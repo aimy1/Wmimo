@@ -2,15 +2,18 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:wmimo/app/clash/clash_config.dart';
+import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/auto_update_manager.dart';
 import 'package:wmimo/app/modules/biz.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/modules/board_session_persistent_manager.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
+import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/remote_config_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/app_args.dart';
@@ -21,6 +24,7 @@ import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
+import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/windows_version_helper.dart';
 import 'package:wmimo/i18n/strings.g.dart';
@@ -233,11 +237,20 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp>
     with WidgetsBindingObserver, WindowListener, TrayListener {
+  static const kMenuStatus = "status_info";
   static const kMenuConnect = "connect";
   static const kMenuDisconnect = "disconnect";
+  static const kMenuRestartCore = "restart_core";
+  static const kMenuSystemProxy = "toggle_system_proxy";
+  static const kMenuTunMode = "toggle_tun_mode";
   static const kMenuModeRule = "mode_rule";
   static const kMenuModeGlobal = "mode_global";
   static const kMenuModeDirect = "mode_direct";
+  static const kMenuUpdateAllProfiles = "update_all_profiles";
+  static const kMenuCopyProxyCmd = "copy_proxy_cmd";
+  static const kMenuDelayTest = "delay_test_all";
+  static const kMenuOpenConfigDir = "open_config_dir";
+  static const kMenuOpenLogs = "open_logs";
   static const kMenuOpen = "show_window";
   static const kMenuExit = "exit_app";
   bool _launchAtStartup = false;
@@ -572,33 +585,141 @@ class MyAppState extends State<MyApp>
       return;
     }
     final mode = ClashSettingManager.getConfigsMode();
+    final isSysProxy = await VPNService.getSystemProxyEnable();
+    final tunEnable = ClashSettingManager.getConfig().Tun?.Enable ?? false;
+    final profiles = ProfileManager.getProfiles();
+    final currentProfile = ProfileManager.getCurrent();
+
+    // 1. Status and Core Control
     List<MenuItem> items = [
+      MenuItem(
+        key: kMenuStatus,
+        label: grey ? "  ⚪ 核心未连接  " : "  🟢 核心已连接  ",
+        disabled: true,
+      ),
       if (grey) ...[
-        MenuItem(key: kMenuConnect, label: "   ${t.meta.connect}   "),
+        MenuItem(key: kMenuConnect, label: "  ▶ 启动代理连接  "),
       ],
       if (!grey) ...[
-        MenuItem(key: kMenuDisconnect, label: "   ${t.meta.disconnect}   "),
+        MenuItem(key: kMenuDisconnect, label: "  ⏹ 断开代理连接  "),
+        MenuItem(key: kMenuRestartCore, label: "  🔄 重启代理核心  "),
       ],
       MenuItem.separator(),
+
+      // 2. System Proxy & TUN Switch
       MenuItem.checkbox(
-        key: kMenuModeRule,
-        checked: mode == ClashConfigsMode.rule,
-        label: "   ${t.meta.rule}   ",
+        key: kMenuSystemProxy,
+        checked: isSysProxy,
+        label: "  🌐 系统代理  ",
       ),
       MenuItem.checkbox(
-        key: kMenuModeGlobal,
-        checked: mode == ClashConfigsMode.global,
-        label: "   ${t.meta.global}   ",
-      ),
-      MenuItem.checkbox(
-        key: kMenuModeDirect,
-        checked: mode == ClashConfigsMode.direct,
-        label: "   ${t.meta.direct}   ",
+        key: kMenuTunMode,
+        checked: tunEnable,
+        label: "  🛡 TUN 模式  ",
       ),
       MenuItem.separator(),
-      MenuItem(key: kMenuOpen, label: "   ${t.main.tray.menuOpen}   "),
-      MenuItem(key: kMenuExit, label: "   ${t.main.tray.menuExit}   "),
+
+      // 3. Outbound Mode Submenu
+      MenuItem.submenu(
+        label: "  🔀 出站模式 (${mode == ClashConfigsMode.rule ? '规则' : mode == ClashConfigsMode.global ? '全局' : '直连'})  ",
+        submenu: Menu(
+          items: [
+            MenuItem.checkbox(
+              key: kMenuModeRule,
+              checked: mode == ClashConfigsMode.rule,
+              label: "  规则分流 (Rule)  ",
+            ),
+            MenuItem.checkbox(
+              key: kMenuModeGlobal,
+              checked: mode == ClashConfigsMode.global,
+              label: "  全局代理 (Global)  ",
+            ),
+            MenuItem.checkbox(
+              key: kMenuModeDirect,
+              checked: mode == ClashConfigsMode.direct,
+              label: "  直接连接 (Direct)  ",
+            ),
+          ],
+        ),
+      ),
     ];
+
+    // 4. Profiles Submenu
+    List<MenuItem> profileItems = [];
+    if (profiles.isNotEmpty) {
+      for (var p in profiles) {
+        final displayName = p.remark.isNotEmpty ? p.remark : (p.url.isNotEmpty ? p.url : p.id);
+        profileItems.add(
+          MenuItem.checkbox(
+            key: "profile_${p.id}",
+            checked: currentProfile?.id == p.id,
+            label: "  $displayName  ",
+          ),
+        );
+      }
+      profileItems.add(MenuItem.separator());
+    }
+    profileItems.add(
+      MenuItem(key: kMenuUpdateAllProfiles, label: "  🔄 更新所有订阅配置  "),
+    );
+    final curProfileName = currentProfile != null
+        ? (currentProfile.remark.isNotEmpty ? currentProfile.remark : currentProfile.id)
+        : '未选择';
+    items.add(
+      MenuItem.submenu(
+        label: "  📑 订阅配置 ($curProfileName)  ",
+        submenu: Menu(items: profileItems),
+      ),
+    );
+
+    // 5. Proxy Nodes Submenu
+    try {
+      final nodes = await ProxyNodeLoader.loadCurrentProfileNodes();
+      if (nodes.isNotEmpty) {
+        List<MenuItem> nodeMenuItems = [];
+        final selectableNodes =
+            nodes.where((n) => !ClashProtocolType.isGroupType(n.type)).toList();
+        if (selectableNodes.isNotEmpty) {
+          for (var i = 0; i < math.min(15, selectableNodes.length); i++) {
+            final node = selectableNodes[i];
+            nodeMenuItems.add(
+              MenuItem(
+                key: "node_GLOBAL:::_:::${node.name}",
+                label: "  ${node.name}  ",
+              ),
+            );
+          }
+          items.add(
+            MenuItem.submenu(
+              label: "  ⚡ 代理节点 (${selectableNodes.length}个)  ",
+              submenu: Menu(items: nodeMenuItems),
+            ),
+          );
+        }
+      }
+    } catch (_) {}
+
+    // 6. Tools Submenu
+    items.add(
+      MenuItem.submenu(
+        label: "  🛠 实用工具  ",
+        submenu: Menu(
+          items: [
+            MenuItem(key: kMenuCopyProxyCmd, label: "  📋 复制系统代理命令  "),
+            MenuItem(key: kMenuDelayTest, label: "  ⚡ 一键全节点测速  "),
+            MenuItem.separator(),
+            MenuItem(key: kMenuOpenConfigDir, label: "  📁 打开应用配置目录  "),
+            MenuItem(key: kMenuOpenLogs, label: "  📄 查看核心运行日志  "),
+          ],
+        ),
+      ),
+    );
+    items.add(MenuItem.separator());
+
+    // 7. Window & Exit
+    items.add(MenuItem(key: kMenuOpen, label: "  🖥 显示主界面  "));
+    items.add(MenuItem(key: kMenuExit, label: "  ❌ 退出程序  "));
+
     _menu = Menu(items: items);
     await trayManager.setContextMenu(_menu!);
     if (!Platform.isLinux) {
@@ -623,37 +744,96 @@ class MyAppState extends State<MyApp>
 
   @override
   void onTrayMenuItemClick(MenuItem menuItem) async {
-    if (menuItem.key == kMenuConnect) {
+    final key = menuItem.key ?? "";
+    if (key == kMenuConnect) {
       VpnActionHandler.vpnConnect?.call("menu", false);
-    } else if (menuItem.key == kMenuDisconnect) {
+    } else if (key == kMenuDisconnect) {
       VpnActionHandler.vpnDisconnect?.call("menu", false);
-    } else if (menuItem.key == kMenuModeRule) {
+    } else if (key == kMenuRestartCore) {
+      VpnActionHandler.vpnReconnect?.call("menu", false);
+    } else if (key == kMenuSystemProxy) {
+      final isSys = await VPNService.getSystemProxyEnable();
+      await VPNService.setSystemProxy(!isSys);
+      await _setTrayMenu(_trayGrey);
+    } else if (key == kMenuTunMode) {
+      final config = ClashSettingManager.getConfig();
+      final currentTun = config.Tun?.Enable ?? false;
+      config.Tun?.Enable = !currentTun;
+      await ClashSettingManager.save();
+      if (!_trayGrey) {
+        VpnActionHandler.vpnReconnect?.call("tun", false);
+      }
+      await _setTrayMenu(_trayGrey);
+    } else if (key == kMenuModeRule) {
       await ClashSettingManager.setConfigsMode(ClashConfigsMode.rule);
-      menuItem.checked = true;
-      _menu?.getMenuItem(kMenuModeGlobal)?.checked = false;
-      _menu?.getMenuItem(kMenuModeDirect)?.checked = false;
-      trayManager.setContextMenu(_menu!);
-    } else if (menuItem.key == kMenuModeGlobal) {
+      await _setTrayMenu(_trayGrey);
+    } else if (key == kMenuModeGlobal) {
       await ClashSettingManager.setConfigsMode(ClashConfigsMode.global);
-      menuItem.checked = true;
-      _menu?.getMenuItem(kMenuModeRule)?.checked = false;
-      _menu?.getMenuItem(kMenuModeDirect)?.checked = false;
-      trayManager.setContextMenu(_menu!);
-    } else if (menuItem.key == kMenuModeDirect) {
+      await _setTrayMenu(_trayGrey);
+    } else if (key == kMenuModeDirect) {
       await ClashSettingManager.setConfigsMode(ClashConfigsMode.direct);
-      menuItem.checked = true;
-      _menu?.getMenuItem(kMenuModeRule)?.checked = false;
-      _menu?.getMenuItem(kMenuModeGlobal)?.checked = false;
-      trayManager.setContextMenu(_menu!);
-    } else if (menuItem.key == kMenuExit) {
-      await _quit();
-    } else if (menuItem.key == kMenuOpen) {
+      await _setTrayMenu(_trayGrey);
+    } else if (key.startsWith("profile_")) {
+      final profileId = key.substring("profile_".length);
+      ProfileManager.setCurrent(profileId);
+      if (!_trayGrey) {
+        VpnActionHandler.vpnReconnect?.call("profile_change", false);
+      }
+      await _setTrayMenu(_trayGrey);
+    } else if (key.startsWith("node_")) {
+      final parts = key.substring("node_".length).split(":::_:::");
+      if (parts.length == 2) {
+        await ClashHttpApi.setProxiesNode(parts[0], parts[1]);
+      }
+    } else if (key == kMenuUpdateAllProfiles) {
+      await ProfileManager.updateAll();
+    } else if (key == kMenuCopyProxyCmd) {
+      final port = ClashSettingManager.getMixedPort();
+      final cmd = Platform.isWindows
+          ? 'set http_proxy=http://127.0.0.1:$port\nset https_proxy=http://127.0.0.1:$port\nset all_proxy=socks5://127.0.0.1:$port'
+          : 'export http_proxy=http://127.0.0.1:$port\nexport https_proxy=http://127.0.0.1:$port\nexport all_proxy=socks5://127.0.0.1:$port';
+      await Clipboard.setData(ClipboardData(text: cmd));
+    } else if (key == kMenuDelayTest) {
+      final nodes = await ProxyNodeLoader.loadCurrentProfileNodes();
+      for (var n in nodes) {
+        if (!ClashProtocolType.isGroupType(n.type)) {
+          ClashHttpApi.getDelay(
+            n.name,
+            url: "http://www.gstatic.com/generate_204",
+            timeout: const Duration(seconds: 5),
+          );
+        }
+      }
+    } else if (key == kMenuOpenConfigDir) {
+      final dir = await PathUtils.profileDir();
+      if (Platform.isWindows) {
+        Process.run('explorer.exe', [dir]);
+      } else if (Platform.isMacOS) {
+        Process.run('open', [dir]);
+      } else if (Platform.isLinux) {
+        Process.run('xdg-open', [dir]);
+      }
+    } else if (key == kMenuOpenLogs) {
+      final logPath = await PathUtils.serviceLogFilePath();
+      final logFile = File(logPath);
+      if (await logFile.exists()) {
+        if (Platform.isWindows) {
+          Process.run('notepad.exe', [logPath]);
+        } else if (Platform.isMacOS) {
+          Process.run('open', [logPath]);
+        } else if (Platform.isLinux) {
+          Process.run('xdg-open', [logPath]);
+        }
+      }
+    } else if (key == kMenuOpen) {
       if (await windowManager.isMinimized()) {
         await windowManager.restore();
       } else {
         await windowManager.show();
         onWindowRestore();
       }
+    } else if (key == kMenuExit) {
+      await _quit();
     }
   }
 }
