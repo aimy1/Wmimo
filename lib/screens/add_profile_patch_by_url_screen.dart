@@ -1,4 +1,4 @@
-﻿// ignore_for_file: use_build_context_synchronously, empty_catches
+// ignore_for_file: use_build_context_synchronously, empty_catches
 
 import 'dart:async';
 
@@ -124,8 +124,7 @@ class _AddProfilePatchByUrlScreenState
                       child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                     ),
                   ),
-                  SizedBox(
-                    width: windowSize.width - 50 * 2,
+                  Expanded(
                     child: Text(
                       tcontext.meta.profileAddUrlOrContent,
                       textAlign: TextAlign.center,

@@ -1,4 +1,4 @@
-﻿import 'package:wmimo/app/modules/diversion_template_manager.dart';
+import 'package:wmimo/app/modules/diversion_template_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/rule_templates_add_or_edit_screen.dart';
 import 'package:wmimo/screens/theme_config.dart';
@@ -53,8 +53,7 @@ class _RuleTemplatesScreenState
                         child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                       ),
                     ),
-                    SizedBox(
-                      width: windowSize.width - 50 * 2,
+                    Expanded(
                       child: Text(
                         tcontext.meta.ruleTemplates,
                         textAlign: TextAlign.center,

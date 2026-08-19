@@ -222,8 +222,7 @@ class _BackupAndSyncWebdavScreenState
                     children: [
                       Row(
                         children: [
-                          SizedBox(
-                            width: windowSize.width - 100,
+                          Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,

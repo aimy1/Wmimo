@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack
+// ignore_for_file: unused_catch_stack
 
 import 'dart:async';
 import 'dart:io';
@@ -127,8 +127,7 @@ class _ProxyGroupScreenScreenState
                         child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                       ),
                     ),
-                    SizedBox(
-                      width: windowSize.width - 50 * 2,
+                    Expanded(
                       child: Text(
                         tcontext.meta.proxyNodeList,
                         textAlign: TextAlign.center,

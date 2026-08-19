@@ -1,4 +1,4 @@
-﻿import 'package:wmimo/app/modules/diversion_template_manager.dart';
+import 'package:wmimo/app/modules/diversion_template_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
@@ -70,8 +70,7 @@ class _ProxyGroupTemplatesAddOrEditScreenState
                         child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                       ),
                     ),
-                    SizedBox(
-                      width: windowSize.width - 50 * 2,
+                    Expanded(
                       child: Text(
                         tcontext.meta.proxyGroups,
                         textAlign: TextAlign.center,

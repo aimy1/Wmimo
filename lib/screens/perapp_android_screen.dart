@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack
+// ignore_for_file: unused_catch_stack
 
 import 'package:android_package_manager/android_package_manager.dart';
 import 'package:app_settings/app_settings.dart';
@@ -186,8 +186,7 @@ class _PerAppAndroidScreenState
                         child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                       ),
                     ),
-                    SizedBox(
-                      width: windowSize.width - 50 * 2,
+                    Expanded(
                       child: Text(
                         tcontext.PerAppAndroidScreen.title,
                         textAlign: TextAlign.center,

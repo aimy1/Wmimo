@@ -1,4 +1,4 @@
-﻿// ignore_for_file: empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:io';
 
@@ -85,8 +85,7 @@ class _QrcodeScreenState extends LasyRenderingState<QrcodeScreen> {
                       child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                     ),
                   ),
-                  SizedBox(
-                    width: windowSize.width - 50 * 2,
+                  Expanded(
                     child: Text(
                       widget.title.isEmpty
                           ? tcontext.meta.qrcode

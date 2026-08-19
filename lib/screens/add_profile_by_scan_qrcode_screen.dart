@@ -1,4 +1,4 @@
-﻿// ignore_for_file: use_build_context_synchronously, empty_catches
+// ignore_for_file: use_build_context_synchronously, empty_catches
 
 import 'dart:io';
 
@@ -112,8 +112,7 @@ class _AddProfileByScanQrcodeScanScreenState
             child: Icon(Icons.arrow_back_ios_outlined, size: 26),
           ),
         ),
-        SizedBox(
-          width: windowSize.width - 50 * 2 - (_scanFromFile ? 70 : 100),
+        Expanded(
           child: Text(
             tcontext.meta.qrcodeScan,
             textAlign: TextAlign.center,
@@ -213,8 +212,7 @@ class _AddProfileByScanQrcodeScanScreenState
           child: Icon(Icons.arrow_back_ios_outlined, size: 26),
         ),
       ),
-      SizedBox(
-        width: windowSize.width - 50 * 2,
+      Expanded(
         child: Text(
           tcontext.meta.qrcodeScan,
           textAlign: TextAlign.center,

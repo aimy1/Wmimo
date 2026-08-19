@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
@@ -71,8 +71,7 @@ class _ProfilesPatchBoardScreenState
                       child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                     ),
                   ),
-                  SizedBox(
-                    width: windowSize.width - 50 * 3,
+                  Expanded(
                     child: Text(
                       tcontext.meta.overwrite,
                       textAlign: TextAlign.center,

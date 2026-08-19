@@ -81,8 +81,7 @@ class _LoginStepProviderScreenState extends State<LoginStepProviderScreen> {
                                 ),
                               ),
                             ),
-                      SizedBox(
-                        width: windowSize.width - 50 * 2,
+                      Expanded(
                         child: Text(
                           tcontext.loginScreen.login,
                           textAlign: TextAlign.center,

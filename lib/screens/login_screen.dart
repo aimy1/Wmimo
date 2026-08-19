@@ -1,4 +1,4 @@
-﻿import 'package:board_service/sspanel_uim/sspanel_uim_client.dart'
+import 'package:board_service/sspanel_uim/sspanel_uim_client.dart'
     as sspanel_client;
 import 'package:board_service/v2board/v2board_client.dart' as v2board_client;
 import 'package:board_service/xboard/xboard_client.dart' as xboard_client;
@@ -141,8 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                      SizedBox(
-                        width: windowSize.width - 50 * 2,
+                      Expanded(
                         child: Text(
                           tcontext.loginScreen.login,
                           textAlign: TextAlign.center,

@@ -151,8 +151,7 @@ class _AddProfileByUrlScreenState
                       child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                     ),
                   ),
-                  SizedBox(
-                    width: windowSize.width - 50 * 2,
+                  Expanded(
                     child: Text(
                       tcontext.meta.profileAddUrlOrContent,
                       textAlign: TextAlign.center,

@@ -1,4 +1,4 @@
-﻿// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:wmimo/i18n/strings.g.dart';
@@ -69,8 +69,7 @@ class _MapStringAndStringAddScreenState
                         child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                       ),
                     ),
-                    SizedBox(
-                      width: windowSize.width - 50 * 2,
+                    Expanded(
                       child: Text(
                         widget.title,
                         textAlign: TextAlign.center,

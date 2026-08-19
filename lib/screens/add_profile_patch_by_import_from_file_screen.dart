@@ -1,4 +1,4 @@
-﻿// ignore_for_file: use_build_context_synchronously, unused_catch_stack
+// ignore_for_file: use_build_context_synchronously, unused_catch_stack
 
 import 'dart:io';
 
@@ -105,8 +105,7 @@ class _AddProfilePatchByImportFromFileScreenState
                       child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                     ),
                   ),
-                  SizedBox(
-                    width: windowSize.width - 50 * 2,
+                  Expanded(
                     child: Text(
                       tcontext.meta.import,
                       textAlign: TextAlign.center,
