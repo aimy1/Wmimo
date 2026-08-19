@@ -120,6 +120,11 @@ flutter:
     - assets/txts/
     - assets/fonts/
     - assets/images/
+    - assets/core/android/arm64-v8a/
+    - assets/core/android/armeabi-v7a/
+    - assets/core/android/x86_64/
+    - assets/core/linux/
+    - assets/core/macos/
     - path: assets/datas/geoip.zip
     - path: assets/datas/geosite.zip
       platforms: [windows, linux, macos, android, ios]

@@ -82,7 +82,7 @@ android {
             }
             ndk {
                 abiFilters.clear()
-                abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+                abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
                 // debugSymbolLevel = 'FULL'
             }
         }
@@ -92,7 +92,12 @@ android {
             isEnable = true
             isUniversalApk = true
             reset()
-            include("armeabi-v7a", "arm64-v8a")
+            include("armeabi-v7a", "arm64-v8a", "x86_64")
+        }
+    }
+    sourceSets {
+        getByName("main") {
+            jniLibs.srcDirs("src/main/jniLibs")
         }
     }
 }

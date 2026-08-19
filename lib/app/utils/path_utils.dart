@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: unused_catch_stack, empty_catches
 
 import "dart:io";
 
@@ -191,18 +191,21 @@ class PathUtils {
   }
 
   static String serviceExeName() {
-    if (Platform.isLinux) {
-      return "wmimoService";
-    } else if (Platform.isWindows) {
+    if (Platform.isWindows) {
       return "wmimoService.exe";
     }
-    return "";
+    return "wmimoService";
   }
 
   static String serviceExePath() {
     if (Platform.isLinux || Platform.isWindows) {
       String filePath = exeDir();
       return path.join(filePath, serviceExeName());
+    } else if (Platform.isMacOS) {
+      String filePath = macosDir();
+      String p = path.join(filePath, serviceExeName());
+      if (File(p).existsSync()) return p;
+      return path.join(exeDir(), serviceExeName());
     }
     return "";
   }

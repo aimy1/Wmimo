@@ -40,30 +40,8 @@ jobs:
       - name: Generate Translations
         run: dart run slang
 
-      - name: Download Mihomo Core for Windows
-        shell: pwsh
-        run: |
-          $coreDir = "bind/windows/core"
-          $releaseDir = "build/windows/x64/runner/Release"
-          New-Item -ItemType Directory -Force -Path $coreDir | Out-Null
-          New-Item -ItemType Directory -Force -Path $releaseDir | Out-Null
-          
-          $zipUrl = "https://github.com/MetaCubeX/mihomo/releases/download/v1.19.2/mihomo-windows-amd64-v1.19.2.zip"
-          $zipPath = "$coreDir/mihomo.zip"
-          Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath -UseBasicParsing
-          
-          $tempDir = "$coreDir/temp"
-          Expand-Archive -Path $zipPath -DestinationPath $tempDir -Force
-          $exe = Get-ChildItem -Path $tempDir -Filter "*.exe" | Select-Object -First 1
-          if ($exe) {
-            Copy-Item -Path $exe.FullName -Destination "$coreDir/wmimoService.exe" -Force
-            Copy-Item -Path $exe.FullName -Destination "$releaseDir/wmimoService.exe" -Force
-            Remove-Item -Path $tempDir -Recurse -Force
-            Remove-Item -Path $zipPath -Force
-            Write-Host "Mihomo core downloaded successfully." -ForegroundColor Green
-          } else {
-            Write-Error "Failed to extract mihomo executable."
-          }
+      - name: Download Multiplatform Mihomo Cores
+        run: dart run tool/download_all_cores.dart
 
       - name: Build Windows Application
         run: flutter build windows --release
@@ -126,6 +104,9 @@ jobs:
 
       - name: Generate Translations
         run: dart run slang
+
+      - name: Download Multiplatform Mihomo Cores
+        run: dart run tool/download_all_cores.dart
 
       - name: Build Android APK
         run: flutter build apk --release

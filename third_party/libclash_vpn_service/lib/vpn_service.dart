@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'state.dart';
 
 enum VpnServiceWaitType {
@@ -114,27 +116,178 @@ class FlutterVpnService {
     }
   }
 
-  static String _resolveCorePath() {
+  static Future<String> _resolveCorePath() async {
     if (_savedTunnelServicePath != null &&
         _savedTunnelServicePath!.isNotEmpty &&
         File(_savedTunnelServicePath!).existsSync()) {
       return _savedTunnelServicePath!;
     }
+
     final currentDir = Directory.current.path;
     final exeName = Platform.isWindows ? "wmimoService.exe" : "wmimoService";
     final candidates = [
       '$currentDir/$exeName',
       '$currentDir/bind/windows/core/$exeName',
+      '$currentDir/bind/linux/core/$exeName',
+      '$currentDir/bind/macos/core/$exeName',
       '$currentDir/build/windows/x64/runner/Release/$exeName',
       '$currentDir/mihomo.exe',
       '$currentDir/clash.exe',
+      '$currentDir/mihomo',
+      '$currentDir/clash',
     ];
+
+    // Check app support and documents directories
+    try {
+      final appSupport = await getApplicationSupportDirectory();
+      candidates.insert(0, '${appSupport.path}/core/$exeName');
+      candidates.insert(1, '${appSupport.path}/$exeName');
+      final appDoc = await getApplicationDocumentsDirectory();
+      candidates.insert(2, '${appDoc.path}/core/$exeName');
+    } catch (_) {}
+
+    // Android native library paths
+    if (Platform.isAndroid) {
+      candidates.addAll([
+        "/data/data/com.wmimo.app/lib/libwmimoService.so",
+        "/data/user/0/com.wmimo.app/lib/libwmimoService.so",
+      ]);
+      try {
+        final libDir = Directory("/data/data/com.wmimo.app/lib");
+        if (libDir.existsSync()) {
+          for (final f in libDir.listSync()) {
+            if (f is File && (f.path.contains("wmimo") || f.path.contains("clash") || f.path.contains("mihomo"))) {
+              candidates.insert(0, f.path);
+            }
+          }
+        }
+      } catch (_) {}
+    }
+
     for (var path in candidates) {
       if (File(path).existsSync()) {
+        if (!Platform.isWindows) {
+          try {
+            await Process.run('chmod', ['755', path]);
+          } catch (_) {}
+        }
         return path;
       }
     }
+
+    // Attempt to extract from Flutter assets
+    try {
+      final extracted = await _extractCoreFromAssets();
+      if (extracted != null && File(extracted).existsSync()) {
+        return extracted;
+      }
+    } catch (_) {}
+
+    // Fallback: auto-download from MetaCubeX releases
+    try {
+      final downloaded = await _autoDownloadCore();
+      if (downloaded != null && File(downloaded).existsSync()) {
+        return downloaded;
+      }
+    } catch (_) {}
+
     return _savedTunnelServicePath ?? exeName;
+  }
+
+  static Future<String?> _extractCoreFromAssets() async {
+    try {
+      final exeName = Platform.isWindows ? "wmimoService.exe" : "wmimoService";
+      final appSupport = await getApplicationSupportDirectory();
+      final targetFile = File("${appSupport.path}/core/$exeName");
+      if (!targetFile.parent.existsSync()) {
+        targetFile.parent.createSync(recursive: true);
+      }
+
+      List<String> assetCandidates = [];
+      if (Platform.isAndroid) {
+        assetCandidates = [
+          "assets/core/android/arm64-v8a/wmimoService",
+          "assets/core/android/armeabi-v7a/wmimoService",
+          "assets/core/android/x86_64/wmimoService",
+        ];
+      } else if (Platform.isLinux) {
+        assetCandidates = ["assets/core/linux/wmimoService"];
+      } else if (Platform.isMacOS) {
+        assetCandidates = [
+          "assets/core/macos/wmimoService",
+          "assets/core/macos/wmimoService_arm64",
+          "assets/core/macos/wmimoService_amd64",
+        ];
+      } else if (Platform.isWindows) {
+        assetCandidates = ["assets/core/windows/wmimoService.exe"];
+      }
+
+      for (final asset in assetCandidates) {
+        try {
+          final data = await rootBundle.load(asset);
+          if (data.lengthInBytes > 0) {
+            final buffer = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+            await targetFile.writeAsBytes(buffer, flush: true);
+            if (!Platform.isWindows) {
+              try {
+                await Process.run('chmod', ['755', targetFile.path]);
+              } catch (_) {}
+            }
+            return targetFile.path;
+          }
+        } catch (_) {}
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  static Future<String?> _autoDownloadCore() async {
+    try {
+      final exeName = Platform.isWindows ? "wmimoService.exe" : "wmimoService";
+      final appSupport = await getApplicationSupportDirectory();
+      final targetFile = File("${appSupport.path}/core/$exeName");
+      if (!targetFile.parent.existsSync()) {
+        targetFile.parent.createSync(recursive: true);
+      }
+
+      const String kVersion = 'v1.19.2';
+      const String kBaseUrl = 'https://github.com/MetaCubeX/mihomo/releases/download/$kVersion';
+
+      String? url;
+      if (Platform.isAndroid) {
+        url = '$kBaseUrl/mihomo-android-arm64-v8-$kVersion.gz';
+      } else if (Platform.isWindows) {
+        url = '$kBaseUrl/mihomo-windows-amd64-$kVersion.zip';
+      } else if (Platform.isLinux) {
+        url = '$kBaseUrl/mihomo-linux-amd64-$kVersion.gz';
+      } else if (Platform.isMacOS) {
+        url = '$kBaseUrl/mihomo-darwin-arm64-$kVersion.gz';
+      }
+
+      if (url == null) return null;
+
+      final client = HttpClient()..connectionTimeout = const Duration(seconds: 30);
+      final req = await client.getUrl(Uri.parse(url));
+      req.followRedirects = true;
+      final resp = await req.close();
+      if (resp.statusCode == 200) {
+        final bytes = await resp.fold<List<int>>([], (prev, elem) => prev..addAll(elem));
+        List<int>? decompressed;
+        if (url.endsWith('.gz')) {
+          decompressed = gzip.decode(bytes);
+        }
+        if (decompressed != null && decompressed.isNotEmpty) {
+          await targetFile.writeAsBytes(decompressed, flush: true);
+          if (!Platform.isWindows) {
+            try {
+              await Process.run('chmod', ['755', targetFile.path]);
+            } catch (_) {}
+          }
+          return targetFile.path;
+        }
+      }
+    } catch (_) {}
+    return null;
   }
 
   static Future<String> _resolveConfigFile() async {
@@ -262,7 +415,7 @@ secret: "$secret"
   }
 
   static Future<VpnServiceWaitResult> start(Duration timeout) async {
-    final coreExe = _resolveCorePath();
+    final coreExe = await _resolveCorePath();
     final configFile = await _resolveConfigFile();
 
     if (!File(coreExe).existsSync()) {

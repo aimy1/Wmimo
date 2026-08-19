@@ -74,3 +74,12 @@ migrate_working_dir/
 
 # Linux related
 **/linux/flutter/ephemeral
+
+# Mihomo / Core binaries (managed by download_all_cores.dart and CI)
+/assets/core/
+/android/app/src/main/jniLibs/
+/bind/linux/
+/bind/macos/
+*.zip
+*.gz
+mihomo-alpha-bin/
