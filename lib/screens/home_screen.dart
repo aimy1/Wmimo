@@ -378,11 +378,15 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
-            children: const [
-              HomeScreenWidgetPart1(),
-              SizedBox(height: 12),
-              HomeScreenWidgetPart2(),
-              SizedBox(height: 24),
+            children: [
+              HomeScreenWidgetPart1(
+                onNavigateToTab: (index) {
+                  setState(() {
+                    _currentNavIndex = index;
+                  });
+                },
+              ),
+              const SizedBox(height: 24),
             ],
           ),
         ),

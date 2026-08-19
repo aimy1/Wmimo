@@ -58,7 +58,8 @@ class ProxyHttpOverrides extends HttpOverrides {
 }
 
 class HomeScreenWidgetPart1 extends StatefulWidget {
-  const HomeScreenWidgetPart1({super.key});
+  final Function(int tabIndex)? onNavigateToTab;
+  const HomeScreenWidgetPart1({super.key, this.onNavigateToTab});
 
   @override
   State<HomeScreenWidgetPart1> createState() => _HomeScreenWidgetPart1();
@@ -556,6 +557,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   ),
                   minVerticalPadding: 16,
                   onTap: () async {
+                    if (widget.onNavigateToTab != null) {
+                      widget.onNavigateToTab!(2);
+                      return;
+                    }
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -582,6 +587,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
                     minVerticalPadding: 16,
                     onTap: () async {
+                      if (widget.onNavigateToTab != null) {
+                        widget.onNavigateToTab!(1);
+                        return;
+                      }
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -1161,6 +1170,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }
 
   Future<void> _onTapNetCheck() async {
+    if (widget.onNavigateToTab != null) {
+      widget.onNavigateToTab!(3);
+      return;
+    }
     await Navigator.push(
       context,
       MaterialPageRoute(
