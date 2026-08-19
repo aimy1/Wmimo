@@ -29,8 +29,6 @@ import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/themes.dart';
 import 'package:wmimo/screens/user_agreement_screen.dart';
 import 'package:wmimo/screens/webview_helper.dart';
-import 'package:wmimo/screens/settings_screen.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
@@ -114,41 +112,13 @@ class _HomeScreenState extends State<HomeScreen>
       _TabNavigator(
         navigatorKey: _navigatorKeys[6],
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: ThemeDefine.kColorBlue.withValues(
-                          alpha: Theme.of(context).brightness == Brightness.dark ? 0.2 : 0.1,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(
-                        Icons.tune_rounded,
-                        size: 20,
-                        color: ThemeDefine.kColorBlue,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      Translations.of(context).meta.settingApp,
-                      style: const TextStyle(
-                        fontWeight: ThemeConfig.kFontWeightTitle,
-                        fontSize: ThemeConfig.kFontSizeTitle,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const SettingsScreen(),
-                const SizedBox(height: 24),
+              children: const [
+                HomeScreenWidgetPart2(),
+                SizedBox(height: 24),
               ],
             ),
           ),
