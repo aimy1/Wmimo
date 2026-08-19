@@ -11,6 +11,7 @@ import 'package:wmimo/screens/add_profile_by_import_from_file_screen.dart';
 import 'package:wmimo/screens/add_profile_by_scan_qrcode_screen.dart';
 import 'package:wmimo/screens/add_profile_by_url_screen.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
+import 'package:wmimo/screens/group_helper.dart';
 import 'package:wmimo/screens/login_step_provider_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen_widgets.dart';
 import 'package:wmimo/screens/theme_config.dart';
@@ -92,71 +93,87 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
                         ),
                       ),
                     ),
+                    Tooltip(
+                      message: tcontext.meta.backupAndSync,
+                      child: SizedBox(
+                        width: 36,
+                        height: 32,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () {
+                            GroupHelper.showBackupAndSync(context);
+                          },
+                          child: const Icon(
+                            Icons.cloud_sync_outlined,
+                            size: 22,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
                     ProfileManager.updating.isNotEmpty
                         ? const Row(
                             children: [
-                              SizedBox(width: 8),
+                              SizedBox(width: 6),
                               SizedBox(
-                                width: 24,
-                                height: 24,
+                                width: 18,
+                                height: 18,
                                 child: RepaintBoundary(
-                                  child: CircularProgressIndicator(strokeWidth: 2.5),
+                                  child: CircularProgressIndicator(strokeWidth: 2),
                                 ),
                               ),
-                              SizedBox(width: 8),
+                              SizedBox(width: 6),
                             ],
                           )
                         : Tooltip(
                             message: tcontext.meta.update,
                             child: SizedBox(
-                              width: 40,
-                              height: 30,
+                              width: 36,
+                              height: 32,
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(8),
                                 onTap: () async {
                                   onTapUpdateAll();
                                 },
                                 child: const Icon(
-                                  Icons.cloud_download_outlined,
-                                  size: 26,
+                                  Icons.sync_rounded,
+                                  size: 22,
                                 ),
                               ),
                             ),
                           ),
+                    const SizedBox(width: 4),
                     Tooltip(
                       message: tcontext.meta.add,
                       child: SizedBox(
-                        width: 40,
-                        height: 30,
+                        width: 36,
+                        height: 32,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () async {
                             onTapAdd();
                           },
-                          child: const Icon(Icons.add, size: 26),
+                          child: const Icon(Icons.add_rounded, size: 24),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                  child: FutureBuilder(
-                    future: getProfiles(),
-                    builder:
-                        (
-                          BuildContext context,
-                          AsyncSnapshot<List<ProfileSetting>> snapshot,
-                        ) {
-                          List<ProfileSetting> data = snapshot.hasData
-                              ? snapshot.data!
-                              : [];
-                          return ProfilesBoardScreenWidget(settings: data);
-                        },
-                  ),
+                child: FutureBuilder(
+                  future: getProfiles(),
+                  builder:
+                      (
+                        BuildContext context,
+                        AsyncSnapshot<List<ProfileSetting>> snapshot,
+                      ) {
+                        List<ProfileSetting> data = snapshot.hasData
+                            ? snapshot.data!
+                            : [];
+                        return ProfilesBoardScreenWidget(settings: data);
+                      },
                 ),
               ),
             ],
