@@ -1330,10 +1330,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     VpnActionHandler.vpnDisconnect = _vpnDisconnect;
     VpnActionHandler.vpnReconnect = _vpnReconnect;
     initQuickAction();
-    if (PlatformUtils.isPC()) {
-      if (SettingManager.getConfig().autoConnectAfterLaunch) {
-        await start("launch");
-      }
+    final currentProfile = ProfileManager.getCurrent();
+    if (currentProfile != null) {
+      await start("launch");
     }
   }
 

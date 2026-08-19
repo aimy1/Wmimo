@@ -1,4 +1,4 @@
-﻿// ignore_for_file: empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:convert';
 import 'dart:io';
@@ -138,7 +138,7 @@ class SettingConfig {
       : "info"; //trace, debug, info, warning, error
   String autoUpdateChannel = "stable"; //stable, beta
   bool autoDownloadUpdatePkg = true;
-  bool autoConnectAfterLaunch = false;
+  bool autoConnectAfterLaunch = true;
   bool autoSetSystemProxy = getAutoSetSystemProxyDefault();
   List<String> systemProxyBypassDomain = ProxyBypassDoaminsDefault.toList();
   String _userAgent = "";
@@ -195,7 +195,7 @@ class SettingConfig {
       autoUpdateChannel = Random().nextInt(10) < 5 ? "beta" : "stable";
     }
     autoDownloadUpdatePkg = map["auto_download_udpate_pkg"] ?? true;
-    autoConnectAfterLaunch = map["auto_connect_after_launch"] ?? false;
+    autoConnectAfterLaunch = map["auto_connect_after_launch"] ?? true;
     autoSetSystemProxy =
         map["auto_set_system_proxy"] ?? getAutoSetSystemProxyDefault();
     systemProxyBypassDomain = ConvertUtils.getListStringFromDynamic(
