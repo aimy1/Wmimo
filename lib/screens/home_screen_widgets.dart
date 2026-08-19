@@ -571,73 +571,69 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     setState(() {});
                   },
                 ),
-                if (connected) ...[
-                  const Divider(height: 1, thickness: 0.8),
-                  ListTile(
-                    title: Text(tcontext.meta.proxy),
-                    leading: Icon(
-                      Icons.alt_route_rounded,
-                      size: 22,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    subtitle: ValueListenableBuilder<String>(
-                      builder: _buildWithValue,
-                      valueListenable: _proxyNow,
-                    ),
-                    trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-                    minVerticalPadding: 16,
-                    onTap: () async {
-                      if (widget.onNavigateToTab != null) {
-                        widget.onNavigateToTab!(1);
-                        return;
-                      }
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          settings: ProxyBoardScreen.routSettings(),
-                          builder: (context) => ProxyBoardScreen(),
-                        ),
-                      );
-                      _updateProxyNow();
-                    },
+                const Divider(height: 1, thickness: 0.8),
+                ListTile(
+                  title: Text(tcontext.meta.proxy),
+                  leading: Icon(
+                    Icons.alt_route_rounded,
+                    size: 22,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                ],
+                  subtitle: ValueListenableBuilder<String>(
+                    builder: _buildWithValue,
+                    valueListenable: _proxyNow,
+                  ),
+                  trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
+                  minVerticalPadding: 16,
+                  onTap: () async {
+                    if (widget.onNavigateToTab != null) {
+                      widget.onNavigateToTab!(1);
+                      return;
+                    }
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        settings: ProxyBoardScreen.routSettings(),
+                        builder: (context) => ProxyBoardScreen(),
+                      ),
+                    );
+                    _updateProxyNow();
+                  },
+                ),
               ],
             ),
           ),
         ),
-        if (connected) ...[
-          const SizedBox(height: 12),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  _buildQuickActionTile(
-                    context: context,
-                    icon: Icons.dashboard_outlined,
-                    label: tcontext.meta.board,
-                    onTap: _onTapBoard,
-                  ),
-                  const SizedBox(width: 8),
-                  _buildQuickActionTile(
-                    context: context,
-                    icon: Icons.description_outlined,
-                    label: tcontext.meta.runtimeProfile,
-                    onTap: _onTapRunTimeProfile,
-                  ),
-                  const SizedBox(width: 8),
-                  _buildQuickActionTile(
-                    context: context,
-                    icon: Icons.network_check_rounded,
-                    label: tcontext.meta.networkCheck,
-                    onTap: _onTapNetCheck,
-                  ),
-                ],
-              ),
+        const SizedBox(height: 12),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.dashboard_outlined,
+                  label: tcontext.meta.board,
+                  onTap: _onTapBoard,
+                ),
+                const SizedBox(width: 8),
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.description_outlined,
+                  label: tcontext.meta.runtimeProfile,
+                  onTap: _onTapRunTimeProfile,
+                ),
+                const SizedBox(width: 8),
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.network_check_rounded,
+                  label: tcontext.meta.networkCheck,
+                  onTap: _onTapNetCheck,
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ],
     );
   }

@@ -14,6 +14,7 @@ import 'package:wmimo/app/utils/error_reporter_utils.dart';
 import 'package:wmimo/app/utils/local_storage.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
+import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/about_screen.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
@@ -318,54 +319,87 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final connected = _vpnState == FlutterVpnServiceState.connected;
+    final connecting = _vpnState == FlutterVpnServiceState.connecting ||
+        _vpnState == FlutterVpnServiceState.disconnecting ||
+        _vpnState == FlutterVpnServiceState.reasserting;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
+      child: Material(
         color: isDark
             ? const Color(0xFF151D2E)
             : const Color(0xFFE2E8F0).withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: theme.dividerColor.withValues(alpha: 0.4),
-          width: 0.8,
-        ),
-      ),
-      margin: const EdgeInsets.fromLTRB(10, 0, 10, 12),
-      child: Row(
-        children: [
-          Container(
-            width: 8,
-            height: 8,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            if (connecting) return;
+            if (connected) {
+              VpnActionHandler.vpnDisconnect?.call("sidebar", false);
+            } else {
+              VpnActionHandler.vpnConnect?.call("sidebar", false);
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
-              color: connected
-                  ? ThemeDefine.kColorGreenBright
-                  : const Color(0xFF94A3B8),
-              shape: BoxShape.circle,
-              boxShadow: connected
-                  ? [
-                      BoxShadow(
-                        color: ThemeDefine.kColorGreenBright.withValues(alpha: 0.5),
-                        blurRadius: 6,
-                        spreadRadius: 1.5,
-                      ),
-                    ]
-                  : null,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              connected ? tcontext.meta.connected : tcontext.meta.disconnected,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: theme.dividerColor.withValues(alpha: 0.4),
+                width: 0.8,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: connected
+                        ? ThemeDefine.kColorGreenBright
+                        : const Color(0xFF94A3B8),
+                    shape: BoxShape.circle,
+                    boxShadow: connected
+                        ? [
+                            BoxShadow(
+                              color: ThemeDefine.kColorGreenBright
+                                  .withValues(alpha: 0.5),
+                              blurRadius: 6,
+                              spreadRadius: 1.5,
+                            ),
+                          ]
+                        : null,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    connecting
+                        ? tcontext.meta.connecting
+                        : (connected
+                            ? tcontext.meta.connected
+                            : tcontext.meta.disconnected),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Icon(
+                  connected
+                      ? Icons.power_settings_new_rounded
+                      : Icons.play_arrow_rounded,
+                  size: 16,
+                  color: connected
+                      ? ThemeDefine.kColorGreenBright
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
