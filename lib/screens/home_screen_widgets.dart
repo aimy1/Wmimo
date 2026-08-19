@@ -18,7 +18,6 @@ import 'package:wmimo/screens/rules_screen.dart';
 import 'package:wmimo/screens/logs_screen.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/app_scheme_actions.dart';
-import 'package:wmimo/app/utils/file_utils.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
@@ -32,7 +31,6 @@ import 'package:wmimo/screens/group_helper.dart';
 import 'package:wmimo/screens/net_check_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen.dart';
 import 'package:wmimo/screens/proxy_board_screen.dart';
-import 'package:wmimo/screens/richtext_viewer.screen.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
@@ -892,7 +890,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   minVerticalPadding: 16,
                   onTap: () async {
                     if (widget.onNavigateToTab != null) {
-                      widget.onNavigateToTab!(2);
+                      widget.onNavigateToTab!(1);
                       return;
                     }
                     await Navigator.push(
@@ -921,7 +919,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   minVerticalPadding: 16,
                   onTap: () async {
                     if (widget.onNavigateToTab != null) {
-                      widget.onNavigateToTab!(1);
+                      widget.onNavigateToTab!(2);
                       return;
                     }
                     await Navigator.push(
@@ -1674,6 +1672,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }
 
   Future<void> _onTapConnections() async {
+    if (widget.onNavigateToTab != null) {
+      widget.onNavigateToTab!(3);
+      return;
+    }
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -1684,6 +1686,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }
 
   Future<void> _onTapRules() async {
+    if (widget.onNavigateToTab != null) {
+      widget.onNavigateToTab!(4);
+      return;
+    }
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -1694,6 +1700,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }
 
   Future<void> _onTapLogs() async {
+    if (widget.onNavigateToTab != null) {
+      widget.onNavigateToTab!(5);
+      return;
+    }
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -1738,10 +1748,6 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }
 
   Future<void> _onTapNetCheck() async {
-    if (widget.onNavigateToTab != null) {
-      widget.onNavigateToTab!(3);
-      return;
-    }
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -1807,42 +1813,11 @@ class HomeScreenWidgetPart2 extends StatelessWidget {
         trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
         minVerticalPadding: 16,
         onTap: () async {
-          String content = "";
-          final fileErrPath = await PathUtils.serviceStdErrorFilePath();
-          final filePath = await PathUtils.serviceLogFilePath();
-          File file = File(fileErrPath);
-          const split = "\n-------------------------------\n";
-          if (await file.exists()) {
-            final errContent = await file.readAsString();
-            if (errContent.isNotEmpty) {
-              content += split;
-              content += errContent;
-            }
-          }
-          final item = await FileUtils.readAsStringReverse(
-            filePath,
-            50 * 1024,
-            false,
-          );
-          if (item != null) {
-            if (content.isNotEmpty) {
-              content += split;
-            }
-            content += item.item1;
-          }
-          if (!context.mounted) {
-            return;
-          }
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
-              settings: RichtextViewScreen.routSettings(),
-              builder: (context) => RichtextViewScreen(
-                title: tcontext.meta.coreLog,
-                file: "",
-                content: content,
-                showAction: true,
-              ),
+              settings: LogsScreen.routSettings(),
+              builder: (context) => const LogsScreen(),
             ),
           );
         },

@@ -18,8 +18,10 @@ import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/home_screen_widgets.dart';
+import 'package:wmimo/screens/connections_screen.dart';
+import 'package:wmimo/screens/rules_screen.dart';
+import 'package:wmimo/screens/logs_screen.dart';
 import 'package:wmimo/screens/language_settings_screen.dart';
-import 'package:wmimo/screens/net_check_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen.dart';
 import 'package:wmimo/screens/proxy_board_screen.dart';
 import 'package:wmimo/screens/scheme_handler.dart';
@@ -56,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen>
   int _currentNavIndex = 0;
   FlutterVpnServiceState _vpnState = FlutterVpnServiceState.disconnected;
   final List<GlobalKey<NavigatorState>> _navigatorKeys = List.generate(
-    5,
+    7,
     (_) => GlobalKey<NavigatorState>(),
   );
   late final List<Widget> _tabPages;
@@ -89,18 +91,26 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       _TabNavigator(
         navigatorKey: _navigatorKeys[1],
-        child: const ProxyBoardScreen(),
-      ),
-      _TabNavigator(
-        navigatorKey: _navigatorKeys[2],
         child: const ProfilesBoardScreen(),
       ),
       _TabNavigator(
+        navigatorKey: _navigatorKeys[2],
+        child: const ProxyBoardScreen(),
+      ),
+      _TabNavigator(
         navigatorKey: _navigatorKeys[3],
-        child: const NetCheckScreen(),
+        child: const ConnectionsScreen(),
       ),
       _TabNavigator(
         navigatorKey: _navigatorKeys[4],
+        child: const RulesScreen(),
+      ),
+      _TabNavigator(
+        navigatorKey: _navigatorKeys[5],
+        child: const LogsScreen(),
+      ),
+      _TabNavigator(
+        navigatorKey: _navigatorKeys[6],
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: SingleChildScrollView(
@@ -579,24 +589,36 @@ class _HomeScreenState extends State<HomeScreen>
                                 _buildNavItem(
                                   context: context,
                                   index: 1,
-                                  icon: Icons.alt_route_rounded,
-                                  label: tcontext.meta.proxy,
-                                ),
-                                _buildNavItem(
-                                  context: context,
-                                  index: 2,
                                   icon: Icons.dns_rounded,
                                   label: tcontext.meta.myProfiles,
                                 ),
                                 _buildNavItem(
                                   context: context,
+                                  index: 2,
+                                  icon: Icons.alt_route_rounded,
+                                  label: tcontext.meta.proxy,
+                                ),
+                                _buildNavItem(
+                                  context: context,
                                   index: 3,
-                                  icon: Icons.network_check_rounded,
-                                  label: tcontext.meta.networkCheck,
+                                  icon: Icons.hub_outlined,
+                                  label: tcontext.meta.connections,
                                 ),
                                 _buildNavItem(
                                   context: context,
                                   index: 4,
+                                  icon: Icons.rule_rounded,
+                                  label: tcontext.meta.rules,
+                                ),
+                                _buildNavItem(
+                                  context: context,
+                                  index: 5,
+                                  icon: Icons.article_outlined,
+                                  label: tcontext.meta.coreLog,
+                                ),
+                                _buildNavItem(
+                                  context: context,
+                                  index: 6,
                                   icon: Icons.tune_rounded,
                                   label: tcontext.meta.settingApp,
                                 ),
@@ -656,7 +678,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       bottomNavigationBar: !isDesktop
           ? NavigationBar(
-              selectedIndex: _currentNavIndex > 4 ? 0 : _currentNavIndex,
+              selectedIndex: _currentNavIndex > 6 ? 0 : _currentNavIndex,
               onDestinationSelected: (int index) {
                 if (_currentNavIndex == index) {
                   final navState = _navigatorKeys[index].currentState;
@@ -680,19 +702,19 @@ class _HomeScreenState extends State<HomeScreen>
                   label: tcontext.meta.overview,
                 ),
                 NavigationDestination(
-                  icon: const Icon(Icons.alt_route_outlined),
-                  selectedIcon: const Icon(Icons.alt_route_rounded),
-                  label: tcontext.meta.proxy,
-                ),
-                NavigationDestination(
                   icon: const Icon(Icons.dns_outlined),
                   selectedIcon: const Icon(Icons.dns_rounded),
                   label: tcontext.meta.myProfiles,
                 ),
                 NavigationDestination(
-                  icon: const Icon(Icons.network_check_outlined),
-                  selectedIcon: const Icon(Icons.network_check_rounded),
-                  label: tcontext.meta.networkCheck,
+                  icon: const Icon(Icons.alt_route_outlined),
+                  selectedIcon: const Icon(Icons.alt_route_rounded),
+                  label: tcontext.meta.proxy,
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.hub_outlined),
+                  selectedIcon: const Icon(Icons.hub),
+                  label: tcontext.meta.connections,
                 ),
                 NavigationDestination(
                   icon: const Icon(Icons.tune_outlined),
