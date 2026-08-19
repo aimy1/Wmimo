@@ -57,6 +57,115 @@ class ProxyHttpOverrides extends HttpOverrides {
   }
 }
 
+class TrafficWaveChartPainter extends CustomPainter {
+  final List<double> downloadHistory;
+  final List<double> uploadHistory;
+  final Color downloadColor;
+  final Color uploadColor;
+  final bool isDark;
+
+  TrafficWaveChartPainter({
+    required this.downloadHistory,
+    required this.uploadHistory,
+    required this.downloadColor,
+    required this.uploadColor,
+    required this.isDark,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (downloadHistory.isEmpty && uploadHistory.isEmpty) return;
+
+    double maxVal = 1024 * 10; // minimum scale: 10 KB/s
+    for (var v in downloadHistory) {
+      if (v > maxVal) maxVal = v;
+    }
+    for (var v in uploadHistory) {
+      if (v > maxVal) maxVal = v;
+    }
+
+    // Grid lines
+    final gridPaint = Paint()
+      ..color = (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05)
+      ..strokeWidth = 0.8;
+    canvas.drawLine(
+      Offset(0, size.height * 0.33),
+      Offset(size.width, size.height * 0.33),
+      gridPaint,
+    );
+    canvas.drawLine(
+      Offset(0, size.height * 0.66),
+      Offset(size.width, size.height * 0.66),
+      gridPaint,
+    );
+
+    _drawLineAndFill(canvas, size, downloadHistory, maxVal, downloadColor);
+    _drawLineAndFill(canvas, size, uploadHistory, maxVal, uploadColor);
+  }
+
+  void _drawLineAndFill(
+    Canvas canvas,
+    Size size,
+    List<double> history,
+    double maxVal,
+    Color color,
+  ) {
+    if (history.length < 2) return;
+
+    final stepX = size.width / (history.length - 1);
+    final path = Path();
+    final fillPath = Path();
+
+    double getY(double val) {
+      final ratio = (val / maxVal).clamp(0.0, 1.0);
+      return size.height - (ratio * (size.height - 4)) - 2;
+    }
+
+    path.moveTo(0, getY(history.first));
+    fillPath.moveTo(0, size.height);
+    fillPath.lineTo(0, getY(history.first));
+
+    for (int i = 1; i < history.length; i++) {
+      final prevX = (i - 1) * stepX;
+      final prevY = getY(history[i - 1]);
+      final currX = i * stepX;
+      final currY = getY(history[i]);
+
+      final midX = (prevX + currX) / 2;
+      path.cubicTo(midX, prevY, midX, currY, currX, currY);
+      fillPath.cubicTo(midX, prevY, midX, currY, currX, currY);
+    }
+
+    fillPath.lineTo(size.width, size.height);
+    fillPath.close();
+
+    // Fill gradient
+    final fillPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          color.withValues(alpha: isDark ? 0.28 : 0.18),
+          color.withValues(alpha: 0.0),
+        ],
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
+      ..style = PaintingStyle.fill;
+    canvas.drawPath(fillPath, fillPaint);
+
+    // Stroke line
+    final strokePaint = Paint()
+      ..color = color
+      ..strokeWidth = 1.8
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(path, strokePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant TrafficWaveChartPainter oldDelegate) => true;
+}
+
 class HomeScreenWidgetPart1 extends StatefulWidget {
   final Function(int tabIndex)? onNavigateToTab;
   const HomeScreenWidgetPart1({super.key, this.onNavigateToTab});
@@ -68,7 +177,6 @@ class HomeScreenWidgetPart1 extends StatefulWidget {
 class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   static final String _kNoSpeed = "↑ 0 B/s   ↓ 0 B/s";
   static final String _kNoTrafficTotal = "↑ 0 B   ↓ 0 B";
-  //static final String _kNoMemory = "0 B   0 B";
   final FocusNode _focusNodeConnect = FocusNode();
   FlutterVpnServiceState _state = FlutterVpnServiceState.disconnected;
   Timer? _timerStateChecker;
@@ -76,11 +184,17 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   QuickActions? _quickActions;
   bool _quickActionWorking = false;
 
-  //final ValueNotifier<String> _memory = ValueNotifier<String>(_kNoMemory);
   final ValueNotifier<String> _trafficSpeed = ValueNotifier<String>(_kNoSpeed);
   final ValueNotifier<String> _trafficTotal = ValueNotifier<String>(
     _kNoTrafficTotal,
   );
+  final ValueNotifier<num> _uploadSpeedRaw = ValueNotifier<num>(0);
+  final ValueNotifier<num> _downloadSpeedRaw = ValueNotifier<num>(0);
+  final ValueNotifier<num> _uploadTotalRaw = ValueNotifier<num>(0);
+  final ValueNotifier<num> _downloadTotalRaw = ValueNotifier<num>(0);
+  final ValueNotifier<num> _memoryRaw = ValueNotifier<num>(0);
+  final List<double> _uploadHistory = List<double>.filled(30, 0.0);
+  final List<double> _downloadHistory = List<double>.filled(30, 0.0);
   final ValueNotifier<String> _proxyNow = ValueNotifier<String>("");
   bool _proxyNowUpdating = false;
 
@@ -331,65 +445,121 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     },
                   ),
                 ),
-                if (connected) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .surface
-                          .withValues(alpha: 0.7),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: Theme.of(context)
-                            .dividerColor
-                            .withValues(alpha: 0.6),
-                        width: 0.8,
-                      ),
-                    ),
-                    child: Row(
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        // 流量统计卡片
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 标题栏与实时状态
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.speed_rounded,
-                                size: 18,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: ValueListenableBuilder<String>(
-                                  builder: _buildWithTrafficSpeedValue,
-                                  valueListenable: _trafficSpeed,
-                                ),
-                              ),
-                            ],
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: ThemeDefine.kColorBlue.withValues(
+                              alpha: Theme.of(context).brightness == Brightness.dark ? 0.2 : 0.1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.auto_graph_rounded,
+                            size: 18,
+                            color: ThemeDefine.kColorBlue,
                           ),
                         ),
-                        Container(
-                          width: 1,
-                          height: 22,
-                          color: Theme.of(context).dividerColor,
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                        const SizedBox(width: 8),
+                        const Text(
+                          '流量统计',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.data_usage_rounded,
-                                size: 18,
-                                color: Theme.of(context).colorScheme.primary,
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        ValueListenableBuilder<num>(
+                          valueListenable: _memoryRaw,
+                          builder: (context, mem, _) {
+                            if (mem <= 0 || !connected) return const SizedBox.shrink();
+                            return Container(
+                              margin: const EdgeInsets.only(right: 6),
+                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: (Theme.of(context).brightness == Brightness.dark
+                                        ? const Color(0xFF1E293B)
+                                        : const Color(0xFFE2E8F0))
+                                    .withValues(alpha: 0.7),
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: ValueListenableBuilder<String>(
-                                  builder: _buildWithTrafficSpeedValue,
-                                  valueListenable: _trafficTotal,
+                              child: Text(
+                                '内存: ${ClashHttpApi.convertTrafficToStringDouble(mem)}',
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.65),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                          decoration: BoxDecoration(
+                            color: connected
+                                ? ThemeDefine.kColorGreenBright.withValues(
+                                    alpha: Theme.of(context).brightness == Brightness.dark ? 0.15 : 0.1,
+                                  )
+                                : (Theme.of(context).brightness == Brightness.dark
+                                    ? const Color(0xFF1E293B)
+                                    : const Color(0xFFE2E8F0)),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: connected
+                                  ? ThemeDefine.kColorGreenBright.withValues(alpha: 0.3)
+                                  : Theme.of(context).dividerColor.withValues(alpha: 0.3),
+                              width: 0.8,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 6,
+                                height: 6,
+                                decoration: BoxDecoration(
+                                  color: connected
+                                      ? ThemeDefine.kColorGreenBright
+                                      : const Color(0xFF94A3B8),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                connected ? '实时监控' : '未连接',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                  color: connected
+                                      ? ThemeDefine.kColorGreenBright
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.6),
                                 ),
                               ),
                             ],
@@ -397,6 +567,118 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                         ),
                       ],
                     ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                // 实时流量波形图
+                Container(
+                  height: 68,
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xFF0F172A).withValues(alpha: 0.7)
+                        : const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Theme.of(context).dividerColor.withValues(alpha: 0.35),
+                      width: 0.8,
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: ValueListenableBuilder<num>(
+                      valueListenable: _downloadSpeedRaw,
+                      builder: (context, _, __) {
+                        return CustomPaint(
+                          painter: TrafficWaveChartPainter(
+                            downloadHistory: _downloadHistory,
+                            uploadHistory: _uploadHistory,
+                            downloadColor: const Color(0xFF10B981),
+                            uploadColor: const Color(0xFF3B82F6),
+                            isDark: Theme.of(context).brightness == Brightness.dark,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // 4 个指标小卡片
+                Row(
+                  children: [
+                    Expanded(
+                      child: ValueListenableBuilder<num>(
+                        valueListenable: _uploadSpeedRaw,
+                        builder: (context, value, _) {
+                          return _buildTrafficTile(
+                            context: context,
+                            icon: Icons.arrow_upward_rounded,
+                            iconColor: const Color(0xFF3B82F6),
+                            label: '实时上传',
+                            value: '${ClashHttpApi.convertTrafficToStringDouble(value)}/s',
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ValueListenableBuilder<num>(
+                        valueListenable: _downloadSpeedRaw,
+                        builder: (context, value, _) {
+                          return _buildTrafficTile(
+                            context: context,
+                            icon: Icons.arrow_downward_rounded,
+                            iconColor: const Color(0xFF10B981),
+                            label: '实时下载',
+                            value: '${ClashHttpApi.convertTrafficToStringDouble(value)}/s',
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ValueListenableBuilder<num>(
+                        valueListenable: _uploadTotalRaw,
+                        builder: (context, value, _) {
+                          return _buildTrafficTile(
+                            context: context,
+                            icon: Icons.cloud_upload_outlined,
+                            iconColor: const Color(0xFF8B5CF6),
+                            label: '本次上传',
+                            value: ClashHttpApi.convertTrafficToStringDouble(value),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ValueListenableBuilder<num>(
+                        valueListenable: _downloadTotalRaw,
+                        builder: (context, value, _) {
+                          return _buildTrafficTile(
+                            context: context,
+                            icon: Icons.cloud_download_outlined,
+                            iconColor: const Color(0xFF06B6D4),
+                            label: '本次下载',
+                            value: ClashHttpApi.convertTrafficToStringDouble(value),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                // 订阅套餐流量进度
+                if (currentProfile != null && currentProfile.isRemote() && currentProfile.total > 0) ...[
+                  const SizedBox(height: 10),
+                  _buildSubscriptionQuotaSection(
+                    context: context,
+                    profile: currentProfile,
+                    expireInfo: tranfficExpire,
                   ),
                 ],
               ],
@@ -676,6 +958,177 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTrafficTile({
+    required BuildContext context,
+    required IconData icon,
+    required Color iconColor,
+    required String label,
+    required String value,
+  }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF0F172A).withValues(alpha: 0.6)
+            : const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: 0.3),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: isDark ? 0.2 : 0.12),
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: Icon(icon, size: 16, color: iconColor),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSubscriptionQuotaSection({
+    required BuildContext context,
+    required ProfileSetting profile,
+    required Tuple2<bool, String>? expireInfo,
+  }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    num used = profile.upload + profile.download;
+    num total = profile.total;
+    double percent = total > 0 ? (used / total) : 0.0;
+    if (percent > 1.0) percent = 1.0;
+
+    String usedStr = ClashHttpApi.convertTrafficToStringDouble(used);
+    String totalStr = ClashHttpApi.convertTrafficToStringDouble(total);
+    num remaining = (total - used).clamp(0, total);
+    String remainingStr = ClashHttpApi.convertTrafficToStringDouble(remaining);
+
+    Color statusColor = percent > 0.9
+        ? Colors.red
+        : (percent > 0.7 ? Colors.orange : ThemeDefine.kColorBlue);
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF151D2E)
+            : const Color(0xFFF1F5F9).withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: 0.4),
+          width: 0.8,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.pie_chart_outline_rounded,
+                    size: 15,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    '套餐用量: $usedStr / $totalStr (剩余 $remainingStr)',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                '${(percent * 100).toStringAsFixed(1)}%',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: statusColor,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: percent,
+              minHeight: 6,
+              backgroundColor: (isDark ? Colors.white : Colors.black)
+                  .withValues(alpha: 0.08),
+              valueColor: AlwaysStoppedAnimation<Color>(statusColor),
+            ),
+          ),
+          if (expireInfo != null) ...[
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(
+                  Icons.event_outlined,
+                  size: 13,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  '到期时间: ${expireInfo.item2}',
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    color: expireInfo.item1
+                        ? Colors.red
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ],
       ),
     );
   }
@@ -975,8 +1428,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       var obj = jsonDecode(connections);
       ClashConnections body = ClashConnections();
       body.fromJson(obj, false);
-      //_memory.value =
-      //    ClashHttpApi.convertTrafficToStringDouble(body.memory);
+      _uploadTotalRaw.value = body.uploadTotal;
+      _downloadTotalRaw.value = body.downloadTotal;
+      _memoryRaw.value = body.memory;
       trafficTotalNew =
           "↑ ${ClashHttpApi.convertTrafficToStringDouble(body.uploadTotal)}  ↓ ${ClashHttpApi.convertTrafficToStringDouble(body.downloadTotal)} ";
     } catch (err) {}
@@ -984,6 +1438,12 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       var obj = jsonDecode(tranffic);
       ClashTraffic traffic = ClashTraffic();
       traffic.fromJson(obj);
+      _uploadSpeedRaw.value = traffic.upload;
+      _downloadSpeedRaw.value = traffic.download;
+      _uploadHistory.removeAt(0);
+      _uploadHistory.add(traffic.upload.toDouble());
+      _downloadHistory.removeAt(0);
+      _downloadHistory.add(traffic.download.toDouble());
       trafficSpeedNew =
           "↑ ${ClashHttpApi.convertTrafficToStringDouble(traffic.upload)}/s  ↓ ${ClashHttpApi.convertTrafficToStringDouble(traffic.download)}/s";
     } catch (err) {}
@@ -1024,8 +1484,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     if (resetUI) {
       _trafficTotal.value = _kNoTrafficTotal;
       _trafficSpeed.value = _kNoSpeed;
+      _uploadSpeedRaw.value = 0;
+      _downloadSpeedRaw.value = 0;
+      _uploadTotalRaw.value = 0;
+      _downloadTotalRaw.value = 0;
+      _memoryRaw.value = 0;
+      _uploadHistory.fillRange(0, _uploadHistory.length, 0.0);
+      _downloadHistory.fillRange(0, _downloadHistory.length, 0.0);
       Biz.trafficChanged("", "");
-      // _memory.value = _kNoMemory;
       _proxyNow.value = "";
     }
   }
