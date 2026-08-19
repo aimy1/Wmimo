@@ -131,15 +131,18 @@ Future<void> run(List<String> args) async {
       await windowManager.ensureInitialized();
       WindowOptions windowOptions = const WindowOptions(
         size: Size(1020, 680),
+        minimumSize: Size(800, 560),
         center: true,
         backgroundColor: Colors.transparent,
         skipTaskbar: false,
         titleBarStyle: TitleBarStyle.normal,
       );
       windowManager.waitUntilReadyToShow(windowOptions, () async {
+        await windowManager.setMinimumSize(const Size(800, 560));
         await windowManager.show();
         await windowManager.focus();
       });
+      await windowManager.setMinimumSize(const Size(800, 560));
       await windowManager.show();
       await windowManager.focus();
     }
