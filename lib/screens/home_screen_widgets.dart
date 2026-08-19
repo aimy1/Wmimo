@@ -72,7 +72,7 @@ class TrafficWaveChartPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (downloadHistory.isEmpty && uploadHistory.isEmpty) return;
 
-    double maxVal = 1024 * 10; // minimum scale: 10 KB/s
+    double maxVal = 1024 * 50; // minimum scale: 50 KB/s
     for (var v in downloadHistory) {
       if (v > maxVal) maxVal = v;
     }
@@ -80,23 +80,80 @@ class TrafficWaveChartPainter extends CustomPainter {
       if (v > maxVal) maxVal = v;
     }
 
-    // Grid lines
+    // Grid lines (3 horizontal lines)
     final gridPaint = Paint()
-      ..color = (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05)
+      ..color = (isDark ? Colors.white : Colors.black).withValues(alpha: 0.06)
       ..strokeWidth = 0.8;
     canvas.drawLine(
-      Offset(0, size.height * 0.33),
-      Offset(size.width, size.height * 0.33),
+      Offset(0, size.height * 0.25),
+      Offset(size.width, size.height * 0.25),
       gridPaint,
     );
     canvas.drawLine(
-      Offset(0, size.height * 0.66),
-      Offset(size.width, size.height * 0.66),
+      Offset(0, size.height * 0.5),
+      Offset(size.width, size.height * 0.5),
+      gridPaint,
+    );
+    canvas.drawLine(
+      Offset(0, size.height * 0.75),
+      Offset(size.width, size.height * 0.75),
       gridPaint,
     );
 
     _drawLineAndFill(canvas, size, downloadHistory, maxVal, downloadColor);
     _drawLineAndFill(canvas, size, uploadHistory, maxVal, uploadColor);
+
+    // Dynamic Top Speed Indicators
+    final textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+    );
+
+    // Top-left: Peak Scale
+    textPainter.text = TextSpan(
+      text: "${ClashHttpApi.convertTrafficToStringDouble(maxVal)}/s",
+      style: TextStyle(
+        fontSize: 9,
+        fontWeight: FontWeight.w600,
+        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.35),
+      ),
+    );
+    textPainter.layout();
+    textPainter.paint(canvas, const Offset(6, 4));
+
+    // Top-right: Current Speed Indicators
+    final currDown = downloadHistory.isNotEmpty ? downloadHistory.last : 0.0;
+    final currUp = uploadHistory.isNotEmpty ? uploadHistory.last : 0.0;
+
+    textPainter.text = TextSpan(
+      children: [
+        TextSpan(
+          text: "● ",
+          style: TextStyle(color: downloadColor, fontSize: 8),
+        ),
+        TextSpan(
+          text: "↓ ${ClashHttpApi.convertTrafficToStringDouble(currDown)}/s   ",
+          style: TextStyle(
+            fontSize: 9,
+            fontWeight: FontWeight.w600,
+            color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
+          ),
+        ),
+        TextSpan(
+          text: "● ",
+          style: TextStyle(color: uploadColor, fontSize: 8),
+        ),
+        TextSpan(
+          text: "↑ ${ClashHttpApi.convertTrafficToStringDouble(currUp)}/s",
+          style: TextStyle(
+            fontSize: 9,
+            fontWeight: FontWeight.w600,
+            color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
+          ),
+        ),
+      ],
+    );
+    textPainter.layout();
+    textPainter.paint(canvas, Offset(size.width - textPainter.width - 6, 4));
   }
 
   void _drawLineAndFill(
@@ -114,7 +171,7 @@ class TrafficWaveChartPainter extends CustomPainter {
 
     double getY(double val) {
       final ratio = (val / maxVal).clamp(0.0, 1.0);
-      return size.height - (ratio * (size.height - 4)) - 2;
+      return size.height - (ratio * (size.height - 22)) - 4;
     }
 
     path.moveTo(0, getY(history.first));
@@ -141,7 +198,7 @@ class TrafficWaveChartPainter extends CustomPainter {
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          color.withValues(alpha: isDark ? 0.28 : 0.18),
+          color.withValues(alpha: isDark ? 0.32 : 0.2),
           color.withValues(alpha: 0.0),
         ],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
@@ -151,11 +208,19 @@ class TrafficWaveChartPainter extends CustomPainter {
     // Stroke line
     final strokePaint = Paint()
       ..color = color
-      ..strokeWidth = 1.8
+      ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
     canvas.drawPath(path, strokePaint);
+
+    // Draw point at latest point
+    final lastX = size.width;
+    final lastY = getY(history.last);
+    final dotPaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(lastX, lastY), 3.0, dotPaint);
   }
 
   @override
@@ -180,6 +245,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   QuickActions? _quickActions;
   bool _quickActionWorking = false;
 
+  final ValueNotifier<int> _chartTick = ValueNotifier<int>(0);
   final ValueNotifier<String> _trafficSpeed = ValueNotifier<String>(_kNoSpeed);
   final ValueNotifier<String> _trafficTotal = ValueNotifier<String>(
     _kNoTrafficTotal,
@@ -622,7 +688,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 const SizedBox(height: 12),
                 // 实时流量波形图
                 Container(
-                  height: 68,
+                  height: 76,
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                   decoration: BoxDecoration(
@@ -637,8 +703,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: ValueListenableBuilder<num>(
-                      valueListenable: _downloadSpeedRaw,
+                    child: ValueListenableBuilder<int>(
+                      valueListenable: _chartTick,
                       builder: (context, _, __) {
                         return CustomPaint(
                           painter: TrafficWaveChartPainter(
@@ -1601,6 +1667,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     }
     _trafficTotal.value = trafficTotalNew;
     _trafficSpeed.value = trafficSpeedNew;
+    _chartTick.value++;
   }
 
   Future<void> _connectToCore() async {
@@ -1641,6 +1708,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       _downloadHistory.fillRange(0, _downloadHistory.length, 0.0);
       Biz.trafficChanged("", "");
       _proxyNow.value = "";
+      _chartTick.value++;
     }
   }
 

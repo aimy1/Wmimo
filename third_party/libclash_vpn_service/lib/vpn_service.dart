@@ -74,12 +74,6 @@ class FlutterVpnService {
   static String? _savedTunnelServicePath;
   static String? _savedConfigFilePath;
 
-  // Real-time Traffic Monitoring
-  static int _lastUp = 0;
-  static int _lastDown = 0;
-  static StreamSubscription? _trafficSub;
-  static HttpClient? _trafficClient;
-
   static Future<FlutterVpnServiceState> get currentState async => _state;
 
   static Future<String> getSystemVersion() async => "1.0.0";
@@ -207,9 +201,23 @@ secret: "$secret"
     }
   }
 
+  // Real-time Traffic Monitoring
+  static int _lastUp = 0;
+  static int _lastDown = 0;
+  static bool _trafficMonitoring = false;
+  static StreamSubscription? _trafficSub;
+  static HttpClient? _trafficClient;
+
   static void _startTrafficMonitor(int port, String secret) {
-    _stopTrafficMonitor();
-    _trafficClient = HttpClient();
+    _trafficMonitoring = true;
+    _listenTraffic(port, secret);
+  }
+
+  static void _listenTraffic(int port, String secret) {
+    if (!_trafficMonitoring) return;
+    _trafficSub?.cancel();
+    _trafficClient?.close(force: true);
+    _trafficClient = HttpClient()..connectionTimeout = const Duration(seconds: 3);
     _trafficClient!.getUrl(Uri.parse("http://127.0.0.1:$port/traffic")).then((req) {
       if (secret.isNotEmpty) {
         req.headers.set('Authorization', 'Bearer $secret');
@@ -227,15 +235,24 @@ secret: "$secret"
             _lastDown = json['down'] ?? 0;
           }
         } catch (_) {}
+      }, onDone: () {
+        if (_trafficMonitoring) {
+          Future.delayed(const Duration(seconds: 1), () => _listenTraffic(port, secret));
+        }
       }, onError: (_) {
-        _stopTrafficMonitor();
+        if (_trafficMonitoring) {
+          Future.delayed(const Duration(seconds: 1), () => _listenTraffic(port, secret));
+        }
       });
     }).catchError((_) {
-      _stopTrafficMonitor();
+      if (_trafficMonitoring) {
+        Future.delayed(const Duration(seconds: 1), () => _listenTraffic(port, secret));
+      }
     });
   }
 
   static void _stopTrafficMonitor() {
+    _trafficMonitoring = false;
     _trafficSub?.cancel();
     _trafficSub = null;
     _trafficClient?.close(force: true);
