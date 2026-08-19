@@ -1508,6 +1508,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   Future<void> _onCurrentChanged(String id) async {
     if (id.isEmpty) {
       await VPNService.stop();
+      if (mounted) {
+        setState(() {});
+        _updateProxyNow();
+      }
       return;
     }
 
@@ -1517,6 +1521,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         return;
       }
       DialogUtils.showAlertDialog(context, err.message, withVersion: true);
+    }
+    if (mounted) {
+      setState(() {});
+      _updateProxyNow();
     }
   }
 

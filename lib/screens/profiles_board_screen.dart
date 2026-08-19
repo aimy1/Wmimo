@@ -40,6 +40,7 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
     ProfileManager.onEventAdd.add(_onAdd);
     ProfileManager.onEventRemove.add(_onRemove);
     ProfileManager.onEventUpdate.add(_onUpdate);
+    ProfileManager.onEventCurrentChanged.add(_onCurrentChanged);
   }
 
   @override
@@ -54,6 +55,7 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
     ProfileManager.onEventAdd.remove(_onAdd);
     ProfileManager.onEventRemove.remove(_onRemove);
     ProfileManager.onEventUpdate.remove(_onUpdate);
+    ProfileManager.onEventCurrentChanged.remove(_onCurrentChanged);
     super.dispose();
   }
 
@@ -357,6 +359,10 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
   }
 
   Future<void> _onUpdate(String id, bool finish) async {
+    setState(() {});
+  }
+
+  Future<void> _onCurrentChanged(String id) async {
     setState(() {});
   }
 }

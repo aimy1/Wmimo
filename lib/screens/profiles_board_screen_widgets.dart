@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
@@ -277,7 +277,11 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
             showDivider: i != widget.settings.length - 1,
             onTap: () {
               ProfileManager.setCurrent(setting.id);
-              Navigator.of(context).pop();
+              if (ModalRoute.of(context)?.canPop ?? false) {
+                Navigator.of(context).pop();
+              } else {
+                setState(() {});
+              }
             },
             onTapMore: () {
               showMore(setting);

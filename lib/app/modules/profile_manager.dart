@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: unused_catch_stack, empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -480,16 +480,19 @@ class ProfileManager {
   }
 
   static ProfileSetting? getCurrent() {
-    if (_config._currentId.isEmpty) {
-      return null;
+    if (_config._currentId.isNotEmpty) {
+      int index = _config.profiles.indexWhere((value) {
+        return value.id == _config._currentId;
+      });
+      if (index >= 0) {
+        return _config.profiles[index];
+      }
     }
-    int index = _config.profiles.indexWhere((value) {
-      return value.id == _config._currentId;
-    });
-    if (index < 0) {
-      return null;
+    if (_config.profiles.isNotEmpty) {
+      _config._currentId = _config.profiles.first.id;
+      return _config.profiles.first;
     }
-    return _config.profiles[index];
+    return null;
   }
 
   static Future<ReturnResultError?> prepare(ProfileSetting profile) async {
@@ -567,7 +570,7 @@ class ProfileManager {
         event(id);
       }
 
-      if (_config._currentId.isEmpty) {
+      if (_config._currentId.isEmpty || _config.profiles.length == 1) {
         setCurrent(id);
       }
 
@@ -775,7 +778,7 @@ class ProfileManager {
       event(id);
     }
 
-    if (_config._currentId.isEmpty) {
+    if (_config._currentId.isEmpty || _config.profiles.length == 1) {
       setCurrent(id);
     }
 

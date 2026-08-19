@@ -1,4 +1,4 @@
-﻿// ignore_for_file: use_build_context_synchronously, empty_catches
+// ignore_for_file: use_build_context_synchronously, empty_catches
 
 import 'dart:async';
 
@@ -106,6 +106,9 @@ class _AddProfileByUrlScreenState
     _loading = false;
     setState(() {});
     if (result.error == null) {
+      if (result.data != null && result.data!.isNotEmpty) {
+        ProfileManager.setCurrent(result.data!);
+      }
       await DialogUtils.showAlertDialog(context, tcontext.meta.addSuccess);
       if (!mounted) {
         return;
