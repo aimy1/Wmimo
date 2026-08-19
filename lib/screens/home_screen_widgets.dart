@@ -34,6 +34,7 @@ import 'package:wmimo/screens/proxy_board_screen.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
 import 'package:wmimo/screens/widgets/traffic_chart_card.dart';
+import 'package:wmimo/screens/settings_screen.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:libclash_vpn_service/state.dart';
@@ -1535,130 +1536,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
 class HomeScreenWidgetPart2 extends StatelessWidget {
   const HomeScreenWidgetPart2({super.key});
 
-  Widget _buildSectionCard({
-    required BuildContext context,
-    required List<Widget> items,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (_, index) => items[index],
-            separatorBuilder: (_, __) => const Divider(height: 1, thickness: 0.8),
-            itemCount: items.length,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    AutoUpdateCheckVersion versionCheck = AutoUpdateManager.getVersionCheck();
-    final tcontext = Translations.of(context);
-
-    // Group 1: Core & Configuration
-    final coreItems = [
-      ListTile(
-        title: Text(tcontext.meta.settingApp),
-        leading: const Icon(Icons.tune_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
-        onTap: () async {
-          await GroupHelper.showAppSettings(context);
-        },
-      ),
-      ListTile(
-        title: Text(tcontext.meta.settingCore),
-        leading: const Icon(Icons.settings_suggest_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
-        onTap: () async {
-          await GroupHelper.showClashSettings(context);
-        },
-      ),
-      ListTile(
-        title: Text(tcontext.meta.coreLog),
-        leading: const Icon(Icons.terminal_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              settings: LogsScreen.routSettings(),
-              builder: (context) => const LogsScreen(),
-            ),
-          );
-        },
-      ),
-    ];
-
-    // Group 2: Data & Sync
-    final dataItems = [
-      ListTile(
-        title: Text(tcontext.meta.backupAndSync),
-        leading: const Icon(Icons.cloud_sync_outlined, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
-        onTap: () async {
-          GroupHelper.showBackupAndSync(context);
-        },
-      ),
-      if (versionCheck.newVersion)
-        ListTile(
-          title: Text(tcontext.meta.hasNewVersion(p: versionCheck.version)),
-          leading: const Icon(
-            Icons.new_releases_rounded,
-            size: 22,
-            color: Colors.amber,
-          ),
-          trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-          minVerticalPadding: 16,
-          onTap: () async {
-            GroupHelper.newVersionUpdate(context);
-          },
-        ),
-    ];
-
-    // Group 3: Help & About
-    final helpItems = [
-      ListTile(
-        title: Text(tcontext.meta.help),
-        leading: const Icon(Icons.help_outline_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
-        onTap: () async {
-          await GroupHelper.showHelp(context);
-        },
-      ),
-      ListTile(
-        title: Text(tcontext.meta.about),
-        leading: const Icon(Icons.info_outline_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              settings: AboutScreen.routSettings(),
-              builder: (context) => const AboutScreen(),
-            ),
-          );
-        },
-      ),
-    ];
-
-    return Column(
-      children: [
-        _buildSectionCard(context: context, items: coreItems),
-        _buildSectionCard(context: context, items: dataItems),
-        _buildSectionCard(context: context, items: helpItems),
-      ],
-    );
+    return const SettingsScreen();
   }
 }
