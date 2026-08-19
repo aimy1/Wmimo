@@ -116,7 +116,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           return ClashProtocolType.isGroupType(n.type);
         }).toList();
 
-        if (groups.isNotEmpty) {
+        bool hasActualGroups = groups.any((g) =>
+            g.name != "GLOBAL" ||
+            g.all.any((m) => m != "DIRECT" && m != "REJECT"));
+
+        if (groups.isNotEmpty && hasActualGroups) {
           if (mounted) {
             setState(() {
               _allNodes = result.data!;
@@ -168,50 +172,33 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       return;
     }
 
-    if (!_isVpnStarted) {
-      setState(() {
-        group.now = node.name;
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text("代理服务尚未开启，请先在主页开启代理以应用节点切换"),
-            action: SnackBarAction(
-              label: "开启代理",
-              onPressed: () {
-                VpnActionHandler.vpnConnect?.call("proxy_select", false);
-              },
-            ),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-      return;
-    }
-
     final prev = group.now;
     setState(() {
       group.now = node.name;
     });
 
-    final err = await ClashHttpApi.setProxiesNode(group.name, node.name);
-    if (err != null && mounted) {
-      setState(() {
-        group.now = prev;
-      });
+    if (_isVpnStarted) {
+      final err = await ClashHttpApi.setProxiesNode(group.name, node.name);
+      if (err != null && mounted) {
+        setState(() {
+          group.now = prev;
+        });
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("切换节点失败: ${err.message}"),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
+    }
+
+    if (mounted) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("切换节点失败: ${err.message}"),
-          duration: const Duration(seconds: 3),
-        ),
-      );
-    } else if (mounted) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("已切换节点至「${node.name}」"),
+          content: Text("已选择节点「${node.name}」"),
           duration: const Duration(seconds: 1),
           behavior: SnackBarBehavior.floating,
         ),
@@ -221,19 +208,23 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   Future<void> _testNodeDelay(ClashProxiesNode node) async {
     if (!_isVpnStarted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("代理核心尚未启动，请先开启代理服务再进行测速"),
-          action: SnackBarAction(
-            label: "开启代理",
-            onPressed: () {
-              VpnActionHandler.vpnConnect?.call("proxy_test", false);
-            },
-          ),
-          duration: const Duration(seconds: 3),
+          content: const Text("正在启动代理核心并测速..."),
+          duration: const Duration(seconds: 2),
         ),
       );
-      return;
+      VpnActionHandler.vpnConnect?.call("proxy_test", false);
+      for (int i = 0; i < 15; i++) {
+        await Future.delayed(const Duration(milliseconds: 300));
+        final started = await VPNService.getStarted();
+        if (started) {
+          _isVpnStarted = true;
+          break;
+        }
+      }
+      if (!_isVpnStarted) return;
     }
 
     if (_nodesTesting.contains(node.name)) return;
@@ -271,19 +262,23 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   Future<void> _testGroupDelay(ClashProxiesNode group) async {
     if (!_isVpnStarted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("代理核心尚未启动，请先开启代理服务再进行测速"),
-          action: SnackBarAction(
-            label: "开启代理",
-            onPressed: () {
-              VpnActionHandler.vpnConnect?.call("proxy_test", false);
-            },
-          ),
-          duration: const Duration(seconds: 3),
+          content: const Text("正在启动代理核心并测速..."),
+          duration: const Duration(seconds: 2),
         ),
       );
-      return;
+      VpnActionHandler.vpnConnect?.call("proxy_test", false);
+      for (int i = 0; i < 15; i++) {
+        await Future.delayed(const Duration(milliseconds: 300));
+        final started = await VPNService.getStarted();
+        if (started) {
+          _isVpnStarted = true;
+          break;
+        }
+      }
+      if (!_isVpnStarted) return;
     }
 
     final nodeMap = {for (var n in _allNodes) n.name: n};
@@ -334,19 +329,23 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   Future<void> _testAllDelay() async {
     if (!_isVpnStarted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("代理核心尚未启动，请先开启代理服务再进行测速"),
-          action: SnackBarAction(
-            label: "开启代理",
-            onPressed: () {
-              VpnActionHandler.vpnConnect?.call("proxy_test", false);
-            },
-          ),
-          duration: const Duration(seconds: 3),
+          content: const Text("正在启动代理核心并测速..."),
+          duration: const Duration(seconds: 2),
         ),
       );
-      return;
+      VpnActionHandler.vpnConnect?.call("proxy_test", false);
+      for (int i = 0; i < 15; i++) {
+        await Future.delayed(const Duration(milliseconds: 300));
+        final started = await VPNService.getStarted();
+        if (started) {
+          _isVpnStarted = true;
+          break;
+        }
+      }
+      if (!_isVpnStarted) return;
     }
 
     final groups = _getProxyGroups();

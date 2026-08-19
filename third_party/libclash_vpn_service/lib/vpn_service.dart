@@ -137,28 +137,74 @@ class FlutterVpnService {
     return _savedTunnelServicePath ?? exeName;
   }
 
-  static String _resolveConfigFile() {
-    if (_savedConfig?.core_path_patch_final != null &&
-        _savedConfig!.core_path_patch_final.isNotEmpty &&
-        File(_savedConfig!.core_path_patch_final).existsSync()) {
-      return _savedConfig!.core_path_patch_final;
-    }
+  static Future<String> _resolveConfigFile() async {
+    // 1. Locate the active subscription profile file
+    String profileFile = "";
     if (_savedConfig?.core_path != null &&
         _savedConfig!.core_path.isNotEmpty &&
         File(_savedConfig!.core_path).existsSync()) {
-      return _savedConfig!.core_path;
-    }
-    if (_savedConfigFilePath != null &&
+      profileFile = _savedConfig!.core_path;
+    } else if (_savedConfigFilePath != null &&
         _savedConfigFilePath!.isNotEmpty &&
         File(_savedConfigFilePath!).existsSync()) {
-      return _savedConfigFilePath!;
+      profileFile = _savedConfigFilePath!;
     }
-    return "";
+
+    String profileContent = "";
+    if (profileFile.isNotEmpty && File(profileFile).existsSync()) {
+      try {
+        profileContent = await File(profileFile).readAsString();
+      } catch (_) {}
+    }
+
+    // If profile content is still empty, fall back to patch file
+    if (profileContent.isEmpty) {
+      if (_savedConfig?.core_path_patch_final != null &&
+          File(_savedConfig!.core_path_patch_final).existsSync()) {
+        return _savedConfig!.core_path_patch_final;
+      }
+      return "";
+    }
+
+    final port = _savedConfig?.control_port ?? 9090;
+    final secret = _savedConfig?.secret ?? "";
+
+    final header = '''
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:$port
+secret: "$secret"
+
+''';
+
+    // Filter out conflicting top-level keys
+    final filteredLines = profileContent.split('\n').where((line) {
+      final trimmed = line.trim();
+      return !trimmed.startsWith('external-controller:') &&
+          !trimmed.startsWith('secret:') &&
+          !trimmed.startsWith('mixed-port:') &&
+          !trimmed.startsWith('allow-lan:') &&
+          !trimmed.startsWith('mode:') &&
+          !trimmed.startsWith('log-level:');
+    }).join('\n');
+
+    final baseDir = _savedConfig?.base_dir.isNotEmpty == true
+        ? _savedConfig!.base_dir
+        : Directory.current.path;
+    final runtimePath = "$baseDir/runtime_active_config.yaml";
+    try {
+      await File(runtimePath).writeAsString(header + filteredLines, flush: true);
+      return runtimePath;
+    } catch (_) {
+      return profileFile;
+    }
   }
 
   static Future<VpnServiceWaitResult> start(Duration timeout) async {
     final coreExe = _resolveCorePath();
-    final configFile = _resolveConfigFile();
+    final configFile = await _resolveConfigFile();
 
     if (!File(coreExe).existsSync()) {
       return VpnServiceWaitResult(
