@@ -1,4 +1,4 @@
-﻿import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/screens/widgets/routes.dart';
 
@@ -42,7 +42,8 @@ abstract class LasyRenderingState<T extends LasyRenderingStatefulWidget>
       _print("delay redraw by paused:${T.toString()} $hashCode ");
       return;
     }
-    if (hashCode != AppRouteObserver.instance.currentRoute()) {
+    final route = ModalRoute.of(context);
+    if (route != null && !route.isCurrent) {
       _print("delay redraw by route:${T.toString()} $hashCode");
       return;
     }
@@ -55,7 +56,8 @@ abstract class LasyRenderingState<T extends LasyRenderingStatefulWidget>
     if (!mounted) {
       return;
     }
-    if (hashCode != AppRouteObserver.instance.currentRoute()) {
+    final route = ModalRoute.of(context);
+    if (route != null && !route.isCurrent) {
       return;
     }
     if (!_needRedraw) {
@@ -63,7 +65,7 @@ abstract class LasyRenderingState<T extends LasyRenderingStatefulWidget>
     }
     _print("redraw by route $from :${T.toString()} $hashCode");
     _needRedraw = false;
-    setState(() {});
+    super.setState(() {});
   }
 
   void _print(Object? object) {

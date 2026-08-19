@@ -28,7 +28,6 @@ import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/themes.dart';
 import 'package:wmimo/screens/user_agreement_screen.dart';
 import 'package:wmimo/screens/webview_helper.dart';
-import 'package:wmimo/screens/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
@@ -37,7 +36,7 @@ import 'package:protocol_handler/protocol_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
-class HomeScreen extends LasyRenderingStatefulWidget {
+class HomeScreen extends StatefulWidget {
   static RouteSettings routSettings() {
     return const RouteSettings(name: "/");
   }
@@ -49,7 +48,7 @@ class HomeScreen extends LasyRenderingStatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends LasyRenderingState<HomeScreen>
+class _HomeScreenState extends State<HomeScreen>
     with WidgetsBindingObserver, ProtocolListener, AfterLayoutMixin {
   static const String userAgreementAgreedIdKey = 'userAgreementAgreedKey';
 
