@@ -273,7 +273,7 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 4),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -281,8 +281,8 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
                       'assets/images/app_icon_128.png',
-                      width: 30,
-                      height: 30,
+                      width: 28,
+                      height: 28,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -291,8 +291,8 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
                     AppUtils.getName(),
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      letterSpacing: 0.3,
+                      fontSize: 19,
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ],
@@ -300,14 +300,16 @@ class _HomeScreenState extends LasyRenderingState<HomeScreen>
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: const [
                       HomeScreenWidgetPart1(),
-                      SizedBox(height: 15),
+                      SizedBox(height: 12),
                       HomeScreenWidgetPart2(),
+                      SizedBox(height: 24),
                     ],
                   ),
                 ),

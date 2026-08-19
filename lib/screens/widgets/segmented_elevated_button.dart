@@ -1,4 +1,4 @@
-﻿// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable
 
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:flutter/material.dart';
@@ -28,111 +28,82 @@ class SegmentedElevatedButton extends StatefulWidget {
   final Function(int value)? onPressed;
 
   @override
-  State<SegmentedElevatedButton> createState() => _SegmentedElevatedButton();
+  State<SegmentedElevatedButton> createState() => _SegmentedElevatedButtonState();
 }
 
-class _SegmentedElevatedButton extends State<SegmentedElevatedButton> {
-  final List<WidgetStatesController> _controllers = [];
-
-  @override
-  void initState() {
-    for (int i = 0; i < widget.segments.length; ++i) {
-      var controller = WidgetStatesController();
-      _controllers.add(controller);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    for (int i = 0; i < _controllers.length; ++i) {
-      _controllers[i].dispose();
-    }
-    super.dispose();
-  }
-
+class _SegmentedElevatedButtonState extends State<SegmentedElevatedButton> {
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final theme = Theme.of(context);
-        for (int i = 0; i < _controllers.length; ++i) {
-          _controllers[i].value = i == widget.selected
-              ? {WidgetState.selected}
-              : {};
-        }
-        const double space = 5;
-        double spaceWidth = (widget.segments.length + 1) * space;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
-        List<Widget> widgets = [];
-        widgets.add(const SizedBox(width: space));
-
-        for (int i = 0; i < widget.segments.length; ++i) {
-          final button = SizedBox(
-            width: (constraints.maxWidth - spaceWidth) / widget.segments.length,
-            child: ElevatedButton(
-              statesController: _controllers[i],
-              style:
-                  widget.buttonStyle ??
-                  ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith((
-                      Set<WidgetState> states,
-                    ) {
-                      if (states.contains(WidgetState.focused)) {
-                        return Colors.white;
-                      }
-                      if (states.contains(WidgetState.selected)) {
-                        return Colors.white;
-                      }
-                      return Colors.white.withValues(alpha: 0.3);
-                    }),
-                    shadowColor: WidgetStateProperty.resolveWith((
-                      Set<WidgetState> states,
-                    ) {
-                      return Colors.white.withValues(alpha: 0.0);
-                    }),
-                  ),
-              onPressed: () async {
-                widget.selected = i;
-                for (int j = 0; j < widget.segments.length; ++j) {
-                  _controllers[j].value = i == j ? {WidgetState.selected} : {};
-                }
-
-                widget.onPressed?.call(i);
-                setState(() {});
+    return Container(
+      decoration: BoxDecoration(
+        color: widget.background ??
+            (isDark
+                ? ThemeDefine.kColorDarkBg
+                : const Color(0xFFF1F5F9)),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: 0.5),
+          width: 0.8,
+        ),
+      ),
+      padding: const EdgeInsets.all(3),
+      child: Row(
+        children: List.generate(widget.segments.length, (index) {
+          final isSelected = widget.selected == index;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.selected = index;
+                });
+                widget.onPressed?.call(index);
               },
-              child: FittedBox(
-                fit: BoxFit.fill,
-                child: Text(
-                  widget.segments[i].text,
-                  style: TextStyle(
-                    color: widget.selected == i
-                        ? ThemeDefine.kColorBlue
-                        : Colors.black,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? (isDark
+                          ? ThemeDefine.kColorDarkCard
+                          : Colors.white)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(9),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: Colors.black.withValues(
+                              alpha: isDark ? 0.25 : 0.06,
+                            ),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          ),
+                        ]
+                      : null,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    widget.segments[index].text,
+                    style: TextStyle(
+                      fontSize: 13.5,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
+                      color: isSelected
+                          ? ThemeDefine.kColorBlue
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                    ),
                   ),
                 ),
               ),
             ),
           );
-          widgets.add(button);
-          widgets.add(const SizedBox(width: space));
-        }
-
-        return Container(
-          width: constraints.maxWidth - 40,
-          decoration: BoxDecoration(
-            color: widget.background ?? theme.colorScheme.surface,
-            borderRadius: BorderRadius.all(Radius.circular(25)),
-          ),
-          child: Padding(
-            padding: widget.padding ?? const EdgeInsets.fromLTRB(0, 3, 0, 3),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: widgets,
-            ),
-          ),
-        );
-      },
+        }),
+      ),
     );
   }
 }

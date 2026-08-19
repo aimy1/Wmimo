@@ -210,407 +210,426 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     }
     bool notice =
         BoardProviderNoticeManager.getFirstUnread(provider?.id ?? "") != null;
-    var widgets = [
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      children: [
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: connected
-                            ? ThemeDefine.kColorGreenBright
-                            : Colors.grey.shade400,
-                        shape: BoxShape.circle,
-                        boxShadow: connected
-                            ? [
-                                BoxShadow(
-                                  color: ThemeDefine.kColorGreenBright
-                                      .withValues(alpha: 0.35),
-                                  blurRadius: 6,
-                                  spreadRadius: 2,
-                                ),
-                              ]
-                            : null,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      connected
-                          ? tcontext.meta.connected
-                          : tcontext.meta.disconnected,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Transform.scale(
-                      scale: 0.95,
-                      child: Switch.adaptive(
-                        value: _state == FlutterVpnServiceState.connected,
-                        activeThumbColor: Colors.white,
-                        activeTrackColor: ThemeDefine.kColorGreenBright,
-                        focusNode: _focusNodeConnect,
-                        onChanged: (bool value) async {
-                          if (value) {
-                            await start("switch");
-                          } else {
-                            await stop();
-                          }
-                        },
-                      ),
-                    ),
-                    if (_state == FlutterVpnServiceState.connecting ||
-                        _state == FlutterVpnServiceState.disconnecting ||
-                        _state == FlutterVpnServiceState.reasserting)
-                      const Positioned(
-                        left: 6,
-                        child: SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            color: ThemeDefine.kColorGreenBright,
-                            strokeWidth: 2.5,
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: connected
+                                ? ThemeDefine.kColorGreenBright
+                                : const Color(0xFF94A3B8),
+                            shape: BoxShape.circle,
+                            boxShadow: connected
+                                ? [
+                                    BoxShadow(
+                                      color: ThemeDefine.kColorGreenBright
+                                          .withValues(alpha: 0.4),
+                                      blurRadius: 8,
+                                      spreadRadius: 2,
+                                    ),
+                                  ]
+                                : null,
                           ),
                         ),
-                      ),
-                  ],
-                ),
-              ],
-            ),
-            if (connected) ...[
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.7),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Theme.of(context).dividerColor.withValues(alpha: 0.6),
-                    width: 0.8,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.speed_rounded,
-                            size: 18,
-                            color: Theme.of(context).colorScheme.primary,
+                        const SizedBox(width: 10),
+                        Text(
+                          connected
+                              ? tcontext.meta.connected
+                              : tcontext.meta.disconnected,
+                          style: const TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.2,
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: ValueListenableBuilder<String>(
-                              builder: _buildWithTrafficSpeedValue,
-                              valueListenable: _trafficSpeed,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      width: 1,
-                      height: 22,
-                      color: Theme.of(context).dividerColor,
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                    ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.data_usage_rounded,
-                            size: 18,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: ValueListenableBuilder<String>(
-                              builder: _buildWithTrafficSpeedValue,
-                              valueListenable: _trafficTotal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: SizedBox(
-          height: 48,
-          child: SegmentedElevatedButton(
-            segments: [
-              SegemntedElevatedButtonItem(
-                value: ClashConfigsMode.rule.index,
-                text: tcontext.meta.rule,
-              ),
-              SegemntedElevatedButtonItem(
-                value: ClashConfigsMode.global.index,
-                text: tcontext.meta.global,
-              ),
-              SegemntedElevatedButtonItem(
-                value: ClashConfigsMode.direct.index,
-                text: tcontext.meta.direct,
-              ),
-            ],
-            selected: ClashSettingManager.getConfigsMode().index,
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            onPressed: (int value) async {
-              ClashConfigsMode type = ClashConfigsMode.values[value];
-              var error = await ClashSettingManager.setConfigsMode(type);
-              if (!context.mounted) {
-                return;
-              }
-              if (error != null) {
-                DialogUtils.showAlertDialog(
-                  context,
-                  error.message,
-                  withVersion: true,
-                );
-                return;
-              }
-              _updateProxyNow();
-            },
-          ),
-        ),
-      ),
-      ListTile(
-        title: Text(tcontext.meta.myProfiles),
-        leading: Icon(
-          Icons.dns_rounded,
-          size: 22,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        subtitle: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (currentProfile != null) ...[
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text(
-                  currentProfileName,
-                  style: const TextStyle(
-                    color: ThemeDefine.kColorBlue,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-            if (tranffic.isNotEmpty) ...[
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text(
-                  tranffic,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-            if (tranfficExpire != null) ...[
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text(
-                  tranfficExpire.item2,
-                  style: TextStyle(
-                    color: tranfficExpire.item1
-                        ? Colors.red
-                        : ThemeDefine.kColorBlue,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-        trailing: SizedBox(
-          width: 90,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              if (provider != null &&
-                  GroupHelper.canShowVpnProvider(provider)) ...[
-                SizedBox(
-                  width: 36,
-                  height: 36,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(18),
-                    onTap: () async {
-                      final session = BoardSessionPersistentManager.instance()
-                          .getBySubscribeUrl(currentProfile?.url ?? "");
-                      await GroupHelper.showVpnProvider(
-                        context,
-                        provider,
-                        session,
-                      );
-                    },
-                    child: Stack(
+                    Stack(
                       alignment: Alignment.center,
                       children: [
-                        provider.appIconUrl.isNotEmpty && provider.logoBranding
-                            ? FastCachedImage(
-                                url: provider.appIconUrl,
-                                width: 28,
-                                height: 28,
-                                cacheWidth: 56,
-                                cacheHeight: 56,
-                                loadingBuilder: (context, loadingProgress) {
-                                  return const SizedBox.shrink();
-                                },
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Icon(Icons.business, size: 28);
-                                },
-                              )
-                            : const Icon(Icons.business, size: 28),
-                        if (notice) ...[
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
+                        Transform.scale(
+                          scale: 0.95,
+                          child: Switch.adaptive(
+                            value: _state == FlutterVpnServiceState.connected,
+                            activeThumbColor: Colors.white,
+                            activeTrackColor: ThemeDefine.kColorGreenBright,
+                            focusNode: _focusNodeConnect,
+                            onChanged: (bool value) async {
+                              if (value) {
+                                await start("switch");
+                              } else {
+                                await stop();
+                              }
+                            },
+                          ),
+                        ),
+                        if (_state == FlutterVpnServiceState.connecting ||
+                            _state == FlutterVpnServiceState.disconnecting ||
+                            _state == FlutterVpnServiceState.reasserting)
+                          const Positioned(
+                            left: 6,
+                            child: SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                color: ThemeDefine.kColorGreenBright,
+                                strokeWidth: 2.5,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 44,
+                  child: SegmentedElevatedButton(
+                    segments: [
+                      SegemntedElevatedButtonItem(
+                        value: ClashConfigsMode.rule.index,
+                        text: tcontext.meta.rule,
+                      ),
+                      SegemntedElevatedButtonItem(
+                        value: ClashConfigsMode.global.index,
+                        text: tcontext.meta.global,
+                      ),
+                      SegemntedElevatedButtonItem(
+                        value: ClashConfigsMode.direct.index,
+                        text: tcontext.meta.direct,
+                      ),
+                    ],
+                    selected: ClashSettingManager.getConfigsMode().index,
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    onPressed: (int value) async {
+                      ClashConfigsMode type = ClashConfigsMode.values[value];
+                      var error = await ClashSettingManager.setConfigsMode(type);
+                      if (!context.mounted) {
+                        return;
+                      }
+                      if (error != null) {
+                        DialogUtils.showAlertDialog(
+                          context,
+                          error.message,
+                          withVersion: true,
+                        );
+                        return;
+                      }
+                      _updateProxyNow();
+                    },
+                  ),
+                ),
+                if (connected) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .surface
+                          .withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: Theme.of(context)
+                            .dividerColor
+                            .withValues(alpha: 0.6),
+                        width: 0.8,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.speed_rounded,
+                                size: 18,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: ValueListenableBuilder<String>(
+                                  builder: _buildWithTrafficSpeedValue,
+                                  valueListenable: _trafficSpeed,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 22,
+                          color: Theme.of(context).dividerColor,
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                        ),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.data_usage_rounded,
+                                size: 18,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: ValueListenableBuilder<String>(
+                                  builder: _buildWithTrafficSpeedValue,
+                                  valueListenable: _trafficTotal,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text(tcontext.meta.myProfiles),
+                  leading: Icon(
+                    Icons.dns_rounded,
+                    size: 22,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (currentProfile != null) ...[
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            currentProfileName,
+                            style: const TextStyle(
+                              color: ThemeDefine.kColorBlue,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                      if (tranffic.isNotEmpty) ...[
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            tranffic,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.7),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                      if (tranfficExpire != null) ...[
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            tranfficExpire.item2,
+                            style: TextStyle(
+                              color: tranfficExpire.item1
+                                  ? Colors.red
+                                  : ThemeDefine.kColorBlue,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  trailing: SizedBox(
+                    width: 90,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (provider != null &&
+                            GroupHelper.canShowVpnProvider(provider)) ...[
+                          SizedBox(
+                            width: 34,
+                            height: 34,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(17),
+                              onTap: () async {
+                                final session =
+                                    BoardSessionPersistentManager.instance()
+                                        .getBySubscribeUrl(
+                                          currentProfile?.url ?? "",
+                                        );
+                                await GroupHelper.showVpnProvider(
+                                  context,
+                                  provider,
+                                  session,
+                                );
+                              },
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  provider.appIconUrl.isNotEmpty &&
+                                          provider.logoBranding
+                                      ? FastCachedImage(
+                                          url: provider.appIconUrl,
+                                          width: 26,
+                                          height: 26,
+                                          cacheWidth: 52,
+                                          cacheHeight: 52,
+                                          loadingBuilder: (
+                                            context,
+                                            loadingProgress,
+                                          ) => const SizedBox.shrink(),
+                                          errorBuilder: (
+                                            context,
+                                            error,
+                                            stackTrace,
+                                          ) => const Icon(
+                                            Icons.business,
+                                            size: 26,
+                                          ),
+                                        )
+                                      : const Icon(Icons.business, size: 26),
+                                  if (notice) ...[
+                                    Positioned(
+                                      right: 0,
+                                      top: 0,
+                                      child: Container(
+                                        width: 8,
+                                        height: 8,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                             ),
                           ),
                         ],
+                        SizedBox(
+                          width: 34,
+                          height: 34,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(17),
+                            onTap: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  settings: ProfilesBoardScreen.routSettings(),
+                                  builder: (context) => ProfilesBoardScreen(
+                                    navigateToAdd: true,
+                                  ),
+                                ),
+                              );
+                              setState(() {});
+                            },
+                            child: const Icon(Icons.add_rounded, size: 24),
+                          ),
+                        ),
+                        const Icon(Icons.keyboard_arrow_right, size: 20),
                       ],
                     ),
                   ),
-                ),
-              ],
-              SizedBox(
-                width: 36,
-                height: 36,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(18),
+                  minVerticalPadding: 16,
                   onTap: () async {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
                         settings: ProfilesBoardScreen.routSettings(),
-                        builder: (context) =>
-                            ProfilesBoardScreen(navigateToAdd: true),
+                        builder: (context) => ProfilesBoardScreen(),
                       ),
                     );
                     setState(() {});
                   },
-                  child: const Icon(Icons.add_rounded, size: 26),
                 ),
-              ),
-              const Icon(Icons.keyboard_arrow_right, size: 20),
-            ],
-          ),
-        ),
-        minVerticalPadding: 16,
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              settings: ProfilesBoardScreen.routSettings(),
-              builder: (context) => ProfilesBoardScreen(),
+                if (connected) ...[
+                  const Divider(height: 1, thickness: 0.8),
+                  ListTile(
+                    title: Text(tcontext.meta.proxy),
+                    leading: Icon(
+                      Icons.alt_route_rounded,
+                      size: 22,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    subtitle: ValueListenableBuilder<String>(
+                      builder: _buildWithValue,
+                      valueListenable: _proxyNow,
+                    ),
+                    trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
+                    minVerticalPadding: 16,
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          settings: ProxyBoardScreen.routSettings(),
+                          builder: (context) => ProxyBoardScreen(),
+                        ),
+                      );
+                      _updateProxyNow();
+                    },
+                  ),
+                ],
+              ],
             ),
-          );
-          setState(() {});
-        },
-      ),
-    ];
-
-    if (connected) {
-      widgets.add(
-        ListTile(
-          title: Text(tcontext.meta.proxy),
-          leading: Icon(
-            Icons.alt_route_rounded,
-            size: 22,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          subtitle: ValueListenableBuilder<String>(
-            builder: _buildWithValue,
-            valueListenable: _proxyNow,
-          ),
-          trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-          minVerticalPadding: 16,
-          onTap: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                settings: ProxyBoardScreen.routSettings(),
-                builder: (context) => ProxyBoardScreen(),
-              ),
-            );
-            _updateProxyNow();
-          },
-        ),
-      );
-      widgets.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            children: [
-              _buildQuickActionTile(
-                context: context,
-                icon: Icons.dashboard_outlined,
-                label: tcontext.meta.board,
-                onTap: _onTapBoard,
-              ),
-              const SizedBox(width: 8),
-              _buildQuickActionTile(
-                context: context,
-                icon: Icons.description_outlined,
-                label: tcontext.meta.runtimeProfile,
-                onTap: _onTapRunTimeProfile,
-              ),
-              const SizedBox(width: 8),
-              _buildQuickActionTile(
-                context: context,
-                icon: Icons.network_check_rounded,
-                label: tcontext.meta.networkCheck,
-                onTap: _onTapNetCheck,
-              ),
-            ],
           ),
         ),
-      );
-    }
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-        child: ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (_, index) {
-            return widgets[index];
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider(height: 1, thickness: 0.8);
-          },
-          itemCount: widgets.length,
-        ),
-      ),
+        if (connected) ...[
+          const SizedBox(height: 12),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  _buildQuickActionTile(
+                    context: context,
+                    icon: Icons.dashboard_outlined,
+                    label: tcontext.meta.board,
+                    onTap: _onTapBoard,
+                  ),
+                  const SizedBox(width: 8),
+                  _buildQuickActionTile(
+                    context: context,
+                    icon: Icons.description_outlined,
+                    label: tcontext.meta.runtimeProfile,
+                    onTap: _onTapRunTimeProfile,
+                  ),
+                  const SizedBox(width: 8),
+                  _buildQuickActionTile(
+                    context: context,
+                    icon: Icons.network_check_rounded,
+                    label: tcontext.meta.networkCheck,
+                    onTap: _onTapNetCheck,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 

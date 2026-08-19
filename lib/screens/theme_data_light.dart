@@ -2,12 +2,12 @@ import 'package:wmimo/screens/theme_define.dart';
 import 'package:flutter/material.dart';
 
 class ThemeDataLight {
-  static const Color mainColor = Colors.white;
-  static const Color mainBgColor = Color(0xFFF6F8FA);
+  static const Color mainColor = ThemeDefine.kColorLightCard;
+  static const Color mainBgColor = ThemeDefine.kColorLightBg;
   static ThemeData theme(BuildContext context) {
     final ColorScheme scheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF00BCDF),
-      primary: const Color(0xFF00BCDF),
+      seedColor: ThemeDefine.kColorBlue,
+      primary: ThemeDefine.kColorBlue,
       brightness: Brightness.light,
       surface: mainBgColor,
     );
@@ -22,15 +22,15 @@ class ThemeDataLight {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           side: const BorderSide(
             color: Color(0xFFE2E8F0),
-            width: 1,
+            width: 0.8,
           ),
         ),
       ),
       dividerTheme: const DividerThemeData(
-        color: Color(0xFFEEF2F6),
+        color: Color(0xFFF1F5F9),
         thickness: 0.8,
         space: 1,
       ),
@@ -40,44 +40,48 @@ class ThemeDataLight {
       inputDecorationTheme: const InputDecorationTheme(
         fillColor: Colors.white,
         filled: true,
-        labelStyle: TextStyle(color: Colors.grey),
+        labelStyle: TextStyle(color: Color(0xFF94A3B8)),
         floatingLabelStyle: TextStyle(color: ThemeDefine.kColorBlue),
-        helperStyle: TextStyle(color: Colors.grey),
-        hintStyle: TextStyle(color: Colors.grey),
-        errorStyle: TextStyle(color: Colors.red),
+        helperStyle: TextStyle(color: Color(0xFF94A3B8)),
+        hintStyle: TextStyle(color: Color(0xFF94A3B8)),
+        errorStyle: TextStyle(color: ThemeDefine.kColorRed),
         isDense: true,
-        contentPadding: EdgeInsets.all(12),
+        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFCBD5E1)),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: Color(0xFFE2E8F0)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFCBD5E1)),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: Color(0xFFE2E8F0)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: ThemeDefine.kColorBlue, width: 1.5),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
       ),
-      listTileTheme: const ListTileThemeData(dense: true),
+      listTileTheme: const ListTileThemeData(
+        dense: true,
+        contentPadding: EdgeInsets.symmetric(horizontal: 4),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
+          elevation: WidgetStateProperty.all(0),
           backgroundColor: WidgetStateProperty.resolveWith((
             Set<WidgetState> states,
           ) {
             if (states.contains(WidgetState.focused)) {
-              return const Color(0xFF009AB6);
+              return ThemeDefine.kColorBlueDark;
             }
             if (states.contains(WidgetState.selected)) {
-              return const Color(0xFF67E8F9);
+              return ThemeDefine.kColorBlueLight;
             }
             return ThemeDefine.kColorBlue;
           }),
           foregroundColor: WidgetStateProperty.all(Colors.white),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
         ),
@@ -86,6 +90,7 @@ class ThemeDataLight {
         fillColor: WidgetStateProperty.all(Colors.white),
         checkColor: WidgetStateProperty.all(ThemeDefine.kColorGreenBright),
         overlayColor: WidgetStateProperty.all(Colors.grey),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(strokeWidth: 2.5),
     );
