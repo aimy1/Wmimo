@@ -25,50 +25,27 @@ class GroupItemCreator {
     GroupItemCreator giCreator = GroupItemCreator();
     int index = 0;
     for (var group in groups) {
-      final hasName = group.name != null && group.name!.isNotEmpty;
       widgets.add(
         Padding(
-          padding: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.only(bottom: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (hasName)
+              if (group.name != null && group.name!.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(left: 4, bottom: 8, top: 4),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 3.5,
-                        height: 13,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        group.name!,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: Theme.of(context).colorScheme.primary,
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                    ],
+                  padding: const EdgeInsets.only(left: 4, bottom: 6, top: 4),
+                  child: Text(
+                    group.name!,
+                    style: TextStyle(
+                      fontSize: ThemeConfig.kFontSizeListItem,
+                      fontWeight: ThemeConfig.kFontWeightListItem,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
               Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(
-                    color: Theme.of(context).dividerColor.withValues(alpha: 0.35),
-                    width: 0.8,
-                  ),
-                ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
                   child: giCreator.createGroup(context, group, index == 0),
                 ),
               ),
@@ -106,25 +83,20 @@ class GroupItemCreator {
     }
     return Column(
       children: [
-        Scrollbar(
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (_, index) {
-              return widgets[index];
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return Divider(
-                height: 1,
-                thickness: 0.6,
-                color: Theme.of(context).dividerColor.withValues(alpha: 0.25),
-              );
-            },
-            itemCount: widgets.length,
-          ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (_, index) {
+            return widgets[index];
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(height: 1, thickness: 0.8);
+          },
+          itemCount: widgets.length,
         ),
       ],
     );
   }
 }
+
 
