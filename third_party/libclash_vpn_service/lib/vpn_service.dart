@@ -179,20 +179,16 @@ secret: "$secret"
 
 ''';
 
-    // Filter out conflicting top-level keys and normalize anytls -> trojan
-    final normalizedProfile = profileContent.replaceAll(
-      RegExp(r'type:\s*anytls', caseSensitive: false),
-      'type: trojan',
-    );
-
-    final filteredLines = normalizedProfile.split('\n').where((line) {
+    // Filter out conflicting top-level keys
+    final filteredLines = profileContent.split('\n').where((line) {
       final trimmed = line.trim();
       return !trimmed.startsWith('external-controller:') &&
           !trimmed.startsWith('secret:') &&
           !trimmed.startsWith('mixed-port:') &&
           !trimmed.startsWith('allow-lan:') &&
           !trimmed.startsWith('mode:') &&
-          !trimmed.startsWith('log-level:');
+          !trimmed.startsWith('log-level:') &&
+          !trimmed.startsWith('port:');
     }).join('\n');
 
     final baseDir = _savedConfig?.base_dir.isNotEmpty == true
