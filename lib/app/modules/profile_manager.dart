@@ -27,6 +27,7 @@ import 'package:intl/intl.dart';
 import 'package:libclash_vpn_service/state.dart';
 import 'package:path/path.dart' as path;
 import 'package:tuple/tuple.dart';
+import 'package:wmimo/app/utils/proxy_node_loader.dart';
 
 const int kRemarkMaxLength = 32;
 
@@ -505,6 +506,7 @@ class ProfileManager {
         }
         return ReturnResultError("file not exist: $filePath");
       }
+      await ProxyNodeLoader.ensureProfileHasProxyGroups(filePath);
       return await validFileContentFormat(filePath);
     } catch (err) {
       return ReturnResultError(err.toString());
@@ -574,6 +576,7 @@ class ProfileManager {
         setCurrent(id);
       }
 
+      await ProxyNodeLoader.ensureProfileHasProxyGroups(savePath);
       await save();
       return null;
     } catch (err) {
@@ -679,9 +682,6 @@ class ProfileManager {
         await FileUtils.deletePath(savePath);
         return ReturnResult(error: err);
       }
-      //final announce = result.data!.value("announce");
-      //final supportUrl = result.data!.value("support-url");
-      //final xhwidLimit = result.data!.value("x-hwid-limit");
       final profileUpdateInterval = result.data!.value(
         "profile-update-interval",
       );
@@ -706,36 +706,33 @@ class ProfileManager {
               Log.w("Failed to decode base64 profile-title: $e");
             }
           } else {
-            remark = profileTitle;
+            try {
+              remark = Uri.decodeComponent(profileTitle);
+            } catch (e) {
+              remark = profileTitle;
+            }
+          }
+          if (remark.length > kRemarkMaxLength) {
+            remark = remark.substring(0, kRemarkMaxLength);
           }
         }
       }
     }
-    final err = await validFileContentFormat(savePath);
-    if (err != null) {
-      await FileUtils.deletePath(savePath);
-      return ReturnResult(error: err);
+    if (remark.isEmpty) {
+      final result = await HttpUtils.httpGetTitle(url, userAgent);
+      if (result.data != null && result.data!.isNotEmpty) {
+        remark = result.data!;
+      }
     }
 
     await FileUtils.append(savePath, "\n$urlComment$url\n");
-    if (remark.isEmpty ||
-        boardProviderId.startsWith(
-          BoardProviderManager.unknownProviderIdPrefix,
-        )) {
-      final result = await HttpUtils.httpGetTitle(url, userAgent);
-      if (result.data == null || result.data!.length > 32) {
-        remark = uri.host;
-      } else {
-        if (boardProviderId.startsWith(
-              BoardProviderManager.unknownProviderIdPrefix,
-            ) &&
-            result.data!.isNotEmpty) {
-          remark = "${result.data!} ($remark)";
-        } else {
-          remark = result.data!;
-        }
-      }
+    await ProxyNodeLoader.ensureProfileHasProxyGroups(savePath);
+    final validErr = await validFileContentFormat(savePath);
+    if (validErr != null) {
+      await FileUtils.deletePath(savePath);
+      return ReturnResult(error: validErr);
     }
+
     int index = _config.profiles.indexWhere((value) {
       return value.id == id;
     });
@@ -944,6 +941,7 @@ class ProfileManager {
       }
 
       await FileUtils.append(savePath, "\n$urlComment${profile.url}\n");
+      await ProxyNodeLoader.ensureProfileHasProxyGroups(savePath);
       profile.updateSubscriptionTraffic(result.data);
     }
     await save();
