@@ -437,4 +437,46 @@ class ProxyNodeLoader {
 
     return result;
   }
+
+  static Future<List<Map<String, dynamic>>> loadCurrentProfileRules() async {
+    try {
+      final currentProfile = ProfileManager.getCurrent();
+      if (currentProfile == null) return [];
+      final profilesDir = await PathUtils.profilesDir();
+      final filePath = path.join(profilesDir, currentProfile.id);
+      final file = File(filePath);
+      if (!await file.exists()) return [];
+      final content = await file.readAsString();
+
+      final block = extractBlock(content, 'rules');
+      if (block.isEmpty) return [];
+
+      final lines = block.split('\n');
+      final List<Map<String, dynamic>> rulesList = [];
+      for (var line in lines) {
+        var trimmed = line.trim();
+        if (trimmed.startsWith('-')) {
+          trimmed = trimmed.substring(1).trim();
+        }
+        if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
+        final parts = trimmed.split(',');
+        if (parts.length >= 3) {
+          rulesList.add({
+            'type': parts[0].trim(),
+            'payload': parts[1].trim(),
+            'proxy': parts[2].trim(),
+          });
+        } else if (parts.length == 2) {
+          rulesList.add({
+            'type': parts[0].trim(),
+            'payload': '',
+            'proxy': parts[1].trim(),
+          });
+        }
+      }
+      return rulesList;
+    } catch (_) {
+      return [];
+    }
+  }
 }

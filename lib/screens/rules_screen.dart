@@ -6,6 +6,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
+import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -57,21 +58,25 @@ class _RulesScreenState extends State<RulesScreen> with AfterLayoutMixin {
     }
 
     final started = await VPNService.getStarted();
-    if (!started) {
-      if (mounted) {
-        setState(() {
-          _rules = [];
-          _loading = false;
-        });
+    if (started) {
+      final result = await ClashHttpApi.getRules();
+      if (result.data != null && result.data!.isNotEmpty) {
+        if (mounted) {
+          setState(() {
+            _rules = result.data!;
+            _loading = false;
+          });
+        }
+        return;
       }
-      return;
     }
 
-    final result = await ClashHttpApi.getRules();
+    // Fallback: load directly from active profile YAML
+    final profileRules = await ProxyNodeLoader.loadCurrentProfileRules();
     if (!mounted) return;
 
     setState(() {
-      _rules = result.data ?? [];
+      _rules = profileRules;
       _loading = false;
     });
   }

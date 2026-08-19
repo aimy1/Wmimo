@@ -74,6 +74,12 @@ class FlutterVpnService {
   static String? _savedTunnelServicePath;
   static String? _savedConfigFilePath;
 
+  // Real-time Traffic Monitoring
+  static int _lastUp = 0;
+  static int _lastDown = 0;
+  static StreamSubscription? _trafficSub;
+  static HttpClient? _trafficClient;
+
   static Future<FlutterVpnServiceState> get currentState async => _state;
 
   static Future<String> getSystemVersion() async => "1.0.0";
@@ -138,7 +144,6 @@ class FlutterVpnService {
   }
 
   static Future<String> _resolveConfigFile() async {
-    // 1. Locate the active subscription profile file
     String profileFile = "";
     if (_savedConfig?.core_path != null &&
         _savedConfig!.core_path.isNotEmpty &&
@@ -157,7 +162,6 @@ class FlutterVpnService {
       } catch (_) {}
     }
 
-    // If profile content is still empty, fall back to patch file
     if (profileContent.isEmpty) {
       if (_savedConfig?.core_path_patch_final != null &&
           File(_savedConfig!.core_path_patch_final).existsSync()) {
@@ -203,6 +207,43 @@ secret: "$secret"
     }
   }
 
+  static void _startTrafficMonitor(int port, String secret) {
+    _stopTrafficMonitor();
+    _trafficClient = HttpClient();
+    _trafficClient!.getUrl(Uri.parse("http://127.0.0.1:$port/traffic")).then((req) {
+      if (secret.isNotEmpty) {
+        req.headers.set('Authorization', 'Bearer $secret');
+      }
+      return req.close();
+    }).then((resp) {
+      _trafficSub = resp
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .listen((line) {
+        try {
+          if (line.trim().isNotEmpty) {
+            final json = jsonDecode(line.trim());
+            _lastUp = json['up'] ?? 0;
+            _lastDown = json['down'] ?? 0;
+          }
+        } catch (_) {}
+      }, onError: (_) {
+        _stopTrafficMonitor();
+      });
+    }).catchError((_) {
+      _stopTrafficMonitor();
+    });
+  }
+
+  static void _stopTrafficMonitor() {
+    _trafficSub?.cancel();
+    _trafficSub = null;
+    _trafficClient?.close(force: true);
+    _trafficClient = null;
+    _lastUp = 0;
+    _lastDown = 0;
+  }
+
   static Future<VpnServiceWaitResult> start(Duration timeout) async {
     final coreExe = _resolveCorePath();
     final configFile = await _resolveConfigFile();
@@ -234,15 +275,29 @@ secret: "$secret"
 
       final outBuffer = StringBuffer();
       final errBuffer = StringBuffer();
+      final logFile = (_savedConfig?.log_path.isNotEmpty == true)
+          ? File(_savedConfig!.log_path)
+          : null;
 
       _coreProcess!.stdout.transform(utf8.decoder).listen((data) {
         outBuffer.write(data);
+        if (logFile != null) {
+          try {
+            logFile.writeAsStringSync(data, mode: FileMode.append, flush: true);
+          } catch (_) {}
+        }
       });
       _coreProcess!.stderr.transform(utf8.decoder).listen((data) {
         errBuffer.write(data);
+        if (logFile != null) {
+          try {
+            logFile.writeAsStringSync(data, mode: FileMode.append, flush: true);
+          } catch (_) {}
+        }
       });
       _coreProcess!.exitCode.then((code) {
         _coreProcess = null;
+        _stopTrafficMonitor();
         _state = FlutterVpnServiceState.disconnected;
         for (var l in _listeners) {
           l(_state, {});
@@ -290,6 +345,9 @@ secret: "$secret"
         );
       }
 
+      // Start Real-time Traffic Listener
+      _startTrafficMonitor(port, secret);
+
       _state = FlutterVpnServiceState.connected;
       for (var l in _listeners) {
         l(_state, {});
@@ -309,6 +367,7 @@ secret: "$secret"
   }
 
   static Future<void> stop() async {
+    _stopTrafficMonitor();
     if (_coreProcess != null) {
       try {
         _coreProcess?.kill(ProcessSignal.sigterm);
@@ -416,8 +475,28 @@ secret: "$secret"
     return false;
   }
 
-  static Future<String> clashiApiConnections(bool full) async => "{}";
-  static Future<String> clashiApiTraffic() async => "{\"up\": 0, \"down\": 0}";
+  static Future<String> clashiApiConnections(bool full) async {
+    final port = _savedConfig?.control_port ?? 9090;
+    final secret = _savedConfig?.secret ?? "";
+    try {
+      final client = HttpClient()..connectionTimeout = const Duration(milliseconds: 600);
+      final req = await client.getUrl(Uri.parse("http://127.0.0.1:$port/connections"));
+      if (secret.isNotEmpty) {
+        req.headers.set('Authorization', 'Bearer $secret');
+      }
+      final resp = await req.close();
+      final body = await resp.transform(utf8.decoder).join();
+      client.close();
+      return body;
+    } catch (_) {
+      return "{}";
+    }
+  }
+
+  static Future<String> clashiApiTraffic() async {
+    return jsonEncode({"up": _lastUp, "down": _lastDown});
+  }
+
   static Future<void> autoStartCreate(
     dynamic name,
     dynamic exec, {
