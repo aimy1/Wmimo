@@ -78,16 +78,8 @@ class ProxyNodeLoader {
         }
       }
 
-      // If proxy-groups already exists and has all rule targets, no need to patch
-      bool missingRuleTargets = false;
-      for (var t in ruleTargets) {
-        if (!existingGroupNames.contains(t)) {
-          missingRuleTargets = true;
-          break;
-        }
-      }
-
-      if (hasValidGroups && !missingRuleTargets) {
+      // If proxy-groups already exists in the profile, do NOT append a duplicate proxy-groups section
+      if (hasValidGroups) {
         return;
       }
 
@@ -109,52 +101,49 @@ class ProxyNodeLoader {
 
       final List<Map<String, dynamic>> synthesizedGroups = [];
 
-      // If completely missing proxy-groups, add primary selector & region groups
-      if (!hasValidGroups) {
-        final List<String> primaryGroupMembers = ["自动选择", "故障转移", ...allProxyNames, "DIRECT"];
-        synthesizedGroups.add({
-          'name': '节点选择',
-          'type': 'select',
-          'proxies': primaryGroupMembers,
-        });
+      // Synthesize primary selector & region groups
+      final List<String> primaryGroupMembers = ["自动选择", "故障转移", ...allProxyNames, "DIRECT"];
+      synthesizedGroups.add({
+        'name': '节点选择',
+        'type': 'select',
+        'proxies': primaryGroupMembers,
+      });
 
-        synthesizedGroups.add({
-          'name': '自动选择',
-          'type': 'url-test',
-          'url': 'http://www.gstatic.com/generate_204',
-          'interval': 300,
-          'tolerance': 50,
-          'proxies': List<String>.from(allProxyNames),
-        });
+      synthesizedGroups.add({
+        'name': '自动选择',
+        'type': 'url-test',
+        'url': 'http://www.gstatic.com/generate_204',
+        'interval': 300,
+        'tolerance': 50,
+        'proxies': List<String>.from(allProxyNames),
+      });
 
-        synthesizedGroups.add({
-          'name': '故障转移',
-          'type': 'fallback',
-          'url': 'http://www.gstatic.com/generate_204',
-          'interval': 300,
-          'proxies': List<String>.from(allProxyNames),
-        });
+      synthesizedGroups.add({
+        'name': '故障转移',
+        'type': 'fallback',
+        'url': 'http://www.gstatic.com/generate_204',
+        'interval': 300,
+        'proxies': List<String>.from(allProxyNames),
+      });
 
-        _addRegionGroup(synthesizedGroups, '🇭🇰 香港节点', hkNodes);
-        _addRegionGroup(synthesizedGroups, '🇯🇵 日本节点', jpNodes);
-        _addRegionGroup(synthesizedGroups, '🇸🇬 新加坡节点', sgNodes);
-        _addRegionGroup(synthesizedGroups, '🇹🇼 台湾节点', twNodes);
-        _addRegionGroup(synthesizedGroups, '🇺🇸 美国节点', usNodes);
-        _addRegionGroup(synthesizedGroups, '🇰🇷 韩国节点', krNodes);
-        _addRegionGroup(synthesizedGroups, '🇬🇧 英国节点', gbNodes);
-        _addRegionGroup(synthesizedGroups, '🇩🇪 德国节点', deNodes);
-        _addRegionGroup(synthesizedGroups, '🇫🇷 法国节点', frNodes);
-        _addRegionGroup(synthesizedGroups, '🇨🇦 加拿大节点', caNodes);
-        _addRegionGroup(synthesizedGroups, '🇦🇺 澳大利亚节点', auNodes);
-        _addRegionGroup(synthesizedGroups, '🇹🇭 泰国节点', thNodes);
-        _addRegionGroup(synthesizedGroups, '🇮🇩 印尼节点', idNodes);
-        _addRegionGroup(synthesizedGroups, '🇹🇷 土耳其节点', trNodes);
-      }
+      _addRegionGroup(synthesizedGroups, '🇭🇰 香港节点', hkNodes);
+      _addRegionGroup(synthesizedGroups, '🇯🇵 日本节点', jpNodes);
+      _addRegionGroup(synthesizedGroups, '🇸🇬 新加坡节点', sgNodes);
+      _addRegionGroup(synthesizedGroups, '🇹🇼 台湾节点', twNodes);
+      _addRegionGroup(synthesizedGroups, '🇺🇸 美国节点', usNodes);
+      _addRegionGroup(synthesizedGroups, '🇰🇷 韩国节点', krNodes);
+      _addRegionGroup(synthesizedGroups, '🇬🇧 英国节点', gbNodes);
+      _addRegionGroup(synthesizedGroups, '🇩🇪 德国节点', deNodes);
+      _addRegionGroup(synthesizedGroups, '🇫🇷 法国节点', frNodes);
+      _addRegionGroup(synthesizedGroups, '🇨🇦 加拿大节点', caNodes);
+      _addRegionGroup(synthesizedGroups, '🇦🇺 澳大利亚节点', auNodes);
+      _addRegionGroup(synthesizedGroups, '🇹🇭 泰国节点', thNodes);
+      _addRegionGroup(synthesizedGroups, '🇮🇩 印尼节点', idNodes);
+      _addRegionGroup(synthesizedGroups, '🇹🇷 土耳其节点', trNodes);
 
-      // Add all missing rule-referenced target groups (e.g. YouTube, Netflix, Telegram, AI, etc.)
+      // Add rule-referenced target groups (e.g. YouTube, Netflix, Telegram, AI, etc.)
       for (var target in ruleTargets) {
-        if (!existingGroupNames.contains(target) &&
-            !synthesizedGroups.any((g) => g['name'] == target)) {
+        if (!synthesizedGroups.any((g) => g['name'] == target)) {
           synthesizedGroups.add({
             'name': target,
             'type': 'select',
@@ -163,20 +152,8 @@ class ProxyNodeLoader {
         }
       }
 
-      // Also ensure 🎯Direct stub group exists if referenced
-      if (content.contains("🎯Direct") &&
-          !existingGroupNames.contains("🎯Direct") &&
-          !synthesizedGroups.any((g) => g['name'] == "🎯Direct")) {
-        synthesizedGroups.add({
-          'name': '🎯Direct',
-          'type': 'select',
-          'proxies': ['DIRECT', '节点选择'],
-        });
-      }
-
-      // Also ensure GLOBAL group exists
-      if (!existingGroupNames.contains("GLOBAL") &&
-          !synthesizedGroups.any((g) => g['name'] == "GLOBAL")) {
+      // Ensure GLOBAL group exists
+      if (!synthesizedGroups.any((g) => g['name'] == "GLOBAL")) {
         synthesizedGroups.add({
           'name': 'GLOBAL',
           'type': 'select',
@@ -222,6 +199,16 @@ class ProxyNodeLoader {
 
   /// Extract proxies section as a List of Maps safely
   static List<Map<String, dynamic>> extractProxiesList(String content) {
+    try {
+      final parsed = loadYaml(content);
+      if (parsed is Map && parsed['proxies'] is List) {
+        return (parsed['proxies'] as List)
+            .whereType<Map>()
+            .map((m) => Map<String, dynamic>.from(m))
+            .toList();
+      }
+    } catch (_) {}
+
     final block = extractBlock(content, 'proxies');
     if (block.isEmpty) return [];
 
@@ -240,6 +227,16 @@ class ProxyNodeLoader {
 
   /// Extract proxy-groups section as a List of Maps safely
   static List<Map<String, dynamic>> extractProxyGroupsList(String content) {
+    try {
+      final parsed = loadYaml(content);
+      if (parsed is Map && parsed['proxy-groups'] is List) {
+        return (parsed['proxy-groups'] as List)
+            .whereType<Map>()
+            .map((m) => Map<String, dynamic>.from(m))
+            .toList();
+      }
+    } catch (_) {}
+
     final block = extractBlock(content, 'proxy-groups');
     if (block.isEmpty) return [];
 
@@ -262,19 +259,25 @@ class ProxyNodeLoader {
     bool inSection = false;
     final blockLines = <String>[];
     final sectionHeader = RegExp('^\\s*$sectionName\\s*:', caseSensitive: false);
-    final otherHeader = RegExp('^[a-zA-Z0-9_-]+:');
+    final topLevelHeader = RegExp('^[a-zA-Z0-9_-]+\\s*:');
 
     for (var line in lines) {
       final trimmed = line.trim();
+      if (trimmed.isEmpty || trimmed.startsWith('#')) {
+        if (inSection) blockLines.add(line);
+        continue;
+      }
+
       if (!inSection) {
-        if (sectionHeader.hasMatch(trimmed)) {
+        if (sectionHeader.hasMatch(line) && !line.startsWith(' ') && !line.startsWith('\t')) {
           inSection = true;
         }
       } else {
-        if (otherHeader.hasMatch(trimmed) &&
-            !sectionHeader.hasMatch(trimmed) &&
-            !trimmed.startsWith('-')) {
-          break;
+        // A new section only begins if the line is unindented and matches top-level key
+        if (!line.startsWith(' ') && !line.startsWith('\t') && !line.startsWith('-')) {
+          if (topLevelHeader.hasMatch(line) && !sectionHeader.hasMatch(line)) {
+            break;
+          }
         }
         blockLines.add(line);
       }
@@ -288,19 +291,21 @@ class ProxyNodeLoader {
     final lines = content.split('\n');
     bool inRules = false;
     final ruleHeader = RegExp('^\\s*rules\\s*:', caseSensitive: false);
-    final otherHeader = RegExp('^[a-zA-Z0-9_-]+:');
+    final topLevelHeader = RegExp('^[a-zA-Z0-9_-]+\\s*:');
 
     for (var line in lines) {
       final trimmed = line.trim();
+      if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
+
       if (!inRules) {
-        if (ruleHeader.hasMatch(trimmed)) {
+        if (ruleHeader.hasMatch(line) && !line.startsWith(' ') && !line.startsWith('\t')) {
           inRules = true;
         }
       } else {
-        if (otherHeader.hasMatch(trimmed) &&
-            !ruleHeader.hasMatch(trimmed) &&
-            !trimmed.startsWith('-')) {
-          break;
+        if (!line.startsWith(' ') && !line.startsWith('\t') && !line.startsWith('-')) {
+          if (topLevelHeader.hasMatch(line) && !ruleHeader.hasMatch(line)) {
+            break;
+          }
         }
         if (trimmed.startsWith('-')) {
           var ruleBody = trimmed.substring(1).trim();
@@ -355,7 +360,7 @@ class ProxyNodeLoader {
     bool hasGroups = groupsList.isNotEmpty;
     for (var item in groupsList) {
       final name = item['name']?.toString() ?? "";
-      final type = item['type']?.toString() ?? "Selector";
+      final rawType = item['type']?.toString() ?? "Selector";
       final icon = item['icon']?.toString() ?? "";
       final proxies = item['proxies'];
       List<String> allMembers = [];
@@ -363,10 +368,24 @@ class ProxyNodeLoader {
         allMembers = proxies.map((e) => e.toString()).toList();
       }
 
+      String normalizedType = rawType;
+      final lowerType = rawType.toLowerCase().replaceAll('-', '').replaceAll('_', '');
+      if (lowerType == "select" || lowerType == "selector") {
+        normalizedType = "Selector";
+      } else if (lowerType == "urltest") {
+        normalizedType = "URLTest";
+      } else if (lowerType == "loadbalance") {
+        normalizedType = "LoadBalance";
+      } else if (lowerType == "fallback") {
+        normalizedType = "Fallback";
+      } else if (lowerType == "relay") {
+        normalizedType = "Relay";
+      }
+
       if (name.isNotEmpty) {
         final group = ClashProxiesNode()
           ..name = name
-          ..type = type
+          ..type = normalizedType
           ..icon = icon
           ..all = allMembers
           ..now = allMembers.isNotEmpty ? allMembers.first : ""

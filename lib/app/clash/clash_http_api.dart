@@ -360,10 +360,7 @@ class ClashProxies {
   }
 
   int? updateGroupDelay(ClashProxiesNode node) {
-    if (node.type != ClashProtocolType.urltest.name &&
-        node.type != ClashProtocolType.selector.name &&
-        node.type != ClashProtocolType.fallback.name &&
-        node.type != ClashProtocolType.loadBalance.name) {
+    if (!ClashProtocolType.isGroupType(node.type)) {
       return node.delay;
     }
     if (node.now.isEmpty) {
@@ -391,7 +388,7 @@ class ClashProxies {
 class ClashHttpApi {
   static String host = "http://127.0.0.1";
   static String wshost = "ws://127.0.0.1";
-  static const int timeoutSeconds = 1;
+  static const int timeoutSeconds = 5;
   static int Function()? getControlPort;
   static String Function()? getSecret;
 
@@ -559,7 +556,7 @@ class ClashHttpApi {
       "$host:${getControlPort?.call()}/proxies/$encodeNode/delay?url=$encodeUrl&timeout=${timeout.inMilliseconds}",
       null,
       headers,
-      const Duration(seconds: timeoutSeconds),
+      timeout + const Duration(seconds: 2),
       null,
       null,
     );
@@ -654,10 +651,7 @@ class ClashHttpApi {
     }
     List<ClashProxiesNode> filtered = [];
     for (var node in result.data!) {
-      if (node.type == ClashProtocolType.urltest.name ||
-          node.type == ClashProtocolType.selector.name ||
-          node.type == ClashProtocolType.fallback.name ||
-          node.type == ClashProtocolType.loadBalance.name) {
+      if (ClashProtocolType.isGroupType(node.type)) {
         filtered.add(node);
       }
     }

@@ -1,4 +1,4 @@
-﻿// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
 // https://github.com/MetaCubeX/mihomo/blob/Alpha/docs/config.yaml
 import 'dart:io';
 
@@ -122,6 +122,17 @@ enum ClashProtocolType {
       ClashProtocolType.reject.name,
       ClashProtocolType.rejectDrop.name,
     ];
+  }
+
+  static bool isGroupType(String? type) {
+    if (type == null || type.trim().isEmpty) return false;
+    final t = type.toLowerCase().replaceAll('-', '').replaceAll('_', '').trim();
+    return t == "selector" ||
+        t == "select" ||
+        t == "urltest" ||
+        t == "fallback" ||
+        t == "loadbalance" ||
+        t == "relay";
   }
 
   static List<String> GroupToList() {

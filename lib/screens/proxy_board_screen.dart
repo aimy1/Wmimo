@@ -113,11 +113,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       final result = await ClashHttpApi.getProxies();
       if (result.data != null && result.data!.isNotEmpty) {
         final groups = result.data!.where((n) {
-          final t = n.type.toLowerCase();
-          return t == ClashProtocolType.selector.name ||
-              t == ClashProtocolType.urltest.name ||
-              t == ClashProtocolType.fallback.name ||
-              t == ClashProtocolType.loadBalance.name;
+          return ClashProtocolType.isGroupType(n.type);
         }).toList();
 
         if (groups.isNotEmpty) {
@@ -154,17 +150,72 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   }
 
   Future<void> _selectNode(ClashProxiesNode group, ClashProxiesNode node) async {
+    final lowerType = group.type.toLowerCase().replaceAll('-', '').replaceAll('_', '');
+    final isSelector = lowerType == "selector" || lowerType == "select";
+
+    if (!isSelector) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "「${group.name}」属于 ${group.type} 自动策略组，由系统按延迟/可用性自动优选节点。如需自选节点，请在「节点选择」等手动策略组中切换。",
+            ),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+      return;
+    }
+
+    if (!_isVpnStarted) {
+      setState(() {
+        group.now = node.name;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("代理服务尚未开启，请先在主页开启代理以应用节点切换"),
+            action: SnackBarAction(
+              label: "开启代理",
+              onPressed: () {
+                VpnActionHandler.vpnConnect?.call("proxy_select", false);
+              },
+            ),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+      return;
+    }
+
     final prev = group.now;
     setState(() {
       group.now = node.name;
     });
-    if (_isVpnStarted) {
-      final err = await ClashHttpApi.setProxiesNode(group.name, node.name);
-      if (err != null && mounted) {
-        setState(() {
-          group.now = prev;
-        });
-      }
+
+    final err = await ClashHttpApi.setProxiesNode(group.name, node.name);
+    if (err != null && mounted) {
+      setState(() {
+        group.now = prev;
+      });
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("切换节点失败: ${err.message}"),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    } else if (mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("已切换节点至「${node.name}」"),
+          duration: const Duration(seconds: 1),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -306,12 +357,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   List<ClashProxiesNode> _getProxyGroups() {
     return _allNodes.where((n) {
-      final t = n.type.toLowerCase();
-      return (t == ClashProtocolType.selector.name ||
-              t == ClashProtocolType.urltest.name ||
-              t == ClashProtocolType.fallback.name ||
-              t == ClashProtocolType.loadBalance.name) &&
-          !n.hidden;
+      return ClashProtocolType.isGroupType(n.type) && !n.hidden;
     }).toList();
   }
 
@@ -772,13 +818,19 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: ThemeDefine.kColorBlue.withValues(alpha: 0.15),
+                      color: (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
+                          ? ThemeDefine.kColorBlue.withValues(alpha: 0.15)
+                          : Colors.orange.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      group.type,
-                      style: const TextStyle(
-                        color: ThemeDefine.kColorBlue,
+                      (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
+                          ? "手动切换"
+                          : "${group.type} 自动",
+                      style: TextStyle(
+                        color: (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
+                            ? ThemeDefine.kColorBlue
+                            : Colors.orange.shade700,
                         fontSize: 10.5,
                         fontWeight: FontWeight.w600,
                       ),

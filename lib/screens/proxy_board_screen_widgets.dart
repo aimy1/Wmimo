@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
@@ -65,10 +65,7 @@ class _ProxyScreenProxiesNodeWidget
     double iconSize = 20;
     var widgets = [];
     for (var node in _nodes) {
-      if (node.type != ClashProtocolType.urltest.name &&
-          node.type != ClashProtocolType.selector.name &&
-          node.type != ClashProtocolType.fallback.name &&
-          node.type != ClashProtocolType.loadBalance.name) {
+      if (!ClashProtocolType.isGroupType(node.type)) {
         continue;
       }
       if (node.hidden) {
