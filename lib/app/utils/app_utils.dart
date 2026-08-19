@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:wmimo/generated/build_time.dart' as build_time;
@@ -24,7 +24,7 @@ abstract final class AppUtils {
   }
 
   static String getBuildinVersion() {
-    return "1.0.28.1406";
+    return "1.0.29.1407";
   }
 
   static DateTime getBuildinVersionDate() {
