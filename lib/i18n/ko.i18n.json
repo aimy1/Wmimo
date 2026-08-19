@@ -1,4 +1,4 @@
-﻿{
+{
     "BackupAndSyncWebdavScreen": {
         "webdavServerUrl": "서버 URL",
         "webdavRequired": "비워둘 수 없습니다",
@@ -305,7 +305,18 @@
         "profileAddUrlOrContent": "프로필 링크 추가",
         "profileUrlOrContent": "Clash 설정 링크",
         "profileUrlOrContentHit": "Clash 설정 링크 [필수]",
-        "profileUrlOrContentCannotEmpty": "프로필 링크는 비워둘 수 없습니다"
+        "profileUrlOrContentCannotEmpty": "프로필 링크는 비워둘 수 없습니다",
+        "overview": "개요",
+        "trafficStats": "트래픽 통계",
+        "realtimeMonitor": "실시간 모니터링",
+        "realtimeUpload": "실시간 업로드",
+        "realtimeDownload": "실시간 다운로드",
+        "sessionUpload": "이번 업로드",
+        "sessionDownload": "이번 다운로드",
+        "planUsage": "요금제 사용량",
+        "memoryUsage": "메모리",
+        "remaining": "남음",
+        "expireTime": "만료 시간"
     },
     "permission": {
         "camera": "카메라",

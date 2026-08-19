@@ -1,4 +1,4 @@
-﻿///
+///
 /// Generated file. Do not edit.
 ///
 // coverage:ignore-file
@@ -434,6 +434,17 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get profileUrlOrContent => 'پیوند پیکربندی Clash';
 	@override String get profileUrlOrContentHit => 'پیوند پیکربندی Clash [الزامی]';
 	@override String get profileUrlOrContentCannotEmpty => 'لینک پروفایل نمی‌تواند خالی باشد';
+	@override String get overview => 'نمای کلی';
+	@override String get trafficStats => 'آمار ترافیک';
+	@override String get realtimeMonitor => 'نظارت زنده';
+	@override String get realtimeUpload => 'آپلود لحظه‌ای';
+	@override String get realtimeDownload => 'دانلود لحظه‌ای';
+	@override String get sessionUpload => 'آپلود نشست';
+	@override String get sessionDownload => 'دانلود نشست';
+	@override String get planUsage => 'مصرف بسته';
+	@override String get memoryUsage => 'حافظه';
+	@override String get remaining => 'باقیمانده';
+	@override String get expireTime => 'زمان انقضا';
 }
 
 // Path: permission
@@ -837,6 +848,17 @@ extension on TranslationsFa {
 			'meta.profileUrlOrContent' => 'پیوند پیکربندی Clash',
 			'meta.profileUrlOrContentHit' => 'پیوند پیکربندی Clash [الزامی]',
 			'meta.profileUrlOrContentCannotEmpty' => 'لینک پروفایل نمی‌تواند خالی باشد',
+			'meta.overview' => 'نمای کلی',
+			'meta.trafficStats' => 'آمار ترافیک',
+			'meta.realtimeMonitor' => 'نظارت زنده',
+			'meta.realtimeUpload' => 'آپلود لحظه‌ای',
+			'meta.realtimeDownload' => 'دانلود لحظه‌ای',
+			'meta.sessionUpload' => 'آپلود نشست',
+			'meta.sessionDownload' => 'دانلود نشست',
+			'meta.planUsage' => 'مصرف بسته',
+			'meta.memoryUsage' => 'حافظه',
+			'meta.remaining' => 'باقیمانده',
+			'meta.expireTime' => 'زمان انقضا',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

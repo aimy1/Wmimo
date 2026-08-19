@@ -1,4 +1,4 @@
-﻿///
+///
 /// Generated file. Do not edit.
 ///
 // coverage:ignore-file
@@ -434,6 +434,17 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get profileUrlOrContent => 'Ссылка на профиль Clash';
 	@override String get profileUrlOrContentHit => 'Ссылка на профиль Clash [обязательно]';
 	@override String get profileUrlOrContentCannotEmpty => 'Ссылка на подписку не может быть пустой';
+	@override String get overview => 'Обзор';
+	@override String get trafficStats => 'Статистика трафика';
+	@override String get realtimeMonitor => 'Мониторинг';
+	@override String get realtimeUpload => 'Текущая отдача';
+	@override String get realtimeDownload => 'Текущая загрузка';
+	@override String get sessionUpload => 'За сессию отдано';
+	@override String get sessionDownload => 'За сессию принято';
+	@override String get planUsage => 'Использование тарифа';
+	@override String get memoryUsage => 'Память';
+	@override String get remaining => 'Осталось';
+	@override String get expireTime => 'Срок действия';
 }
 
 // Path: permission
@@ -837,6 +848,17 @@ extension on TranslationsRu {
 			'meta.profileUrlOrContent' => 'Ссылка на профиль Clash',
 			'meta.profileUrlOrContentHit' => 'Ссылка на профиль Clash [обязательно]',
 			'meta.profileUrlOrContentCannotEmpty' => 'Ссылка на подписку не может быть пустой',
+			'meta.overview' => 'Обзор',
+			'meta.trafficStats' => 'Статистика трафика',
+			'meta.realtimeMonitor' => 'Мониторинг',
+			'meta.realtimeUpload' => 'Текущая отдача',
+			'meta.realtimeDownload' => 'Текущая загрузка',
+			'meta.sessionUpload' => 'За сессию отдано',
+			'meta.sessionDownload' => 'За сессию принято',
+			'meta.planUsage' => 'Использование тарифа',
+			'meta.memoryUsage' => 'Память',
+			'meta.remaining' => 'Осталось',
+			'meta.expireTime' => 'Срок действия',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

@@ -1,4 +1,4 @@
-﻿{
+{
     "BackupAndSyncWebdavScreen": {
         "webdavServerUrl": "عنوان URL الخادم",
         "webdavRequired": "لايمكن ان يكون فارغا",
@@ -305,7 +305,18 @@
         "profileAddUrlOrContent": "إضافة رابط ملف التعريف",
         "profileUrlOrContent": "رابط إعداد Clash",
         "profileUrlOrContentHit": "رابط إعداد Clash [مطلوب]",
-        "profileUrlOrContentCannotEmpty": "لا يمكن أن يكون رابط الملف الشخصي فارغًا"
+        "profileUrlOrContentCannotEmpty": "لا يمكن أن يكون رابط الملف الشخصي فارغًا",
+        "overview": "نظرة عامة",
+        "trafficStats": "إحصائيات البيانات",
+        "realtimeMonitor": "مراقبة في الوقت الفعلي",
+        "realtimeUpload": "الرفع الفعلي",
+        "realtimeDownload": "التحميل الفعلي",
+        "sessionUpload": "رفع الجلسة",
+        "sessionDownload": "تحميل الجلسة",
+        "planUsage": "استهلاك الباقة",
+        "memoryUsage": "الذاكرة",
+        "remaining": "المتبقي",
+        "expireTime": "تاريخ الانتهاء"
     },
     "permission": {
         "camera": "الكاميرا",

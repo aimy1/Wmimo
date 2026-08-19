@@ -1,4 +1,4 @@
-﻿{
+{
     "BackupAndSyncWebdavScreen": {
         "webdavServerUrl": "伺服器地址",
         "webdavRequired": "不能為空",
@@ -305,7 +305,18 @@
         "profileAddUrlOrContent": "添加設定連結",
         "profileUrlOrContent": "Clash設定連結",
         "profileUrlOrContentHit": "Clash設定連結[必填]",
-        "profileUrlOrContentCannotEmpty": "設定連結不能為空"
+        "profileUrlOrContentCannotEmpty": "設定連結不能為空",
+        "overview": "概覽",
+        "trafficStats": "流量統計",
+        "realtimeMonitor": "即時監控",
+        "realtimeUpload": "即時上傳",
+        "realtimeDownload": "即時下載",
+        "sessionUpload": "本次上傳",
+        "sessionDownload": "本次下載",
+        "planUsage": "套餐用量",
+        "memoryUsage": "記憶體",
+        "remaining": "剩餘",
+        "expireTime": "到期時間"
     },
     "permission": {
         "camera": "攝像頭",

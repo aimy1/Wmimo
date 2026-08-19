@@ -1,4 +1,4 @@
-﻿///
+///
 /// Generated file. Do not edit.
 ///
 // coverage:ignore-file
@@ -434,6 +434,17 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get profileUrlOrContent => 'Clash設定連結';
 	@override String get profileUrlOrContentHit => 'Clash設定連結[必填]';
 	@override String get profileUrlOrContentCannotEmpty => '設定連結不能為空';
+	@override String get overview => '概覽';
+	@override String get trafficStats => '流量統計';
+	@override String get realtimeMonitor => '即時監控';
+	@override String get realtimeUpload => '即時上傳';
+	@override String get realtimeDownload => '即時下載';
+	@override String get sessionUpload => '本次上傳';
+	@override String get sessionDownload => '本次下載';
+	@override String get planUsage => '套餐用量';
+	@override String get memoryUsage => '記憶體';
+	@override String get remaining => '剩餘';
+	@override String get expireTime => '到期時間';
 }
 
 // Path: permission
@@ -837,6 +848,17 @@ extension on TranslationsZhTw {
 			'meta.profileUrlOrContent' => 'Clash設定連結',
 			'meta.profileUrlOrContentHit' => 'Clash設定連結[必填]',
 			'meta.profileUrlOrContentCannotEmpty' => '設定連結不能為空',
+			'meta.overview' => '概覽',
+			'meta.trafficStats' => '流量統計',
+			'meta.realtimeMonitor' => '即時監控',
+			'meta.realtimeUpload' => '即時上傳',
+			'meta.realtimeDownload' => '即時下載',
+			'meta.sessionUpload' => '本次上傳',
+			'meta.sessionDownload' => '本次下載',
+			'meta.planUsage' => '套餐用量',
+			'meta.memoryUsage' => '記憶體',
+			'meta.remaining' => '剩餘',
+			'meta.expireTime' => '到期時間',
 			'permission.camera' => '攝像頭',
 			'permission.screen' => '屏幕錄製',
 			'permission.appQuery' => '獲取應用列表',

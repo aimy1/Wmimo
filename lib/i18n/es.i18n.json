@@ -1,4 +1,4 @@
-﻿{
+{
     "BackupAndSyncWebdavScreen": {
         "webdavServerUrl": "URL del Servidor",
         "webdavRequired": "No puede estar vacío",
@@ -305,7 +305,18 @@
         "profileAddUrlOrContent": "Añadir Enlace de Perfil",
         "profileUrlOrContent": "Enlace de Perfil Clash",
         "profileUrlOrContentHit": "Enlace de Perfil Clash [Requerido]",
-        "profileUrlOrContentCannotEmpty": "El enlace del perfil no puede estar vacío"
+        "profileUrlOrContentCannotEmpty": "El enlace del perfil no puede estar vacío",
+        "overview": "Resumen",
+        "trafficStats": "Estadísticas de tráfico",
+        "realtimeMonitor": "Monitoreo en tiempo real",
+        "realtimeUpload": "Subida en tiempo real",
+        "realtimeDownload": "Descarga en tiempo real",
+        "sessionUpload": "Subida de la sesión",
+        "sessionDownload": "Descarga de la sesión",
+        "planUsage": "Uso del plan",
+        "memoryUsage": "Memoria",
+        "remaining": "Restante",
+        "expireTime": "Fecha de caducidad"
     },
     "permission": {
         "camera": "Cámara",

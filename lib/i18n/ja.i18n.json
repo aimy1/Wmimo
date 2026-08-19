@@ -1,4 +1,4 @@
-﻿{
+{
     "BackupAndSyncWebdavScreen": {
         "webdavServerUrl": "サーバーURL",
         "webdavRequired": "空にすることはできません",
@@ -305,7 +305,18 @@
         "profileAddUrlOrContent": "プロファイルリンクを追加",
         "profileUrlOrContent": "Clash設定リンク",
         "profileUrlOrContentHit": "Clash設定リンク [必須]",
-        "profileUrlOrContentCannotEmpty": "プロファイルリンクを空にすることはできません"
+        "profileUrlOrContentCannotEmpty": "プロファイルリンクを空にすることはできません",
+        "overview": "概要",
+        "trafficStats": "トラフィック統計",
+        "realtimeMonitor": "リアルタイム監視",
+        "realtimeUpload": "リアルタイム送信",
+        "realtimeDownload": "リアルタイム受信",
+        "sessionUpload": "今回の送信",
+        "sessionDownload": "今回の受信",
+        "planUsage": "プラン使用量",
+        "memoryUsage": "メモリ",
+        "remaining": "残り",
+        "expireTime": "有効期限"
     },
     "permission": {
         "camera": "カメラ",

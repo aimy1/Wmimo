@@ -1,4 +1,4 @@
-﻿{
+{
     "BackupAndSyncWebdavScreen": {
         "webdavServerUrl": "آدرس URL سرور",
         "webdavRequired": "نمی‌تواند خالی باشد",
@@ -305,7 +305,18 @@
         "profileAddUrlOrContent": "افزودن لینک پروفایل",
         "profileUrlOrContent": "پیوند پیکربندی Clash",
         "profileUrlOrContentHit": "پیوند پیکربندی Clash [الزامی]",
-        "profileUrlOrContentCannotEmpty": "لینک پروفایل نمی‌تواند خالی باشد"
+        "profileUrlOrContentCannotEmpty": "لینک پروفایل نمی‌تواند خالی باشد",
+        "overview": "نمای کلی",
+        "trafficStats": "آمار ترافیک",
+        "realtimeMonitor": "نظارت زنده",
+        "realtimeUpload": "آپلود لحظه‌ای",
+        "realtimeDownload": "دانلود لحظه‌ای",
+        "sessionUpload": "آپلود نشست",
+        "sessionDownload": "دانلود نشست",
+        "planUsage": "مصرف بسته",
+        "memoryUsage": "حافظه",
+        "remaining": "باقیمانده",
+        "expireTime": "زمان انقضا"
     },
     "permission": {
         "camera": "دوربین",

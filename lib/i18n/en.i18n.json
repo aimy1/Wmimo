@@ -1,4 +1,4 @@
-﻿{
+{
     "BackupAndSyncWebdavScreen": {
         "webdavServerUrl": "Server Url",
         "webdavRequired": "Can not be empty",
@@ -305,7 +305,18 @@
         "profileAddUrlOrContent": "Add Profile Link",
         "profileUrlOrContent": "Clash Profile Link",
         "profileUrlOrContentHit": "Clash Profile Link [Required]",
-        "profileUrlOrContentCannotEmpty": "Profile Link can not be empty"
+        "profileUrlOrContentCannotEmpty": "Profile Link can not be empty",
+        "overview": "Overview",
+        "trafficStats": "Traffic Statistics",
+        "realtimeMonitor": "Real-time Monitor",
+        "realtimeUpload": "Real-time Upload",
+        "realtimeDownload": "Real-time Download",
+        "sessionUpload": "Session Upload",
+        "sessionDownload": "Session Download",
+        "planUsage": "Plan Usage",
+        "memoryUsage": "Memory",
+        "remaining": "Remaining",
+        "expireTime": "Expire Time"
     },
     "permission": {
         "camera": "Camera",

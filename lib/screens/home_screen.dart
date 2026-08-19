@@ -571,7 +571,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   context: context,
                                   index: 0,
                                   icon: Icons.dashboard_rounded,
-                                  label: '概览',
+                                  label: tcontext.meta.overview,
                                 ),
                                 _buildNavItem(
                                   context: context,
@@ -667,7 +667,7 @@ class _HomeScreenState extends State<HomeScreen>
                 NavigationDestination(
                   icon: const Icon(Icons.dashboard_outlined),
                   selectedIcon: const Icon(Icons.dashboard_rounded),
-                  label: '概览',
+                  label: tcontext.meta.overview,
                 ),
                 NavigationDestination(
                   icon: const Icon(Icons.alt_route_outlined),

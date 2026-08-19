@@ -1,4 +1,4 @@
-﻿///
+///
 /// Generated file. Do not edit.
 ///
 // coverage:ignore-file
@@ -434,6 +434,17 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get profileUrlOrContent => 'Clash設定リンク';
 	@override String get profileUrlOrContentHit => 'Clash設定リンク [必須]';
 	@override String get profileUrlOrContentCannotEmpty => 'プロファイルリンクを空にすることはできません';
+	@override String get overview => '概要';
+	@override String get trafficStats => 'トラフィック統計';
+	@override String get realtimeMonitor => 'リアルタイム監視';
+	@override String get realtimeUpload => 'リアルタイム送信';
+	@override String get realtimeDownload => 'リアルタイム受信';
+	@override String get sessionUpload => '今回の送信';
+	@override String get sessionDownload => '今回の受信';
+	@override String get planUsage => 'プラン使用量';
+	@override String get memoryUsage => 'メモリ';
+	@override String get remaining => '残り';
+	@override String get expireTime => '有効期限';
 }
 
 // Path: permission
@@ -837,6 +848,17 @@ extension on TranslationsJa {
 			'meta.profileUrlOrContent' => 'Clash設定リンク',
 			'meta.profileUrlOrContentHit' => 'Clash設定リンク [必須]',
 			'meta.profileUrlOrContentCannotEmpty' => 'プロファイルリンクを空にすることはできません',
+			'meta.overview' => '概要',
+			'meta.trafficStats' => 'トラフィック統計',
+			'meta.realtimeMonitor' => 'リアルタイム監視',
+			'meta.realtimeUpload' => 'リアルタイム送信',
+			'meta.realtimeDownload' => 'リアルタイム受信',
+			'meta.sessionUpload' => '今回の送信',
+			'meta.sessionDownload' => '今回の受信',
+			'meta.planUsage' => 'プラン使用量',
+			'meta.memoryUsage' => 'メモリ',
+			'meta.remaining' => '残り',
+			'meta.expireTime' => '有効期限',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

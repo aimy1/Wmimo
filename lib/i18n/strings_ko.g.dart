@@ -1,4 +1,4 @@
-﻿///
+///
 /// Generated file. Do not edit.
 ///
 // coverage:ignore-file
@@ -434,6 +434,17 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get profileUrlOrContent => 'Clash 설정 링크';
 	@override String get profileUrlOrContentHit => 'Clash 설정 링크 [필수]';
 	@override String get profileUrlOrContentCannotEmpty => '프로필 링크는 비워둘 수 없습니다';
+	@override String get overview => '개요';
+	@override String get trafficStats => '트래픽 통계';
+	@override String get realtimeMonitor => '실시간 모니터링';
+	@override String get realtimeUpload => '실시간 업로드';
+	@override String get realtimeDownload => '실시간 다운로드';
+	@override String get sessionUpload => '이번 업로드';
+	@override String get sessionDownload => '이번 다운로드';
+	@override String get planUsage => '요금제 사용량';
+	@override String get memoryUsage => '메모리';
+	@override String get remaining => '남음';
+	@override String get expireTime => '만료 시간';
 }
 
 // Path: permission
@@ -837,6 +848,17 @@ extension on TranslationsKo {
 			'meta.profileUrlOrContent' => 'Clash 설정 링크',
 			'meta.profileUrlOrContentHit' => 'Clash 설정 링크 [필수]',
 			'meta.profileUrlOrContentCannotEmpty' => '프로필 링크는 비워둘 수 없습니다',
+			'meta.overview' => '개요',
+			'meta.trafficStats' => '트래픽 통계',
+			'meta.realtimeMonitor' => '실시간 모니터링',
+			'meta.realtimeUpload' => '실시간 업로드',
+			'meta.realtimeDownload' => '실시간 다운로드',
+			'meta.sessionUpload' => '이번 업로드',
+			'meta.sessionDownload' => '이번 다운로드',
+			'meta.planUsage' => '요금제 사용량',
+			'meta.memoryUsage' => '메모리',
+			'meta.remaining' => '남음',
+			'meta.expireTime' => '만료 시간',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

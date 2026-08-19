@@ -478,9 +478,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Text(
-                          '流量统计',
-                          style: TextStyle(
+                        Text(
+                          tcontext.meta.trafficStats,
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                           ),
@@ -504,7 +504,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                '内存: ${ClashHttpApi.convertTrafficToStringDouble(mem)}',
+                                '${tcontext.meta.memoryUsage}: ${ClashHttpApi.convertTrafficToStringDouble(mem)}',
                                 style: TextStyle(
                                   fontSize: 10.5,
                                   color: Theme.of(context)
@@ -550,7 +550,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                connected ? '实时监控' : '未连接',
+                                connected ? tcontext.meta.realtimeMonitor : tcontext.meta.disconnected,
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w500,
@@ -615,7 +615,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                             context: context,
                             icon: Icons.arrow_upward_rounded,
                             iconColor: const Color(0xFF3B82F6),
-                            label: '实时上传',
+                            label: tcontext.meta.realtimeUpload,
                             value: '${ClashHttpApi.convertTrafficToStringDouble(value)}/s',
                           );
                         },
@@ -630,7 +630,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                             context: context,
                             icon: Icons.arrow_downward_rounded,
                             iconColor: const Color(0xFF10B981),
-                            label: '实时下载',
+                            label: tcontext.meta.realtimeDownload,
                             value: '${ClashHttpApi.convertTrafficToStringDouble(value)}/s',
                           );
                         },
@@ -649,7 +649,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                             context: context,
                             icon: Icons.cloud_upload_outlined,
                             iconColor: const Color(0xFF8B5CF6),
-                            label: '本次上传',
+                            label: tcontext.meta.sessionUpload,
                             value: ClashHttpApi.convertTrafficToStringDouble(value),
                           );
                         },
@@ -664,7 +664,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                             context: context,
                             icon: Icons.cloud_download_outlined,
                             iconColor: const Color(0xFF06B6D4),
-                            label: '本次下载',
+                            label: tcontext.meta.sessionDownload,
                             value: ClashHttpApi.convertTrafficToStringDouble(value),
                           );
                         },
@@ -1033,6 +1033,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     required ProfileSetting profile,
     required Tuple2<bool, String>? expireInfo,
   }) {
+    final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -1077,7 +1078,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    '套餐用量: $usedStr / $totalStr (剩余 $remainingStr)',
+                    '${tcontext.meta.planUsage}: $usedStr / $totalStr (${tcontext.meta.remaining} $remainingStr)',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -1117,7 +1118,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  '到期时间: ${expireInfo.item2}',
+                  '${tcontext.meta.expireTime}: ${expireInfo.item2}',
                   style: TextStyle(
                     fontSize: 11.5,
                     color: expireInfo.item1

@@ -1,4 +1,4 @@
-﻿///
+///
 /// Generated file. Do not edit.
 ///
 // coverage:ignore-file
@@ -434,6 +434,17 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get profileUrlOrContent => 'رابط إعداد Clash';
 	@override String get profileUrlOrContentHit => 'رابط إعداد Clash [مطلوب]';
 	@override String get profileUrlOrContentCannotEmpty => 'لا يمكن أن يكون رابط الملف الشخصي فارغًا';
+	@override String get overview => 'نظرة عامة';
+	@override String get trafficStats => 'إحصائيات البيانات';
+	@override String get realtimeMonitor => 'مراقبة في الوقت الفعلي';
+	@override String get realtimeUpload => 'الرفع الفعلي';
+	@override String get realtimeDownload => 'التحميل الفعلي';
+	@override String get sessionUpload => 'رفع الجلسة';
+	@override String get sessionDownload => 'تحميل الجلسة';
+	@override String get planUsage => 'استهلاك الباقة';
+	@override String get memoryUsage => 'الذاكرة';
+	@override String get remaining => 'المتبقي';
+	@override String get expireTime => 'تاريخ الانتهاء';
 }
 
 // Path: permission
@@ -837,6 +848,17 @@ extension on TranslationsAr {
 			'meta.profileUrlOrContent' => 'رابط إعداد Clash',
 			'meta.profileUrlOrContentHit' => 'رابط إعداد Clash [مطلوب]',
 			'meta.profileUrlOrContentCannotEmpty' => 'لا يمكن أن يكون رابط الملف الشخصي فارغًا',
+			'meta.overview' => 'نظرة عامة',
+			'meta.trafficStats' => 'إحصائيات البيانات',
+			'meta.realtimeMonitor' => 'مراقبة في الوقت الفعلي',
+			'meta.realtimeUpload' => 'الرفع الفعلي',
+			'meta.realtimeDownload' => 'التحميل الفعلي',
+			'meta.sessionUpload' => 'رفع الجلسة',
+			'meta.sessionDownload' => 'تحميل الجلسة',
+			'meta.planUsage' => 'استهلاك الباقة',
+			'meta.memoryUsage' => 'الذاكرة',
+			'meta.remaining' => 'المتبقي',
+			'meta.expireTime' => 'تاريخ الانتهاء',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',

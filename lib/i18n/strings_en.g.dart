@@ -1,4 +1,4 @@
-﻿///
+///
 /// Generated file. Do not edit.
 ///
 // coverage:ignore-file
@@ -1016,6 +1016,39 @@ class Translations$meta$en {
 
 	/// en: 'Profile Link can not be empty'
 	String get profileUrlOrContentCannotEmpty => 'Profile Link can not be empty';
+
+	/// en: 'Overview'
+	String get overview => 'Overview';
+
+	/// en: 'Traffic Statistics'
+	String get trafficStats => 'Traffic Statistics';
+
+	/// en: 'Real-time Monitor'
+	String get realtimeMonitor => 'Real-time Monitor';
+
+	/// en: 'Real-time Upload'
+	String get realtimeUpload => 'Real-time Upload';
+
+	/// en: 'Real-time Download'
+	String get realtimeDownload => 'Real-time Download';
+
+	/// en: 'Session Upload'
+	String get sessionUpload => 'Session Upload';
+
+	/// en: 'Session Download'
+	String get sessionDownload => 'Session Download';
+
+	/// en: 'Plan Usage'
+	String get planUsage => 'Plan Usage';
+
+	/// en: 'Memory'
+	String get memoryUsage => 'Memory';
+
+	/// en: 'Remaining'
+	String get remaining => 'Remaining';
+
+	/// en: 'Expire Time'
+	String get expireTime => 'Expire Time';
 }
 
 // Path: permission
@@ -1503,6 +1536,17 @@ extension on Translations {
 			'meta.profileUrlOrContent' => 'Clash Profile Link',
 			'meta.profileUrlOrContentHit' => 'Clash Profile Link [Required]',
 			'meta.profileUrlOrContentCannotEmpty' => 'Profile Link can not be empty',
+			'meta.overview' => 'Overview',
+			'meta.trafficStats' => 'Traffic Statistics',
+			'meta.realtimeMonitor' => 'Real-time Monitor',
+			'meta.realtimeUpload' => 'Real-time Upload',
+			'meta.realtimeDownload' => 'Real-time Download',
+			'meta.sessionUpload' => 'Session Upload',
+			'meta.sessionDownload' => 'Session Download',
+			'meta.planUsage' => 'Plan Usage',
+			'meta.memoryUsage' => 'Memory',
+			'meta.remaining' => 'Remaining',
+			'meta.expireTime' => 'Expire Time',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

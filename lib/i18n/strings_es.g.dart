@@ -1,4 +1,4 @@
-﻿///
+///
 /// Generated file. Do not edit.
 ///
 // coverage:ignore-file
@@ -434,6 +434,17 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get profileUrlOrContent => 'Enlace de Perfil Clash';
 	@override String get profileUrlOrContentHit => 'Enlace de Perfil Clash [Requerido]';
 	@override String get profileUrlOrContentCannotEmpty => 'El enlace del perfil no puede estar vacío';
+	@override String get overview => 'Resumen';
+	@override String get trafficStats => 'Estadísticas de tráfico';
+	@override String get realtimeMonitor => 'Monitoreo en tiempo real';
+	@override String get realtimeUpload => 'Subida en tiempo real';
+	@override String get realtimeDownload => 'Descarga en tiempo real';
+	@override String get sessionUpload => 'Subida de la sesión';
+	@override String get sessionDownload => 'Descarga de la sesión';
+	@override String get planUsage => 'Uso del plan';
+	@override String get memoryUsage => 'Memoria';
+	@override String get remaining => 'Restante';
+	@override String get expireTime => 'Fecha de caducidad';
 }
 
 // Path: permission
@@ -837,6 +848,17 @@ extension on TranslationsEs {
 			'meta.profileUrlOrContent' => 'Enlace de Perfil Clash',
 			'meta.profileUrlOrContentHit' => 'Enlace de Perfil Clash [Requerido]',
 			'meta.profileUrlOrContentCannotEmpty' => 'El enlace del perfil no puede estar vacío',
+			'meta.overview' => 'Resumen',
+			'meta.trafficStats' => 'Estadísticas de tráfico',
+			'meta.realtimeMonitor' => 'Monitoreo en tiempo real',
+			'meta.realtimeUpload' => 'Subida en tiempo real',
+			'meta.realtimeDownload' => 'Descarga en tiempo real',
+			'meta.sessionUpload' => 'Subida de la sesión',
+			'meta.sessionDownload' => 'Descarga de la sesión',
+			'meta.planUsage' => 'Uso del plan',
+			'meta.memoryUsage' => 'Memoria',
+			'meta.remaining' => 'Restante',
+			'meta.expireTime' => 'Fecha de caducidad',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

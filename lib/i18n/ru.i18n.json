@@ -1,4 +1,4 @@
-﻿{
+{
     "BackupAndSyncWebdavScreen": {
         "webdavServerUrl": "Адрес сервера",
         "webdavRequired": "Не может быть пустым",
@@ -305,7 +305,18 @@
         "profileAddUrlOrContent": "Добавление подписки",
         "profileUrlOrContent": "Ссылка на профиль Clash",
         "profileUrlOrContentHit": "Ссылка на профиль Clash [обязательно]",
-        "profileUrlOrContentCannotEmpty": "Ссылка на подписку не может быть пустой"
+        "profileUrlOrContentCannotEmpty": "Ссылка на подписку не может быть пустой",
+        "overview": "Обзор",
+        "trafficStats": "Статистика трафика",
+        "realtimeMonitor": "Мониторинг",
+        "realtimeUpload": "Текущая отдача",
+        "realtimeDownload": "Текущая загрузка",
+        "sessionUpload": "За сессию отдано",
+        "sessionDownload": "За сессию принято",
+        "planUsage": "Использование тарифа",
+        "memoryUsage": "Память",
+        "remaining": "Осталось",
+        "expireTime": "Срок действия"
     },
     "permission": {
         "camera": "Камера",
