@@ -1,6 +1,7 @@
 // ignore_for_file: empty_catches, unused_catch_stack
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui';
@@ -580,6 +581,40 @@ class MyAppState extends State<MyApp>
     });
   }
 
+  static String _getNodeEmoji(String name) {
+    final upper = name.toUpperCase();
+    if (name.contains("香港") || upper.contains("HK") || upper.contains("HONG KONG")) {
+      return "🇭🇰";
+    } else if (name.contains("日本") || upper.contains("JP") || upper.contains("JAPAN") || upper.contains("TOKYO")) {
+      return "🇯🇵";
+    } else if (name.contains("美国") || upper.contains("US") || upper.contains("USA") || upper.contains("UNITED STATES")) {
+      return "🇺🇸";
+    } else if (name.contains("新加坡") || upper.contains("SG") || upper.contains("SINGAPORE") || name.contains("狮城")) {
+      return "🇸🇬";
+    } else if (name.contains("台湾") || upper.contains("TW") || upper.contains("TAIWAN")) {
+      return "🇹🇼";
+    } else if (name.contains("韩国") || upper.contains("KR") || upper.contains("KOREA") || name.contains("首尔")) {
+      return "🇰🇷";
+    } else if (name.contains("德国") || upper.contains("DE") || upper.contains("GERMANY")) {
+      return "🇩🇪";
+    } else if (name.contains("英国") || upper.contains("UK") || upper.contains("GB") || upper.contains("BRITAIN")) {
+      return "🇬🇧";
+    } else if (name.contains("加拿大") || upper.contains("CA") || upper.contains("CANADA")) {
+      return "🇨🇦";
+    } else if (name.contains("澳大利亚") || upper.contains("AU") || upper.contains("AUSTRALIA") || name.contains("澳洲")) {
+      return "🇦🇺";
+    } else if (name.contains("法国") || upper.contains("FR") || upper.contains("FRANCE")) {
+      return "🇫🇷";
+    } else if (name.contains("俄罗斯") || upper.contains("RU") || upper.contains("RUSSIA")) {
+      return "🇷🇺";
+    } else if (name.contains("直连") || upper.contains("DIRECT")) {
+      return "⚡";
+    } else if (name.contains("自动") || upper.contains("AUTO") || upper.contains("URLTEST")) {
+      return "♻️";
+    }
+    return "🌐";
+  }
+
   Future<void> _setTrayMenu(bool grey) async {
     if (!PlatformUtils.isPC()) {
       return;
@@ -590,19 +625,34 @@ class MyAppState extends State<MyApp>
     final profiles = ProfileManager.getProfiles();
     final currentProfile = ProfileManager.getCurrent();
 
+    // Query traffic speed if connected
+    String statusLabel = grey ? "⚪  Wmimo · 核心未连接" : "🚀  Wmimo · 核心运行中";
+    if (!grey) {
+      try {
+        final trafficJson = await FlutterVpnService.clashiApiTraffic();
+        final data = jsonDecode(trafficJson);
+        final num up = data['up'] ?? 0;
+        final num down = data['down'] ?? 0;
+        final upStr = ClashHttpApi.convertTrafficToStringDouble(up);
+        final downStr = ClashHttpApi.convertTrafficToStringDouble(down);
+        statusLabel = "🚀  Wmimo · ↑ $upStr/s  ↓ $downStr/s";
+      } catch (_) {}
+    }
+
     // 1. Status and Core Control
     List<MenuItem> items = [
       MenuItem(
         key: kMenuStatus,
-        label: grey ? "  ⚪ 核心未连接  " : "  🟢 核心已连接  ",
+        label: "  $statusLabel  ",
         disabled: true,
       ),
+      MenuItem.separator(),
       if (grey) ...[
-        MenuItem(key: kMenuConnect, label: "  ▶ 启动代理连接  "),
+        MenuItem(key: kMenuConnect, label: "  ▶️   启动代理连接  "),
       ],
       if (!grey) ...[
-        MenuItem(key: kMenuDisconnect, label: "  ⏹ 断开代理连接  "),
-        MenuItem(key: kMenuRestartCore, label: "  🔄 重启代理核心  "),
+        MenuItem(key: kMenuDisconnect, label: "  ⏹️   断开代理连接  "),
+        MenuItem(key: kMenuRestartCore, label: "  🔄   重启代理核心  "),
       ],
       MenuItem.separator(),
 
@@ -610,34 +660,34 @@ class MyAppState extends State<MyApp>
       MenuItem.checkbox(
         key: kMenuSystemProxy,
         checked: isSysProxy,
-        label: "  🌐 系统代理  ",
+        label: "  🌐  系统代理 (System Proxy)  ",
       ),
       MenuItem.checkbox(
         key: kMenuTunMode,
         checked: tunEnable,
-        label: "  🛡 TUN 模式  ",
+        label: "  🛡️  TUN 模式 (TUN Mode)  ",
       ),
       MenuItem.separator(),
 
       // 3. Outbound Mode Submenu
       MenuItem.submenu(
-        label: "  🔀 出站模式 (${mode == ClashConfigsMode.rule ? '规则' : mode == ClashConfigsMode.global ? '全局' : '直连'})  ",
+        label: "  🔀  出站模式 (${mode == ClashConfigsMode.rule ? '规则' : mode == ClashConfigsMode.global ? '全局' : '直连'})  ",
         submenu: Menu(
           items: [
             MenuItem.checkbox(
               key: kMenuModeRule,
               checked: mode == ClashConfigsMode.rule,
-              label: "  规则分流 (Rule)  ",
+              label: "  🎯  规则分流 (Rule)  ",
             ),
             MenuItem.checkbox(
               key: kMenuModeGlobal,
               checked: mode == ClashConfigsMode.global,
-              label: "  全局代理 (Global)  ",
+              label: "  🌍  全局代理 (Global)  ",
             ),
             MenuItem.checkbox(
               key: kMenuModeDirect,
               checked: mode == ClashConfigsMode.direct,
-              label: "  直接连接 (Direct)  ",
+              label: "  ⚡  直接连接 (Direct)  ",
             ),
           ],
         ),
@@ -653,21 +703,21 @@ class MyAppState extends State<MyApp>
           MenuItem.checkbox(
             key: "profile_${p.id}",
             checked: currentProfile?.id == p.id,
-            label: "  $displayName  ",
+            label: "  📌  $displayName  ",
           ),
         );
       }
       profileItems.add(MenuItem.separator());
     }
     profileItems.add(
-      MenuItem(key: kMenuUpdateAllProfiles, label: "  🔄 更新所有订阅配置  "),
+      MenuItem(key: kMenuUpdateAllProfiles, label: "  🔄  更新所有订阅配置  "),
     );
     final curProfileName = currentProfile != null
         ? (currentProfile.remark.isNotEmpty ? currentProfile.remark : currentProfile.id)
         : '未选择';
     items.add(
       MenuItem.submenu(
-        label: "  📑 订阅配置 ($curProfileName)  ",
+        label: "  📑  订阅配置 ($curProfileName)  ",
         submenu: Menu(items: profileItems),
       ),
     );
@@ -680,18 +730,19 @@ class MyAppState extends State<MyApp>
         final selectableNodes =
             nodes.where((n) => !ClashProtocolType.isGroupType(n.type)).toList();
         if (selectableNodes.isNotEmpty) {
-          for (var i = 0; i < math.min(15, selectableNodes.length); i++) {
+          for (var i = 0; i < math.min(20, selectableNodes.length); i++) {
             final node = selectableNodes[i];
+            final flag = _getNodeEmoji(node.name);
             nodeMenuItems.add(
               MenuItem(
                 key: "node_GLOBAL:::_:::${node.name}",
-                label: "  ${node.name}  ",
+                label: "  $flag  ${node.name}  ",
               ),
             );
           }
           items.add(
             MenuItem.submenu(
-              label: "  ⚡ 代理节点 (${selectableNodes.length}个)  ",
+              label: "  ⚡  代理节点 (${selectableNodes.length}个)  ",
               submenu: Menu(items: nodeMenuItems),
             ),
           );
@@ -702,14 +753,14 @@ class MyAppState extends State<MyApp>
     // 6. Tools Submenu
     items.add(
       MenuItem.submenu(
-        label: "  🛠 实用工具  ",
+        label: "  🛠️  实用工具  ",
         submenu: Menu(
           items: [
-            MenuItem(key: kMenuCopyProxyCmd, label: "  📋 复制系统代理命令  "),
-            MenuItem(key: kMenuDelayTest, label: "  ⚡ 一键全节点测速  "),
+            MenuItem(key: kMenuCopyProxyCmd, label: "  📋  复制系统代理命令 (CMD / Bash)  "),
+            MenuItem(key: kMenuDelayTest, label: "  ⚡  一键全节点延迟测速  "),
             MenuItem.separator(),
-            MenuItem(key: kMenuOpenConfigDir, label: "  📁 打开应用配置目录  "),
-            MenuItem(key: kMenuOpenLogs, label: "  📄 查看核心运行日志  "),
+            MenuItem(key: kMenuOpenConfigDir, label: "  📁  打开应用配置目录  "),
+            MenuItem(key: kMenuOpenLogs, label: "  📄  查看核心运行日志  "),
           ],
         ),
       ),
@@ -717,8 +768,8 @@ class MyAppState extends State<MyApp>
     items.add(MenuItem.separator());
 
     // 7. Window & Exit
-    items.add(MenuItem(key: kMenuOpen, label: "  🖥 显示主界面  "));
-    items.add(MenuItem(key: kMenuExit, label: "  ❌ 退出程序  "));
+    items.add(MenuItem(key: kMenuOpen, label: "  🖥️  打开主界面  "));
+    items.add(MenuItem(key: kMenuExit, label: "  ❌  退出程序  "));
 
     _menu = Menu(items: items);
     await trayManager.setContextMenu(_menu!);
