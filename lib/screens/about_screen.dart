@@ -53,34 +53,27 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Navigator.canPop(context)
-                        ? InkWell(
-                            onTap: () => Navigator.pop(context),
-                            child: const SizedBox(
-                              width: 50,
-                              height: 30,
-                              child:
-                                  Icon(Icons.arrow_back_ios_outlined, size: 26),
-                            ),
-                          )
-                        : const SizedBox(width: 50, height: 30),
-                    SizedBox(
-                      width: windowSize.width - 50 * 2,
+                    if (Navigator.canPop(context))
+                      InkWell(
+                        onTap: () => Navigator.pop(context),
+                        child: const SizedBox(
+                          width: 40,
+                          height: 30,
+                          child: Icon(Icons.arrow_back_ios_outlined, size: 24),
+                        ),
+                      ),
+                    Expanded(
                       child: Text(
                         tcontext.meta.about,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: ThemeConfig.kFontWeightTitle,
                           fontSize: ThemeConfig.kFontSizeTitle,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 50),
                   ],
                 ),
               ),

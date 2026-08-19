@@ -69,76 +69,75 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
           padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Navigator.canPop(context)
-                      ? InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: const SizedBox(
-                            width: 50,
-                            height: 30,
-                            child:
-                                Icon(Icons.arrow_back_ios_outlined, size: 26),
-                          ),
-                        )
-                      : const SizedBox(width: 50, height: 30),
-                  SizedBox(
-                    width: windowSize.width - 50 * 3,
-                    child: Text(
-                      tcontext.meta.myProfiles,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: ThemeConfig.kFontWeightTitle,
-                        fontSize: ThemeConfig.kFontSizeTitle,
-                      ),
-                    ),
-                  ),
-                  ProfileManager.updating.isNotEmpty
-                      ? const Row(
-                          children: [
-                            SizedBox(width: 12),
-                            SizedBox(
-                              width: 26,
-                              height: 26,
-                              child: RepaintBoundary(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                            SizedBox(width: 12),
-                          ],
-                        )
-                      : InkWell(
-                          onTap: () async {
-                            onTapUpdateAll();
-                          },
-                          child: Tooltip(
-                            message: tcontext.meta.update,
-                            child: const SizedBox(
-                              width: 50,
-                              height: 30,
-                              child: Icon(
-                                Icons.cloud_download_outlined,
-                                size: 30,
-                              ),
-                            ),
-                          ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    if (Navigator.canPop(context))
+                      InkWell(
+                        onTap: () => Navigator.pop(context),
+                        child: const SizedBox(
+                          width: 40,
+                          height: 30,
+                          child: Icon(Icons.arrow_back_ios_outlined, size: 24),
                         ),
-                  InkWell(
-                    onTap: () async {
-                      onTapAdd();
-                    },
-                    child: Tooltip(
-                      message: tcontext.meta.add,
-                      child: const SizedBox(
-                        width: 50,
-                        height: 30,
-                        child: Icon(Icons.add, size: 30),
+                      ),
+                    Expanded(
+                      child: Text(
+                        tcontext.meta.myProfiles,
+                        style: const TextStyle(
+                          fontWeight: ThemeConfig.kFontWeightTitle,
+                          fontSize: ThemeConfig.kFontSizeTitle,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    ProfileManager.updating.isNotEmpty
+                        ? const Row(
+                            children: [
+                              SizedBox(width: 8),
+                              SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: RepaintBoundary(
+                                  child: CircularProgressIndicator(strokeWidth: 2.5),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                            ],
+                          )
+                        : Tooltip(
+                            message: tcontext.meta.update,
+                            child: SizedBox(
+                              width: 40,
+                              height: 30,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(8),
+                                onTap: () async {
+                                  onTapUpdateAll();
+                                },
+                                child: const Icon(
+                                  Icons.cloud_download_outlined,
+                                  size: 26,
+                                ),
+                              ),
+                            ),
+                          ),
+                    Tooltip(
+                      message: tcontext.meta.add,
+                      child: SizedBox(
+                        width: 40,
+                        height: 30,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () async {
+                            onTapAdd();
+                          },
+                          child: const Icon(Icons.add, size: 26),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
               Expanded(

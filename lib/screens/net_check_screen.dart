@@ -238,64 +238,62 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Navigator.canPop(context)
-                      ? InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: const SizedBox(
-                            width: 50,
-                            height: 30,
-                            child:
-                                Icon(Icons.arrow_back_ios_outlined, size: 26),
-                          ),
-                        )
-                      : const SizedBox(width: 50, height: 30),
-                  SizedBox(
-                    width: windowSize.width - 50 * 3,
-                    child: Text(
-                      tcontext.meta.networkCheck,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: ThemeConfig.kFontWeightTitle,
-                        fontSize: ThemeConfig.kFontSizeTitle,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    if (Navigator.canPop(context))
+                      InkWell(
+                        onTap: () => Navigator.pop(context),
+                        child: const SizedBox(
+                          width: 40,
+                          height: 30,
+                          child: Icon(Icons.arrow_back_ios_outlined, size: 24),
+                        ),
+                      ),
+                    Expanded(
+                      child: Text(
+                        tcontext.meta.networkCheck,
+                        style: const TextStyle(
+                          fontWeight: ThemeConfig.kFontWeightTitle,
+                          fontSize: ThemeConfig.kFontSizeTitle,
+                        ),
                       ),
                     ),
-                  ),
-                  _checking || _proxyHttpResult.isEmpty
-                      ? const SizedBox(width: 50, height: 30)
-                      : InkWell(
-                          onTap: () async {
-                            try {
-                              await Clipboard.setData(
-                                ClipboardData(
-                                  text: [
-                                    "Domain: ${_domainController.text.trim()}",
-                                    "OS: ${Platform.operatingSystem}",
-                                    '1. DNS:',
-                                    _dnsResult,
-                                    '2. HTTP Via TUN:',
-                                    _directHttpResult,
-                                    '3. HTTP Via Proxy:',
-                                    _proxyHttpResult,
-                                    if (!Platform.isIOS) ...[
-                                      '4. Route Table:',
-                                      _routeTableResult,
-                                    ],
-                                  ].join('\n\n'),
-                                ),
-                              );
-                            } catch (e) {}
-                          },
-                          child: SizedBox(
-                            width: 50,
+                    _checking || _proxyHttpResult.isEmpty
+                        ? const SizedBox(width: 40, height: 30)
+                        : SizedBox(
+                            width: 40,
                             height: 30,
-                            child: Icon(Icons.copy, size: 26),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () async {
+                                try {
+                                  await Clipboard.setData(
+                                    ClipboardData(
+                                      text: [
+                                        "Domain: ${_domainController.text.trim()}",
+                                        "OS: ${Platform.operatingSystem}",
+                                        '1. DNS:',
+                                        _dnsResult,
+                                        '2. HTTP Via TUN:',
+                                        _directHttpResult,
+                                        '3. HTTP Via Proxy:',
+                                        _proxyHttpResult,
+                                        if (!Platform.isIOS) ...[
+                                          '4. Route Table:',
+                                          _routeTableResult,
+                                        ],
+                                      ].join('\n\n'),
+                                    ),
+                                  );
+                                } catch (e) {}
+                              },
+                              child: const Icon(Icons.copy, size: 24),
+                            ),
                           ),
-                        ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
               Expanded(
