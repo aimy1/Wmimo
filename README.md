@@ -31,7 +31,7 @@
 
 本项目在开发与演进过程中，深受开源社区众多优秀项目的启发与支持。在此向以下开发者和开源项目致以诚挚的感谢：
 
-- 🌟 **特别鸣谢 [GooRingX](https://github.com/GooRingX)** 与 **[vowe](https://github.com/vowe)** 的杰出开源贡献、设计思路与灵感指导！
+- 🌟 **特别鸣谢 [GooRingX (vowe)](https://github.com/GooRingX)** 的杰出开源贡献、设计思路与灵感指导！
 - 🚀 **特别感谢 [Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** 团队提供的高性能、全协议通用代理核心。
 - 💙 **感谢 [Flutter](https://flutter.dev/)** 团队与社区提供的跨平台 UI 框架支持。
 - 🌐 **感谢所有为 Clash 开源生态做出贡献的开发者们！**
