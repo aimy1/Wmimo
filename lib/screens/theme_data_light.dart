@@ -92,6 +92,32 @@ class ThemeDataLight {
         overlayColor: WidgetStateProperty.all(Colors.grey),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        height: 60,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        indicatorColor: ThemeDefine.kColorBlue.withValues(alpha: 0.12),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const IconThemeData(color: ThemeDefine.kColorBlue, size: 22);
+          }
+          return const IconThemeData(color: Color(0xFF64748B), size: 22);
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: ThemeDefine.kColorBlue,
+            );
+          }
+          return const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF64748B),
+          );
+        }),
+      ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(strokeWidth: 2.5),
     );
   }

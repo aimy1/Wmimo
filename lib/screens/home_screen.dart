@@ -479,21 +479,144 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  int _getMobileSelectedIndex() {
-    switch (_currentNavIndex) {
-      case 0:
-        return 0;
-      case 1:
-        return 1;
-      case 2:
-        return 2;
-      case 3:
-        return 3;
-      case 6:
-        return 4;
-      default:
-        return 0;
-    }
+  Widget _buildBottomNavBar(BuildContext context) {
+    final tcontext = Translations.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final navItems = [
+      (
+        index: 0,
+        icon: Icons.dashboard_outlined,
+        selectedIcon: Icons.dashboard_rounded,
+        label: tcontext.meta.overview,
+      ),
+      (
+        index: 1,
+        icon: Icons.alt_route_outlined,
+        selectedIcon: Icons.alt_route_rounded,
+        label: tcontext.meta.proxy,
+      ),
+      (
+        index: 2,
+        icon: Icons.dns_outlined,
+        selectedIcon: Icons.dns_rounded,
+        label: tcontext.meta.myProfiles,
+      ),
+      (
+        index: 3,
+        icon: Icons.hub_outlined,
+        selectedIcon: Icons.hub_rounded,
+        label: tcontext.meta.connections,
+      ),
+      (
+        index: 6,
+        icon: Icons.tune_outlined,
+        selectedIcon: Icons.tune_rounded,
+        label: tcontext.meta.settingApp,
+      ),
+    ];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF0F172A) : Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: isDark
+                ? const Color(0xFF1E293B)
+                : const Color(0xFFE2E8F0),
+            width: 0.8,
+          ),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.3)
+                : const Color(0xFF0F172A).withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 60,
+          child: Row(
+            children: navItems.map((item) {
+              final isSelected = _currentNavIndex == item.index;
+              return Expanded(
+                child: InkWell(
+                  onTap: () {
+                    if (_currentNavIndex == item.index) {
+                      final navState =
+                          _navigatorKeys[item.index].currentState;
+                      if (navState != null) {
+                        try {
+                          if (navState.canPop()) {
+                            navState.popUntil((route) => route.isFirst);
+                          }
+                        } catch (_) {}
+                      }
+                    } else {
+                      setState(() {
+                        _currentNavIndex = item.index;
+                      });
+                    }
+                  },
+                  splashColor: ThemeDefine.kColorBlue.withValues(alpha: 0.1),
+                  highlightColor: Colors.transparent,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeOutCubic,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isSelected ? 16 : 0,
+                          vertical: 3.5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? ThemeDefine.kColorBlue
+                                  .withValues(alpha: isDark ? 0.22 : 0.12)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Icon(
+                          isSelected ? item.selectedIcon : item.icon,
+                          size: 21,
+                          color: isSelected
+                              ? ThemeDefine.kColorBlue
+                              : (isDark
+                                  ? const Color(0xFF64748B)
+                                  : const Color(0xFF64748B)),
+                        ),
+                      ),
+                      const SizedBox(height: 2.5),
+                      Text(
+                        item.label,
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.w500,
+                          color: isSelected
+                              ? ThemeDefine.kColorBlue
+                              : (isDark
+                                  ? const Color(0xFF94A3B8)
+                                  : const Color(0xFF64748B)),
+                          letterSpacing: -0.2,
+                          height: 1.1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -694,76 +817,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
         ),
       ),
-      bottomNavigationBar: !isDesktop
-          ? NavigationBar(
-              selectedIndex: _getMobileSelectedIndex(),
-              onDestinationSelected: (int index) {
-                int targetNavIndex;
-                switch (index) {
-                  case 0:
-                    targetNavIndex = 0;
-                    break;
-                  case 1:
-                    targetNavIndex = 1;
-                    break;
-                  case 2:
-                    targetNavIndex = 2;
-                    break;
-                  case 3:
-                    targetNavIndex = 3;
-                    break;
-                  case 4:
-                    targetNavIndex = 6;
-                    break;
-                  default:
-                    targetNavIndex = 0;
-                    break;
-                }
-                if (_currentNavIndex == targetNavIndex) {
-                  final navState =
-                      _navigatorKeys[targetNavIndex].currentState;
-                  if (navState != null) {
-                    try {
-                      if (navState.canPop()) {
-                        navState.popUntil((route) => route.isFirst);
-                      }
-                    } catch (_) {}
-                  }
-                } else {
-                  setState(() {
-                    _currentNavIndex = targetNavIndex;
-                  });
-                }
-              },
-              destinations: [
-                NavigationDestination(
-                  icon: const Icon(Icons.dashboard_outlined),
-                  selectedIcon: const Icon(Icons.dashboard_rounded),
-                  label: tcontext.meta.overview,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.alt_route_outlined),
-                  selectedIcon: const Icon(Icons.alt_route_rounded),
-                  label: tcontext.meta.proxy,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.dns_outlined),
-                  selectedIcon: const Icon(Icons.dns_rounded),
-                  label: tcontext.meta.myProfiles,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.hub_outlined),
-                  selectedIcon: const Icon(Icons.hub),
-                  label: tcontext.meta.connections,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.tune_outlined),
-                  selectedIcon: const Icon(Icons.tune_rounded),
-                  label: tcontext.meta.settingApp,
-                ),
-              ],
-            )
-          : null,
+      bottomNavigationBar: !isDesktop ? _buildBottomNavBar(context) : null,
     );
   }
 }
