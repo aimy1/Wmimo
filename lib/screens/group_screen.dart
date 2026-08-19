@@ -69,109 +69,138 @@ class GroupScreenState extends LasyRenderingState<GroupScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    !widget.hasReturn
-                        ? const SizedBox(width: 50)
-                        : InkWell(
-                            onTap: () => Navigator.pop(context),
-                            child: const SizedBox(
-                              width: 50,
-                              height: 30,
-                              child: Icon(
-                                Icons.arrow_back_ios_outlined,
-                                size: 26,
-                              ),
-                            ),
-                          ),
-                    Expanded(
-                      child: Text(
-                        widget.title,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: ThemeConfig.kFontWeightTitle,
-                          fontSize: ThemeConfig.kFontSizeTitle,
-                        ),
-                      ),
-                    ),
-                    widget.onDone != null
-                        ? InkWell(
-                            onTap: () async {
-                              if (await widget.onDone!(context)) {
-                                Navigator.pop(context, true);
-                              }
-                              setState(() {});
-                            },
-                            child: SizedBox(
-                              width: 50,
-                              height: 30,
-                              child: Icon(
-                                widget.onDoneIcon ?? Icons.done_outlined,
-                                size: 26,
-                              ),
-                            ),
-                          )
-                        : widget.tipsIfNoOnDone != null &&
-                              widget.tipsIfNoOnDone!.isNotEmpty
-                        ? Tooltip(
-                            message: widget.tipsIfNoOnDone,
-                            child: InkWell(
-                              onTap: () {
-                                DialogUtils.showAlertDialog(
-                                  context,
-                                  widget.tipsIfNoOnDone!,
-                                );
-                              },
-                              child: const SizedBox(
-                                width: 50,
-                                height: 30,
-                                child: Icon(Icons.info_outlined, size: 20),
-                              ),
-                            ),
-                          )
-                        : const SizedBox(width: 50),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                  child: SingleChildScrollView(
-                    child: FutureBuilder(
-                      future: getGroupOptionsWithTryCatch(),
-                      builder:
-                          (
-                            BuildContext context,
-                            AsyncSnapshot<List<GroupItem>> snapshot,
-                          ) {
-                            List<GroupItem> data = snapshot.hasData
-                                ? snapshot.data!
-                                : [];
-                            List<Widget> children = [];
-
-                            children.addAll(
-                              GroupItemCreator.createGroups(context, data),
-                            );
-                            return Column(children: children);
-                          },
-                    ),
+        child: Column(
+          children: [
+            // Top Navigation Bar
+            Container(
+              height: 54,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: theme.dividerColor.withValues(alpha: 0.15),
+                    width: 0.8,
                   ),
                 ),
               ),
-            ],
-          ),
+              child: Row(
+                children: [
+                  if (widget.hasReturn)
+                    InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: theme.dividerColor.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_rounded,
+                          size: 20,
+                        ),
+                      ),
+                    )
+                  else
+                    const SizedBox(width: 36),
+                  Expanded(
+                    child: Text(
+                      widget.title,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16.5,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ),
+                  if (widget.onDone != null)
+                    InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () async {
+                        if (await widget.onDone!(context)) {
+                          Navigator.pop(context, true);
+                        }
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          widget.onDoneIcon ?? Icons.check_rounded,
+                          size: 20,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    )
+                  else if (widget.tipsIfNoOnDone != null && widget.tipsIfNoOnDone!.isNotEmpty)
+                    Tooltip(
+                      message: widget.tipsIfNoOnDone,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(10),
+                        onTap: () {
+                          DialogUtils.showAlertDialog(
+                            context,
+                            widget.tipsIfNoOnDone!,
+                          );
+                        },
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: theme.dividerColor.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(
+                            Icons.info_outline_rounded,
+                            size: 20,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    const SizedBox(width: 36),
+                ],
+              ),
+            ),
+            // Content Body
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                child: SingleChildScrollView(
+                  child: FutureBuilder(
+                    future: getGroupOptionsWithTryCatch(),
+                    builder:
+                        (
+                          BuildContext context,
+                          AsyncSnapshot<List<GroupItem>> snapshot,
+                        ) {
+                          List<GroupItem> data = snapshot.hasData
+                              ? snapshot.data!
+                              : [];
+                          List<Widget> children = [];
+
+                          children.addAll(
+                            GroupItemCreator.createGroups(context, data),
+                          );
+                          return Column(children: children);
+                        },
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

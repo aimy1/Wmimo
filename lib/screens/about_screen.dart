@@ -43,42 +43,66 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    if (ModalRoute.of(context)?.canPop ?? false)
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: const SizedBox(
-                          width: 40,
-                          height: 30,
-                          child: Icon(Icons.arrow_back_ios_outlined, size: 24),
-                        ),
-                      ),
-                    Expanded(
-                      child: Text(
-                        tcontext.meta.about,
-                        style: const TextStyle(
-                          fontWeight: ThemeConfig.kFontWeightTitle,
-                          fontSize: ThemeConfig.kFontSizeTitle,
-                        ),
-                      ),
-                    ),
-                  ],
+        child: Column(
+          children: [
+            // Top Navigation Bar
+            Container(
+              height: 54,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: theme.dividerColor.withValues(alpha: 0.15),
+                    width: 0.8,
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+              child: Row(
+                children: [
+                  if (ModalRoute.of(context)?.canPop ?? false)
+                    InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: theme.dividerColor.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_rounded,
+                          size: 20,
+                        ),
+                      ),
+                    )
+                  else
+                    const SizedBox(width: 36),
+                  Expanded(
+                    child: Text(
+                      tcontext.meta.about,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16.5,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 36),
+                ],
+              ),
+            ),
+            // Content Body
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                 child: SingleChildScrollView(
                   child: FutureBuilder(
                     future: getGroupOptions(),
@@ -94,25 +118,60 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
                             children: [
                               Center(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 5, bottom: 20),
+                                  padding: const EdgeInsets.only(top: 8, bottom: 24),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(18),
-                                        child: Image.asset(
-                                          'assets/images/app_icon_128.png',
-                                          width: 72,
-                                          height: 72,
-                                          fit: BoxFit.contain,
+                                      Container(
+                                        padding: const EdgeInsets.all(3),
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [Color(0xFF3B82F6), Color(0xFF8B5CF6)],
+                                          ),
+                                          borderRadius: BorderRadius.circular(22),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: const Color(0xFF3B82F6).withValues(alpha: 0.3),
+                                              blurRadius: 16,
+                                              offset: const Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(19),
+                                          child: Image.asset(
+                                            'assets/images/app_icon_128.png',
+                                            width: 68,
+                                            height: 68,
+                                            fit: BoxFit.contain,
+                                          ),
                                         ),
                                       ),
-                                      const SizedBox(height: 10),
+                                      const SizedBox(height: 12),
                                       Text(
                                         AppUtils.getName(),
                                         style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w800,
+                                          letterSpacing: 0.3,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                        decoration: BoxDecoration(
+                                          color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Text(
+                                          "v${AppUtils.getBuildinVersion()}",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: theme.colorScheme.primary,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -129,8 +188,8 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

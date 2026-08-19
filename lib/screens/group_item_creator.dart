@@ -25,41 +25,60 @@ class GroupItemCreator {
     GroupItemCreator giCreator = GroupItemCreator();
     int index = 0;
     for (var group in groups) {
+      final hasName = group.name != null && group.name!.isNotEmpty;
       widgets.add(
         Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-              child: giCreator.createGroup(context, group, index == 0),
-            ),
+          padding: const EdgeInsets.only(bottom: 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (hasName)
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, bottom: 8, top: 4),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 3.5,
+                        height: 13,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        group.name!,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).colorScheme.primary,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(
+                    color: Theme.of(context).dividerColor.withValues(alpha: 0.35),
+                    width: 0.8,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
+                  child: giCreator.createGroup(context, group, index == 0),
+                ),
+              ),
+            ],
           ),
         ),
       );
       ++index;
     }
     return widgets;
-  }
-
-  Widget _createGroupName(BuildContext context, GroupItem group) {
-    if (group.name == null || group.name!.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 6),
-        child: Text(
-          group.name!,
-          style: TextStyle(
-            fontSize: ThemeConfig.kFontSizeListItem,
-            fontWeight: ThemeConfig.kFontWeightListItem,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-      ),
-    );
   }
 
   Column createGroup(BuildContext context, GroupItem group, bool isFirstGroup) {
@@ -87,7 +106,6 @@ class GroupItemCreator {
     }
     return Column(
       children: [
-        _createGroupName(context, group),
         Scrollbar(
           child: ListView.separated(
             shrinkWrap: true,
@@ -96,7 +114,11 @@ class GroupItemCreator {
               return widgets[index];
             },
             separatorBuilder: (BuildContext context, int index) {
-              return const Divider(height: 1, thickness: 0.8);
+              return Divider(
+                height: 1,
+                thickness: 0.6,
+                color: Theme.of(context).dividerColor.withValues(alpha: 0.25),
+              );
             },
             itemCount: widgets.length,
           ),
@@ -105,3 +127,4 @@ class GroupItemCreator {
     );
   }
 }
+

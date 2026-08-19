@@ -1535,23 +1535,155 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
 class HomeScreenWidgetPart2 extends StatelessWidget {
   const HomeScreenWidgetPart2({super.key});
 
+  Widget _buildSettingsItem({
+    required BuildContext context,
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required List<Color> gradientColors,
+    required VoidCallback onTap,
+    Widget? trailingBadge,
+  }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Row(
+          children: [
+            // Icon container with soft gradient
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: gradientColors,
+                ),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: gradientColors.first.withValues(alpha: isDark ? 0.3 : 0.25),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Icon(
+                icon,
+                size: 20,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 14),
+            // Title & Subtitle
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.1,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (trailingBadge != null) ...[
+              trailingBadge,
+              const SizedBox(width: 8),
+            ],
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSectionCard({
     required BuildContext context,
+    required String sectionTitle,
     required List<Widget> items,
   }) {
+    final theme = Theme.of(context);
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (_, index) => items[index],
-            separatorBuilder: (_, __) => const Divider(height: 1, thickness: 0.8),
-            itemCount: items.length,
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 6, bottom: 8),
+            child: Row(
+              children: [
+                Container(
+                  width: 3.5,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  sectionTitle,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                    color: theme.colorScheme.primary.withValues(alpha: 0.9),
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: theme.dividerColor.withValues(alpha: 0.35),
+                width: 0.8,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (_, index) => items[index],
+                separatorBuilder: (_, __) => Divider(
+                  height: 1,
+                  thickness: 0.6,
+                  indent: 66,
+                  endIndent: 16,
+                  color: theme.dividerColor.withValues(alpha: 0.25),
+                ),
+                itemCount: items.length,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1563,29 +1695,32 @@ class HomeScreenWidgetPart2 extends StatelessWidget {
 
     // Group 1: Core & Configuration
     final coreItems = [
-      ListTile(
-        title: Text(tcontext.meta.settingApp),
-        leading: const Icon(Icons.tune_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
+      _buildSettingsItem(
+        context: context,
+        title: tcontext.meta.settingApp,
+        subtitle: "界面主题、语言、开机自启与窗口行为",
+        icon: Icons.tune_rounded,
+        gradientColors: const [Color(0xFF3B82F6), Color(0xFF2563EB)],
         onTap: () async {
           await GroupHelper.showAppSettings(context);
         },
       ),
-      ListTile(
-        title: Text(tcontext.meta.settingCore),
-        leading: const Icon(Icons.settings_suggest_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
+      _buildSettingsItem(
+        context: context,
+        title: tcontext.meta.settingCore,
+        subtitle: "Mihomo 核心参数、TUN 模式与 DNS 分流",
+        icon: Icons.settings_suggest_rounded,
+        gradientColors: const [Color(0xFF8B5CF6), Color(0xFF7C3AED)],
         onTap: () async {
           await GroupHelper.showClashSettings(context);
         },
       ),
-      ListTile(
-        title: Text(tcontext.meta.coreLog),
-        leading: const Icon(Icons.terminal_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
+      _buildSettingsItem(
+        context: context,
+        title: tcontext.meta.coreLog,
+        subtitle: "查看实时运行日志与错误排查",
+        icon: Icons.terminal_rounded,
+        gradientColors: const [Color(0xFF06B6D4), Color(0xFF0891B2)],
         onTap: () async {
           await Navigator.push(
             context,
@@ -1600,25 +1735,23 @@ class HomeScreenWidgetPart2 extends StatelessWidget {
 
     // Group 2: Data & Sync
     final dataItems = [
-      ListTile(
-        title: Text(tcontext.meta.backupAndSync),
-        leading: const Icon(Icons.cloud_sync_outlined, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
+      _buildSettingsItem(
+        context: context,
+        title: tcontext.meta.backupAndSync,
+        subtitle: "配置导出、WebDAV 与多端云同步",
+        icon: Icons.cloud_sync_rounded,
+        gradientColors: const [Color(0xFFF59E0B), Color(0xFFD97706)],
         onTap: () async {
           GroupHelper.showBackupAndSync(context);
         },
       ),
       if (versionCheck.newVersion)
-        ListTile(
-          title: Text(tcontext.meta.hasNewVersion(p: versionCheck.version)),
-          leading: const Icon(
-            Icons.new_releases_rounded,
-            size: 22,
-            color: Colors.amber,
-          ),
-          trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-          minVerticalPadding: 16,
+        _buildSettingsItem(
+          context: context,
+          title: tcontext.meta.hasNewVersion(p: versionCheck.version),
+          subtitle: "点击立即更新至最新版本",
+          icon: Icons.new_releases_rounded,
+          gradientColors: const [Color(0xFF10B981), Color(0xFF059669)],
           onTap: () async {
             GroupHelper.newVersionUpdate(context);
           },
@@ -1627,20 +1760,22 @@ class HomeScreenWidgetPart2 extends StatelessWidget {
 
     // Group 3: Help & About
     final helpItems = [
-      ListTile(
-        title: Text(tcontext.meta.help),
-        leading: const Icon(Icons.help_outline_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
+      _buildSettingsItem(
+        context: context,
+        title: tcontext.meta.help,
+        subtitle: "常见问题、使用指南与功能说明",
+        icon: Icons.help_outline_rounded,
+        gradientColors: const [Color(0xFF0EA5E9), Color(0xFF0284C7)],
         onTap: () async {
           await GroupHelper.showHelp(context);
         },
       ),
-      ListTile(
-        title: Text(tcontext.meta.about),
-        leading: const Icon(Icons.info_outline_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
+      _buildSettingsItem(
+        context: context,
+        title: tcontext.meta.about,
+        subtitle: "版本信息、开源代码仓库与致谢",
+        icon: Icons.info_outline_rounded,
+        gradientColors: const [Color(0xFF6366F1), Color(0xFF4F46E5)],
         onTap: () async {
           await Navigator.push(
             context,
@@ -1655,9 +1790,21 @@ class HomeScreenWidgetPart2 extends StatelessWidget {
 
     return Column(
       children: [
-        _buildSectionCard(context: context, items: coreItems),
-        _buildSectionCard(context: context, items: dataItems),
-        _buildSectionCard(context: context, items: helpItems),
+        _buildSectionCard(
+          context: context,
+          sectionTitle: "核心与运行",
+          items: coreItems,
+        ),
+        _buildSectionCard(
+          context: context,
+          sectionTitle: "数据与同步",
+          items: dataItems,
+        ),
+        _buildSectionCard(
+          context: context,
+          sectionTitle: "关于与支持",
+          items: helpItems,
+        ),
       ],
     );
   }

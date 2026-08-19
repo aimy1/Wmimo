@@ -1,4 +1,4 @@
-﻿// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names
 
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
@@ -15,14 +15,16 @@ class GroupItemText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return InkWell(
+      borderRadius: BorderRadius.circular(10),
       onTap: options.onPush,
       onLongPress: options.onLongPress,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          options.child ?? SizedBox.shrink(),
-          options.child != null ? SizedBox(width: 5) : SizedBox.shrink(),
+          options.child ?? const SizedBox.shrink(),
+          options.child != null ? const SizedBox(width: 6) : const SizedBox.shrink(),
           if ((options.tips != null) && options.tips!.isNotEmpty) ...[
             InkWell(
               onTap: () {
@@ -30,10 +32,10 @@ class GroupItemText extends StatelessWidget {
               },
               child: Tooltip(
                 message: options.tips,
-                child: const Icon(Icons.info_outlined, size: 26),
+                child: Icon(Icons.info_outline_rounded, size: 20, color: theme.colorScheme.primary),
               ),
             ),
-            const SizedBox(width: 5),
+            const SizedBox(width: 8),
           ],
           Expanded(
             flex: ((1 - options.textWidthPercent) * 10).toInt(),
@@ -41,8 +43,12 @@ class GroupItemText extends StatelessWidget {
               alignment: AlignmentDirectional.centerStart,
               child: Text(
                 options.name,
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -52,13 +58,17 @@ class GroupItemText extends StatelessWidget {
               alignment: AlignmentDirectional.centerEnd,
               child: Text(
                 options.text ?? "",
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: options.textStyle ?? TextStyle(color: options.textColor),
+                style: options.textStyle ??
+                    TextStyle(
+                      fontSize: 13,
+                      color: options.textColor ?? theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                    ),
               ),
             ),
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 4),
         ],
       ),
     );
@@ -72,6 +82,7 @@ class GroupItemTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     var controller = options.controller ?? TextEditingController();
     controller.value = controller.value.copyWith(text: options.text);
     return Row(
@@ -84,10 +95,10 @@ class GroupItemTextField extends StatelessWidget {
             },
             child: Tooltip(
               message: options.tips,
-              child: const Icon(Icons.info_outlined, size: 26),
+              child: Icon(Icons.info_outline_rounded, size: 20, color: theme.colorScheme.primary),
             ),
           ),
-          const SizedBox(width: 5),
+          const SizedBox(width: 8),
         ],
         Expanded(
           flex: ((1 - options.textWidthPercent) * 10).toInt(),
@@ -95,8 +106,12 @@ class GroupItemTextField extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               options.name,
-              maxLines: 3,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ),
@@ -105,23 +120,28 @@ class GroupItemTextField extends StatelessWidget {
           child: Align(
             alignment: AlignmentDirectional.centerEnd,
             child: TextFieldEx(
-              style: options.textStyle,
+              style: options.textStyle ?? const TextStyle(fontSize: 13.5),
               readOnly: options.readOnly,
               controller: controller,
               textInputAction: options.textInputAction,
               obscureText: options.obscureText,
               decoration: InputDecoration(
                 hintText: options.hint,
+                hintStyle: TextStyle(
+                  fontSize: 13,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                ),
                 errorText: options.errorText,
                 border: InputBorder.none,
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 8),
               ),
               textAlign: TextAlign.right,
               keyboardType: options.keyboardType,
               inputFormatters: options.inputFormatters,
               focusNode: options.focusNode,
               autocorrect: false,
-              enableSuggestions:
-                  true, //Non-English input methods cannot be used after disabling
+              enableSuggestions: true,
               autofocus: options.autoFocus,
               onChanged: options.onChanged,
               enabled: options.enabled,
@@ -142,6 +162,7 @@ class GroupItemSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -152,15 +173,16 @@ class GroupItemSwitch extends StatelessWidget {
             },
             child: Tooltip(
               message: options.tips,
-              child: const Icon(Icons.info_outlined, size: 26),
+              child: Icon(Icons.info_outline_rounded, size: 20, color: theme.colorScheme.primary),
             ),
           ),
-          const SizedBox(width: 5),
+          const SizedBox(width: 8),
         ],
         if (options.reddot == true) ...[
           Container(
-            width: 8,
-            height: 8,
+            width: 7,
+            height: 7,
+            margin: const EdgeInsets.only(right: 6),
             decoration: const BoxDecoration(
               color: Colors.red,
               shape: BoxShape.circle,
@@ -172,13 +194,17 @@ class GroupItemSwitch extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: Text(
               options.name,
-              maxLines: 3,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ),
-        SizedBox(
-          width: 60,
+        Transform.scale(
+          scale: 0.85,
           child: Switch.adaptive(
             value: options.switchValue ?? false,
             activeThumbColor: Colors.white,
@@ -198,7 +224,9 @@ class GroupItemPush extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return InkWell(
+      borderRadius: BorderRadius.circular(10),
       onTap: options.onPush,
       onLongPress: options.onLongPress,
       child: Row(
@@ -211,15 +239,16 @@ class GroupItemPush extends StatelessWidget {
               },
               child: Tooltip(
                 message: options.tips,
-                child: const Icon(Icons.info_outlined, size: 26),
+                child: Icon(Icons.info_outline_rounded, size: 20, color: theme.colorScheme.primary),
               ),
             ),
-            const SizedBox(width: 5),
+            const SizedBox(width: 8),
           ],
           if (options.reddot == true) ...[
             Container(
-              width: 8,
-              height: 8,
+              width: 7,
+              height: 7,
+              margin: const EdgeInsets.only(right: 6),
               decoration: BoxDecoration(
                 color: options.reddotColor ?? Colors.red,
                 shape: BoxShape.circle,
@@ -227,8 +256,8 @@ class GroupItemPush extends StatelessWidget {
             ),
           ],
           if (options.icon != null) ...[
-            Icon(options.icon, size: 26),
-            const SizedBox(width: 5),
+            Icon(options.icon, size: 20, color: theme.colorScheme.primary),
+            const SizedBox(width: 8),
           ],
           Expanded(
             flex: ((1 - options.textWidthPercent) * 10).toInt(),
@@ -236,24 +265,42 @@ class GroupItemPush extends StatelessWidget {
               alignment: AlignmentDirectional.centerStart,
               child: Text(
                 options.name,
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
-          Expanded(
-            flex: (options.textWidthPercent * 10).toInt(),
-            child: Align(
-              alignment: AlignmentDirectional.centerEnd,
+          if (options.text != null && options.text!.isNotEmpty) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+              decoration: BoxDecoration(
+                color: theme.dividerColor.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(7),
+              ),
               child: Text(
-                options.text ?? "",
-                maxLines: 3,
+                options.text!,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: options.textStyle ?? TextStyle(color: options.textColor),
+                style: options.textStyle ??
+                    TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: options.textColor ??
+                          theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                    ),
               ),
             ),
+            const SizedBox(width: 6),
+          ],
+          Icon(
+            Icons.chevron_right_rounded,
+            size: 18,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
           ),
-          Icon(Icons.arrow_forward_ios_rounded, size: 14),
         ],
       ),
     );
@@ -268,7 +315,9 @@ class GroupItemTimerIntervalPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
+    final theme = Theme.of(context);
     return InkWell(
+      borderRadius: BorderRadius.circular(10),
       onTap: options.onPicker == null
           ? null
           : () async {
@@ -298,15 +347,16 @@ class GroupItemTimerIntervalPicker extends StatelessWidget {
               },
               child: Tooltip(
                 message: options.tips,
-                child: const Icon(Icons.info_outlined, size: 26),
+                child: Icon(Icons.info_outline_rounded, size: 20, color: theme.colorScheme.primary),
               ),
             ),
-            const SizedBox(width: 5),
+            const SizedBox(width: 8),
           ],
           if (options.reddot == true) ...[
             Container(
-              width: 8,
-              height: 8,
+              width: 7,
+              height: 7,
+              margin: const EdgeInsets.only(right: 6),
               decoration: const BoxDecoration(
                 color: Colors.red,
                 shape: BoxShape.circle,
@@ -314,27 +364,36 @@ class GroupItemTimerIntervalPicker extends StatelessWidget {
             ),
           ],
           Expanded(
-            flex: 8,
+            flex: 7,
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: Text(
                 options.name,
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: Text(
-                _duratingToString(options.duration, tcontext.meta.disable),
-                style: TextStyle(decoration: TextDecoration.underline),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+            decoration: BoxDecoration(
+              color: theme.dividerColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: Text(
+              _duratingToString(options.duration, tcontext.meta.disable),
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.primary,
               ),
             ),
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 4),
         ],
       ),
     );
@@ -367,6 +426,7 @@ class GroupItemStringPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     String selectedText = options.selected ?? "";
     var widgets = [];
     if (options.tupleStrings != null) {
@@ -379,11 +439,15 @@ class GroupItemStringPicker extends StatelessWidget {
             title: Text(
               key.item2,
               style: TextStyle(
+                fontWeight: options.selected == key.item1 ? FontWeight.w700 : FontWeight.normal,
                 color: options.selected == key.item1
-                    ? ThemeDefine.kColorBlue
+                    ? theme.colorScheme.primary
                     : null,
               ),
             ),
+            trailing: options.selected == key.item1
+                ? Icon(Icons.check_rounded, color: theme.colorScheme.primary, size: 20)
+                : null,
             onTap: () async {
               Navigator.pop(context);
               options.selected = key.item1;
@@ -399,9 +463,13 @@ class GroupItemStringPicker extends StatelessWidget {
             title: Text(
               key ?? "",
               style: TextStyle(
-                color: options.selected == key ? ThemeDefine.kColorBlue : null,
+                fontWeight: options.selected == key ? FontWeight.w700 : FontWeight.normal,
+                color: options.selected == key ? theme.colorScheme.primary : null,
               ),
             ),
+            trailing: options.selected == key
+                ? Icon(Icons.check_rounded, color: theme.colorScheme.primary, size: 20)
+                : null,
             onTap: () async {
               Navigator.pop(context);
               options.selected = key;
@@ -412,22 +480,27 @@ class GroupItemStringPicker extends StatelessWidget {
       }
     }
     return InkWell(
+      borderRadius: BorderRadius.circular(10),
       onTap: options.onPicker == null
           ? null
           : () {
               showSheet(
                 context: context,
                 body: SizedBox(
-                  height: 400,
+                  height: 380,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                     child: Scrollbar(
                       child: ListView.separated(
                         itemBuilder: (BuildContext context, int index) {
                           return widgets[index];
                         },
                         separatorBuilder: (BuildContext context, int index) {
-                          return const Divider(height: 1, thickness: 0.3);
+                          return Divider(
+                            height: 1,
+                            thickness: 0.6,
+                            color: theme.dividerColor.withValues(alpha: 0.2),
+                          );
                         },
                         itemCount: widgets.length,
                       ),
@@ -446,15 +519,16 @@ class GroupItemStringPicker extends StatelessWidget {
               },
               child: Tooltip(
                 message: options.tips,
-                child: const Icon(Icons.info_outlined, size: 26),
+                child: Icon(Icons.info_outline_rounded, size: 20, color: theme.colorScheme.primary),
               ),
             ),
-            const SizedBox(width: 5),
+            const SizedBox(width: 8),
           ],
           if (options.reddot == true) ...[
             Container(
-              width: 8,
-              height: 8,
+              width: 7,
+              height: 7,
+              margin: const EdgeInsets.only(right: 6),
               decoration: const BoxDecoration(
                 color: Colors.red,
                 shape: BoxShape.circle,
@@ -467,25 +541,46 @@ class GroupItemStringPicker extends StatelessWidget {
               alignment: AlignmentDirectional.centerStart,
               child: Text(
                 options.name,
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
-          Expanded(
-            flex: (options.textWidthPercent * 10).toInt(),
-            child: Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: Text(
-                selectedText,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+            decoration: BoxDecoration(
+              color: theme.dividerColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  selectedText,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.unfold_more_rounded,
+                  size: 14,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
+              ],
             ),
           ),
-          Icon(Icons.arrow_drop_down, size: 16),
+          const SizedBox(width: 4),
         ],
       ),
     );
   }
 }
+
