@@ -1770,8 +1770,8 @@ class HomeScreenWidgetPart2 extends StatelessWidget {
         ),
     ];
 
-    // Group 3: Help & About
-    final aboutItems = [
+    // Group 3: Help
+    final helpItems = [
       ListTile(
         title: Text(tcontext.meta.help),
         leading: const Icon(Icons.help_outline_rounded, size: 22),
@@ -1781,28 +1781,13 @@ class HomeScreenWidgetPart2 extends StatelessWidget {
           await GroupHelper.showHelp(context);
         },
       ),
-      ListTile(
-        title: Text(tcontext.meta.about),
-        leading: const Icon(Icons.info_outline_rounded, size: 22),
-        trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-        minVerticalPadding: 16,
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              settings: AboutScreen.routSettings(),
-              builder: (context) => const AboutScreen(),
-            ),
-          );
-        },
-      ),
     ];
 
     return Column(
       children: [
         _buildSectionCard(context: context, items: coreItems),
         _buildSectionCard(context: context, items: dataItems),
-        _buildSectionCard(context: context, items: aboutItems),
+        _buildSectionCard(context: context, items: helpItems),
       ],
     );
   }
