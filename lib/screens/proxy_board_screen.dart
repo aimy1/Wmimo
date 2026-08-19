@@ -11,8 +11,10 @@ import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
+import 'package:wmimo/screens/add_profile_by_url_screen.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 
@@ -77,17 +79,13 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   ) async {
     if (!mounted) return;
     _isVpnStarted = state == FlutterVpnServiceState.connected;
-    if (_isVpnStarted) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      await _fetchProxies();
-    } else {
-      setState(() {});
-    }
+    await Future.delayed(const Duration(milliseconds: 300));
+    await _fetchProxies();
   }
 
   Future<void> _onProfileChanged(String id) async {
     if (mounted) {
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 200));
       await _fetchProxies();
     }
   }
@@ -110,21 +108,36 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     final started = await VPNService.getStarted();
     _isVpnStarted = started;
-    if (!started) {
-      if (mounted) {
-        setState(() {
-          _allNodes = [];
-          _loading = false;
-        });
+
+    if (started) {
+      final result = await ClashHttpApi.getProxies();
+      if (result.data != null && result.data!.isNotEmpty) {
+        final groups = result.data!.where((n) {
+          final t = n.type.toLowerCase();
+          return t == ClashProtocolType.selector.name ||
+              t == ClashProtocolType.urltest.name ||
+              t == ClashProtocolType.fallback.name ||
+              t == ClashProtocolType.loadBalance.name;
+        }).toList();
+
+        if (groups.isNotEmpty) {
+          if (mounted) {
+            setState(() {
+              _allNodes = result.data!;
+              _loading = false;
+            });
+          }
+          return;
+        }
       }
-      return;
     }
 
-    final result = await ClashHttpApi.getProxies();
+    // Offline / Local profile fallback: load directly from active profile YAML/JSON
+    final offlineNodes = await ProxyNodeLoader.loadCurrentProfileNodes();
     if (!mounted) return;
 
     setState(() {
-      _allNodes = result.data ?? [];
+      _allNodes = offlineNodes;
       _loading = false;
     });
   }
@@ -145,15 +158,33 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     setState(() {
       group.now = node.name;
     });
-    final err = await ClashHttpApi.setProxiesNode(group.name, node.name);
-    if (err != null && mounted) {
-      setState(() {
-        group.now = prev;
-      });
+    if (_isVpnStarted) {
+      final err = await ClashHttpApi.setProxiesNode(group.name, node.name);
+      if (err != null && mounted) {
+        setState(() {
+          group.now = prev;
+        });
+      }
     }
   }
 
   Future<void> _testNodeDelay(ClashProxiesNode node) async {
+    if (!_isVpnStarted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("代理核心尚未启动，请先开启代理服务再进行测速"),
+          action: SnackBarAction(
+            label: "开启代理",
+            onPressed: () {
+              VpnActionHandler.vpnConnect?.call("proxy_test", false);
+            },
+          ),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+
     if (_nodesTesting.contains(node.name)) return;
     setState(() {
       _nodesTesting.add(node.name);
@@ -188,6 +219,22 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   }
 
   Future<void> _testGroupDelay(ClashProxiesNode group) async {
+    if (!_isVpnStarted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("代理核心尚未启动，请先开启代理服务再进行测速"),
+          action: SnackBarAction(
+            label: "开启代理",
+            onPressed: () {
+              VpnActionHandler.vpnConnect?.call("proxy_test", false);
+            },
+          ),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+
     final nodeMap = {for (var n in _allNodes) n.name: n};
     final nodesToTest = group.all
         .map((name) => nodeMap[name])
@@ -235,6 +282,22 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   }
 
   Future<void> _testAllDelay() async {
+    if (!_isVpnStarted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("代理核心尚未启动，请先开启代理服务再进行测速"),
+          action: SnackBarAction(
+            label: "开启代理",
+            onPressed: () {
+              VpnActionHandler.vpnConnect?.call("proxy_test", false);
+            },
+          ),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+
     final groups = _getProxyGroups();
     for (var g in groups) {
       _testGroupDelay(g);
@@ -487,78 +550,149 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               ),
               const SizedBox(height: 10),
 
+              // Offline Status Notice Banner (when VPN not connected but groups exist)
+              if (!_isVpnStarted && groups.isNotEmpty)
+                Container(
+                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: ThemeDefine.kColorBlue.withValues(alpha: 0.25),
+                      width: 0.8,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.cloud_off_rounded,
+                        size: 18,
+                        color: ThemeDefine.kColorBlue,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          "离线配置预览中，开启代理后可进行分流与节点测速",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? Colors.white.withValues(alpha: 0.8)
+                                : const Color(0xFF1E40AF),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ThemeDefine.kColorBlue,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 5,
+                          ),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        onPressed: () {
+                          VpnActionHandler.vpnConnect?.call("proxy_page", false);
+                        },
+                        child: Text(
+                          tcontext.meta.connect,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
               // Proxy Groups & Node Cards Grid
               Expanded(
-                child: !_isVpnStarted
+                child: groups.isEmpty
                     ? Center(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              Icons.power_settings_new_rounded,
-                              size: 56,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              tcontext.meta.disconnected,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                              ),
+                              Icons.alt_route_rounded,
+                              size: 52,
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.25),
                             ),
                             const SizedBox(height: 12),
+                            Text(
+                              ProfileManager.getProfiles().isEmpty
+                                  ? "尚未添加任何订阅或节点配置"
+                                  : "当前配置未解析到代理组，请检查订阅或更新",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.6),
+                              ),
+                            ),
+                            const SizedBox(height: 14),
                             ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: ThemeDefine.kColorBlue,
                                 foregroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 10,
+                                  horizontal: 18,
+                                  vertical: 8,
                                 ),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              icon: const Icon(Icons.play_arrow_rounded, size: 20),
-                              label: Text(tcontext.meta.connect),
-                              onPressed: () {
-                                VpnActionHandler.vpnConnect?.call("proxy_page", false);
+                              icon: Icon(
+                                ProfileManager.getProfiles().isEmpty
+                                    ? Icons.add_rounded
+                                    : Icons.refresh_rounded,
+                                size: 18,
+                              ),
+                              label: Text(
+                                ProfileManager.getProfiles().isEmpty
+                                    ? "添加订阅"
+                                    : "重新加载",
+                              ),
+                              onPressed: () async {
+                                if (ProfileManager.getProfiles().isEmpty) {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      settings:
+                                          AddProfileByUrlScreen.routSettings(),
+                                      builder: (context) =>
+                                          const AddProfileByUrlScreen(),
+                                    ),
+                                  );
+                                  await _fetchProxies();
+                                } else {
+                                  await _fetchProxies();
+                                }
                               },
                             ),
                           ],
                         ),
                       )
-                    : groups.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.alt_route_rounded,
-                                  size: 52,
-                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.25),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  tcontext.meta.none,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : ListView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                            itemCount: groups.length,
-                            itemBuilder: (context, index) {
-                              final group = groups[index];
-                              return _buildGroupSection(group);
-                            },
-                          ),
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
+                        itemCount: groups.length,
+                        itemBuilder: (context, index) {
+                          final group = groups[index];
+                          return _buildGroupSection(group);
+                        },
+                      ),
               ),
             ],
           ),
