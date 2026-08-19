@@ -123,6 +123,52 @@ class FlutterVpnService {
       return _savedTunnelServicePath!;
     }
 
+    // Android: nativeLibraryDir is the ONLY location allowed for ELF execution on Android 10+
+    if (Platform.isAndroid) {
+      try {
+        const platform = MethodChannel('com.wmimo.app/native_helper');
+        final String? nativeLibPath = await platform.invokeMethod<String>('getNativeLibraryPath', {'libName': 'libwmimoService.so'});
+        if (nativeLibPath != null && nativeLibPath.isNotEmpty && File(nativeLibPath).existsSync()) {
+          return nativeLibPath;
+        }
+      } catch (_) {}
+
+      try {
+        const platform = MethodChannel('com.wmimo.app/native_helper');
+        final String? nativeDir = await platform.invokeMethod<String>('getNativeLibraryDir');
+        if (nativeDir != null && nativeDir.isNotEmpty) {
+          final androidLibCandidates = [
+            '$nativeDir/libwmimoService.so',
+            '$nativeDir/libmihomo.so',
+            '$nativeDir/libclash.so',
+          ];
+          for (final c in androidLibCandidates) {
+            if (File(c).existsSync()) {
+              return c;
+            }
+          }
+          final dir = Directory(nativeDir);
+          if (dir.existsSync()) {
+            for (final f in dir.listSync()) {
+              if (f is File && f.path.endsWith('.so') && (f.path.contains('wmimo') || f.path.contains('clash') || f.path.contains('mihomo'))) {
+                return f.path;
+              }
+            }
+          }
+        }
+      } catch (_) {}
+
+      final fallbackAndroidPaths = [
+        "/data/data/com.wmimo.app/lib/libwmimoService.so",
+        "/data/user/0/com.wmimo.app/lib/libwmimoService.so",
+      ];
+      for (final p in fallbackAndroidPaths) {
+        if (File(p).existsSync()) {
+          return p;
+        }
+      }
+    }
+
     final currentDir = Directory.current.path;
     final exeName = Platform.isWindows ? "wmimoService.exe" : "wmimoService";
     final candidates = [
@@ -137,7 +183,7 @@ class FlutterVpnService {
       '$currentDir/clash',
     ];
 
-    // Check app support and documents directories
+    // Check app support and documents directories (for desktop)
     try {
       final appSupport = await getApplicationSupportDirectory();
       candidates.insert(0, '${appSupport.path}/core/$exeName');
@@ -145,24 +191,6 @@ class FlutterVpnService {
       final appDoc = await getApplicationDocumentsDirectory();
       candidates.insert(2, '${appDoc.path}/core/$exeName');
     } catch (_) {}
-
-    // Android native library paths
-    if (Platform.isAndroid) {
-      candidates.addAll([
-        "/data/data/com.wmimo.app/lib/libwmimoService.so",
-        "/data/user/0/com.wmimo.app/lib/libwmimoService.so",
-      ]);
-      try {
-        final libDir = Directory("/data/data/com.wmimo.app/lib");
-        if (libDir.existsSync()) {
-          for (final f in libDir.listSync()) {
-            if (f is File && (f.path.contains("wmimo") || f.path.contains("clash") || f.path.contains("mihomo"))) {
-              candidates.insert(0, f.path);
-            }
-          }
-        }
-      } catch (_) {}
-    }
 
     for (var path in candidates) {
       if (File(path).existsSync()) {
@@ -434,10 +462,19 @@ secret: "$secret"
 
     await stop();
 
-    final workDir = (_savedConfig?.work_dir.isNotEmpty == true &&
-            Directory(_savedConfig!.work_dir).existsSync())
-        ? _savedConfig!.work_dir
-        : File(coreExe).parent.path;
+    String workDir = "";
+    if (_savedConfig?.work_dir.isNotEmpty == true && Directory(_savedConfig!.work_dir).existsSync()) {
+      workDir = _savedConfig!.work_dir;
+    } else if (_savedConfig?.base_dir.isNotEmpty == true && Directory(_savedConfig!.base_dir).existsSync()) {
+      workDir = _savedConfig!.base_dir;
+    } else {
+      try {
+        final appSupport = await getApplicationSupportDirectory();
+        workDir = appSupport.path;
+      } catch (_) {
+        workDir = File(coreExe).parent.path;
+      }
+    }
 
     try {
       final args = ['-d', workDir, '-f', configFile];
