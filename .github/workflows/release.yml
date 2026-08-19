@@ -1,0 +1,185 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release Tag (e.g. v1.0.30)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build Windows Release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Generate Translations
+        run: dart run slang
+
+      - name: Download Mihomo Core for Windows
+        shell: pwsh
+        run: |
+          $coreDir = "bind/windows/core"
+          $releaseDir = "build/windows/x64/runner/Release"
+          New-Item -ItemType Directory -Force -Path $coreDir | Out-Null
+          New-Item -ItemType Directory -Force -Path $releaseDir | Out-Null
+          
+          $zipUrl = "https://github.com/MetaCubeX/mihomo/releases/download/v1.19.2/mihomo-windows-amd64-v1.19.2.zip"
+          $zipPath = "$coreDir/mihomo.zip"
+          Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath -UseBasicParsing
+          
+          $tempDir = "$coreDir/temp"
+          Expand-Archive -Path $zipPath -DestinationPath $tempDir -Force
+          $exe = Get-ChildItem -Path $tempDir -Filter "*.exe" | Select-Object -First 1
+          if ($exe) {
+            Copy-Item -Path $exe.FullName -Destination "$coreDir/wmimoService.exe" -Force
+            Copy-Item -Path $exe.FullName -Destination "$releaseDir/wmimoService.exe" -Force
+            Remove-Item -Path $tempDir -Recurse -Force
+            Remove-Item -Path $zipPath -Force
+            Write-Host "Mihomo core downloaded successfully." -ForegroundColor Green
+          } else {
+            Write-Error "Failed to extract mihomo executable."
+          }
+
+      - name: Build Windows Application
+        run: flutter build windows --release
+
+      - name: Package Windows Artifacts
+        shell: pwsh
+        run: |
+          $releasePath = "build/windows/x64/runner/Release"
+          $corePath = "bind/windows/core/wmimoService.exe"
+          if (Test-Path $corePath) {
+            Copy-Item -Path $corePath -Destination "$releasePath/wmimoService.exe" -Force
+          }
+          
+          $tag = "${{ github.ref_name }}"
+          if (-not $tag -or $tag -eq "") {
+            $tag = "${{ github.event.inputs.tag_name }}"
+          }
+          if (-not $tag -or $tag -eq "") {
+            $tag = "v1.0.30"
+          }
+          
+          $zipName = "Wmimo-Windows-x64-$tag.zip"
+          Compress-Archive -Path "$releasePath/*" -DestinationPath $zipName -Force
+          
+          New-Item -ItemType Directory -Force -Path "dist" | Out-Null
+          Move-Item -Path $zipName -Destination "dist/" -Force
+          Write-Host "Created $zipName in dist/" -ForegroundColor Green
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          path: dist/*
+
+  build-android:
+    name: Build Android Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Generate Translations
+        run: dart run slang
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Package Android Artifacts
+        run: |
+          mkdir -p dist
+          TAG="${{ github.ref_name }}"
+          if [ -z "$TAG" ]; then
+            TAG="${{ github.event.inputs.tag_name }}"
+          fi
+          if [ -z "$TAG" ]; then
+            TAG="v1.0.30"
+          fi
+          
+          if [ -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
+            cp build/app/outputs/flutter-apk/app-release.apk dist/Wmimo-Android-$TAG.apk
+          fi
+          if [ -f "build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk" ]; then
+            cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk dist/Wmimo-Android-armv7-$TAG.apk
+          fi
+          if [ -f "build/app/outputs/flutter-apk/app-arm64-v8a-release.apk" ]; then
+            cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk dist/Wmimo-Android-arm64-$TAG.apk
+          fi
+          if [ -f "build/app/outputs/flutter-apk/app-x86_64-release.apk" ]; then
+            cp build/app/outputs/flutter-apk/app-x86_64-release.apk dist/Wmimo-Android-x86_64-$TAG.apk
+          fi
+          ls -la dist/
+
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release
+          path: dist/*
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: [build-windows, build-android]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.tag_name != ''
+
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: List Release Files
+        run: ls -la release-assets/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          files: release-assets/*
+          draft: false
+          prerelease: false
+          generate_release_notes: true

@@ -43,26 +43,43 @@ android {
 
     buildTypes {
         val keystore = rootProject.file("./key.properties")
-        val prop = Properties().apply { keystore.inputStream().use(this::load) }
+        val prop = Properties()
+        var hasReleaseKey = false
+        if (keystore.exists()) {
+            try {
+                keystore.inputStream().use { prop.load(it) }
+                val storeFilePath = prop.getProperty("storeFile.release")
+                if (storeFilePath != null && rootProject.file(storeFilePath).exists()) {
+                    hasReleaseKey = true
+                }
+            } catch (_: Exception) {}
+        }
+
         named("debug") { ndk { abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64", "x86") } }
         named("profile") {
-            signingConfig =
-                    signingConfigs.create("profile") {
-                        storeFile = rootProject.file(prop.getProperty("storeFile.release"))
-                        storePassword = prop.getProperty("storePassword.release")
-                        keyAlias = prop.getProperty("keyAlias.release")
-                        keyPassword = prop.getProperty("keyPassword.release")
-                    }
+            if (hasReleaseKey) {
+                signingConfig =
+                        signingConfigs.create("profile") {
+                            storeFile = rootProject.file(prop.getProperty("storeFile.release"))
+                            storePassword = prop.getProperty("storePassword.release")
+                            keyAlias = prop.getProperty("keyAlias.release")
+                            keyPassword = prop.getProperty("keyPassword.release")
+                        }
+            }
             ndk { abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64", "x86") }
         }
         named("release") {
-            signingConfig =
-                    signingConfigs.create("release") {
-                        storeFile = rootProject.file(prop.getProperty("storeFile.release"))
-                        storePassword = prop.getProperty("storePassword.release")
-                        keyAlias = prop.getProperty("keyAlias.release")
-                        keyPassword = prop.getProperty("keyPassword.release")
-                    }
+            if (hasReleaseKey) {
+                signingConfig =
+                        signingConfigs.create("release") {
+                            storeFile = rootProject.file(prop.getProperty("storeFile.release"))
+                            storePassword = prop.getProperty("storePassword.release")
+                            keyAlias = prop.getProperty("keyAlias.release")
+                            keyPassword = prop.getProperty("keyPassword.release")
+                        }
+            } else {
+                signingConfig = signingConfigs.getByName("debug")
+            }
             ndk {
                 abiFilters.clear()
                 abiFilters += listOf("armeabi-v7a", "arm64-v8a")
