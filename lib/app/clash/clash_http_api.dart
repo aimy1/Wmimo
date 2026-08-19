@@ -1,4 +1,4 @@
-﻿// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
 import 'dart:io';
@@ -136,17 +136,45 @@ class ClashTraffic {
 }
 
 class ClashConnectionsTrack {
+  String id = "";
+  Map<String, dynamic> metadata = {};
+  num upload = 0;
+  num download = 0;
   String start = "";
   List<String> chains = [];
   List<String> providerChains = [];
   String rule = "";
   String rulePayload = "";
 
+  String get host => metadata['host']?.toString() ?? "";
+  String get destinationIP => metadata['destinationIP']?.toString() ?? "";
+  String get destinationPort => metadata['destinationPort']?.toString() ?? "";
+  String get sourceIP => metadata['sourceIP']?.toString() ?? "";
+  String get sourcePort => metadata['sourcePort']?.toString() ?? "";
+  String get network => metadata['network']?.toString().toUpperCase() ?? "TCP";
+  String get type => metadata['type']?.toString() ?? "";
+  String get process => metadata['process']?.toString() ?? "";
+  String get processPath => metadata['processPath']?.toString() ?? "";
+
+  String get targetDisplay {
+    if (host.isNotEmpty) {
+      return destinationPort.isNotEmpty ? "$host:$destinationPort" : host;
+    }
+    if (destinationIP.isNotEmpty) {
+      return destinationPort.isNotEmpty ? "$destinationIP:$destinationPort" : destinationIP;
+    }
+    return "";
+  }
+
   void fromJson(Map<String, dynamic>? map) {
     if (map == null) {
       return;
     }
 
+    id = map['id']?.toString() ?? "";
+    metadata = map['metadata'] is Map ? Map<String, dynamic>.from(map['metadata']) : {};
+    upload = map['upload'] ?? 0;
+    download = map['download'] ?? 0;
     start = map['start'] ?? "";
     chains = List.from(map['chains'] ?? []);
     providerChains = List.from(map['providerChains'] ?? []);
@@ -155,6 +183,10 @@ class ClashConnectionsTrack {
   }
 
   Map<String, dynamic> toJson() => {
+    'id': id,
+    'metadata': metadata,
+    'upload': upload,
+    'download': download,
     'start': start,
     'chains': chains,
     'providerChains': providerChains,
@@ -384,6 +416,95 @@ class ClashHttpApi {
       ClashConfigs configs = ClashConfigs();
       configs.fromJson(decodedResponse);
       return ReturnResult(data: configs);
+    } catch (err) {
+      return ReturnResult(error: ReturnResultError(err.toString()));
+    }
+  }
+
+  static Future<ReturnResult<ClashConnections>> getConnections() async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+
+    var result = await HttpUtils.httpGetRequest(
+      "$host:${getControlPort?.call()}/connections",
+      null,
+      headers,
+      const Duration(seconds: timeoutSeconds),
+      null,
+      null,
+    );
+    if (result.error != null) {
+      return ReturnResult(error: result.error);
+    }
+    try {
+      var decodedResponse = jsonDecode(result.data!.item2);
+      ClashConnections connections = ClashConnections();
+      connections.fromJson(decodedResponse, true);
+      return ReturnResult(data: connections);
+    } catch (err) {
+      return ReturnResult(error: ReturnResultError(err.toString()));
+    }
+  }
+
+  static Future<ReturnResultError?> closeConnection(String id) async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+
+    var result = await HttpUtils.httpDeleteRequest(
+      "$host:${getControlPort?.call()}/connections/$id",
+      null,
+      headers,
+      "",
+      const Duration(seconds: timeoutSeconds),
+      null,
+      null,
+    );
+    return result.error;
+  }
+
+  static Future<ReturnResultError?> closeAllConnections() async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+
+    var result = await HttpUtils.httpDeleteRequest(
+      "$host:${getControlPort?.call()}/connections",
+      null,
+      headers,
+      "",
+      const Duration(seconds: timeoutSeconds),
+      null,
+      null,
+    );
+    return result.error;
+  }
+
+  static Future<ReturnResult<List<Map<String, dynamic>>>> getRules() async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+
+    var result = await HttpUtils.httpGetRequest(
+      "$host:${getControlPort?.call()}/rules",
+      null,
+      headers,
+      const Duration(seconds: timeoutSeconds),
+      null,
+      null,
+    );
+    if (result.error != null) {
+      return ReturnResult(error: result.error);
+    }
+    try {
+      var decodedResponse = jsonDecode(result.data!.item2);
+      final rules = decodedResponse["rules"];
+      if (rules is List) {
+        return ReturnResult(
+          data: rules
+              .whereType<Map>()
+              .map((r) => Map<String, dynamic>.from(r))
+              .toList(),
+        );
+      }
+      return ReturnResult(data: []);
     } catch (err) {
       return ReturnResult(error: ReturnResultError(err.toString()));
     }

@@ -367,6 +367,10 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get boardOnline => 'オンラインボードを使用';
 	@override String get boardOnlineUrl => 'オンラインボードURL';
 	@override String get boardLocalPort => 'ローカルボードポート';
+	@override String get connections => '接続';
+	@override String get closeAllConnections => 'すべての接続を閉じる';
+	@override String get searchConnections => '接続を検索 (ドメイン/IP/ルール/プロセス)';
+	@override String get noFilterResults => '一致する接続がありません';
 	@override String get alwayOnVPN => '常時接続';
 	@override String get disableFontScaler => 'フォントスケーリングを無効にする（再起動後に有効）';
 	@override String get autoOrientation => '画面に合わせて回転';
@@ -782,6 +786,10 @@ extension on TranslationsJa {
 			'meta.boardOnline' => 'オンラインボードを使用',
 			'meta.boardOnlineUrl' => 'オンラインボードURL',
 			'meta.boardLocalPort' => 'ローカルボードポート',
+			'meta.connections' => '接続',
+			'meta.closeAllConnections' => 'すべての接続を閉じる',
+			'meta.searchConnections' => '接続を検索 (ドメイン/IP/ルール/プロセス)',
+			'meta.noFilterResults' => '一致する接続がありません',
 			'meta.alwayOnVPN' => '常時接続',
 			'meta.disableFontScaler' => 'フォントスケーリングを無効にする（再起動後に有効）',
 			'meta.autoOrientation' => '画面に合わせて回転',

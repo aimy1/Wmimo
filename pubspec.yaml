@@ -116,8 +116,6 @@ dependency_overrides:
 flutter:
   uses-material-design: true
   assets:
-    - assets/zashboard/
-    - assets/zashboard/assets/
     - assets/txts/
     - assets/fonts/
     - assets/images/

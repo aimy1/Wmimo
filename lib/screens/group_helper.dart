@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: unused_catch_stack, empty_catches
 
 import 'dart:async';
 import 'dart:io';
@@ -16,7 +16,6 @@ import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/modules/remote_config_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
-import 'package:wmimo/app/modules/zashboard.dart';
 import 'package:wmimo/app/runtime/return_result.dart';
 import 'package:wmimo/app/utils/backup_and_sync_utils.dart';
 import 'package:wmimo/app/utils/device_utils.dart';
@@ -707,47 +706,6 @@ class GroupHelper {
         ),
       ];
 
-      List<GroupItemOptions> options3 = [
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.meta.boardOnline,
-            switchValue: setting.boardOnline,
-            onSwitch: (bool value) async {
-              setting.boardOnline = value;
-              if (value) {
-                Zashboard.stop();
-              }
-            },
-          ),
-        ),
-        if (setting.boardOnline) ...[
-          GroupItemOptions(
-            textFormFieldOptions: GroupItemTextFieldOptions(
-              name: tcontext.meta.boardOnlineUrl,
-              text: setting.boardUrl,
-              textWidthPercent: 0.5,
-              onChanged: (String value) {
-                setting.boardUrl = value;
-              },
-            ),
-          ),
-        ],
-        if (!setting.boardOnline) ...[
-          GroupItemOptions(
-            textFormFieldOptions: GroupItemTextFieldOptions(
-              name: tcontext.meta.boardLocalPort,
-              text: setting.boardLocalPort.toString(),
-              textWidthPercent: 0.3,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              onChanged: (String value) {
-                setting.boardLocalPort =
-                    int.tryParse(value) ?? SettingConfig.kDefaultBoardPort;
-              },
-            ),
-          ),
-        ],
-      ];
-
       List<GroupItemOptions> options4 = [
         GroupItemOptions(
           switchOptions: GroupItemSwitchOptions(
@@ -936,7 +894,6 @@ class GroupHelper {
         GroupItem(options: options01),
         GroupItem(options: options1),
         GroupItem(options: options2),
-        GroupItem(options: options3),
       ];
       if (Platform.isWindows) {
         gitems.add(GroupItem(options: options4));

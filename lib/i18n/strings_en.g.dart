@@ -816,6 +816,18 @@ class Translations$meta$en {
 	/// en: 'Local Board Port'
 	String get boardLocalPort => 'Local Board Port';
 
+	/// en: 'Connections'
+	String get connections => 'Connections';
+
+	/// en: 'Close All Connections'
+	String get closeAllConnections => 'Close All Connections';
+
+	/// en: 'Search connections (Domain/IP/Rule/Process)'
+	String get searchConnections => 'Search connections (Domain/IP/Rule/Process)';
+
+	/// en: 'No matching connections'
+	String get noFilterResults => 'No matching connections';
+
 	/// en: 'Always-on Connection'
 	String get alwayOnVPN => 'Always-on Connection';
 
@@ -1472,6 +1484,10 @@ extension on Translations {
 			'meta.boardOnline' => 'Use Online Board',
 			'meta.boardOnlineUrl' => 'Online Board URL',
 			'meta.boardLocalPort' => 'Local Board Port',
+			'meta.connections' => 'Connections',
+			'meta.closeAllConnections' => 'Close All Connections',
+			'meta.searchConnections' => 'Search connections (Domain/IP/Rule/Process)',
+			'meta.noFilterResults' => 'No matching connections',
 			'meta.alwayOnVPN' => 'Always-on Connection',
 			'meta.disableFontScaler' => 'Disable Font scaling(Restart takes effect)',
 			'meta.autoOrientation' => 'Rotate with the screen',

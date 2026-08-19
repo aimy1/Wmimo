@@ -367,6 +367,10 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get boardOnline => 'استخدام اللوحة عبر الإنترنت';
 	@override String get boardOnlineUrl => 'عنوان URL للوحة عبر الإنترنت';
 	@override String get boardLocalPort => 'منفذ اللوحة المحلية';
+	@override String get connections => 'الاتصالات النشطة';
+	@override String get closeAllConnections => 'إغلاق جميع الاتصالات';
+	@override String get searchConnections => 'بحث في الاتصالات (النطاق/IP/القاعدة/العملية)';
+	@override String get noFilterResults => 'لا توجد اتصالات مطابقة';
 	@override String get alwayOnVPN => 'اتصال مفتوح دائمًا';
 	@override String get disableFontScaler => 'تعطيل تحجيم الخط(يسري مفعوله بعد إعادة التشغيل)';
 	@override String get autoOrientation => 'Rotate with the screen';
@@ -782,6 +786,10 @@ extension on TranslationsAr {
 			'meta.boardOnline' => 'استخدام اللوحة عبر الإنترنت',
 			'meta.boardOnlineUrl' => 'عنوان URL للوحة عبر الإنترنت',
 			'meta.boardLocalPort' => 'منفذ اللوحة المحلية',
+			'meta.connections' => 'الاتصالات النشطة',
+			'meta.closeAllConnections' => 'إغلاق جميع الاتصالات',
+			'meta.searchConnections' => 'بحث في الاتصالات (النطاق/IP/القاعدة/العملية)',
+			'meta.noFilterResults' => 'لا توجد اتصالات مطابقة',
 			'meta.alwayOnVPN' => 'اتصال مفتوح دائمًا',
 			'meta.disableFontScaler' => 'تعطيل تحجيم الخط(يسري مفعوله بعد إعادة التشغيل)',
 			'meta.autoOrientation' => 'Rotate with the screen',

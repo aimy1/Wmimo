@@ -13,14 +13,12 @@ import 'package:wmimo/app/modules/board_session_persistent_manager.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
-import 'package:wmimo/app/modules/zashboard.dart';
-import 'package:wmimo/app/runtime/return_result.dart';
+import 'package:wmimo/screens/connections_screen.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/app_scheme_actions.dart';
 import 'package:wmimo/app/utils/file_utils.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
-import 'package:wmimo/app/utils/network_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
@@ -34,7 +32,6 @@ import 'package:wmimo/screens/profiles_board_screen.dart';
 import 'package:wmimo/screens/proxy_board_screen.dart';
 import 'package:wmimo/screens/richtext_viewer.screen.dart';
 import 'package:wmimo/screens/theme_define.dart';
-import 'package:wmimo/screens/webview_helper.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -947,9 +944,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
               children: [
                 _buildQuickActionTile(
                   context: context,
-                  icon: Icons.dashboard_outlined,
-                  label: tcontext.meta.board,
-                  onTap: _onTapBoard,
+                  icon: Icons.hub_outlined,
+                  label: tcontext.meta.connections,
+                  onTap: _onTapConnections,
                 ),
                 const SizedBox(width: 8),
                 _buildQuickActionTile(
@@ -1301,26 +1298,6 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     );
   }
 
-  Future<String> _getLocalAddress() async {
-    String ipLocal = "127.0.0.1";
-    String ipInterface = ipLocal;
-
-    List<NetInterfacesInfo> interfaces = await NetworkUtils.getInterfaces(
-      addressType: InternetAddressType.IPv4,
-    );
-    if (interfaces.isNotEmpty) {
-      ipInterface = interfaces.first.address;
-    }
-    for (var interf in interfaces) {
-      if (interf.name.startsWith("en") || interf.name.startsWith("wlan")) {
-        ipInterface = interf.address;
-        break;
-      }
-    }
-
-    return ipInterface;
-  }
-
   Future<void> _onInitAllFinish() async {
     VpnActionHandler.vpnConnect = _vpnConnect;
     VpnActionHandler.vpnDisconnect = _vpnDisconnect;
@@ -1478,7 +1455,6 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       _disconnectToCore();
     } else if (state == FlutterVpnServiceState.disconnecting) {
       _stopStateCheckTimer();
-      Zashboard.stop();
     } else {
       _disconnectToCore();
       Biz.vpnStateChanged(false);
@@ -1681,66 +1657,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     }
   }
 
-  Future<void> _onTapBoard() async {
-    final tcontext = Translations.of(context);
-    var setting = SettingManager.getConfig();
-    if (setting.boardOnline && setting.boardUrl.isNotEmpty) {
-      final uri = Uri.tryParse(setting.boardUrl);
-      if (uri == null) {
-        final msg = "${tcontext.meta.urlInvalid}:${setting.boardUrl}";
-        DialogUtils.showAlertDialog(context, msg, withVersion: true);
-        return;
-      }
-      final shortUrl = Uri(
-        scheme: uri.scheme,
-        userInfo: uri.userInfo,
-        host: uri.host,
-        port: uri.port,
-      );
-      String host = Platform.isIOS ? await _getLocalAddress() : "127.0.0.1";
-      String secret = ClashSettingManager.getConfig().Secret!;
-      final url =
-          '${shortUrl.toString()}/?hostname=$host&port=${ClashSettingManager.getControlPort()}&secret=$secret&http=true';
-
-      if (!mounted) {
-        return;
-      }
-      await WebviewHelper.loadUrl(
-        context,
-        url,
-        "onlineboard",
-        title: tcontext.meta.board,
-        inappWebViewOpenExternal: true,
-      );
-      return;
-    }
-    ReturnResult result = await Zashboard.start();
-    if (result.error != null) {
-      if (!mounted) {
-        return;
-      }
-      DialogUtils.showAlertDialog(
-        context,
-        result.error!.message,
-        withVersion: true,
-      );
-      return;
-    }
-    String url = result.data!;
-    if (!mounted) {
-      return;
-    }
-    await WebviewHelper.loadUrl(
+  Future<void> _onTapConnections() async {
+    await Navigator.push(
       context,
-      url,
-      "board",
-      title: tcontext.meta.board,
-      inappWebViewOpenExternal: false,
+      MaterialPageRoute(
+        settings: ConnectionsScreen.routSettings(),
+        builder: (context) => const ConnectionsScreen(),
+      ),
     );
-    if (PlatformUtils.isMobile()) {
-      await Zashboard.stop();
-    }
-    _updateProxyNow();
   }
 
   Future<void> _onTapRunTimeProfile() async {

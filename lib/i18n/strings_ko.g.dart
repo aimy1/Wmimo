@@ -367,6 +367,10 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get boardOnline => '온라인 보드 사용';
 	@override String get boardOnlineUrl => '온라인 보드 URL';
 	@override String get boardLocalPort => '로컬 보드 포트';
+	@override String get connections => '연결';
+	@override String get closeAllConnections => '모든 연결 닫기';
+	@override String get searchConnections => '연결 검색 (도메인/IP/규칙/프로세스)';
+	@override String get noFilterResults => '일치하는 연결 없음';
 	@override String get alwayOnVPN => '상시 연결';
 	@override String get disableFontScaler => '글꼴 크기 조정 비활성화 (재시작 후 적용)';
 	@override String get autoOrientation => '화면 방향에 따라 회전';
@@ -782,6 +786,10 @@ extension on TranslationsKo {
 			'meta.boardOnline' => '온라인 보드 사용',
 			'meta.boardOnlineUrl' => '온라인 보드 URL',
 			'meta.boardLocalPort' => '로컬 보드 포트',
+			'meta.connections' => '연결',
+			'meta.closeAllConnections' => '모든 연결 닫기',
+			'meta.searchConnections' => '연결 검색 (도메인/IP/규칙/프로세스)',
+			'meta.noFilterResults' => '일치하는 연결 없음',
 			'meta.alwayOnVPN' => '상시 연결',
 			'meta.disableFontScaler' => '글꼴 크기 조정 비활성화 (재시작 후 적용)',
 			'meta.autoOrientation' => '화면 방향에 따라 회전',

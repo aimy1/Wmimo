@@ -367,6 +367,10 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get boardOnline => '使用在線面板';
 	@override String get boardOnlineUrl => '在線面板URL';
 	@override String get boardLocalPort => '本地面板端口';
+	@override String get connections => '活動連接';
+	@override String get closeAllConnections => '關閉全部連接';
+	@override String get searchConnections => '搜尋連接 (網域名稱/IP/規則/進程)';
+	@override String get noFilterResults => '沒有相符的連接';
 	@override String get alwayOnVPN => '始終開啟連線';
 	@override String get disableFontScaler => '禁用字體縮放';
 	@override String get autoOrientation => '跟隨螢幕旋轉';
@@ -782,6 +786,10 @@ extension on TranslationsZhTw {
 			'meta.boardOnline' => '使用在線面板',
 			'meta.boardOnlineUrl' => '在線面板URL',
 			'meta.boardLocalPort' => '本地面板端口',
+			'meta.connections' => '活動連接',
+			'meta.closeAllConnections' => '關閉全部連接',
+			'meta.searchConnections' => '搜尋連接 (網域名稱/IP/規則/進程)',
+			'meta.noFilterResults' => '沒有相符的連接',
 			'meta.alwayOnVPN' => '始終開啟連線',
 			'meta.disableFontScaler' => '禁用字體縮放',
 			'meta.autoOrientation' => '跟隨螢幕旋轉',
