@@ -504,6 +504,17 @@ class GroupHelper {
             },
           ),
         ),
+        GroupItemOptions(
+          pushOptions: GroupItemPushOptions(
+            name: "提交反馈与建议 / Issues",
+            onPush: () async {
+              await UrlLauncherUtils.loadUrl(
+                "https://github.com/aimy1/Wmimo/issues",
+                mode: LaunchMode.externalApplication,
+              );
+            },
+          ),
+        ),
       ];
       return [GroupItem(options: options), GroupItem(options: options1)];
     }
