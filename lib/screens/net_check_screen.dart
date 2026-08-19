@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
@@ -241,14 +241,17 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: const SizedBox(
-                      width: 50,
-                      height: 30,
-                      child: Icon(Icons.arrow_back_ios_outlined, size: 26),
-                    ),
-                  ),
+                  Navigator.canPop(context)
+                      ? InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: const SizedBox(
+                            width: 50,
+                            height: 30,
+                            child:
+                                Icon(Icons.arrow_back_ios_outlined, size: 26),
+                          ),
+                        )
+                      : const SizedBox(width: 50, height: 30),
                   SizedBox(
                     width: windowSize.width - 50 * 3,
                     child: Text(

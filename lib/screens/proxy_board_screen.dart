@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
@@ -61,14 +61,17 @@ class _ProxyBoardScreenState extends LasyRenderingState<ProxyBoardScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: const SizedBox(
-                      width: 50,
-                      height: 30,
-                      child: Icon(Icons.arrow_back_ios_outlined, size: 26),
-                    ),
-                  ),
+                  Navigator.canPop(context)
+                      ? InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: const SizedBox(
+                            width: 50,
+                            height: 30,
+                            child:
+                                Icon(Icons.arrow_back_ios_outlined, size: 26),
+                          ),
+                        )
+                      : const SizedBox(width: 50, height: 30),
                   SizedBox(
                     width: windowSize.width - 50 * 3,
                     child: Text(

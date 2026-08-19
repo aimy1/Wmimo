@@ -57,14 +57,17 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: const SizedBox(
-                        width: 50,
-                        height: 30,
-                        child: Icon(Icons.arrow_back_ios_outlined, size: 26),
-                      ),
-                    ),
+                    Navigator.canPop(context)
+                        ? InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: const SizedBox(
+                              width: 50,
+                              height: 30,
+                              child:
+                                  Icon(Icons.arrow_back_ios_outlined, size: 26),
+                            ),
+                          )
+                        : const SizedBox(width: 50, height: 30),
                     SizedBox(
                       width: windowSize.width - 50 * 2,
                       child: Text(
