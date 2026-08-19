@@ -454,6 +454,32 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get remaining => 'المتبقي';
 	@override String get expireTime => 'تاريخ الانتهاء';
 	@override String get tunMode => 'وضع TUN';
+	@override String daysAgo({required Object p}) => 'منذ ${p} أيام';
+	@override String hoursAgo({required Object p}) => 'منذ ${p} ساعات';
+	@override String get lessThanOneHourAgo => 'أقل من ساعة';
+	@override String get inUse => 'قيد الاستخدام';
+	@override String get remoteSubscription => 'اشتراك عن بُعد';
+	@override String get localProfile => 'ملف محلي';
+	@override String get viewYamlConfig => 'عرض تكوين YAML';
+	@override String get editYamlConfig => 'تعديل تكوين YAML';
+	@override String get copySubscriptionUrl => 'نسخ رابط الاشتراك';
+	@override String get qrCode => 'رمز الاستجابة السريعة';
+	@override String get deleteProfile => 'حذف ملف التعريف';
+	@override String get noProfilesYet => 'لا توجد ملفات تعريف بعد';
+	@override String get addProfilePrompt => 'انقر على + في أعلى اليمين لإضافة رابط اشتراك أو استيراد ملف';
+	@override String get subscriptionUrlCopied => 'تم نسخ رابط الاشتراك إلى الحافظة';
+	@override String autoGroupTip({required Object group, required Object type}) => '«${group}» هي مجموعة سياسات تلقائية (${type}). لتحديد عقدة يدويًا، يُرجى التبديل في مجموعات السياسات اليدوية.';
+	@override String switchNodeFailed({required Object p}) => 'فشل تبديل العقدة: ${p}';
+	@override String nodeSelected({required Object p}) => 'العقدة المحددة: ${p}';
+	@override String get startingCoreAndTesting => 'جارٍ تشغيل النواة واختبار زمن الانتقال...';
+	@override String chartMinutes({required Object p}) => '${p} دقيقة';
+	@override String get chartUpload => 'رفع';
+	@override String get chartDownload => 'تنزيل';
+	@override String get author => 'المؤلف';
+	@override String get githubRepo => 'مستودع مفتوح المصدر';
+	@override String get openSourceLicense => 'ترخيص مفتوح المصدر';
+	@override String get submitFeedback => 'إرسال التعليقات والملاحظات';
+	@override String get copiedToClipboard => 'تم النسخ إلى الحافظة';
 }
 
 // Path: permission
@@ -557,8 +583,26 @@ class _Translations$main$tray$ar implements Translations$main$tray$en {
 	final TranslationsAr _root; // ignore: unused_field
 
 	// Translations
-	@override String get menuOpen => 'يفتح';
-	@override String get menuExit => 'مخرج';
+	@override String get menuOpen => 'فتح';
+	@override String get menuExit => 'خروج';
+	@override String get coreDisconnected => 'Wmimo · النواة غير متصلة';
+	@override String get coreRunning => 'Wmimo · النواة قيد التشغيل';
+	@override String get startProxy => 'بدء اتصال الوكيل';
+	@override String get stopProxy => 'قطع اتصال الوكيل';
+	@override String get restartCore => 'إعادة تشغيل النواة';
+	@override String get systemProxyItem => 'وكيل النظام';
+	@override String get tunModeItem => 'وضع TUN';
+	@override String get outboundMode => 'وضع الإرسال';
+	@override String get modeRule => 'توجيه القواعد';
+	@override String get modeGlobal => 'وكيل شامل';
+	@override String get modeDirect => 'اتصال مباشر';
+	@override String get profilesMenu => 'ملفات التعريف';
+	@override String get updateAllProfiles => 'تحديث جميع ملفات التعريف';
+	@override String get proxyNodes => 'عقد الوكيل';
+	@override String get tools => 'الأدوات';
+	@override String get copyProxyCmd => 'نسخ أمر وكيل الطرفية (CMD / Bash)';
+	@override String get delayTestAll => 'اختبار زمن انتقال جميع العقد';
+	@override String get openDashboard => 'فتح لوحة التحكم';
 }
 
 /// The flat map containing all translations for locale <ar>.
@@ -619,8 +663,26 @@ extension on TranslationsAr {
 			'loginScreen.unActivedProvider' => 'ميزة تسجيل الدخول غير مفعلة',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'يرجى طلب رمز/اسم مستعار المزوّد من ${_root.loginScreen.provider}.\nللاطلاع على تكامل ${_root.loginScreen.provider}، راجع: ${p}',
 			'loginScreen.providerDisclaimer' => 'إخلاء المسؤولية: ${_root.loginScreen.provider} هي خدمة تابعة لطرف ثالث ولا علاقة لها بهذا التطبيق',
-			'main.tray.menuOpen' => 'يفتح',
-			'main.tray.menuExit' => 'مخرج',
+			'main.tray.menuOpen' => 'فتح',
+			'main.tray.menuExit' => 'خروج',
+			'main.tray.coreDisconnected' => 'Wmimo · النواة غير متصلة',
+			'main.tray.coreRunning' => 'Wmimo · النواة قيد التشغيل',
+			'main.tray.startProxy' => 'بدء اتصال الوكيل',
+			'main.tray.stopProxy' => 'قطع اتصال الوكيل',
+			'main.tray.restartCore' => 'إعادة تشغيل النواة',
+			'main.tray.systemProxyItem' => 'وكيل النظام',
+			'main.tray.tunModeItem' => 'وضع TUN',
+			'main.tray.outboundMode' => 'وضع الإرسال',
+			'main.tray.modeRule' => 'توجيه القواعد',
+			'main.tray.modeGlobal' => 'وكيل شامل',
+			'main.tray.modeDirect' => 'اتصال مباشر',
+			'main.tray.profilesMenu' => 'ملفات التعريف',
+			'main.tray.updateAllProfiles' => 'تحديث جميع ملفات التعريف',
+			'main.tray.proxyNodes' => 'عقد الوكيل',
+			'main.tray.tools' => 'الأدوات',
+			'main.tray.copyProxyCmd' => 'نسخ أمر وكيل الطرفية (CMD / Bash)',
+			'main.tray.delayTestAll' => 'اختبار زمن انتقال جميع العقد',
+			'main.tray.openDashboard' => 'فتح لوحة التحكم',
 			'meta.enable' => 'يُمكَِن',
 			'meta.disable' => 'إبطال',
 			'meta.open' => 'يفتح',
@@ -877,6 +939,32 @@ extension on TranslationsAr {
 			'meta.remaining' => 'المتبقي',
 			'meta.expireTime' => 'تاريخ الانتهاء',
 			'meta.tunMode' => 'وضع TUN',
+			'meta.daysAgo' => ({required Object p}) => 'منذ ${p} أيام',
+			'meta.hoursAgo' => ({required Object p}) => 'منذ ${p} ساعات',
+			'meta.lessThanOneHourAgo' => 'أقل من ساعة',
+			'meta.inUse' => 'قيد الاستخدام',
+			'meta.remoteSubscription' => 'اشتراك عن بُعد',
+			'meta.localProfile' => 'ملف محلي',
+			'meta.viewYamlConfig' => 'عرض تكوين YAML',
+			'meta.editYamlConfig' => 'تعديل تكوين YAML',
+			'meta.copySubscriptionUrl' => 'نسخ رابط الاشتراك',
+			'meta.qrCode' => 'رمز الاستجابة السريعة',
+			'meta.deleteProfile' => 'حذف ملف التعريف',
+			'meta.noProfilesYet' => 'لا توجد ملفات تعريف بعد',
+			'meta.addProfilePrompt' => 'انقر على + في أعلى اليمين لإضافة رابط اشتراك أو استيراد ملف',
+			'meta.subscriptionUrlCopied' => 'تم نسخ رابط الاشتراك إلى الحافظة',
+			'meta.autoGroupTip' => ({required Object group, required Object type}) => '«${group}» هي مجموعة سياسات تلقائية (${type}). لتحديد عقدة يدويًا، يُرجى التبديل في مجموعات السياسات اليدوية.',
+			'meta.switchNodeFailed' => ({required Object p}) => 'فشل تبديل العقدة: ${p}',
+			'meta.nodeSelected' => ({required Object p}) => 'العقدة المحددة: ${p}',
+			'meta.startingCoreAndTesting' => 'جارٍ تشغيل النواة واختبار زمن الانتقال...',
+			'meta.chartMinutes' => ({required Object p}) => '${p} دقيقة',
+			'meta.chartUpload' => 'رفع',
+			'meta.chartDownload' => 'تنزيل',
+			'meta.author' => 'المؤلف',
+			'meta.githubRepo' => 'مستودع مفتوح المصدر',
+			'meta.openSourceLicense' => 'ترخيص مفتوح المصدر',
+			'meta.submitFeedback' => 'إرسال التعليقات والملاحظات',
+			'meta.copiedToClipboard' => 'تم النسخ إلى الحافظة',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',

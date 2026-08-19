@@ -454,6 +454,32 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get remaining => '剩餘';
 	@override String get expireTime => '到期時間';
 	@override String get tunMode => 'TUN 模式';
+	@override String daysAgo({required Object p}) => '${p}天前';
+	@override String hoursAgo({required Object p}) => '${p}小時前';
+	@override String get lessThanOneHourAgo => '< 1小時前';
+	@override String get inUse => '使用中';
+	@override String get remoteSubscription => '遠端訂閱';
+	@override String get localProfile => '本機檔案';
+	@override String get viewYamlConfig => '檢視 YAML 設定';
+	@override String get editYamlConfig => '編輯 YAML 設定';
+	@override String get copySubscriptionUrl => '複製訂閱連結';
+	@override String get qrCode => 'QR Code';
+	@override String get deleteProfile => '刪除設定';
+	@override String get noProfilesYet => '暫無訂閱設定';
+	@override String get addProfilePrompt => '點擊右上角 + 新增訂閱連結或匯入本機檔案';
+	@override String get subscriptionUrlCopied => '訂閱連結已複製到剪貼簿';
+	@override String autoGroupTip({required Object group, required Object type}) => '「${group}」屬於 ${type} 自動策略組，由系統按延遲/可用性自動優選節點。如需自選節點，請在「節點選擇」等手動策略組中切換。';
+	@override String switchNodeFailed({required Object p}) => '切換節點失敗: ${p}';
+	@override String nodeSelected({required Object p}) => '已選擇節點: ${p}';
+	@override String get startingCoreAndTesting => '正在啟動代理核心並測速...';
+	@override String chartMinutes({required Object p}) => '${p} 分鐘';
+	@override String get chartUpload => '上傳';
+	@override String get chartDownload => '下載';
+	@override String get author => '作者';
+	@override String get githubRepo => '開原始碼倉庫';
+	@override String get openSourceLicense => '開源許可證';
+	@override String get submitFeedback => '提交反饋與建議';
+	@override String get copiedToClipboard => '已複製到剪貼簿';
 }
 
 // Path: permission
@@ -557,8 +583,26 @@ class Translations$main$tray$zh_TW implements Translations$main$tray$en {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get menuOpen => '打開';
-	@override String get menuExit => '退出';
+	@override String get menuOpen => '開啟';
+	@override String get menuExit => '結束';
+	@override String get coreDisconnected => 'Wmimo · 核心未連線';
+	@override String get coreRunning => 'Wmimo · 核心運行中';
+	@override String get startProxy => '啟動代理連線';
+	@override String get stopProxy => '中斷代理連線';
+	@override String get restartCore => '重啟代理核心';
+	@override String get systemProxyItem => '系統代理';
+	@override String get tunModeItem => 'TUN 模式';
+	@override String get outboundMode => '出站模式';
+	@override String get modeRule => '規則分流';
+	@override String get modeGlobal => '全域代理';
+	@override String get modeDirect => '直接連線';
+	@override String get profilesMenu => '訂閱設定';
+	@override String get updateAllProfiles => '更新所有訂閱設定';
+	@override String get proxyNodes => '代理節點';
+	@override String get tools => '實用工具';
+	@override String get copyProxyCmd => '複製終端代理指令 (CMD / Bash)';
+	@override String get delayTestAll => '一鍵全節點延遲測速';
+	@override String get openDashboard => '開啟控制面板';
 }
 
 /// The flat map containing all translations for locale <zh-TW>.
@@ -619,8 +663,26 @@ extension on TranslationsZhTw {
 			'loginScreen.unActivedProvider' => '登入功能未啟用',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => '編碼/別名請向${_root.loginScreen.provider}索取\n${_root.loginScreen.provider}接入請參考:${p}',
 			'loginScreen.providerDisclaimer' => '免責聲明:${_root.loginScreen.provider}為第三方服務,與本App無關',
-			'main.tray.menuOpen' => '打開',
-			'main.tray.menuExit' => '退出',
+			'main.tray.menuOpen' => '開啟',
+			'main.tray.menuExit' => '結束',
+			'main.tray.coreDisconnected' => 'Wmimo · 核心未連線',
+			'main.tray.coreRunning' => 'Wmimo · 核心運行中',
+			'main.tray.startProxy' => '啟動代理連線',
+			'main.tray.stopProxy' => '中斷代理連線',
+			'main.tray.restartCore' => '重啟代理核心',
+			'main.tray.systemProxyItem' => '系統代理',
+			'main.tray.tunModeItem' => 'TUN 模式',
+			'main.tray.outboundMode' => '出站模式',
+			'main.tray.modeRule' => '規則分流',
+			'main.tray.modeGlobal' => '全域代理',
+			'main.tray.modeDirect' => '直接連線',
+			'main.tray.profilesMenu' => '訂閱設定',
+			'main.tray.updateAllProfiles' => '更新所有訂閱設定',
+			'main.tray.proxyNodes' => '代理節點',
+			'main.tray.tools' => '實用工具',
+			'main.tray.copyProxyCmd' => '複製終端代理指令 (CMD / Bash)',
+			'main.tray.delayTestAll' => '一鍵全節點延遲測速',
+			'main.tray.openDashboard' => '開啟控制面板',
 			'meta.enable' => '啟用',
 			'meta.disable' => '禁用',
 			'meta.open' => '打開',
@@ -877,6 +939,32 @@ extension on TranslationsZhTw {
 			'meta.remaining' => '剩餘',
 			'meta.expireTime' => '到期時間',
 			'meta.tunMode' => 'TUN 模式',
+			'meta.daysAgo' => ({required Object p}) => '${p}天前',
+			'meta.hoursAgo' => ({required Object p}) => '${p}小時前',
+			'meta.lessThanOneHourAgo' => '< 1小時前',
+			'meta.inUse' => '使用中',
+			'meta.remoteSubscription' => '遠端訂閱',
+			'meta.localProfile' => '本機檔案',
+			'meta.viewYamlConfig' => '檢視 YAML 設定',
+			'meta.editYamlConfig' => '編輯 YAML 設定',
+			'meta.copySubscriptionUrl' => '複製訂閱連結',
+			'meta.qrCode' => 'QR Code',
+			'meta.deleteProfile' => '刪除設定',
+			'meta.noProfilesYet' => '暫無訂閱設定',
+			'meta.addProfilePrompt' => '點擊右上角 + 新增訂閱連結或匯入本機檔案',
+			'meta.subscriptionUrlCopied' => '訂閱連結已複製到剪貼簿',
+			'meta.autoGroupTip' => ({required Object group, required Object type}) => '「${group}」屬於 ${type} 自動策略組，由系統按延遲/可用性自動優選節點。如需自選節點，請在「節點選擇」等手動策略組中切換。',
+			'meta.switchNodeFailed' => ({required Object p}) => '切換節點失敗: ${p}',
+			'meta.nodeSelected' => ({required Object p}) => '已選擇節點: ${p}',
+			'meta.startingCoreAndTesting' => '正在啟動代理核心並測速...',
+			'meta.chartMinutes' => ({required Object p}) => '${p} 分鐘',
+			'meta.chartUpload' => '上傳',
+			'meta.chartDownload' => '下載',
+			'meta.author' => '作者',
+			'meta.githubRepo' => '開原始碼倉庫',
+			'meta.openSourceLicense' => '開源許可證',
+			'meta.submitFeedback' => '提交反饋與建議',
+			'meta.copiedToClipboard' => '已複製到剪貼簿',
 			'permission.camera' => '攝像頭',
 			'permission.screen' => '屏幕錄製',
 			'permission.appQuery' => '獲取應用列表',

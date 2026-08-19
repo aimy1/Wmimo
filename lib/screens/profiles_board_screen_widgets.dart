@@ -86,11 +86,11 @@ class ProfilesBoardItem extends StatelessWidget {
       if (setting.update != null) {
         final interval = DateTime.now().difference(setting.update!);
         if (interval.inDays > 0) {
-          updateInterval = "${interval.inDays}天前";
+          updateInterval = tcontext.meta.daysAgo(p: interval.inDays.toString());
         } else if (interval.inHours > 0) {
-          updateInterval = "${interval.inHours}小时前";
+          updateInterval = tcontext.meta.hoursAgo(p: interval.inHours.toString());
         } else {
-          updateInterval = "< 1小时前";
+          updateInterval = tcontext.meta.lessThanOneHourAgo;
         }
       }
     }
@@ -218,9 +218,9 @@ class ProfilesBoardItem extends StatelessWidget {
                                         color: Colors.green,
                                       ),
                                       const SizedBox(width: 3),
-                                      const Text(
-                                        "使用中",
-                                        style: TextStyle(
+                                      Text(
+                                        tcontext.meta.inUse,
+                                        style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w700,
                                           color: Colors.green,
@@ -252,7 +252,9 @@ class ProfilesBoardItem extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: Text(
-                                  setting.isRemote() ? "远程订阅" : "本地文件",
+                                  setting.isRemote()
+                                      ? tcontext.meta.remoteSubscription
+                                      : tcontext.meta.localProfile,
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
@@ -344,7 +346,7 @@ class ProfilesBoardItem extends StatelessWidget {
                         // More menu
                         PopupMenuButton<String>(
                           icon: const Icon(Icons.more_vert_rounded, size: 20),
-                          tooltip: "更多操作",
+                          tooltip: tcontext.meta.more,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -371,43 +373,45 @@ class ProfilesBoardItem extends StatelessWidget {
                                 children: [
                                   const Icon(Icons.code_rounded, size: 18),
                                   const SizedBox(width: 8),
-                                  Text(setting.isRemote() ? "查看 YAML 配置" : "编辑 YAML 配置"),
+                                  Text(setting.isRemote()
+                                      ? tcontext.meta.viewYamlConfig
+                                      : tcontext.meta.editYamlConfig),
                                 ],
                               ),
                             ),
                             if (setting.isRemote()) ...[
-                              const PopupMenuItem(
+                              PopupMenuItem(
                                 value: 'copyUrl',
                                 child: Row(
                                   children: [
-                                    Icon(Icons.copy_rounded, size: 18),
-                                    SizedBox(width: 8),
-                                    Text("复制订阅链接"),
+                                    const Icon(Icons.copy_rounded, size: 18),
+                                    const SizedBox(width: 8),
+                                    Text(tcontext.meta.copySubscriptionUrl),
                                   ],
                                 ),
                               ),
-                              const PopupMenuItem(
+                              PopupMenuItem(
                                 value: 'qrcode',
                                 child: Row(
                                   children: [
-                                    Icon(Icons.qr_code_rounded, size: 18),
-                                    SizedBox(width: 8),
-                                    Text("二维码"),
+                                    const Icon(Icons.qr_code_rounded, size: 18),
+                                    const SizedBox(width: 8),
+                                    Text(tcontext.meta.qrCode),
                                   ],
                                 ),
                               ),
                             ],
                             const PopupMenuDivider(),
-                            const PopupMenuItem(
+                            PopupMenuItem(
                               value: 'delete',
                               child: Row(
                                 children: [
-                                  Icon(Icons.delete_outline_rounded,
+                                  const Icon(Icons.delete_outline_rounded,
                                       size: 18, color: Colors.redAccent),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   Text(
-                                    "删除配置",
-                                    style: TextStyle(color: Colors.redAccent),
+                                    tcontext.meta.deleteProfile,
+                                    style: const TextStyle(color: Colors.redAccent),
                                   ),
                                 ],
                               ),
@@ -478,7 +482,7 @@ class ProfilesBoardItem extends StatelessWidget {
                       // Expire Date
                       if (trafficExpire != null)
                         Text(
-                          "📅 到期: ${trafficExpire.item2}",
+                          "📅 ${tcontext.meta.expireTime}: ${trafficExpire.item2}",
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w500,
@@ -529,7 +533,7 @@ class ProfilesBoardItem extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            "更新于 $updateInterval",
+                            updateInterval,
                             style: TextStyle(
                               fontSize: 11,
                               color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -581,7 +585,7 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
             ),
             const SizedBox(height: 16),
             Text(
-              "暂无订阅配置",
+              tcontext.meta.noProfilesYet,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -590,7 +594,7 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
             ),
             const SizedBox(height: 6),
             Text(
-              "点击右上角 + 添加订阅链接或导入本地文件",
+              tcontext.meta.addProfilePrompt,
               style: TextStyle(
                 fontSize: 12,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
@@ -677,9 +681,9 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
             try {
               Clipboard.setData(ClipboardData(text: setting.url));
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("订阅链接已复制到剪贴板"),
-                  duration: Duration(seconds: 2),
+                SnackBar(
+                  content: Text(tcontext.meta.subscriptionUrlCopied),
+                  duration: const Duration(seconds: 2),
                 ),
               );
             } catch (_) {}

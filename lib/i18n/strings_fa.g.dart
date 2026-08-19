@@ -454,6 +454,32 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get remaining => 'باقیمانده';
 	@override String get expireTime => 'زمان انقضا';
 	@override String get tunMode => 'حالت TUN';
+	@override String daysAgo({required Object p}) => '${p} روز پیش';
+	@override String hoursAgo({required Object p}) => '${p} ساعت پیش';
+	@override String get lessThanOneHourAgo => 'کمتر از ۱ ساعت پیش';
+	@override String get inUse => 'در حال استفاده';
+	@override String get remoteSubscription => 'اشتراک از راه دور';
+	@override String get localProfile => 'فایل محلی';
+	@override String get viewYamlConfig => 'مشاهده پیکربندی YAML';
+	@override String get editYamlConfig => 'ویرایش پیکربندی YAML';
+	@override String get copySubscriptionUrl => 'کپی پیوند اشتراک';
+	@override String get qrCode => 'کد QR';
+	@override String get deleteProfile => 'حذف پروفایل';
+	@override String get noProfilesYet => 'هنوز پروفایلی وجود ندارد';
+	@override String get addProfilePrompt => 'برای افزودن پیوند اشتراک یا وارد کردن فایل، روی + در بالا سمت راست کلیک کنید';
+	@override String get subscriptionUrlCopied => 'پیوند اشتراک در کلیپ‌بورد کپی شد';
+	@override String autoGroupTip({required Object group, required Object type}) => '«${group}» یک گروه سیاست خودکار (${type}) است. برای انتخاب دستی گره، لطفاً در گروه‌های دستی جابه‌جا شوید.';
+	@override String switchNodeFailed({required Object p}) => 'تغییر گره ناموفق بود: ${p}';
+	@override String nodeSelected({required Object p}) => 'گره انتخاب شده: ${p}';
+	@override String get startingCoreAndTesting => 'در حال راه‌اندازی هسته و تست تاخیر...';
+	@override String chartMinutes({required Object p}) => '${p} دقیقه';
+	@override String get chartUpload => 'آپلود';
+	@override String get chartDownload => 'دانلود';
+	@override String get author => 'سازنده';
+	@override String get githubRepo => 'مخزن متن باز';
+	@override String get openSourceLicense => 'مجوز متن باز';
+	@override String get submitFeedback => 'ارسال بازخورد و پیشنهادات';
+	@override String get copiedToClipboard => 'در کلیپ‌بورد کپی شد';
 }
 
 // Path: permission
@@ -557,8 +583,26 @@ class _Translations$main$tray$fa implements Translations$main$tray$en {
 	final TranslationsFa _root; // ignore: unused_field
 
 	// Translations
-	@override String get menuOpen => 'بازکردن';
-	@override String get menuExit => 'بستن';
+	@override String get menuOpen => 'باز کردن';
+	@override String get menuExit => 'خروج';
+	@override String get coreDisconnected => 'Wmimo · هسته متصل نیست';
+	@override String get coreRunning => 'Wmimo · هسته در حال اجرا';
+	@override String get startProxy => 'شروع اتصال پروکسی';
+	@override String get stopProxy => 'قطع اتصال پروکسی';
+	@override String get restartCore => 'راه‌اندازی مجدد هسته';
+	@override String get systemProxyItem => 'پروکسی سیستم';
+	@override String get tunModeItem => 'حالت TUN';
+	@override String get outboundMode => 'حالت خروجی';
+	@override String get modeRule => 'مسیریابی بر اساس قانون';
+	@override String get modeGlobal => 'پروکسی سرتاسری';
+	@override String get modeDirect => 'اتصال مستقیم';
+	@override String get profilesMenu => 'پروفایل‌ها';
+	@override String get updateAllProfiles => 'به‌روزرسانی همه پروفایل‌ها';
+	@override String get proxyNodes => 'گره‌های پروکسی';
+	@override String get tools => 'ابزارها';
+	@override String get copyProxyCmd => 'کپی دستور پروکسی ترمینال (CMD / Bash)';
+	@override String get delayTestAll => 'تست تاخیر همه گره‌ها';
+	@override String get openDashboard => 'باز کردن داشبورد';
 }
 
 /// The flat map containing all translations for locale <fa>.
@@ -619,8 +663,26 @@ extension on TranslationsFa {
 			'loginScreen.unActivedProvider' => 'قابلیت ورود فعال نشده است',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'لطفاً کد/نام مستعار ارائه‌دهنده را از ${_root.loginScreen.provider} دریافت کنید.\nبرای راهنمای اتصال ${_root.loginScreen.provider} به این لینک مراجعه کنید: ${p}',
 			'loginScreen.providerDisclaimer' => 'سلب مسئولیت: ${_root.loginScreen.provider} یک سرویس شخص ثالث است و ارتباطی با این برنامه ندارد',
-			'main.tray.menuOpen' => 'بازکردن',
-			'main.tray.menuExit' => 'بستن',
+			'main.tray.menuOpen' => 'باز کردن',
+			'main.tray.menuExit' => 'خروج',
+			'main.tray.coreDisconnected' => 'Wmimo · هسته متصل نیست',
+			'main.tray.coreRunning' => 'Wmimo · هسته در حال اجرا',
+			'main.tray.startProxy' => 'شروع اتصال پروکسی',
+			'main.tray.stopProxy' => 'قطع اتصال پروکسی',
+			'main.tray.restartCore' => 'راه‌اندازی مجدد هسته',
+			'main.tray.systemProxyItem' => 'پروکسی سیستم',
+			'main.tray.tunModeItem' => 'حالت TUN',
+			'main.tray.outboundMode' => 'حالت خروجی',
+			'main.tray.modeRule' => 'مسیریابی بر اساس قانون',
+			'main.tray.modeGlobal' => 'پروکسی سرتاسری',
+			'main.tray.modeDirect' => 'اتصال مستقیم',
+			'main.tray.profilesMenu' => 'پروفایل‌ها',
+			'main.tray.updateAllProfiles' => 'به‌روزرسانی همه پروفایل‌ها',
+			'main.tray.proxyNodes' => 'گره‌های پروکسی',
+			'main.tray.tools' => 'ابزارها',
+			'main.tray.copyProxyCmd' => 'کپی دستور پروکسی ترمینال (CMD / Bash)',
+			'main.tray.delayTestAll' => 'تست تاخیر همه گره‌ها',
+			'main.tray.openDashboard' => 'باز کردن داشبورد',
 			'meta.enable' => 'فعال‌سازی',
 			'meta.disable' => 'غیرفعال',
 			'meta.open' => 'باز کن',
@@ -877,6 +939,32 @@ extension on TranslationsFa {
 			'meta.remaining' => 'باقیمانده',
 			'meta.expireTime' => 'زمان انقضا',
 			'meta.tunMode' => 'حالت TUN',
+			'meta.daysAgo' => ({required Object p}) => '${p} روز پیش',
+			'meta.hoursAgo' => ({required Object p}) => '${p} ساعت پیش',
+			'meta.lessThanOneHourAgo' => 'کمتر از ۱ ساعت پیش',
+			'meta.inUse' => 'در حال استفاده',
+			'meta.remoteSubscription' => 'اشتراک از راه دور',
+			'meta.localProfile' => 'فایل محلی',
+			'meta.viewYamlConfig' => 'مشاهده پیکربندی YAML',
+			'meta.editYamlConfig' => 'ویرایش پیکربندی YAML',
+			'meta.copySubscriptionUrl' => 'کپی پیوند اشتراک',
+			'meta.qrCode' => 'کد QR',
+			'meta.deleteProfile' => 'حذف پروفایل',
+			'meta.noProfilesYet' => 'هنوز پروفایلی وجود ندارد',
+			'meta.addProfilePrompt' => 'برای افزودن پیوند اشتراک یا وارد کردن فایل، روی + در بالا سمت راست کلیک کنید',
+			'meta.subscriptionUrlCopied' => 'پیوند اشتراک در کلیپ‌بورد کپی شد',
+			'meta.autoGroupTip' => ({required Object group, required Object type}) => '«${group}» یک گروه سیاست خودکار (${type}) است. برای انتخاب دستی گره، لطفاً در گروه‌های دستی جابه‌جا شوید.',
+			'meta.switchNodeFailed' => ({required Object p}) => 'تغییر گره ناموفق بود: ${p}',
+			'meta.nodeSelected' => ({required Object p}) => 'گره انتخاب شده: ${p}',
+			'meta.startingCoreAndTesting' => 'در حال راه‌اندازی هسته و تست تاخیر...',
+			'meta.chartMinutes' => ({required Object p}) => '${p} دقیقه',
+			'meta.chartUpload' => 'آپلود',
+			'meta.chartDownload' => 'دانلود',
+			'meta.author' => 'سازنده',
+			'meta.githubRepo' => 'مخزن متن باز',
+			'meta.openSourceLicense' => 'مجوز متن باز',
+			'meta.submitFeedback' => 'ارسال بازخورد و پیشنهادات',
+			'meta.copiedToClipboard' => 'در کلیپ‌بورد کپی شد',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

@@ -454,6 +454,32 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get remaining => '남음';
 	@override String get expireTime => '만료 시간';
 	@override String get tunMode => 'TUN 모드';
+	@override String daysAgo({required Object p}) => '${p}일 전';
+	@override String hoursAgo({required Object p}) => '${p}시간 전';
+	@override String get lessThanOneHourAgo => '1시간 이내';
+	@override String get inUse => '사용 중';
+	@override String get remoteSubscription => '원격 구독';
+	@override String get localProfile => '로컬 파일';
+	@override String get viewYamlConfig => 'YAML 설정 보기';
+	@override String get editYamlConfig => 'YAML 설정 편집';
+	@override String get copySubscriptionUrl => '구독 URL 복사';
+	@override String get qrCode => 'QR 코드';
+	@override String get deleteProfile => '프로필 삭제';
+	@override String get noProfilesYet => '구독 프로필이 없습니다';
+	@override String get addProfilePrompt => '오른쪽 상단의 + 를 클릭하여 구독 URL을 추가하거나 로컬 파일을 가져오세요';
+	@override String get subscriptionUrlCopied => '구독 URL이 클립보드에 복사되었습니다';
+	@override String autoGroupTip({required Object group, required Object type}) => '「${group}」은(는) ${type} 자동 정책 그룹으로 지연 시간/가용성에 따라 노드가 자동 선택됩니다. 수동으로 선택하려면 \'노드 선택\' 그룹에서 전환하세요.';
+	@override String switchNodeFailed({required Object p}) => '노드 전환 실패: ${p}';
+	@override String nodeSelected({required Object p}) => '선택된 노드: ${p}';
+	@override String get startingCoreAndTesting => '코어를 시작하고 지연 시간을 테스트하는 중...';
+	@override String chartMinutes({required Object p}) => '${p} 분';
+	@override String get chartUpload => '업로드';
+	@override String get chartDownload => '다운로드';
+	@override String get author => '작성자';
+	@override String get githubRepo => '오픈 소스 저장소';
+	@override String get openSourceLicense => '오픈 소스 라이선스';
+	@override String get submitFeedback => '피드백 및 문제 제출';
+	@override String get copiedToClipboard => '클립보드에 복사되었습니다';
 }
 
 // Path: permission
@@ -559,6 +585,24 @@ class _Translations$main$tray$ko implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => '열기';
 	@override String get menuExit => '종료';
+	@override String get coreDisconnected => 'Wmimo · 코어 미연결';
+	@override String get coreRunning => 'Wmimo · 코어 실행 중';
+	@override String get startProxy => '프록시 연결 시작';
+	@override String get stopProxy => '프록시 연결 해제';
+	@override String get restartCore => '코어 재시작';
+	@override String get systemProxyItem => '시스템 프록시';
+	@override String get tunModeItem => 'TUN 모드';
+	@override String get outboundMode => '아웃바운드 모드';
+	@override String get modeRule => '규칙 라우팅';
+	@override String get modeGlobal => '글로벌 프록시';
+	@override String get modeDirect => '직접 연결';
+	@override String get profilesMenu => '프로필';
+	@override String get updateAllProfiles => '모든 프로필 업데이트';
+	@override String get proxyNodes => '프록시 노드';
+	@override String get tools => '도구';
+	@override String get copyProxyCmd => '터미널 프록시 명령 복사 (CMD / Bash)';
+	@override String get delayTestAll => '모든 노드 지연 시간 테스트';
+	@override String get openDashboard => '대시보드 열기';
 }
 
 /// The flat map containing all translations for locale <ko>.
@@ -621,6 +665,24 @@ extension on TranslationsKo {
 			'loginScreen.providerDisclaimer' => '면책 조항: ${_root.loginScreen.provider}는 제3자 서비스이며, 본 앱과는 무관합니다',
 			'main.tray.menuOpen' => '열기',
 			'main.tray.menuExit' => '종료',
+			'main.tray.coreDisconnected' => 'Wmimo · 코어 미연결',
+			'main.tray.coreRunning' => 'Wmimo · 코어 실행 중',
+			'main.tray.startProxy' => '프록시 연결 시작',
+			'main.tray.stopProxy' => '프록시 연결 해제',
+			'main.tray.restartCore' => '코어 재시작',
+			'main.tray.systemProxyItem' => '시스템 프록시',
+			'main.tray.tunModeItem' => 'TUN 모드',
+			'main.tray.outboundMode' => '아웃바운드 모드',
+			'main.tray.modeRule' => '규칙 라우팅',
+			'main.tray.modeGlobal' => '글로벌 프록시',
+			'main.tray.modeDirect' => '직접 연결',
+			'main.tray.profilesMenu' => '프로필',
+			'main.tray.updateAllProfiles' => '모든 프로필 업데이트',
+			'main.tray.proxyNodes' => '프록시 노드',
+			'main.tray.tools' => '도구',
+			'main.tray.copyProxyCmd' => '터미널 프록시 명령 복사 (CMD / Bash)',
+			'main.tray.delayTestAll' => '모든 노드 지연 시간 테스트',
+			'main.tray.openDashboard' => '대시보드 열기',
 			'meta.enable' => '활성화',
 			'meta.disable' => '비활성화',
 			'meta.open' => '열기',
@@ -877,6 +939,32 @@ extension on TranslationsKo {
 			'meta.remaining' => '남음',
 			'meta.expireTime' => '만료 시간',
 			'meta.tunMode' => 'TUN 모드',
+			'meta.daysAgo' => ({required Object p}) => '${p}일 전',
+			'meta.hoursAgo' => ({required Object p}) => '${p}시간 전',
+			'meta.lessThanOneHourAgo' => '1시간 이내',
+			'meta.inUse' => '사용 중',
+			'meta.remoteSubscription' => '원격 구독',
+			'meta.localProfile' => '로컬 파일',
+			'meta.viewYamlConfig' => 'YAML 설정 보기',
+			'meta.editYamlConfig' => 'YAML 설정 편집',
+			'meta.copySubscriptionUrl' => '구독 URL 복사',
+			'meta.qrCode' => 'QR 코드',
+			'meta.deleteProfile' => '프로필 삭제',
+			'meta.noProfilesYet' => '구독 프로필이 없습니다',
+			'meta.addProfilePrompt' => '오른쪽 상단의 + 를 클릭하여 구독 URL을 추가하거나 로컬 파일을 가져오세요',
+			'meta.subscriptionUrlCopied' => '구독 URL이 클립보드에 복사되었습니다',
+			'meta.autoGroupTip' => ({required Object group, required Object type}) => '「${group}」은(는) ${type} 자동 정책 그룹으로 지연 시간/가용성에 따라 노드가 자동 선택됩니다. 수동으로 선택하려면 \'노드 선택\' 그룹에서 전환하세요.',
+			'meta.switchNodeFailed' => ({required Object p}) => '노드 전환 실패: ${p}',
+			'meta.nodeSelected' => ({required Object p}) => '선택된 노드: ${p}',
+			'meta.startingCoreAndTesting' => '코어를 시작하고 지연 시간을 테스트하는 중...',
+			'meta.chartMinutes' => ({required Object p}) => '${p} 분',
+			'meta.chartUpload' => '업로드',
+			'meta.chartDownload' => '다운로드',
+			'meta.author' => '작성자',
+			'meta.githubRepo' => '오픈 소스 저장소',
+			'meta.openSourceLicense' => '오픈 소스 라이선스',
+			'meta.submitFeedback' => '피드백 및 문제 제출',
+			'meta.copiedToClipboard' => '클립보드에 복사되었습니다',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

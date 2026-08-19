@@ -506,7 +506,8 @@ class GroupHelper {
         ),
         GroupItemOptions(
           pushOptions: GroupItemPushOptions(
-            name: "提交反馈与建议 / Issues",
+            name: tcontext.meta.submitFeedback,
+            text: "Issues",
             onPush: () async {
               await UrlLauncherUtils.loadUrl(
                 "https://github.com/aimy1/Wmimo/issues",

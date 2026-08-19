@@ -454,6 +454,32 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get remaining => 'Осталось';
 	@override String get expireTime => 'Срок действия';
 	@override String get tunMode => 'Режим TUN';
+	@override String daysAgo({required Object p}) => '${p} дн. назад';
+	@override String hoursAgo({required Object p}) => '${p} ч. назад';
+	@override String get lessThanOneHourAgo => '< 1 часа назад';
+	@override String get inUse => 'Используется';
+	@override String get remoteSubscription => 'Удаленная подписка';
+	@override String get localProfile => 'Локальный файл';
+	@override String get viewYamlConfig => 'Просмотреть YAML-конфиг';
+	@override String get editYamlConfig => 'Редактировать YAML-конфиг';
+	@override String get copySubscriptionUrl => 'Скопировать URL подписки';
+	@override String get qrCode => 'QR-код';
+	@override String get deleteProfile => 'Удалить профиль';
+	@override String get noProfilesYet => 'Нет профилей';
+	@override String get addProfilePrompt => 'Нажмите + в правом верхнем углу, чтобы добавить URL или импортировать файл';
+	@override String get subscriptionUrlCopied => 'URL подписки скопирован в буфер обмена';
+	@override String autoGroupTip({required Object group, required Object type}) => '«${group}» — автоматическая группа (${type}), которая выбирает узлы по задержке/доступности. Для ручного выбора переключитесь в ручной группе, например «Выбор узла».';
+	@override String switchNodeFailed({required Object p}) => 'Не удалось переключить узел: ${p}';
+	@override String nodeSelected({required Object p}) => 'Выбран узел: ${p}';
+	@override String get startingCoreAndTesting => 'Запуск ядра и проверка задержки...';
+	@override String chartMinutes({required Object p}) => '${p} мин';
+	@override String get chartUpload => 'Отдача';
+	@override String get chartDownload => 'Загрузка';
+	@override String get author => 'Автор';
+	@override String get githubRepo => 'Репозиторий с открытым исходным кодом';
+	@override String get openSourceLicense => 'Лицензия';
+	@override String get submitFeedback => 'Обратная связь и предложения';
+	@override String get copiedToClipboard => 'Скопировано в буфер обмена';
 }
 
 // Path: permission
@@ -558,7 +584,25 @@ class _Translations$main$tray$ru implements Translations$main$tray$en {
 
 	// Translations
 	@override String get menuOpen => 'Открыть';
-	@override String get menuExit => 'Выйти';
+	@override String get menuExit => 'Выход';
+	@override String get coreDisconnected => 'Wmimo · Ядро не подключено';
+	@override String get coreRunning => 'Wmimo · Ядро запущено';
+	@override String get startProxy => 'Запустить прокси-соединение';
+	@override String get stopProxy => 'Отключить прокси';
+	@override String get restartCore => 'Перезапустить ядро';
+	@override String get systemProxyItem => 'Системный прокси';
+	@override String get tunModeItem => 'Режим TUN';
+	@override String get outboundMode => 'Режим маршрутизации';
+	@override String get modeRule => 'По правилам';
+	@override String get modeGlobal => 'Глобальный прокси';
+	@override String get modeDirect => 'Прямое подключение';
+	@override String get profilesMenu => 'Профили';
+	@override String get updateAllProfiles => 'Обновить все профили';
+	@override String get proxyNodes => 'Прокси-узлы';
+	@override String get tools => 'Инструменты';
+	@override String get copyProxyCmd => 'Копировать команду терминала (CMD / Bash)';
+	@override String get delayTestAll => 'Тест задержки всех узлов';
+	@override String get openDashboard => 'Открыть панель управления';
 }
 
 /// The flat map containing all translations for locale <ru>.
@@ -620,7 +664,25 @@ extension on TranslationsRu {
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'Запросите код/алиас провайдера у вашего ${_root.loginScreen.provider}.\nИнструкцию по интеграции с ${_root.loginScreen.provider} смотрите: ${p}',
 			'loginScreen.providerDisclaimer' => 'Отказ от ответственности: ${_root.loginScreen.provider} — это сторонний сервис и не связан с этим приложением',
 			'main.tray.menuOpen' => 'Открыть',
-			'main.tray.menuExit' => 'Выйти',
+			'main.tray.menuExit' => 'Выход',
+			'main.tray.coreDisconnected' => 'Wmimo · Ядро не подключено',
+			'main.tray.coreRunning' => 'Wmimo · Ядро запущено',
+			'main.tray.startProxy' => 'Запустить прокси-соединение',
+			'main.tray.stopProxy' => 'Отключить прокси',
+			'main.tray.restartCore' => 'Перезапустить ядро',
+			'main.tray.systemProxyItem' => 'Системный прокси',
+			'main.tray.tunModeItem' => 'Режим TUN',
+			'main.tray.outboundMode' => 'Режим маршрутизации',
+			'main.tray.modeRule' => 'По правилам',
+			'main.tray.modeGlobal' => 'Глобальный прокси',
+			'main.tray.modeDirect' => 'Прямое подключение',
+			'main.tray.profilesMenu' => 'Профили',
+			'main.tray.updateAllProfiles' => 'Обновить все профили',
+			'main.tray.proxyNodes' => 'Прокси-узлы',
+			'main.tray.tools' => 'Инструменты',
+			'main.tray.copyProxyCmd' => 'Копировать команду терминала (CMD / Bash)',
+			'main.tray.delayTestAll' => 'Тест задержки всех узлов',
+			'main.tray.openDashboard' => 'Открыть панель управления',
 			'meta.enable' => 'Включить',
 			'meta.disable' => 'Запретить',
 			'meta.open' => 'Открыть',
@@ -877,6 +939,32 @@ extension on TranslationsRu {
 			'meta.remaining' => 'Осталось',
 			'meta.expireTime' => 'Срок действия',
 			'meta.tunMode' => 'Режим TUN',
+			'meta.daysAgo' => ({required Object p}) => '${p} дн. назад',
+			'meta.hoursAgo' => ({required Object p}) => '${p} ч. назад',
+			'meta.lessThanOneHourAgo' => '< 1 часа назад',
+			'meta.inUse' => 'Используется',
+			'meta.remoteSubscription' => 'Удаленная подписка',
+			'meta.localProfile' => 'Локальный файл',
+			'meta.viewYamlConfig' => 'Просмотреть YAML-конфиг',
+			'meta.editYamlConfig' => 'Редактировать YAML-конфиг',
+			'meta.copySubscriptionUrl' => 'Скопировать URL подписки',
+			'meta.qrCode' => 'QR-код',
+			'meta.deleteProfile' => 'Удалить профиль',
+			'meta.noProfilesYet' => 'Нет профилей',
+			'meta.addProfilePrompt' => 'Нажмите + в правом верхнем углу, чтобы добавить URL или импортировать файл',
+			'meta.subscriptionUrlCopied' => 'URL подписки скопирован в буфер обмена',
+			'meta.autoGroupTip' => ({required Object group, required Object type}) => '«${group}» — автоматическая группа (${type}), которая выбирает узлы по задержке/доступности. Для ручного выбора переключитесь в ручной группе, например «Выбор узла».',
+			'meta.switchNodeFailed' => ({required Object p}) => 'Не удалось переключить узел: ${p}',
+			'meta.nodeSelected' => ({required Object p}) => 'Выбран узел: ${p}',
+			'meta.startingCoreAndTesting' => 'Запуск ядра и проверка задержки...',
+			'meta.chartMinutes' => ({required Object p}) => '${p} мин',
+			'meta.chartUpload' => 'Отдача',
+			'meta.chartDownload' => 'Загрузка',
+			'meta.author' => 'Автор',
+			'meta.githubRepo' => 'Репозиторий с открытым исходным кодом',
+			'meta.openSourceLicense' => 'Лицензия',
+			'meta.submitFeedback' => 'Обратная связь и предложения',
+			'meta.copiedToClipboard' => 'Скопировано в буфер обмена',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

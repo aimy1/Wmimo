@@ -454,6 +454,32 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get remaining => '剩余';
 	@override String get expireTime => '到期时间';
 	@override String get tunMode => 'TUN 模式';
+	@override String daysAgo({required Object p}) => '${p}天前';
+	@override String hoursAgo({required Object p}) => '${p}小时前';
+	@override String get lessThanOneHourAgo => '< 1小时前';
+	@override String get inUse => '使用中';
+	@override String get remoteSubscription => '远程订阅';
+	@override String get localProfile => '本地文件';
+	@override String get viewYamlConfig => '查看 YAML 配置';
+	@override String get editYamlConfig => '编辑 YAML 配置';
+	@override String get copySubscriptionUrl => '复制订阅链接';
+	@override String get qrCode => '二维码';
+	@override String get deleteProfile => '删除配置';
+	@override String get noProfilesYet => '暂无订阅配置';
+	@override String get addProfilePrompt => '点击右上角 + 添加订阅链接或导入本地文件';
+	@override String get subscriptionUrlCopied => '订阅链接已复制到剪贴板';
+	@override String autoGroupTip({required Object group, required Object type}) => '「${group}」属于 ${type} 自动策略组，由系统按延迟/可用性自动优选节点。如需自选节点，请在「节点选择」等手动策略组中切换。';
+	@override String switchNodeFailed({required Object p}) => '切换节点失败: ${p}';
+	@override String nodeSelected({required Object p}) => '已选择节点: ${p}';
+	@override String get startingCoreAndTesting => '正在启动代理核心并测速...';
+	@override String chartMinutes({required Object p}) => '${p} 分钟';
+	@override String get chartUpload => '上传';
+	@override String get chartDownload => '下载';
+	@override String get author => '作者';
+	@override String get githubRepo => '开源代码仓库';
+	@override String get openSourceLicense => '开源许可证';
+	@override String get submitFeedback => '提交反馈与建议';
+	@override String get copiedToClipboard => '已复制到剪贴板';
 }
 
 // Path: permission
@@ -559,6 +585,24 @@ class Translations$main$tray$zh_CN implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => '打开';
 	@override String get menuExit => '退出';
+	@override String get coreDisconnected => 'Wmimo · 核心未连接';
+	@override String get coreRunning => 'Wmimo · 核心运行中';
+	@override String get startProxy => '启动代理连接';
+	@override String get stopProxy => '断开代理连接';
+	@override String get restartCore => '重启代理核心';
+	@override String get systemProxyItem => '系统代理';
+	@override String get tunModeItem => 'TUN 模式';
+	@override String get outboundMode => '出站模式';
+	@override String get modeRule => '规则分流';
+	@override String get modeGlobal => '全局代理';
+	@override String get modeDirect => '直接连接';
+	@override String get profilesMenu => '订阅配置';
+	@override String get updateAllProfiles => '更新所有订阅配置';
+	@override String get proxyNodes => '代理节点';
+	@override String get tools => '实用工具';
+	@override String get copyProxyCmd => '复制终端代理命令 (CMD / Bash)';
+	@override String get delayTestAll => '一键全节点延迟测速';
+	@override String get openDashboard => '打开控制面板';
 }
 
 /// The flat map containing all translations for locale <zh-CN>.
@@ -621,6 +665,24 @@ extension on TranslationsZhCn {
 			'loginScreen.providerDisclaimer' => '免责声明:${_root.loginScreen.provider}为三方服务,与本App无关',
 			'main.tray.menuOpen' => '打开',
 			'main.tray.menuExit' => '退出',
+			'main.tray.coreDisconnected' => 'Wmimo · 核心未连接',
+			'main.tray.coreRunning' => 'Wmimo · 核心运行中',
+			'main.tray.startProxy' => '启动代理连接',
+			'main.tray.stopProxy' => '断开代理连接',
+			'main.tray.restartCore' => '重启代理核心',
+			'main.tray.systemProxyItem' => '系统代理',
+			'main.tray.tunModeItem' => 'TUN 模式',
+			'main.tray.outboundMode' => '出站模式',
+			'main.tray.modeRule' => '规则分流',
+			'main.tray.modeGlobal' => '全局代理',
+			'main.tray.modeDirect' => '直接连接',
+			'main.tray.profilesMenu' => '订阅配置',
+			'main.tray.updateAllProfiles' => '更新所有订阅配置',
+			'main.tray.proxyNodes' => '代理节点',
+			'main.tray.tools' => '实用工具',
+			'main.tray.copyProxyCmd' => '复制终端代理命令 (CMD / Bash)',
+			'main.tray.delayTestAll' => '一键全节点延迟测速',
+			'main.tray.openDashboard' => '打开控制面板',
 			'meta.enable' => '启用',
 			'meta.disable' => '禁用',
 			'meta.open' => '打开',
@@ -877,6 +939,32 @@ extension on TranslationsZhCn {
 			'meta.remaining' => '剩余',
 			'meta.expireTime' => '到期时间',
 			'meta.tunMode' => 'TUN 模式',
+			'meta.daysAgo' => ({required Object p}) => '${p}天前',
+			'meta.hoursAgo' => ({required Object p}) => '${p}小时前',
+			'meta.lessThanOneHourAgo' => '< 1小时前',
+			'meta.inUse' => '使用中',
+			'meta.remoteSubscription' => '远程订阅',
+			'meta.localProfile' => '本地文件',
+			'meta.viewYamlConfig' => '查看 YAML 配置',
+			'meta.editYamlConfig' => '编辑 YAML 配置',
+			'meta.copySubscriptionUrl' => '复制订阅链接',
+			'meta.qrCode' => '二维码',
+			'meta.deleteProfile' => '删除配置',
+			'meta.noProfilesYet' => '暂无订阅配置',
+			'meta.addProfilePrompt' => '点击右上角 + 添加订阅链接或导入本地文件',
+			'meta.subscriptionUrlCopied' => '订阅链接已复制到剪贴板',
+			'meta.autoGroupTip' => ({required Object group, required Object type}) => '「${group}」属于 ${type} 自动策略组，由系统按延迟/可用性自动优选节点。如需自选节点，请在「节点选择」等手动策略组中切换。',
+			'meta.switchNodeFailed' => ({required Object p}) => '切换节点失败: ${p}',
+			'meta.nodeSelected' => ({required Object p}) => '已选择节点: ${p}',
+			'meta.startingCoreAndTesting' => '正在启动代理核心并测速...',
+			'meta.chartMinutes' => ({required Object p}) => '${p} 分钟',
+			'meta.chartUpload' => '上传',
+			'meta.chartDownload' => '下载',
+			'meta.author' => '作者',
+			'meta.githubRepo' => '开源代码仓库',
+			'meta.openSourceLicense' => '开源许可证',
+			'meta.submitFeedback' => '提交反馈与建议',
+			'meta.copiedToClipboard' => '已复制到剪贴板',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',

@@ -454,6 +454,32 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get remaining => 'Restante';
 	@override String get expireTime => 'Fecha de caducidad';
 	@override String get tunMode => 'Modo TUN';
+	@override String daysAgo({required Object p}) => 'hace ${p} días';
+	@override String hoursAgo({required Object p}) => 'hace ${p} horas';
+	@override String get lessThanOneHourAgo => '< 1 hora';
+	@override String get inUse => 'En uso';
+	@override String get remoteSubscription => 'Suscripción remota';
+	@override String get localProfile => 'Archivo local';
+	@override String get viewYamlConfig => 'Ver configuración YAML';
+	@override String get editYamlConfig => 'Editar configuración YAML';
+	@override String get copySubscriptionUrl => 'Copiar URL de suscripción';
+	@override String get qrCode => 'Código QR';
+	@override String get deleteProfile => 'Eliminar perfil';
+	@override String get noProfilesYet => 'No hay perfiles';
+	@override String get addProfilePrompt => 'Haga clic en + arriba a la derecha para agregar una URL o importar un archivo';
+	@override String get subscriptionUrlCopied => 'URL de suscripción copiada al portapapeles';
+	@override String autoGroupTip({required Object group, required Object type}) => '«${group}» es un grupo de políticas automáticas (${type}). Para seleccionar manualmente un nodo, cámbielo en grupos manuales como \'Selección de nodos\'.';
+	@override String switchNodeFailed({required Object p}) => 'Error al cambiar de nodo: ${p}';
+	@override String nodeSelected({required Object p}) => 'Nodo seleccionado: ${p}';
+	@override String get startingCoreAndTesting => 'Iniciando núcleo y probando latencia...';
+	@override String chartMinutes({required Object p}) => '${p} min';
+	@override String get chartUpload => 'Subida';
+	@override String get chartDownload => 'Descarga';
+	@override String get author => 'Autor';
+	@override String get githubRepo => 'Repositorio de código abierto';
+	@override String get openSourceLicense => 'Licencia de código abierto';
+	@override String get submitFeedback => 'Comentarios y sugerencias';
+	@override String get copiedToClipboard => 'Copiado al portapapeles';
 }
 
 // Path: permission
@@ -559,6 +585,24 @@ class _Translations$main$tray$es implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => 'Abrir';
 	@override String get menuExit => 'Salir';
+	@override String get coreDisconnected => 'Wmimo · Núcleo desconectado';
+	@override String get coreRunning => 'Wmimo · Núcleo en ejecución';
+	@override String get startProxy => 'Iniciar conexión proxy';
+	@override String get stopProxy => 'Desconectar proxy';
+	@override String get restartCore => 'Reiniciar núcleo';
+	@override String get systemProxyItem => 'Proxy del sistema';
+	@override String get tunModeItem => 'Modo TUN';
+	@override String get outboundMode => 'Modo de salida';
+	@override String get modeRule => 'Por reglas';
+	@override String get modeGlobal => 'Proxy global';
+	@override String get modeDirect => 'Conexión directa';
+	@override String get profilesMenu => 'Perfiles';
+	@override String get updateAllProfiles => 'Actualizar todos los perfiles';
+	@override String get proxyNodes => 'Nodos de proxy';
+	@override String get tools => 'Herramientas';
+	@override String get copyProxyCmd => 'Copiar comando de proxy de terminal (CMD / Bash)';
+	@override String get delayTestAll => 'Probar latencia de todos los nodos';
+	@override String get openDashboard => 'Abrir panel de control';
 }
 
 /// The flat map containing all translations for locale <es>.
@@ -621,6 +665,24 @@ extension on TranslationsEs {
 			'loginScreen.providerDisclaimer' => 'Aviso legal: ${_root.loginScreen.provider} es un servicio de terceros y no está relacionado con esta aplicación',
 			'main.tray.menuOpen' => 'Abrir',
 			'main.tray.menuExit' => 'Salir',
+			'main.tray.coreDisconnected' => 'Wmimo · Núcleo desconectado',
+			'main.tray.coreRunning' => 'Wmimo · Núcleo en ejecución',
+			'main.tray.startProxy' => 'Iniciar conexión proxy',
+			'main.tray.stopProxy' => 'Desconectar proxy',
+			'main.tray.restartCore' => 'Reiniciar núcleo',
+			'main.tray.systemProxyItem' => 'Proxy del sistema',
+			'main.tray.tunModeItem' => 'Modo TUN',
+			'main.tray.outboundMode' => 'Modo de salida',
+			'main.tray.modeRule' => 'Por reglas',
+			'main.tray.modeGlobal' => 'Proxy global',
+			'main.tray.modeDirect' => 'Conexión directa',
+			'main.tray.profilesMenu' => 'Perfiles',
+			'main.tray.updateAllProfiles' => 'Actualizar todos los perfiles',
+			'main.tray.proxyNodes' => 'Nodos de proxy',
+			'main.tray.tools' => 'Herramientas',
+			'main.tray.copyProxyCmd' => 'Copiar comando de proxy de terminal (CMD / Bash)',
+			'main.tray.delayTestAll' => 'Probar latencia de todos los nodos',
+			'main.tray.openDashboard' => 'Abrir panel de control',
 			'meta.enable' => 'Habilitar',
 			'meta.disable' => 'Deshabilitar',
 			'meta.open' => 'Abrir',
@@ -877,6 +939,32 @@ extension on TranslationsEs {
 			'meta.remaining' => 'Restante',
 			'meta.expireTime' => 'Fecha de caducidad',
 			'meta.tunMode' => 'Modo TUN',
+			'meta.daysAgo' => ({required Object p}) => 'hace ${p} días',
+			'meta.hoursAgo' => ({required Object p}) => 'hace ${p} horas',
+			'meta.lessThanOneHourAgo' => '< 1 hora',
+			'meta.inUse' => 'En uso',
+			'meta.remoteSubscription' => 'Suscripción remota',
+			'meta.localProfile' => 'Archivo local',
+			'meta.viewYamlConfig' => 'Ver configuración YAML',
+			'meta.editYamlConfig' => 'Editar configuración YAML',
+			'meta.copySubscriptionUrl' => 'Copiar URL de suscripción',
+			'meta.qrCode' => 'Código QR',
+			'meta.deleteProfile' => 'Eliminar perfil',
+			'meta.noProfilesYet' => 'No hay perfiles',
+			'meta.addProfilePrompt' => 'Haga clic en + arriba a la derecha para agregar una URL o importar un archivo',
+			'meta.subscriptionUrlCopied' => 'URL de suscripción copiada al portapapeles',
+			'meta.autoGroupTip' => ({required Object group, required Object type}) => '«${group}» es un grupo de políticas automáticas (${type}). Para seleccionar manualmente un nodo, cámbielo en grupos manuales como \'Selección de nodos\'.',
+			'meta.switchNodeFailed' => ({required Object p}) => 'Error al cambiar de nodo: ${p}',
+			'meta.nodeSelected' => ({required Object p}) => 'Nodo seleccionado: ${p}',
+			'meta.startingCoreAndTesting' => 'Iniciando núcleo y probando latencia...',
+			'meta.chartMinutes' => ({required Object p}) => '${p} min',
+			'meta.chartUpload' => 'Subida',
+			'meta.chartDownload' => 'Descarga',
+			'meta.author' => 'Autor',
+			'meta.githubRepo' => 'Repositorio de código abierto',
+			'meta.openSourceLicense' => 'Licencia de código abierto',
+			'meta.submitFeedback' => 'Comentarios y sugerencias',
+			'meta.copiedToClipboard' => 'Copiado al portapapeles',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

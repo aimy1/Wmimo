@@ -1076,6 +1076,84 @@ class Translations$meta$en {
 
 	/// en: 'TUN Mode'
 	String get tunMode => 'TUN Mode';
+
+	/// en: '$p days ago'
+	String daysAgo({required Object p}) => '${p} days ago';
+
+	/// en: '$p hours ago'
+	String hoursAgo({required Object p}) => '${p} hours ago';
+
+	/// en: '< 1 hour ago'
+	String get lessThanOneHourAgo => '< 1 hour ago';
+
+	/// en: 'In Use'
+	String get inUse => 'In Use';
+
+	/// en: 'Remote Subscription'
+	String get remoteSubscription => 'Remote Subscription';
+
+	/// en: 'Local File'
+	String get localProfile => 'Local File';
+
+	/// en: 'View YAML Config'
+	String get viewYamlConfig => 'View YAML Config';
+
+	/// en: 'Edit YAML Config'
+	String get editYamlConfig => 'Edit YAML Config';
+
+	/// en: 'Copy Subscription URL'
+	String get copySubscriptionUrl => 'Copy Subscription URL';
+
+	/// en: 'QR Code'
+	String get qrCode => 'QR Code';
+
+	/// en: 'Delete Profile'
+	String get deleteProfile => 'Delete Profile';
+
+	/// en: 'No profiles yet'
+	String get noProfilesYet => 'No profiles yet';
+
+	/// en: 'Click + in the top right to add a subscription URL or import a local file'
+	String get addProfilePrompt => 'Click + in the top right to add a subscription URL or import a local file';
+
+	/// en: 'Subscription URL copied to clipboard'
+	String get subscriptionUrlCopied => 'Subscription URL copied to clipboard';
+
+	/// en: '[$group] is an auto policy group ($type), which automatically selects nodes based on latency/availability. To manually select a node, please switch in manual policy groups.'
+	String autoGroupTip({required Object group, required Object type}) => '[${group}] is an auto policy group (${type}), which automatically selects nodes based on latency/availability. To manually select a node, please switch in manual policy groups.';
+
+	/// en: 'Failed to switch node: $p'
+	String switchNodeFailed({required Object p}) => 'Failed to switch node: ${p}';
+
+	/// en: 'Selected node: $p'
+	String nodeSelected({required Object p}) => 'Selected node: ${p}';
+
+	/// en: 'Starting core and testing latency...'
+	String get startingCoreAndTesting => 'Starting core and testing latency...';
+
+	/// en: '$p min'
+	String chartMinutes({required Object p}) => '${p} min';
+
+	/// en: 'Upload'
+	String get chartUpload => 'Upload';
+
+	/// en: 'Download'
+	String get chartDownload => 'Download';
+
+	/// en: 'Author'
+	String get author => 'Author';
+
+	/// en: 'Open Source Repository'
+	String get githubRepo => 'Open Source Repository';
+
+	/// en: 'License'
+	String get openSourceLicense => 'License';
+
+	/// en: 'Feedback & Issues'
+	String get submitFeedback => 'Feedback & Issues';
+
+	/// en: 'Copied to clipboard'
+	String get copiedToClipboard => 'Copied to clipboard';
 }
 
 // Path: permission
@@ -1265,6 +1343,60 @@ class Translations$main$tray$en {
 
 	/// en: 'Exit'
 	String get menuExit => 'Exit';
+
+	/// en: 'Wmimo · Core Disconnected'
+	String get coreDisconnected => 'Wmimo · Core Disconnected';
+
+	/// en: 'Wmimo · Core Running'
+	String get coreRunning => 'Wmimo · Core Running';
+
+	/// en: 'Start Proxy Connection'
+	String get startProxy => 'Start Proxy Connection';
+
+	/// en: 'Disconnect Proxy'
+	String get stopProxy => 'Disconnect Proxy';
+
+	/// en: 'Restart Core'
+	String get restartCore => 'Restart Core';
+
+	/// en: 'System Proxy'
+	String get systemProxyItem => 'System Proxy';
+
+	/// en: 'TUN Mode'
+	String get tunModeItem => 'TUN Mode';
+
+	/// en: 'Outbound Mode'
+	String get outboundMode => 'Outbound Mode';
+
+	/// en: 'Rule Routing'
+	String get modeRule => 'Rule Routing';
+
+	/// en: 'Global Proxy'
+	String get modeGlobal => 'Global Proxy';
+
+	/// en: 'Direct Connection'
+	String get modeDirect => 'Direct Connection';
+
+	/// en: 'Profiles'
+	String get profilesMenu => 'Profiles';
+
+	/// en: 'Update All Profiles'
+	String get updateAllProfiles => 'Update All Profiles';
+
+	/// en: 'Proxy Nodes'
+	String get proxyNodes => 'Proxy Nodes';
+
+	/// en: 'Tools'
+	String get tools => 'Tools';
+
+	/// en: 'Copy Terminal Proxy Command (CMD / Bash)'
+	String get copyProxyCmd => 'Copy Terminal Proxy Command (CMD / Bash)';
+
+	/// en: 'Test Latency for All Nodes'
+	String get delayTestAll => 'Test Latency for All Nodes';
+
+	/// en: 'Open Dashboard'
+	String get openDashboard => 'Open Dashboard';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1327,6 +1459,24 @@ extension on Translations {
 			'loginScreen.providerDisclaimer' => 'Disclaimer: ${_root.loginScreen.provider} is a third-party service and is not affiliated with this app',
 			'main.tray.menuOpen' => 'Open',
 			'main.tray.menuExit' => 'Exit',
+			'main.tray.coreDisconnected' => 'Wmimo · Core Disconnected',
+			'main.tray.coreRunning' => 'Wmimo · Core Running',
+			'main.tray.startProxy' => 'Start Proxy Connection',
+			'main.tray.stopProxy' => 'Disconnect Proxy',
+			'main.tray.restartCore' => 'Restart Core',
+			'main.tray.systemProxyItem' => 'System Proxy',
+			'main.tray.tunModeItem' => 'TUN Mode',
+			'main.tray.outboundMode' => 'Outbound Mode',
+			'main.tray.modeRule' => 'Rule Routing',
+			'main.tray.modeGlobal' => 'Global Proxy',
+			'main.tray.modeDirect' => 'Direct Connection',
+			'main.tray.profilesMenu' => 'Profiles',
+			'main.tray.updateAllProfiles' => 'Update All Profiles',
+			'main.tray.proxyNodes' => 'Proxy Nodes',
+			'main.tray.tools' => 'Tools',
+			'main.tray.copyProxyCmd' => 'Copy Terminal Proxy Command (CMD / Bash)',
+			'main.tray.delayTestAll' => 'Test Latency for All Nodes',
+			'main.tray.openDashboard' => 'Open Dashboard',
 			'meta.enable' => 'Enable',
 			'meta.disable' => 'Disable',
 			'meta.open' => 'Open',
@@ -1583,6 +1733,32 @@ extension on Translations {
 			'meta.remaining' => 'Remaining',
 			'meta.expireTime' => 'Expire Time',
 			'meta.tunMode' => 'TUN Mode',
+			'meta.daysAgo' => ({required Object p}) => '${p} days ago',
+			'meta.hoursAgo' => ({required Object p}) => '${p} hours ago',
+			'meta.lessThanOneHourAgo' => '< 1 hour ago',
+			'meta.inUse' => 'In Use',
+			'meta.remoteSubscription' => 'Remote Subscription',
+			'meta.localProfile' => 'Local File',
+			'meta.viewYamlConfig' => 'View YAML Config',
+			'meta.editYamlConfig' => 'Edit YAML Config',
+			'meta.copySubscriptionUrl' => 'Copy Subscription URL',
+			'meta.qrCode' => 'QR Code',
+			'meta.deleteProfile' => 'Delete Profile',
+			'meta.noProfilesYet' => 'No profiles yet',
+			'meta.addProfilePrompt' => 'Click + in the top right to add a subscription URL or import a local file',
+			'meta.subscriptionUrlCopied' => 'Subscription URL copied to clipboard',
+			'meta.autoGroupTip' => ({required Object group, required Object type}) => '[${group}] is an auto policy group (${type}), which automatically selects nodes based on latency/availability. To manually select a node, please switch in manual policy groups.',
+			'meta.switchNodeFailed' => ({required Object p}) => 'Failed to switch node: ${p}',
+			'meta.nodeSelected' => ({required Object p}) => 'Selected node: ${p}',
+			'meta.startingCoreAndTesting' => 'Starting core and testing latency...',
+			'meta.chartMinutes' => ({required Object p}) => '${p} min',
+			'meta.chartUpload' => 'Upload',
+			'meta.chartDownload' => 'Download',
+			'meta.author' => 'Author',
+			'meta.githubRepo' => 'Open Source Repository',
+			'meta.openSourceLicense' => 'License',
+			'meta.submitFeedback' => 'Feedback & Issues',
+			'meta.copiedToClipboard' => 'Copied to clipboard',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

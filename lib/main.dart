@@ -626,7 +626,7 @@ class MyAppState extends State<MyApp>
     final currentProfile = ProfileManager.getCurrent();
 
     // Query traffic speed if connected
-    String statusLabel = grey ? "⚪  Wmimo · 核心未连接" : "🚀  Wmimo · 核心运行中";
+    String statusLabel = grey ? "⚪  ${t.main.tray.coreDisconnected}" : "🚀  ${t.main.tray.coreRunning}";
     if (!grey) {
       try {
         final trafficJson = await FlutterVpnService.clashiApiTraffic();
@@ -639,6 +639,12 @@ class MyAppState extends State<MyApp>
       } catch (_) {}
     }
 
+    String modeName = mode == ClashConfigsMode.rule
+        ? t.main.tray.modeRule
+        : mode == ClashConfigsMode.global
+            ? t.main.tray.modeGlobal
+            : t.main.tray.modeDirect;
+
     // 1. Status and Core Control
     List<MenuItem> items = [
       MenuItem(
@@ -648,11 +654,11 @@ class MyAppState extends State<MyApp>
       ),
       MenuItem.separator(),
       if (grey) ...[
-        MenuItem(key: kMenuConnect, label: "  ▶️   启动代理连接  "),
+        MenuItem(key: kMenuConnect, label: "  ▶️   ${t.main.tray.startProxy}  "),
       ],
       if (!grey) ...[
-        MenuItem(key: kMenuDisconnect, label: "  ⏹️   断开代理连接  "),
-        MenuItem(key: kMenuRestartCore, label: "  🔄   重启代理核心  "),
+        MenuItem(key: kMenuDisconnect, label: "  ⏹️   ${t.main.tray.stopProxy}  "),
+        MenuItem(key: kMenuRestartCore, label: "  🔄   ${t.main.tray.restartCore}  "),
       ],
       MenuItem.separator(),
 
@@ -660,34 +666,34 @@ class MyAppState extends State<MyApp>
       MenuItem.checkbox(
         key: kMenuSystemProxy,
         checked: isSysProxy,
-        label: "  🌐  系统代理 (System Proxy)  ",
+        label: "  🌐  ${t.main.tray.systemProxyItem}  ",
       ),
       MenuItem.checkbox(
         key: kMenuTunMode,
         checked: tunEnable,
-        label: "  🛡️  TUN 模式 (TUN Mode)  ",
+        label: "  🛡️  ${t.main.tray.tunModeItem}  ",
       ),
       MenuItem.separator(),
 
       // 3. Outbound Mode Submenu
       MenuItem.submenu(
-        label: "  🔀  出站模式 (${mode == ClashConfigsMode.rule ? '规则' : mode == ClashConfigsMode.global ? '全局' : '直连'})  ",
+        label: "  🔀  ${t.main.tray.outboundMode} ($modeName)  ",
         submenu: Menu(
           items: [
             MenuItem.checkbox(
               key: kMenuModeRule,
               checked: mode == ClashConfigsMode.rule,
-              label: "  🎯  规则分流 (Rule)  ",
+              label: "  🎯  ${t.main.tray.modeRule}  ",
             ),
             MenuItem.checkbox(
               key: kMenuModeGlobal,
               checked: mode == ClashConfigsMode.global,
-              label: "  🌍  全局代理 (Global)  ",
+              label: "  🌍  ${t.main.tray.modeGlobal}  ",
             ),
             MenuItem.checkbox(
               key: kMenuModeDirect,
               checked: mode == ClashConfigsMode.direct,
-              label: "  ⚡  直接连接 (Direct)  ",
+              label: "  ⚡  ${t.main.tray.modeDirect}  ",
             ),
           ],
         ),
@@ -710,14 +716,14 @@ class MyAppState extends State<MyApp>
       profileItems.add(MenuItem.separator());
     }
     profileItems.add(
-      MenuItem(key: kMenuUpdateAllProfiles, label: "  🔄  更新所有订阅配置  "),
+      MenuItem(key: kMenuUpdateAllProfiles, label: "  🔄  ${t.main.tray.updateAllProfiles}  "),
     );
     final curProfileName = currentProfile != null
         ? (currentProfile.remark.isNotEmpty ? currentProfile.remark : currentProfile.id)
-        : '未选择';
+        : t.meta.none;
     items.add(
       MenuItem.submenu(
-        label: "  📑  订阅配置 ($curProfileName)  ",
+        label: "  📑  ${t.main.tray.profilesMenu} ($curProfileName)  ",
         submenu: Menu(items: profileItems),
       ),
     );
@@ -742,7 +748,7 @@ class MyAppState extends State<MyApp>
           }
           items.add(
             MenuItem.submenu(
-              label: "  ⚡  代理节点 (${selectableNodes.length}个)  ",
+              label: "  ⚡  ${t.main.tray.proxyNodes} (${selectableNodes.length})  ",
               submenu: Menu(items: nodeMenuItems),
             ),
           );
@@ -753,14 +759,14 @@ class MyAppState extends State<MyApp>
     // 6. Tools Submenu
     items.add(
       MenuItem.submenu(
-        label: "  🛠️  实用工具  ",
+        label: "  🛠️  ${t.main.tray.tools}  ",
         submenu: Menu(
           items: [
-            MenuItem(key: kMenuCopyProxyCmd, label: "  📋  复制系统代理命令 (CMD / Bash)  "),
-            MenuItem(key: kMenuDelayTest, label: "  ⚡  一键全节点延迟测速  "),
+            MenuItem(key: kMenuCopyProxyCmd, label: "  📋  ${t.main.tray.copyProxyCmd}  "),
+            MenuItem(key: kMenuDelayTest, label: "  ⚡  ${t.main.tray.delayTestAll}  "),
             MenuItem.separator(),
-            MenuItem(key: kMenuOpenConfigDir, label: "  📁  打开应用配置目录  "),
-            MenuItem(key: kMenuOpenLogs, label: "  📄  查看核心运行日志  "),
+            MenuItem(key: kMenuOpenConfigDir, label: "  📁  ${t.meta.openDir}  "),
+            MenuItem(key: kMenuOpenLogs, label: "  📄  ${t.meta.coreLog}  "),
           ],
         ),
       ),
@@ -768,8 +774,8 @@ class MyAppState extends State<MyApp>
     items.add(MenuItem.separator());
 
     // 7. Window & Exit
-    items.add(MenuItem(key: kMenuOpen, label: "  🖥️  打开主界面  "));
-    items.add(MenuItem(key: kMenuExit, label: "  ❌  退出程序  "));
+    items.add(MenuItem(key: kMenuOpen, label: "  🖥️  ${t.main.tray.menuOpen}  "));
+    items.add(MenuItem(key: kMenuExit, label: "  ❌  ${t.main.tray.menuExit}  "));
 
     _menu = Menu(items: items);
     await trayManager.setContextMenu(_menu!);

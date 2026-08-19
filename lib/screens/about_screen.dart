@@ -172,13 +172,13 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
       ),
       GroupItemOptions(
         textOptions: GroupItemTextOptions(
-          name: "作者 / Author",
+          name: tcontext.meta.author,
           text: "aimy1",
         ),
       ),
       GroupItemOptions(
         pushOptions: GroupItemPushOptions(
-          name: "开源代码仓库 / GitHub",
+          name: tcontext.meta.githubRepo,
           text: "aimy1/Wmimo",
           onPush: () async {
             await UrlLauncherUtils.loadUrl("https://github.com/aimy1/Wmimo");
@@ -187,7 +187,7 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
       ),
       GroupItemOptions(
         textOptions: GroupItemTextOptions(
-          name: "开源许可证 / License",
+          name: tcontext.meta.openSourceLicense,
           text: "GPL-3.0",
         ),
       ),

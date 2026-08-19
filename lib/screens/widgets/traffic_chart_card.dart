@@ -219,7 +219,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        "$_selectedMinutes 分钟",
+                        tcontext.meta.chartMinutes(p: '$_selectedMinutes'),
                         style: TextStyle(
                           fontSize: 10.5,
                           fontWeight: FontWeight.w600,
@@ -237,7 +237,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "上传",
+                          tcontext.meta.chartUpload,
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
@@ -246,7 +246,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                         ),
                         const SizedBox(width: 14),
                         Text(
-                          "下载",
+                          tcontext.meta.chartDownload,
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,

@@ -159,11 +159,12 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     if (!isSelector) {
       if (mounted) {
+        final tcontext = Translations.of(context);
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              "「${group.name}」属于 ${group.type} 自动策略组，由系统按延迟/可用性自动优选节点。如需自选节点，请在「节点选择」等手动策略组中切换。",
+              tcontext.meta.autoGroupTip(group: group.name, type: group.type),
             ),
             duration: const Duration(seconds: 3),
           ),
@@ -180,13 +181,14 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     if (_isVpnStarted) {
       final err = await ClashHttpApi.setProxiesNode(group.name, node.name);
       if (err != null && mounted) {
+        final tcontext = Translations.of(context);
         setState(() {
           group.now = prev;
         });
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("切换节点失败: ${err.message}"),
+            content: Text(tcontext.meta.switchNodeFailed(p: err.message)),
             duration: const Duration(seconds: 3),
           ),
         );
@@ -195,10 +197,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
 
     if (mounted) {
+      final tcontext = Translations.of(context);
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("已选择节点「${node.name}」"),
+          content: Text(tcontext.meta.nodeSelected(p: node.name)),
           duration: const Duration(seconds: 1),
           behavior: SnackBarBehavior.floating,
         ),
@@ -208,10 +211,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   Future<void> _testNodeDelay(ClashProxiesNode node) async {
     if (!_isVpnStarted) {
+      final tcontext = Translations.of(context);
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("正在启动代理核心并测速..."),
+          content: Text(tcontext.meta.startingCoreAndTesting),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -262,10 +266,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   Future<void> _testGroupDelay(ClashProxiesNode group) async {
     if (!_isVpnStarted) {
+      final tcontext = Translations.of(context);
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("正在启动代理核心并测速..."),
+          content: Text(tcontext.meta.startingCoreAndTesting),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -329,10 +334,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   Future<void> _testAllDelay() async {
     if (!_isVpnStarted) {
+      final tcontext = Translations.of(context);
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("正在启动代理核心并测速..."),
+          content: Text(tcontext.meta.startingCoreAndTesting),
           duration: const Duration(seconds: 2),
         ),
       );

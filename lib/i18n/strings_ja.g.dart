@@ -454,6 +454,32 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get remaining => '残り';
 	@override String get expireTime => '有効期限';
 	@override String get tunMode => 'TUN モード';
+	@override String daysAgo({required Object p}) => '${p}日前';
+	@override String hoursAgo({required Object p}) => '${p}時間前';
+	@override String get lessThanOneHourAgo => '1時間以内';
+	@override String get inUse => '使用中';
+	@override String get remoteSubscription => 'リモートサブスクリプション';
+	@override String get localProfile => 'ローカルファイル';
+	@override String get viewYamlConfig => 'YAML設定を表示';
+	@override String get editYamlConfig => 'YAML設定を編集';
+	@override String get copySubscriptionUrl => 'サブスクリプションURLをコピー';
+	@override String get qrCode => 'QRコード';
+	@override String get deleteProfile => 'プロファイルを削除';
+	@override String get noProfilesYet => 'プロファイルがありません';
+	@override String get addProfilePrompt => '右上の + をクリックしてURLを追加またはファイルをインポート';
+	@override String get subscriptionUrlCopied => 'サブスクリプションURLがクリップボードにコピーされました';
+	@override String autoGroupTip({required Object group, required Object type}) => '「${group}」は ${type} 自動ポリシーグループです。システムが遅延/可用性に基づいて自動的にノードを選択します。手動で選択する場合は「ノード選択」グループで切り替えてください。';
+	@override String switchNodeFailed({required Object p}) => 'ノードの切り替えに失敗しました: ${p}';
+	@override String nodeSelected({required Object p}) => '選択されたノード: ${p}';
+	@override String get startingCoreAndTesting => 'コアを起動してレイテンシをテスト中...';
+	@override String chartMinutes({required Object p}) => '${p} 分';
+	@override String get chartUpload => 'アップロード';
+	@override String get chartDownload => 'ダウンロード';
+	@override String get author => '作成者';
+	@override String get githubRepo => 'オープンソースリポジトリ';
+	@override String get openSourceLicense => 'オープンソースライセンス';
+	@override String get submitFeedback => 'フィードバックと問題の報告';
+	@override String get copiedToClipboard => 'クリップボードにコピーしました';
 }
 
 // Path: permission
@@ -559,6 +585,24 @@ class _Translations$main$tray$ja implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => '開く';
 	@override String get menuExit => '終了';
+	@override String get coreDisconnected => 'Wmimo · コア未接続';
+	@override String get coreRunning => 'Wmimo · コア実行中';
+	@override String get startProxy => 'プロキシ接続を開始';
+	@override String get stopProxy => 'プロキシ接続を切断';
+	@override String get restartCore => 'コアを再起動';
+	@override String get systemProxyItem => 'システムプロキシ';
+	@override String get tunModeItem => 'TUN モード';
+	@override String get outboundMode => 'アウトバウンドモード';
+	@override String get modeRule => 'ルールルーティング';
+	@override String get modeGlobal => 'グローバルプロキシ';
+	@override String get modeDirect => 'ダイレクト接続';
+	@override String get profilesMenu => 'プロファイル';
+	@override String get updateAllProfiles => 'すべてのプロファイルを更新';
+	@override String get proxyNodes => 'プロキシノード';
+	@override String get tools => 'ツール';
+	@override String get copyProxyCmd => 'ターミナルプロキシコマンドをコピー (CMD / Bash)';
+	@override String get delayTestAll => 'すべてのノードの遅延をテスト';
+	@override String get openDashboard => 'ダッシュボードを開く';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -621,6 +665,24 @@ extension on TranslationsJa {
 			'loginScreen.providerDisclaimer' => '免責事項:${_root.loginScreen.provider}はサードパーティサービスであり、本アプリとは無関係です',
 			'main.tray.menuOpen' => '開く',
 			'main.tray.menuExit' => '終了',
+			'main.tray.coreDisconnected' => 'Wmimo · コア未接続',
+			'main.tray.coreRunning' => 'Wmimo · コア実行中',
+			'main.tray.startProxy' => 'プロキシ接続を開始',
+			'main.tray.stopProxy' => 'プロキシ接続を切断',
+			'main.tray.restartCore' => 'コアを再起動',
+			'main.tray.systemProxyItem' => 'システムプロキシ',
+			'main.tray.tunModeItem' => 'TUN モード',
+			'main.tray.outboundMode' => 'アウトバウンドモード',
+			'main.tray.modeRule' => 'ルールルーティング',
+			'main.tray.modeGlobal' => 'グローバルプロキシ',
+			'main.tray.modeDirect' => 'ダイレクト接続',
+			'main.tray.profilesMenu' => 'プロファイル',
+			'main.tray.updateAllProfiles' => 'すべてのプロファイルを更新',
+			'main.tray.proxyNodes' => 'プロキシノード',
+			'main.tray.tools' => 'ツール',
+			'main.tray.copyProxyCmd' => 'ターミナルプロキシコマンドをコピー (CMD / Bash)',
+			'main.tray.delayTestAll' => 'すべてのノードの遅延をテスト',
+			'main.tray.openDashboard' => 'ダッシュボードを開く',
 			'meta.enable' => '有効',
 			'meta.disable' => '無効',
 			'meta.open' => '開く',
@@ -877,6 +939,32 @@ extension on TranslationsJa {
 			'meta.remaining' => '残り',
 			'meta.expireTime' => '有効期限',
 			'meta.tunMode' => 'TUN モード',
+			'meta.daysAgo' => ({required Object p}) => '${p}日前',
+			'meta.hoursAgo' => ({required Object p}) => '${p}時間前',
+			'meta.lessThanOneHourAgo' => '1時間以内',
+			'meta.inUse' => '使用中',
+			'meta.remoteSubscription' => 'リモートサブスクリプション',
+			'meta.localProfile' => 'ローカルファイル',
+			'meta.viewYamlConfig' => 'YAML設定を表示',
+			'meta.editYamlConfig' => 'YAML設定を編集',
+			'meta.copySubscriptionUrl' => 'サブスクリプションURLをコピー',
+			'meta.qrCode' => 'QRコード',
+			'meta.deleteProfile' => 'プロファイルを削除',
+			'meta.noProfilesYet' => 'プロファイルがありません',
+			'meta.addProfilePrompt' => '右上の + をクリックしてURLを追加またはファイルをインポート',
+			'meta.subscriptionUrlCopied' => 'サブスクリプションURLがクリップボードにコピーされました',
+			'meta.autoGroupTip' => ({required Object group, required Object type}) => '「${group}」は ${type} 自動ポリシーグループです。システムが遅延/可用性に基づいて自動的にノードを選択します。手動で選択する場合は「ノード選択」グループで切り替えてください。',
+			'meta.switchNodeFailed' => ({required Object p}) => 'ノードの切り替えに失敗しました: ${p}',
+			'meta.nodeSelected' => ({required Object p}) => '選択されたノード: ${p}',
+			'meta.startingCoreAndTesting' => 'コアを起動してレイテンシをテスト中...',
+			'meta.chartMinutes' => ({required Object p}) => '${p} 分',
+			'meta.chartUpload' => 'アップロード',
+			'meta.chartDownload' => 'ダウンロード',
+			'meta.author' => '作成者',
+			'meta.githubRepo' => 'オープンソースリポジトリ',
+			'meta.openSourceLicense' => 'オープンソースライセンス',
+			'meta.submitFeedback' => 'フィードバックと問題の報告',
+			'meta.copiedToClipboard' => 'クリップボードにコピーしました',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

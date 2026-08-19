@@ -199,9 +199,9 @@ class _QrcodeScreenState extends LasyRenderingState<QrcodeScreen> {
                                     ClipboardData(text: _content),
                                   );
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("已复制到剪贴板"),
-                                      duration: Duration(seconds: 2),
+                                    SnackBar(
+                                      content: Text(tcontext.meta.copiedToClipboard),
+                                      duration: const Duration(seconds: 2),
                                     ),
                                   );
                                 } catch (_) {}
