@@ -630,7 +630,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       bottomNavigationBar: !isDesktop
           ? NavigationBar(
-              selectedIndex: _currentNavIndex > 4 ? 4 : _currentNavIndex,
+              selectedIndex: _currentNavIndex > 5 ? 0 : _currentNavIndex,
               onDestinationSelected: (int index) {
                 setState(() {
                   _currentNavIndex = index;
@@ -651,6 +651,11 @@ class _HomeScreenState extends State<HomeScreen>
                   icon: const Icon(Icons.dns_outlined),
                   selectedIcon: const Icon(Icons.dns_rounded),
                   label: tcontext.meta.myProfiles,
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.network_check_outlined),
+                  selectedIcon: const Icon(Icons.network_check_rounded),
+                  label: tcontext.meta.networkCheck,
                 ),
                 NavigationDestination(
                   icon: const Icon(Icons.tune_outlined),

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
+import 'package:wmimo/app/local_services/vpn_service.dart';
+import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/proxy_board_screen_widgets.dart';
@@ -9,6 +11,7 @@ import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:libclash_vpn_service/state.dart';
 
 class ProxyBoardScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -35,6 +38,8 @@ class _ProxyBoardScreenState extends LasyRenderingState<ProxyBoardScreen>
         setState(() {});
       },
     );
+    VPNService.onEventStateChanged.add(_onVpnStateChanged);
+    ProfileManager.onEventCurrentChanged.add(_onProfileChanged);
     super.initState();
   }
 
@@ -43,8 +48,25 @@ class _ProxyBoardScreenState extends LasyRenderingState<ProxyBoardScreen>
 
   @override
   void dispose() {
+    VPNService.onEventStateChanged.remove(_onVpnStateChanged);
+    ProfileManager.onEventCurrentChanged.remove(_onProfileChanged);
     SettingManager.save();
     super.dispose();
+  }
+
+  Future<void> _onVpnStateChanged(
+    FlutterVpnServiceState state,
+    Map<String, String> params,
+  ) async {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _onProfileChanged(String id) async {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -165,7 +187,32 @@ class _ProxyBoardScreenState extends LasyRenderingState<ProxyBoardScreen>
                               ? snapshot.data!
                               : [];
                           return data.isEmpty
-                              ? SizedBox.shrink()
+                              ? Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.alt_route_rounded,
+                                        size: 48,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.3),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        tcontext.meta.none,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.5),
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
                               : ProxyScreenProxiesNodeWidget(
                                   nodes: data,
                                   controller: _controller,
