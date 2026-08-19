@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'state.dart';
 
@@ -51,13 +52,27 @@ class VpnServiceConfig {
   bool enforce_routes = false;
   bool auto_route_use_sub_ranges_by_default = false;
 
-  Map<String, dynamic> toJson() => {};
+  Map<String, dynamic> toJson() => {
+        'control_port': control_port,
+        'base_dir': base_dir,
+        'work_dir': work_dir,
+        'cache_dir': cache_dir,
+        'core_path': core_path,
+        'core_path_patch_final': core_path_patch_final,
+        'secret': secret,
+        'log_path': log_path,
+        'err_path': err_path,
+      };
   void fromJson(Map<String, dynamic> json) {}
 }
 
 class FlutterVpnService {
   static FlutterVpnServiceState _state = FlutterVpnServiceState.disconnected;
   static final List<void Function(FlutterVpnServiceState, Map<String, String>)> _listeners = [];
+  static Process? _coreProcess;
+  static VpnServiceConfig? _savedConfig;
+  static String? _savedTunnelServicePath;
+  static String? _savedConfigFilePath;
 
   static Future<FlutterVpnServiceState> get currentState async => _state;
 
@@ -72,26 +87,8 @@ class FlutterVpnService {
   static Future<VpnServiceResultError?> uninstallService() async => null;
   static Future<void> hideDockIcon(bool hide) async {}
   static Future<Directory?> getAppGroupDirectory(String identifier) async => null;
-  static Future<VpnServiceWaitResult> start(Duration timeout) async {
-    _state = FlutterVpnServiceState.connected;
-    for (var l in _listeners) { l(_state, {}); }
-    return VpnServiceWaitResult();
-  }
-  static Future<VpnServiceWaitResult> restart(Duration timeout) async {
-    _state = FlutterVpnServiceState.connected;
-    for (var l in _listeners) { l(_state, {}); }
-    return VpnServiceWaitResult();
-  }
-  static Future<void> stop() async {
-    _state = FlutterVpnServiceState.disconnected;
-    for (var l in _listeners) { l(_state, {}); }
-  }
-  static Future<void> setAlwaysOn(bool enable) async {}
-  static Future<String?> setExcludeFromRecents(bool enable) async => null;
-  static Future<void> setSystemProxy(dynamic options) async {}
-  static Future<void> cleanSystemProxy() async {}
-  static Future<bool> getSystemProxyEnable(dynamic options) async => false;
-  static Future<void> prepareConfig({
+
+  static void prepareConfig({
     dynamic config,
     dynamic tunnelServicePath,
     dynamic configFilePath,
@@ -105,7 +102,258 @@ class FlutterVpnService {
     dynamic notifyDescription,
     dynamic providerBundleIdentifier,
     dynamic excludePorts,
-  }) async {}
+  }) {
+    if (config is VpnServiceConfig) {
+      _savedConfig = config;
+    }
+    if (tunnelServicePath is String) {
+      _savedTunnelServicePath = tunnelServicePath;
+    }
+    if (configFilePath is String) {
+      _savedConfigFilePath = configFilePath;
+    }
+  }
+
+  static String _resolveCorePath() {
+    if (_savedTunnelServicePath != null &&
+        _savedTunnelServicePath!.isNotEmpty &&
+        File(_savedTunnelServicePath!).existsSync()) {
+      return _savedTunnelServicePath!;
+    }
+    final currentDir = Directory.current.path;
+    final exeName = Platform.isWindows ? "wmimoService.exe" : "wmimoService";
+    final candidates = [
+      '$currentDir/$exeName',
+      '$currentDir/bind/windows/core/$exeName',
+      '$currentDir/build/windows/x64/runner/Release/$exeName',
+      '$currentDir/mihomo.exe',
+      '$currentDir/clash.exe',
+    ];
+    for (var path in candidates) {
+      if (File(path).existsSync()) {
+        return path;
+      }
+    }
+    return _savedTunnelServicePath ?? exeName;
+  }
+
+  static String _resolveConfigFile() {
+    if (_savedConfig?.core_path_patch_final != null &&
+        _savedConfig!.core_path_patch_final.isNotEmpty &&
+        File(_savedConfig!.core_path_patch_final).existsSync()) {
+      return _savedConfig!.core_path_patch_final;
+    }
+    if (_savedConfig?.core_path != null &&
+        _savedConfig!.core_path.isNotEmpty &&
+        File(_savedConfig!.core_path).existsSync()) {
+      return _savedConfig!.core_path;
+    }
+    if (_savedConfigFilePath != null &&
+        _savedConfigFilePath!.isNotEmpty &&
+        File(_savedConfigFilePath!).existsSync()) {
+      return _savedConfigFilePath!;
+    }
+    return "";
+  }
+
+  static Future<VpnServiceWaitResult> start(Duration timeout) async {
+    final coreExe = _resolveCorePath();
+    final configFile = _resolveConfigFile();
+
+    if (!File(coreExe).existsSync()) {
+      return VpnServiceWaitResult(
+        type: VpnServiceWaitType.error,
+        err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe"),
+      );
+    }
+
+    if (configFile.isEmpty || !File(configFile).existsSync()) {
+      return VpnServiceWaitResult(
+        type: VpnServiceWaitType.error,
+        err: VpnServiceResultError(404, "配置文件未找到: $configFile"),
+      );
+    }
+
+    await stop();
+
+    final workDir = (_savedConfig?.work_dir.isNotEmpty == true &&
+            Directory(_savedConfig!.work_dir).existsSync())
+        ? _savedConfig!.work_dir
+        : File(coreExe).parent.path;
+
+    try {
+      final args = ['-d', workDir, '-f', configFile];
+      _coreProcess = await Process.start(coreExe, args, mode: ProcessStartMode.normal);
+
+      _coreProcess!.stdout.transform(utf8.decoder).listen((_) {});
+      _coreProcess!.stderr.transform(utf8.decoder).listen((_) {});
+      _coreProcess!.exitCode.then((code) {
+        _coreProcess = null;
+        _state = FlutterVpnServiceState.disconnected;
+        for (var l in _listeners) {
+          l(_state, {});
+        }
+      });
+
+      final port = _savedConfig?.control_port ?? 9090;
+      final secret = _savedConfig?.secret ?? "";
+      bool ready = false;
+      final stopwatch = Stopwatch()..start();
+
+      while (stopwatch.elapsed < timeout) {
+        try {
+          final client = HttpClient()
+            ..connectionTimeout = const Duration(milliseconds: 400);
+          final req = await client
+              .getUrl(Uri.parse("http://127.0.0.1:$port/version"));
+          if (secret.isNotEmpty) {
+            req.headers.set('Authorization', 'Bearer $secret');
+          }
+          final resp = await req.close();
+          if (resp.statusCode == 200) {
+            ready = true;
+            client.close();
+            break;
+          }
+          client.close();
+        } catch (_) {}
+        await Future.delayed(const Duration(milliseconds: 250));
+      }
+
+      if (!ready) {
+        await stop();
+        return VpnServiceWaitResult(
+          type: VpnServiceWaitType.timeout,
+          err: VpnServiceResultError(504, "等待核心启动超时 (REST API 未响应)"),
+        );
+      }
+
+      _state = FlutterVpnServiceState.connected;
+      for (var l in _listeners) {
+        l(_state, {});
+      }
+      return VpnServiceWaitResult(type: VpnServiceWaitType.done);
+    } catch (e) {
+      return VpnServiceWaitResult(
+        type: VpnServiceWaitType.error,
+        err: VpnServiceResultError(500, "启动核心异常: $e"),
+      );
+    }
+  }
+
+  static Future<VpnServiceWaitResult> restart(Duration timeout) async {
+    await stop();
+    return await start(timeout);
+  }
+
+  static Future<void> stop() async {
+    if (_coreProcess != null) {
+      try {
+        _coreProcess?.kill(ProcessSignal.sigterm);
+      } catch (_) {
+        _coreProcess?.kill();
+      }
+      _coreProcess = null;
+    }
+    if (Platform.isWindows) {
+      await cleanSystemProxy();
+    }
+    _state = FlutterVpnServiceState.disconnected;
+    for (var l in _listeners) {
+      l(_state, {});
+    }
+  }
+
+  static Future<void> setAlwaysOn(bool enable) async {}
+  static Future<String?> setExcludeFromRecents(bool enable) async => null;
+
+  static Future<void> setSystemProxy(dynamic options) async {
+    if (Platform.isWindows) {
+      String host = "127.0.0.1";
+      int port = 7890;
+      String bypass = "<local>;localhost;127.*;10.*;172.16.*;192.168.*";
+
+      try {
+        if (options != null) {
+          host = options.host?.toString() ?? host;
+          port = options.port is int
+              ? options.port
+              : (int.tryParse(options.port.toString()) ?? port);
+          if (options.bypassDomain?.isNotEmpty == true) {
+            bypass = "$bypass;${options.bypassDomain}";
+          }
+        }
+      } catch (_) {}
+
+      await Process.run('reg', [
+        'add',
+        r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
+        '/v',
+        'ProxyEnable',
+        '/t',
+        'REG_DWORD',
+        '/d',
+        '1',
+        '/f'
+      ]);
+      await Process.run('reg', [
+        'add',
+        r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
+        '/v',
+        'ProxyServer',
+        '/t',
+        'REG_SZ',
+        '/d',
+        '$host:$port',
+        '/f'
+      ]);
+      await Process.run('reg', [
+        'add',
+        r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
+        '/v',
+        'ProxyOverride',
+        '/t',
+        'REG_SZ',
+        '/d',
+        bypass,
+        '/f'
+      ]);
+    }
+  }
+
+  static Future<void> cleanSystemProxy() async {
+    if (Platform.isWindows) {
+      await Process.run('reg', [
+        'add',
+        r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
+        '/v',
+        'ProxyEnable',
+        '/t',
+        'REG_DWORD',
+        '/d',
+        '0',
+        '/f'
+      ]);
+    }
+  }
+
+  static Future<bool> getSystemProxyEnable(dynamic options) async {
+    if (Platform.isWindows) {
+      try {
+        final result = await Process.run('reg', [
+          'query',
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
+          '/v',
+          'ProxyEnable'
+        ]);
+        if (result.stdout != null && result.stdout.toString().contains('0x1')) {
+          return true;
+        }
+      } catch (_) {}
+    }
+    return false;
+  }
+
   static Future<String> clashiApiConnections(bool full) async => "{}";
   static Future<String> clashiApiTraffic() async => "{\"up\": 0, \"down\": 0}";
   static Future<void> autoStartCreate(
@@ -117,7 +365,8 @@ class FlutterVpnService {
   static Future<void> autoStartDelete(String name) async {}
   static Future<bool> autoStartIsActive(String name) async => false;
 
-  static void onStateChanged(void Function(FlutterVpnServiceState, Map<String, String>) callback) {
+  static void onStateChanged(
+      void Function(FlutterVpnServiceState, Map<String, String>) callback) {
     _listeners.add(callback);
   }
 }
