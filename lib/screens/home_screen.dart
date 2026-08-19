@@ -479,6 +479,23 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
+  int _getMobileSelectedIndex() {
+    switch (_currentNavIndex) {
+      case 0:
+        return 0;
+      case 1:
+        return 1;
+      case 2:
+        return 2;
+      case 3:
+        return 3;
+      case 6:
+        return 4;
+      default:
+        return 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var themes = Provider.of<Themes>(context, listen: false);
@@ -558,6 +575,7 @@ class _HomeScreenState extends State<HomeScreen>
                                           letterSpacing: 0.3,
                                         ),
                                       ),
+                                      const SizedBox(height: 1),
                                       Text(
                                         'v${AppUtils.getBuildinVersion().split('.').take(3).join('.')}',
                                         style: TextStyle(
@@ -565,7 +583,7 @@ class _HomeScreenState extends State<HomeScreen>
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurface
-                                              .withValues(alpha: 0.5),
+                                              .withValues(alpha: 0.45),
                                         ),
                                       ),
                                     ],
@@ -678,10 +696,32 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       bottomNavigationBar: !isDesktop
           ? NavigationBar(
-              selectedIndex: _currentNavIndex > 6 ? 0 : _currentNavIndex,
+              selectedIndex: _getMobileSelectedIndex(),
               onDestinationSelected: (int index) {
-                if (_currentNavIndex == index) {
-                  final navState = _navigatorKeys[index].currentState;
+                int targetNavIndex;
+                switch (index) {
+                  case 0:
+                    targetNavIndex = 0;
+                    break;
+                  case 1:
+                    targetNavIndex = 1;
+                    break;
+                  case 2:
+                    targetNavIndex = 2;
+                    break;
+                  case 3:
+                    targetNavIndex = 3;
+                    break;
+                  case 4:
+                    targetNavIndex = 6;
+                    break;
+                  default:
+                    targetNavIndex = 0;
+                    break;
+                }
+                if (_currentNavIndex == targetNavIndex) {
+                  final navState =
+                      _navigatorKeys[targetNavIndex].currentState;
                   if (navState != null) {
                     try {
                       if (navState.canPop()) {
@@ -691,7 +731,7 @@ class _HomeScreenState extends State<HomeScreen>
                   }
                 } else {
                   setState(() {
-                    _currentNavIndex = index;
+                    _currentNavIndex = targetNavIndex;
                   });
                 }
               },
