@@ -59,10 +59,62 @@ class _HomeScreenState extends State<HomeScreen>
     5,
     (_) => GlobalKey<NavigatorState>(),
   );
+  late final List<Widget> _tabPages;
 
   @override
   void initState() {
     super.initState();
+
+    _tabPages = [
+      _TabNavigator(
+        navigatorKey: _navigatorKeys[0],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                HomeScreenWidgetPart1(
+                  onNavigateToTab: (index) {
+                    setState(() {
+                      _currentNavIndex = index;
+                    });
+                  },
+                ),
+                const SizedBox(height: 24),
+              ],
+            ),
+          ),
+        ),
+      ),
+      _TabNavigator(
+        navigatorKey: _navigatorKeys[1],
+        child: const ProxyBoardScreen(),
+      ),
+      _TabNavigator(
+        navigatorKey: _navigatorKeys[2],
+        child: const ProfilesBoardScreen(),
+      ),
+      _TabNavigator(
+        navigatorKey: _navigatorKeys[3],
+        child: const NetCheckScreen(),
+      ),
+      _TabNavigator(
+        navigatorKey: _navigatorKeys[4],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: const [
+                HomeScreenWidgetPart2(),
+                SizedBox(height: 24),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ];
 
     WidgetsBinding.instance.addObserver(this);
     protocolHandler.addListener(this);
@@ -417,61 +469,6 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  List<Widget> _buildTabPages() {
-    final pages = [
-      // 0: Overview
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              HomeScreenWidgetPart1(
-                onNavigateToTab: (index) {
-                  setState(() {
-                    _currentNavIndex = index;
-                  });
-                },
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
-        ),
-      ),
-      // 1: Proxies
-      const ProxyBoardScreen(),
-      // 2: Profiles
-      const ProfilesBoardScreen(),
-      // 3: NetCheck
-      const NetCheckScreen(),
-      // 4: Settings
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: const [
-              HomeScreenWidgetPart2(),
-              SizedBox(height: 24),
-            ],
-          ),
-        ),
-      ),
-    ];
-
-    return List.generate(pages.length, (index) {
-      return Navigator(
-        key: _navigatorKeys[index],
-        onGenerateRoute: (routeSettings) {
-          return MaterialPageRoute(
-            settings: routeSettings,
-            builder: (context) => pages[index],
-          );
-        },
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var themes = Provider.of<Themes>(context, listen: false);
@@ -614,7 +611,7 @@ class _HomeScreenState extends State<HomeScreen>
                     Expanded(
                       child: IndexedStack(
                         index: _currentNavIndex,
-                        children: _buildTabPages(),
+                        children: _tabPages,
                       ),
                     ),
                   ],
@@ -650,7 +647,7 @@ class _HomeScreenState extends State<HomeScreen>
                     Expanded(
                       child: IndexedStack(
                         index: _currentNavIndex,
-                        children: _buildTabPages(),
+                        children: _tabPages,
                       ),
                     ),
                   ],
@@ -705,6 +702,30 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             )
           : null,
+    );
+  }
+}
+
+class _TabNavigator extends StatelessWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+  final Widget child;
+
+  const _TabNavigator({
+    required this.navigatorKey,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      key: navigatorKey,
+      onGenerateInitialRoutes: (NavigatorState navigator, String initialRoute) {
+        return [
+          MaterialPageRoute(
+            builder: (context) => child,
+          ),
+        ];
+      },
     );
   }
 }
