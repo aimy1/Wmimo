@@ -1,4 +1,4 @@
-﻿package com.wmimo.app
+package com.wmimo.app
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,6 +10,10 @@ class AutomationCommandReceiver : BroadcastReceiver() {
         const val ACTION_CONNECT = "com.wmimo.app.action.CONNECT"
         const val ACTION_DISCONNECT = "com.wmimo.app.action.DISCONNECT"
         const val ACTION_RECONNECT = "com.wmimo.app.action.RECONNECT"
+
+        const val VPN_SERVICE_CLASS = "io.nebula.vpn_service.ClashVpnServiceImpl"
+        const val ACTION_START = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START"
+        const val ACTION_STOP = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOP"
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
@@ -23,7 +27,7 @@ class AutomationCommandReceiver : BroadcastReceiver() {
 
     private fun connect(context: Context) {
         val serviceIntent = createServiceIntent(context)
-        serviceIntent.action = io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START
+        serviceIntent.action = ACTION_START
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(serviceIntent)
         } else {
@@ -33,7 +37,7 @@ class AutomationCommandReceiver : BroadcastReceiver() {
 
     private fun disconnect(context: Context) {
         val serviceIntent = createServiceIntent(context)
-        serviceIntent.action = io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOP
+        serviceIntent.action = ACTION_STOP
         context.startService(serviceIntent)
     }
 
@@ -46,7 +50,7 @@ class AutomationCommandReceiver : BroadcastReceiver() {
         val serviceIntent = Intent()
         serviceIntent.setClassName(
                 context.packageName,
-                io.nebula.vpn_service.ClashVpnServiceImpl::class.java.name
+                VPN_SERVICE_CLASS
         )
         serviceIntent.putExtra("actionBy", "automation")
         serviceIntent.putExtra("source", "broadcast")

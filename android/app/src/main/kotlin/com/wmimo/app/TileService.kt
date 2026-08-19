@@ -1,4 +1,4 @@
-﻿package com.wmimo.app
+package com.wmimo.app
 
 import android.app.ActivityManager
 import android.app.PendingIntent
@@ -17,6 +17,12 @@ class TileService : TileService() {
     companion object {
         const val profile_file_name = "vpn_profile.txt"
         const val service_file_name = "service.json"
+
+        const val VPN_SERVICE_CLASS = "io.nebula.vpn_service.ClashVpnServiceImpl"
+        const val ACTION_START = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START"
+        const val ACTION_STOP = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOP"
+        const val ACTION_START_RESULT = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START_RESULT"
+        const val ACTION_STOPED = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOPED"
     }
 
     private var receiverRegistered = false
@@ -27,11 +33,11 @@ class TileService : TileService() {
                         intent: Intent,
                 ) {
                     when (intent.action) {
-                        io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START_RESULT -> {
+                        ACTION_START_RESULT -> {
                             val err = intent.getStringExtra("err")
                             updateTile(err == "")
                         }
-                        io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOPED -> {
+                        ACTION_STOPED -> {
                             updateTile(false)
                         }
                     }
@@ -42,10 +48,8 @@ class TileService : TileService() {
         if (!receiverRegistered) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 var intentFilter = IntentFilter()
-                intentFilter.addAction(io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOPED)
-                intentFilter.addAction(
-                        io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START_RESULT
-                )
+                intentFilter.addAction(ACTION_STOPED)
+                intentFilter.addAction(ACTION_START_RESULT)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     registerReceiver(receiver, intentFilter, Context.RECEIVER_EXPORTED)
                 } else {
@@ -69,11 +73,11 @@ class TileService : TileService() {
         if (isRuning()) {
             var intent =
                     Intent().apply {
-                        action = io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOP
+                        action = ACTION_STOP
                     }
             intent.setClassName(
                     getPackageName(),
-                    io.nebula.vpn_service.ClashVpnServiceImpl::class.java.name
+                    VPN_SERVICE_CLASS
             )
             intent.putExtra("exitProcess", true)
             startService(intent)
@@ -136,10 +140,10 @@ class TileService : TileService() {
 
     private fun startByService() {
         var intent =
-                Intent().apply { action = io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START }
+                Intent().apply { action = ACTION_START }
         intent.setClassName(
                 getPackageName(),
-                io.nebula.vpn_service.ClashVpnServiceImpl::class.java.name
+                VPN_SERVICE_CLASS
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent)
@@ -173,7 +177,7 @@ class TileService : TileService() {
     private fun isMainRuning(): Boolean = isServiceRuning(MainActivity::class.java.name)
 
     private fun isRuning(): Boolean =
-            isServiceRuning(io.nebula.vpn_service.ClashVpnServiceImpl::class.java.name)
+            isServiceRuning(VPN_SERVICE_CLASS)
 
     private fun isServiceRuning(serviceName: String): Boolean {
         try {
