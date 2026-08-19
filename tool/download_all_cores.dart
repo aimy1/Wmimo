@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:archive/archive.dart';
 
-const String kVersion = 'v1.19.2';
+const String kVersion = 'v1.19.30';
 const String kBaseUrl = 'https://github.com/MetaCubeX/mihomo/releases/download/$kVersion';
 
 final Map<String, List<String>> targets = {
