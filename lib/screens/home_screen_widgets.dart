@@ -896,7 +896,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   minVerticalPadding: 16,
                   onTap: () async {
                     if (widget.onNavigateToTab != null) {
-                      widget.onNavigateToTab!(1);
+                      widget.onNavigateToTab!(2);
                       return;
                     }
                     await Navigator.push(
@@ -925,7 +925,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   minVerticalPadding: 16,
                   onTap: () async {
                     if (widget.onNavigateToTab != null) {
-                      widget.onNavigateToTab!(2);
+                      widget.onNavigateToTab!(1);
                       return;
                     }
                     await Navigator.push(

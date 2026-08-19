@@ -359,7 +359,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get termOfUse => '使用条款';
 	@override String get privacyPolicy => '隐私政策';
 	@override String get log => '日志';
-	@override String get coreLog => '核心日志';
+	@override String get coreLog => '日志';
 	@override String get core => '核心';
 	@override String get help => '帮助';
 	@override String get tutorial => '使用教程';
@@ -367,12 +367,12 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get boardOnline => '使用在线面板';
 	@override String get boardOnlineUrl => '在线面板URL';
 	@override String get boardLocalPort => '本地面板端口';
-	@override String get connections => '活动连接';
+	@override String get connections => '连接';
 	@override String get closeAllConnections => '关闭全部连接';
 	@override String get searchConnections => '搜索连接 (域名/IP/规则/进程)';
 	@override String get noFilterResults => '没有匹配的连接';
 	@override String get searchRules => '搜索规则 (类型/特征/目标代理)';
-	@override String get rules => '分流规则';
+	@override String get rules => '规则';
 	@override String get clear => '清除';
 	@override String get copySuccess => '拷贝成功';
 	@override String get alwayOnVPN => '始终开启连接';
@@ -410,7 +410,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get donate => '捐助';
 	@override String get setting => '设置';
 	@override String get settingCore => '核心设置';
-	@override String get settingApp => '应用设置';
+	@override String get settingApp => '设置';
 	@override String get coreOverwrite => '核心覆写';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
@@ -429,7 +429,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get getProfile => '获取配置';
 	@override String get buyProfile => '购买配置';
 	@override String get addProfile => '添加配置';
-	@override String get myProfiles => '我的配置';
+	@override String get myProfiles => '订阅';
 	@override String get profileEdit => '编辑配置';
 	@override String get profileNeedActive => '请先将本配置设置为当前配置,并开启连接/重新连接';
 	@override String get profileDownloadBackupChannel => '启用备用下载通道';
@@ -442,7 +442,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get profileUrlOrContent => 'Clash配置链接';
 	@override String get profileUrlOrContentHit => 'Clash配置链接[必填]';
 	@override String get profileUrlOrContentCannotEmpty => '配置链接不能为空';
-	@override String get overview => '概览';
+	@override String get overview => '首页';
 	@override String get trafficStats => '流量统计';
 	@override String get realtimeMonitor => '实时监控';
 	@override String get realtimeUpload => '实时上传';
@@ -782,7 +782,7 @@ extension on TranslationsZhCn {
 			'meta.termOfUse' => '使用条款',
 			'meta.privacyPolicy' => '隐私政策',
 			'meta.log' => '日志',
-			'meta.coreLog' => '核心日志',
+			'meta.coreLog' => '日志',
 			'meta.core' => '核心',
 			'meta.help' => '帮助',
 			'meta.tutorial' => '使用教程',
@@ -790,12 +790,12 @@ extension on TranslationsZhCn {
 			'meta.boardOnline' => '使用在线面板',
 			'meta.boardOnlineUrl' => '在线面板URL',
 			'meta.boardLocalPort' => '本地面板端口',
-			'meta.connections' => '活动连接',
+			'meta.connections' => '连接',
 			'meta.closeAllConnections' => '关闭全部连接',
 			'meta.searchConnections' => '搜索连接 (域名/IP/规则/进程)',
 			'meta.noFilterResults' => '没有匹配的连接',
 			'meta.searchRules' => '搜索规则 (类型/特征/目标代理)',
-			'meta.rules' => '分流规则',
+			'meta.rules' => '规则',
 			'meta.clear' => '清除',
 			'meta.copySuccess' => '拷贝成功',
 			'meta.alwayOnVPN' => '始终开启连接',
@@ -833,7 +833,7 @@ extension on TranslationsZhCn {
 			'meta.donate' => '捐助',
 			'meta.setting' => '设置',
 			'meta.settingCore' => '核心设置',
-			'meta.settingApp' => '应用设置',
+			'meta.settingApp' => '设置',
 			'meta.coreOverwrite' => '核心覆写',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
@@ -852,7 +852,7 @@ extension on TranslationsZhCn {
 			'meta.getProfile' => '获取配置',
 			'meta.buyProfile' => '购买配置',
 			'meta.addProfile' => '添加配置',
-			'meta.myProfiles' => '我的配置',
+			'meta.myProfiles' => '订阅',
 			'meta.profileEdit' => '编辑配置',
 			'meta.profileNeedActive' => '请先将本配置设置为当前配置,并开启连接/重新连接',
 			'meta.profileDownloadBackupChannel' => '启用备用下载通道',
@@ -865,7 +865,7 @@ extension on TranslationsZhCn {
 			'meta.profileUrlOrContent' => 'Clash配置链接',
 			'meta.profileUrlOrContentHit' => 'Clash配置链接[必填]',
 			'meta.profileUrlOrContentCannotEmpty' => '配置链接不能为空',
-			'meta.overview' => '概览',
+			'meta.overview' => '首页',
 			'meta.trafficStats' => '流量统计',
 			'meta.realtimeMonitor' => '实时监控',
 			'meta.realtimeUpload' => '实时上传',

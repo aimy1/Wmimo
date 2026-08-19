@@ -91,11 +91,11 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       _TabNavigator(
         navigatorKey: _navigatorKeys[1],
-        child: const ProfilesBoardScreen(),
+        child: const ProxyBoardScreen(),
       ),
       _TabNavigator(
         navigatorKey: _navigatorKeys[2],
-        child: const ProxyBoardScreen(),
+        child: const ProfilesBoardScreen(),
       ),
       _TabNavigator(
         navigatorKey: _navigatorKeys[3],
@@ -607,14 +607,14 @@ class _HomeScreenState extends State<HomeScreen>
                                 _buildNavItem(
                                   context: context,
                                   index: 1,
-                                  icon: Icons.dns_rounded,
-                                  label: tcontext.meta.myProfiles,
+                                  icon: Icons.alt_route_rounded,
+                                  label: tcontext.meta.proxy,
                                 ),
                                 _buildNavItem(
                                   context: context,
                                   index: 2,
-                                  icon: Icons.alt_route_rounded,
-                                  label: tcontext.meta.proxy,
+                                  icon: Icons.dns_rounded,
+                                  label: tcontext.meta.myProfiles,
                                 ),
                                 _buildNavItem(
                                   context: context,
@@ -742,14 +742,14 @@ class _HomeScreenState extends State<HomeScreen>
                   label: tcontext.meta.overview,
                 ),
                 NavigationDestination(
-                  icon: const Icon(Icons.dns_outlined),
-                  selectedIcon: const Icon(Icons.dns_rounded),
-                  label: tcontext.meta.myProfiles,
-                ),
-                NavigationDestination(
                   icon: const Icon(Icons.alt_route_outlined),
                   selectedIcon: const Icon(Icons.alt_route_rounded),
                   label: tcontext.meta.proxy,
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.dns_outlined),
+                  selectedIcon: const Icon(Icons.dns_rounded),
+                  label: tcontext.meta.myProfiles,
                 ),
                 NavigationDestination(
                   icon: const Icon(Icons.hub_outlined),
