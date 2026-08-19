@@ -1,4 +1,4 @@
-﻿// ignore_for_file: empty_catches, unused_catch_stack
+// ignore_for_file: empty_catches, unused_catch_stack
 
 import 'dart:async';
 
@@ -108,8 +108,7 @@ class _BackupAndSyncWebdavScreenState
                         child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                       ),
                     ),
-                    SizedBox(
-                      width: windowSize.width - 50 * 3,
+                    Expanded(
                       child: Text(
                         tcontext.meta.webdav,
                         textAlign: TextAlign.center,

@@ -1,4 +1,4 @@
-﻿// ignore_for_file: empty_catches, unused_catch_stack
+// ignore_for_file: empty_catches, unused_catch_stack
 
 import 'dart:async';
 
@@ -75,8 +75,7 @@ class _BackupAndSyncIcloudScreenState
                         child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                       ),
                     ),
-                    SizedBox(
-                      width: windowSize.width - 50 * 2,
+                    Expanded(
                       child: Text(
                         tcontext.meta.iCloud,
                         textAlign: TextAlign.center,

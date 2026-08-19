@@ -1,4 +1,4 @@
-﻿import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -119,8 +119,7 @@ class _LanguageSettingsScreenState
                                 ),
                               )
                             : const SizedBox(width: 50, height: 30),
-                        SizedBox(
-                          width: windowSize.width - 50 - 65,
+                        Expanded(
                           child: Text(
                             tcontext.meta.language,
                             textAlign: TextAlign.center,

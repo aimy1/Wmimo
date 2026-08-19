@@ -1,4 +1,4 @@
-﻿//import 'package:flutter/gestures.dart';
+//import 'package:flutter/gestures.dart';
 import 'dart:io';
 
 import 'package:wmimo/app/utils/file_utils.dart';
@@ -82,8 +82,7 @@ class _RichtextViewScreenState extends LasyRenderingState<RichtextViewScreen> {
                       child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                     ),
                   ),
-                  SizedBox(
-                    width: windowSize.width - 50 * 2,
+                  Expanded(
                     child: Text(
                       widget.title,
                       textAlign: TextAlign.center,
@@ -109,7 +108,7 @@ class _RichtextViewScreenState extends LasyRenderingState<RichtextViewScreen> {
                       ),
                     ),
                   ],
-                  if (!widget.showAction) ...[SizedBox(width: 50)],
+                  if (!widget.showAction) const SizedBox(width: 50),
                 ],
               ),
               const SizedBox(height: 10),

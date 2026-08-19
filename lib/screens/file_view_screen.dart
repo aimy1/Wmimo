@@ -1,4 +1,4 @@
-﻿import 'package:wmimo/i18n/strings.g.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -93,8 +93,7 @@ class _FileViewScreenState extends State<FileViewScreen> {
                       child: Icon(Icons.arrow_back_ios_outlined, size: 26),
                     ),
                   ),
-                  SizedBox(
-                    width: windowSize.width - 50 * 3,
+                  Expanded(
                     child: Text(
                       widget.title,
                       textAlign: TextAlign.center,

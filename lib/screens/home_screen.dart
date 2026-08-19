@@ -56,6 +56,10 @@ class _HomeScreenState extends State<HomeScreen>
   String _initUrl = "";
   int _currentNavIndex = 0;
   FlutterVpnServiceState _vpnState = FlutterVpnServiceState.disconnected;
+  final List<GlobalKey<NavigatorState>> _navigatorKeys = List.generate(
+    6,
+    (_) => GlobalKey<NavigatorState>(),
+  );
 
   @override
   void initState() {
@@ -268,9 +272,13 @@ class _HomeScreenState extends State<HomeScreen>
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
-            setState(() {
-              _currentNavIndex = index;
-            });
+            if (_currentNavIndex == index) {
+              _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+            } else {
+              setState(() {
+                _currentNavIndex = index;
+              });
+            }
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -404,7 +412,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   List<Widget> _buildTabPages() {
-    return [
+    final pages = [
       // 0: Overview
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -446,6 +454,18 @@ class _HomeScreenState extends State<HomeScreen>
       // 5: About
       const AboutScreen(),
     ];
+
+    return List.generate(pages.length, (index) {
+      return Navigator(
+        key: _navigatorKeys[index],
+        onGenerateRoute: (routeSettings) {
+          return MaterialPageRoute(
+            settings: routeSettings,
+            builder: (context) => pages[index],
+          );
+        },
+      );
+    });
   }
 
   @override
@@ -469,172 +489,187 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
       ),
-      body: SafeArea(
-        child: isDesktop
-            ? Row(
-                children: [
-                  // Left Sidebar Navigation (Clash Verge Style)
-                  Container(
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF0F172A)
-                          : const Color(0xFFF1F5F9),
-                      border: Border(
-                        right: BorderSide(
-                          color: Theme.of(context)
-                              .dividerColor
-                              .withValues(alpha: 0.5),
-                          width: 0.8,
+      body: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (didPop) return;
+          final currentNavigator =
+              _navigatorKeys[_currentNavIndex].currentState;
+          if (currentNavigator != null && currentNavigator.canPop()) {
+            currentNavigator.pop();
+          }
+        },
+        child: SafeArea(
+          child: isDesktop
+              ? Row(
+                  children: [
+                    // Left Sidebar Navigation (Clash Verge Style)
+                    Container(
+                      width: 200,
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFF0F172A)
+                            : const Color(0xFFF1F5F9),
+                        border: Border(
+                          right: BorderSide(
+                            color: Theme.of(context)
+                                .dividerColor
+                                .withValues(alpha: 0.5),
+                            width: 0.8,
+                          ),
                         ),
                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 20, 16, 14),
-                          child: Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.asset(
-                                  'assets/images/app_icon_128.png',
-                                  width: 28,
-                                  height: 28,
-                                  fit: BoxFit.contain,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 20, 16, 14),
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.asset(
+                                    'assets/images/app_icon_128.png',
+                                    width: 28,
+                                    height: 28,
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      AppUtils.getName(),
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 0.3,
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        AppUtils.getName(),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          letterSpacing: 0.3,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      'v${AppUtils.getBuildinVersion().split('.').take(3).join('.')}',
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withValues(alpha: 0.5),
+                                      Text(
+                                        'v${AppUtils.getBuildinVersion().split('.').take(3).join('.')}',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.5),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        const Divider(height: 1, thickness: 0.8),
-                        const SizedBox(height: 8),
-                        Expanded(
-                          child: ListView(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            children: [
-                              _buildNavItem(
-                                context: context,
-                                index: 0,
-                                icon: Icons.dashboard_rounded,
-                                label: '概览',
-                              ),
-                              _buildNavItem(
-                                context: context,
-                                index: 1,
-                                icon: Icons.alt_route_rounded,
-                                label: tcontext.meta.proxy,
-                              ),
-                              _buildNavItem(
-                                context: context,
-                                index: 2,
-                                icon: Icons.dns_rounded,
-                                label: tcontext.meta.myProfiles,
-                              ),
-                              _buildNavItem(
-                                context: context,
-                                index: 3,
-                                icon: Icons.network_check_rounded,
-                                label: tcontext.meta.networkCheck,
-                              ),
-                              _buildNavItem(
-                                context: context,
-                                index: 4,
-                                icon: Icons.tune_rounded,
-                                label: tcontext.meta.settingApp,
-                              ),
-                              _buildNavItem(
-                                context: context,
-                                index: 5,
-                                icon: Icons.info_outline_rounded,
-                                label: tcontext.meta.about,
-                              ),
-                            ],
+                          const Divider(height: 1, thickness: 0.8),
+                          const SizedBox(height: 8),
+                          Expanded(
+                            child: ListView(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              children: [
+                                _buildNavItem(
+                                  context: context,
+                                  index: 0,
+                                  icon: Icons.dashboard_rounded,
+                                  label: '概览',
+                                ),
+                                _buildNavItem(
+                                  context: context,
+                                  index: 1,
+                                  icon: Icons.alt_route_rounded,
+                                  label: tcontext.meta.proxy,
+                                ),
+                                _buildNavItem(
+                                  context: context,
+                                  index: 2,
+                                  icon: Icons.dns_rounded,
+                                  label: tcontext.meta.myProfiles,
+                                ),
+                                _buildNavItem(
+                                  context: context,
+                                  index: 3,
+                                  icon: Icons.network_check_rounded,
+                                  label: tcontext.meta.networkCheck,
+                                ),
+                                _buildNavItem(
+                                  context: context,
+                                  index: 4,
+                                  icon: Icons.tune_rounded,
+                                  label: tcontext.meta.settingApp,
+                                ),
+                                _buildNavItem(
+                                  context: context,
+                                  index: 5,
+                                  icon: Icons.info_outline_rounded,
+                                  label: tcontext.meta.about,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        _buildSidebarFooter(context),
-                      ],
+                          _buildSidebarFooter(context),
+                        ],
+                      ),
                     ),
-                  ),
-                  // Right Main Workspace
-                  Expanded(
-                    child: IndexedStack(
-                      index: _currentNavIndex,
-                      children: _buildTabPages(),
+                    // Right Main Workspace
+                    Expanded(
+                      child: IndexedStack(
+                        index: _currentNavIndex,
+                        children: _buildTabPages(),
+                      ),
                     ),
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/images/app_icon_128.png',
-                            width: 26,
-                            height: 26,
-                            fit: BoxFit.contain,
+                  ],
+                )
+              : Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 14, 20, 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset(
+                              'assets/images/app_icon_128.png',
+                              width: 26,
+                              height: 26,
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          AppUtils.getName(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18,
-                            letterSpacing: 0.3,
+                          const SizedBox(width: 8),
+                          Text(
+                            AppUtils.getName(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                              letterSpacing: 0.3,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: IndexedStack(
-                      index: _currentNavIndex,
-                      children: _buildTabPages(),
+                    Expanded(
+                      child: IndexedStack(
+                        index: _currentNavIndex,
+                        children: _buildTabPages(),
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+        ),
       ),
       bottomNavigationBar: !isDesktop
           ? NavigationBar(
               selectedIndex: _currentNavIndex > 5 ? 0 : _currentNavIndex,
               onDestinationSelected: (int index) {
-                setState(() {
-                  _currentNavIndex = index;
-                });
+                if (_currentNavIndex == index) {
+                  _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+                } else {
+                  setState(() {
+                    _currentNavIndex = index;
+                  });
+                }
               },
               destinations: [
                 NavigationDestination(

@@ -1,4 +1,4 @@
-﻿// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
 
@@ -96,8 +96,7 @@ class GroupScreenState extends LasyRenderingState<GroupScreen>
                               ),
                             ),
                           ),
-                    SizedBox(
-                      width: windowSize.width - 50 * 2,
+                    Expanded(
                       child: Text(
                         widget.title,
                         textAlign: TextAlign.center,
