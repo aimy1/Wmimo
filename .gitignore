@@ -82,4 +82,5 @@ migrate_working_dir/
 /bind/macos/
 *.zip
 *.gz
+/dist/
 mihomo-alpha-bin/

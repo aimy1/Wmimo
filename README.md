@@ -104,8 +104,9 @@ flutter build apk --release
 
 - **自动触发**：当向仓库推送版本标签（例如 `git tag v1.0.30 && git push origin v1.0.30`）时，自动触发跨平台打包流水线。
 - **构建产物**：
-  - 🪟 Windows 绿色便携压缩包：`Wmimo-Windows-x64-v*.zip`（内置最新 Mihomo 核心）
-  - 📱 Android 安装包：`Wmimo-Android-v*.apk`（含通用包及各 ABI 分包）
+  - 🪟 **Windows 安装版**：`Wmimo-Windows-x64-Setup-v*.exe`（基于 Inno Setup 打造的现代化安装向导，支持开机启动、桌面快捷方式及进程互斥检测）
+  - 🪟 **Windows 绿色版**：`Wmimo-Windows-x64-v*.zip`（解压即用的便携式免安装压缩包）
+  - 📱 **Android 安装包**：`Wmimo-Android-v*.apk`（含通用包及 `arm64`、`armv7`、`x86_64` 各 ABI 分包，内置全套原生内核）
 - **自动发布**：构建完成后自动生成 GitHub Release 并上传安装包文件。
 
 ---
