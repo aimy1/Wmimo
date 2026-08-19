@@ -1,21 +1,21 @@
-// ignore_for_file: empty_catches
+// ignore_for_file: empty_catches, use_build_context_synchronously
 
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart' as path;
+import 'package:share_plus/share_plus.dart';
 import 'package:wmimo/app/utils/file_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
-import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/qrcode_utils.dart';
+import 'package:wmimo/app/utils/url_launcher_utils.dart';
 import 'package:wmimo/app/utils/windows_version_helper.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_config.dart';
-import 'package:wmimo/screens/webview_helper.dart';
+import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
-import 'package:path/path.dart' as path;
-import 'package:share_plus/share_plus.dart';
 
 class QrcodeScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -40,6 +40,7 @@ class _QrcodeScreenState extends LasyRenderingState<QrcodeScreen> {
   String _content = "";
   Image? _image;
   Uri? _url;
+
   @override
   void initState() {
     super.initState();
@@ -52,144 +53,216 @@ class _QrcodeScreenState extends LasyRenderingState<QrcodeScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
-    Size windowSize = MediaQuery.of(context).size;
-    double height = PlatformUtils.isPC()
-        ? windowSize.height - 270
-        : windowSize.height - 320;
-    if (height > windowSize.width) {
-      height = windowSize.width;
-    }
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: const SizedBox(
-                      width: 50,
-                      height: 30,
-                      child: Icon(Icons.arrow_back_ios_outlined, size: 26),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      widget.title.isEmpty
-                          ? tcontext.meta.qrcode
-                          : widget.title,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: ThemeConfig.kFontWeightTitle,
-                        fontSize: ThemeConfig.kFontSizeTitle,
+              // Header
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => Navigator.pop(context),
+                      child: const SizedBox(
+                        width: 36,
+                        height: 30,
+                        child: Icon(Icons.arrow_back_ios_outlined, size: 22),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 50),
-                ],
+                    Expanded(
+                      child: Text(
+                        widget.title.isEmpty
+                            ? tcontext.meta.qrcode
+                            : widget.title,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontWeight: ThemeConfig.kFontWeightTitle,
+                          fontSize: ThemeConfig.kFontSizeTitle,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 36),
+                  ],
+                ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
+
+              // Content Body (Scrollable to prevent any overflow)
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 440),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
+                          // QR Code Container
                           Container(
-                            height: height,
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                              child:
-                                  _image ??
+                            width: 240,
+                            height: 240,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                              border: Border.all(
+                                color: isDark
+                                    ? Colors.white.withValues(alpha: 0.1)
+                                    : const Color(0xFFE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            child: Center(
+                              child: _image ??
                                   Text(
                                     tcontext.meta.qrcodeTooLong,
+                                    textAlign: TextAlign.center,
                                     style: const TextStyle(
-                                      fontWeight: ThemeConfig.kFontWeightTitle,
-                                      fontSize: ThemeConfig.kFontSizeTitle,
-                                      color: Colors.red,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                      color: Colors.redAccent,
                                     ),
                                   ),
                             ),
                           ),
-                          const SizedBox(height: 5),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Text(
-                              _content,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                fontSize: ThemeConfig.kFontSizeListSubItem,
+                          const SizedBox(height: 18),
+
+                          // Text Content Box
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF1E293B)
+                                  : const Color(0xFFF1F5F9),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: theme.dividerColor.withValues(alpha: 0.3),
+                                width: 0.8,
                               ),
-                              overflow: TextOverflow.ellipsis,
+                            ),
+                            child: SelectableText(
+                              _content,
+                              maxLines: 3,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                fontFamily: 'monospace',
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 5),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      child: Column(
-                        children: [
+                          const SizedBox(height: 24),
+
+                          // Copy Button
                           SizedBox(
-                            height: 45.0,
-                            child: ElevatedButton(
-                              child: Text(tcontext.meta.copyUrl),
+                            width: double.infinity,
+                            height: 42,
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ThemeDefine.kColorBlue,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              icon: const Icon(Icons.copy_rounded, size: 18),
+                              label: Text(
+                                tcontext.meta.copyUrl,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                              ),
                               onPressed: () async {
                                 try {
                                   await Clipboard.setData(
                                     ClipboardData(text: _content),
                                   );
-                                } catch (e) {}
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("已复制到剪贴板"),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                } catch (_) {}
                               },
                             ),
                           ),
-                          const SizedBox(height: 10),
+
+                          // Open in Browser Button
                           if (_url != null) ...[
+                            const SizedBox(height: 10),
                             SizedBox(
-                              height: 45.0,
-                              child: ElevatedButton(
-                                child: Text(tcontext.meta.openUrl),
+                              width: double.infinity,
+                              height: 42,
+                              child: OutlinedButton.icon(
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color: theme.dividerColor.withValues(alpha: 0.4),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                icon: const Icon(Icons.open_in_browser_rounded, size: 18),
+                                label: Text(
+                                  tcontext.meta.openUrl,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
                                 onPressed: () async {
                                   if (widget.callback != null) {
                                     widget.callback!();
                                   } else {
-                                    await WebviewHelper.loadUrl(
-                                      context,
-                                      _content,
-                                      "qrcode",
-                                    );
+                                    await UrlLauncherUtils.loadUrl(_content);
                                   }
                                 },
                               ),
                             ),
                           ],
-                          const SizedBox(height: 10),
+
+                          // Share / Save Image Button
                           if (_image != null &&
                               (!Platform.isWindows ||
                                   (Platform.isWindows &&
-                                      VersionHelper
-                                          .instance
-                                          .isWindows10RS5OrGreater))) ...[
+                                      VersionHelper.instance.isWindows10RS5OrGreater))) ...[
+                            const SizedBox(height: 10),
                             SizedBox(
-                              height: 45.0,
-                              child: ElevatedButton(
-                                child: Text(t.meta.qrcodeShare),
+                              width: double.infinity,
+                              height: 42,
+                              child: OutlinedButton.icon(
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color: theme.dividerColor.withValues(alpha: 0.4),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                icon: const Icon(Icons.share_rounded, size: 18),
+                                label: Text(
+                                  tcontext.meta.qrcodeShare,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
                                 onPressed: () async {
                                   String savePath = path.join(
                                     await PathUtils.cacheDir(),
@@ -200,16 +273,11 @@ class _QrcodeScreenState extends LasyRenderingState<QrcodeScreen> {
                                     _content,
                                     savePath,
                                   );
-                                  if (!context.mounted) {
-                                    return;
-                                  }
+                                  if (!context.mounted) return;
                                   try {
-                                    final box =
-                                        context.findRenderObject()
-                                            as RenderBox?;
+                                    final box = context.findRenderObject() as RenderBox?;
                                     final rect = box != null
-                                        ? box.localToGlobal(Offset.zero) &
-                                              box.size
+                                        ? box.localToGlobal(Offset.zero) & box.size
                                         : null;
                                     await SharePlus.instance.share(
                                       ShareParams(
@@ -218,9 +286,7 @@ class _QrcodeScreenState extends LasyRenderingState<QrcodeScreen> {
                                       ),
                                     );
                                   } catch (err) {
-                                    if (!context.mounted) {
-                                      return;
-                                    }
+                                    if (!context.mounted) return;
                                     DialogUtils.showAlertDialog(
                                       context,
                                       err.toString(),
@@ -233,11 +299,11 @@ class _QrcodeScreenState extends LasyRenderingState<QrcodeScreen> {
                               ),
                             ),
                           ],
-                          const SizedBox(height: 50),
+                          const SizedBox(height: 24),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ],
