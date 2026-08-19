@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen>
   int _currentNavIndex = 0;
   FlutterVpnServiceState _vpnState = FlutterVpnServiceState.disconnected;
   final List<GlobalKey<NavigatorState>> _navigatorKeys = List.generate(
-    6,
+    5,
     (_) => GlobalKey<NavigatorState>(),
   );
 
@@ -451,8 +451,6 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
       ),
-      // 5: About
-      const AboutScreen(),
     ];
 
     return List.generate(pages.length, (index) {
@@ -599,12 +597,6 @@ class _HomeScreenState extends State<HomeScreen>
                                   icon: Icons.tune_rounded,
                                   label: tcontext.meta.settingApp,
                                 ),
-                                _buildNavItem(
-                                  context: context,
-                                  index: 5,
-                                  icon: Icons.info_outline_rounded,
-                                  label: tcontext.meta.about,
-                                ),
                               ],
                             ),
                           ),
@@ -661,7 +653,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       bottomNavigationBar: !isDesktop
           ? NavigationBar(
-              selectedIndex: _currentNavIndex > 5 ? 0 : _currentNavIndex,
+              selectedIndex: _currentNavIndex > 4 ? 0 : _currentNavIndex,
               onDestinationSelected: (int index) {
                 if (_currentNavIndex == index) {
                   _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
@@ -696,11 +688,6 @@ class _HomeScreenState extends State<HomeScreen>
                   icon: const Icon(Icons.tune_outlined),
                   selectedIcon: const Icon(Icons.tune_rounded),
                   label: tcontext.meta.settingApp,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.info_outline),
-                  selectedIcon: const Icon(Icons.info_rounded),
-                  label: tcontext.meta.about,
                 ),
               ],
             )
