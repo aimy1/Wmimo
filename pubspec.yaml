@@ -1,5 +1,8 @@
 name: wmimo
-description: Wmimo Cross-Platform Proxy Client
+description: A modern, sleek cross-platform Clash/Mihomo GUI proxy client.
+homepage: https://github.com/aimy1/Wmimo
+repository: https://github.com/aimy1/Wmimo.git
+issue_tracker: https://github.com/aimy1/Wmimo/issues
 
 publish_to: none 
 version: 1.0.28+1406
@@ -134,16 +137,16 @@ flutter:
 flutter_launcher_icons: #flutter pub run flutter_launcher_icons
   android: ic_launcher
   ios: true
-  image_path: logo-round.png 
+  image_path: "assets/images/app_icon_256.png" 
   min_sdk_android: 21 
-  image_path_android: logo-round.png
-  image_path_ios: logo.png
+  image_path_android: "assets/images/app_icon_256.png"
+  image_path_ios: "assets/images/app_icon_256.png"
   remove_alpha_ios: true
   windows:
-    generate: false 
-    image_path: logo-round.png
+    generate: true 
+    image_path: "assets/images/app_icon_256.png"
     icon_size: 48
   macos:
     generate: true
-    image_path: logo-round-macos.png
+    image_path: "assets/images/app_icon_256.png"
  
