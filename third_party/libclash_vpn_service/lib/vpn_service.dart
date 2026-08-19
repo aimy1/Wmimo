@@ -179,8 +179,13 @@ secret: "$secret"
 
 ''';
 
-    // Filter out conflicting top-level keys
-    final filteredLines = profileContent.split('\n').where((line) {
+    // Filter out conflicting top-level keys and normalize anytls -> trojan
+    final normalizedProfile = profileContent.replaceAll(
+      RegExp(r'type:\s*anytls', caseSensitive: false),
+      'type: trojan',
+    );
+
+    final filteredLines = normalizedProfile.split('\n').where((line) {
       final trimmed = line.trim();
       return !trimmed.startsWith('external-controller:') &&
           !trimmed.startsWith('secret:') &&
@@ -231,8 +236,15 @@ secret: "$secret"
       final args = ['-d', workDir, '-f', configFile];
       _coreProcess = await Process.start(coreExe, args, mode: ProcessStartMode.normal);
 
-      _coreProcess!.stdout.transform(utf8.decoder).listen((_) {});
-      _coreProcess!.stderr.transform(utf8.decoder).listen((_) {});
+      final outBuffer = StringBuffer();
+      final errBuffer = StringBuffer();
+
+      _coreProcess!.stdout.transform(utf8.decoder).listen((data) {
+        outBuffer.write(data);
+      });
+      _coreProcess!.stderr.transform(utf8.decoder).listen((data) {
+        errBuffer.write(data);
+      });
       _coreProcess!.exitCode.then((code) {
         _coreProcess = null;
         _state = FlutterVpnServiceState.disconnected;
@@ -267,10 +279,18 @@ secret: "$secret"
       }
 
       if (!ready) {
+        final errorDetail = errBuffer.toString().trim().isNotEmpty
+            ? errBuffer.toString().trim()
+            : outBuffer.toString().trim();
         await stop();
         return VpnServiceWaitResult(
           type: VpnServiceWaitType.timeout,
-          err: VpnServiceResultError(504, "等待核心启动超时 (REST API 未响应)"),
+          err: VpnServiceResultError(
+            504,
+            errorDetail.isNotEmpty
+                ? "核心启动失败: $errorDetail"
+                : "等待核心启动超时 (REST API 未响应)",
+          ),
         );
       }
 
