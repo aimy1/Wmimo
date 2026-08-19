@@ -84,7 +84,7 @@ class _ProxyBoardScreenState extends LasyRenderingState<ProxyBoardScreen>
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    if (Navigator.canPop(context))
+                    if (ModalRoute.of(context)?.canPop ?? false)
                       InkWell(
                         onTap: () => Navigator.pop(context),
                         child: const SizedBox(

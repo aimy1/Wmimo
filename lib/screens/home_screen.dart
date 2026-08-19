@@ -272,7 +272,14 @@ class _HomeScreenState extends State<HomeScreen>
           borderRadius: BorderRadius.circular(12),
           onTap: () {
             if (_currentNavIndex == index) {
-              _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+              final navState = _navigatorKeys[index].currentState;
+              if (navState != null) {
+                try {
+                  if (navState.canPop()) {
+                    navState.popUntil((route) => route.isFirst);
+                  }
+                } catch (_) {}
+              }
             } else {
               setState(() {
                 _currentNavIndex = index;
@@ -655,7 +662,14 @@ class _HomeScreenState extends State<HomeScreen>
               selectedIndex: _currentNavIndex > 4 ? 0 : _currentNavIndex,
               onDestinationSelected: (int index) {
                 if (_currentNavIndex == index) {
-                  _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+                  final navState = _navigatorKeys[index].currentState;
+                  if (navState != null) {
+                    try {
+                      if (navState.canPop()) {
+                        navState.popUntil((route) => route.isFirst);
+                      }
+                    } catch (_) {}
+                  }
                 } else {
                   setState(() {
                     _currentNavIndex = index;
