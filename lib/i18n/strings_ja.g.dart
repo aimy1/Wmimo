@@ -371,6 +371,10 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get closeAllConnections => 'すべての接続を閉じる';
 	@override String get searchConnections => '接続を検索 (ドメイン/IP/ルール/プロセス)';
 	@override String get noFilterResults => '一致する接続がありません';
+	@override String get searchRules => 'ルールを検索 (タイプ/ペイロード/プロキシ)';
+	@override String get rules => 'ルーティングルール';
+	@override String get clear => 'クリア';
+	@override String get copySuccess => 'コピーしました';
 	@override String get alwayOnVPN => '常時接続';
 	@override String get disableFontScaler => 'フォントスケーリングを無効にする（再起動後に有効）';
 	@override String get autoOrientation => '画面に合わせて回転';
@@ -790,6 +794,10 @@ extension on TranslationsJa {
 			'meta.closeAllConnections' => 'すべての接続を閉じる',
 			'meta.searchConnections' => '接続を検索 (ドメイン/IP/ルール/プロセス)',
 			'meta.noFilterResults' => '一致する接続がありません',
+			'meta.searchRules' => 'ルールを検索 (タイプ/ペイロード/プロキシ)',
+			'meta.rules' => 'ルーティングルール',
+			'meta.clear' => 'クリア',
+			'meta.copySuccess' => 'コピーしました',
 			'meta.alwayOnVPN' => '常時接続',
 			'meta.disableFontScaler' => 'フォントスケーリングを無効にする（再起動後に有効）',
 			'meta.autoOrientation' => '画面に合わせて回転',

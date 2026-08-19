@@ -371,6 +371,10 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get closeAllConnections => '모든 연결 닫기';
 	@override String get searchConnections => '연결 검색 (도메인/IP/규칙/프로세스)';
 	@override String get noFilterResults => '일치하는 연결 없음';
+	@override String get searchRules => '규칙 검색 (유형/페이로드/프록시)';
+	@override String get rules => '규칙';
+	@override String get clear => '지우기';
+	@override String get copySuccess => '복사되었습니다';
 	@override String get alwayOnVPN => '상시 연결';
 	@override String get disableFontScaler => '글꼴 크기 조정 비활성화 (재시작 후 적용)';
 	@override String get autoOrientation => '화면 방향에 따라 회전';
@@ -790,6 +794,10 @@ extension on TranslationsKo {
 			'meta.closeAllConnections' => '모든 연결 닫기',
 			'meta.searchConnections' => '연결 검색 (도메인/IP/규칙/프로세스)',
 			'meta.noFilterResults' => '일치하는 연결 없음',
+			'meta.searchRules' => '규칙 검색 (유형/페이로드/프록시)',
+			'meta.rules' => '규칙',
+			'meta.clear' => '지우기',
+			'meta.copySuccess' => '복사되었습니다',
 			'meta.alwayOnVPN' => '상시 연결',
 			'meta.disableFontScaler' => '글꼴 크기 조정 비활성화 (재시작 후 적용)',
 			'meta.autoOrientation' => '화면 방향에 따라 회전',

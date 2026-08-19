@@ -371,6 +371,10 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get closeAllConnections => 'بستن همه اتصال‌ها';
 	@override String get searchConnections => 'جستجوی اتصال‌ها (دامنه/IP/قاعده/پردازش)';
 	@override String get noFilterResults => 'اتصالی یافت نشد';
+	@override String get searchRules => 'جستجوی قوانین (نوع/محتوا/پروکسی)';
+	@override String get rules => 'قوانین';
+	@override String get clear => 'پاک کردن';
+	@override String get copySuccess => 'کپی شد';
 	@override String get alwayOnVPN => 'اتصال همیشه باز';
 	@override String get disableFontScaler => 'غیرفعال‌سازی مقیاس‌بندی فونت(با راه‌اندازی مجدد اعمال می‌شود)';
 	@override String get autoOrientation => 'چرخش صفحه را دنبال کنید';
@@ -790,6 +794,10 @@ extension on TranslationsFa {
 			'meta.closeAllConnections' => 'بستن همه اتصال‌ها',
 			'meta.searchConnections' => 'جستجوی اتصال‌ها (دامنه/IP/قاعده/پردازش)',
 			'meta.noFilterResults' => 'اتصالی یافت نشد',
+			'meta.searchRules' => 'جستجوی قوانین (نوع/محتوا/پروکسی)',
+			'meta.rules' => 'قوانین',
+			'meta.clear' => 'پاک کردن',
+			'meta.copySuccess' => 'کپی شد',
 			'meta.alwayOnVPN' => 'اتصال همیشه باز',
 			'meta.disableFontScaler' => 'غیرفعال‌سازی مقیاس‌بندی فونت(با راه‌اندازی مجدد اعمال می‌شود)',
 			'meta.autoOrientation' => 'چرخش صفحه را دنبال کنید',

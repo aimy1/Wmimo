@@ -371,6 +371,10 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get closeAllConnections => 'Закрыть все соединения';
 	@override String get searchConnections => 'Поиск соединений (Домен/IP/Правило/Процесс)';
 	@override String get noFilterResults => 'Нет подходящих соединений';
+	@override String get searchRules => 'Поиск правил (Тип/Пейлоад/Прокси)';
+	@override String get rules => 'Правила';
+	@override String get clear => 'Очистить';
+	@override String get copySuccess => 'Скопировано';
 	@override String get alwayOnVPN => 'VPN всегда включен';
 	@override String get disableFontScaler => 'Отключить масштабирование шрифта';
 	@override String get autoOrientation => 'Следовать за поворотом экрана';
@@ -790,6 +794,10 @@ extension on TranslationsRu {
 			'meta.closeAllConnections' => 'Закрыть все соединения',
 			'meta.searchConnections' => 'Поиск соединений (Домен/IP/Правило/Процесс)',
 			'meta.noFilterResults' => 'Нет подходящих соединений',
+			'meta.searchRules' => 'Поиск правил (Тип/Пейлоад/Прокси)',
+			'meta.rules' => 'Правила',
+			'meta.clear' => 'Очистить',
+			'meta.copySuccess' => 'Скопировано',
 			'meta.alwayOnVPN' => 'VPN всегда включен',
 			'meta.disableFontScaler' => 'Отключить масштабирование шрифта',
 			'meta.autoOrientation' => 'Следовать за поворотом экрана',

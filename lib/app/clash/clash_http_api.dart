@@ -228,7 +228,14 @@ class ClashConnections {
 class ClashLog {
   String type = "";
   String payload = "";
-  Map<String, dynamic> toJson() => {'type': type, 'payload': payload};
+  DateTime time = DateTime.now();
+
+  Map<String, dynamic> toJson() => {
+    'type': type,
+    'payload': payload,
+    'time': time.toIso8601String(),
+  };
+
   void fromJson(Map<String, dynamic>? map) {
     if (map == null) {
       return;
@@ -236,6 +243,7 @@ class ClashLog {
 
     type = map['type'] ?? '';
     payload = map['payload'] ?? '';
+    time = DateTime.now();
   }
 }
 
@@ -507,6 +515,33 @@ class ClashHttpApi {
       return ReturnResult(data: []);
     } catch (err) {
       return ReturnResult(error: ReturnResultError(err.toString()));
+    }
+  }
+
+  static Stream<ClashLog> getLogsStream({String level = "info"}) async* {
+    String secret = getSecret?.call() ?? "";
+    var client = HttpClient();
+    try {
+      var request = await client.getUrl(
+        Uri.parse("$host:${getControlPort?.call()}/logs?level=$level"),
+      );
+      if (secret.isNotEmpty) {
+        request.headers.add("Authorization", "Bearer $secret");
+      }
+      var response = await request.close();
+      await for (var line in response.transform(utf8.decoder).transform(const LineSplitter())) {
+        line = line.trim();
+        if (line.isEmpty) continue;
+        try {
+          var json = jsonDecode(line);
+          ClashLog log = ClashLog();
+          log.fromJson(json);
+          yield log;
+        } catch (_) {}
+      }
+    } catch (_) {
+    } finally {
+      client.close(force: true);
     }
   }
 

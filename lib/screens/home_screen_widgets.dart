@@ -14,6 +14,8 @@ import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/screens/connections_screen.dart';
+import 'package:wmimo/screens/rules_screen.dart';
+import 'package:wmimo/screens/logs_screen.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/app_scheme_actions.dart';
 import 'package:wmimo/app/utils/file_utils.dart';
@@ -939,7 +941,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         const SizedBox(height: 12),
         Card(
           child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
             child: Row(
               children: [
                 _buildQuickActionTile(
@@ -948,19 +950,33 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   label: tcontext.meta.connections,
                   onTap: _onTapConnections,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 4),
                 _buildQuickActionTile(
                   context: context,
-                  icon: Icons.description_outlined,
-                  label: tcontext.meta.runtimeProfile,
-                  onTap: _onTapRunTimeProfile,
+                  icon: Icons.alt_route_rounded,
+                  label: tcontext.meta.rules,
+                  onTap: _onTapRules,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 4),
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.article_outlined,
+                  label: tcontext.meta.coreLog,
+                  onTap: _onTapLogs,
+                ),
+                const SizedBox(width: 4),
                 _buildQuickActionTile(
                   context: context,
                   icon: Icons.network_check_rounded,
                   label: tcontext.meta.networkCheck,
                   onTap: _onTapNetCheck,
+                ),
+                const SizedBox(width: 4),
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.description_outlined,
+                  label: tcontext.meta.runtimeProfile,
+                  onTap: _onTapRunTimeProfile,
                 ),
               ],
             ),
@@ -1000,7 +1016,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -1663,6 +1679,26 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       MaterialPageRoute(
         settings: ConnectionsScreen.routSettings(),
         builder: (context) => const ConnectionsScreen(),
+      ),
+    );
+  }
+
+  Future<void> _onTapRules() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        settings: RulesScreen.routSettings(),
+        builder: (context) => const RulesScreen(),
+      ),
+    );
+  }
+
+  Future<void> _onTapLogs() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        settings: LogsScreen.routSettings(),
+        builder: (context) => const LogsScreen(),
       ),
     );
   }

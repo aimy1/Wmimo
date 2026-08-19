@@ -371,6 +371,10 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get closeAllConnections => 'Cerrar todas las conexiones';
 	@override String get searchConnections => 'Buscar conexiones (Dominio/IP/Regla/Proceso)';
 	@override String get noFilterResults => 'No hay conexiones coincidentes';
+	@override String get searchRules => 'Buscar reglas (Tipo/Carga útil/Proxy)';
+	@override String get rules => 'Reglas';
+	@override String get clear => 'Limpiar';
+	@override String get copySuccess => 'Copiado con éxito';
 	@override String get alwayOnVPN => 'Conexión permanente';
 	@override String get disableFontScaler => 'Deshabilitar escala de fuente (el reinicio surte efecto)';
 	@override String get autoOrientation => 'Girar con la pantalla';
@@ -790,6 +794,10 @@ extension on TranslationsEs {
 			'meta.closeAllConnections' => 'Cerrar todas las conexiones',
 			'meta.searchConnections' => 'Buscar conexiones (Dominio/IP/Regla/Proceso)',
 			'meta.noFilterResults' => 'No hay conexiones coincidentes',
+			'meta.searchRules' => 'Buscar reglas (Tipo/Carga útil/Proxy)',
+			'meta.rules' => 'Reglas',
+			'meta.clear' => 'Limpiar',
+			'meta.copySuccess' => 'Copiado con éxito',
 			'meta.alwayOnVPN' => 'Conexión permanente',
 			'meta.disableFontScaler' => 'Deshabilitar escala de fuente (el reinicio surte efecto)',
 			'meta.autoOrientation' => 'Girar con la pantalla',

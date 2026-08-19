@@ -371,6 +371,10 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get closeAllConnections => 'إغلاق جميع الاتصالات';
 	@override String get searchConnections => 'بحث في الاتصالات (النطاق/IP/القاعدة/العملية)';
 	@override String get noFilterResults => 'لا توجد اتصالات مطابقة';
+	@override String get searchRules => 'بحث في القواعد (النوع/الحمولة/الوكيل)';
+	@override String get rules => 'القواعد';
+	@override String get clear => 'مسح';
+	@override String get copySuccess => 'تم النسخ';
 	@override String get alwayOnVPN => 'اتصال مفتوح دائمًا';
 	@override String get disableFontScaler => 'تعطيل تحجيم الخط(يسري مفعوله بعد إعادة التشغيل)';
 	@override String get autoOrientation => 'Rotate with the screen';
@@ -790,6 +794,10 @@ extension on TranslationsAr {
 			'meta.closeAllConnections' => 'إغلاق جميع الاتصالات',
 			'meta.searchConnections' => 'بحث في الاتصالات (النطاق/IP/القاعدة/العملية)',
 			'meta.noFilterResults' => 'لا توجد اتصالات مطابقة',
+			'meta.searchRules' => 'بحث في القواعد (النوع/الحمولة/الوكيل)',
+			'meta.rules' => 'القواعد',
+			'meta.clear' => 'مسح',
+			'meta.copySuccess' => 'تم النسخ',
 			'meta.alwayOnVPN' => 'اتصال مفتوح دائمًا',
 			'meta.disableFontScaler' => 'تعطيل تحجيم الخط(يسري مفعوله بعد إعادة التشغيل)',
 			'meta.autoOrientation' => 'Rotate with the screen',

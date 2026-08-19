@@ -828,6 +828,18 @@ class Translations$meta$en {
 	/// en: 'No matching connections'
 	String get noFilterResults => 'No matching connections';
 
+	/// en: 'Search rules (Type/Payload/Proxy)'
+	String get searchRules => 'Search rules (Type/Payload/Proxy)';
+
+	/// en: 'Rules'
+	String get rules => 'Rules';
+
+	/// en: 'Clear'
+	String get clear => 'Clear';
+
+	/// en: 'Copied to clipboard'
+	String get copySuccess => 'Copied to clipboard';
+
 	/// en: 'Always-on Connection'
 	String get alwayOnVPN => 'Always-on Connection';
 
@@ -1488,6 +1500,10 @@ extension on Translations {
 			'meta.closeAllConnections' => 'Close All Connections',
 			'meta.searchConnections' => 'Search connections (Domain/IP/Rule/Process)',
 			'meta.noFilterResults' => 'No matching connections',
+			'meta.searchRules' => 'Search rules (Type/Payload/Proxy)',
+			'meta.rules' => 'Rules',
+			'meta.clear' => 'Clear',
+			'meta.copySuccess' => 'Copied to clipboard',
 			'meta.alwayOnVPN' => 'Always-on Connection',
 			'meta.disableFontScaler' => 'Disable Font scaling(Restart takes effect)',
 			'meta.autoOrientation' => 'Rotate with the screen',

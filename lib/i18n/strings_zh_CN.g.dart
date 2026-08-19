@@ -371,6 +371,10 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get closeAllConnections => '关闭全部连接';
 	@override String get searchConnections => '搜索连接 (域名/IP/规则/进程)';
 	@override String get noFilterResults => '没有匹配的连接';
+	@override String get searchRules => '搜索规则 (类型/特征/目标代理)';
+	@override String get rules => '分流规则';
+	@override String get clear => '清除';
+	@override String get copySuccess => '拷贝成功';
 	@override String get alwayOnVPN => '始终开启连接';
 	@override String get disableFontScaler => '禁用字体缩放';
 	@override String get autoOrientation => '跟随屏幕旋转';
@@ -790,6 +794,10 @@ extension on TranslationsZhCn {
 			'meta.closeAllConnections' => '关闭全部连接',
 			'meta.searchConnections' => '搜索连接 (域名/IP/规则/进程)',
 			'meta.noFilterResults' => '没有匹配的连接',
+			'meta.searchRules' => '搜索规则 (类型/特征/目标代理)',
+			'meta.rules' => '分流规则',
+			'meta.clear' => '清除',
+			'meta.copySuccess' => '拷贝成功',
 			'meta.alwayOnVPN' => '始终开启连接',
 			'meta.disableFontScaler' => '禁用字体缩放',
 			'meta.autoOrientation' => '跟随屏幕旋转',
