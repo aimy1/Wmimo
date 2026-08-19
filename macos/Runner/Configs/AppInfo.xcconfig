@@ -1,4 +1,4 @@
-﻿// Application-level settings for the Runner target.
+// Application-level settings for the Runner target.
 //
 // This may be replaced with something auto-generated from metadata (e.g., pubspec.yaml) in the
 // future. If not, the values below would default to using the project name when this becomes a
@@ -11,4 +11,4 @@ PRODUCT_NAME = wmimo
 PRODUCT_BUNDLE_IDENTIFIER = com.wmimo.app
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 com.wmimo.app All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 com.wmimo.app All rights reserved.

@@ -88,7 +88,7 @@ class RemoteConfig {
 
   static const String kDefaultDownload = "https://$kDefaultHost/download/";
   static const String kDefaultTelegram = "https://t.me/WmimoApp";
-  static const String kDefaultFollow = "https://github.com/Wmimo/wmimo";
+  static const String kDefaultFollow = "https://github.com/aimy1/Wmimo";
   static const String kDefaultDonate = "http://$kDefaultHost/donate";
   static const String kDefaultDoc = "https://wiki.metacubex.one/config/";
   static const String kDefaultHtmlTools = "https://tools.wmimo.app/";
