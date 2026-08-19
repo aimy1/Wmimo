@@ -16,7 +16,6 @@ import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
-import 'package:wmimo/screens/about_screen.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/home_screen_widgets.dart';
 import 'package:wmimo/screens/language_settings_screen.dart';

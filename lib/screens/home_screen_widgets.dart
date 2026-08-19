@@ -33,7 +33,6 @@ import 'package:wmimo/screens/net_check_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen.dart';
 import 'package:wmimo/screens/proxy_board_screen.dart';
 import 'package:wmimo/screens/richtext_viewer.screen.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/webview_helper.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
@@ -1130,23 +1129,6 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             ),
           ],
         ],
-      ),
-    );
-  }
-
-  Widget _buildWithTrafficSpeedValue(
-    BuildContext context,
-    String value,
-    Widget? child,
-  ) {
-    return Text(
-      value,
-      textAlign: TextAlign.left,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        fontSize: ThemeConfig.kFontSizeListSubItem,
-        fontWeight: FontWeight.w500,
-        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.85),
       ),
     );
   }

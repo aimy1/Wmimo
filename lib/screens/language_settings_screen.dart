@@ -86,7 +86,6 @@ class _LanguageSettingsScreenState
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
-    Size windowSize = MediaQuery.of(context).size;
     var setting = SettingManager.getConfig();
     return PopScope(
       canPop: widget.canPop,
