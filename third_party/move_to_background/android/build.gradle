@@ -1,0 +1,35 @@
+group 'com.sayegh.move_to_background'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.11.1'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdk 35
+    namespace "com.sayegh.move_to_background"
+
+    defaultConfig {
+        minSdk 21
+    }
+}
+
+dependencies {
+    compileOnly 'androidx.annotation:annotation:1.8.0'
+}

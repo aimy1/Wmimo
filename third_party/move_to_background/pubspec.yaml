@@ -1,0 +1,21 @@
+name: move_to_background
+description: A flutter plugin for moving apps to the background (modern V2 embedding).
+version: 1.0.3
+homepage: https://github.com/aimy1/Wmimo
+
+environment:
+  sdk: ">=2.12.0 <4.0.0"
+  flutter: ">=2.0.0"
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.sayegh.move_to_background
+        pluginClass: MoveToBackgroundPlugin
+      ios:
+        pluginClass: MoveToBackgroundPlugin
+
+dependencies:
+  flutter:
+    sdk: flutter

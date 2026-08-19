@@ -84,7 +84,8 @@ dependencies:
   webdav_client_plus:
     path: third_party/webdav_client_plus
   android_package_manager: ^0.7.1
-  move_to_background: ^1.0.2
+  move_to_background:
+    path: third_party/move_to_background
   libclash_vpn_service:
     path: third_party/libclash_vpn_service
 
