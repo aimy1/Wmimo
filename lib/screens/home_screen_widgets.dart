@@ -742,61 +742,67 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             child: Column(
               children: [
                 ListTile(
-                  title: Text(tcontext.meta.myProfiles),
+                  title: Text(
+                    tcontext.meta.myProfiles,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   leading: Icon(
                     Icons.dns_rounded,
                     size: 22,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  subtitle: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (currentProfile != null) ...[
-                        Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Text(
-                            currentProfileName,
-                            style: const TextStyle(
-                              color: ThemeDefine.kColorBlue,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
+                  subtitle: currentProfile != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                currentProfileName,
+                                style: const TextStyle(
+                                  color: ThemeDefine.kColorBlue,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (tranffic.isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(
+                                  tranffic,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.65),
+                                    fontSize: 11.5,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                              if (tranfficExpire != null) ...[
+                                const SizedBox(height: 2),
+                                Text(
+                                  '📅 ${tranfficExpire.item2}',
+                                  style: TextStyle(
+                                    color: tranfficExpire.item1
+                                        ? Colors.redAccent
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.6),
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
-                        ),
-                      ],
-                      if (tranffic.isNotEmpty) ...[
-                        Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Text(
-                            tranffic,
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.7),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                      if (tranfficExpire != null) ...[
-                        Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Text(
-                            tranfficExpire.item2,
-                            style: TextStyle(
-                              color: tranfficExpire.item1
-                                  ? Colors.red
-                                  : ThemeDefine.kColorBlue,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
+                        )
+                      : null,
                   trailing: SizedBox(
-                    width: 90,
+                    width: 70,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -1040,7 +1046,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     final tcontext = Translations.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: isDark
             ? const Color(0xFF151D2E)
@@ -1056,19 +1062,19 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               color: (isActive ? iconColor : const Color(0xFF94A3B8))
                   .withValues(alpha: isDark ? 0.2 : 0.12),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(
               icon,
-              size: 16,
+              size: 15,
               color: isActive ? iconColor : const Color(0xFF94A3B8),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1077,7 +1083,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 11.5,
                     fontWeight: FontWeight.w600,
                     color: isActive
                         ? theme.colorScheme.onSurface
@@ -1089,12 +1095,13 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 Text(
                   isActive ? tcontext.meta.enable : tcontext.meta.disable,
                   style: TextStyle(
-                    fontSize: 10.5,
+                    fontSize: 10,
                     fontWeight: FontWeight.w500,
                     color: isActive
                         ? iconColor
                         : theme.colorScheme.onSurface.withValues(alpha: 0.45),
                   ),
+                  maxLines: 1,
                 ),
               ],
             ),
@@ -1104,22 +1111,27 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
               borderRadius: BorderRadius.circular(6),
               onTap: onSettingsTap,
               child: Padding(
-                padding: const EdgeInsets.all(3),
+                padding: const EdgeInsets.all(2),
                 child: Icon(
                   Icons.settings_outlined,
-                  size: 15,
+                  size: 14,
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
                 ),
               ),
             ),
             const SizedBox(width: 2),
           ],
-          Transform.scale(
-            scale: 0.72,
-            child: Switch(
-              value: isActive,
-              activeColor: iconColor,
-              onChanged: onChanged,
+          SizedBox(
+            width: 34,
+            height: 20,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Switch(
+                value: isActive,
+                activeColor: iconColor,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                onChanged: onChanged,
+              ),
             ),
           ),
         ],
@@ -1232,25 +1244,25 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.pie_chart_outline_rounded,
-                    size: 15,
-                    color: theme.colorScheme.primary,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '${tcontext.meta.planUsage}: $usedStr / $totalStr (${tcontext.meta.remaining} $remainingStr)',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+              Icon(
+                Icons.pie_chart_outline_rounded,
+                size: 15,
+                color: theme.colorScheme.primary,
               ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  '${tcontext.meta.planUsage}: $usedStr / $totalStr',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 6),
               Text(
                 '${(percent * 100).toStringAsFixed(1)}%',
                 style: TextStyle(
@@ -1272,28 +1284,29 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
               valueColor: AlwaysStoppedAnimation<Color>(statusColor),
             ),
           ),
-          if (expireInfo != null) ...[
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(
-                  Icons.event_outlined,
-                  size: 13,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${tcontext.meta.remaining}: $remainingStr',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
-                const SizedBox(width: 5),
+              ),
+              if (expireInfo != null)
                 Text(
-                  '${tcontext.meta.expireTime}: ${expireInfo.item2}',
+                  '📅 ${tcontext.meta.expireTime}: ${expireInfo.item2}',
                   style: TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 11,
                     color: expireInfo.item1
                         ? Colors.red
                         : theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   ),
                 ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ],
       ),
     );
