@@ -1049,6 +1049,9 @@ class Translations$meta$en {
 
 	/// en: 'Expire Time'
 	String get expireTime => 'Expire Time';
+
+	/// en: 'TUN Mode'
+	String get tunMode => 'TUN Mode';
 }
 
 // Path: permission
@@ -1547,6 +1550,7 @@ extension on Translations {
 			'meta.memoryUsage' => 'Memory',
 			'meta.remaining' => 'Remaining',
 			'meta.expireTime' => 'Expire Time',
+			'meta.tunMode' => 'TUN Mode',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

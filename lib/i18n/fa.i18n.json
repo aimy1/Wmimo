@@ -316,7 +316,8 @@
         "planUsage": "مصرف بسته",
         "memoryUsage": "حافظه",
         "remaining": "باقیمانده",
-        "expireTime": "زمان انقضا"
+        "expireTime": "زمان انقضا",
+        "tunMode": "حالت TUN"
     },
     "permission": {
         "camera": "دوربین",

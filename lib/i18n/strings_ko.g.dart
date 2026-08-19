@@ -445,6 +445,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get memoryUsage => '메모리';
 	@override String get remaining => '남음';
 	@override String get expireTime => '만료 시간';
+	@override String get tunMode => 'TUN 모드';
 }
 
 // Path: permission
@@ -859,6 +860,7 @@ extension on TranslationsKo {
 			'meta.memoryUsage' => '메모리',
 			'meta.remaining' => '남음',
 			'meta.expireTime' => '만료 시간',
+			'meta.tunMode' => 'TUN 모드',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

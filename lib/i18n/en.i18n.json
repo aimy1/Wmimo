@@ -316,7 +316,8 @@
         "planUsage": "Plan Usage",
         "memoryUsage": "Memory",
         "remaining": "Remaining",
-        "expireTime": "Expire Time"
+        "expireTime": "Expire Time",
+        "tunMode": "TUN Mode"
     },
     "permission": {
         "camera": "Camera",

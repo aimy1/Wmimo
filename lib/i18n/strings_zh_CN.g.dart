@@ -445,6 +445,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get memoryUsage => '内存';
 	@override String get remaining => '剩余';
 	@override String get expireTime => '到期时间';
+	@override String get tunMode => 'TUN 模式';
 }
 
 // Path: permission
@@ -859,6 +860,7 @@ extension on TranslationsZhCn {
 			'meta.memoryUsage' => '内存',
 			'meta.remaining' => '剩余',
 			'meta.expireTime' => '到期时间',
+			'meta.tunMode' => 'TUN 模式',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',

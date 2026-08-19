@@ -316,7 +316,8 @@
         "planUsage": "プラン使用量",
         "memoryUsage": "メモリ",
         "remaining": "残り",
-        "expireTime": "有効期限"
+        "expireTime": "有効期限",
+        "tunMode": "TUN モード"
     },
     "permission": {
         "camera": "カメラ",

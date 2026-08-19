@@ -445,6 +445,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get memoryUsage => 'حافظه';
 	@override String get remaining => 'باقیمانده';
 	@override String get expireTime => 'زمان انقضا';
+	@override String get tunMode => 'حالت TUN';
 }
 
 // Path: permission
@@ -859,6 +860,7 @@ extension on TranslationsFa {
 			'meta.memoryUsage' => 'حافظه',
 			'meta.remaining' => 'باقیمانده',
 			'meta.expireTime' => 'زمان انقضا',
+			'meta.tunMode' => 'حالت TUN',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

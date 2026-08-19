@@ -316,7 +316,8 @@
         "planUsage": "요금제 사용량",
         "memoryUsage": "메모리",
         "remaining": "남음",
-        "expireTime": "만료 시간"
+        "expireTime": "만료 시간",
+        "tunMode": "TUN 모드"
     },
     "permission": {
         "camera": "카메라",

@@ -316,7 +316,8 @@
         "planUsage": "استهلاك الباقة",
         "memoryUsage": "الذاكرة",
         "remaining": "المتبقي",
-        "expireTime": "تاريخ الانتهاء"
+        "expireTime": "تاريخ الانتهاء",
+        "tunMode": "وضع TUN"
     },
     "permission": {
         "camera": "الكاميرا",

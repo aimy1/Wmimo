@@ -316,7 +316,8 @@
         "planUsage": "Uso del plan",
         "memoryUsage": "Memoria",
         "remaining": "Restante",
-        "expireTime": "Fecha de caducidad"
+        "expireTime": "Fecha de caducidad",
+        "tunMode": "Modo TUN"
     },
     "permission": {
         "camera": "Cámara",

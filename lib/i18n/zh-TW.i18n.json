@@ -316,7 +316,8 @@
         "planUsage": "套餐用量",
         "memoryUsage": "記憶體",
         "remaining": "剩餘",
-        "expireTime": "到期時間"
+        "expireTime": "到期時間",
+        "tunMode": "TUN 模式"
     },
     "permission": {
         "camera": "攝像頭",

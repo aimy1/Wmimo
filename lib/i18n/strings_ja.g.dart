@@ -445,6 +445,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get memoryUsage => 'メモリ';
 	@override String get remaining => '残り';
 	@override String get expireTime => '有効期限';
+	@override String get tunMode => 'TUN モード';
 }
 
 // Path: permission
@@ -859,6 +860,7 @@ extension on TranslationsJa {
 			'meta.memoryUsage' => 'メモリ',
 			'meta.remaining' => '残り',
 			'meta.expireTime' => '有効期限',
+			'meta.tunMode' => 'TUN モード',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

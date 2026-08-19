@@ -445,6 +445,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get memoryUsage => 'الذاكرة';
 	@override String get remaining => 'المتبقي';
 	@override String get expireTime => 'تاريخ الانتهاء';
+	@override String get tunMode => 'وضع TUN';
 }
 
 // Path: permission
@@ -859,6 +860,7 @@ extension on TranslationsAr {
 			'meta.memoryUsage' => 'الذاكرة',
 			'meta.remaining' => 'المتبقي',
 			'meta.expireTime' => 'تاريخ الانتهاء',
+			'meta.tunMode' => 'وضع TUN',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',

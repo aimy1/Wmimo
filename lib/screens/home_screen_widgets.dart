@@ -444,6 +444,60 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     },
                   ),
                 ),
+                const SizedBox(height: 12),
+                // Clash Verge 风格开关: 系统代理 & TUN 模式
+                Row(
+                  children: [
+                    // 系统代理
+                    Expanded(
+                      child: _buildClashVergeModeSwitch(
+                        context: context,
+                        icon: Icons.laptop_windows_rounded,
+                        iconColor: ThemeDefine.kColorBlue,
+                        title: tcontext.meta.systemProxy,
+                        isActive: SettingManager.getConfig().autoSetSystemProxy,
+                        onChanged: (bool value) async {
+                          SettingManager.getConfig().autoSetSystemProxy = value;
+                          SettingManager.save();
+                          if (PlatformUtils.isPC()) {
+                            if (_state == FlutterVpnServiceState.connected) {
+                              await VPNService.setSystemProxy(value);
+                            }
+                          }
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // TUN 模式
+                    Expanded(
+                      child: _buildClashVergeModeSwitch(
+                        context: context,
+                        icon: Icons.shield_outlined,
+                        iconColor: const Color(0xFF10B981),
+                        title: tcontext.meta.tunMode,
+                        isActive: (ClashSettingManager.getConfig().Tun?.OverWrite == true &&
+                            ClashSettingManager.getConfig().Tun?.Enable == true),
+                        onSettingsTap: () async {
+                          await GroupHelper.showClashSettingsTUN(context);
+                          setState(() {});
+                        },
+                        onChanged: (bool value) async {
+                          var tun = ClashSettingManager.getConfig().Tun;
+                          if (tun != null) {
+                            tun.OverWrite = true;
+                            tun.Enable = value;
+                            await ClashSettingManager.save();
+                            setState(() {});
+                            if (_state == FlutterVpnServiceState.connected) {
+                              VpnActionHandler.vpnReconnect?.call("tun", false);
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -957,6 +1011,107 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildClashVergeModeSwitch({
+    required BuildContext context,
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required bool isActive,
+    required ValueChanged<bool> onChanged,
+    VoidCallback? onSettingsTap,
+  }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final tcontext = Translations.of(context);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF151D2E)
+            : const Color(0xFFF1F5F9).withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isActive
+              ? iconColor.withValues(alpha: 0.45)
+              : theme.dividerColor.withValues(alpha: 0.35),
+          width: isActive ? 1.0 : 0.8,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: (isActive ? iconColor : const Color(0xFF94A3B8))
+                  .withValues(alpha: isDark ? 0.2 : 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              size: 16,
+              color: isActive ? iconColor : const Color(0xFF94A3B8),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                    color: isActive
+                        ? theme.colorScheme.onSurface
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  isActive ? tcontext.meta.enable : tcontext.meta.disable,
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w500,
+                    color: isActive
+                        ? iconColor
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.45),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (onSettingsTap != null) ...[
+            InkWell(
+              borderRadius: BorderRadius.circular(6),
+              onTap: onSettingsTap,
+              child: Padding(
+                padding: const EdgeInsets.all(3),
+                child: Icon(
+                  Icons.settings_outlined,
+                  size: 15,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+                ),
+              ),
+            ),
+            const SizedBox(width: 2),
+          ],
+          Transform.scale(
+            scale: 0.72,
+            child: Switch(
+              value: isActive,
+              activeColor: iconColor,
+              onChanged: onChanged,
+            ),
+          ),
+        ],
       ),
     );
   }

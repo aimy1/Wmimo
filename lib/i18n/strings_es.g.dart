@@ -445,6 +445,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get memoryUsage => 'Memoria';
 	@override String get remaining => 'Restante';
 	@override String get expireTime => 'Fecha de caducidad';
+	@override String get tunMode => 'Modo TUN';
 }
 
 // Path: permission
@@ -859,6 +860,7 @@ extension on TranslationsEs {
 			'meta.memoryUsage' => 'Memoria',
 			'meta.remaining' => 'Restante',
 			'meta.expireTime' => 'Fecha de caducidad',
+			'meta.tunMode' => 'Modo TUN',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

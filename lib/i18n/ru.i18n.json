@@ -316,7 +316,8 @@
         "planUsage": "Использование тарифа",
         "memoryUsage": "Память",
         "remaining": "Осталось",
-        "expireTime": "Срок действия"
+        "expireTime": "Срок действия",
+        "tunMode": "Режим TUN"
     },
     "permission": {
         "camera": "Камера",
