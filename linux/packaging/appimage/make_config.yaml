@@ -1,0 +1,14 @@
+﻿display_name: Wmimo
+package_name: wmimo
+maintainer:
+  name: Wmimo
+
+icon: assets/images/app_icon_256.png
+
+keywords:
+  - Wmimo
+
+generic_name: Wmimo
+
+categories:
+  - Network

@@ -1,0 +1,23 @@
+{
+  "latest_check": "2026-08-19 11:11:48.627738",
+  "get_profile": [],
+  "channel": [
+    {
+      "platform": "ios",
+      "channel": "Apple - Test Flight",
+      "url": "https://testflight.apple.com/join/bjHXktB3"
+    },
+    {
+      "platform": "ios",
+      "channel": "Apple - App Store",
+      "url": "https://apps.apple.com/us/app/wmimo/id6744321968"
+    },
+    {
+      "platform": "macos",
+      "channel": "Apple - Test Flight",
+      "url": "https://testflight.apple.com/join/bjHXktB3"
+    }
+  ],
+  "get_tranffic": "https://wmimo.app/page/sponsor#list",
+  "donate_url": "https://wmimo.app/donate"
+}

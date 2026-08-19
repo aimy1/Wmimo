@@ -1,0 +1,16 @@
+[package]
+name = "wmimo_core_mgr"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+wmimo_common = { workspace = true }
+wmimo_client = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+directories = { workspace = true }
+parking_lot = { workspace = true }
+reqwest = { workspace = true }

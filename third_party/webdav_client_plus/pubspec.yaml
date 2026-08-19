@@ -1,0 +1,13 @@
+name: webdav_client_plus
+description: WebDAV client plus
+version: 1.0.2
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  dio: ^5.11.0
+  flutter:
+    sdk: flutter

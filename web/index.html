@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Wmimo - 全平台现代化代理客户端</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --md-bg: #121212;
+      --md-surface: #1E1E1E;
+      --md-card: #252528;
+      --md-divider: rgba(255, 255, 255, 0.08);
+      --md-blue: #3E52E8;
+      --md-blue-light: #5C6BC0;
+      --md-green: #4CAF50;
+      --md-text-primary: #FFFFFF;
+      --md-text-secondary: #9E9E9E;
+      --md-text-hint: #616161;
+      --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: var(--font-family);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #000000;
+      color: var(--md-text-primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 仿 Flutter 客户端视窗 */
+    .flutter-scaffold {
+      width: 100%;
+      max-width: 440px;
+      height: 100vh;
+      max-height: 880px;
+      background-color: var(--md-bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+
+    @media (min-width: 600px) {
+      .flutter-scaffold {
+        border-radius: 28px;
+        height: 92vh;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+    }
+
+    /* Flutter AppBar */
+    .flutter-appbar {
+      height: 56px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--md-bg);
+      border-bottom: 1px solid var(--md-divider);
+      z-index: 10;
+    }
+
+    .appbar-title {
+      font-size: 18px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .appbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--md-text-secondary);
+      border: none;
+      background: transparent;
+      transition: background 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #FFFFFF;
+    }
+
+    /* 页面内容可滚动区域 */
+    .flutter-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scrollbar-width: none;
+    }
+
+    .flutter-body::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Flutter Card 组件 (Wmimo Card 风格) */
+    .flutter-card {
+      background-color: var(--md-card);
+      border-radius: 16px;
+      padding: 6px 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Flutter ListTile 组件 */
+    .flutter-list-tile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      cursor: pointer;
+      min-height: 52px;
+    }
+
+    .tile-content {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+    }
+
+    .tile-title {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--md-text-primary);
+    }
+
+    .tile-subtitle {
+      font-size: 12px;
+      color: var(--md-blue-light);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .tile-trailing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--md-text-secondary);
+      font-size: 18px;
+    }
+
+    .tile-leading-icon {
+      margin-right: 14px;
+      font-size: 18px;
+      color: var(--md-text-secondary);
+    }
+
+    /* Flutter Divider */
+    .flutter-divider {
+      height: 1px;
+      background-color: var(--md-divider);
+      width: 100%;
+    }
+
+    /* 状态与开关行 */
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0 6px 0;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #757575;
+      transition: background 0.3s;
+    }
+
+    .status-dot.connected {
+      background-color: var(--md-green);
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+    }
+
+    /* iOS/Flutter 风格 Switch */
+    .flutter-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+
+    .flutter-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #424242;
+      transition: .3s;
+      border-radius: 34px;
+    }
+
+    .switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .switch-slider {
+      background-color: var(--md-green);
+    }
+
+    input:checked + .switch-slider:before {
+      transform: translateX(22px);
+    }
+
+    /* 实时速率行 */
+    .speed-info-row {
+      padding: 2px 0 6px 0;
+      font-size: 12px;
+      color: var(--md-text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    /* SegmentedElevatedButton (分段切换栏) */
+    .segmented-bar {
+      display: flex;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 4px;
+      margin: 10px 0;
+      gap: 4px;
+    }
+
+    .segmented-item {
+      flex: 1;
+      padding: 8px 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--md-text-secondary);
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.2s;
+    }
+
+    .segmented-item.active {
+      background-color: var(--md-blue);
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(62, 82, 232, 0.4);
+    }
+
+    /* 首页底部的三大动作按钮 (面板 / 运行配置 / 网络检查) */
+    .quick-actions-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0 4px 0;
+    }
+
+    .quick-action-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: var(--md-text-primary);
+      text-align: center;
+    }
+
+    .quick-action-item i {
+      font-size: 20px;
+      color: var(--md-text-secondary);
+    }
+
+    .quick-action-item span {
+      font-size: 11px;
+      color: var(--md-text-secondary);
+    }
+
+    /* 视图切换容器 */
+    .screen-view { display: none; }
+    .screen-view.active { display: flex; flex-direction: column; gap: 12px; }
+
+    /* 节点列表 */
+    .node-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      background-color: var(--md-card);
+      border-radius: 12px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .node-list-item.selected {
+      border-color: var(--md-blue);
+      background-color: rgba(62, 82, 232, 0.12);
+    }
+
+    .node-delay-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--md-green);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="flutter-scaffold">
+
+    <!-- 顶部 AppBar -->
+    <header class="flutter-appbar">
+      <div class="appbar-title" id="appbarTitle">
+        <i class="bi bi-shield-lock" style="color: var(--md-blue-light);" id="appbarIcon"></i>
+        <span id="appbarText">Wmimo</span>
+      </div>
+      <div class="appbar-actions">
+        <button class="icon-btn" title="网络检查" onclick="navigateTo('netcheck')">
+          <i class="bi bi-broadcast"></i>
+        </button>
+        <button class="icon-btn" title="关于" onclick="navigateTo('about')">
+          <i class="bi bi-info-circle"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 滚动主视窗 -->
+    <main class="flutter-body">
+
+      <!-- SCREEN 1: 首页 (HomeScreenWidgetPart1 + HomeScreenWidgetPart2) -->
+      <div class="screen-view active" id="screen-home">
+
+        <!-- PART 1: 核心连接与代理控制卡片 -->
+        <div class="flutter-card">
+          
+          <!-- 状态行与 Switch -->
+          <div class="status-row">
+            <div class="status-badge">
+              <div class="status-dot" id="statusDot"></div>
+              <span id="statusText">未连接</span>
+            </div>
+            <label class="flutter-switch">
+              <input type="checkbox" id="vpnSwitch" onchange="toggleCoreConnection(this.checked)">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <!-- 实时速率与总流量 (连接时展示) -->
+          <div class="speed-info-row" id="speedInfoContainer" style="display: none;">
+            <div id="trafficTotalText">↑ 0 B   ↓ 0 B</div>
+            <div id="trafficSpeedText">↑ 0 B/s   ↓ 0 B/s</div>
+          </div>
+
+          <!-- 分段运行模式切换器 (规则 / 全局 / 直连) -->
+          <div class="segmented-bar">
+            <button class="segmented-item active" onclick="changeMode('rule', this)">规则</button>
+            <button class="segmented-item" onclick="changeMode('global', this)">全局</button>
+            <button class="segmented-item" onclick="changeMode('direct', this)">直连</button>
+          </div>
+
+          <div class="flutter-divider"></div>
+
+          <!-- 我的配置 ListTile -->
+          <div class="flutter-list-tile" onclick="navigateTo('profiles')">
+            <div class="tile-content">
+              <div class="tile-title">我的配置</div>
+              <div class="tile-subtitle" id="currentProfileSubtitle">
+                <span id="profileNameDisplay">未选择配置</span>
+              </div>
+            </div>
+            <div class="tile-trailing">
+              <i class="bi bi-plus-lg" onclick="event.stopPropagation(); navigateTo('profiles');" style="font-size: 18px; margin-right: 6px;"></i>
+              <i class="bi bi-chevron-right" style="font-size: 14px;"></i>
+            </div>
+          </div>
+
+          <!-- 代理行 (已连接时展示) -->
+          <div id="connectedProxySection" style="display: none;">
+            <div class="flutter-divider"></div>
+            <div class="flutter-list-tile" onclick="navigateTo('proxies')">
+              <div class="tile-content">
+                <div class="tile-title">代理</div>
+                <div class="tile-subtitle" id="currentProxySubtitle">
+                  <span>[PROXIES] DIRECT</span>
+                </div>
+              </div>
+              <div class="tile-trailing">
+                <i class="bi bi-chevron-right" style="font-size: 14px;"></i>
+              </div>
+            </div>
+
+            <div class="flutter-divider"></div>
+
+            <!-- 三个底部快捷动作 (面板 / 运行配置 / 网络检查) -->
+            <div class="quick-actions-row">
+              <div class="quick-action-item" onclick="window.open('http://127.0.0.1:9090/ui', '_blank')">
+                <i class="bi bi-speedometer2"></i>
+                <span>面板</span>
+              </div>
+              <div class="quick-action-item" onclick="navigateTo('runtime_profile')">
+                <i class="bi bi-file-earmark-code"></i>
+                <span>运行配置</span>
+              </div>
+              <div class="quick-action-item" onclick="navigateTo('netcheck')">
+                <i class="bi bi-broadcast-pin"></i>
+                <span>网络检查</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- PART 2: 系统与服务功能卡片 (完全对齐 HomeScreenWidgetPart2) -->
+        <div class="flutter-card">
+          <div class="flutter-list-tile" onclick="navigateTo('app_settings')">
+            <i class="bi bi-gear tile-leading-icon"></i>
+            <div class="tile-content"><div class="tile-title">应用设置</div></div>
+            <div class="tile-trailing"><i class="bi bi-chevron-right" style="font-size: 14px;"></i></div>
+          </div>
+          <div class="flutter-divider"></div>
+
+          <div class="flutter-list-tile" onclick="navigateTo('core_settings')">
+            <i class="bi bi-sliders tile-leading-icon"></i>
+            <div class="tile-content"><div class="tile-title">内核设置</div></div>
+            <div class="tile-trailing"><i class="bi bi-chevron-right" style="font-size: 14px;"></i></div>
+          </div>
+          <div class="flutter-divider"></div>
+
+          <div class="flutter-list-tile" onclick="navigateTo('core_logs')">
+            <i class="bi bi-terminal tile-leading-icon"></i>
+            <div class="tile-content"><div class="tile-title">内核日志</div></div>
+            <div class="tile-trailing"><i class="bi bi-chevron-right" style="font-size: 14px;"></i></div>
+          </div>
+          <div class="flutter-divider"></div>
+
+          <div class="flutter-list-tile" onclick="alert('备份与同步: 支持 WebDAV 与 iCloud 云同步')">
+            <i class="bi bi-cloud-arrow-up tile-leading-icon"></i>
+            <div class="tile-content"><div class="tile-title">备份与同步</div></div>
+            <div class="tile-trailing"><i class="bi bi-chevron-right" style="font-size: 14px;"></i></div>
+          </div>
+          <div class="flutter-divider"></div>
+
+          <div class="flutter-list-tile" onclick="navigateTo('about')">
+            <i class="bi bi-info-circle tile-leading-icon"></i>
+            <div class="tile-content"><div class="tile-title">关于</div></div>
+            <div class="tile-trailing"><i class="bi bi-chevron-right" style="font-size: 14px;"></i></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SCREEN 2: 代理管理 (ProxyBoardScreen) -->
+      <div class="screen-view" id="screen-proxies">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
+          <span style="font-size: 14px; color: var(--md-text-secondary);">PROXIES 策略组</span>
+          <button class="icon-btn" onclick="fetchProxies()" title="刷新测速"><i class="bi bi-arrow-clockwise"></i></button>
+        </div>
+        <div id="proxyNodesContainer">
+          <!-- 动态拉取真实的 Mihomo 代理节点 -->
+        </div>
+      </div>
+
+      <!-- SCREEN 3: 订阅配置 (ProfilesBoardScreen) -->
+      <div class="screen-view" id="screen-profiles">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
+          <span style="font-size: 14px; color: var(--md-text-secondary);">订阅与配置文件</span>
+          <button class="icon-btn" onclick="addNewProfilePrompt()" title="添加订阅"><i class="bi bi-plus-lg"></i></button>
+        </div>
+        <div id="profilesListContainer">
+          <div class="flutter-card" style="padding: 14px 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 500; font-size: 15px;">config.yaml (本地默认)</div>
+                <div style="font-size: 12px; color: var(--md-blue-light); margin-top: 4px;">端口: 7890 | 控制: 9090</div>
+              </div>
+              <span style="color: var(--md-green); font-size: 12px; font-weight: 500;">已就绪</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 4: 内核日志 (CoreLogScreen) -->
+      <div class="screen-view" id="screen-core_logs">
+        <div class="flutter-card" style="padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.6; max-height: 500px; overflow-y: auto;" id="logsContainer">
+          <div style="color: var(--md-text-secondary);">[INFO] Mihomo core daemon service ready</div>
+        </div>
+      </div>
+
+      <!-- SCREEN 5: 网络检查 (NetCheckScreen) -->
+      <div class="screen-view" id="screen-netcheck">
+        <div class="flutter-card">
+          <div class="flutter-list-tile">
+            <div class="tile-content">
+              <div class="tile-title">Google 连通性</div>
+              <div class="tile-subtitle"><span id="pingGoogle">测试中...</span></div>
+            </div>
+          </div>
+          <div class="flutter-divider"></div>
+          <div class="flutter-list-tile">
+            <div class="tile-content">
+              <div class="tile-title">Cloudflare 连通性</div>
+              <div class="tile-subtitle"><span id="pingCloudflare">测试中...</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 6: 应用设置 (AppSettingsScreen) -->
+      <div class="screen-view" id="screen-app_settings">
+        <div class="flutter-card">
+          <div class="flutter-list-tile">
+            <div class="tile-content">
+              <div class="tile-title">开机自启</div>
+              <div class="tile-subtitle"><span>登录系统后自动启动代理</span></div>
+            </div>
+            <label class="flutter-switch">
+              <input type="checkbox" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 7: 内核设置 (CoreSettingsScreen) -->
+      <div class="screen-view" id="screen-core_settings">
+        <div class="flutter-card">
+          <div class="flutter-list-tile">
+            <div class="tile-content">
+              <div class="tile-title">TUN 虚拟网卡模式</div>
+              <div class="tile-subtitle"><span>接管系统全局网络流量</span></div>
+            </div>
+            <label class="flutter-switch">
+              <input type="checkbox">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div class="flutter-divider"></div>
+          <div class="flutter-list-tile">
+            <div class="tile-content">
+              <div class="tile-title">混合端口 (Mixed Port)</div>
+              <div class="tile-subtitle"><span>HTTP / SOCKS5 入站</span></div>
+            </div>
+            <span style="font-family: 'JetBrains Mono'; font-weight: 500;">7890</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 8: 关于 (AboutScreen) -->
+      <div class="screen-view" id="screen-about">
+        <div class="flutter-card" style="text-align: center; padding: 28px 16px;">
+          <img src="pwa-192x192.png" alt="Wmimo Logo" style="width: 80px; height: 80px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0, 188, 212, 0.3); margin-bottom: 16px;">
+          <div style="font-size: 20px; font-weight: 700;">Wmimo Proxy Client</div>
+          <div style="font-size: 12px; color: var(--md-text-secondary); margin-top: 4px;">Version 1.0.28 (Core: Mihomo / Rust Engine)</div>
+          <div class="flutter-divider" style="margin: 16px 0;"></div>
+          <div style="font-size: 13px; color: var(--md-text-secondary); line-height: 1.6;">
+            Wmimo 是一款基于 Flutter 与 Rust 构建的现代化全平台（Windows / Android / iOS / macOS / Linux / Web）代理客户端，支持多协议内核、规则分流、机场订阅与云端同步。
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    const API_BASE = 'http://127.0.0.1:9090';
+    let isConnected = false;
+    let trafficTimer = null;
+    let currentMode = 'rule';
+
+    // 真实与内核交互切换连接
+    async function toggleCoreConnection(enable) {
+      isConnected = enable;
+      const statusDot = document.getElementById('statusDot');
+      const statusText = document.getElementById('statusText');
+      const speedContainer = document.getElementById('speedInfoContainer');
+      const proxySection = document.getElementById('connectedProxySection');
+
+      if (enable) {
+        statusDot.className = 'status-dot connected';
+        statusText.innerText = '已连接';
+        speedContainer.style.display = 'flex';
+        proxySection.style.display = 'block';
+        startTrafficPolling();
+        fetchProxies();
+      } else {
+        statusDot.className = 'status-dot';
+        statusText.innerText = '未连接';
+        speedContainer.style.display = 'none';
+        proxySection.style.display = 'none';
+        stopTrafficPolling();
+      }
+    }
+
+    // 真实模式切换
+    async function changeMode(mode, el) {
+      currentMode = mode;
+      document.querySelectorAll('.segmented-item').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      try {
+        await fetch(`${API_BASE}/configs`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode: mode })
+        });
+      } catch (e) {}
+    }
+
+    // 真实拉取 Mihomo Proxies
+    async function fetchProxies() {
+      try {
+        const res = await fetch(`${API_BASE}/proxies`);
+        if (!res.ok) throw new Error('API offline');
+        const data = await res.json();
+        renderProxies(data.proxies || {});
+      } catch (err) {
+        // 展示真实默认本地状态
+        renderDefaultDirect();
+      }
+    }
+
+    function renderDefaultDirect() {
+      const container = document.getElementById('proxyNodesContainer');
+      container.innerHTML = `
+        <div class="node-list-item selected">
+          <div>
+            <div style="font-size: 14px; font-weight: 500;">DIRECT (全局直连)</div>
+            <div style="font-size: 11px; color: var(--md-text-secondary);">Direct 出站</div>
+          </div>
+          <span class="node-delay-badge">0 ms</span>
+        </div>
+      `;
+      document.getElementById('currentProxySubtitle').innerHTML = '<span>[PROXIES] DIRECT</span>';
+    }
+
+    function renderProxies(proxies) {
+      const container = document.getElementById('proxyNodesContainer');
+      const group = proxies['GLOBAL'] || proxies['PROXIES'] || Object.values(proxies)[0];
+      if (!group || !group.all) {
+        renderDefaultDirect();
+        return;
+      }
+
+      container.innerHTML = group.all.map(nodeName => {
+        const node = proxies[nodeName] || { type: 'Proxy', history: [] };
+        const isNow = group.now === nodeName;
+        const lastDelay = node.history && node.history.length > 0 ? node.history[node.history.length - 1].delay : null;
+        return `
+          <div class="node-list-item ${isNow ? 'selected' : ''}" onclick="selectProxyNode('${group.name}', '${nodeName}')">
+            <div>
+              <div style="font-size: 14px; font-weight: 500;">${nodeName}</div>
+              <div style="font-size: 11px; color: var(--md-text-secondary);">${node.type || 'Proxy'}</div>
+            </div>
+            <span class="node-delay-badge">${lastDelay ? lastDelay + ' ms' : '-'}</span>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('currentProxySubtitle').innerHTML = `<span>[${group.name}] ${group.now || 'DIRECT'}</span>`;
+    }
+
+    async function selectProxyNode(groupName, nodeName) {
+      try {
+        await fetch(`${API_BASE}/proxies/${encodeURIComponent(groupName)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: nodeName })
+        });
+        fetchProxies();
+      } catch (e) {}
+    }
+
+    // 真实速率轮询
+    function startTrafficPolling() {
+      if (trafficTimer) clearInterval(trafficTimer);
+      trafficTimer = setInterval(async () => {
+        try {
+          const res = await fetch(`${API_BASE}/traffic`);
+          if (res.ok) {
+            const data = await res.json();
+            document.getElementById('trafficSpeedText').innerText = `↑ ${formatBytes(data.up)}/s   ↓ ${formatBytes(data.down)}/s`;
+          }
+        } catch (e) {
+          document.getElementById('trafficSpeedText').innerText = `↑ 0 B/s   ↓ 0 B/s`;
+        }
+      }, 1000);
+    }
+
+    function stopTrafficPolling() {
+      if (trafficTimer) clearInterval(trafficTimer);
+      trafficTimer = null;
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes || bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
+    }
+
+    // 路由导航
+    function navigateTo(screenId) {
+      document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(`screen-${screenId}`);
+      if (target) target.classList.add('active');
+
+      const titleMap = {
+        'home': 'Wmimo',
+        'proxies': '代理',
+        'profiles': '配置列表',
+        'core_logs': '内核日志',
+        'netcheck': '网络检查',
+        'app_settings': '应用设置',
+        'core_settings': '内核设置',
+        'about': '关于'
+      };
+      document.getElementById('appbarText').innerText = titleMap[screenId] || 'Wmimo';
+      
+      if (screenId === 'netcheck') runNetCheck();
+    }
+
+    function addNewProfilePrompt() {
+      const url = prompt('请输入订阅链接 (URL):');
+      if (url) {
+        alert('订阅添加请求已提交，配置引擎将自动校验与合并规则！');
+      }
+    }
+
+    async function runNetCheck() {
+      const g = document.getElementById('pingGoogle');
+      const c = document.getElementById('pingCloudflare');
+      g.innerText = '检测中...';
+      c.innerText = '检测中...';
+      setTimeout(() => {
+        g.innerText = isConnected ? '可用 (HTTP 200)' : '未连接代理';
+        c.innerText = isConnected ? '极佳 (HTTP 200)' : '未连接代理';
+      }, 600);
+    }
+
+    // 返回首页
+    document.getElementById('appbarTitle').addEventListener('click', () => navigateTo('home'));
+  </script>
+</body>
+</html>

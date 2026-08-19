@@ -1,0 +1,44 @@
+{
+  "language_tag": "zh-CN",
+  "ui": {
+    "theme": "light",
+    "auto_orientation": false,
+    "disable_font_scaler": false,
+    "hide_after_launch": false,
+    "tv_mode": false,
+    "perapp_hide_system_app": true,
+    "perapp_hide_app_icon": false,
+    "delay_test_sort": false
+  },
+  "webdav": {
+    "url": "",
+    "user": "",
+    "password": ""
+  },
+  "alway_on": false,
+  "log_level": "info",
+  "auto_update_channel": "stable",
+  "auto_download_udpate_pkg": true,
+  "auto_connect_after_launch": false,
+  "auto_set_system_proxy": true,
+  "system_proxy_bypass_domain": [
+    "127.0.0.1",
+    "localhost",
+    "*.local",
+    "10.*",
+    "172.16.*",
+    "192.168.*"
+  ],
+  "user_agent": "",
+  "board_online": false,
+  "board_url": "https://board.zash.run.place/",
+  "board_port": 7066,
+  "delay_test_url": "https://www.gstatic.com/generate_204",
+  "delay_test_url_timeout": 5000,
+  "hide_dock_icon": false,
+  "show_tray_traffic": false,
+  "exclude_from_recent": false,
+  "wake_lock": false,
+  "auto_connect_at_boot": false,
+  "hide_vpn": false
+}

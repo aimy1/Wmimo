@@ -1,0 +1,24 @@
+[package]
+name = "wmimo_bridge"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+wmimo_common = { workspace = true }
+wmimo_core_mgr = { workspace = true }
+wmimo_sys_proxy = { workspace = true }
+wmimo_config_engine = { workspace = true }
+wmimo_client = { workspace = true }
+wmimo_firewall = { workspace = true }
+
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+parking_lot = { workspace = true }
+directories = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }

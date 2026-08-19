@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Wmimo
+GenericName=Wmimo
+Comment=Wmimo client
+Exec=wmimo %u
+TryExec=wmimo
+Terminal=false
+Categories=Network;
+StartupNotify=true
+Icon=com.wmimo.app
+MimeType=x-scheme-handler/wmimo;x-scheme-handler/clash;
+

@@ -1,0 +1,10 @@
+[package]
+name = "wmimo_firewall"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+wmimo_common = { workspace = true }
+tracing = { workspace = true }

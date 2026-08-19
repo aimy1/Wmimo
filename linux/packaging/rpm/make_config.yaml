@@ -1,0 +1,21 @@
+﻿display_name: Wmimo
+summary: Wmimo
+group: Applications/Internet
+vendor: Wmimo
+packager: Wmimo
+license: Other
+priority: optional
+section: x11
+essential: false
+url: https://wmimo.app
+icon: assets/images/app_icon_256.png
+
+keywords:
+  - Wmimo
+
+generic_name: Wmimo
+
+categories:
+  - Applications/Internet
+
+startup_notify: true

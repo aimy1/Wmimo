@@ -1,0 +1,44 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/wmimo_common",
+    "crates/wmimo_core_mgr",
+    "crates/wmimo_sys_proxy",
+    "crates/wmimo_config_engine",
+    "crates/wmimo_client",
+    "crates/wmimo_firewall",
+    "crates/wmimo_bridge",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Wmimo Team"]
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+tokio = { version = "1.38", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
+futures-util = "0.3"
+tokio-tungstenite = { version = "0.23", features = ["rustls-tls-webpki-roots"] }
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
+parking_lot = "0.12"
+directories = "5.0"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.8", features = ["v4", "serde"] }
+base64 = "0.22"
+url = "2.5"
+
+# Local crates
+wmimo_common = { path = "crates/wmimo_common" }
+wmimo_core_mgr = { path = "crates/wmimo_core_mgr" }
+wmimo_sys_proxy = { path = "crates/wmimo_sys_proxy" }
+wmimo_config_engine = { path = "crates/wmimo_config_engine" }
+wmimo_client = { path = "crates/wmimo_client" }
+wmimo_firewall = { path = "crates/wmimo_firewall" }
