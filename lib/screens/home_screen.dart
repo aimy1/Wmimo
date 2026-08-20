@@ -20,8 +20,6 @@ import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/home_screen_widgets.dart';
 import 'package:wmimo/screens/connections_screen.dart';
-import 'package:wmimo/screens/rules_screen.dart';
-import 'package:wmimo/screens/logs_screen.dart';
 import 'package:wmimo/screens/language_settings_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen.dart';
 import 'package:wmimo/screens/proxy_board_screen.dart';
@@ -59,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen>
   int _currentNavIndex = 0;
   FlutterVpnServiceState _vpnState = FlutterVpnServiceState.disconnected;
   final List<GlobalKey<NavigatorState>> _navigatorKeys = List.generate(
-    7,
+    5,
     (_) => GlobalKey<NavigatorState>(),
   );
   late final List<Widget> _tabPages;
@@ -104,14 +102,6 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       _TabNavigator(
         navigatorKey: _navigatorKeys[4],
-        child: const RulesScreen(),
-      ),
-      _TabNavigator(
-        navigatorKey: _navigatorKeys[5],
-        child: const LogsScreen(),
-      ),
-      _TabNavigator(
-        navigatorKey: _navigatorKeys[6],
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: SingleChildScrollView(
@@ -511,7 +501,7 @@ class _HomeScreenState extends State<HomeScreen>
         label: tcontext.meta.connections,
       ),
       (
-        index: 6,
+        index: 4,
         icon: Icons.tune_outlined,
         selectedIcon: Icons.tune_rounded,
         label: tcontext.meta.settingApp,
@@ -750,18 +740,6 @@ class _HomeScreenState extends State<HomeScreen>
                                 _buildNavItem(
                                   context: context,
                                   index: 4,
-                                  icon: Icons.rule_rounded,
-                                  label: tcontext.meta.rules,
-                                ),
-                                _buildNavItem(
-                                  context: context,
-                                  index: 5,
-                                  icon: Icons.article_outlined,
-                                  label: tcontext.meta.coreLog,
-                                ),
-                                _buildNavItem(
-                                  context: context,
-                                  index: 6,
                                   icon: Icons.tune_rounded,
                                   label: tcontext.meta.settingApp,
                                 ),
