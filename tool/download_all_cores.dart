@@ -10,6 +10,9 @@ final Map<String, List<String>> targets = {
     'bind/windows/core/wmimoService.exe',
     'build/windows/x64/runner/Release/wmimoService.exe',
   ],
+  '$kBaseUrl/mihomo-windows-arm64-$kVersion.zip': [
+    'bind/windows/core_arm64/wmimoService.exe',
+  ],
   // Android
   '$kBaseUrl/mihomo-android-arm64-v8-$kVersion.gz': [
     'android/app/src/main/jniLibs/arm64-v8a/libwmimoService.so',

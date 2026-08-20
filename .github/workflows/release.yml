@@ -80,12 +80,26 @@ jobs:
             }
           }
 
-          Write-Host "Compiling Inno Setup Installer using $iscc..." -ForegroundColor Cyan
+          # 1. Package Windows x64 (Installer & Portable)
+          Write-Host "Compiling Inno Setup Installer for x64..." -ForegroundColor Cyan
           & $iscc "/DMyAppVersion=$tag" "/DMyAppArch=x64" "/DSourceDir=$releasePath" "/DOutputDir=$distPath" packaging/windows/setup.iss
+          $zipNameX64 = "Wmimo-Windows-x64-$tag.zip"
+          Compress-Archive -Path "$releasePath/*" -DestinationPath "$distPath/$zipNameX64" -Force
 
-          # 2. Package Portable Zip
-          $zipName = "Wmimo-Windows-x64-$tag.zip"
-          Compress-Archive -Path "$releasePath/*" -DestinationPath "$distPath/$zipName" -Force
+          # 2. Package Windows ARM64 (Installer & Portable)
+          $arm64ReleasePath = "build/windows/arm64/Release"
+          New-Item -ItemType Directory -Force -Path $arm64ReleasePath | Out-Null
+          Copy-Item -Path "$releasePath/*" -Destination $arm64ReleasePath -Recurse -Force
+          $arm64CorePath = "bind/windows/core_arm64/wmimoService.exe"
+          if (Test-Path $arm64CorePath) {
+            Copy-Item -Path $arm64CorePath -Destination "$arm64ReleasePath/wmimoService.exe" -Force
+          }
+          $arm64Resolved = (Resolve-Path $arm64ReleasePath).Path
+          Write-Host "Compiling Inno Setup Installer for ARM64..." -ForegroundColor Cyan
+          & $iscc "/DMyAppVersion=$tag" "/DMyAppArch=arm64" "/DSourceDir=$arm64Resolved" "/DOutputDir=$distPath" packaging/windows/setup.iss
+          $zipNameArm64 = "Wmimo-Windows-arm64-$tag.zip"
+          Compress-Archive -Path "$arm64Resolved/*" -DestinationPath "$distPath/$zipNameArm64" -Force
+
           Write-Host "Created Windows artifacts in dist/:" -ForegroundColor Green
           Get-ChildItem -Path $distPath | Select-Object Name, Length
 

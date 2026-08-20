@@ -115,10 +115,49 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
+[Registry]
+Root: HKCU; Subkey: "Software\{#MyAppName}"; ValueType: string; ValueName: "LanguageTag"; ValueData: "{code:GetLanguageTag}"; Flags: uninsdeletekey
+
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
+function GetLanguageTag(Param: String): String;
+begin
+  case ExpandConstant('{language}') of
+    'chinesesimplified': Result := 'zh-CN';
+    'chinesetraditional': Result := 'zh-TW';
+    'english': Result := 'en';
+    'japanese': Result := 'ja';
+    'korean': Result := 'ko';
+    'russian': Result := 'ru';
+    'spanish': Result := 'es';
+    'arabic': Result := 'ar';
+    'french': Result := 'fr';
+    'german': Result := 'de';
+    'italian': Result := 'it';
+    'portuguese': Result := 'pt';
+    'turkish': Result := 'tr';
+    'dutch': Result := 'nl';
+    'polish': Result := 'pl';
+  else
+    Result := 'en';
+  end;
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+var
+  LangFile: String;
+  LangTag: String;
+begin
+  if CurStep = ssPostInstall then
+  begin
+    LangTag := GetLanguageTag('');
+    LangFile := ExpandConstant('{app}\installer_language.txt');
+    SaveStringToFile(LangFile, LangTag, False);
+  end;
+end;
+
 // Helper function to kill running processes before install or uninstall
 procedure StopWmimoProcesses();
 var

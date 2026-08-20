@@ -14,6 +14,8 @@ import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/text_field.dart';
 
+import 'package:path/path.dart' as path;
+import 'package:win32_registry/win32_registry.dart';
 import 'package:libclash_vpn_service/proxy_manager.dart';
 
 const List<String> ProxyBypassDoaminsDefault = [
@@ -263,6 +265,32 @@ class SettingManager {
 
   static Future<bool> parseConfig() async {
     bool save = false;
+
+    if (_config.languageTag.isEmpty) {
+      if (Platform.isWindows) {
+        try {
+          final regKey = Registry.openPath(RegistryHive.currentUser, path: r'Software\Wmimo');
+          final regLang = regKey.getValueAsString('LanguageTag');
+          regKey.close();
+          if (regLang != null && regLang.isNotEmpty) {
+            _config.languageTag = regLang;
+          }
+        } catch (_) {}
+
+        if (_config.languageTag.isEmpty) {
+          try {
+            final exeDir = File(Platform.resolvedExecutable).parent.path;
+            final langFile = File(path.join(exeDir, 'installer_language.txt'));
+            if (langFile.existsSync()) {
+              final tag = langFile.readAsStringSync().trim();
+              if (tag.isNotEmpty) {
+                _config.languageTag = tag;
+              }
+            }
+          } catch (_) {}
+        }
+      }
+    }
 
     String languageTag = "en";
     if (_config.languageTag.isNotEmpty) {
