@@ -90,11 +90,7 @@ Future<void> run(List<String> args) async {
         startFailedReason = StartFailedReason.invalidProfile;
         break;
       }
-      String version = await AppUtils.getPackgetVersion();
-      if (buildVersion != version) {
-        startFailedReason = StartFailedReason.invalidVersion;
-        break;
-      }
+      await AppUtils.getPackgetVersion();
       if (PlatformUtils.isPC()) {
         String baseExe = path.basename(exePath).toLowerCase();
         if (baseExe != PathUtils.getExeName().toLowerCase() &&

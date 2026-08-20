@@ -4,9 +4,17 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:wmimo/generated/build_time.dart' as build_time;
 
 abstract final class AppUtils {
+  static String? _cachedPackageVersion;
+
   static Future<String> getPackgetVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    return "${packageInfo.version}.${packageInfo.buildNumber}";
+    if (_cachedPackageVersion != null) return _cachedPackageVersion!;
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      _cachedPackageVersion = "${packageInfo.version}.${packageInfo.buildNumber}";
+      return _cachedPackageVersion!;
+    } catch (_) {
+      return getBuildinVersion();
+    }
   }
 
   static String getName() {
@@ -15,16 +23,17 @@ abstract final class AppUtils {
 
   static String getReleaseVersion() {
     List<String> v = getBuildinVersion().split(".");
-    return "${v[0]}.${v[1]}.${v[2]}+${v[3]}";
+    return "${v[0]}.${v[1]}.${v[2]}+${v.length > 3 ? v[3] : '0'}";
   }
 
   static String getNextBuildinVersion() {
     List<String> v = getBuildinVersion().split(".");
-    return "${v[0]}.${v[1]}.${v[2]}.${int.parse(v[3]) + 1}";
+    int buildNum = v.length > 3 ? (int.tryParse(v[3]) ?? 0) : 0;
+    return "${v[0]}.${v[1]}.${v[2]}.${buildNum + 1}";
   }
 
   static String getBuildinVersion() {
-    return "1.0.30.1408";
+    return _cachedPackageVersion ?? "1.0.31.1409";
   }
 
   static DateTime getBuildinVersionDate() {
