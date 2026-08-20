@@ -189,6 +189,8 @@ class VPNService {
     VpnServiceConfig config = VpnServiceConfig();
     config.control_port = controlPort;
     config.mixed_port = ClashSettingManager.getMixedPort();
+    config.mode = setting.Mode ?? "rule";
+    config.tun_mode = setting.Tun?.Enable == true;
     config.base_dir = await PathUtils.profileDir();
     config.work_dir = PathUtils.appAssetsDir();
     config.cache_dir = await PathUtils.cacheDir();

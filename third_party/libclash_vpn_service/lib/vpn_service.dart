@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi' as ffi;
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -26,6 +27,7 @@ class VpnServiceWaitResult {
 class VpnServiceConfig {
   int control_port = 9090;
   int mixed_port = 7890;
+  String mode = "rule";
   String base_dir = "";
   String work_dir = "";
   String cache_dir = "";
@@ -57,6 +59,8 @@ class VpnServiceConfig {
 
   Map<String, dynamic> toJson() => {
         'control_port': control_port,
+        'mixed_port': mixed_port,
+        'mode': mode,
         'base_dir': base_dir,
         'work_dir': work_dir,
         'cache_dir': cache_dir,
@@ -65,8 +69,51 @@ class VpnServiceConfig {
         'secret': secret,
         'log_path': log_path,
         'err_path': err_path,
+        'tun_mode': tun_mode,
       };
-  void fromJson(Map<String, dynamic> json) {}
+  void fromJson(Map<String, dynamic> json) {
+    if (json['control_port'] != null) control_port = json['control_port'];
+    if (json['mixed_port'] != null) mixed_port = json['mixed_port'];
+    if (json['mode'] != null) mode = json['mode'];
+    if (json['base_dir'] != null) base_dir = json['base_dir'];
+    if (json['work_dir'] != null) work_dir = json['work_dir'];
+    if (json['cache_dir'] != null) cache_dir = json['cache_dir'];
+    if (json['core_path'] != null) core_path = json['core_path'];
+    if (json['core_path_patch_final'] != null) core_path_patch_final = json['core_path_patch_final'];
+    if (json['secret'] != null) secret = json['secret'];
+    if (json['log_path'] != null) log_path = json['log_path'];
+    if (json['err_path'] != null) err_path = json['err_path'];
+    if (json['tun_mode'] != null) tun_mode = json['tun_mode'];
+  }
+}
+
+// WinINet FFI Bindings for instant Windows proxy refresh
+typedef _InternetSetOptionC = ffi.Int32 Function(
+  ffi.Pointer<ffi.Void> hInternet,
+  ffi.Uint32 dwOption,
+  ffi.Pointer<ffi.Void> lpBuffer,
+  ffi.Uint32 dwBufferLength,
+);
+typedef _InternetSetOptionDart = int Function(
+  ffi.Pointer<ffi.Void> hInternet,
+  int dwOption,
+  ffi.Pointer<ffi.Void> lpBuffer,
+  int dwBufferLength,
+);
+
+void _refreshWinINetSettings() {
+  if (Platform.isWindows) {
+    try {
+      final wininet = ffi.DynamicLibrary.open('wininet.dll');
+      final _InternetSetOptionDart internetSetOption = wininet
+          .lookup<ffi.NativeFunction<_InternetSetOptionC>>('InternetSetOptionW')
+          .asFunction();
+      // INTERNET_OPTION_SETTINGS_CHANGED = 39
+      // INTERNET_OPTION_REFRESH = 37
+      internetSetOption(ffi.nullptr, 39, ffi.nullptr, 0);
+      internetSetOption(ffi.nullptr, 37, ffi.nullptr, 0);
+    } catch (_) {}
+  }
 }
 
 class FlutterVpnService {
@@ -81,9 +128,66 @@ class FlutterVpnService {
 
   static Future<String> getSystemVersion() async => "1.0.0";
   static Future<String> getABIs() async => "[arm64-v8a, armeabi-v7a, x86_64]";
-  static Future<bool> isRunAsAdmin() async => false;
-  static Future<void> firewallAddApp(String path, String name) async {}
-  static Future<void> firewallAddPorts(List<int> ports, String name) async {}
+
+  static Future<bool> isRunAsAdmin() async {
+    if (Platform.isWindows) {
+      try {
+        final res = await Process.run('net', ['session']);
+        return res.exitCode == 0;
+      } catch (_) {
+        return false;
+      }
+    } else if (Platform.isLinux || Platform.isMacOS) {
+      try {
+        final res = await Process.run('id', ['-u']);
+        return res.stdout.toString().trim() == '0';
+      } catch (_) {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  static Future<void> firewallAddApp(String path, String name) async {
+    if (Platform.isWindows && path.isNotEmpty && File(path).existsSync()) {
+      try {
+        await Process.run('netsh', [
+          'advfirewall',
+          'firewall',
+          'add',
+          'rule',
+          'name=$name',
+          'dir=in',
+          'action=allow',
+          'program=$path',
+          'enable=yes',
+        ]);
+      } catch (_) {}
+    }
+  }
+
+  static Future<void> firewallAddPorts(List<int> ports, String name) async {
+    if (Platform.isWindows && ports.isNotEmpty) {
+      try {
+        final validPorts = ports.where((p) => p > 0).join(',');
+        if (validPorts.isNotEmpty) {
+          await Process.run('netsh', [
+            'advfirewall',
+            'firewall',
+            'add',
+            'rule',
+            'name=$name',
+            'dir=in',
+            'action=allow',
+            'protocol=TCP',
+            'localport=$validPorts',
+            'enable=yes',
+          ]);
+        }
+      } catch (_) {}
+    }
+  }
+
   static Future<bool> isServiceAuthorized(String path) async => true;
   static Future<VpnServiceResultError?> authorizeService(String path, String password) async => null;
   static Future<VpnServiceResultError?> installService() async => null;
@@ -319,6 +423,41 @@ class FlutterVpnService {
     return null;
   }
 
+  static void _ensureWintunAvailable(String workDir, String coreExePath) {
+    if (!Platform.isWindows) return;
+    try {
+      final currentDir = Directory.current.path;
+      final candidateSources = [
+        "$currentDir/bind/windows/core/wintun.dll",
+        "$currentDir/wintun.dll",
+        "${File(coreExePath).parent.path}/wintun.dll",
+      ];
+
+      File? sourceFile;
+      for (final src in candidateSources) {
+        if (File(src).existsSync()) {
+          sourceFile = File(src);
+          break;
+        }
+      }
+
+      if (sourceFile != null && sourceFile.existsSync()) {
+        final destDirs = [
+          workDir,
+          File(coreExePath).parent.path,
+        ];
+        for (final d in destDirs) {
+          if (Directory(d).existsSync()) {
+            final dest = File("$d/wintun.dll");
+            if (!dest.existsSync()) {
+              sourceFile.copySync(dest.path);
+            }
+          }
+        }
+      }
+    } catch (_) {}
+  }
+
   static Future<String> _resolveConfigFile() async {
     String profileFile = "";
     if (_savedConfig?.core_path != null &&
@@ -349,18 +488,38 @@ class FlutterVpnService {
     final port = _savedConfig?.control_port ?? 9090;
     final mixedPort = _savedConfig?.mixed_port ?? 7890;
     final secret = _savedConfig?.secret ?? "";
+    final mode = (_savedConfig?.mode.isNotEmpty == true) ? _savedConfig!.mode : "rule";
+    final tunMode = _savedConfig?.tun_mode ?? false;
 
-    final header = '''
+    // Header parameters matching Clash Verge standards
+    var header = '''
 mixed-port: $mixedPort
 allow-lan: true
-mode: rule
+mode: $mode
 log-level: info
 external-controller: 127.0.0.1:$port
 secret: "$secret"
-
+ipv6: false
+unified-delay: true
+tcp-concurrent: true
+find-process-mode: always
 ''';
 
-    // Filter out conflicting top-level keys
+    if (tunMode) {
+      header += '''
+tun:
+  enable: true
+  stack: mixed
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: false
+''';
+    }
+
+    // Filter out conflicting top-level keys from raw subscription
     var filteredLines = profileContent.split('\n').where((line) {
       final trimmed = line.trim();
       return !trimmed.startsWith('external-controller:') &&
@@ -369,22 +528,27 @@ secret: "$secret"
           !trimmed.startsWith('allow-lan:') &&
           !trimmed.startsWith('mode:') &&
           !trimmed.startsWith('log-level:') &&
-          !trimmed.startsWith('port:');
+          !trimmed.startsWith('port:') &&
+          !trimmed.startsWith('socks-port:') &&
+          !trimmed.startsWith('redir-port:') &&
+          !trimmed.startsWith('tproxy-port:') &&
+          !(tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-')));
     }).map((line) {
-      // Sanitize privileged port 53 binding on Android non-root
-      if (line.contains(':53') || line.contains('0.0.0.0:53')) {
+      // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
+      if (!tunMode && (line.contains(':53') || line.contains('0.0.0.0:53'))) {
         return line.replaceAll(':53', ':1053').replaceAll('0.0.0.0:53', '127.0.0.1:1053');
       }
       return line;
     }).join('\n');
 
-    // Ensure fallback DNS if not defined
+    // Ensure fallback DNS with Fake-IP if not defined or if TUN is active
     if (!filteredLines.contains('dns:') && !filteredLines.contains('nameserver:')) {
       filteredLines += '''\n
 dns:
   enable: true
   listen: 127.0.0.1:1053
   enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
   nameserver:
     - 223.5.5.5
     - 119.29.29.29
@@ -401,7 +565,7 @@ dns:
         : Directory.current.path;
     final runtimePath = "$baseDir/runtime_active_config.yaml";
     try {
-      await File(runtimePath).writeAsString(header + filteredLines, flush: true);
+      await File(runtimePath).writeAsString(header + '\n' + filteredLines, flush: true);
       return runtimePath;
     } catch (_) {
       return profileFile;
@@ -502,6 +666,8 @@ dns:
       }
     }
 
+    _ensureWintunAvailable(workDir, coreExe);
+
     try {
       final args = ['-d', workDir, '-f', configFile];
       _coreProcess = await Process.start(coreExe, args, mode: ProcessStartMode.normal);
@@ -544,7 +710,6 @@ dns:
 
       while (stopwatch.elapsed < timeout) {
         if (_coreProcess == null) {
-          // Process exited or failed to start
           break;
         }
         try {
@@ -626,9 +791,7 @@ dns:
       }
       _coreProcess = null;
     }
-    if (Platform.isWindows) {
-      await cleanSystemProxy();
-    }
+    await cleanSystemProxy();
     _state = FlutterVpnServiceState.disconnected;
     for (var l in _listeners) {
       l(_state, {});
@@ -639,72 +802,121 @@ dns:
   static Future<String?> setExcludeFromRecents(bool enable) async => null;
 
   static Future<void> setSystemProxy(dynamic options) async {
-    if (Platform.isWindows) {
-      String host = "127.0.0.1";
-      int port = 7890;
-      String bypass = "<local>;localhost;127.*;10.*;172.16.*;192.168.*";
+    String host = "127.0.0.1";
+    int port = 7890;
+    String bypass = "<local>;localhost;127.*;10.*;172.16.*;172.17.*;172.18.*;172.19.*;172.20.*;172.21.*;172.22.*;172.23.*;172.24.*;172.25.*;172.26.*;172.27.*;172.28.*;172.29.*;172.30.*;172.31.*;192.168.*";
 
+    try {
+      if (options != null) {
+        host = options.host?.toString() ?? host;
+        port = options.port is int
+            ? options.port
+            : (int.tryParse(options.port.toString()) ?? port);
+        if (options.bypassDomain != null && options.bypassDomain.toString().isNotEmpty) {
+          bypass = "$bypass;${options.bypassDomain}";
+        }
+      }
+    } catch (_) {}
+
+    if (Platform.isWindows) {
       try {
-        if (options != null) {
-          host = options.host?.toString() ?? host;
-          port = options.port is int
-              ? options.port
-              : (int.tryParse(options.port.toString()) ?? port);
-          if (options.bypassDomain?.isNotEmpty == true) {
-            bypass = "$bypass;${options.bypassDomain}";
-          }
+        await Process.run('reg', [
+          'add',
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
+          '/v',
+          'ProxyEnable',
+          '/t',
+          'REG_DWORD',
+          '/d',
+          '1',
+          '/f'
+        ]);
+        await Process.run('reg', [
+          'add',
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
+          '/v',
+          'ProxyServer',
+          '/t',
+          'REG_SZ',
+          '/d',
+          '$host:$port',
+          '/f'
+        ]);
+        await Process.run('reg', [
+          'add',
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
+          '/v',
+          'ProxyOverride',
+          '/t',
+          'REG_SZ',
+          '/d',
+          bypass,
+          '/f'
+        ]);
+        _refreshWinINetSettings();
+      } catch (_) {}
+    } else if (Platform.isMacOS) {
+      try {
+        final services = await _getMacNetworkServices();
+        for (final service in services) {
+          await Process.run('networksetup', ['-setwebproxy', service, host, '$port']);
+          await Process.run('networksetup', ['-setsecurewebproxy', service, host, '$port']);
+          await Process.run('networksetup', ['-setsocksfirewallproxy', service, host, '$port']);
+          final macBypass = ["localhost", "127.0.0.1", "192.168.0.0/16", "10.0.0.0/8", "172.16.0.0/12"];
+          await Process.run('networksetup', ['-setproxybypassdomains', service, ...macBypass]);
+          await Process.run('networksetup', ['-setwebproxystate', service, 'on']);
+          await Process.run('networksetup', ['-setsecurewebproxystate', service, 'on']);
+          await Process.run('networksetup', ['-setsocksfirewallproxystate', service, 'on']);
         }
       } catch (_) {}
-
-      await Process.run('reg', [
-        'add',
-        r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
-        '/v',
-        'ProxyEnable',
-        '/t',
-        'REG_DWORD',
-        '/d',
-        '1',
-        '/f'
-      ]);
-      await Process.run('reg', [
-        'add',
-        r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
-        '/v',
-        'ProxyServer',
-        '/t',
-        'REG_SZ',
-        '/d',
-        '$host:$port',
-        '/f'
-      ]);
-      await Process.run('reg', [
-        'add',
-        r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
-        '/v',
-        'ProxyOverride',
-        '/t',
-        'REG_SZ',
-        '/d',
-        bypass,
-        '/f'
-      ]);
+    } else if (Platform.isLinux) {
+      try {
+        await Process.run('gsettings', ['set', 'org.gnome.system.proxy', 'mode', 'manual']);
+        await Process.run('gsettings', ['set', 'org.gnome.system.proxy.http', 'host', host]);
+        await Process.run('gsettings', ['set', 'org.gnome.system.proxy.http', 'port', '$port']);
+        await Process.run('gsettings', ['set', 'org.gnome.system.proxy.https', 'host', host]);
+        await Process.run('gsettings', ['set', 'org.gnome.system.proxy.https', 'port', '$port']);
+        await Process.run('gsettings', ['set', 'org.gnome.system.proxy.socks', 'host', host]);
+        await Process.run('gsettings', ['set', 'org.gnome.system.proxy.socks', 'port', '$port']);
+        await Process.run('gsettings', [
+          'set',
+          'org.gnome.system.proxy',
+          'ignore-hosts',
+          "['localhost', '127.0.0.0/8', '::1', '10.0.0.0/8', '192.168.0.0/16', '172.16.0.0/12']"
+        ]);
+      } catch (_) {}
     }
   }
 
   static Future<void> cleanSystemProxy() async {
     if (Platform.isWindows) {
-      await Process.run('reg', [
-        'add',
-        r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
-        '/v',
-        'ProxyEnable',
-        '/t',
-        'REG_DWORD',
-        '/d',
-        '0',
-        '/f'
-      ]);
+      try {
+        await Process.run('reg', [
+          'add',
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
+          '/v',
+          'ProxyEnable',
+          '/t',
+          'REG_DWORD',
+          '/d',
+          '0',
+          '/f'
+        ]);
+        _refreshWinINetSettings();
+      } catch (_) {}
+    } else if (Platform.isMacOS) {
+      try {
+        final services = await _getMacNetworkServices();
+        for (final service in services) {
+          await Process.run('networksetup', ['-setwebproxystate', service, 'off']);
+          await Process.run('networksetup', ['-setsecurewebproxystate', service, 'off']);
+          await Process.run('networksetup', ['-setsocksfirewallproxystate', service, 'off']);
+        }
+      } catch (_) {}
+    } else if (Platform.isLinux) {
+      try {
+        await Process.run('gsettings', ['set', 'org.gnome.system.proxy', 'mode', 'none']);
+      } catch (_) {}
     }
   }
 
@@ -721,8 +933,45 @@ dns:
           return true;
         }
       } catch (_) {}
+    } else if (Platform.isMacOS) {
+      try {
+        final services = await _getMacNetworkServices();
+        for (final service in services) {
+          final res = await Process.run('networksetup', ['-getwebproxy', service]);
+          if (res.stdout != null && res.stdout.toString().contains('Enabled: Yes')) {
+            return true;
+          }
+        }
+      } catch (_) {}
+    } else if (Platform.isLinux) {
+      try {
+        final res = await Process.run('gsettings', ['get', 'org.gnome.system.proxy', 'mode']);
+        if (res.stdout != null && res.stdout.toString().contains('manual')) {
+          return true;
+        }
+      } catch (_) {}
     }
     return false;
+  }
+
+  static Future<List<String>> _getMacNetworkServices() async {
+    List<String> services = [];
+    try {
+      final res = await Process.run('networksetup', ['-listallnetworkservices']);
+      if (res.exitCode == 0 && res.stdout != null) {
+        final lines = res.stdout.toString().split('\n');
+        for (var line in lines) {
+          line = line.trim();
+          if (line.isNotEmpty && !line.startsWith('*') && !line.contains('An asterisk')) {
+            services.add(line);
+          }
+        }
+      }
+    } catch (_) {}
+    if (services.isEmpty) {
+      services = ['Wi-Fi', 'Ethernet'];
+    }
+    return services;
   }
 
   static Future<String> clashiApiConnections(bool full) async {
@@ -752,9 +1001,59 @@ dns:
     dynamic exec, {
     dynamic processArgs,
     dynamic runElevated,
-  }) async {}
-  static Future<void> autoStartDelete(String name) async {}
-  static Future<bool> autoStartIsActive(String name) async => false;
+  }) async {
+    final taskName = name.toString();
+    final execPath = exec.toString();
+    if (Platform.isWindows) {
+      try {
+        final cmd = processArgs != null && processArgs.toString().isNotEmpty
+            ? '"$execPath" $processArgs'
+            : '"$execPath"';
+        await Process.run('reg', [
+          'add',
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Run',
+          '/v',
+          taskName,
+          '/t',
+          'REG_SZ',
+          '/d',
+          cmd,
+          '/f',
+        ]);
+      } catch (_) {}
+    }
+  }
+
+  static Future<void> autoStartDelete(String name) async {
+    if (Platform.isWindows) {
+      try {
+        await Process.run('reg', [
+          'delete',
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Run',
+          '/v',
+          name,
+          '/f',
+        ]);
+      } catch (_) {}
+    }
+  }
+
+  static Future<bool> autoStartIsActive(String name) async {
+    if (Platform.isWindows) {
+      try {
+        final res = await Process.run('reg', [
+          'query',
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Run',
+          '/v',
+          name,
+        ]);
+        return res.exitCode == 0 && res.stdout.toString().contains(name);
+      } catch (_) {
+        return false;
+      }
+    }
+    return false;
+  }
 
   static void onStateChanged(
       void Function(FlutterVpnServiceState, Map<String, String>) callback) {

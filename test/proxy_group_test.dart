@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:libclash_vpn_service/vpn_service.dart';
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
 
@@ -101,4 +102,29 @@ rules:
       expect(groups[1].name, equals('自动选择'));
     });
   });
+
+  group('VpnServiceConfig tests', () {
+    test('VpnServiceConfig properly serializes and deserializes mode and tun_mode', () {
+      final config = VpnServiceConfig();
+      config.control_port = 9090;
+      config.mixed_port = 7890;
+      config.mode = "global";
+      config.tun_mode = true;
+      config.secret = "test-secret";
+
+      final json = config.toJson();
+      expect(json['mode'], equals('global'));
+      expect(json['tun_mode'], isTrue);
+      expect(json['control_port'], equals(9090));
+      expect(json['mixed_port'], equals(7890));
+
+      final restored = VpnServiceConfig();
+      restored.fromJson(json);
+      expect(restored.mode, equals('global'));
+      expect(restored.tun_mode, isTrue);
+      expect(restored.control_port, equals(9090));
+      expect(restored.mixed_port, equals(7890));
+    });
+  });
 }
+
