@@ -21,42 +21,17 @@ class _IpInfoCardState extends State<IpInfoCard> {
   IpInfoData? _ipInfo;
   bool _loading = false;
   bool _maskIp = false;
-  int _countdown = 300;
-  Timer? _countdownTimer;
 
   @override
   void initState() {
     super.initState();
     _fetchIpInfo();
-    _startTimer();
-  }
-
-  @override
-  void dispose() {
-    _countdownTimer?.cancel();
-    super.dispose();
-  }
-
-  void _startTimer() {
-    _countdownTimer?.cancel();
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) return;
-      if (_countdown > 0) {
-        setState(() {
-          _countdown--;
-        });
-      } else {
-        _countdown = 300;
-        _fetchIpInfo();
-      }
-    });
   }
 
   @override
   void didUpdateWidget(covariant IpInfoCard oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.isConnected != widget.isConnected) {
-      _countdown = 300;
       _fetchIpInfo();
     }
   }
@@ -100,14 +75,15 @@ class _IpInfoCardState extends State<IpInfoCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final labelStyle = TextStyle(
+    final labelTitleStyle = TextStyle(
       fontSize: 13,
-      fontWeight: FontWeight.w400,
-      color: isDark ? Colors.white70 : Colors.black87,
+      fontWeight: FontWeight.w500,
+      color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
     );
-    final footerStyle = TextStyle(
-      fontSize: 11.5,
-      color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.5),
+    final labelValueStyle = TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.w500,
+      color: isDark ? Colors.white : Colors.black87,
     );
 
     return Card(
@@ -123,28 +99,29 @@ class _IpInfoCardState extends State<IpInfoCard> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // 1. Header: Location icon + Title + Refresh Button
             Row(
               children: [
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: 30,
+                  height: 30,
                   decoration: BoxDecoration(
                     color: const Color(0xFF1E3A5F).withValues(alpha: isDark ? 0.8 : 0.2),
-                    borderRadius: BorderRadius.circular(9),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
                     Icons.location_on_rounded,
                     color: Color(0xFF38BDF8),
-                    size: 20,
+                    size: 18,
                   ),
                 ),
                 const SizedBox(width: 10),
                 const Text(
                   "IP 信息",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15.5,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.2,
                   ),
@@ -152,35 +129,30 @@ class _IpInfoCardState extends State<IpInfoCard> {
                 const Spacer(),
                 InkWell(
                   borderRadius: BorderRadius.circular(16),
-                  onTap: _loading
-                      ? null
-                      : () {
-                          _countdown = 300;
-                          _fetchIpInfo();
-                        },
+                  onTap: _loading ? null : _fetchIpInfo,
                   child: Padding(
                     padding: const EdgeInsets.all(6),
                     child: _loading
                         ? const SizedBox(
-                            width: 18,
-                            height: 18,
+                            width: 17,
+                            height: 17,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : Icon(
                             Icons.refresh_rounded,
-                            size: 22,
-                            color: isDark ? Colors.white70 : Colors.black87,
+                            size: 20,
+                            color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.7),
                           ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
 
-            // 2. Two-Column Grid Content
+            // 2. Simplified Content Area
             if (_loading && _ipInfo == null)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 14),
                 child: Center(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -190,11 +162,11 @@ class _IpInfoCardState extends State<IpInfoCard> {
                         height: 14,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       Text(
                         "正在获取 IP 信息...",
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 12.5,
                           color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
                         ),
                       ),
@@ -203,127 +175,86 @@ class _IpInfoCardState extends State<IpInfoCard> {
                 ),
               )
             else if (_ipInfo != null) ...[
+              // Line 1: IP Address + Mask + Copy
+              Row(
+                children: [
+                  Text("IP: ", style: labelTitleStyle),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(4),
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: _ipInfo!.ip));
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("IP 地址已复制到剪贴板"),
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      _formatIp(_ipInfo!.ip),
+                      style: labelValueStyle.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "monospace",
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () {
+                      setState(() {
+                        _maskIp = !_maskIp;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Icon(
+                        _maskIp
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        size: 15,
+                        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+
+              // Line 2: Location
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Left Column: Country, IP, ASN
+                  Text("位置: ", style: labelTitleStyle),
+                  Text(_ipInfo!.flagEmoji, style: const TextStyle(fontSize: 14)),
+                  const SizedBox(width: 4),
                   Expanded(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Country with Flag
-                        Row(
-                          children: [
-                            Text(
-                              _ipInfo!.flagEmoji,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            const SizedBox(width: 6),
-                            Flexible(
-                              child: Text(
-                                _ipInfo!.country.isNotEmpty ? _ipInfo!.country : "-",
-                                style: const TextStyle(
-                                  fontSize: 14.5,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        // IP Address + Mask toggle & Copy
-                        Row(
-                          children: [
-                            InkWell(
-                              borderRadius: BorderRadius.circular(4),
-                              onTap: () {
-                                Clipboard.setData(ClipboardData(text: _ipInfo!.ip));
-                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("IP 地址已复制到剪贴板"),
-                                    duration: Duration(seconds: 1),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                "IP: ${_formatIp(_ipInfo!.ip)}",
-                                style: labelStyle.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: "monospace",
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(10),
-                              onTap: () {
-                                setState(() {
-                                  _maskIp = !_maskIp;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Icon(
-                                  _maskIp
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
-                                  size: 15,
-                                  color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        // ASN
-                        Text(
-                          "自治域: ${_ipInfo!.asn.isNotEmpty ? _ipInfo!.asn : '-'}",
-                          style: labelStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                    child: Text(
+                      _ipInfo!.locationString,
+                      style: labelValueStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width: 14),
-                  // Right Column: ISP, Org, Location, Timezone
+                ],
+              ),
+              const SizedBox(height: 8),
+
+              // Line 3: ISP / ASN
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("服务商: ", style: labelTitleStyle),
                   Expanded(
-                    flex: 6,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "服务商: ${_ipInfo!.isp.isNotEmpty ? _ipInfo!.isp : '-'}",
-                          style: labelStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          "组织: ${_ipInfo!.org.isNotEmpty ? _ipInfo!.org : '-'}",
-                          style: labelStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          "位置: ${_ipInfo!.locationCityRegion}",
-                          style: labelStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          "时区: ${_ipInfo!.timezone.isNotEmpty ? _ipInfo!.timezone : '-'}",
-                          style: labelStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                    child: Text(
+                      [
+                        _ipInfo!.isp.isNotEmpty ? _ipInfo!.isp : _ipInfo!.org,
+                        if (_ipInfo!.asn.isNotEmpty) "(${_ipInfo!.asn})"
+                      ].where((s) => s.isNotEmpty).join(' '),
+                      style: labelValueStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -333,21 +264,21 @@ class _IpInfoCardState extends State<IpInfoCard> {
                 borderRadius: BorderRadius.circular(8),
                 onTap: _fetchIpInfo,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Center(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           Icons.refresh_rounded,
-                          size: 16,
+                          size: 15,
                           color: theme.colorScheme.primary,
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          "点击检测当前 IP 信息",
+                          "点击获取 IP 信息",
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 12.5,
                             fontWeight: FontWeight.w600,
                             color: theme.colorScheme.primary,
                           ),
@@ -357,24 +288,6 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   ),
                 ),
               ),
-
-            const SizedBox(height: 14),
-
-            // 3. Footer: Auto refresh countdown on left, Coordinates on right
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "自动刷新: ${_countdown}s",
-                  style: footerStyle,
-                ),
-                if (_ipInfo != null && _ipInfo!.coordinatesString.isNotEmpty)
-                  Text(
-                    _ipInfo!.coordinatesString,
-                    style: footerStyle,
-                  ),
-              ],
-            ),
           ],
         ),
       ),

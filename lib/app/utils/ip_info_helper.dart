@@ -58,6 +58,14 @@ class IpInfoData {
     if (region.isNotEmpty) return region;
     return country.isNotEmpty ? country : "-";
   }
+
+  String get locationString {
+    final parts = <String>[];
+    if (country.isNotEmpty) parts.add(country);
+    if (city.isNotEmpty && city != country) parts.add(city);
+    else if (region.isNotEmpty && region != country) parts.add(region);
+    return parts.isEmpty ? (country.isNotEmpty ? country : "-") : parts.join(' · ');
+  }
 }
 
 class IpInfoHelper {
