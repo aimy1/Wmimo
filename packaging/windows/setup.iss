@@ -60,7 +60,8 @@ PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 DisableWelcomePage=no
 DisableDirPage=no
-DisableProgramGroupPage=no
+ShowLanguageDialog=yes
+UsePreviousLanguage=no
 
 #if MyAppArch == "x64"
 ArchitecturesAllowed=x64compatible
@@ -72,11 +73,39 @@ ArchitecturesInstallIn64BitMode=arm64
 
 [Languages]
 Name: "chinesesimplified"; MessagesFile: "ChineseSimplified.isl"
+Name: "chinesetraditional"; MessagesFile: "ChineseTraditional.isl"
 Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
+Name: "korean"; MessagesFile: "compiler:Languages\Korean.isl"
+Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
+Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl"
+Name: "german"; MessagesFile: "compiler:Languages\German.isl"
+Name: "italian"; MessagesFile: "compiler:Languages\Italian.isl"
+Name: "portuguese"; MessagesFile: "compiler:Languages\Portuguese.isl"
+Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"
+Name: "arabic"; MessagesFile: "compiler:Languages\Arabic.isl"
+Name: "dutch"; MessagesFile: "compiler:Languages\Dutch.isl"
+Name: "polish"; MessagesFile: "compiler:Languages\Polish.isl"
+
+[CustomMessages]
+chinesesimplified.AdditionalIcons=附加图标:
+chinesesimplified.CreateDesktopIcon=创建桌面快捷方式(&D)
+chinesesimplified.LaunchProgram=启动 %1
+chinesesimplified.UninstallProgram=卸载 %1
+
+chinesetraditional.AdditionalIcons=附加圖示:
+chinesetraditional.CreateDesktopIcon=建立桌面捷徑(&D)
+chinesetraditional.LaunchProgram=啟動 %1
+chinesetraditional.UninstallProgram=解除安裝 %1
+
+english.AdditionalIcons=Additional shortcuts:
+english.CreateDesktopIcon=Create a &desktop shortcut
+english.LaunchProgram=Launch %1
+english.UninstallProgram=Uninstall %1
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
-Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 6.1; Check: not IsAdminInstallMode
 
 [Files]
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.pdb,portable\*,*.log"

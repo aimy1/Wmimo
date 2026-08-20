@@ -320,7 +320,11 @@ class FlutterVpnService {
 
   static Future<String> _resolveConfigFile() async {
     String profileFile = "";
-    if (_savedConfig?.core_path != null &&
+    if (_savedConfig?.core_path_patch_final != null &&
+        _savedConfig!.core_path_patch_final.isNotEmpty &&
+        File(_savedConfig!.core_path_patch_final).existsSync()) {
+      profileFile = _savedConfig!.core_path_patch_final;
+    } else if (_savedConfig?.core_path != null &&
         _savedConfig!.core_path.isNotEmpty &&
         File(_savedConfig!.core_path).existsSync()) {
       profileFile = _savedConfig!.core_path;
@@ -338,11 +342,7 @@ class FlutterVpnService {
     }
 
     if (profileContent.isEmpty) {
-      if (_savedConfig?.core_path_patch_final != null &&
-          File(_savedConfig!.core_path_patch_final).existsSync()) {
-        return _savedConfig!.core_path_patch_final;
-      }
-      return "";
+      return profileFile;
     }
 
     final port = _savedConfig?.control_port ?? 9090;
@@ -359,7 +359,7 @@ secret: "$secret"
 ''';
 
     // Filter out conflicting top-level keys
-    final filteredLines = profileContent.split('\n').where((line) {
+    var filteredLines = profileContent.split('\n').where((line) {
       final trimmed = line.trim();
       return !trimmed.startsWith('external-controller:') &&
           !trimmed.startsWith('secret:') &&
@@ -368,7 +368,31 @@ secret: "$secret"
           !trimmed.startsWith('mode:') &&
           !trimmed.startsWith('log-level:') &&
           !trimmed.startsWith('port:');
+    }).map((line) {
+      // Sanitize privileged port 53 binding on Android non-root
+      if (line.contains(':53') || line.contains('0.0.0.0:53')) {
+        return line.replaceAll(':53', ':1053').replaceAll('0.0.0.0:53', '127.0.0.1:1053');
+      }
+      return line;
     }).join('\n');
+
+    // Ensure fallback DNS if not defined
+    if (!filteredLines.contains('dns:') && !filteredLines.contains('nameserver:')) {
+      filteredLines += '''\n
+dns:
+  enable: true
+  listen: 127.0.0.1:1053
+  enhanced-mode: fake-ip
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 8.8.8.8
+    - 1.1.1.1
+  fallback:
+    - 1.0.0.1
+    - 8.8.4.4
+''';
+    }
 
     final baseDir = _savedConfig?.base_dir.isNotEmpty == true
         ? _savedConfig!.base_dir
