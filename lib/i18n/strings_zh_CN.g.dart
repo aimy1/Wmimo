@@ -216,7 +216,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get more => '更多';
 	@override String get tips => '提示';
 	@override String get selectAll => '全选';
-	@override String get copy => '拷贝';
+	@override String get copy => '复制';
 	@override String get paste => '粘贴';
 	@override String get cut => '剪切';
 	@override String get save => '保存';
@@ -274,7 +274,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get urlInvalid => 'URL无效';
 	@override String get urlCannotEmpty => 'URL不能为空';
 	@override String get urlTooLong => 'URL过长(>8182)';
-	@override String get copyUrl => '拷贝链接';
+	@override String get copyUrl => '复制链接';
 	@override String get openUrl => '打开链接';
 	@override String get shareUrl => '分享链接';
 	@override String get coreSettingTips => '注意:修改配置后,需要重新连接才会生效';
@@ -374,7 +374,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get searchRules => '搜索规则 (类型/特征/目标代理)';
 	@override String get rules => '规则';
 	@override String get clear => '清除';
-	@override String get copySuccess => '拷贝成功';
+	@override String get copySuccess => '复制成功';
 	@override String get alwayOnVPN => '始终开启连接';
 	@override String get disableFontScaler => '禁用字体缩放';
 	@override String get autoOrientation => '跟随屏幕旋转';
@@ -716,7 +716,7 @@ extension on TranslationsZhCn {
 			'meta.more' => '更多',
 			'meta.tips' => '提示',
 			'meta.selectAll' => '全选',
-			'meta.copy' => '拷贝',
+			'meta.copy' => '复制',
 			'meta.paste' => '粘贴',
 			'meta.cut' => '剪切',
 			'meta.save' => '保存',
@@ -774,7 +774,7 @@ extension on TranslationsZhCn {
 			'meta.urlInvalid' => 'URL无效',
 			'meta.urlCannotEmpty' => 'URL不能为空',
 			'meta.urlTooLong' => 'URL过长(>8182)',
-			'meta.copyUrl' => '拷贝链接',
+			'meta.copyUrl' => '复制链接',
 			'meta.openUrl' => '打开链接',
 			'meta.shareUrl' => '分享链接',
 			'meta.coreSettingTips' => '注意:修改配置后,需要重新连接才会生效',
@@ -874,7 +874,7 @@ extension on TranslationsZhCn {
 			'meta.searchRules' => '搜索规则 (类型/特征/目标代理)',
 			'meta.rules' => '规则',
 			'meta.clear' => '清除',
-			'meta.copySuccess' => '拷贝成功',
+			'meta.copySuccess' => '复制成功',
 			'meta.alwayOnVPN' => '始终开启连接',
 			'meta.disableFontScaler' => '禁用字体缩放',
 			'meta.autoOrientation' => '跟随屏幕旋转',

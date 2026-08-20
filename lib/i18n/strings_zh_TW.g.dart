@@ -374,7 +374,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get searchRules => '搜尋規則 (類型/特徵/目標代理)';
 	@override String get rules => '分流規則';
 	@override String get clear => '清除';
-	@override String get copySuccess => '拷貝成功';
+	@override String get copySuccess => '複製成功';
 	@override String get alwayOnVPN => '始終開啟連線';
 	@override String get disableFontScaler => '禁用字體縮放';
 	@override String get autoOrientation => '跟隨螢幕旋轉';
@@ -874,7 +874,7 @@ extension on TranslationsZhTw {
 			'meta.searchRules' => '搜尋規則 (類型/特徵/目標代理)',
 			'meta.rules' => '分流規則',
 			'meta.clear' => '清除',
-			'meta.copySuccess' => '拷貝成功',
+			'meta.copySuccess' => '複製成功',
 			'meta.alwayOnVPN' => '始終開啟連線',
 			'meta.disableFontScaler' => '禁用字體縮放',
 			'meta.autoOrientation' => '跟隨螢幕旋轉',

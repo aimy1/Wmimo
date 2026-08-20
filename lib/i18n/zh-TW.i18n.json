@@ -264,7 +264,7 @@
         "searchRules": "搜尋規則 (類型/特徵/目標代理)",
         "rules": "分流規則",
         "clear": "清除",
-        "copySuccess": "拷貝成功",
+        "copySuccess": "複製成功",
         "alwayOnVPN": "始終開啟連線",
         "disableFontScaler": "禁用字體縮放",
         "autoOrientation": "跟隨螢幕旋轉",
