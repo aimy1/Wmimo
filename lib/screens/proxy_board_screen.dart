@@ -451,6 +451,22 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }).toList();
   }
 
+  bool _isGroupExpandedByDefault(ClashProxiesNode group, int index) {
+    if (_groupExpanded.containsKey(group.name)) {
+      return _groupExpanded[group.name]!;
+    }
+    if (_currentMode == "global") {
+      return group.name.toUpperCase() == "GLOBAL" || index == 0;
+    }
+    // In rule mode: only expand the primary/first selector group by default; fold all other secondary groups
+    if (index == 0) return true;
+    final lower = group.name.toLowerCase();
+    if (lower == "proxies" || lower == "proxy" || lower == "节点选择" || lower == "手动选择" || lower == "select") {
+      return true;
+    }
+    return false;
+  }
+
   List<ClashProxiesNode> _getNodesForGroup(ClashProxiesNode group) {
     final nodeMap = {for (var n in _allNodes) n.name: n};
     List<ClashProxiesNode> list = group.all
@@ -560,6 +576,38 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       ),
                     ),
                     const SizedBox(width: 8),
+
+                    // Toggle Collapse / Expand All button
+                    Tooltip(
+                      message: groups.any((g) => _isGroupExpandedByDefault(g, groups.indexOf(g)))
+                          ? "折叠所有代理组"
+                          : "展开所有代理组",
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: () {
+                          final anyExpanded = groups.any((g) => _isGroupExpandedByDefault(g, groups.indexOf(g)));
+                          setState(() {
+                            for (var g in groups) {
+                              _groupExpanded[g.name] = !anyExpanded;
+                            }
+                          });
+                        },
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            groups.any((g) => _isGroupExpandedByDefault(g, groups.indexOf(g)))
+                                ? Icons.unfold_less_rounded
+                                : Icons.unfold_more_rounded,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
 
                     // Sort button
                     Tooltip(
@@ -826,7 +874,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         itemCount: groups.length,
                         itemBuilder: (context, index) {
                           final group = groups[index];
-                          return _buildGroupSection(group);
+                          return _buildGroupSection(group, index);
                         },
                       ),
               ),
@@ -862,11 +910,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     );
   }
 
-  Widget _buildGroupSection(ClashProxiesNode group) {
+  Widget _buildGroupSection(ClashProxiesNode group, int index) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final isExpanded = _groupExpanded[group.name] ?? true;
+    final isExpanded = _isGroupExpandedByDefault(group, index);
     final nodes = _getNodesForGroup(group);
 
     return Container(
