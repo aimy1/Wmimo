@@ -520,26 +520,73 @@ tun:
     }
 
     // Filter out conflicting top-level keys from raw subscription
-    var filteredLines = profileContent.split('\n').where((line) {
-      final trimmed = line.trim();
-      return !trimmed.startsWith('external-controller:') &&
-          !trimmed.startsWith('secret:') &&
-          !trimmed.startsWith('mixed-port:') &&
-          !trimmed.startsWith('allow-lan:') &&
-          !trimmed.startsWith('mode:') &&
-          !trimmed.startsWith('log-level:') &&
-          !trimmed.startsWith('port:') &&
-          !trimmed.startsWith('socks-port:') &&
-          !trimmed.startsWith('redir-port:') &&
-          !trimmed.startsWith('tproxy-port:') &&
-          !(tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-')));
-    }).map((line) {
-      // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
-      if (!tunMode && (line.contains(':53') || line.contains('0.0.0.0:53'))) {
-        return line.replaceAll(':53', ':1053').replaceAll('0.0.0.0:53', '127.0.0.1:1053');
+    final overriddenTopLevelPrefixes = [
+      'mixed-port:',
+      'allow-lan:',
+      'mode:',
+      'log-level:',
+      'external-controller:',
+      'secret:',
+      'ipv6:',
+      'unified-delay:',
+      'tcp-concurrent:',
+      'find-process-mode:',
+      'port:',
+      'socks-port:',
+      'redir-port:',
+      'tproxy-port:',
+      'interface-name:',
+      'routing-mark:',
+    ];
+
+    bool inOverriddenBlock = false;
+    final List<String> resultLines = [];
+    final rawLines = profileContent.split('\n');
+
+    for (int i = 0; i < rawLines.length; i++) {
+      final rawLine = rawLines[i];
+      final trimmed = rawLine.trim();
+
+      // Check if entering a root block that we override completely (e.g. tun:)
+      if (tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-'))) {
+        inOverriddenBlock = true;
+        continue;
       }
-      return line;
-    }).join('\n');
+
+      // If we are inside an overridden block and the line is indented, skip it
+      if (inOverriddenBlock) {
+        if (rawLine.startsWith(' ') || rawLine.startsWith('\t') || trimmed.isEmpty) {
+          continue;
+        } else {
+          inOverriddenBlock = false;
+        }
+      }
+
+      // Check if it's a top-level key that we override
+      bool isOverridden = false;
+      if (!rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
+        for (final prefix in overriddenTopLevelPrefixes) {
+          if (trimmed.startsWith(prefix)) {
+            isOverridden = true;
+            break;
+          }
+        }
+      }
+
+      if (isOverridden) {
+        continue;
+      }
+
+      // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
+      String processedLine = rawLine;
+      if (!tunMode && (processedLine.contains(':53') || processedLine.contains('0.0.0.0:53'))) {
+        processedLine = processedLine.replaceAll(':53', ':1053').replaceAll('0.0.0.0:53', '127.0.0.1:1053');
+      }
+
+      resultLines.add(processedLine);
+    }
+
+    var filteredLines = resultLines.join('\n');
 
     // Ensure fallback DNS with Fake-IP if not defined or if TUN is active
     if (!filteredLines.contains('dns:') && !filteredLines.contains('nameserver:')) {
