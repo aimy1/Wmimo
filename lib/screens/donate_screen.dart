@@ -22,18 +22,43 @@ class _DonateScreenState extends LasyRenderingState<DonateScreen> {
   static const String networkName = "APTOS";
   static const String currency = "USDT";
 
+  bool _isCopied = false;
+
   void _copyAddress() {
     final t = Translations.of(context);
     Clipboard.setData(const ClipboardData(text: walletAddress));
+    setState(() {
+      _isCopied = true;
+    });
+
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(t.meta.donateAddressCopied),
+        content: Row(
+          children: [
+            const Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 18),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                t.meta.donateAddressCopied,
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _isCopied = false;
+        });
+      }
+    });
   }
 
   @override
@@ -41,6 +66,12 @@ class _DonateScreenState extends LasyRenderingState<DonateScreen> {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+
+    final cardBgColor = isDark ? ThemeDefine.kColorDarkCard : Colors.white;
+    final innerBoxBgColor =
+        isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC);
+    final borderColor =
+        theme.dividerColor.withValues(alpha: isDark ? 0.25 : 0.12);
 
     return Scaffold(
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
@@ -62,7 +93,7 @@ class _DonateScreenState extends LasyRenderingState<DonateScreen> {
                         child: const SizedBox(
                           width: 36,
                           height: 30,
-                          child: Icon(Icons.arrow_back_ios_outlined, size: 22),
+                          child: Icon(Icons.arrow_back_ios_outlined, size: 20),
                         ),
                       )
                     else
@@ -84,261 +115,278 @@ class _DonateScreenState extends LasyRenderingState<DonateScreen> {
               ),
               const SizedBox(height: 12),
 
-              // 2. Main Page Content
+              // 2. Main Scrollable Content
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   child: Center(
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 460),
+                      constraints: const BoxConstraints(maxWidth: 440),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // Cute Thank You Message Banner
+                          // A. Cute Thank You Greeting Card
                           Container(
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
+                              horizontal: 18,
+                              vertical: 14,
                             ),
                             decoration: BoxDecoration(
                               color: ThemeDefine.kColorBlue.withValues(
-                                alpha: isDark ? 0.14 : 0.08,
+                                alpha: isDark ? 0.12 : 0.08,
                               ),
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(16),
                               border: Border.all(
                                 color: ThemeDefine.kColorBlue.withValues(
-                                  alpha: isDark ? 0.25 : 0.15,
+                                  alpha: isDark ? 0.22 : 0.16,
                                 ),
                                 width: 0.8,
                               ),
                             ),
-                            child: Text(
-                              tcontext.meta.donateThankYou,
-                              style: TextStyle(
-                                fontSize: 12.5,
-                                height: 1.45,
-                                color: ThemeDefine.kColorBlue,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              textAlign: TextAlign.center,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text("☕", style: TextStyle(fontSize: 16)),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      tcontext.meta.donate,
+                                      style: TextStyle(
+                                        fontSize: 13.5,
+                                        fontWeight: FontWeight.w700,
+                                        color: ThemeDefine.kColorBlue,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    const Text("✨", style: TextStyle(fontSize: 14)),
+                                  ],
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  tcontext.meta.donateThankYou,
+                                  style: TextStyle(
+                                    fontSize: 12.5,
+                                    height: 1.5,
+                                    color: isDark
+                                        ? const Color(0xFFCBD5E1)
+                                        : const Color(0xFF475569),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 16),
 
-                          // QR Code Container
+                          // B. Unified Master Donation Card
                           Container(
-                            padding: const EdgeInsets.all(16),
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: cardBgColor,
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: isDark
-                                    ? Colors.white.withValues(alpha: 0.15)
-                                    : Colors.black.withValues(alpha: 0.08),
+                                color: borderColor,
                                 width: 1,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.06),
+                                  color: Colors.black.withValues(
+                                    alpha: isDark ? 0.2 : 0.04,
+                                  ),
                                   blurRadius: 16,
                                   offset: const Offset(0, 4),
                                 ),
                               ],
                             ),
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.asset(
-                                    "assets/images/donate_qr.png",
-                                    width: 180,
-                                    height: 180,
-                                    fit: BoxFit.contain,
+                                // QR Code Container
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color: const Color(0xFFE2E8F0),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.asset(
+                                      "assets/images/donate_qr.png",
+                                      width: 160,
+                                      height: 160,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 18),
+                                const SizedBox(height: 16),
 
-                          // Currency & Network Info Row
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? const Color(0xFF1E293B)
-                                  : const Color(0xFFF1F5F9),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
+                                // Token & Network Chips
                                 Row(
-                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      "${tcontext.meta.tokenCurrency}: ",
-                                      style: TextStyle(
-                                        fontSize: 12.5,
-                                        color: theme.colorScheme.onSurface
-                                            .withValues(alpha: 0.6),
-                                      ),
+                                    _buildBadge(
+                                      icon: Icons.monetization_on_rounded,
+                                      label: "${tcontext.meta.tokenCurrency}: $currency",
+                                      color: const Color(0xFF10B981),
+                                      isDark: isDark,
                                     ),
-                                    const Text(
-                                      currency,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
-                                        color: Color(0xFF26A17B),
-                                      ),
+                                    const SizedBox(width: 10),
+                                    _buildBadge(
+                                      icon: Icons.hub_rounded,
+                                      label: "${tcontext.meta.networkChain}: $networkName",
+                                      color: ThemeDefine.kColorBlue,
+                                      isDark: isDark,
                                     ),
                                   ],
                                 ),
-                                Container(
-                                  width: 1,
-                                  height: 14,
-                                  color: theme.dividerColor.withValues(alpha: 0.35),
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "${tcontext.meta.networkChain}: ",
-                                      style: TextStyle(
-                                        fontSize: 12.5,
-                                        color: theme.colorScheme.onSurface
-                                            .withValues(alpha: 0.6),
-                                      ),
-                                    ),
-                                    Text(
-                                      networkName,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
-                                        color: ThemeDefine.kColorBlue,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 14),
+                                const SizedBox(height: 18),
 
-                          // Deposit Address Card (Tap to Copy)
-                          InkWell(
-                            borderRadius: BorderRadius.circular(14),
-                            onTap: _copyAddress,
-                            child: Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? const Color(0xFF1E293B)
-                                    : const Color(0xFFF1F5F9),
-                                borderRadius: BorderRadius.circular(14),
-                                border: Border.all(
-                                  color: theme.dividerColor.withValues(alpha: 0.3),
-                                  width: 0.8,
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        tcontext.meta.depositAddress,
-                                        style: TextStyle(
-                                          fontSize: 11.5,
-                                          fontWeight: FontWeight.w600,
-                                          color: theme.colorScheme.onSurface
-                                              .withValues(alpha: 0.6),
+                                const Divider(height: 1, thickness: 0.8),
+                                const SizedBox(height: 16),
+
+                                // Deposit Address Box
+                                Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(14),
+                                    onTap: _copyAddress,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(14),
+                                      decoration: BoxDecoration(
+                                        color: innerBoxBgColor,
+                                        borderRadius: BorderRadius.circular(14),
+                                        border: Border.all(
+                                          color: _isCopied
+                                              ? ThemeDefine.kColorBlue
+                                              : borderColor,
+                                          width: 0.8,
                                         ),
                                       ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Icon(
-                                            Icons.copy_rounded,
-                                            size: 13,
-                                            color: ThemeDefine.kColorBlue,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                tcontext.meta.depositAddress,
+                                                style: TextStyle(
+                                                  fontSize: 11.5,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: theme
+                                                      .colorScheme.onSurface
+                                                      .withValues(alpha: 0.55),
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    _isCopied
+                                                        ? Icons.check_circle_rounded
+                                                        : Icons.copy_rounded,
+                                                    size: 13,
+                                                    color: _isCopied
+                                                        ? const Color(0xFF10B981)
+                                                        : ThemeDefine.kColorBlue,
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    _isCopied
+                                                        ? tcontext.meta.copySuccess
+                                                        : tcontext.meta.clickToCopy,
+                                                    style: TextStyle(
+                                                      fontSize: 11,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: _isCopied
+                                                          ? const Color(0xFF10B981)
+                                                          : ThemeDefine.kColorBlue,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            tcontext.meta.clickToCopy,
+                                          const SizedBox(height: 8),
+                                          SelectableText(
+                                            walletAddress,
                                             style: TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w600,
-                                              color: ThemeDefine.kColorBlue,
+                                              fontSize: 11.5,
+                                              fontFamily: "monospace",
+                                              letterSpacing: 0.3,
+                                              height: 1.4,
+                                              color: theme.colorScheme.onSurface
+                                                  .withValues(alpha: 0.85),
                                             ),
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  SelectableText(
-                                    walletAddress,
-                                    style: TextStyle(
-                                      fontSize: 11.5,
-                                      fontFamily: "monospace",
-                                      letterSpacing: 0.3,
-                                      height: 1.4,
-                                      color: theme.colorScheme.onSurface
-                                          .withValues(alpha: 0.85),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 18),
-
-                          // Copy Address Action Button
-                          SizedBox(
-                            width: double.infinity,
-                            height: 44,
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: ThemeDefine.kColorBlue,
-                                foregroundColor: Colors.white,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                              ),
-                              onPressed: _copyAddress,
-                              icon: const Icon(Icons.copy_rounded, size: 17),
-                              label: Text(
-                                tcontext.meta.copyAddressBtn,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
+                                const SizedBox(height: 16),
 
-                          // Tip
-                          Text(
-                            tcontext.meta.donateTip,
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.5),
+                                // Copy Button
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 44,
+                                  child: ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: ThemeDefine.kColorBlue,
+                                      foregroundColor: Colors.white,
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: _copyAddress,
+                                    icon: Icon(
+                                      _isCopied
+                                          ? Icons.check_rounded
+                                          : Icons.copy_rounded,
+                                      size: 16,
+                                    ),
+                                    label: Text(
+                                      _isCopied
+                                          ? tcontext.meta.copySuccess
+                                          : tcontext.meta.copyAddressBtn,
+                                      style: const TextStyle(
+                                        fontSize: 13.5,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 16),
+
+                          // C. Bottom Tip
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              tcontext.meta.donateTip,
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                color: theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.45),
+                                height: 1.4,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
@@ -348,6 +396,40 @@ class _DonateScreenState extends LasyRenderingState<DonateScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildBadge({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required bool isDark,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: isDark ? 0.15 : 0.08),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: color.withValues(alpha: isDark ? 0.3 : 0.2),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: color),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
       ),
     );
   }
