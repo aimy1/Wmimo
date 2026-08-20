@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: unused_catch_stack, empty_catches
 
 import 'dart:convert';
 import 'dart:io';
@@ -188,6 +188,7 @@ class VPNService {
 
     VpnServiceConfig config = VpnServiceConfig();
     config.control_port = controlPort;
+    config.mixed_port = ClashSettingManager.getMixedPort();
     config.base_dir = await PathUtils.profileDir();
     config.work_dir = PathUtils.appAssetsDir();
     config.cache_dir = await PathUtils.cacheDir();
@@ -338,7 +339,10 @@ class VPNService {
     VpnServiceWaitResult result = await FlutterVpnService.restart(timeout);
     if (result.type == VpnServiceWaitType.timeout) {
       await stop();
-      return ReturnResultError("service restart timeout");
+      final msg = result.err?.message.isNotEmpty == true
+          ? result.err!.message
+          : "服务重启超时";
+      return ReturnResultError(msg);
     }
     if (result.type != VpnServiceWaitType.done) {
       Log.w(
@@ -394,7 +398,10 @@ class VPNService {
     VpnServiceWaitResult result = await FlutterVpnService.start(timeout);
     if (result.type == VpnServiceWaitType.timeout) {
       await stop();
-      return ReturnResultError("service start timeout");
+      final msg = result.err?.message.isNotEmpty == true
+          ? result.err!.message
+          : "服务启动超时";
+      return ReturnResultError(msg);
     }
 
     if (result.err != null) {

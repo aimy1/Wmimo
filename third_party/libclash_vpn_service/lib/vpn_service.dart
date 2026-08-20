@@ -25,6 +25,7 @@ class VpnServiceWaitResult {
 
 class VpnServiceConfig {
   int control_port = 9090;
+  int mixed_port = 7890;
   String base_dir = "";
   String work_dir = "";
   String cache_dir = "";
@@ -320,11 +321,7 @@ class FlutterVpnService {
 
   static Future<String> _resolveConfigFile() async {
     String profileFile = "";
-    if (_savedConfig?.core_path_patch_final != null &&
-        _savedConfig!.core_path_patch_final.isNotEmpty &&
-        File(_savedConfig!.core_path_patch_final).existsSync()) {
-      profileFile = _savedConfig!.core_path_patch_final;
-    } else if (_savedConfig?.core_path != null &&
+    if (_savedConfig?.core_path != null &&
         _savedConfig!.core_path.isNotEmpty &&
         File(_savedConfig!.core_path).existsSync()) {
       profileFile = _savedConfig!.core_path;
@@ -332,6 +329,10 @@ class FlutterVpnService {
         _savedConfigFilePath!.isNotEmpty &&
         File(_savedConfigFilePath!).existsSync()) {
       profileFile = _savedConfigFilePath!;
+    } else if (_savedConfig?.core_path_patch_final != null &&
+        _savedConfig!.core_path_patch_final.isNotEmpty &&
+        File(_savedConfig!.core_path_patch_final).existsSync()) {
+      profileFile = _savedConfig!.core_path_patch_final;
     }
 
     String profileContent = "";
@@ -346,10 +347,11 @@ class FlutterVpnService {
     }
 
     final port = _savedConfig?.control_port ?? 9090;
+    final mixedPort = _savedConfig?.mixed_port ?? 7890;
     final secret = _savedConfig?.secret ?? "";
 
     final header = '''
-mixed-port: 7890
+mixed-port: $mixedPort
 allow-lan: true
 mode: rule
 log-level: info
@@ -541,9 +543,13 @@ dns:
       final stopwatch = Stopwatch()..start();
 
       while (stopwatch.elapsed < timeout) {
+        if (_coreProcess == null) {
+          // Process exited or failed to start
+          break;
+        }
         try {
           final client = HttpClient()
-            ..connectionTimeout = const Duration(milliseconds: 400);
+            ..connectionTimeout = const Duration(milliseconds: 200);
           final req = await client
               .getUrl(Uri.parse("http://127.0.0.1:$port/version"));
           if (secret.isNotEmpty) {
@@ -557,7 +563,7 @@ dns:
           }
           client.close();
         } catch (_) {}
-        await Future.delayed(const Duration(milliseconds: 250));
+        await Future.delayed(const Duration(milliseconds: 100));
       }
 
       if (!ready) {
@@ -566,12 +572,12 @@ dns:
             : outBuffer.toString().trim();
         await stop();
         return VpnServiceWaitResult(
-          type: VpnServiceWaitType.timeout,
+          type: VpnServiceWaitType.error,
           err: VpnServiceResultError(
-            504,
+            500,
             errorDetail.isNotEmpty
                 ? "核心启动失败: $errorDetail"
-                : "等待核心启动超时 (REST API 未响应)",
+                : "等待核心启动超时 (端口 $port 无响应)",
           ),
         );
       }

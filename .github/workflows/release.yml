@@ -61,10 +61,14 @@ jobs:
           $distDir = New-Item -ItemType Directory -Force -Path "dist"
           $distPath = $distDir.FullName
 
-          # Ensure core is present in Release
+          # Ensure core and wintun.dll are present in Release
           $corePath = "bind/windows/core/wmimoService.exe"
           if (Test-Path $corePath) {
             Copy-Item -Path $corePath -Destination "$releasePath/wmimoService.exe" -Force
+          }
+          $wintunPath = "bind/windows/core/wintun.dll"
+          if (Test-Path $wintunPath) {
+            Copy-Item -Path $wintunPath -Destination "$releasePath/wintun.dll" -Force
           }
 
           # 1. Locate/Install Inno Setup and build Setup Installer
@@ -93,6 +97,10 @@ jobs:
           $arm64CorePath = "bind/windows/core_arm64/wmimoService.exe"
           if (Test-Path $arm64CorePath) {
             Copy-Item -Path $arm64CorePath -Destination "$arm64ReleasePath/wmimoService.exe" -Force
+          }
+          $arm64WintunPath = "bind/windows/core_arm64/wintun.dll"
+          if (Test-Path $arm64WintunPath) {
+            Copy-Item -Path $arm64WintunPath -Destination "$arm64ReleasePath/wintun.dll" -Force
           }
           $arm64Resolved = (Resolve-Path $arm64ReleasePath).Path
           Write-Host "Compiling Inno Setup Installer for ARM64..." -ForegroundColor Cyan

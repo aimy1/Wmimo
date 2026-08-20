@@ -98,6 +98,41 @@ Future<void> main() async {
     }
   }
 
+  // Download Wintun DLL for Windows TUN mode
+  try {
+    print('\n[Downloading] Wintun 0.14.1 for Windows TUN mode...');
+    final req = await client.getUrl(Uri.parse('https://www.wintun.net/builds/wintun-0.14.1.zip'));
+    final resp = await req.close();
+    if (resp.statusCode == 200) {
+      final bytes = await resp.fold<List<int>>([], (prev, element) => prev..addAll(element));
+      final archive = ZipDecoder().decodeBytes(bytes);
+      for (final file in archive) {
+        if (file.isFile) {
+          if (file.name == 'wintun/bin/amd64/wintun.dll') {
+            final data = file.content as List<int>;
+            for (final dest in [
+              'bind/windows/core/wintun.dll',
+              'build/windows/x64/runner/Release/wintun.dll',
+            ]) {
+              final f = File(dest);
+              if (!f.parent.existsSync()) f.parent.createSync(recursive: true);
+              f.writeAsBytesSync(data, flush: true);
+              print('  -> Saved $dest (${data.length} bytes)');
+            }
+          } else if (file.name == 'wintun/bin/arm64/wintun.dll') {
+            final data = file.content as List<int>;
+            final f = File('bind/windows/core_arm64/wintun.dll');
+            if (!f.parent.existsSync()) f.parent.createSync(recursive: true);
+            f.writeAsBytesSync(data, flush: true);
+            print('  -> Saved bind/windows/core_arm64/wintun.dll (${data.length} bytes)');
+          }
+        }
+      }
+    }
+  } catch (e) {
+    print('  Warning: Could not download wintun.dll: $e');
+  }
+
   client.close();
   print('\nAll core downloads completed successfully!');
 }

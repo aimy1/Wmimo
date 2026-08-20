@@ -299,37 +299,38 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
     setState(() {});
 
+    Timer? updateDebounce;
+    void scheduleUiUpdate() {
+      if (updateDebounce?.isActive == true) return;
+      updateDebounce = Timer(const Duration(milliseconds: 120), () {
+        if (mounted) setState(() {});
+      });
+    }
+
     final testFutures = nodesToTest.map((node) async {
       try {
         final res = await ClashHttpApi.getDelay(
           node.name,
           url: SettingManager.getConfig().delayTestUrl,
         );
-        if (mounted) {
-          setState(() {
-            if (res.data != null && res.data! > 0) {
-              node.delay = res.data;
-            } else {
-              node.delay = -1;
-            }
-          });
+        if (res.data != null && res.data! > 0) {
+          node.delay = res.data;
+        } else {
+          node.delay = -1;
         }
       } catch (_) {
-        if (mounted) {
-          setState(() {
-            node.delay = -1;
-          });
-        }
+        node.delay = -1;
       } finally {
-        if (mounted) {
-          setState(() {
-            _nodesTesting.remove(node.name);
-          });
-        }
+        _nodesTesting.remove(node.name);
+        scheduleUiUpdate();
       }
     });
 
     await Future.wait(testFutures);
+    updateDebounce?.cancel();
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<void> _testAllDelay() async {
