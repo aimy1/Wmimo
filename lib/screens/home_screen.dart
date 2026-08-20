@@ -759,41 +759,9 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   ],
                 )
-              : Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 14, 20, 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.asset(
-                              'assets/images/app_icon_128.png',
-                              width: 26,
-                              height: 26,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            AppUtils.getName(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18,
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: IndexedStack(
-                        index: _currentNavIndex,
-                        children: _tabPages,
-                      ),
-                    ),
-                  ],
+              : IndexedStack(
+                  index: _currentNavIndex,
+                  children: _tabPages,
                 ),
         ),
       ),
