@@ -780,7 +780,7 @@ class MyAppState extends State<MyApp>
     _menu = Menu(items: items);
     await trayManager.setContextMenu(_menu!);
     if (!Platform.isLinux) {
-      await trayManager.popUpContextMenu(bringAppToFront: true);
+      await trayManager.popUpContextMenu();
     }
   }
 

@@ -164,7 +164,7 @@ class ProxyNodeLoader {
       if (synthesizedGroups.isEmpty) return;
 
       // Append generated proxy-groups to the file
-      final yamlWriter = YAMLWriter();
+      final yamlWriter = YamlWriter();
       String groupsYaml = yamlWriter.write({'proxy-groups': synthesizedGroups});
 
       // Append cleanly

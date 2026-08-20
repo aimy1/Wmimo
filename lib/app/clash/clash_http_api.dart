@@ -755,6 +755,107 @@ class ClashHttpApi {
     return result.error;
   }
 
+  static Future<ReturnResultError?> patchConfigs(Map<String, dynamic> patch) async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+    var body = jsonEncode(patch);
+    var result = await HttpUtils.httpPatchRequest(
+      "$host:${getControlPort?.call()}/configs",
+      null,
+      headers,
+      body,
+      const Duration(seconds: 3),
+      null,
+      null,
+    );
+    return result.error;
+  }
+
+  static Future<ReturnResultError?> reloadConfigs({
+    bool force = true,
+    String path = "",
+  }) async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+    var body = jsonEncode({
+      "path": path,
+      "payload": "",
+    });
+    var result = await HttpUtils.httpPutRequest(
+      "$host:${getControlPort?.call()}/configs?force=$force",
+      null,
+      headers,
+      body,
+      const Duration(seconds: 5),
+      null,
+      null,
+      null,
+    );
+    return result.error;
+  }
+
+  static Future<ReturnResult<Map<String, dynamic>>> getProvidersRules() async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+    var result = await HttpUtils.httpGetRequest(
+      "$host:${getControlPort?.call()}/providers/rules",
+      null,
+      headers,
+      const Duration(seconds: timeoutSeconds),
+      null,
+      null,
+    );
+    if (result.error != null) {
+      return ReturnResult(error: result.error);
+    }
+    try {
+      var decodedResponse = jsonDecode(result.data!.item2);
+      if (decodedResponse is Map) {
+        final providers = decodedResponse["providers"];
+        if (providers is Map) {
+          return ReturnResult(data: Map<String, dynamic>.from(providers));
+        }
+      }
+      return ReturnResult(data: {});
+    } catch (err) {
+      return ReturnResult(error: ReturnResultError(err.toString()));
+    }
+  }
+
+  static Future<ReturnResultError?> updateRuleProvider(String name) async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+    final encodeName = Uri.encodeComponent(name);
+    var result = await HttpUtils.httpPutRequest(
+      "$host:${getControlPort?.call()}/providers/rules/$encodeName",
+      null,
+      headers,
+      "",
+      const Duration(seconds: 30),
+      null,
+      null,
+      null,
+    );
+    return result.error;
+  }
+
+  static Future<ReturnResultError?> updateProxyProvider(String name) async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+    final encodeName = Uri.encodeComponent(name);
+    var result = await HttpUtils.httpPutRequest(
+      "$host:${getControlPort?.call()}/providers/proxies/$encodeName",
+      null,
+      headers,
+      "",
+      const Duration(seconds: 30),
+      null,
+      null,
+      null,
+    );
+    return result.error;
+  }
+
   static String convertTrafficToStringDouble(num? value, {num kb = 1024}) {
     if (value == null || value < 0) {
       return "";

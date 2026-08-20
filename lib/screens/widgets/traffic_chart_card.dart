@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/i18n/strings.g.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 
 class TrafficDataRecord {

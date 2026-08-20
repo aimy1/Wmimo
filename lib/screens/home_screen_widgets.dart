@@ -878,7 +878,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
               fit: BoxFit.contain,
               child: Switch(
                 value: isActive,
-                activeColor: iconColor,
+                activeThumbColor: iconColor,
+                activeTrackColor: iconColor.withValues(alpha: 0.4),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 onChanged: onChanged,
               ),

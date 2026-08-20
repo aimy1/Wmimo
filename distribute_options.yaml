@@ -1,0 +1,44 @@
+app_name: Wmimo
+output: dist/
+variables:
+releases:
+  - name: release
+    jobs:
+      - name: android-apk
+        package:
+          platform: android
+          target: apk
+          build_args:
+            target-platform: android-arm,android-arm64,android-x64
+      - name: android-aab
+        package:
+          platform: android
+          target: aab
+      - name: linux-deb
+        package:
+          platform: linux
+          target: deb
+          dart-define:
+            PACKAGE_TARGET: deb
+      - name: linux-rpm
+        package:
+          platform: linux
+          target: rpm
+          dart-define:
+            PACKAGE_TARGET: rpm
+      - name: macos-dmg
+        package:
+          platform: macos
+          target: dmg
+      - name: macos-zip
+        package:
+          platform: macos
+          target: zip
+      - name: windows-exe
+        package:
+          platform: windows
+          target: exe
+      - name: windows-zip
+        package:
+          platform: windows
+          target: zip
