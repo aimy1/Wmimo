@@ -10,7 +10,6 @@ import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
-import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 
@@ -259,6 +258,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
   }
 
   void _showLogDetail(ClashLog log) {
+    final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final color = _getLevelColor(log.type);
