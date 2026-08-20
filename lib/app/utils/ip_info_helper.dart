@@ -9,7 +9,11 @@ class IpInfoData {
   final String region;
   final String city;
   final String isp;
+  final String org;
   final String asn;
+  final String timezone;
+  final double? latitude;
+  final double? longitude;
   final bool isProxy;
 
   IpInfoData({
@@ -19,7 +23,11 @@ class IpInfoData {
     this.region = '',
     this.city = '',
     this.isp = '',
+    this.org = '',
     this.asn = '',
+    this.timezone = '',
+    this.latitude,
+    this.longitude,
     this.isProxy = false,
   });
 
@@ -30,16 +38,25 @@ class IpInfoData {
     return String.fromCharCode(firstLetter) + String.fromCharCode(secondLetter);
   }
 
-  String get locationString {
-    final parts = <String>[];
-    if (country.isNotEmpty) parts.add(country);
-    if (region.isNotEmpty && region != country && !region.contains(country)) {
-      parts.add(region);
+  String get coordinatesString {
+    if (latitude == null || longitude == null) {
+      return countryCode;
     }
-    if (city.isNotEmpty && city != region && !region.contains(city)) {
-      parts.add(city);
+    final latStr = latitude!.toStringAsFixed(2);
+    final lonStr = longitude!.toStringAsFixed(2);
+    if (countryCode.isNotEmpty) {
+      return "$countryCode, $lonStr, $latStr";
     }
-    return parts.isEmpty ? "未知位置" : parts.join(' · ');
+    return "$lonStr, $latStr";
+  }
+
+  String get locationCityRegion {
+    if (city.isNotEmpty && region.isNotEmpty && city != region) {
+      return "$city, $region";
+    }
+    if (city.isNotEmpty) return city;
+    if (region.isNotEmpty) return region;
+    return country.isNotEmpty ? country : "-";
   }
 }
 
@@ -49,14 +66,26 @@ class IpInfoHelper {
     try {
       final data = await _fetchFromUrl('https://api.ip.sb/geoip', proxyPort);
       if (data != null && data['ip'] != null) {
+        double? lat;
+        double? lon;
+        if (data['latitude'] != null) lat = double.tryParse(data['latitude'].toString());
+        if (data['longitude'] != null) lon = double.tryParse(data['longitude'].toString());
+        final asnNum = data['asn'] != null ? 'AS${data['asn']}' : '';
+        final orgName = data['organization']?.toString() ?? (data['asn_organization']?.toString() ?? '');
+        final ispName = data['isp']?.toString() ?? orgName;
+
         return IpInfoData(
           ip: data['ip']?.toString() ?? '',
           country: data['country']?.toString() ?? '',
           countryCode: data['country_code']?.toString() ?? '',
           region: data['region']?.toString() ?? '',
           city: data['city']?.toString() ?? '',
-          isp: data['isp']?.toString() ?? (data['organization']?.toString() ?? ''),
-          asn: data['asn'] != null ? 'AS${data['asn']}' : '',
+          isp: ispName.isNotEmpty ? ispName : orgName,
+          org: orgName.isNotEmpty ? orgName : ispName,
+          asn: asnNum,
+          timezone: data['timezone']?.toString() ?? '',
+          latitude: lat,
+          longitude: lon,
           isProxy: isProxy,
         );
       }
@@ -67,14 +96,27 @@ class IpInfoHelper {
       final data = await _fetchFromUrl('https://ipwho.is/', proxyPort);
       if (data != null && data['ip'] != null) {
         final conn = data['connection'] is Map ? data['connection'] : {};
+        final tz = data['timezone'] is Map ? data['timezone'] : {};
+        double? lat;
+        double? lon;
+        if (data['latitude'] != null) lat = double.tryParse(data['latitude'].toString());
+        if (data['longitude'] != null) lon = double.tryParse(data['longitude'].toString());
+        final asnNum = conn['asn'] != null ? 'AS${conn['asn']}' : '';
+        final ispName = conn['isp']?.toString() ?? '';
+        final orgName = conn['org']?.toString() ?? ispName;
+
         return IpInfoData(
           ip: data['ip']?.toString() ?? '',
           country: data['country']?.toString() ?? '',
           countryCode: data['country_code']?.toString() ?? '',
           region: data['region']?.toString() ?? '',
           city: data['city']?.toString() ?? '',
-          isp: conn['isp']?.toString() ?? (conn['org']?.toString() ?? ''),
-          asn: conn['asn'] != null ? 'AS${conn['asn']}' : '',
+          isp: ispName.isNotEmpty ? ispName : orgName,
+          org: orgName.isNotEmpty ? orgName : ispName,
+          asn: asnNum,
+          timezone: tz['id']?.toString() ?? '',
+          latitude: lat,
+          longitude: lon,
           isProxy: isProxy,
         );
       }
@@ -85,6 +127,11 @@ class IpInfoHelper {
       final data = await _fetchFromUrl('https://api.myip.la/en?json', proxyPort);
       if (data != null && data['ip'] != null) {
         final loc = data['location'] is Map ? data['location'] : {};
+        double? lat;
+        double? lon;
+        if (loc['latitude'] != null) lat = double.tryParse(loc['latitude'].toString());
+        if (loc['longitude'] != null) lon = double.tryParse(loc['longitude'].toString());
+
         return IpInfoData(
           ip: data['ip']?.toString() ?? '',
           country: loc['country_name']?.toString() ?? '',
@@ -92,7 +139,11 @@ class IpInfoHelper {
           region: loc['province']?.toString() ?? '',
           city: loc['city']?.toString() ?? '',
           isp: '',
+          org: '',
           asn: '',
+          timezone: '',
+          latitude: lat,
+          longitude: lon,
           isProxy: isProxy,
         );
       }
