@@ -369,7 +369,22 @@
         "githubRepo": "Репозиторий с открытым исходным кодом",
         "openSourceLicense": "Лицензия",
         "submitFeedback": "Обратная связь и предложения",
-        "copiedToClipboard": "Скопировано в буфер обмена"
+        "copiedToClipboard": "Скопировано в буфер обмена",
+        "autoScrollEnabled": "Автопрокрутка включена",
+        "autoScrollDisabled": "Автопрокрутка отключена",
+        "pauseLogs": "Приостановить логи",
+        "resumeLogs": "Возобновить логи",
+        "scrollToLatest": "К последним логам",
+        "scrollToBottom": "Прокрутить вниз",
+        "newLogsCount": "($p новых логов)",
+        "copiedLogContent": "Содержимое лога скопировано",
+        "copyLog": "Копировать лог",
+        "noLogsPrompt": "Логов пока нет. Логи ядра появятся после запуска прокси.",
+        "searchLogsHint": " (IP, Домен, Правило, Ошибка...)",
+        "offlinePreviewPrompt": "Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.",
+        "manualSelect": "Вручную",
+        "autoSelect": "Авто",
+        "speedTestGroup": "Проверить задержку группы"
     },
     "permission": {
         "camera": "Камера",

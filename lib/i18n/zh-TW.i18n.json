@@ -369,7 +369,22 @@
         "githubRepo": "開原始碼倉庫",
         "openSourceLicense": "開源許可證",
         "submitFeedback": "提交反饋與建議",
-        "copiedToClipboard": "已複製到剪貼簿"
+        "copiedToClipboard": "已複製到剪貼簿",
+        "autoScrollEnabled": "已開啟自動滾動",
+        "autoScrollDisabled": "已關閉自動滾動",
+        "pauseLogs": "暫停即時日誌",
+        "resumeLogs": "恢復即時日誌",
+        "scrollToLatest": "滾至最新",
+        "scrollToBottom": "滾至底部",
+        "newLogsCount": "($p 條新日誌)",
+        "copiedLogContent": "已複製日誌內容",
+        "copyLog": "複製日誌",
+        "noLogsPrompt": "暫無日誌，啟動代理後將即時捕獲核心日誌",
+        "searchLogsHint": " (IP, 網域名稱, 規則, 錯誤...)",
+        "offlinePreviewPrompt": "離線設定預覽中，開啟代理後可進行分流與節點測速",
+        "manualSelect": "手動切換",
+        "autoSelect": "自動",
+        "speedTestGroup": "策略組測速"
     },
     "permission": {
         "camera": "攝像頭",

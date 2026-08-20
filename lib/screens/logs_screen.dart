@@ -355,15 +355,15 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                         await Clipboard.setData(ClipboardData(text: log.payload));
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("已复制日志内容"),
-                            duration: Duration(seconds: 1),
+                          SnackBar(
+                            content: Text(tcontext.meta.copiedLogContent),
+                            duration: const Duration(seconds: 1),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
                       },
                       icon: const Icon(Icons.copy_rounded, size: 18),
-                      label: const Text("复制日志"),
+                      label: Text(tcontext.meta.copyLog),
                     ),
                   ),
                 ],
@@ -456,7 +456,9 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
 
                     // Auto-scroll toggle
                     Tooltip(
-                      message: _autoScroll ? "已开启自动滚动" : "已关闭自动滚动",
+                      message: _autoScroll
+                          ? tcontext.meta.autoScrollEnabled
+                          : tcontext.meta.autoScrollDisabled,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
                         onTap: () {
@@ -490,7 +492,9 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
 
                     // Pause/Resume Stream
                     Tooltip(
-                      message: _isStreaming ? "暂停实时日志" : "恢复实时日志",
+                      message: _isStreaming
+                          ? tcontext.meta.pauseLogs
+                          : tcontext.meta.resumeLogs,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
                         onTap: () {
@@ -576,7 +580,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                       child: TextField(
                         controller: _searchController,
                         decoration: InputDecoration(
-                          hintText: "${tcontext.meta.search} (IP, 域名, 规则, 错误...)",
+                          hintText: "${tcontext.meta.search}${tcontext.meta.searchLogsHint}",
                           hintStyle: TextStyle(
                             fontSize: 12,
                             color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
@@ -649,7 +653,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                                   const SizedBox(height: 10),
                                   Text(
                                     _logs.isEmpty
-                                        ? "暂无日志，启动代理后将实时捕获核心日志"
+                                        ? tcontext.meta.noLogsPrompt
                                         : tcontext.meta.noFilterResults,
                                     style: TextStyle(
                                       fontSize: 13,
@@ -693,8 +697,8 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                                     const SizedBox(width: 6),
                                     Text(
                                       _newLogsWhilePaused > 0
-                                          ? "滚至最新 (${_newLogsWhilePaused} 条新日志)"
-                                          : "滚至底部",
+                                          ? "${tcontext.meta.scrollToLatest} ${tcontext.meta.newLogsCount(p: _newLogsWhilePaused.toString())}"
+                                          : tcontext.meta.scrollToBottom,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,

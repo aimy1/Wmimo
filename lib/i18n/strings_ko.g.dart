@@ -480,6 +480,21 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get openSourceLicense => '오픈 소스 라이선스';
 	@override String get submitFeedback => '피드백 및 문제 제출';
 	@override String get copiedToClipboard => '클립보드에 복사되었습니다';
+	@override String get autoScrollEnabled => '자동 스크롤 켜짐';
+	@override String get autoScrollDisabled => '자동 스크롤 꺼짐';
+	@override String get pauseLogs => '실시간 로그 일시 중지';
+	@override String get resumeLogs => '실시간 로그 재개';
+	@override String get scrollToLatest => '최신으로 스크롤';
+	@override String get scrollToBottom => '맨 아래로 스크롤';
+	@override String newLogsCount({required Object p}) => '(${p}개 새 로그)';
+	@override String get copiedLogContent => '로그 내용이 복사되었습니다';
+	@override String get copyLog => '로그 복사';
+	@override String get noLogsPrompt => '아직 로그가 없습니다. 프록시 시작 후 실시간 로그가 표시됩니다.';
+	@override String get searchLogsHint => ' (IP, 도메인, 규칙, 오류...)';
+	@override String get offlinePreviewPrompt => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.';
+	@override String get manualSelect => '수동 선택';
+	@override String get autoSelect => '자동';
+	@override String get speedTestGroup => '그룹 지연 테스트';
 }
 
 // Path: permission
@@ -965,6 +980,21 @@ extension on TranslationsKo {
 			'meta.openSourceLicense' => '오픈 소스 라이선스',
 			'meta.submitFeedback' => '피드백 및 문제 제출',
 			'meta.copiedToClipboard' => '클립보드에 복사되었습니다',
+			'meta.autoScrollEnabled' => '자동 스크롤 켜짐',
+			'meta.autoScrollDisabled' => '자동 스크롤 꺼짐',
+			'meta.pauseLogs' => '실시간 로그 일시 중지',
+			'meta.resumeLogs' => '실시간 로그 재개',
+			'meta.scrollToLatest' => '최신으로 스크롤',
+			'meta.scrollToBottom' => '맨 아래로 스크롤',
+			'meta.newLogsCount' => ({required Object p}) => '(${p}개 새 로그)',
+			'meta.copiedLogContent' => '로그 내용이 복사되었습니다',
+			'meta.copyLog' => '로그 복사',
+			'meta.noLogsPrompt' => '아직 로그가 없습니다. 프록시 시작 후 실시간 로그가 표시됩니다.',
+			'meta.searchLogsHint' => ' (IP, 도메인, 규칙, 오류...)',
+			'meta.offlinePreviewPrompt' => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.',
+			'meta.manualSelect' => '수동 선택',
+			'meta.autoSelect' => '자동',
+			'meta.speedTestGroup' => '그룹 지연 테스트',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

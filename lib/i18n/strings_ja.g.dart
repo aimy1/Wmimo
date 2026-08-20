@@ -480,6 +480,21 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get openSourceLicense => 'オープンソースライセンス';
 	@override String get submitFeedback => 'フィードバックと問題の報告';
 	@override String get copiedToClipboard => 'クリップボードにコピーしました';
+	@override String get autoScrollEnabled => '自動スクロール有効';
+	@override String get autoScrollDisabled => '自動スクロール無効';
+	@override String get pauseLogs => 'リアルタイムログを一時停止';
+	@override String get resumeLogs => 'リアルタイムログを再開';
+	@override String get scrollToLatest => '最新までスクロール';
+	@override String get scrollToBottom => '最下部へスクロール';
+	@override String newLogsCount({required Object p}) => '(${p} 件の新しいログ)';
+	@override String get copiedLogContent => 'ログ内容をコピーしました';
+	@override String get copyLog => 'ログをコピー';
+	@override String get noLogsPrompt => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。';
+	@override String get searchLogsHint => ' (IP, ドメイン, ルール, エラー...)';
+	@override String get offlinePreviewPrompt => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。';
+	@override String get manualSelect => '手動切替';
+	@override String get autoSelect => '自動';
+	@override String get speedTestGroup => 'グループ速度テスト';
 }
 
 // Path: permission
@@ -965,6 +980,21 @@ extension on TranslationsJa {
 			'meta.openSourceLicense' => 'オープンソースライセンス',
 			'meta.submitFeedback' => 'フィードバックと問題の報告',
 			'meta.copiedToClipboard' => 'クリップボードにコピーしました',
+			'meta.autoScrollEnabled' => '自動スクロール有効',
+			'meta.autoScrollDisabled' => '自動スクロール無効',
+			'meta.pauseLogs' => 'リアルタイムログを一時停止',
+			'meta.resumeLogs' => 'リアルタイムログを再開',
+			'meta.scrollToLatest' => '最新までスクロール',
+			'meta.scrollToBottom' => '最下部へスクロール',
+			'meta.newLogsCount' => ({required Object p}) => '(${p} 件の新しいログ)',
+			'meta.copiedLogContent' => 'ログ内容をコピーしました',
+			'meta.copyLog' => 'ログをコピー',
+			'meta.noLogsPrompt' => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。',
+			'meta.searchLogsHint' => ' (IP, ドメイン, ルール, エラー...)',
+			'meta.offlinePreviewPrompt' => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。',
+			'meta.manualSelect' => '手動切替',
+			'meta.autoSelect' => '自動',
+			'meta.speedTestGroup' => 'グループ速度テスト',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

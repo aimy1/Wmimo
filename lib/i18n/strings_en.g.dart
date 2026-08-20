@@ -1154,6 +1154,51 @@ class Translations$meta$en {
 
 	/// en: 'Copied to clipboard'
 	String get copiedToClipboard => 'Copied to clipboard';
+
+	/// en: 'Auto-scroll enabled'
+	String get autoScrollEnabled => 'Auto-scroll enabled';
+
+	/// en: 'Auto-scroll disabled'
+	String get autoScrollDisabled => 'Auto-scroll disabled';
+
+	/// en: 'Pause live logs'
+	String get pauseLogs => 'Pause live logs';
+
+	/// en: 'Resume live logs'
+	String get resumeLogs => 'Resume live logs';
+
+	/// en: 'Scroll to latest'
+	String get scrollToLatest => 'Scroll to latest';
+
+	/// en: 'Scroll to bottom'
+	String get scrollToBottom => 'Scroll to bottom';
+
+	/// en: '($p new logs)'
+	String newLogsCount({required Object p}) => '(${p} new logs)';
+
+	/// en: 'Log content copied'
+	String get copiedLogContent => 'Log content copied';
+
+	/// en: 'Copy Log'
+	String get copyLog => 'Copy Log';
+
+	/// en: 'No logs yet. Core logs will appear after starting proxy.'
+	String get noLogsPrompt => 'No logs yet. Core logs will appear after starting proxy.';
+
+	/// en: ' (IP, Domain, Rule, Error...)'
+	String get searchLogsHint => ' (IP, Domain, Rule, Error...)';
+
+	/// en: 'Offline preview mode. Start proxy to enable routing and latency testing.'
+	String get offlinePreviewPrompt => 'Offline preview mode. Start proxy to enable routing and latency testing.';
+
+	/// en: 'Manual'
+	String get manualSelect => 'Manual';
+
+	/// en: 'Auto'
+	String get autoSelect => 'Auto';
+
+	/// en: 'Test Group Latency'
+	String get speedTestGroup => 'Test Group Latency';
 }
 
 // Path: permission
@@ -1759,6 +1804,21 @@ extension on Translations {
 			'meta.openSourceLicense' => 'License',
 			'meta.submitFeedback' => 'Feedback & Issues',
 			'meta.copiedToClipboard' => 'Copied to clipboard',
+			'meta.autoScrollEnabled' => 'Auto-scroll enabled',
+			'meta.autoScrollDisabled' => 'Auto-scroll disabled',
+			'meta.pauseLogs' => 'Pause live logs',
+			'meta.resumeLogs' => 'Resume live logs',
+			'meta.scrollToLatest' => 'Scroll to latest',
+			'meta.scrollToBottom' => 'Scroll to bottom',
+			'meta.newLogsCount' => ({required Object p}) => '(${p} new logs)',
+			'meta.copiedLogContent' => 'Log content copied',
+			'meta.copyLog' => 'Copy Log',
+			'meta.noLogsPrompt' => 'No logs yet. Core logs will appear after starting proxy.',
+			'meta.searchLogsHint' => ' (IP, Domain, Rule, Error...)',
+			'meta.offlinePreviewPrompt' => 'Offline preview mode. Start proxy to enable routing and latency testing.',
+			'meta.manualSelect' => 'Manual',
+			'meta.autoSelect' => 'Auto',
+			'meta.speedTestGroup' => 'Test Group Latency',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

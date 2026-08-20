@@ -480,6 +480,21 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get openSourceLicense => 'ترخيص مفتوح المصدر';
 	@override String get submitFeedback => 'إرسال التعليقات والملاحظات';
 	@override String get copiedToClipboard => 'تم النسخ إلى الحافظة';
+	@override String get autoScrollEnabled => 'التمرير التلقائي مفعّل';
+	@override String get autoScrollDisabled => 'التمرير التلقائي معطّل';
+	@override String get pauseLogs => 'إيقاف السجلات مؤقتاً';
+	@override String get resumeLogs => 'استئناف السجلات الحية';
+	@override String get scrollToLatest => 'التمرير إلى الأحدث';
+	@override String get scrollToBottom => 'التمرير إلى الأسفل';
+	@override String newLogsCount({required Object p}) => '(${p} سجلات جديدة)';
+	@override String get copiedLogContent => 'تم نسخ محتوى السجل';
+	@override String get copyLog => 'نسخ السجل';
+	@override String get noLogsPrompt => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.';
+	@override String get searchLogsHint => ' (IP, النطاق, القاعدة, الخطأ...)';
+	@override String get offlinePreviewPrompt => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.';
+	@override String get manualSelect => 'يدوي';
+	@override String get autoSelect => 'تلقائي';
+	@override String get speedTestGroup => 'اختبار سرعة المجموعة';
 }
 
 // Path: permission
@@ -965,6 +980,21 @@ extension on TranslationsAr {
 			'meta.openSourceLicense' => 'ترخيص مفتوح المصدر',
 			'meta.submitFeedback' => 'إرسال التعليقات والملاحظات',
 			'meta.copiedToClipboard' => 'تم النسخ إلى الحافظة',
+			'meta.autoScrollEnabled' => 'التمرير التلقائي مفعّل',
+			'meta.autoScrollDisabled' => 'التمرير التلقائي معطّل',
+			'meta.pauseLogs' => 'إيقاف السجلات مؤقتاً',
+			'meta.resumeLogs' => 'استئناف السجلات الحية',
+			'meta.scrollToLatest' => 'التمرير إلى الأحدث',
+			'meta.scrollToBottom' => 'التمرير إلى الأسفل',
+			'meta.newLogsCount' => ({required Object p}) => '(${p} سجلات جديدة)',
+			'meta.copiedLogContent' => 'تم نسخ محتوى السجل',
+			'meta.copyLog' => 'نسخ السجل',
+			'meta.noLogsPrompt' => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.',
+			'meta.searchLogsHint' => ' (IP, النطاق, القاعدة, الخطأ...)',
+			'meta.offlinePreviewPrompt' => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.',
+			'meta.manualSelect' => 'يدوي',
+			'meta.autoSelect' => 'تلقائي',
+			'meta.speedTestGroup' => 'اختبار سرعة المجموعة',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',

@@ -480,6 +480,21 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get openSourceLicense => '開源許可證';
 	@override String get submitFeedback => '提交反饋與建議';
 	@override String get copiedToClipboard => '已複製到剪貼簿';
+	@override String get autoScrollEnabled => '已開啟自動滾動';
+	@override String get autoScrollDisabled => '已關閉自動滾動';
+	@override String get pauseLogs => '暫停即時日誌';
+	@override String get resumeLogs => '恢復即時日誌';
+	@override String get scrollToLatest => '滾至最新';
+	@override String get scrollToBottom => '滾至底部';
+	@override String newLogsCount({required Object p}) => '(${p} 條新日誌)';
+	@override String get copiedLogContent => '已複製日誌內容';
+	@override String get copyLog => '複製日誌';
+	@override String get noLogsPrompt => '暫無日誌，啟動代理後將即時捕獲核心日誌';
+	@override String get searchLogsHint => ' (IP, 網域名稱, 規則, 錯誤...)';
+	@override String get offlinePreviewPrompt => '離線設定預覽中，開啟代理後可進行分流與節點測速';
+	@override String get manualSelect => '手動切換';
+	@override String get autoSelect => '自動';
+	@override String get speedTestGroup => '策略組測速';
 }
 
 // Path: permission
@@ -965,6 +980,21 @@ extension on TranslationsZhTw {
 			'meta.openSourceLicense' => '開源許可證',
 			'meta.submitFeedback' => '提交反饋與建議',
 			'meta.copiedToClipboard' => '已複製到剪貼簿',
+			'meta.autoScrollEnabled' => '已開啟自動滾動',
+			'meta.autoScrollDisabled' => '已關閉自動滾動',
+			'meta.pauseLogs' => '暫停即時日誌',
+			'meta.resumeLogs' => '恢復即時日誌',
+			'meta.scrollToLatest' => '滾至最新',
+			'meta.scrollToBottom' => '滾至底部',
+			'meta.newLogsCount' => ({required Object p}) => '(${p} 條新日誌)',
+			'meta.copiedLogContent' => '已複製日誌內容',
+			'meta.copyLog' => '複製日誌',
+			'meta.noLogsPrompt' => '暫無日誌，啟動代理後將即時捕獲核心日誌',
+			'meta.searchLogsHint' => ' (IP, 網域名稱, 規則, 錯誤...)',
+			'meta.offlinePreviewPrompt' => '離線設定預覽中，開啟代理後可進行分流與節點測速',
+			'meta.manualSelect' => '手動切換',
+			'meta.autoSelect' => '自動',
+			'meta.speedTestGroup' => '策略組測速',
 			'permission.camera' => '攝像頭',
 			'permission.screen' => '屏幕錄製',
 			'permission.appQuery' => '獲取應用列表',

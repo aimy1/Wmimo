@@ -369,7 +369,22 @@
         "githubRepo": "مخزن متن باز",
         "openSourceLicense": "مجوز متن باز",
         "submitFeedback": "ارسال بازخورد و پیشنهادات",
-        "copiedToClipboard": "در کلیپ‌بورد کپی شد"
+        "copiedToClipboard": "در کلیپ‌بورد کپی شد",
+        "autoScrollEnabled": "پیمایش خودکار فعال است",
+        "autoScrollDisabled": "پیمایش خودکار غیرفعال است",
+        "pauseLogs": "توقف موقت لاگ‌های زنده",
+        "resumeLogs": "ادامه لاگ‌های زنده",
+        "scrollToLatest": "پیمایش به جدیدترین",
+        "scrollToBottom": "پیمایش به پایین",
+        "newLogsCount": "($p لاگ جدید)",
+        "copiedLogContent": "محتوای لاگ کپی شد",
+        "copyLog": "کپی لاگ",
+        "noLogsPrompt": "هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.",
+        "searchLogsHint": " (IP, دامنه, قانون, خطا...)",
+        "offlinePreviewPrompt": "حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.",
+        "manualSelect": "دستی",
+        "autoSelect": "خودکار",
+        "speedTestGroup": "تست تأخیر گروه"
     },
     "permission": {
         "camera": "دوربین",

@@ -369,7 +369,22 @@
         "githubRepo": "مستودع مفتوح المصدر",
         "openSourceLicense": "ترخيص مفتوح المصدر",
         "submitFeedback": "إرسال التعليقات والملاحظات",
-        "copiedToClipboard": "تم النسخ إلى الحافظة"
+        "copiedToClipboard": "تم النسخ إلى الحافظة",
+        "autoScrollEnabled": "التمرير التلقائي مفعّل",
+        "autoScrollDisabled": "التمرير التلقائي معطّل",
+        "pauseLogs": "إيقاف السجلات مؤقتاً",
+        "resumeLogs": "استئناف السجلات الحية",
+        "scrollToLatest": "التمرير إلى الأحدث",
+        "scrollToBottom": "التمرير إلى الأسفل",
+        "newLogsCount": "($p سجلات جديدة)",
+        "copiedLogContent": "تم نسخ محتوى السجل",
+        "copyLog": "نسخ السجل",
+        "noLogsPrompt": "لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.",
+        "searchLogsHint": " (IP, النطاق, القاعدة, الخطأ...)",
+        "offlinePreviewPrompt": "معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.",
+        "manualSelect": "يدوي",
+        "autoSelect": "تلقائي",
+        "speedTestGroup": "اختبار سرعة المجموعة"
     },
     "permission": {
         "camera": "الكاميرا",

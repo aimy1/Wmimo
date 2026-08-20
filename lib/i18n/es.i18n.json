@@ -369,7 +369,22 @@
         "githubRepo": "Repositorio de código abierto",
         "openSourceLicense": "Licencia de código abierto",
         "submitFeedback": "Comentarios y sugerencias",
-        "copiedToClipboard": "Copiado al portapapeles"
+        "copiedToClipboard": "Copiado al portapapeles",
+        "autoScrollEnabled": "Autodesplazamiento activado",
+        "autoScrollDisabled": "Autodesplazamiento desactivado",
+        "pauseLogs": "Pausar registros en vivo",
+        "resumeLogs": "Reanudar registros en vivo",
+        "scrollToLatest": "Desplazar al final",
+        "scrollToBottom": "Desplazar hacia abajo",
+        "newLogsCount": "($p nuevos registros)",
+        "copiedLogContent": "Contenido del registro copiado",
+        "copyLog": "Copiar registro",
+        "noLogsPrompt": "Aún no hay registros. Aparecerán tras iniciar el proxy.",
+        "searchLogsHint": " (IP, Dominio, Regla, Error...)",
+        "offlinePreviewPrompt": "Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.",
+        "manualSelect": "Manual",
+        "autoSelect": "Automático",
+        "speedTestGroup": "Probar latencia del grupo"
     },
     "permission": {
         "camera": "Cámara",

@@ -369,7 +369,22 @@
         "githubRepo": "오픈 소스 저장소",
         "openSourceLicense": "오픈 소스 라이선스",
         "submitFeedback": "피드백 및 문제 제출",
-        "copiedToClipboard": "클립보드에 복사되었습니다"
+        "copiedToClipboard": "클립보드에 복사되었습니다",
+        "autoScrollEnabled": "자동 스크롤 켜짐",
+        "autoScrollDisabled": "자동 스크롤 꺼짐",
+        "pauseLogs": "실시간 로그 일시 중지",
+        "resumeLogs": "실시간 로그 재개",
+        "scrollToLatest": "최신으로 스크롤",
+        "scrollToBottom": "맨 아래로 스크롤",
+        "newLogsCount": "($p개 새 로그)",
+        "copiedLogContent": "로그 내용이 복사되었습니다",
+        "copyLog": "로그 복사",
+        "noLogsPrompt": "아직 로그가 없습니다. 프록시 시작 후 실시간 로그가 표시됩니다.",
+        "searchLogsHint": " (IP, 도메인, 규칙, 오류...)",
+        "offlinePreviewPrompt": "오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.",
+        "manualSelect": "수동 선택",
+        "autoSelect": "자동",
+        "speedTestGroup": "그룹 지연 테스트"
     },
     "permission": {
         "camera": "카메라",

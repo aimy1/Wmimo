@@ -369,7 +369,22 @@
         "githubRepo": "オープンソースリポジトリ",
         "openSourceLicense": "オープンソースライセンス",
         "submitFeedback": "フィードバックと問題の報告",
-        "copiedToClipboard": "クリップボードにコピーしました"
+        "copiedToClipboard": "クリップボードにコピーしました",
+        "autoScrollEnabled": "自動スクロール有効",
+        "autoScrollDisabled": "自動スクロール無効",
+        "pauseLogs": "リアルタイムログを一時停止",
+        "resumeLogs": "リアルタイムログを再開",
+        "scrollToLatest": "最新までスクロール",
+        "scrollToBottom": "最下部へスクロール",
+        "newLogsCount": "($p 件の新しいログ)",
+        "copiedLogContent": "ログ内容をコピーしました",
+        "copyLog": "ログをコピー",
+        "noLogsPrompt": "ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。",
+        "searchLogsHint": " (IP, ドメイン, ルール, エラー...)",
+        "offlinePreviewPrompt": "オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。",
+        "manualSelect": "手動切替",
+        "autoSelect": "自動",
+        "speedTestGroup": "グループ速度テスト"
     },
     "permission": {
         "camera": "カメラ",

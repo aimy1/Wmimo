@@ -480,6 +480,21 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get openSourceLicense => 'Лицензия';
 	@override String get submitFeedback => 'Обратная связь и предложения';
 	@override String get copiedToClipboard => 'Скопировано в буфер обмена';
+	@override String get autoScrollEnabled => 'Автопрокрутка включена';
+	@override String get autoScrollDisabled => 'Автопрокрутка отключена';
+	@override String get pauseLogs => 'Приостановить логи';
+	@override String get resumeLogs => 'Возобновить логи';
+	@override String get scrollToLatest => 'К последним логам';
+	@override String get scrollToBottom => 'Прокрутить вниз';
+	@override String newLogsCount({required Object p}) => '(${p} новых логов)';
+	@override String get copiedLogContent => 'Содержимое лога скопировано';
+	@override String get copyLog => 'Копировать лог';
+	@override String get noLogsPrompt => 'Логов пока нет. Логи ядра появятся после запуска прокси.';
+	@override String get searchLogsHint => ' (IP, Домен, Правило, Ошибка...)';
+	@override String get offlinePreviewPrompt => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.';
+	@override String get manualSelect => 'Вручную';
+	@override String get autoSelect => 'Авто';
+	@override String get speedTestGroup => 'Проверить задержку группы';
 }
 
 // Path: permission
@@ -965,6 +980,21 @@ extension on TranslationsRu {
 			'meta.openSourceLicense' => 'Лицензия',
 			'meta.submitFeedback' => 'Обратная связь и предложения',
 			'meta.copiedToClipboard' => 'Скопировано в буфер обмена',
+			'meta.autoScrollEnabled' => 'Автопрокрутка включена',
+			'meta.autoScrollDisabled' => 'Автопрокрутка отключена',
+			'meta.pauseLogs' => 'Приостановить логи',
+			'meta.resumeLogs' => 'Возобновить логи',
+			'meta.scrollToLatest' => 'К последним логам',
+			'meta.scrollToBottom' => 'Прокрутить вниз',
+			'meta.newLogsCount' => ({required Object p}) => '(${p} новых логов)',
+			'meta.copiedLogContent' => 'Содержимое лога скопировано',
+			'meta.copyLog' => 'Копировать лог',
+			'meta.noLogsPrompt' => 'Логов пока нет. Логи ядра появятся после запуска прокси.',
+			'meta.searchLogsHint' => ' (IP, Домен, Правило, Ошибка...)',
+			'meta.offlinePreviewPrompt' => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.',
+			'meta.manualSelect' => 'Вручную',
+			'meta.autoSelect' => 'Авто',
+			'meta.speedTestGroup' => 'Проверить задержку группы',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

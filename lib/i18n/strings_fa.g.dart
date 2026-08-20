@@ -480,6 +480,21 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get openSourceLicense => 'مجوز متن باز';
 	@override String get submitFeedback => 'ارسال بازخورد و پیشنهادات';
 	@override String get copiedToClipboard => 'در کلیپ‌بورد کپی شد';
+	@override String get autoScrollEnabled => 'پیمایش خودکار فعال است';
+	@override String get autoScrollDisabled => 'پیمایش خودکار غیرفعال است';
+	@override String get pauseLogs => 'توقف موقت لاگ‌های زنده';
+	@override String get resumeLogs => 'ادامه لاگ‌های زنده';
+	@override String get scrollToLatest => 'پیمایش به جدیدترین';
+	@override String get scrollToBottom => 'پیمایش به پایین';
+	@override String newLogsCount({required Object p}) => '(${p} لاگ جدید)';
+	@override String get copiedLogContent => 'محتوای لاگ کپی شد';
+	@override String get copyLog => 'کپی لاگ';
+	@override String get noLogsPrompt => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.';
+	@override String get searchLogsHint => ' (IP, دامنه, قانون, خطا...)';
+	@override String get offlinePreviewPrompt => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.';
+	@override String get manualSelect => 'دستی';
+	@override String get autoSelect => 'خودکار';
+	@override String get speedTestGroup => 'تست تأخیر گروه';
 }
 
 // Path: permission
@@ -965,6 +980,21 @@ extension on TranslationsFa {
 			'meta.openSourceLicense' => 'مجوز متن باز',
 			'meta.submitFeedback' => 'ارسال بازخورد و پیشنهادات',
 			'meta.copiedToClipboard' => 'در کلیپ‌بورد کپی شد',
+			'meta.autoScrollEnabled' => 'پیمایش خودکار فعال است',
+			'meta.autoScrollDisabled' => 'پیمایش خودکار غیرفعال است',
+			'meta.pauseLogs' => 'توقف موقت لاگ‌های زنده',
+			'meta.resumeLogs' => 'ادامه لاگ‌های زنده',
+			'meta.scrollToLatest' => 'پیمایش به جدیدترین',
+			'meta.scrollToBottom' => 'پیمایش به پایین',
+			'meta.newLogsCount' => ({required Object p}) => '(${p} لاگ جدید)',
+			'meta.copiedLogContent' => 'محتوای لاگ کپی شد',
+			'meta.copyLog' => 'کپی لاگ',
+			'meta.noLogsPrompt' => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.',
+			'meta.searchLogsHint' => ' (IP, دامنه, قانون, خطا...)',
+			'meta.offlinePreviewPrompt' => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.',
+			'meta.manualSelect' => 'دستی',
+			'meta.autoSelect' => 'خودکار',
+			'meta.speedTestGroup' => 'تست تأخیر گروه',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

@@ -480,6 +480,21 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get openSourceLicense => 'Licencia de código abierto';
 	@override String get submitFeedback => 'Comentarios y sugerencias';
 	@override String get copiedToClipboard => 'Copiado al portapapeles';
+	@override String get autoScrollEnabled => 'Autodesplazamiento activado';
+	@override String get autoScrollDisabled => 'Autodesplazamiento desactivado';
+	@override String get pauseLogs => 'Pausar registros en vivo';
+	@override String get resumeLogs => 'Reanudar registros en vivo';
+	@override String get scrollToLatest => 'Desplazar al final';
+	@override String get scrollToBottom => 'Desplazar hacia abajo';
+	@override String newLogsCount({required Object p}) => '(${p} nuevos registros)';
+	@override String get copiedLogContent => 'Contenido del registro copiado';
+	@override String get copyLog => 'Copiar registro';
+	@override String get noLogsPrompt => 'Aún no hay registros. Aparecerán tras iniciar el proxy.';
+	@override String get searchLogsHint => ' (IP, Dominio, Regla, Error...)';
+	@override String get offlinePreviewPrompt => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.';
+	@override String get manualSelect => 'Manual';
+	@override String get autoSelect => 'Automático';
+	@override String get speedTestGroup => 'Probar latencia del grupo';
 }
 
 // Path: permission
@@ -965,6 +980,21 @@ extension on TranslationsEs {
 			'meta.openSourceLicense' => 'Licencia de código abierto',
 			'meta.submitFeedback' => 'Comentarios y sugerencias',
 			'meta.copiedToClipboard' => 'Copiado al portapapeles',
+			'meta.autoScrollEnabled' => 'Autodesplazamiento activado',
+			'meta.autoScrollDisabled' => 'Autodesplazamiento desactivado',
+			'meta.pauseLogs' => 'Pausar registros en vivo',
+			'meta.resumeLogs' => 'Reanudar registros en vivo',
+			'meta.scrollToLatest' => 'Desplazar al final',
+			'meta.scrollToBottom' => 'Desplazar hacia abajo',
+			'meta.newLogsCount' => ({required Object p}) => '(${p} nuevos registros)',
+			'meta.copiedLogContent' => 'Contenido del registro copiado',
+			'meta.copyLog' => 'Copiar registro',
+			'meta.noLogsPrompt' => 'Aún no hay registros. Aparecerán tras iniciar el proxy.',
+			'meta.searchLogsHint' => ' (IP, Dominio, Regla, Error...)',
+			'meta.offlinePreviewPrompt' => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.',
+			'meta.manualSelect' => 'Manual',
+			'meta.autoSelect' => 'Automático',
+			'meta.speedTestGroup' => 'Probar latencia del grupo',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

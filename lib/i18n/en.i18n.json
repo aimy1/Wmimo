@@ -369,7 +369,22 @@
         "githubRepo": "Open Source Repository",
         "openSourceLicense": "License",
         "submitFeedback": "Feedback & Issues",
-        "copiedToClipboard": "Copied to clipboard"
+        "copiedToClipboard": "Copied to clipboard",
+        "autoScrollEnabled": "Auto-scroll enabled",
+        "autoScrollDisabled": "Auto-scroll disabled",
+        "pauseLogs": "Pause live logs",
+        "resumeLogs": "Resume live logs",
+        "scrollToLatest": "Scroll to latest",
+        "scrollToBottom": "Scroll to bottom",
+        "newLogsCount": "($p new logs)",
+        "copiedLogContent": "Log content copied",
+        "copyLog": "Copy Log",
+        "noLogsPrompt": "No logs yet. Core logs will appear after starting proxy.",
+        "searchLogsHint": " (IP, Domain, Rule, Error...)",
+        "offlinePreviewPrompt": "Offline preview mode. Start proxy to enable routing and latency testing.",
+        "manualSelect": "Manual",
+        "autoSelect": "Auto",
+        "speedTestGroup": "Test Group Latency"
     },
     "permission": {
         "camera": "Camera",

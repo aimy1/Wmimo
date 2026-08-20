@@ -369,7 +369,22 @@
         "githubRepo": "开源代码仓库",
         "openSourceLicense": "开源许可证",
         "submitFeedback": "提交反馈与建议",
-        "copiedToClipboard": "已复制到剪贴板"
+        "copiedToClipboard": "已复制到剪贴板",
+        "autoScrollEnabled": "已开启自动滚动",
+        "autoScrollDisabled": "已关闭自动滚动",
+        "pauseLogs": "暂停实时日志",
+        "resumeLogs": "恢复实时日志",
+        "scrollToLatest": "滚至最新",
+        "scrollToBottom": "滚至底部",
+        "newLogsCount": "($p 条新日志)",
+        "copiedLogContent": "已复制日志内容",
+        "copyLog": "复制日志",
+        "noLogsPrompt": "暂无日志，启动代理后将实时捕获核心日志",
+        "searchLogsHint": " (IP, 域名, 规则, 错误...)",
+        "offlinePreviewPrompt": "离线配置预览中，开启代理后可进行分流与节点测速",
+        "manualSelect": "手动切换",
+        "autoSelect": "自动",
+        "speedTestGroup": "策略组测速"
     },
     "permission": {
         "camera": "摄像头",

@@ -709,7 +709,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          "离线配置预览中，开启代理后可进行分流与节点测速",
+                          tcontext.meta.offlinePreviewPrompt,
                           style: TextStyle(
                             fontSize: 12,
                             color: isDark
@@ -766,12 +766,12 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                             const SizedBox(height: 12),
                             Text(
                               ProfileManager.getProfiles().isEmpty
-                                  ? "尚未添加任何订阅或节点配置"
-                                  : "当前配置未解析到代理组，请检查订阅或更新",
+                                  ? tcontext.meta.noProfilesYet
+                                  : tcontext.meta.noFilterResults,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.6),
+                                  .withValues(alpha: 0.6),
                               ),
                             ),
                             const SizedBox(height: 14),
@@ -795,8 +795,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               ),
                               label: Text(
                                 ProfileManager.getProfiles().isEmpty
-                                    ? "添加订阅"
-                                    : "重新加载",
+                                    ? tcontext.meta.addProfile
+                                    : tcontext.meta.refresh,
                               ),
                               onPressed: () async {
                                 if (ProfileManager.getProfiles().isEmpty) {
@@ -863,6 +863,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   }
 
   Widget _buildGroupSection(ClashProxiesNode group) {
+    final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isExpanded = _groupExpanded[group.name] ?? true;
@@ -915,8 +916,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                     ),
                     child: Text(
                       (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
-                          ? "手动切换"
-                          : "${group.type} 自动",
+                          ? tcontext.meta.manualSelect
+                          : "${group.type} ${tcontext.meta.autoSelect}",
                       style: TextStyle(
                         color: (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
                             ? ThemeDefine.kColorBlue
@@ -957,7 +958,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
                   // Ping this group button
                   Tooltip(
-                    message: "Speed test group",
+                    message: tcontext.meta.speedTestGroup,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(6),
                       onTap: () => _testGroupDelay(group),
