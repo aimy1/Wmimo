@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.ProxyInfo
 import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
@@ -15,6 +16,7 @@ import java.io.File
 class WmimoVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
     private var isRunning = false
+    private var mixedPort = 7890
 
     companion object {
         const val ACTION_START = "com.wmimo.app.vpn.START"
@@ -32,6 +34,7 @@ class WmimoVpnService : VpnService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val action = intent?.action ?: ACTION_START
+        mixedPort = intent?.getIntExtra("mixedPort", 7890) ?: 7890
         when (action) {
             ACTION_START -> startVpn()
             ACTION_STOP -> stopVpn()
@@ -93,9 +96,15 @@ class WmimoVpnService : VpnService() {
                 .setSession("Wmimo")
                 .setMtu(1500)
                 .addAddress("172.19.0.1", 30)
-                .addRoute("0.0.0.0", 0)
                 .addDnsServer("223.5.5.5")
                 .addDnsServer("1.1.1.1")
+
+            // On Android 10+ (API 29+), set direct system HTTP proxy to Mihomo mixed-port
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                try {
+                    builder.setHttpProxy(ProxyInfo.buildDirectProxy("127.0.0.1", mixedPort))
+                } catch (_: Exception) {}
+            }
 
             // Prevent routing Wmimo itself into the VPN loop
             try {

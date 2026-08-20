@@ -804,8 +804,11 @@ dns:
 
       if (Platform.isAndroid) {
         try {
+          final mixedPort = _savedConfig?.mixed_port ?? 7890;
           const platform = MethodChannel('com.wmimo.app/native_helper');
-          await platform.invokeMethod('startVpnService');
+          await platform.invokeMethod('startVpnService', {
+            'mixedPort': mixedPort,
+          });
         } catch (_) {}
       }
 

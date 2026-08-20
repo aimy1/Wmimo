@@ -125,8 +125,10 @@ class MainActivity : FlutterActivity() {
                     }
                 }
                 "startVpnService" -> {
+                    val mixedPort = call.argument<Int>("mixedPort") ?: 7890
                     val intent = Intent(this, WmimoVpnService::class.java).apply {
                         action = WmimoVpnService.ACTION_START
+                        putExtra("mixedPort", mixedPort)
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         startForegroundService(intent)
