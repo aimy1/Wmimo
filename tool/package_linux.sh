@@ -35,6 +35,7 @@ fi
 cat << 'EOF' > "$PORTABLE_DIR/wmimo.desktop"
 [Desktop Entry]
 Name=Wmimo
+GenericName=Wmimo
 Comment=Modern cross-platform Clash/Mihomo GUI proxy client.
 Exec=wmimo %u
 Icon=wmimo
@@ -42,6 +43,7 @@ Terminal=false
 Type=Application
 Categories=Network;Utility;
 StartupNotify=true
+MimeType=x-scheme-handler/wmimo;x-scheme-handler/clash;
 EOF
 
 cat << 'EOF' > "$PORTABLE_DIR/install.sh"
@@ -63,25 +65,42 @@ rm -rf "$PORTABLE_DIR"
 echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.tar.gz"
 
 # ------------------------------------------------------------
+# Common Base Layout for Deb, RPM, and Pacman packages
+# ------------------------------------------------------------
+PKG_ROOT="linux_pkg_root"
+rm -rf "$PKG_ROOT"
+mkdir -p "$PKG_ROOT/opt/wmimo"
+mkdir -p "$PKG_ROOT/usr/bin"
+mkdir -p "$PKG_ROOT/usr/share/applications"
+mkdir -p "$PKG_ROOT/usr/share/icons/hicolor/256x256/apps"
+
+cp -r "$BUNDLE_DIR"/* "$PKG_ROOT/opt/wmimo/"
+ln -sf /opt/wmimo/wmimo "$PKG_ROOT/usr/bin/wmimo"
+
+if [ -f "assets/images/app_icon_256.png" ]; then
+  cp assets/images/app_icon_256.png "$PKG_ROOT/usr/share/icons/hicolor/256x256/apps/wmimo.png"
+fi
+
+cat << 'EOF' > "$PKG_ROOT/usr/share/applications/wmimo.desktop"
+[Desktop Entry]
+Name=Wmimo
+GenericName=Wmimo
+Comment=Modern cross-platform Clash/Mihomo GUI proxy client.
+Exec=/opt/wmimo/wmimo %u
+Icon=wmimo
+Terminal=false
+Type=Application
+Categories=Network;Utility;
+StartupNotify=true
+MimeType=x-scheme-handler/wmimo;x-scheme-handler/clash;
+EOF
+
+# ------------------------------------------------------------
 # 2. Debian / Ubuntu / Mint / Deepin Package (.deb)
 # ------------------------------------------------------------
 echo "[2/5] Packaging Debian Package (.deb)..."
-DEB_ROOT="deb_package"
-rm -rf "$DEB_ROOT"
-mkdir -p "$DEB_ROOT/DEBIAN"
-mkdir -p "$DEB_ROOT/opt/wmimo"
-mkdir -p "$DEB_ROOT/usr/bin"
-mkdir -p "$DEB_ROOT/usr/share/applications"
-mkdir -p "$DEB_ROOT/usr/share/icons/hicolor/256x256/apps"
-
-cp -r "$BUNDLE_DIR"/* "$DEB_ROOT/opt/wmimo/"
-ln -sf /opt/wmimo/wmimo "$DEB_ROOT/usr/bin/wmimo"
-
-if [ -f "assets/images/app_icon_256.png" ]; then
-  cp assets/images/app_icon_256.png "$DEB_ROOT/usr/share/icons/hicolor/256x256/apps/wmimo.png"
-fi
-
-cat << EOF > "$DEB_ROOT/DEBIAN/control"
+mkdir -p "$PKG_ROOT/DEBIAN"
+cat << EOF > "$PKG_ROOT/DEBIAN/control"
 Package: wmimo
 Version: $RAW_VERSION
 Section: net
@@ -94,20 +113,8 @@ Description: Modern cross-platform Clash/Mihomo GUI proxy client.
  A sleek, modern proxy GUI client crafted with Flutter and Mihomo core.
 EOF
 
-cat << 'EOF' > "$DEB_ROOT/usr/share/applications/wmimo.desktop"
-[Desktop Entry]
-Name=Wmimo
-Comment=Modern cross-platform Clash/Mihomo GUI proxy client.
-Exec=/opt/wmimo/wmimo %u
-Icon=wmimo
-Terminal=false
-Type=Application
-Categories=Network;Utility;
-StartupNotify=true
-EOF
-
-dpkg-deb --build "$DEB_ROOT" "$DIST_DIR/Wmimo-Linux-x64-$TAG.deb"
-rm -rf "$DEB_ROOT"
+dpkg-deb --build "$PKG_ROOT" "$DIST_DIR/Wmimo-Linux-x64-$TAG.deb"
+rm -rf "$PKG_ROOT/DEBIAN"
 echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.deb"
 
 # ------------------------------------------------------------
@@ -126,13 +133,11 @@ if command -v fpm >/dev/null 2>&1; then
     --category "Network" \
     --depends gtk3 \
     --depends libsecret \
-    "$BUNDLE_DIR/"=/opt/wmimo/ \
-    "$DIST_DIR/wmimo.desktop"=/usr/share/applications/wmimo.desktop \
-    "assets/images/app_icon_256.png"=/usr/share/icons/hicolor/256x256/apps/wmimo.png
-  mv *.rpm "$DIST_DIR/Wmimo-Linux-x64-$TAG.rpm" 2>/dev/null || true
+    -C "$PKG_ROOT" \
+    -p "$DIST_DIR/Wmimo-Linux-x64-$TAG.rpm"
   echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.rpm"
 else
-  echo "  [Notice] fpm not found, skipping native rpm generation (can use alien or install fpm)."
+  echo "  [Notice] fpm not found, skipping RPM package generation."
 fi
 
 # ------------------------------------------------------------
@@ -149,11 +154,13 @@ if command -v fpm >/dev/null 2>&1; then
     --url "https://github.com/aimy1/Wmimo" \
     --description "Modern cross-platform Clash/Mihomo GUI proxy client." \
     --category "Network" \
-    "$BUNDLE_DIR/"=/opt/wmimo/ \
-    "assets/images/app_icon_256.png"=/usr/share/icons/hicolor/256x256/apps/wmimo.png
-  mv *.pkg.tar.zst "$DIST_DIR/Wmimo-Linux-x64-$TAG.pkg.tar.zst" 2>/dev/null || true
+    -C "$PKG_ROOT" \
+    -p "$DIST_DIR/Wmimo-Linux-x64-$TAG.pkg.tar.zst"
   echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.pkg.tar.zst"
+else
+  echo "  [Notice] fpm not found, skipping Pacman package generation."
 fi
+rm -rf "$PKG_ROOT"
 
 # ------------------------------------------------------------
 # 5. Universal AppImage Package (.AppImage)
@@ -178,6 +185,7 @@ fi
 cat << 'EOF' > "$APP_DIR/wmimo.desktop"
 [Desktop Entry]
 Name=Wmimo
+GenericName=Wmimo
 Comment=Modern cross-platform Clash/Mihomo GUI proxy client.
 Exec=wmimo %u
 Icon=wmimo
@@ -185,6 +193,7 @@ Terminal=false
 Type=Application
 Categories=Network;Utility;
 StartupNotify=true
+MimeType=x-scheme-handler/wmimo;x-scheme-handler/clash;
 EOF
 
 cat << 'EOF' > "$APP_DIR/AppRun"
