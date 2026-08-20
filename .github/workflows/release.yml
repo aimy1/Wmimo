@@ -11,10 +11,11 @@ on:
       tag_name:
         description: 'Release Tag (e.g. v1.0.30)'
         required: false
-        default: ''
+        default: 'v1.0.30'
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   build-windows:
@@ -49,11 +50,11 @@ jobs:
       - name: Package Windows Artifacts (Installer & Portable)
         shell: pwsh
         run: |
-          $tag = "${{ github.ref_name }}"
-          if ($tag -eq "main" -or -not $tag) {
-            $tag = "${{ github.event.inputs.tag_name }}"
-          }
+          $tag = "${{ github.event.inputs.tag_name }}"
           if (-not $tag -or $tag -eq "") {
+            $tag = "${{ github.ref_name }}"
+          }
+          if ($tag -eq "main" -or -not $tag -or $tag -eq "") {
             $tag = "v1.0.30"
           }
 
@@ -152,17 +153,14 @@ jobs:
       - name: Build Android APK
         run: flutter build apk --release
 
-      - name: Build Android App Bundle (AAB)
-        run: flutter build appbundle --release || true
-
       - name: Package Android Artifacts
         run: |
           mkdir -p dist
-          TAG="${{ github.ref_name }}"
-          if [ "$TAG" = "main" ] || [ -z "$TAG" ]; then
-            TAG="${{ github.event.inputs.tag_name }}"
-          fi
+          TAG="${{ github.event.inputs.tag_name }}"
           if [ -z "$TAG" ]; then
+            TAG="${{ github.ref_name }}"
+          fi
+          if [ "$TAG" = "main" ] || [ -z "$TAG" ]; then
             TAG="v1.0.30"
           fi
           
@@ -178,9 +176,6 @@ jobs:
           if [ -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
             cp build/app/outputs/flutter-apk/app-release.apk dist/Wmimo-Android-universal-$TAG.apk
           fi
-          if [ -f "build/app/outputs/bundle/release/app-release.aab" ]; then
-            cp build/app/outputs/bundle/release/app-release.aab dist/Wmimo-Android-$TAG.aab
-          fi
           ls -la dist/
 
       - name: Upload Android Artifact
@@ -193,9 +188,22 @@ jobs:
     name: Publish GitHub Release
     needs: [build-windows, build-android]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name != '')
 
     steps:
+      - name: Determine Release Tag
+        id: tag_info
+        run: |
+          TAG="${{ github.event.inputs.tag_name }}"
+          if [ -z "$TAG" ]; then
+            if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+              TAG="${{ github.ref_name }}"
+            else
+              TAG="v1.0.30"
+            fi
+          fi
+          echo "release_tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Using release tag: $TAG"
+
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -208,11 +216,13 @@ jobs:
           sha256sum * > SHA256SUMS.txt || true
           ls -la
 
-      - name: Create GitHub Release
+      - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          tag_name: ${{ steps.tag_info.outputs.release_tag }}
+          name: "Wmimo ${{ steps.tag_info.outputs.release_tag }}"
           files: release-assets/*
           draft: false
           prerelease: false
           generate_release_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
