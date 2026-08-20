@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.0.30)'
+        description: 'Release Tag (e.g. v1.0.31)'
         required: false
-        default: 'v1.0.30'
+        default: 'v1.0.31'
 
 permissions:
   contents: write
@@ -55,7 +55,7 @@ jobs:
             $tag = "${{ github.ref_name }}"
           }
           if ($tag -eq "main" -or -not $tag -or $tag -eq "") {
-            $tag = "v1.0.30"
+            $tag = "v1.0.31"
           }
 
           $releasePath = (Resolve-Path "build/windows/x64/runner/Release").Path
@@ -161,7 +161,7 @@ jobs:
             TAG="${{ github.ref_name }}"
           fi
           if [ "$TAG" = "main" ] || [ -z "$TAG" ]; then
-            TAG="v1.0.30"
+            TAG="v1.0.31"
           fi
           
           if [ -f "build/app/outputs/flutter-apk/app-arm64-v8a-release.apk" ]; then
@@ -198,7 +198,7 @@ jobs:
             if [[ "${{ github.ref }}" == refs/tags/* ]]; then
               TAG="${{ github.ref_name }}"
             else
-              TAG="v1.0.30"
+              TAG="v1.0.31"
             fi
           fi
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT
