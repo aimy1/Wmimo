@@ -19,6 +19,7 @@ import 'package:wmimo/screens/logs_screen.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/app_scheme_actions.dart';
 import 'package:wmimo/app/utils/log.dart';
+import 'package:wmimo/app/utils/mobile_permission_helper.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
@@ -1139,6 +1140,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         }
       }
     }
+    if (Platform.isAndroid) {
+      bool vpnGranted = await MobilePermissionHelper.requestVpnPermission();
+      if (!vpnGranted) {
+        if (mounted) setState(() {});
+        return false;
+      }
+    }
+
     var state = await VPNService.getState();
     if (state == FlutterVpnServiceState.connecting ||
         state == FlutterVpnServiceState.disconnecting ||

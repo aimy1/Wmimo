@@ -13,6 +13,7 @@ import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/error_reporter_utils.dart';
 import 'package:wmimo/app/utils/local_storage.dart';
 import 'package:wmimo/app/utils/log.dart';
+import 'package:wmimo/app/utils/mobile_permission_helper.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
@@ -142,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
     Biz.initHomeFinish();
+    MobilePermissionHelper.requestInitialPermissions();
     ErrorReporterUtils.register(() {
       if (!mounted) {
         return;
