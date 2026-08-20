@@ -61,7 +61,8 @@
         "unsupportedProviderType": "Неподдерживаемый тип @:{loginScreen.provider}",
         "unActivedProvider": "Функция входа не активирована",
         "providerLoginSupportRequired": "Запросите код/алиас провайдера у вашего @:{loginScreen.provider}.\nИнструкцию по интеграции с @:{loginScreen.provider} смотрите: $p",
-        "providerDisclaimer": "Отказ от ответственности: @:{loginScreen.provider} — это сторонний сервис и не связан с этим приложением"
+        "providerDisclaimer": "Отказ от ответственности: @:{loginScreen.provider} — это сторонний сервис и не связан с этим приложением",
+        "createSessionFailed": "Не удалось создать сессию, проверьте провайдера или аккаунт"
     },
     "main": {
         "tray": {
@@ -384,7 +385,9 @@
         "offlinePreviewPrompt": "Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.",
         "manualSelect": "Ручной выбор",
         "autoSelect": "Автовыбор",
-        "speedTestGroup": "Тест скорости группы"
+        "speedTestGroup": "Тест скорости группы",
+        "pause": "Пауза",
+        "resume": "Возобновить"
     },
     "permission": {
         "camera": "Камера",

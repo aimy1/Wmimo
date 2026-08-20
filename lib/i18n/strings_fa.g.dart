@@ -179,6 +179,7 @@ class _Translations$loginScreen$fa implements Translations$loginScreen$en {
 	@override String get unActivedProvider => 'قابلیت ورود فعال نشده است';
 	@override String providerLoginSupportRequired({required Object p}) => 'لطفاً کد/نام مستعار ارائه‌دهنده را از ${_root.loginScreen.provider} دریافت کنید.\nبرای راهنمای اتصال ${_root.loginScreen.provider} به این لینک مراجعه کنید: ${p}';
 	@override String get providerDisclaimer => 'سلب مسئولیت: ${_root.loginScreen.provider} یک سرویس شخص ثالث است و ارتباطی با این برنامه ندارد';
+	@override String get createSessionFailed => 'ایجاد نشست با خطا مواجه شد، ارائه‌دهنده یا حساب را بررسی کنید';
 }
 
 // Path: main
@@ -495,6 +496,8 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get manualSelect => 'انتخاب دستی';
 	@override String get autoSelect => 'انتخاب خودکار';
 	@override String get speedTestGroup => 'تست سرعت گروه';
+	@override String get pause => 'توقف موقت';
+	@override String get resume => 'ادامه';
 }
 
 // Path: permission
@@ -678,6 +681,7 @@ extension on TranslationsFa {
 			'loginScreen.unActivedProvider' => 'قابلیت ورود فعال نشده است',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'لطفاً کد/نام مستعار ارائه‌دهنده را از ${_root.loginScreen.provider} دریافت کنید.\nبرای راهنمای اتصال ${_root.loginScreen.provider} به این لینک مراجعه کنید: ${p}',
 			'loginScreen.providerDisclaimer' => 'سلب مسئولیت: ${_root.loginScreen.provider} یک سرویس شخص ثالث است و ارتباطی با این برنامه ندارد',
+			'loginScreen.createSessionFailed' => 'ایجاد نشست با خطا مواجه شد، ارائه‌دهنده یا حساب را بررسی کنید',
 			'main.tray.menuOpen' => 'باز کردن',
 			'main.tray.menuExit' => 'خروج',
 			'main.tray.coreDisconnected' => 'Wmimo · هسته متصل نیست',
@@ -995,6 +999,8 @@ extension on TranslationsFa {
 			'meta.manualSelect' => 'انتخاب دستی',
 			'meta.autoSelect' => 'انتخاب خودکار',
 			'meta.speedTestGroup' => 'تست سرعت گروه',
+			'meta.pause' => 'توقف موقت',
+			'meta.resume' => 'ادامه',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

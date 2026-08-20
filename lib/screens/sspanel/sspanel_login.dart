@@ -1,8 +1,9 @@
-﻿import 'package:wmimo/app/modules/board_provider_manager.dart';
+import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/modules/board_session_persistent_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/utils/log.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 
 class SSPanelLogin {
   static final Map<int, Function()> onEventLogin = {};
@@ -19,7 +20,7 @@ class SSPanelLogin {
     );
     if (session == null || session.ssPanel == null) {
       return BoardSessionLoginError(
-        message: "create session failed, check provider or account",
+        message: t.loginScreen.createSessionFailed,
       );
     }
     //session.ssPanel!.proxyUrl = "127.0.0.1:8888";

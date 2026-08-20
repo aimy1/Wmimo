@@ -179,6 +179,7 @@ class Translations$loginScreen$zh_TW implements Translations$loginScreen$en {
 	@override String get unActivedProvider => '登入功能未啟用';
 	@override String providerLoginSupportRequired({required Object p}) => '編碼/別名請向${_root.loginScreen.provider}索取\n${_root.loginScreen.provider}接入請參考:${p}';
 	@override String get providerDisclaimer => '免責聲明:${_root.loginScreen.provider}為第三方服務,與本App無關';
+	@override String get createSessionFailed => '建立工作階段失敗，請檢查服務商或帳號密碼';
 }
 
 // Path: main
@@ -495,6 +496,8 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get manualSelect => '手動選擇';
 	@override String get autoSelect => '自動優選';
 	@override String get speedTestGroup => '策略組測速';
+	@override String get pause => '暫停';
+	@override String get resume => '恢復';
 }
 
 // Path: permission
@@ -678,6 +681,7 @@ extension on TranslationsZhTw {
 			'loginScreen.unActivedProvider' => '登入功能未啟用',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => '編碼/別名請向${_root.loginScreen.provider}索取\n${_root.loginScreen.provider}接入請參考:${p}',
 			'loginScreen.providerDisclaimer' => '免責聲明:${_root.loginScreen.provider}為第三方服務,與本App無關',
+			'loginScreen.createSessionFailed' => '建立工作階段失敗，請檢查服務商或帳號密碼',
 			'main.tray.menuOpen' => '開啟',
 			'main.tray.menuExit' => '結束',
 			'main.tray.coreDisconnected' => 'Wmimo · 核心未執行',
@@ -995,6 +999,8 @@ extension on TranslationsZhTw {
 			'meta.manualSelect' => '手動選擇',
 			'meta.autoSelect' => '自動優選',
 			'meta.speedTestGroup' => '策略組測速',
+			'meta.pause' => '暫停',
+			'meta.resume' => '恢復',
 			'permission.camera' => '攝像頭',
 			'permission.screen' => '屏幕錄製',
 			'permission.appQuery' => '獲取應用列表',

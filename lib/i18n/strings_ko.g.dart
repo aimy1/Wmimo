@@ -179,6 +179,7 @@ class _Translations$loginScreen$ko implements Translations$loginScreen$en {
 	@override String get unActivedProvider => '로그인 기능이 활성화되어 있지 않습니다';
 	@override String providerLoginSupportRequired({required Object p}) => '공급자 코드/별칭은 ${_root.loginScreen.provider}에 문의해 주세요.\n${_root.loginScreen.provider} 연동은 다음을 참고하세요: ${p}';
 	@override String get providerDisclaimer => '면책 조항: ${_root.loginScreen.provider}는 제3자 서비스이며, 본 앱과는 무관합니다';
+	@override String get createSessionFailed => '세션 생성 실패, 제공업체 또는 계정을 확인하세요';
 }
 
 // Path: main
@@ -495,6 +496,8 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get manualSelect => '수동 선택';
 	@override String get autoSelect => '자동 최적화';
 	@override String get speedTestGroup => '그룹 속도 테스트';
+	@override String get pause => '일시 중지';
+	@override String get resume => '재개';
 }
 
 // Path: permission
@@ -678,6 +681,7 @@ extension on TranslationsKo {
 			'loginScreen.unActivedProvider' => '로그인 기능이 활성화되어 있지 않습니다',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => '공급자 코드/별칭은 ${_root.loginScreen.provider}에 문의해 주세요.\n${_root.loginScreen.provider} 연동은 다음을 참고하세요: ${p}',
 			'loginScreen.providerDisclaimer' => '면책 조항: ${_root.loginScreen.provider}는 제3자 서비스이며, 본 앱과는 무관합니다',
+			'loginScreen.createSessionFailed' => '세션 생성 실패, 제공업체 또는 계정을 확인하세요',
 			'main.tray.menuOpen' => '열기',
 			'main.tray.menuExit' => '종료',
 			'main.tray.coreDisconnected' => 'Wmimo · 코어 미실행',
@@ -995,6 +999,8 @@ extension on TranslationsKo {
 			'meta.manualSelect' => '수동 선택',
 			'meta.autoSelect' => '자동 최적화',
 			'meta.speedTestGroup' => '그룹 속도 테스트',
+			'meta.pause' => '일시 중지',
+			'meta.resume' => '재개',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

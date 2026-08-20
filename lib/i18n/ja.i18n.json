@@ -61,7 +61,8 @@
         "unsupportedProviderType": "サポートされていない@:{loginScreen.provider}タイプ",
         "unActivedProvider": "ログイン機能は有効化されていません",
         "providerLoginSupportRequired": "プロバイダーのコード/別名は@:{loginScreen.provider}にお問い合わせください。\n@:{loginScreen.provider}連携は次をご参照ください: $p",
-        "providerDisclaimer": "免責事項:@:{loginScreen.provider}はサードパーティサービスであり、本アプリとは無関係です"
+        "providerDisclaimer": "免責事項:@:{loginScreen.provider}はサードパーティサービスであり、本アプリとは無関係です",
+        "createSessionFailed": "セッションの作成に失敗しました。プロバイダーまたはアカウントを確認してください"
     },
     "main": {
         "tray": {
@@ -384,7 +385,9 @@
         "offlinePreviewPrompt": "オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。",
         "manualSelect": "手動選択",
         "autoSelect": "自動最適化",
-        "speedTestGroup": "グループ速度テスト"
+        "speedTestGroup": "グループ速度テスト",
+        "pause": "一時停止",
+        "resume": "再開"
     },
     "permission": {
         "camera": "カメラ",

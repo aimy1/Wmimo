@@ -179,6 +179,7 @@ class Translations$loginScreen$zh_CN implements Translations$loginScreen$en {
 	@override String get unActivedProvider => '登录功能未激活';
 	@override String providerLoginSupportRequired({required Object p}) => '编码/别名请找${_root.loginScreen.provider}索要\n${_root.loginScreen.provider}接入请参考:${p}';
 	@override String get providerDisclaimer => '免责声明:${_root.loginScreen.provider}为三方服务,与本App无关';
+	@override String get createSessionFailed => '创建会话失败，请检查服务商或账号密码';
 }
 
 // Path: main
@@ -495,6 +496,8 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get manualSelect => '手动选择';
 	@override String get autoSelect => '自动优选';
 	@override String get speedTestGroup => '策略组测速';
+	@override String get pause => '暂停';
+	@override String get resume => '恢复';
 }
 
 // Path: permission
@@ -678,6 +681,7 @@ extension on TranslationsZhCn {
 			'loginScreen.unActivedProvider' => '登录功能未激活',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => '编码/别名请找${_root.loginScreen.provider}索要\n${_root.loginScreen.provider}接入请参考:${p}',
 			'loginScreen.providerDisclaimer' => '免责声明:${_root.loginScreen.provider}为三方服务,与本App无关',
+			'loginScreen.createSessionFailed' => '创建会话失败，请检查服务商或账号密码',
 			'main.tray.menuOpen' => '打开',
 			'main.tray.menuExit' => '退出',
 			'main.tray.coreDisconnected' => 'Wmimo · 内核未运行',
@@ -995,6 +999,8 @@ extension on TranslationsZhCn {
 			'meta.manualSelect' => '手动选择',
 			'meta.autoSelect' => '自动优选',
 			'meta.speedTestGroup' => '策略组测速',
+			'meta.pause' => '暂停',
+			'meta.resume' => '恢复',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',

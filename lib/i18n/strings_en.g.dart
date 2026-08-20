@@ -289,6 +289,9 @@ class Translations$loginScreen$en {
 
 	/// en: 'Disclaimer: Provider is a third-party service and is not affiliated with this app'
 	String get providerDisclaimer => 'Disclaimer: ${_root.loginScreen.provider} is a third-party service and is not affiliated with this app';
+
+	/// en: 'Failed to create session, check provider or account'
+	String get createSessionFailed => 'Failed to create session, check provider or account';
 }
 
 // Path: main
@@ -1199,6 +1202,12 @@ class Translations$meta$en {
 
 	/// en: 'Test Group Latency'
 	String get speedTestGroup => 'Test Group Latency';
+
+	/// en: 'Pause'
+	String get pause => 'Pause';
+
+	/// en: 'Resume'
+	String get resume => 'Resume';
 }
 
 // Path: permission
@@ -1502,6 +1511,7 @@ extension on Translations {
 			'loginScreen.unActivedProvider' => 'Login feature is not activated',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'Please request the provider code/alias from your ${_root.loginScreen.provider}.\nFor ${_root.loginScreen.provider} integration, please refer to: ${p}',
 			'loginScreen.providerDisclaimer' => 'Disclaimer: ${_root.loginScreen.provider} is a third-party service and is not affiliated with this app',
+			'loginScreen.createSessionFailed' => 'Failed to create session, check provider or account',
 			'main.tray.menuOpen' => 'Open',
 			'main.tray.menuExit' => 'Exit',
 			'main.tray.coreDisconnected' => 'Wmimo · Core Not Running',
@@ -1819,6 +1829,8 @@ extension on Translations {
 			'meta.manualSelect' => 'Manual',
 			'meta.autoSelect' => 'Auto Select',
 			'meta.speedTestGroup' => 'Test Group Latency',
+			'meta.pause' => 'Pause',
+			'meta.resume' => 'Resume',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

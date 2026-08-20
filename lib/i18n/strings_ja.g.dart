@@ -179,6 +179,7 @@ class _Translations$loginScreen$ja implements Translations$loginScreen$en {
 	@override String get unActivedProvider => 'ログイン機能は有効化されていません';
 	@override String providerLoginSupportRequired({required Object p}) => 'プロバイダーのコード/別名は${_root.loginScreen.provider}にお問い合わせください。\n${_root.loginScreen.provider}連携は次をご参照ください: ${p}';
 	@override String get providerDisclaimer => '免責事項:${_root.loginScreen.provider}はサードパーティサービスであり、本アプリとは無関係です';
+	@override String get createSessionFailed => 'セッションの作成に失敗しました。プロバイダーまたはアカウントを確認してください';
 }
 
 // Path: main
@@ -495,6 +496,8 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get manualSelect => '手動選択';
 	@override String get autoSelect => '自動最適化';
 	@override String get speedTestGroup => 'グループ速度テスト';
+	@override String get pause => '一時停止';
+	@override String get resume => '再開';
 }
 
 // Path: permission
@@ -678,6 +681,7 @@ extension on TranslationsJa {
 			'loginScreen.unActivedProvider' => 'ログイン機能は有効化されていません',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'プロバイダーのコード/別名は${_root.loginScreen.provider}にお問い合わせください。\n${_root.loginScreen.provider}連携は次をご参照ください: ${p}',
 			'loginScreen.providerDisclaimer' => '免責事項:${_root.loginScreen.provider}はサードパーティサービスであり、本アプリとは無関係です',
+			'loginScreen.createSessionFailed' => 'セッションの作成に失敗しました。プロバイダーまたはアカウントを確認してください',
 			'main.tray.menuOpen' => '開く',
 			'main.tray.menuExit' => '終了',
 			'main.tray.coreDisconnected' => 'Wmimo · コア未起動',
@@ -995,6 +999,8 @@ extension on TranslationsJa {
 			'meta.manualSelect' => '手動選択',
 			'meta.autoSelect' => '自動最適化',
 			'meta.speedTestGroup' => 'グループ速度テスト',
+			'meta.pause' => '一時停止',
+			'meta.resume' => '再開',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

@@ -179,6 +179,7 @@ class _Translations$loginScreen$ar implements Translations$loginScreen$en {
 	@override String get unActivedProvider => 'ميزة تسجيل الدخول غير مفعلة';
 	@override String providerLoginSupportRequired({required Object p}) => 'يرجى طلب رمز/اسم مستعار المزوّد من ${_root.loginScreen.provider}.\nللاطلاع على تكامل ${_root.loginScreen.provider}، راجع: ${p}';
 	@override String get providerDisclaimer => 'إخلاء المسؤولية: ${_root.loginScreen.provider} هي خدمة تابعة لطرف ثالث ولا علاقة لها بهذا التطبيق';
+	@override String get createSessionFailed => 'فشل إنشاء الجلسة، تحقق من مزود الخدمة أو الحساب';
 }
 
 // Path: main
@@ -495,6 +496,8 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get manualSelect => 'اختيار يدوي';
 	@override String get autoSelect => 'اختيار تلقائي';
 	@override String get speedTestGroup => 'اختبار سرعة المجموعة';
+	@override String get pause => 'إيقاف مؤقت';
+	@override String get resume => 'استئناف';
 }
 
 // Path: permission
@@ -678,6 +681,7 @@ extension on TranslationsAr {
 			'loginScreen.unActivedProvider' => 'ميزة تسجيل الدخول غير مفعلة',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'يرجى طلب رمز/اسم مستعار المزوّد من ${_root.loginScreen.provider}.\nللاطلاع على تكامل ${_root.loginScreen.provider}، راجع: ${p}',
 			'loginScreen.providerDisclaimer' => 'إخلاء المسؤولية: ${_root.loginScreen.provider} هي خدمة تابعة لطرف ثالث ولا علاقة لها بهذا التطبيق',
+			'loginScreen.createSessionFailed' => 'فشل إنشاء الجلسة، تحقق من مزود الخدمة أو الحساب',
 			'main.tray.menuOpen' => 'فتح',
 			'main.tray.menuExit' => 'خروج',
 			'main.tray.coreDisconnected' => 'Wmimo · النواة غير متصلة',
@@ -995,6 +999,8 @@ extension on TranslationsAr {
 			'meta.manualSelect' => 'اختيار يدوي',
 			'meta.autoSelect' => 'اختيار تلقائي',
 			'meta.speedTestGroup' => 'اختبار سرعة المجموعة',
+			'meta.pause' => 'إيقاف مؤقت',
+			'meta.resume' => 'استئناف',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',

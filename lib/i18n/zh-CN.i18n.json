@@ -61,7 +61,8 @@
         "unsupportedProviderType": "不支持的@:{loginScreen.provider}类型",
         "unActivedProvider": "登录功能未激活",
         "providerLoginSupportRequired": "编码/别名请找@:{loginScreen.provider}索要\n@:{loginScreen.provider}接入请参考:$p",
-        "providerDisclaimer": "免责声明:@:{loginScreen.provider}为三方服务,与本App无关"
+        "providerDisclaimer": "免责声明:@:{loginScreen.provider}为三方服务,与本App无关",
+        "createSessionFailed": "创建会话失败，请检查服务商或账号密码"
     },
     "main": {
         "tray": {
@@ -384,7 +385,9 @@
         "offlinePreviewPrompt": "离线配置预览中，开启代理后可进行分流与节点测速",
         "manualSelect": "手动选择",
         "autoSelect": "自动优选",
-        "speedTestGroup": "策略组测速"
+        "speedTestGroup": "策略组测速",
+        "pause": "暂停",
+        "resume": "恢复"
     },
     "permission": {
         "camera": "摄像头",

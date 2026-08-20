@@ -61,7 +61,8 @@
         "unsupportedProviderType": "نوع @:{loginScreen.provider} پشتیبانی نمی شود",
         "unActivedProvider": "قابلیت ورود فعال نشده است",
         "providerLoginSupportRequired": "لطفاً کد/نام مستعار ارائه‌دهنده را از @:{loginScreen.provider} دریافت کنید.\nبرای راهنمای اتصال @:{loginScreen.provider} به این لینک مراجعه کنید: $p",
-        "providerDisclaimer": "سلب مسئولیت: @:{loginScreen.provider} یک سرویس شخص ثالث است و ارتباطی با این برنامه ندارد"
+        "providerDisclaimer": "سلب مسئولیت: @:{loginScreen.provider} یک سرویس شخص ثالث است و ارتباطی با این برنامه ندارد",
+        "createSessionFailed": "ایجاد نشست با خطا مواجه شد، ارائه‌دهنده یا حساب را بررسی کنید"
     },
     "main": {
         "tray": {
@@ -384,7 +385,9 @@
         "offlinePreviewPrompt": "حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.",
         "manualSelect": "انتخاب دستی",
         "autoSelect": "انتخاب خودکار",
-        "speedTestGroup": "تست سرعت گروه"
+        "speedTestGroup": "تست سرعت گروه",
+        "pause": "توقف موقت",
+        "resume": "ادامه"
     },
     "permission": {
         "camera": "دوربین",

@@ -61,7 +61,8 @@
         "unsupportedProviderType": "不支持的@:{loginScreen.provider}類型",
         "unActivedProvider": "登入功能未啟用",
         "providerLoginSupportRequired": "編碼/別名請向@:{loginScreen.provider}索取\n@:{loginScreen.provider}接入請參考:$p",
-        "providerDisclaimer": "免責聲明:@:{loginScreen.provider}為第三方服務,與本App無關"
+        "providerDisclaimer": "免責聲明:@:{loginScreen.provider}為第三方服務,與本App無關",
+        "createSessionFailed": "建立工作階段失敗，請檢查服務商或帳號密碼"
     },
     "main": {
         "tray": {
@@ -384,7 +385,9 @@
         "offlinePreviewPrompt": "離線設定預覽中，開啟代理後可進行分流與節點測速",
         "manualSelect": "手動選擇",
         "autoSelect": "自動優選",
-        "speedTestGroup": "策略組測速"
+        "speedTestGroup": "策略組測速",
+        "pause": "暫停",
+        "resume": "恢復"
     },
     "permission": {
         "camera": "攝像頭",

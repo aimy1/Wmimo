@@ -61,7 +61,8 @@
         "unsupportedProviderType": "Unsupported @:{loginScreen.provider} type",
         "unActivedProvider": "Login feature is not activated",
         "providerLoginSupportRequired": "Please request the provider code/alias from your @:{loginScreen.provider}.\nFor @:{loginScreen.provider} integration, please refer to: $p",
-        "providerDisclaimer": "Disclaimer: @:{loginScreen.provider} is a third-party service and is not affiliated with this app"
+        "providerDisclaimer": "Disclaimer: @:{loginScreen.provider} is a third-party service and is not affiliated with this app",
+        "createSessionFailed": "Failed to create session, check provider or account"
     },
     "main": {
         "tray": {
@@ -384,7 +385,9 @@
         "offlinePreviewPrompt": "Offline preview mode. Start proxy to enable routing and latency testing.",
         "manualSelect": "Manual",
         "autoSelect": "Auto Select",
-        "speedTestGroup": "Test Group Latency"
+        "speedTestGroup": "Test Group Latency",
+        "pause": "Pause",
+        "resume": "Resume"
     },
     "permission": {
         "camera": "Camera",

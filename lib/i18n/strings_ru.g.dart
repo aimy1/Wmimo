@@ -179,6 +179,7 @@ class _Translations$loginScreen$ru implements Translations$loginScreen$en {
 	@override String get unActivedProvider => 'Функция входа не активирована';
 	@override String providerLoginSupportRequired({required Object p}) => 'Запросите код/алиас провайдера у вашего ${_root.loginScreen.provider}.\nИнструкцию по интеграции с ${_root.loginScreen.provider} смотрите: ${p}';
 	@override String get providerDisclaimer => 'Отказ от ответственности: ${_root.loginScreen.provider} — это сторонний сервис и не связан с этим приложением';
+	@override String get createSessionFailed => 'Не удалось создать сессию, проверьте провайдера или аккаунт';
 }
 
 // Path: main
@@ -495,6 +496,8 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get manualSelect => 'Ручной выбор';
 	@override String get autoSelect => 'Автовыбор';
 	@override String get speedTestGroup => 'Тест скорости группы';
+	@override String get pause => 'Пауза';
+	@override String get resume => 'Возобновить';
 }
 
 // Path: permission
@@ -678,6 +681,7 @@ extension on TranslationsRu {
 			'loginScreen.unActivedProvider' => 'Функция входа не активирована',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'Запросите код/алиас провайдера у вашего ${_root.loginScreen.provider}.\nИнструкцию по интеграции с ${_root.loginScreen.provider} смотрите: ${p}',
 			'loginScreen.providerDisclaimer' => 'Отказ от ответственности: ${_root.loginScreen.provider} — это сторонний сервис и не связан с этим приложением',
+			'loginScreen.createSessionFailed' => 'Не удалось создать сессию, проверьте провайдера или аккаунт',
 			'main.tray.menuOpen' => 'Открыть',
 			'main.tray.menuExit' => 'Выход',
 			'main.tray.coreDisconnected' => 'Wmimo · Ядро не запущено',
@@ -995,6 +999,8 @@ extension on TranslationsRu {
 			'meta.manualSelect' => 'Ручной выбор',
 			'meta.autoSelect' => 'Автовыбор',
 			'meta.speedTestGroup' => 'Тест скорости группы',
+			'meta.pause' => 'Пауза',
+			'meta.resume' => 'Возобновить',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

@@ -179,6 +179,7 @@ class _Translations$loginScreen$es implements Translations$loginScreen$en {
 	@override String get unActivedProvider => 'La función de inicio de sesión no está activada';
 	@override String providerLoginSupportRequired({required Object p}) => 'Solicita el código/alias del proveedor a tu ${_root.loginScreen.provider}.\nPara la integración con ${_root.loginScreen.provider}, consulta: ${p}';
 	@override String get providerDisclaimer => 'Aviso legal: ${_root.loginScreen.provider} es un servicio de terceros y no está relacionado con esta aplicación';
+	@override String get createSessionFailed => 'Error al crear la sesión, verifique el proveedor o la cuenta';
 }
 
 // Path: main
@@ -495,6 +496,8 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get manualSelect => 'Selección manual';
 	@override String get autoSelect => 'Selección automática';
 	@override String get speedTestGroup => 'Probar velocidad de grupo';
+	@override String get pause => 'Pausar';
+	@override String get resume => 'Reanudar';
 }
 
 // Path: permission
@@ -678,6 +681,7 @@ extension on TranslationsEs {
 			'loginScreen.unActivedProvider' => 'La función de inicio de sesión no está activada',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'Solicita el código/alias del proveedor a tu ${_root.loginScreen.provider}.\nPara la integración con ${_root.loginScreen.provider}, consulta: ${p}',
 			'loginScreen.providerDisclaimer' => 'Aviso legal: ${_root.loginScreen.provider} es un servicio de terceros y no está relacionado con esta aplicación',
+			'loginScreen.createSessionFailed' => 'Error al crear la sesión, verifique el proveedor o la cuenta',
 			'main.tray.menuOpen' => 'Abrir',
 			'main.tray.menuExit' => 'Salir',
 			'main.tray.coreDisconnected' => 'Wmimo · Núcleo no iniciado',
@@ -995,6 +999,8 @@ extension on TranslationsEs {
 			'meta.manualSelect' => 'Selección manual',
 			'meta.autoSelect' => 'Selección automática',
 			'meta.speedTestGroup' => 'Probar velocidad de grupo',
+			'meta.pause' => 'Pausar',
+			'meta.resume' => 'Reanudar',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

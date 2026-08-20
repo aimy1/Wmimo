@@ -240,7 +240,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
                     ),
                     // Auto-refresh toggle
                     Tooltip(
-                      message: _isAutoRefresh ? "Pause" : "Resume",
+                      message: _isAutoRefresh ? tcontext.meta.pause : tcontext.meta.resume,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
                         onTap: () {

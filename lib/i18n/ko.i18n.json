@@ -61,7 +61,8 @@
         "unsupportedProviderType": "지원되지 않는 @:{loginScreen.provider} 유형",
         "unActivedProvider": "로그인 기능이 활성화되어 있지 않습니다",
         "providerLoginSupportRequired": "공급자 코드/별칭은 @:{loginScreen.provider}에 문의해 주세요.\n@:{loginScreen.provider} 연동은 다음을 참고하세요: $p",
-        "providerDisclaimer": "면책 조항: @:{loginScreen.provider}는 제3자 서비스이며, 본 앱과는 무관합니다"
+        "providerDisclaimer": "면책 조항: @:{loginScreen.provider}는 제3자 서비스이며, 본 앱과는 무관합니다",
+        "createSessionFailed": "세션 생성 실패, 제공업체 또는 계정을 확인하세요"
     },
     "main": {
         "tray": {
@@ -384,7 +385,9 @@
         "offlinePreviewPrompt": "오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.",
         "manualSelect": "수동 선택",
         "autoSelect": "자동 최적화",
-        "speedTestGroup": "그룹 속도 테스트"
+        "speedTestGroup": "그룹 속도 테스트",
+        "pause": "일시 중지",
+        "resume": "재개"
     },
     "permission": {
         "camera": "카메라",

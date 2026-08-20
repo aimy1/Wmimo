@@ -61,7 +61,8 @@
         "unsupportedProviderType": "Tipo de @:{loginScreen.provider} no compatible",
         "unActivedProvider": "La función de inicio de sesión no está activada",
         "providerLoginSupportRequired": "Solicita el código/alias del proveedor a tu @:{loginScreen.provider}.\nPara la integración con @:{loginScreen.provider}, consulta: $p",
-        "providerDisclaimer": "Aviso legal: @:{loginScreen.provider} es un servicio de terceros y no está relacionado con esta aplicación"
+        "providerDisclaimer": "Aviso legal: @:{loginScreen.provider} es un servicio de terceros y no está relacionado con esta aplicación",
+        "createSessionFailed": "Error al crear la sesión, verifique el proveedor o la cuenta"
     },
     "main": {
         "tray": {
@@ -384,7 +385,9 @@
         "offlinePreviewPrompt": "Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.",
         "manualSelect": "Selección manual",
         "autoSelect": "Selección automática",
-        "speedTestGroup": "Probar velocidad de grupo"
+        "speedTestGroup": "Probar velocidad de grupo",
+        "pause": "Pausar",
+        "resume": "Reanudar"
     },
     "permission": {
         "camera": "Cámara",

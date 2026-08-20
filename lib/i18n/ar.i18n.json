@@ -61,7 +61,8 @@
         "unsupportedProviderType": "نوع @:{loginScreen.provider} غير مدعوم",
         "unActivedProvider": "ميزة تسجيل الدخول غير مفعلة",
         "providerLoginSupportRequired": "يرجى طلب رمز/اسم مستعار المزوّد من @:{loginScreen.provider}.\nللاطلاع على تكامل @:{loginScreen.provider}، راجع: $p",
-        "providerDisclaimer": "إخلاء المسؤولية: @:{loginScreen.provider} هي خدمة تابعة لطرف ثالث ولا علاقة لها بهذا التطبيق"
+        "providerDisclaimer": "إخلاء المسؤولية: @:{loginScreen.provider} هي خدمة تابعة لطرف ثالث ولا علاقة لها بهذا التطبيق",
+        "createSessionFailed": "فشل إنشاء الجلسة، تحقق من مزود الخدمة أو الحساب"
     },
     "main": {
         "tray": {
@@ -384,7 +385,9 @@
         "offlinePreviewPrompt": "معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.",
         "manualSelect": "اختيار يدوي",
         "autoSelect": "اختيار تلقائي",
-        "speedTestGroup": "اختبار سرعة المجموعة"
+        "speedTestGroup": "اختبار سرعة المجموعة",
+        "pause": "إيقاف مؤقت",
+        "resume": "استئناف"
     },
     "permission": {
         "camera": "الكاميرا",

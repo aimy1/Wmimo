@@ -1,9 +1,10 @@
-﻿import 'package:board_service/xboard/xboard_models.dart';
+import 'package:board_service/xboard/xboard_models.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/modules/board_session_persistent_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/utils/log.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 
 class XboardLogin {
   static final Map<int, Function()> onEventLogin = {};
@@ -20,7 +21,7 @@ class XboardLogin {
     );
     if (session == null || session.xboard == null) {
       return BoardSessionLoginError(
-        message: "create session failed, check provider or account",
+        message: t.loginScreen.createSessionFailed,
       );
     }
     Log.i('xboard: login, provider: ${provider.name}, email: $email');
