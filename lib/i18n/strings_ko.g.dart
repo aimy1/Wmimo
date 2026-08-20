@@ -498,6 +498,23 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get speedTestGroup => '그룹 속도 테스트';
 	@override String get pause => '일시 중지';
 	@override String get resume => '재개';
+	@override String get ipInfo => 'IP 정보';
+	@override String get ipFetching => 'IP 정보 가져오는 중...';
+	@override String get ipCopied => 'IP 주소가 클립보드에 복사되었습니다';
+	@override String get ipLocation => '위치';
+	@override String get ipIsp => '제공자';
+	@override String get ipTapToFetch => '탭하여 IP 정보 가져오기';
+	@override String get collapseAll => '모든 그룹 접기';
+	@override String get expandAll => '모든 그룹 펼치기';
+	@override String get donateTitle => '💖 개발자에게 커피 한 잔 후원하기';
+	@override String get donateThankYou => 'ฅ^•ﻌ•^ฅ 여러분의 따뜻한 후원은 Wmimo를 발전시키는 가장 큰 원동력입니다 ~ ☕✨';
+	@override String get tokenCurrency => '토큰';
+	@override String get networkChain => '네트워크';
+	@override String get depositAddress => 'APTOS 입금 주소';
+	@override String get clickToCopy => '클릭하여 복사';
+	@override String get copyAddressBtn => '주소 복사 ✨';
+	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ 주소가 복사되었습니다! 후원해 주셔서 진심으로 감사드립니다~ 💖';
+	@override String get donateTip => '💡 팁: Bybit 또는 모든 Aptos 호환 지갑 스캔 지원';
 }
 
 // Path: permission
@@ -1001,6 +1018,23 @@ extension on TranslationsKo {
 			'meta.speedTestGroup' => '그룹 속도 테스트',
 			'meta.pause' => '일시 중지',
 			'meta.resume' => '재개',
+			'meta.ipInfo' => 'IP 정보',
+			'meta.ipFetching' => 'IP 정보 가져오는 중...',
+			'meta.ipCopied' => 'IP 주소가 클립보드에 복사되었습니다',
+			'meta.ipLocation' => '위치',
+			'meta.ipIsp' => '제공자',
+			'meta.ipTapToFetch' => '탭하여 IP 정보 가져오기',
+			'meta.collapseAll' => '모든 그룹 접기',
+			'meta.expandAll' => '모든 그룹 펼치기',
+			'meta.donateTitle' => '💖 개발자에게 커피 한 잔 후원하기',
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 여러분의 따뜻한 후원은 Wmimo를 발전시키는 가장 큰 원동력입니다 ~ ☕✨',
+			'meta.tokenCurrency' => '토큰',
+			'meta.networkChain' => '네트워크',
+			'meta.depositAddress' => 'APTOS 입금 주소',
+			'meta.clickToCopy' => '클릭하여 복사',
+			'meta.copyAddressBtn' => '주소 복사 ✨',
+			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ 주소가 복사되었습니다! 후원해 주셔서 진심으로 감사드립니다~ 💖',
+			'meta.donateTip' => '💡 팁: Bybit 또는 모든 Aptos 호환 지갑 스캔 지원',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

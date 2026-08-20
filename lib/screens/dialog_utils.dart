@@ -797,11 +797,12 @@ class DialogUtils {
     const String currency = "USDT";
 
     void copyAddress(BuildContext ctx) {
+      final t = Translations.of(ctx);
       Clipboard.setData(const ClipboardData(text: walletAddress));
       ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
-          content: const Text("( ੭ ˙ᗜ˙ )੭ 地址已复制！非常感谢你的投喂与陪伴~ 💖"),
+          content: Text(t.meta.donateAddressCopied),
           duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -812,6 +813,7 @@ class DialogUtils {
     await showDialog(
       context: context,
       builder: (context) {
+        final tcontext = Translations.of(context);
         final theme = Theme.of(context);
         final isDark = theme.brightness == Brightness.dark;
 
@@ -827,9 +829,9 @@ class DialogUtils {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    "💖 请作者喝杯咖啡",
-                    style: TextStyle(
+                  Text(
+                    tcontext.meta.donateTitle,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -858,7 +860,7 @@ class DialogUtils {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  "ฅ^•ﻌ•^ฅ 你的每一份投喂，都是 Wmimo 不断打磨与更新的最大动力呀 ~ ☕✨",
+                  tcontext.meta.donateThankYou,
                   style: TextStyle(
                     fontSize: 11.5,
                     height: 1.35,
@@ -913,7 +915,7 @@ class DialogUtils {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "币种: ",
+                          "${tcontext.meta.tokenCurrency}: ",
                           style: TextStyle(
                             fontSize: 11,
                             color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -938,7 +940,7 @@ class DialogUtils {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "网络: ",
+                          "${tcontext.meta.networkChain}: ",
                           style: TextStyle(
                             fontSize: 11,
                             color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -980,7 +982,7 @@ class DialogUtils {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "APTOS 收款地址",
+                            tcontext.meta.depositAddress,
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
@@ -997,7 +999,7 @@ class DialogUtils {
                               ),
                               const SizedBox(width: 3),
                               Text(
-                                "点击复制",
+                                tcontext.meta.clickToCopy,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
@@ -1039,9 +1041,9 @@ class DialogUtils {
                   ),
                   onPressed: () => copyAddress(context),
                   icon: const Icon(Icons.copy_rounded, size: 15),
-                  label: const Text(
-                    "复制地址 ✨",
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                  label: Text(
+                    tcontext.meta.copyAddressBtn,
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -1049,7 +1051,7 @@ class DialogUtils {
 
               // Warm tip
               Text(
-                "💡 提示：支持 Bybit 或任意 Aptos 兼容钱包扫码转账",
+                tcontext.meta.donateTip,
                 style: TextStyle(
                   fontSize: 10,
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.45),

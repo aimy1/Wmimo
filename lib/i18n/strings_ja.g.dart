@@ -498,6 +498,23 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get speedTestGroup => 'グループ速度テスト';
 	@override String get pause => '一時停止';
 	@override String get resume => '再開';
+	@override String get ipInfo => 'IP 情報';
+	@override String get ipFetching => 'IP情報を取得中...';
+	@override String get ipCopied => 'IPアドレスをクリップボードにコピーしました';
+	@override String get ipLocation => '位置';
+	@override String get ipIsp => 'プロバイダ';
+	@override String get ipTapToFetch => 'タップしてIP情報を取得';
+	@override String get collapseAll => 'すべてのグループを折りたたむ';
+	@override String get expandAll => 'すべてのグループを展開';
+	@override String get donateTitle => '💖 開発者にコーヒーをおごる';
+	@override String get donateThankYou => 'ฅ^•ﻌ•^ฅ 皆様のご支援が、Wmimoを磨き続ける最大の力になります ~ ☕✨';
+	@override String get tokenCurrency => '通貨';
+	@override String get networkChain => 'ネットワーク';
+	@override String get depositAddress => 'APTOS 受取先アドレス';
+	@override String get clickToCopy => 'クリックしてコピー';
+	@override String get copyAddressBtn => 'アドレスをコピー ✨';
+	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ アドレスをコピーしました！応援ありがとうございます~ 💖';
+	@override String get donateTip => '💡 ヒント：BybitまたはAptos互換ウォレットでのスキャンに対応';
 }
 
 // Path: permission
@@ -1001,6 +1018,23 @@ extension on TranslationsJa {
 			'meta.speedTestGroup' => 'グループ速度テスト',
 			'meta.pause' => '一時停止',
 			'meta.resume' => '再開',
+			'meta.ipInfo' => 'IP 情報',
+			'meta.ipFetching' => 'IP情報を取得中...',
+			'meta.ipCopied' => 'IPアドレスをクリップボードにコピーしました',
+			'meta.ipLocation' => '位置',
+			'meta.ipIsp' => 'プロバイダ',
+			'meta.ipTapToFetch' => 'タップしてIP情報を取得',
+			'meta.collapseAll' => 'すべてのグループを折りたたむ',
+			'meta.expandAll' => 'すべてのグループを展開',
+			'meta.donateTitle' => '💖 開発者にコーヒーをおごる',
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 皆様のご支援が、Wmimoを磨き続ける最大の力になります ~ ☕✨',
+			'meta.tokenCurrency' => '通貨',
+			'meta.networkChain' => 'ネットワーク',
+			'meta.depositAddress' => 'APTOS 受取先アドレス',
+			'meta.clickToCopy' => 'クリックしてコピー',
+			'meta.copyAddressBtn' => 'アドレスをコピー ✨',
+			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ アドレスをコピーしました！応援ありがとうございます~ 💖',
+			'meta.donateTip' => '💡 ヒント：BybitまたはAptos互換ウォレットでのスキャンに対応',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

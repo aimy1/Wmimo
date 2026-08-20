@@ -580,8 +580,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                     // Toggle Collapse / Expand All button
                     Tooltip(
                       message: groups.any((g) => _isGroupExpandedByDefault(g, groups.indexOf(g)))
-                          ? "折叠所有代理组"
-                          : "展开所有代理组",
+                          ? tcontext.meta.collapseAll
+                          : tcontext.meta.expandAll,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
                         onTap: () {

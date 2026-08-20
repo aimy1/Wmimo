@@ -498,6 +498,23 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get speedTestGroup => '策略组测速';
 	@override String get pause => '暂停';
 	@override String get resume => '恢复';
+	@override String get ipInfo => 'IP 信息';
+	@override String get ipFetching => '正在获取 IP 信息...';
+	@override String get ipCopied => 'IP 地址已复制到剪贴板';
+	@override String get ipLocation => '位置';
+	@override String get ipIsp => '服务商';
+	@override String get ipTapToFetch => '点击获取 IP 信息';
+	@override String get collapseAll => '折叠所有代理组';
+	@override String get expandAll => '展开所有代理组';
+	@override String get donateTitle => '💖 请作者喝杯咖啡';
+	@override String get donateThankYou => 'ฅ^•ﻌ•^ฅ 你的每一份投喂，都是 Wmimo 不断打磨与更新的最大动力呀 ~ ☕✨';
+	@override String get tokenCurrency => '币种';
+	@override String get networkChain => '网络';
+	@override String get depositAddress => 'APTOS 收款地址';
+	@override String get clickToCopy => '点击复制';
+	@override String get copyAddressBtn => '复制地址 ✨';
+	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ 地址已复制！非常感谢你的投喂与陪伴~ 💖';
+	@override String get donateTip => '💡 提示：支持 Bybit 或任意 Aptos 兼容钱包扫码转账';
 }
 
 // Path: permission
@@ -1001,6 +1018,23 @@ extension on TranslationsZhCn {
 			'meta.speedTestGroup' => '策略组测速',
 			'meta.pause' => '暂停',
 			'meta.resume' => '恢复',
+			'meta.ipInfo' => 'IP 信息',
+			'meta.ipFetching' => '正在获取 IP 信息...',
+			'meta.ipCopied' => 'IP 地址已复制到剪贴板',
+			'meta.ipLocation' => '位置',
+			'meta.ipIsp' => '服务商',
+			'meta.ipTapToFetch' => '点击获取 IP 信息',
+			'meta.collapseAll' => '折叠所有代理组',
+			'meta.expandAll' => '展开所有代理组',
+			'meta.donateTitle' => '💖 请作者喝杯咖啡',
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 你的每一份投喂，都是 Wmimo 不断打磨与更新的最大动力呀 ~ ☕✨',
+			'meta.tokenCurrency' => '币种',
+			'meta.networkChain' => '网络',
+			'meta.depositAddress' => 'APTOS 收款地址',
+			'meta.clickToCopy' => '点击复制',
+			'meta.copyAddressBtn' => '复制地址 ✨',
+			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ 地址已复制！非常感谢你的投喂与陪伴~ 💖',
+			'meta.donateTip' => '💡 提示：支持 Bybit 或任意 Aptos 兼容钱包扫码转账',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',

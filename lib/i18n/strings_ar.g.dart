@@ -498,6 +498,23 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get speedTestGroup => 'اختبار سرعة المجموعة';
 	@override String get pause => 'إيقاف مؤقت';
 	@override String get resume => 'استئناف';
+	@override String get ipInfo => 'معلومات IP';
+	@override String get ipFetching => 'جارٍ جلب معلومات IP...';
+	@override String get ipCopied => 'تم نسخ عنوان IP إلى الحافظة';
+	@override String get ipLocation => 'الموقع';
+	@override String get ipIsp => 'مزود الخدمة';
+	@override String get ipTapToFetch => 'انقر لجلب معلومات IP';
+	@override String get collapseAll => 'طي جميع المجموعات';
+	@override String get expandAll => 'توسيع جميع المجموعات';
+	@override String get donateTitle => '💖 اشترِ قهوة للمطور';
+	@override String get donateThankYou => 'ฅ^•ﻌ•^ฅ دعمكم هو أكبر دافع لنا لمواصلة تطوير Wmimo ~ ☕✨';
+	@override String get tokenCurrency => 'العملة';
+	@override String get networkChain => 'الشبكة';
+	@override String get depositAddress => 'عنوان إيداع APTOS';
+	@override String get clickToCopy => 'انقر للنسخ';
+	@override String get copyAddressBtn => 'نسخ العنوان ✨';
+	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ تم نسخ العنوان! شكراً جزيلاً لدعمكم الرائع~ 💖';
+	@override String get donateTip => '💡 تلميح: يدعم المسح عبر Bybit أو أي محفظة متوافقة مع Aptos';
 }
 
 // Path: permission
@@ -1001,6 +1018,23 @@ extension on TranslationsAr {
 			'meta.speedTestGroup' => 'اختبار سرعة المجموعة',
 			'meta.pause' => 'إيقاف مؤقت',
 			'meta.resume' => 'استئناف',
+			'meta.ipInfo' => 'معلومات IP',
+			'meta.ipFetching' => 'جارٍ جلب معلومات IP...',
+			'meta.ipCopied' => 'تم نسخ عنوان IP إلى الحافظة',
+			'meta.ipLocation' => 'الموقع',
+			'meta.ipIsp' => 'مزود الخدمة',
+			'meta.ipTapToFetch' => 'انقر لجلب معلومات IP',
+			'meta.collapseAll' => 'طي جميع المجموعات',
+			'meta.expandAll' => 'توسيع جميع المجموعات',
+			'meta.donateTitle' => '💖 اشترِ قهوة للمطور',
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ دعمكم هو أكبر دافع لنا لمواصلة تطوير Wmimo ~ ☕✨',
+			'meta.tokenCurrency' => 'العملة',
+			'meta.networkChain' => 'الشبكة',
+			'meta.depositAddress' => 'عنوان إيداع APTOS',
+			'meta.clickToCopy' => 'انقر للنسخ',
+			'meta.copyAddressBtn' => 'نسخ العنوان ✨',
+			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ تم نسخ العنوان! شكراً جزيلاً لدعمكم الرائع~ 💖',
+			'meta.donateTip' => '💡 تلميح: يدعم المسح عبر Bybit أو أي محفظة متوافقة مع Aptos',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',

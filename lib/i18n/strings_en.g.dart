@@ -1208,6 +1208,57 @@ class Translations$meta$en {
 
 	/// en: 'Resume'
 	String get resume => 'Resume';
+
+	/// en: 'IP Info'
+	String get ipInfo => 'IP Info';
+
+	/// en: 'Fetching IP info...'
+	String get ipFetching => 'Fetching IP info...';
+
+	/// en: 'IP address copied to clipboard'
+	String get ipCopied => 'IP address copied to clipboard';
+
+	/// en: 'Location'
+	String get ipLocation => 'Location';
+
+	/// en: 'Provider'
+	String get ipIsp => 'Provider';
+
+	/// en: 'Tap to fetch IP info'
+	String get ipTapToFetch => 'Tap to fetch IP info';
+
+	/// en: 'Collapse All Groups'
+	String get collapseAll => 'Collapse All Groups';
+
+	/// en: 'Expand All Groups'
+	String get expandAll => 'Expand All Groups';
+
+	/// en: '💖 Buy Author a Coffee'
+	String get donateTitle => '💖 Buy Author a Coffee';
+
+	/// en: 'ฅ^•ﻌ•^ฅ Every donation is our greatest motivation to keep polishing Wmimo ~ ☕✨'
+	String get donateThankYou => 'ฅ^•ﻌ•^ฅ Every donation is our greatest motivation to keep polishing Wmimo ~ ☕✨';
+
+	/// en: 'Token'
+	String get tokenCurrency => 'Token';
+
+	/// en: 'Network'
+	String get networkChain => 'Network';
+
+	/// en: 'APTOS Deposit Address'
+	String get depositAddress => 'APTOS Deposit Address';
+
+	/// en: 'Click to copy'
+	String get clickToCopy => 'Click to copy';
+
+	/// en: 'Copy Address ✨'
+	String get copyAddressBtn => 'Copy Address ✨';
+
+	/// en: '( ੭ ˙ᗜ˙ )੭ Address copied! Thank you so much for your support and company~ 💖'
+	String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ Address copied! Thank you so much for your support and company~ 💖';
+
+	/// en: '💡 Tip: Supports scanning via Bybit or any Aptos-compatible wallet'
+	String get donateTip => '💡 Tip: Supports scanning via Bybit or any Aptos-compatible wallet';
 }
 
 // Path: permission
@@ -1831,6 +1882,23 @@ extension on Translations {
 			'meta.speedTestGroup' => 'Test Group Latency',
 			'meta.pause' => 'Pause',
 			'meta.resume' => 'Resume',
+			'meta.ipInfo' => 'IP Info',
+			'meta.ipFetching' => 'Fetching IP info...',
+			'meta.ipCopied' => 'IP address copied to clipboard',
+			'meta.ipLocation' => 'Location',
+			'meta.ipIsp' => 'Provider',
+			'meta.ipTapToFetch' => 'Tap to fetch IP info',
+			'meta.collapseAll' => 'Collapse All Groups',
+			'meta.expandAll' => 'Expand All Groups',
+			'meta.donateTitle' => '💖 Buy Author a Coffee',
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Every donation is our greatest motivation to keep polishing Wmimo ~ ☕✨',
+			'meta.tokenCurrency' => 'Token',
+			'meta.networkChain' => 'Network',
+			'meta.depositAddress' => 'APTOS Deposit Address',
+			'meta.clickToCopy' => 'Click to copy',
+			'meta.copyAddressBtn' => 'Copy Address ✨',
+			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ Address copied! Thank you so much for your support and company~ 💖',
+			'meta.donateTip' => '💡 Tip: Supports scanning via Bybit or any Aptos-compatible wallet',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

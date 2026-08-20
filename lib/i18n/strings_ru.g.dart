@@ -498,6 +498,23 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get speedTestGroup => 'Тест скорости группы';
 	@override String get pause => 'Пауза';
 	@override String get resume => 'Возобновить';
+	@override String get ipInfo => 'Информация об IP';
+	@override String get ipFetching => 'Получение данных IP...';
+	@override String get ipCopied => 'IP-адрес скопирован в буфер обмена';
+	@override String get ipLocation => 'Местоположение';
+	@override String get ipIsp => 'Провайдер';
+	@override String get ipTapToFetch => 'Нажмите для получения IP';
+	@override String get collapseAll => 'Свернуть все группы';
+	@override String get expandAll => 'Развернуть все группы';
+	@override String get donateTitle => '💖 Угостить автора кофе';
+	@override String get donateThankYou => 'ฅ^•ﻌ•^ฅ Ваша поддержка — главная мотивация делать Wmimo ещё лучше ~ ☕✨';
+	@override String get tokenCurrency => 'Токен';
+	@override String get networkChain => 'Сеть';
+	@override String get depositAddress => 'Адрес для пополнения APTOS';
+	@override String get clickToCopy => 'Нажмите для копирования';
+	@override String get copyAddressBtn => 'Скопировать адрес ✨';
+	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ Адрес скопирован! Большое спасибо за вашу поддержку~ 💖';
+	@override String get donateTip => '💡 Совет: Поддерживается сканирование через Bybit или любой кошелек Aptos';
 }
 
 // Path: permission
@@ -1001,6 +1018,23 @@ extension on TranslationsRu {
 			'meta.speedTestGroup' => 'Тест скорости группы',
 			'meta.pause' => 'Пауза',
 			'meta.resume' => 'Возобновить',
+			'meta.ipInfo' => 'Информация об IP',
+			'meta.ipFetching' => 'Получение данных IP...',
+			'meta.ipCopied' => 'IP-адрес скопирован в буфер обмена',
+			'meta.ipLocation' => 'Местоположение',
+			'meta.ipIsp' => 'Провайдер',
+			'meta.ipTapToFetch' => 'Нажмите для получения IP',
+			'meta.collapseAll' => 'Свернуть все группы',
+			'meta.expandAll' => 'Развернуть все группы',
+			'meta.donateTitle' => '💖 Угостить автора кофе',
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Ваша поддержка — главная мотивация делать Wmimo ещё лучше ~ ☕✨',
+			'meta.tokenCurrency' => 'Токен',
+			'meta.networkChain' => 'Сеть',
+			'meta.depositAddress' => 'Адрес для пополнения APTOS',
+			'meta.clickToCopy' => 'Нажмите для копирования',
+			'meta.copyAddressBtn' => 'Скопировать адрес ✨',
+			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ Адрес скопирован! Большое спасибо за вашу поддержку~ 💖',
+			'meta.donateTip' => '💡 Совет: Поддерживается сканирование через Bybit или любой кошелек Aptos',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

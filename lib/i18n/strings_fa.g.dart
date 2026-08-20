@@ -498,6 +498,23 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get speedTestGroup => 'تست سرعت گروه';
 	@override String get pause => 'توقف موقت';
 	@override String get resume => 'ادامه';
+	@override String get ipInfo => 'اطلاعات IP';
+	@override String get ipFetching => 'در حال دریافت اطلاعات IP...';
+	@override String get ipCopied => 'آدرس IP در کلیپ‌بورد کپی شد';
+	@override String get ipLocation => 'مکان';
+	@override String get ipIsp => 'ارائه‌دهنده';
+	@override String get ipTapToFetch => 'برای دریافت اطلاعات IP ضربه بزنید';
+	@override String get collapseAll => 'بستن همه گروه‌ها';
+	@override String get expandAll => 'باز کردن همه گروه‌ها';
+	@override String get donateTitle => '💖 خرید یک قهوه برای نویسنده';
+	@override String get donateThankYou => 'ฅ^•ﻌ•^ฅ حمایت شما بزرگترین انگیزه برای بهبود مداوم Wmimo است ~ ☕✨';
+	@override String get tokenCurrency => 'ارز';
+	@override String get networkChain => 'شبکه';
+	@override String get depositAddress => 'آدرس واریز APTOS';
+	@override String get clickToCopy => 'کلیک برای کپی';
+	@override String get copyAddressBtn => 'کپی آدرس ✨';
+	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ آدرس کپی شد! از حمایت گرم شما بسیار سپاسگزاریم~ 💖';
+	@override String get donateTip => '💡 نکته: پشتیبانی از اسکن از طریق Bybit یا هر کیف پول سازگار با Aptos';
 }
 
 // Path: permission
@@ -1001,6 +1018,23 @@ extension on TranslationsFa {
 			'meta.speedTestGroup' => 'تست سرعت گروه',
 			'meta.pause' => 'توقف موقت',
 			'meta.resume' => 'ادامه',
+			'meta.ipInfo' => 'اطلاعات IP',
+			'meta.ipFetching' => 'در حال دریافت اطلاعات IP...',
+			'meta.ipCopied' => 'آدرس IP در کلیپ‌بورد کپی شد',
+			'meta.ipLocation' => 'مکان',
+			'meta.ipIsp' => 'ارائه‌دهنده',
+			'meta.ipTapToFetch' => 'برای دریافت اطلاعات IP ضربه بزنید',
+			'meta.collapseAll' => 'بستن همه گروه‌ها',
+			'meta.expandAll' => 'باز کردن همه گروه‌ها',
+			'meta.donateTitle' => '💖 خرید یک قهوه برای نویسنده',
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ حمایت شما بزرگترین انگیزه برای بهبود مداوم Wmimo است ~ ☕✨',
+			'meta.tokenCurrency' => 'ارز',
+			'meta.networkChain' => 'شبکه',
+			'meta.depositAddress' => 'آدرس واریز APTOS',
+			'meta.clickToCopy' => 'کلیک برای کپی',
+			'meta.copyAddressBtn' => 'کپی آدرس ✨',
+			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ آدرس کپی شد! از حمایت گرم شما بسیار سپاسگزاریم~ 💖',
+			'meta.donateTip' => '💡 نکته: پشتیبانی از اسکن از طریق Bybit یا هر کیف پول سازگار با Aptos',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

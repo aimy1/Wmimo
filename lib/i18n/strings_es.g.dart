@@ -498,6 +498,23 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get speedTestGroup => 'Probar velocidad de grupo';
 	@override String get pause => 'Pausar';
 	@override String get resume => 'Reanudar';
+	@override String get ipInfo => 'Información de IP';
+	@override String get ipFetching => 'Obteniendo información de IP...';
+	@override String get ipCopied => 'Dirección IP copiada al portapapeles';
+	@override String get ipLocation => 'Ubicación';
+	@override String get ipIsp => 'Proveedor';
+	@override String get ipTapToFetch => 'Toca para obtener IP';
+	@override String get collapseAll => 'Contraer todos los grupos';
+	@override String get expandAll => 'Expandir todos los grupos';
+	@override String get donateTitle => '💖 Invitar un café al autor';
+	@override String get donateThankYou => 'ฅ^•ﻌ•^ฅ ¡Tu apoyo es la mayor motivación para seguir mejorando Wmimo! ~ ☕✨';
+	@override String get tokenCurrency => 'Token';
+	@override String get networkChain => 'Red';
+	@override String get depositAddress => 'Dirección de depósito APTOS';
+	@override String get clickToCopy => 'Clic para copiar';
+	@override String get copyAddressBtn => 'Copiar dirección ✨';
+	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ ¡Dirección copiada! ¡Muchas gracias por tu generoso apoyo!~ 💖';
+	@override String get donateTip => '💡 Consejo: Admite escaneo a través de Bybit o cualquier billetera Aptos';
 }
 
 // Path: permission
@@ -1001,6 +1018,23 @@ extension on TranslationsEs {
 			'meta.speedTestGroup' => 'Probar velocidad de grupo',
 			'meta.pause' => 'Pausar',
 			'meta.resume' => 'Reanudar',
+			'meta.ipInfo' => 'Información de IP',
+			'meta.ipFetching' => 'Obteniendo información de IP...',
+			'meta.ipCopied' => 'Dirección IP copiada al portapapeles',
+			'meta.ipLocation' => 'Ubicación',
+			'meta.ipIsp' => 'Proveedor',
+			'meta.ipTapToFetch' => 'Toca para obtener IP',
+			'meta.collapseAll' => 'Contraer todos los grupos',
+			'meta.expandAll' => 'Expandir todos los grupos',
+			'meta.donateTitle' => '💖 Invitar un café al autor',
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ ¡Tu apoyo es la mayor motivación para seguir mejorando Wmimo! ~ ☕✨',
+			'meta.tokenCurrency' => 'Token',
+			'meta.networkChain' => 'Red',
+			'meta.depositAddress' => 'Dirección de depósito APTOS',
+			'meta.clickToCopy' => 'Clic para copiar',
+			'meta.copyAddressBtn' => 'Copiar dirección ✨',
+			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ ¡Dirección copiada! ¡Muchas gracias por tu generoso apoyo!~ 💖',
+			'meta.donateTip' => '💡 Consejo: Admite escaneo a través de Bybit o cualquier billetera Aptos',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

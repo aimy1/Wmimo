@@ -498,6 +498,23 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get speedTestGroup => '策略組測速';
 	@override String get pause => '暫停';
 	@override String get resume => '恢復';
+	@override String get ipInfo => 'IP 資訊';
+	@override String get ipFetching => '正在獲取 IP 資訊...';
+	@override String get ipCopied => 'IP 位址已複製到剪貼簿';
+	@override String get ipLocation => '位置';
+	@override String get ipIsp => '服務商';
+	@override String get ipTapToFetch => '點擊獲取 IP 資訊';
+	@override String get collapseAll => '摺疊所有代理組';
+	@override String get expandAll => '展開所有代理組';
+	@override String get donateTitle => '💖 請作者喝杯咖啡';
+	@override String get donateThankYou => 'ฅ^•ﻌ•^ฅ 你的每一份投餵，都是 Wmimo 不斷打磨與更新的最大動力呀 ~ ☕✨';
+	@override String get tokenCurrency => '幣種';
+	@override String get networkChain => '網路';
+	@override String get depositAddress => 'APTOS 收款位址';
+	@override String get clickToCopy => '點擊複製';
+	@override String get copyAddressBtn => '複製位址 ✨';
+	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ 位址已複製！非常感謝你的投餵與陪伴~ 💖';
+	@override String get donateTip => '💡 提示：支援 Bybit 或任意 Aptos 相容錢包掃碼轉帳';
 }
 
 // Path: permission
@@ -1001,6 +1018,23 @@ extension on TranslationsZhTw {
 			'meta.speedTestGroup' => '策略組測速',
 			'meta.pause' => '暫停',
 			'meta.resume' => '恢復',
+			'meta.ipInfo' => 'IP 資訊',
+			'meta.ipFetching' => '正在獲取 IP 資訊...',
+			'meta.ipCopied' => 'IP 位址已複製到剪貼簿',
+			'meta.ipLocation' => '位置',
+			'meta.ipIsp' => '服務商',
+			'meta.ipTapToFetch' => '點擊獲取 IP 資訊',
+			'meta.collapseAll' => '摺疊所有代理組',
+			'meta.expandAll' => '展開所有代理組',
+			'meta.donateTitle' => '💖 請作者喝杯咖啡',
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 你的每一份投餵，都是 Wmimo 不斷打磨與更新的最大動力呀 ~ ☕✨',
+			'meta.tokenCurrency' => '幣種',
+			'meta.networkChain' => '網路',
+			'meta.depositAddress' => 'APTOS 收款位址',
+			'meta.clickToCopy' => '點擊複製',
+			'meta.copyAddressBtn' => '複製位址 ✨',
+			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ 位址已複製！非常感謝你的投餵與陪伴~ 💖',
+			'meta.donateTip' => '💡 提示：支援 Bybit 或任意 Aptos 相容錢包掃碼轉帳',
 			'permission.camera' => '攝像頭',
 			'permission.screen' => '屏幕錄製',
 			'permission.appQuery' => '獲取應用列表',

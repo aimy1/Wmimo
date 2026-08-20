@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/utils/ip_info_helper.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 
 class IpInfoCard extends StatefulWidget {
   final bool isConnected;
@@ -42,41 +43,39 @@ class _IpInfoCardState extends State<IpInfoCard> {
       _loading = true;
     });
 
+    final port = widget.isConnected ? widget.mixedPort : null;
     final info = await IpInfoHelper.fetchIpInfo(
-      proxyPort: widget.isConnected ? widget.mixedPort : null,
       isProxy: widget.isConnected,
+      proxyPort: port,
     );
 
     if (!mounted) return;
     setState(() {
+      _ipInfo = info;
       _loading = false;
-      if (info != null) {
-        _ipInfo = info;
-      }
     });
   }
 
-  String _formatIp(String rawIp) {
-    if (!_maskIp) return rawIp;
-    final parts = rawIp.split('.');
+  String _formatIp(String ip) {
+    if (!_maskIp) return ip;
+    final parts = ip.split('.');
     if (parts.length == 4) {
-      return "${parts[0]}.***.***.${parts[3]}";
+      return '${parts[0]}.${parts[1]}.*.*';
     }
-    if (rawIp.contains(':')) {
-      final colons = rawIp.split(':');
-      if (colons.length > 2) {
-        return "${colons.first}:****:****:${colons.last}";
-      }
+    final colonParts = ip.split(':');
+    if (colonParts.length > 2) {
+      return '${colonParts[0]}:${colonParts[1]}:****:****';
     }
-    return rawIp;
+    return '***.***.***.***';
   }
 
   @override
   Widget build(BuildContext context) {
+    final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final labelTitleStyle = TextStyle(
-      fontSize: 13,
+      fontSize: 12.5,
       fontWeight: FontWeight.w500,
       color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
     );
@@ -119,9 +118,9 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                const Text(
-                  "IP 信息",
-                  style: TextStyle(
+                Text(
+                  tcontext.meta.ipInfo,
+                  style: const TextStyle(
                     fontSize: 15.5,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.2,
@@ -165,7 +164,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        "正在获取 IP 信息...",
+                        tcontext.meta.ipFetching,
                         style: TextStyle(
                           fontSize: 12.5,
                           color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
@@ -186,9 +185,9 @@ class _IpInfoCardState extends State<IpInfoCard> {
                       Clipboard.setData(ClipboardData(text: _ipInfo!.ip));
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("IP 地址已复制到剪贴板"),
-                          duration: Duration(seconds: 1),
+                        SnackBar(
+                          content: Text(tcontext.meta.ipCopied),
+                          duration: const Duration(seconds: 1),
                         ),
                       );
                     },
@@ -227,7 +226,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("位置: ", style: labelTitleStyle),
+                  Text("${tcontext.meta.ipLocation}: ", style: labelTitleStyle),
                   Text(_ipInfo!.flagEmoji, style: const TextStyle(fontSize: 14)),
                   const SizedBox(width: 4),
                   Expanded(
@@ -246,7 +245,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("服务商: ", style: labelTitleStyle),
+                  Text("${tcontext.meta.ipIsp}: ", style: labelTitleStyle),
                   Expanded(
                     child: Text(
                       [
@@ -277,7 +276,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          "点击获取 IP 信息",
+                          tcontext.meta.ipTapToFetch,
                           style: TextStyle(
                             fontSize: 12.5,
                             fontWeight: FontWeight.w600,
