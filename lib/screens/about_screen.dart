@@ -11,6 +11,7 @@ import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/url_launcher_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
+import 'package:wmimo/screens/donate_screen.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
 import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/group_screen.dart';
@@ -202,7 +203,13 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
           name: tcontext.meta.donate,
           text: "USDT (APTOS)",
           onPush: () async {
-            await DialogUtils.showDonateDialog(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                settings: DonateScreen.routSettings(),
+                builder: (context) => const DonateScreen(),
+              ),
+            );
           },
         ),
       ),
