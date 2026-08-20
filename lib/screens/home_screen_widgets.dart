@@ -124,11 +124,21 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       setState(() {});
       _updateProxyNow();
     });
+    Biz.onEventProxySelected.add(_onProxySelectedEvent);
+    _updateProxyNow();
+  }
+
+  void _onProxySelectedEvent(String nodeName) {
+    if (!mounted) return;
+    if (nodeName.isNotEmpty) {
+      _proxyNow.value = nodeName;
+    }
     _updateProxyNow();
   }
 
   @override
   void dispose() {
+    Biz.onEventProxySelected.remove(_onProxySelectedEvent);
     VPNService.onEventStateChanged.remove(_onStateChanged);
     AppLifecycleStateNofity.onStateResumed(hashCode, null);
     AppLifecycleStateNofity.onStatePaused(hashCode, null);
@@ -1309,22 +1319,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           ClashSettingManager.getConfig().Mode ?? ClashConfigsMode.rule.name,
         );
         if (result.error == null && result.data != null && result.data!.isNotEmpty) {
-          if (result.data!.length >= 2) {
-            if (result.data!.first.delay != null) {
-              _proxyNow.value =
-                  "${result.data![1].name} -> ${result.data!.first.name} (${result.data!.first.delay} ms)";
-            } else {
-              _proxyNow.value =
-                  "${result.data![1].name} -> ${result.data!.first.name}";
-            }
-          } else {
-            if (result.data!.first.delay != null) {
-              _proxyNow.value =
-                  "${result.data!.first.name} (${result.data!.first.delay} ms)";
-            } else {
-              _proxyNow.value = result.data!.first.name;
-            }
-          }
+          _proxyNow.value = result.data!.first.name;
           _proxyNowUpdating = false;
           return;
         }
@@ -1342,11 +1337,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           _proxyNow.value = groupWithSelection.now!;
         } else if (groupWithSelection.name.isNotEmpty) {
           _proxyNow.value = groupWithSelection.name;
-        } else {
-          _proxyNow.value = "";
         }
-      } else {
-        _proxyNow.value = "";
       }
     } catch (_) {
       // keep current or fallback

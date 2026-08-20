@@ -8,6 +8,7 @@ import 'package:libclash_vpn_service/state.dart';
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
+import 'package:wmimo/app/modules/biz.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
@@ -191,6 +192,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       group.now = node.name;
     });
 
+    Biz.proxySelected(node.name);
+
     if (_isVpnStarted) {
       final err = await ClashHttpApi.setProxiesNode(group.name, node.name);
       if (err != null && mounted) {
@@ -198,6 +201,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         setState(() {
           group.now = prev;
         });
+        if (prev != null) {
+          Biz.proxySelected(prev);
+        }
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

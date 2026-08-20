@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
+import 'package:wmimo/app/modules/biz.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -283,6 +284,7 @@ class _ProxyScreenProxiesNodeWidget
             }
 
             selectNode.now = node.name;
+            Biz.proxySelected(node.name);
             Navigator.of(context).pop();
             setState(() {});
           },
