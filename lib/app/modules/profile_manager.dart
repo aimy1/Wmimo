@@ -513,8 +513,8 @@ class ProfileManager {
     }
   }
 
-  static void setCurrent(String id) {
-    if (_config._currentId == id) {
+  static void setCurrent(String id, {bool force = false}) {
+    if (!force && _config._currentId == id) {
       return;
     }
     int index = _config.profiles.indexWhere((value) {
@@ -527,6 +527,7 @@ class ProfileManager {
     for (var event in onEventCurrentChanged) {
       event(id);
     }
+    save();
   }
 
   static void removePatch(String patch) {
@@ -568,16 +569,14 @@ class ProfileManager {
         );
       }
 
+      await ProxyNodeLoader.ensureProfileHasProxyGroups(savePath);
+      await save();
+
       for (var event in onEventAdd) {
         event(id);
       }
 
-      if (_config._currentId.isEmpty || _config.profiles.length == 1) {
-        setCurrent(id);
-      }
-
-      await ProxyNodeLoader.ensureProfileHasProxyGroups(savePath);
-      await save();
+      setCurrent(id, force: true);
       return null;
     } catch (err) {
       return ReturnResultError("addLocalProfile exception: ${err.toString()}");
@@ -771,15 +770,13 @@ class ProfileManager {
       _config.profiles[index] = profile;
     }
 
+    await save();
+
     for (var event in onEventAdd) {
       event(id);
     }
 
-    if (_config._currentId.isEmpty || _config.profiles.length == 1) {
-      setCurrent(id);
-    }
-
-    await save();
+    setCurrent(id, force: true);
     return ReturnResult(data: id);
   }
 

@@ -162,18 +162,8 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
               ),
               const SizedBox(height: 12),
               Expanded(
-                child: FutureBuilder(
-                  future: getProfiles(),
-                  builder:
-                      (
-                        BuildContext context,
-                        AsyncSnapshot<List<ProfileSetting>> snapshot,
-                      ) {
-                        List<ProfileSetting> data = snapshot.hasData
-                            ? snapshot.data!
-                            : [];
-                        return ProfilesBoardScreenWidget(settings: data);
-                      },
+                child: ProfilesBoardScreenWidget(
+                  settings: ProfileManager.getProfiles(),
                 ),
               ),
             ],
@@ -181,10 +171,6 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
         ),
       ),
     );
-  }
-
-  Future<List<ProfileSetting>> getProfiles() async {
-    return ProfileManager.getProfiles();
   }
 
   void onTapUpdateAll() async {

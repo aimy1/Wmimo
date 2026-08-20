@@ -102,6 +102,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     AppLifecycleStateNofity.onStateResumed(hashCode, _onStateResumed);
     AppLifecycleStateNofity.onStatePaused(hashCode, _onStatePaused);
     ProfileManager.onEventCurrentChanged.add(_onCurrentChanged);
+    ProfileManager.onEventAdd.add(_onCurrentChanged);
+    ProfileManager.onEventRemove.add(_onCurrentChanged);
     ProfileManager.onEventUpdate.add(_onUpdate);
     BoardProviderNoticeManager.onEventCheck.add(_onNoticeUpdate);
     BoardProviderNoticeManager.onEventReaded.add(_onNoticeReaded);
@@ -127,6 +129,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     AppLifecycleStateNofity.onStateResumed(hashCode, null);
     AppLifecycleStateNofity.onStatePaused(hashCode, null);
     ProfileManager.onEventCurrentChanged.remove(_onCurrentChanged);
+    ProfileManager.onEventAdd.remove(_onCurrentChanged);
+    ProfileManager.onEventRemove.remove(_onCurrentChanged);
     ProfileManager.onEventUpdate.remove(_onUpdate);
     BoardProviderNoticeManager.onEventCheck.remove(_onNoticeUpdate);
     BoardProviderNoticeManager.onEventReaded.remove(_onNoticeReaded);

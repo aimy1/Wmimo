@@ -55,6 +55,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     VPNService.onEventStateChanged.add(_onVpnStateChanged);
     ProfileManager.onEventCurrentChanged.add(_onProfileChanged);
+    ProfileManager.onEventAdd.add(_onProfileChanged);
+    ProfileManager.onEventUpdate.add(_onProfileUpdate);
+    ProfileManager.onEventRemove.add(_onProfileChanged);
   }
 
   @override
@@ -69,8 +72,18 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   void dispose() {
     VPNService.onEventStateChanged.remove(_onVpnStateChanged);
     ProfileManager.onEventCurrentChanged.remove(_onProfileChanged);
+    ProfileManager.onEventAdd.remove(_onProfileChanged);
+    ProfileManager.onEventUpdate.remove(_onProfileUpdate);
+    ProfileManager.onEventRemove.remove(_onProfileChanged);
     _searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> _onProfileUpdate(String id, bool finish) async {
+    if (finish && mounted) {
+      await Future.delayed(const Duration(milliseconds: 200));
+      await _fetchProxies();
+    }
   }
 
   Future<void> _onVpnStateChanged(
