@@ -10,6 +10,7 @@ import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/url_launcher_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
+import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
 import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/group_screen.dart';
@@ -195,32 +196,18 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
 
     groupOptions.add(GroupItem(options: options));
 
-    if (!Platform.isIOS &&
-        !Platform.isMacOS &&
-        remoteConfig.donate.isNotEmpty) {
-      List<GroupItemOptions> options1 = [
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
-            name: tcontext.meta.donate,
-            onPush: () async {
-              String url = await UrlLauncherUtils.reorganizationUrlWithAnchor(
-                remoteConfig.donate,
-              );
-              if (!mounted) {
-                return;
-              }
-              await WebviewHelper.loadUrl(
-                context,
-                url,
-                "donate",
-                title: tcontext.meta.donate,
-              );
-            },
-          ),
+    List<GroupItemOptions> options1 = [
+      GroupItemOptions(
+        pushOptions: GroupItemPushOptions(
+          name: tcontext.meta.donate,
+          text: "USDT (APTOS)",
+          onPush: () async {
+            await DialogUtils.showDonateDialog(context);
+          },
         ),
-      ];
-      groupOptions.add(GroupItem(options: options1));
-    }
+      ),
+    ];
+    groupOptions.add(GroupItem(options: options1));
     if (PlatformUtils.isPC()) {
       List<GroupItemOptions> options2 = [
         GroupItemOptions(
