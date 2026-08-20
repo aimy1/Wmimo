@@ -23,6 +23,7 @@ import 'package:wmimo/app/utils/mobile_permission_helper.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
+import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/about_screen.dart';
@@ -120,7 +121,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     });
     ClashSettingManager.onEventModeChanged.add(() async {
       setState(() {});
+      _updateProxyNow();
     });
+    _updateProxyNow();
   }
 
   @override
@@ -236,41 +239,119 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: connected
-                                ? ThemeDefine.kColorGreenBright
-                                : const Color(0xFF94A3B8),
-                            shape: BoxShape.circle,
-                            boxShadow: connected
-                                ? [
-                                    BoxShadow(
-                                      color: ThemeDefine.kColorGreenBright
-                                          .withValues(alpha: 0.4),
-                                      blurRadius: 8,
-                                      spreadRadius: 2,
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: connected
+                                  ? ThemeDefine.kColorGreenBright
+                                  : const Color(0xFF94A3B8),
+                              shape: BoxShape.circle,
+                              boxShadow: connected
+                                  ? [
+                                      BoxShadow(
+                                        color: ThemeDefine.kColorGreenBright
+                                            .withValues(alpha: 0.4),
+                                        blurRadius: 8,
+                                        spreadRadius: 2,
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            connected
+                                ? tcontext.meta.connected
+                                : tcontext.meta.disconnected,
+                            style: const TextStyle(
+                              fontSize: 16.5,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: ValueListenableBuilder<String>(
+                              valueListenable: _proxyNow,
+                              builder: (context, proxyName, _) {
+                                if (proxyName.trim().isEmpty) {
+                                  return const SizedBox.shrink();
+                                }
+                                return InkWell(
+                                  borderRadius: BorderRadius.circular(8),
+                                  onTap: () async {
+                                    if (widget.onNavigateToTab != null) {
+                                      widget.onNavigateToTab!(1);
+                                      return;
+                                    }
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        settings: ProxyBoardScreen.routSettings(),
+                                        builder: (context) => ProxyBoardScreen(),
+                                      ),
+                                    );
+                                    _updateProxyNow();
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 3,
                                     ),
-                                  ]
-                                : null,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .withValues(alpha: 0.25),
+                                        width: 0.8,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.flight_takeoff_rounded,
+                                          size: 13,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Flexible(
+                                          child: Text(
+                                            proxyName,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          connected
-                              ? tcontext.meta.connected
-                              : tcontext.meta.disconnected,
-                          style: const TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.2,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     Stack(
                       alignment: Alignment.center,
                       children: [
@@ -1408,47 +1489,69 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         ));
       }
       Biz.trafficChanged("", "");
-      _proxyNow.value = "";
       _chartTick.value++;
+      _updateProxyNow();
     }
   }
 
   Future<void> _updateProxyNow() async {
-    if (_state == FlutterVpnServiceState.connected) {
-      if (AppLifecycleStateNofity.isPaused()) {
-        return;
-      }
-      if (_proxyNowUpdating) {
-        return;
-      }
-      _proxyNowUpdating = true;
+    if (AppLifecycleStateNofity.isPaused()) {
+      return;
+    }
+    if (_proxyNowUpdating) {
+      return;
+    }
+    _proxyNowUpdating = true;
 
-      final result = await ClashHttpApi.getNowProxy(
-        ClashSettingManager.getConfig().Mode ?? ClashConfigsMode.rule.name,
-      );
-      if (result.error != null || result.data == null || result.data!.isEmpty) {
-        _proxyNow.value = "";
-      } else {
-        if (result.data!.length >= 2) {
-          if (result.data!.first.delay != null) {
-            _proxyNow.value =
-                "${result.data![1].name} -> ${result.data!.first.name} (${result.data!.first.delay} ms)";
+    try {
+      if (_state == FlutterVpnServiceState.connected) {
+        final result = await ClashHttpApi.getNowProxy(
+          ClashSettingManager.getConfig().Mode ?? ClashConfigsMode.rule.name,
+        );
+        if (result.error == null && result.data != null && result.data!.isNotEmpty) {
+          if (result.data!.length >= 2) {
+            if (result.data!.first.delay != null) {
+              _proxyNow.value =
+                  "${result.data![1].name} -> ${result.data!.first.name} (${result.data!.first.delay} ms)";
+            } else {
+              _proxyNow.value =
+                  "${result.data![1].name} -> ${result.data!.first.name}";
+            }
           } else {
-            _proxyNow.value =
-                "${result.data![1].name} -> ${result.data!.first.name}";
+            if (result.data!.first.delay != null) {
+              _proxyNow.value =
+                  "${result.data!.first.name} (${result.data!.first.delay} ms)";
+            } else {
+              _proxyNow.value = result.data!.first.name;
+            }
           }
-        } else {
-          if (result.data!.first.delay != null) {
-            _proxyNow.value =
-                "${result.data!.first.name} (${result.data!.first.delay} ms)";
-          } else {
-            _proxyNow.value = result.data!.first.name;
-          }
+          _proxyNowUpdating = false;
+          return;
         }
       }
+
+      // Offline / disconnected fallback: load selected node from current profile
+      final offlineNodes = await ProxyNodeLoader.loadCurrentProfileNodes();
+      if (offlineNodes.isNotEmpty) {
+        // Look for proxy group with 'now' or first proxy
+        final groupWithSelection = offlineNodes.firstWhere(
+          (n) => n.now != null && n.now!.isNotEmpty,
+          orElse: () => offlineNodes.first,
+        );
+        if (groupWithSelection.now != null && groupWithSelection.now!.isNotEmpty) {
+          _proxyNow.value = groupWithSelection.now!;
+        } else if (groupWithSelection.name.isNotEmpty) {
+          _proxyNow.value = groupWithSelection.name;
+        } else {
+          _proxyNow.value = "";
+        }
+      } else {
+        _proxyNow.value = "";
+      }
+    } catch (_) {
+      // keep current or fallback
+    } finally {
       _proxyNowUpdating = false;
-    } else {
-      _proxyNow.value = "";
     }
   }
 
