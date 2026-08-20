@@ -124,6 +124,24 @@ class MainActivity : FlutterActivity() {
                         result.success(true)
                     }
                 }
+                "startVpnService" -> {
+                    val intent = Intent(this, WmimoVpnService::class.java).apply {
+                        action = WmimoVpnService.ACTION_START
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(intent)
+                    } else {
+                        startService(intent)
+                    }
+                    result.success(true)
+                }
+                "stopVpnService" -> {
+                    val intent = Intent(this, WmimoVpnService::class.java).apply {
+                        action = WmimoVpnService.ACTION_STOP
+                    }
+                    startService(intent)
+                    result.success(true)
+                }
                 else -> result.notImplemented()
             }
         }

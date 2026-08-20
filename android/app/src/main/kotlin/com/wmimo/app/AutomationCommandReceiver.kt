@@ -11,9 +11,9 @@ class AutomationCommandReceiver : BroadcastReceiver() {
         const val ACTION_DISCONNECT = "com.wmimo.app.action.DISCONNECT"
         const val ACTION_RECONNECT = "com.wmimo.app.action.RECONNECT"
 
-        const val VPN_SERVICE_CLASS = "io.nebula.vpn_service.ClashVpnServiceImpl"
-        const val ACTION_START = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START"
-        const val ACTION_STOP = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOP"
+        const val VPN_SERVICE_CLASS = "com.wmimo.app.WmimoVpnService"
+        const val ACTION_START = "com.wmimo.app.vpn.START"
+        const val ACTION_STOP = "com.wmimo.app.vpn.STOP"
     }
 
     override fun onReceive(context: Context, intent: Intent?) {

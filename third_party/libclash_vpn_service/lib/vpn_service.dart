@@ -579,6 +579,13 @@ dns:
       // Start Real-time Traffic Listener
       _startTrafficMonitor(port, secret);
 
+      if (Platform.isAndroid) {
+        try {
+          const platform = MethodChannel('com.wmimo.app/native_helper');
+          await platform.invokeMethod('startVpnService');
+        } catch (_) {}
+      }
+
       _state = FlutterVpnServiceState.connected;
       for (var l in _listeners) {
         l(_state, {});
@@ -599,6 +606,12 @@ dns:
 
   static Future<void> stop() async {
     _stopTrafficMonitor();
+    if (Platform.isAndroid) {
+      try {
+        const platform = MethodChannel('com.wmimo.app/native_helper');
+        await platform.invokeMethod('stopVpnService');
+      } catch (_) {}
+    }
     if (_coreProcess != null) {
       try {
         _coreProcess?.kill(ProcessSignal.sigterm);

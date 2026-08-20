@@ -18,11 +18,11 @@ class TileService : TileService() {
         const val profile_file_name = "vpn_profile.txt"
         const val service_file_name = "service.json"
 
-        const val VPN_SERVICE_CLASS = "io.nebula.vpn_service.ClashVpnServiceImpl"
-        const val ACTION_START = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START"
-        const val ACTION_STOP = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOP"
-        const val ACTION_START_RESULT = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_START_RESULT"
-        const val ACTION_STOPED = "io.nebula.vpn_service.ClashVpnServiceImpl.ACTION_STOPED"
+        const val VPN_SERVICE_CLASS = "com.wmimo.app.WmimoVpnService"
+        const val ACTION_START = "com.wmimo.app.vpn.START"
+        const val ACTION_STOP = "com.wmimo.app.vpn.STOP"
+        const val ACTION_START_RESULT = "com.wmimo.app.vpn.START_RESULT"
+        const val ACTION_STOPED = "com.wmimo.app.vpn.STOPPED"
     }
 
     private var receiverRegistered = false
