@@ -520,23 +520,23 @@ tun:
     }
 
     // Filter out conflicting top-level keys from raw subscription
-    final overriddenTopLevelPrefixes = [
-      'mixed-port:',
-      'allow-lan:',
-      'mode:',
-      'log-level:',
-      'external-controller:',
-      'secret:',
-      'ipv6:',
-      'unified-delay:',
-      'tcp-concurrent:',
-      'find-process-mode:',
-      'port:',
-      'socks-port:',
-      'redir-port:',
-      'tproxy-port:',
-      'interface-name:',
-      'routing-mark:',
+    final overriddenTopLevelKeys = [
+      'mixed-port',
+      'allow-lan',
+      'mode',
+      'log-level',
+      'external-controller',
+      'secret',
+      'ipv6',
+      'unified-delay',
+      'tcp-concurrent',
+      'find-process-mode',
+      'port',
+      'socks-port',
+      'redir-port',
+      'tproxy-port',
+      'interface-name',
+      'routing-mark',
     ];
 
     bool inOverriddenBlock = false;
@@ -548,7 +548,7 @@ tun:
       final trimmed = rawLine.trim();
 
       // Check if entering a root block that we override completely (e.g. tun:)
-      if (tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-'))) {
+      if (tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-') || trimmed.startsWith('"tun":') || trimmed.startsWith("'tun':"))) {
         inOverriddenBlock = true;
         continue;
       }
@@ -565,8 +565,13 @@ tun:
       // Check if it's a top-level key that we override
       bool isOverridden = false;
       if (!rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
-        for (final prefix in overriddenTopLevelPrefixes) {
-          if (trimmed.startsWith(prefix)) {
+        for (final key in overriddenTopLevelKeys) {
+          if (trimmed.startsWith('$key:') ||
+              trimmed.startsWith('$key :') ||
+              trimmed.startsWith('"$key":') ||
+              trimmed.startsWith("'$key':") ||
+              trimmed.startsWith('"$key" :') ||
+              trimmed.startsWith("'$key' :")) {
             isOverridden = true;
             break;
           }
