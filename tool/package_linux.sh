@@ -145,18 +145,22 @@ fi
 # ------------------------------------------------------------
 echo "[4/5] Packaging Arch Linux / Manjaro Package (.pkg.tar.zst)..."
 if command -v fpm >/dev/null 2>&1; then
-  fpm -s dir -t pacman \
-    -n wmimo \
-    -v "$RAW_VERSION" \
-    -a x86_64 \
-    --license "GPL-3.0" \
-    --vendor "Wmimo" \
-    --url "https://github.com/aimy1/Wmimo" \
-    --description "Modern cross-platform Clash/Mihomo GUI proxy client." \
-    --category "Network" \
-    -C "$PKG_ROOT" \
-    -p "$DIST_DIR/Wmimo-Linux-x64-$TAG.pkg.tar.zst"
-  echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.pkg.tar.zst"
+  if command -v bsdtar >/dev/null 2>&1; then
+    fpm -s dir -t pacman \
+      -n wmimo \
+      -v "$RAW_VERSION" \
+      -a x86_64 \
+      --license "GPL-3.0" \
+      --vendor "Wmimo" \
+      --url "https://github.com/aimy1/Wmimo" \
+      --description "Modern cross-platform Clash/Mihomo GUI proxy client." \
+      --category "Network" \
+      -C "$PKG_ROOT" \
+      -p "$DIST_DIR/Wmimo-Linux-x64-$TAG.pkg.tar.zst" || true
+    echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.pkg.tar.zst"
+  else
+    echo "  [Notice] bsdtar not found, skipping pacman generation."
+  fi
 else
   echo "  [Notice] fpm not found, skipping Pacman package generation."
 fi

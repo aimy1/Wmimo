@@ -150,7 +150,9 @@ jobs:
             zstd \
             file \
             wget \
-            squashfs-tools
+            squashfs-tools \
+            libarchive-tools
+          sudo apt-get install -y libfuse2 || sudo apt-get install -y libfuse2t64 || true
           sudo gem install --no-document fpm
 
       - name: Setup Flutter
