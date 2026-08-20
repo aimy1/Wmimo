@@ -255,30 +255,6 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                       ],
                     ),
                   ),
-
-                  // Bottom Status Footers
-                  Positioned(
-                    bottom: 3,
-                    left: 12,
-                    child: Text(
-                      "Points: ${widget.history.length} | FPS: 60",
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.35),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 3,
-                    right: 12,
-                    child: Text(
-                      "Linear",
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.35),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -404,7 +380,7 @@ class ClashVergeChartPainter extends CustomPainter {
 
       // 3. Draw X-Axis Time Ticks
       final timeFormatter = DateFormat("HH:mm");
-      final tickCount = 6;
+      final tickCount = 4;
       for (int i = 0; i < tickCount; i++) {
         final ratio = i / (tickCount - 1);
         final dataIndex = (ratio * (history.length - 1)).round().clamp(0, history.length - 1);
@@ -419,9 +395,13 @@ class ClashVergeChartPainter extends CustomPainter {
           ),
         );
         textPainter.layout();
+        double posX = x - textPainter.width / 2;
+        if (i == 0) posX = leftPadding;
+        if (i == tickCount - 1) posX = leftPadding + chartWidth - textPainter.width;
+
         textPainter.paint(
           canvas,
-          Offset(x - textPainter.width / 2, topPadding + chartHeight + 4),
+          Offset(posX, topPadding + chartHeight + 5),
         );
       }
 
