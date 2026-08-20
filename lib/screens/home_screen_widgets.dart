@@ -704,14 +704,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
               children: [
                 _buildQuickActionTile(
                   context: context,
-                  icon: Icons.hub_outlined,
-                  label: tcontext.meta.connections,
-                  onTap: _onTapConnections,
-                ),
-                const SizedBox(width: 4),
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.alt_route_rounded,
+                  icon: Icons.policy_rounded,
                   label: tcontext.meta.rules,
                   onTap: _onTapRules,
                 ),
@@ -1457,20 +1450,6 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     } else {
       _proxyNow.value = "";
     }
-  }
-
-  Future<void> _onTapConnections() async {
-    if (widget.onNavigateToTab != null) {
-      widget.onNavigateToTab!(3);
-      return;
-    }
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        settings: ConnectionsScreen.routSettings(),
-        builder: (context) => const ConnectionsScreen(),
-      ),
-    );
   }
 
   Future<void> _onTapRules() async {
