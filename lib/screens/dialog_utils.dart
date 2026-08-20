@@ -800,10 +800,11 @@ class DialogUtils {
       Clipboard.setData(const ClipboardData(text: walletAddress));
       ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
       ScaffoldMessenger.of(ctx).showSnackBar(
-        const SnackBar(
-          content: Text("地址已复制"),
-          duration: Duration(seconds: 1),
+        SnackBar(
+          content: const Text("( ੭ ˙ᗜ˙ )੭ 地址已复制！非常感谢你的投喂与陪伴~ 💖"),
+          duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
       );
     }
@@ -816,19 +817,24 @@ class DialogUtils {
 
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(18),
           ),
-          titlePadding: const EdgeInsets.fromLTRB(20, 16, 14, 0),
+          titlePadding: const EdgeInsets.fromLTRB(20, 18, 14, 0),
           contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "捐赠支持",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "💖 请作者喝杯咖啡",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ),
               IconButton(
                 icon: const Icon(Icons.close_rounded, size: 18),
@@ -843,7 +849,28 @@ class DialogUtils {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Clean QR Code
+              // Cute Thank You Message
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                decoration: BoxDecoration(
+                  color: ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.12 : 0.08),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  "ฅ^•ﻌ•^ฅ 你的每一份投喂，都是 Wmimo 不断打磨与更新的最大动力呀 ~ ☕✨",
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    height: 1.35,
+                    color: ThemeDefine.kColorBlue,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Clean QR Code Frame
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -852,59 +879,144 @@ class DialogUtils {
                   border: Border.all(
                     color: Colors.black.withValues(alpha: 0.08),
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.04),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: Image.asset(
                     "assets/images/donate_qr.png",
-                    width: 150,
-                    height: 150,
+                    width: 145,
+                    height: 145,
                     fit: BoxFit.contain,
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-
-              // Network Info
-              Text(
-                "$currency · $networkName",
-                style: TextStyle(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                  color: ThemeDefine.kColorBlue,
-                ),
-              ),
               const SizedBox(height: 12),
 
-              // Address Box
+              // Detailed Info Row (Token & Network)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "币种: ",
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                          ),
+                        ),
+                        const Text(
+                          currency,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF26A17B),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: 1,
+                      height: 12,
+                      color: theme.dividerColor.withValues(alpha: 0.3),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "网络: ",
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                          ),
+                        ),
+                        Text(
+                          networkName,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w700,
+                            color: ThemeDefine.kColorBlue,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              // Address Box (Interactive)
               InkWell(
                 borderRadius: BorderRadius.circular(8),
                 onTap: () => copyAddress(context),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? const Color(0xFF1E293B)
-                        : const Color(0xFFF1F5F9),
+                    color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
                     borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: theme.dividerColor.withValues(alpha: 0.25),
+                      width: 0.8,
+                    ),
                   ),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: SelectableText(
-                          walletAddress,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: "monospace",
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "APTOS 收款地址",
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                            ),
                           ),
-                        ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.copy_rounded,
+                                size: 11,
+                                color: ThemeDefine.kColorBlue,
+                              ),
+                              const SizedBox(width: 3),
+                              Text(
+                                "点击复制",
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: ThemeDefine.kColorBlue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 6),
-                      Icon(
-                        Icons.copy_rounded,
-                        size: 14,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      const SizedBox(height: 4),
+                      SelectableText(
+                        walletAddress,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontFamily: "monospace",
+                          letterSpacing: 0.2,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                        ),
                       ),
                     ],
                   ),
@@ -915,22 +1027,34 @@ class DialogUtils {
               // Action Button
               SizedBox(
                 width: double.infinity,
-                height: 36,
-                child: ElevatedButton(
+                height: 38,
+                child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ThemeDefine.kColorBlue,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   onPressed: () => copyAddress(context),
-                  child: const Text(
-                    "复制地址",
+                  icon: const Icon(Icons.copy_rounded, size: 15),
+                  label: const Text(
+                    "复制地址 ✨",
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                   ),
                 ),
+              ),
+              const SizedBox(height: 8),
+
+              // Warm tip
+              Text(
+                "💡 提示：支持 Bybit 或任意 Aptos 兼容钱包扫码转账",
+                style: TextStyle(
+                  fontSize: 10,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+                ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
