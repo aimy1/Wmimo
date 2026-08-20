@@ -244,7 +244,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get timeout => 'Tiempo de espera agotado';
 	@override String get timeoutDuration => 'Duración del tiempo de espera';
 	@override String get latency => 'Latencia';
-	@override String get latencyTest => 'Comprobación de latencia';
+	@override String get latencyTest => 'Prueba de latencia';
 	@override String get networkCheck => 'Comprobación de red';
 	@override String get language => 'Idioma';
 	@override String get next => 'Siguiente';
@@ -284,11 +284,11 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get overwriteTips => 'Perfil Original <- Sobrescritura Personalizada <- Sobrescritura de App';
 	@override String get noOverwrite => 'No sobrescribir';
 	@override String get overwriteSettings => 'Ajustes de Sobrescritura';
-	@override String get diversionTemplates => 'Plantilla de Diversión';
-	@override String get ruleProviders => 'Proveedores de Reglas';
+	@override String get diversionTemplates => 'Plantillas de enrutamiento';
+	@override String get ruleProviders => 'Conjuntos de reglas (RuleSet)';
 	@override String get ruleTemplates => 'Plantillas de Reglas';
-	@override String get proxyGroupsTemplates => 'Plantilla de Grupo de Proxy';
-	@override String get proxyGroups => 'Grupo de Proxy';
+	@override String get proxyGroupsTemplates => 'Plantillas de grupos';
+	@override String get proxyGroups => 'Grupos de proxy';
 	@override String get proxyNodeList => 'Lista de Nodos Proxy';
 	@override String proxyNodeFailure({required Object p}) => 'Los siguientes nodos proxy han caducado y han sido eliminados automáticamente: ${p}';
 	@override String get externalController => 'Controlador Externo';
@@ -359,7 +359,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get termOfUse => 'Términos de Servicio';
 	@override String get privacyPolicy => 'Privacidad y Política';
 	@override String get log => 'Registro';
-	@override String get coreLog => 'Registro del Núcleo';
+	@override String get coreLog => 'Registros del núcleo';
 	@override String get core => 'Núcleo';
 	@override String get help => 'Ayuda';
 	@override String get tutorial => 'Tutorial';
@@ -372,7 +372,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get searchConnections => 'Buscar conexiones (Dominio/IP/Regla/Proceso)';
 	@override String get noFilterResults => 'No hay conexiones coincidentes';
 	@override String get searchRules => 'Buscar reglas (Tipo/Carga útil/Proxy)';
-	@override String get rules => 'Reglas';
+	@override String get rules => 'Reglas de enrutamiento';
 	@override String get clear => 'Limpiar';
 	@override String get copySuccess => 'Copiado con éxito';
 	@override String get alwayOnVPN => 'Conexión permanente';
@@ -409,9 +409,9 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get port => 'Puerto';
 	@override String get donate => 'Donar';
 	@override String get setting => 'Ajustes';
-	@override String get settingCore => 'Ajustes del Núcleo';
-	@override String get settingApp => 'Ajustes de la App';
-	@override String get coreOverwrite => 'Sobrescritura del Núcleo';
+	@override String get settingCore => 'Configuración del núcleo';
+	@override String get settingApp => 'Configuración de la app';
+	@override String get coreOverwrite => 'Sobrescritura del núcleo';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
 	@override String get lanSync => 'Sincronización LAN';
@@ -426,22 +426,22 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String fileNotExist({required Object p}) => 'El archivo no existe: ${p}';
 	@override String fileTypeInvalid({required Object p}) => 'Tipo de archivo no válido: ${p}';
 	@override String get uwpExemption => 'Exenciones de Aislamiento de Red UWP';
-	@override String get getProfile => 'Obtener Perfil';
-	@override String get buyProfile => 'Comprar Perfil';
-	@override String get addProfile => 'Añadir Perfil';
-	@override String get myProfiles => 'Mis Perfiles';
-	@override String get profileEdit => 'Editar Perfil';
+	@override String get getProfile => 'Obtener suscripción';
+	@override String get buyProfile => 'Comprar suscripción';
+	@override String get addProfile => 'Añadir suscripción';
+	@override String get myProfiles => 'Suscripciones';
+	@override String get profileEdit => 'Editar suscripción';
 	@override String get profileNeedActive => 'Primero establece este perfil como perfil actual y luego inicia/reconecta';
 	@override String get profileDownloadBackupChannel => 'Habilitar canal de descarga de respaldo';
 	@override String get profileDownloadBackupChannelTips => 'Canal de descarga por proxy proporcionado por Wmimo (no se almacena ninguna información)';
 	@override String get profileEditReloadAfterProfileUpdate => 'Recargar tras actualización del Perfil';
 	@override String get profileRulesAppendApplePush => 'Añadir reglas de notificaciones Push de Apple';
 	@override String get profileRulesAppendProxyTips => 'Las reglas se establecerán automáticamente en el primer proxy de tipo [url-test] o [select] en [proxy-groups] de la configuración original';
-	@override String get profileImport => 'Importar Archivo de Perfil';
-	@override String get profileAddUrlOrContent => 'Añadir Enlace de Perfil';
-	@override String get profileUrlOrContent => 'Enlace de Perfil Clash';
-	@override String get profileUrlOrContentHit => 'Enlace de Perfil Clash [Requerido]';
-	@override String get profileUrlOrContentCannotEmpty => 'El enlace del perfil no puede estar vacío';
+	@override String get profileImport => 'Importar archivo de configuración';
+	@override String get profileAddUrlOrContent => 'Añadir enlace de suscripción';
+	@override String get profileUrlOrContent => 'Enlace / Contenido de suscripción';
+	@override String get profileUrlOrContentHit => 'Enlace de suscripción o YAML [Obligatorio]';
+	@override String get profileUrlOrContentCannotEmpty => 'El enlace o contenido no puede estar vacío';
 	@override String get overview => 'Resumen';
 	@override String get trafficStats => 'Estadísticas de tráfico';
 	@override String get realtimeMonitor => 'Monitoreo en tiempo real';
@@ -464,9 +464,9 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get editYamlConfig => 'Editar configuración YAML';
 	@override String get copySubscriptionUrl => 'Copiar URL de suscripción';
 	@override String get qrCode => 'Código QR';
-	@override String get deleteProfile => 'Eliminar perfil';
-	@override String get noProfilesYet => 'No hay perfiles';
-	@override String get addProfilePrompt => 'Haga clic en + arriba a la derecha para agregar una URL o importar un archivo';
+	@override String get deleteProfile => 'Eliminar configuración';
+	@override String get noProfilesYet => 'No hay suscripciones disponibles';
+	@override String get addProfilePrompt => 'Pulse + arriba a la derecha para añadir URL o importar archivo';
 	@override String get subscriptionUrlCopied => 'URL de suscripción copiada al portapapeles';
 	@override String autoGroupTip({required Object group, required Object type}) => '«${group}» es un grupo de políticas automáticas (${type}). Para seleccionar manualmente un nodo, cámbielo en grupos manuales como \'Selección de nodos\'.';
 	@override String switchNodeFailed({required Object p}) => 'Error al cambiar de nodo: ${p}';
@@ -492,9 +492,9 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get noLogsPrompt => 'Aún no hay registros. Aparecerán tras iniciar el proxy.';
 	@override String get searchLogsHint => ' (IP, Dominio, Regla, Error...)';
 	@override String get offlinePreviewPrompt => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.';
-	@override String get manualSelect => 'Manual';
-	@override String get autoSelect => 'Automático';
-	@override String get speedTestGroup => 'Probar latencia del grupo';
+	@override String get manualSelect => 'Selección manual';
+	@override String get autoSelect => 'Selección automática';
+	@override String get speedTestGroup => 'Probar velocidad de grupo';
 }
 
 // Path: permission
@@ -600,19 +600,19 @@ class _Translations$main$tray$es implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => 'Abrir';
 	@override String get menuExit => 'Salir';
-	@override String get coreDisconnected => 'Wmimo · Núcleo desconectado';
+	@override String get coreDisconnected => 'Wmimo · Núcleo no iniciado';
 	@override String get coreRunning => 'Wmimo · Núcleo en ejecución';
 	@override String get startProxy => 'Iniciar conexión proxy';
 	@override String get stopProxy => 'Desconectar proxy';
-	@override String get restartCore => 'Reiniciar núcleo';
+	@override String get restartCore => 'Reiniciar núcleo proxy';
 	@override String get systemProxyItem => 'Proxy del sistema';
 	@override String get tunModeItem => 'Modo TUN';
 	@override String get outboundMode => 'Modo de salida';
 	@override String get modeRule => 'Por reglas';
 	@override String get modeGlobal => 'Proxy global';
 	@override String get modeDirect => 'Conexión directa';
-	@override String get profilesMenu => 'Perfiles';
-	@override String get updateAllProfiles => 'Actualizar todos los perfiles';
+	@override String get profilesMenu => 'Suscripciones';
+	@override String get updateAllProfiles => 'Actualizar todas las suscripciones';
 	@override String get proxyNodes => 'Nodos de proxy';
 	@override String get tools => 'Herramientas';
 	@override String get copyProxyCmd => 'Copiar comando de proxy de terminal (CMD / Bash)';
@@ -680,19 +680,19 @@ extension on TranslationsEs {
 			'loginScreen.providerDisclaimer' => 'Aviso legal: ${_root.loginScreen.provider} es un servicio de terceros y no está relacionado con esta aplicación',
 			'main.tray.menuOpen' => 'Abrir',
 			'main.tray.menuExit' => 'Salir',
-			'main.tray.coreDisconnected' => 'Wmimo · Núcleo desconectado',
+			'main.tray.coreDisconnected' => 'Wmimo · Núcleo no iniciado',
 			'main.tray.coreRunning' => 'Wmimo · Núcleo en ejecución',
 			'main.tray.startProxy' => 'Iniciar conexión proxy',
 			'main.tray.stopProxy' => 'Desconectar proxy',
-			'main.tray.restartCore' => 'Reiniciar núcleo',
+			'main.tray.restartCore' => 'Reiniciar núcleo proxy',
 			'main.tray.systemProxyItem' => 'Proxy del sistema',
 			'main.tray.tunModeItem' => 'Modo TUN',
 			'main.tray.outboundMode' => 'Modo de salida',
 			'main.tray.modeRule' => 'Por reglas',
 			'main.tray.modeGlobal' => 'Proxy global',
 			'main.tray.modeDirect' => 'Conexión directa',
-			'main.tray.profilesMenu' => 'Perfiles',
-			'main.tray.updateAllProfiles' => 'Actualizar todos los perfiles',
+			'main.tray.profilesMenu' => 'Suscripciones',
+			'main.tray.updateAllProfiles' => 'Actualizar todas las suscripciones',
 			'main.tray.proxyNodes' => 'Nodos de proxy',
 			'main.tray.tools' => 'Herramientas',
 			'main.tray.copyProxyCmd' => 'Copiar comando de proxy de terminal (CMD / Bash)',
@@ -744,7 +744,7 @@ extension on TranslationsEs {
 			'meta.timeout' => 'Tiempo de espera agotado',
 			'meta.timeoutDuration' => 'Duración del tiempo de espera',
 			'meta.latency' => 'Latencia',
-			'meta.latencyTest' => 'Comprobación de latencia',
+			'meta.latencyTest' => 'Prueba de latencia',
 			'meta.networkCheck' => 'Comprobación de red',
 			'meta.language' => 'Idioma',
 			'meta.next' => 'Siguiente',
@@ -784,11 +784,11 @@ extension on TranslationsEs {
 			'meta.overwriteTips' => 'Perfil Original <- Sobrescritura Personalizada <- Sobrescritura de App',
 			'meta.noOverwrite' => 'No sobrescribir',
 			'meta.overwriteSettings' => 'Ajustes de Sobrescritura',
-			'meta.diversionTemplates' => 'Plantilla de Diversión',
-			'meta.ruleProviders' => 'Proveedores de Reglas',
+			'meta.diversionTemplates' => 'Plantillas de enrutamiento',
+			'meta.ruleProviders' => 'Conjuntos de reglas (RuleSet)',
 			'meta.ruleTemplates' => 'Plantillas de Reglas',
-			'meta.proxyGroupsTemplates' => 'Plantilla de Grupo de Proxy',
-			'meta.proxyGroups' => 'Grupo de Proxy',
+			'meta.proxyGroupsTemplates' => 'Plantillas de grupos',
+			'meta.proxyGroups' => 'Grupos de proxy',
 			'meta.proxyNodeList' => 'Lista de Nodos Proxy',
 			'meta.proxyNodeFailure' => ({required Object p}) => 'Los siguientes nodos proxy han caducado y han sido eliminados automáticamente: ${p}',
 			'meta.externalController' => 'Controlador Externo',
@@ -859,7 +859,7 @@ extension on TranslationsEs {
 			'meta.termOfUse' => 'Términos de Servicio',
 			'meta.privacyPolicy' => 'Privacidad y Política',
 			'meta.log' => 'Registro',
-			'meta.coreLog' => 'Registro del Núcleo',
+			'meta.coreLog' => 'Registros del núcleo',
 			'meta.core' => 'Núcleo',
 			'meta.help' => 'Ayuda',
 			'meta.tutorial' => 'Tutorial',
@@ -872,7 +872,7 @@ extension on TranslationsEs {
 			'meta.searchConnections' => 'Buscar conexiones (Dominio/IP/Regla/Proceso)',
 			'meta.noFilterResults' => 'No hay conexiones coincidentes',
 			'meta.searchRules' => 'Buscar reglas (Tipo/Carga útil/Proxy)',
-			'meta.rules' => 'Reglas',
+			'meta.rules' => 'Reglas de enrutamiento',
 			'meta.clear' => 'Limpiar',
 			'meta.copySuccess' => 'Copiado con éxito',
 			'meta.alwayOnVPN' => 'Conexión permanente',
@@ -909,9 +909,9 @@ extension on TranslationsEs {
 			'meta.port' => 'Puerto',
 			'meta.donate' => 'Donar',
 			'meta.setting' => 'Ajustes',
-			'meta.settingCore' => 'Ajustes del Núcleo',
-			'meta.settingApp' => 'Ajustes de la App',
-			'meta.coreOverwrite' => 'Sobrescritura del Núcleo',
+			'meta.settingCore' => 'Configuración del núcleo',
+			'meta.settingApp' => 'Configuración de la app',
+			'meta.coreOverwrite' => 'Sobrescritura del núcleo',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
 			'meta.lanSync' => 'Sincronización LAN',
@@ -926,22 +926,22 @@ extension on TranslationsEs {
 			'meta.fileNotExist' => ({required Object p}) => 'El archivo no existe: ${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => 'Tipo de archivo no válido: ${p}',
 			'meta.uwpExemption' => 'Exenciones de Aislamiento de Red UWP',
-			'meta.getProfile' => 'Obtener Perfil',
-			'meta.buyProfile' => 'Comprar Perfil',
-			'meta.addProfile' => 'Añadir Perfil',
-			'meta.myProfiles' => 'Mis Perfiles',
-			'meta.profileEdit' => 'Editar Perfil',
+			'meta.getProfile' => 'Obtener suscripción',
+			'meta.buyProfile' => 'Comprar suscripción',
+			'meta.addProfile' => 'Añadir suscripción',
+			'meta.myProfiles' => 'Suscripciones',
+			'meta.profileEdit' => 'Editar suscripción',
 			'meta.profileNeedActive' => 'Primero establece este perfil como perfil actual y luego inicia/reconecta',
 			'meta.profileDownloadBackupChannel' => 'Habilitar canal de descarga de respaldo',
 			'meta.profileDownloadBackupChannelTips' => 'Canal de descarga por proxy proporcionado por Wmimo (no se almacena ninguna información)',
 			'meta.profileEditReloadAfterProfileUpdate' => 'Recargar tras actualización del Perfil',
 			'meta.profileRulesAppendApplePush' => 'Añadir reglas de notificaciones Push de Apple',
 			'meta.profileRulesAppendProxyTips' => 'Las reglas se establecerán automáticamente en el primer proxy de tipo [url-test] o [select] en [proxy-groups] de la configuración original',
-			'meta.profileImport' => 'Importar Archivo de Perfil',
-			'meta.profileAddUrlOrContent' => 'Añadir Enlace de Perfil',
-			'meta.profileUrlOrContent' => 'Enlace de Perfil Clash',
-			'meta.profileUrlOrContentHit' => 'Enlace de Perfil Clash [Requerido]',
-			'meta.profileUrlOrContentCannotEmpty' => 'El enlace del perfil no puede estar vacío',
+			'meta.profileImport' => 'Importar archivo de configuración',
+			'meta.profileAddUrlOrContent' => 'Añadir enlace de suscripción',
+			'meta.profileUrlOrContent' => 'Enlace / Contenido de suscripción',
+			'meta.profileUrlOrContentHit' => 'Enlace de suscripción o YAML [Obligatorio]',
+			'meta.profileUrlOrContentCannotEmpty' => 'El enlace o contenido no puede estar vacío',
 			'meta.overview' => 'Resumen',
 			'meta.trafficStats' => 'Estadísticas de tráfico',
 			'meta.realtimeMonitor' => 'Monitoreo en tiempo real',
@@ -964,9 +964,9 @@ extension on TranslationsEs {
 			'meta.editYamlConfig' => 'Editar configuración YAML',
 			'meta.copySubscriptionUrl' => 'Copiar URL de suscripción',
 			'meta.qrCode' => 'Código QR',
-			'meta.deleteProfile' => 'Eliminar perfil',
-			'meta.noProfilesYet' => 'No hay perfiles',
-			'meta.addProfilePrompt' => 'Haga clic en + arriba a la derecha para agregar una URL o importar un archivo',
+			'meta.deleteProfile' => 'Eliminar configuración',
+			'meta.noProfilesYet' => 'No hay suscripciones disponibles',
+			'meta.addProfilePrompt' => 'Pulse + arriba a la derecha para añadir URL o importar archivo',
 			'meta.subscriptionUrlCopied' => 'URL de suscripción copiada al portapapeles',
 			'meta.autoGroupTip' => ({required Object group, required Object type}) => '«${group}» es un grupo de políticas automáticas (${type}). Para seleccionar manualmente un nodo, cámbielo en grupos manuales como \'Selección de nodos\'.',
 			'meta.switchNodeFailed' => ({required Object p}) => 'Error al cambiar de nodo: ${p}',
@@ -992,9 +992,9 @@ extension on TranslationsEs {
 			'meta.noLogsPrompt' => 'Aún no hay registros. Aparecerán tras iniciar el proxy.',
 			'meta.searchLogsHint' => ' (IP, Dominio, Regla, Error...)',
 			'meta.offlinePreviewPrompt' => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.',
-			'meta.manualSelect' => 'Manual',
-			'meta.autoSelect' => 'Automático',
-			'meta.speedTestGroup' => 'Probar latencia del grupo',
+			'meta.manualSelect' => 'Selección manual',
+			'meta.autoSelect' => 'Selección automática',
+			'meta.speedTestGroup' => 'Probar velocidad de grupo',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

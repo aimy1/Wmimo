@@ -244,7 +244,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get timeout => 'タイムアウト';
 	@override String get timeoutDuration => 'タイムアウト時間';
 	@override String get latency => '遅延';
-	@override String get latencyTest => '遅延チェック';
+	@override String get latencyTest => '遅延テスト';
 	@override String get networkCheck => 'ネットワーク診断';
 	@override String get language => '言語';
 	@override String get next => '次へ';
@@ -284,10 +284,10 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get overwriteTips => 'オリジナルプロファイル <- カスタム上書き <- アプリ上書き';
 	@override String get noOverwrite => '上書きしない';
 	@override String get overwriteSettings => '上書き設定';
-	@override String get diversionTemplates => '転送テンプレート';
-	@override String get ruleProviders => 'ルールプロバイダー';
+	@override String get diversionTemplates => 'ルーティングテンプレート';
+	@override String get ruleProviders => 'ルールセット (RuleSet)';
 	@override String get ruleTemplates => 'ルールテンプレート';
-	@override String get proxyGroupsTemplates => 'プロキシグループテンプレート';
+	@override String get proxyGroupsTemplates => 'グループテンプレート';
 	@override String get proxyGroups => 'プロキシグループ';
 	@override String get proxyNodeList => 'プロキシノードリスト';
 	@override String proxyNodeFailure({required Object p}) => '以下のプロキシノードは期限切れのため自動的に削除されました: ${p}';
@@ -411,7 +411,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get setting => '設定';
 	@override String get settingCore => 'コア設定';
 	@override String get settingApp => 'アプリ設定';
-	@override String get coreOverwrite => 'コア上書き';
+	@override String get coreOverwrite => 'コア上書き設定';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
 	@override String get lanSync => 'LAN同期';
@@ -426,11 +426,11 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String fileNotExist({required Object p}) => 'ファイルが存在しません: ${p}';
 	@override String fileTypeInvalid({required Object p}) => '無効なファイルタイプ: ${p}';
 	@override String get uwpExemption => 'UWPネットワーク分離免除';
-	@override String get getProfile => 'プロファイルを取得';
-	@override String get buyProfile => 'プロファイルを購入';
-	@override String get addProfile => 'プロファイルを追加';
-	@override String get myProfiles => 'マイプロファイル';
-	@override String get profileEdit => 'プロファイルを編集';
+	@override String get getProfile => 'サブスクリプションを取得';
+	@override String get buyProfile => 'サブスクリプションを購入';
+	@override String get addProfile => 'サブスクリプションを追加';
+	@override String get myProfiles => 'サブスクリプション設定';
+	@override String get profileEdit => 'サブスクリプション設定を編集';
 	@override String get profileNeedActive => '先にこのプロファイルを現在のプロファイルに設定し、接続/再接続してください';
 	@override String get profileDownloadBackupChannel => 'バックアップダウンロードチャネルを有効化';
 	@override String get profileDownloadBackupChannelTips => 'Wmimo が提供するプロキシダウンロードチャネル（情報は一切保存されません）';
@@ -438,10 +438,10 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get profileRulesAppendApplePush => 'Appleプッシュ通知ルールを追加';
 	@override String get profileRulesAppendProxyTips => 'ルールは元の設定の [proxy-groups] 内で、タイプが [url-test] または [select] の最初のプロキシに自動設定されます';
 	@override String get profileImport => 'プロファイルファイルをインポート';
-	@override String get profileAddUrlOrContent => 'プロファイルリンクを追加';
-	@override String get profileUrlOrContent => 'Clash設定リンク';
-	@override String get profileUrlOrContentHit => 'Clash設定リンク [必須]';
-	@override String get profileUrlOrContentCannotEmpty => 'プロファイルリンクを空にすることはできません';
+	@override String get profileAddUrlOrContent => 'サブスクリプションURLを追加';
+	@override String get profileUrlOrContent => 'サブスクリプションURL / ノード内容';
+	@override String get profileUrlOrContentHit => 'サブスクリプションURLまたは内容 [必須]';
+	@override String get profileUrlOrContentCannotEmpty => 'サブスクリプションURLまたは内容は空にできません';
 	@override String get overview => '概要';
 	@override String get trafficStats => 'トラフィック統計';
 	@override String get realtimeMonitor => 'リアルタイム監視';
@@ -464,8 +464,8 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get editYamlConfig => 'YAML設定を編集';
 	@override String get copySubscriptionUrl => 'サブスクリプションURLをコピー';
 	@override String get qrCode => 'QRコード';
-	@override String get deleteProfile => 'プロファイルを削除';
-	@override String get noProfilesYet => 'プロファイルがありません';
+	@override String get deleteProfile => '設定を削除';
+	@override String get noProfilesYet => 'サブスクリプション設定がありません';
 	@override String get addProfilePrompt => '右上の + をクリックしてURLを追加またはファイルをインポート';
 	@override String get subscriptionUrlCopied => 'サブスクリプションURLがクリップボードにコピーされました';
 	@override String autoGroupTip({required Object group, required Object type}) => '「${group}」は ${type} 自動ポリシーグループです。システムが遅延/可用性に基づいて自動的にノードを選択します。手動で選択する場合は「ノード選択」グループで切り替えてください。';
@@ -492,8 +492,8 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get noLogsPrompt => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。';
 	@override String get searchLogsHint => ' (IP, ドメイン, ルール, エラー...)';
 	@override String get offlinePreviewPrompt => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。';
-	@override String get manualSelect => '手動切替';
-	@override String get autoSelect => '自動';
+	@override String get manualSelect => '手動選択';
+	@override String get autoSelect => '自動最適化';
 	@override String get speedTestGroup => 'グループ速度テスト';
 }
 
@@ -600,23 +600,23 @@ class _Translations$main$tray$ja implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => '開く';
 	@override String get menuExit => '終了';
-	@override String get coreDisconnected => 'Wmimo · コア未接続';
+	@override String get coreDisconnected => 'Wmimo · コア未起動';
 	@override String get coreRunning => 'Wmimo · コア実行中';
 	@override String get startProxy => 'プロキシ接続を開始';
 	@override String get stopProxy => 'プロキシ接続を切断';
-	@override String get restartCore => 'コアを再起動';
+	@override String get restartCore => 'プロキシコアを再起動';
 	@override String get systemProxyItem => 'システムプロキシ';
 	@override String get tunModeItem => 'TUN モード';
 	@override String get outboundMode => 'アウトバウンドモード';
 	@override String get modeRule => 'ルールルーティング';
 	@override String get modeGlobal => 'グローバルプロキシ';
 	@override String get modeDirect => 'ダイレクト接続';
-	@override String get profilesMenu => 'プロファイル';
-	@override String get updateAllProfiles => 'すべてのプロファイルを更新';
+	@override String get profilesMenu => 'サブスクリプション設定';
+	@override String get updateAllProfiles => 'すべてのサブスクリプションを更新';
 	@override String get proxyNodes => 'プロキシノード';
 	@override String get tools => 'ツール';
 	@override String get copyProxyCmd => 'ターミナルプロキシコマンドをコピー (CMD / Bash)';
-	@override String get delayTestAll => 'すべてのノードの遅延をテスト';
+	@override String get delayTestAll => '全ノードの遅延速度を測定';
 	@override String get openDashboard => 'ダッシュボードを開く';
 }
 
@@ -680,23 +680,23 @@ extension on TranslationsJa {
 			'loginScreen.providerDisclaimer' => '免責事項:${_root.loginScreen.provider}はサードパーティサービスであり、本アプリとは無関係です',
 			'main.tray.menuOpen' => '開く',
 			'main.tray.menuExit' => '終了',
-			'main.tray.coreDisconnected' => 'Wmimo · コア未接続',
+			'main.tray.coreDisconnected' => 'Wmimo · コア未起動',
 			'main.tray.coreRunning' => 'Wmimo · コア実行中',
 			'main.tray.startProxy' => 'プロキシ接続を開始',
 			'main.tray.stopProxy' => 'プロキシ接続を切断',
-			'main.tray.restartCore' => 'コアを再起動',
+			'main.tray.restartCore' => 'プロキシコアを再起動',
 			'main.tray.systemProxyItem' => 'システムプロキシ',
 			'main.tray.tunModeItem' => 'TUN モード',
 			'main.tray.outboundMode' => 'アウトバウンドモード',
 			'main.tray.modeRule' => 'ルールルーティング',
 			'main.tray.modeGlobal' => 'グローバルプロキシ',
 			'main.tray.modeDirect' => 'ダイレクト接続',
-			'main.tray.profilesMenu' => 'プロファイル',
-			'main.tray.updateAllProfiles' => 'すべてのプロファイルを更新',
+			'main.tray.profilesMenu' => 'サブスクリプション設定',
+			'main.tray.updateAllProfiles' => 'すべてのサブスクリプションを更新',
 			'main.tray.proxyNodes' => 'プロキシノード',
 			'main.tray.tools' => 'ツール',
 			'main.tray.copyProxyCmd' => 'ターミナルプロキシコマンドをコピー (CMD / Bash)',
-			'main.tray.delayTestAll' => 'すべてのノードの遅延をテスト',
+			'main.tray.delayTestAll' => '全ノードの遅延速度を測定',
 			'main.tray.openDashboard' => 'ダッシュボードを開く',
 			'meta.enable' => '有効',
 			'meta.disable' => '無効',
@@ -744,7 +744,7 @@ extension on TranslationsJa {
 			'meta.timeout' => 'タイムアウト',
 			'meta.timeoutDuration' => 'タイムアウト時間',
 			'meta.latency' => '遅延',
-			'meta.latencyTest' => '遅延チェック',
+			'meta.latencyTest' => '遅延テスト',
 			'meta.networkCheck' => 'ネットワーク診断',
 			'meta.language' => '言語',
 			'meta.next' => '次へ',
@@ -784,10 +784,10 @@ extension on TranslationsJa {
 			'meta.overwriteTips' => 'オリジナルプロファイル <- カスタム上書き <- アプリ上書き',
 			'meta.noOverwrite' => '上書きしない',
 			'meta.overwriteSettings' => '上書き設定',
-			'meta.diversionTemplates' => '転送テンプレート',
-			'meta.ruleProviders' => 'ルールプロバイダー',
+			'meta.diversionTemplates' => 'ルーティングテンプレート',
+			'meta.ruleProviders' => 'ルールセット (RuleSet)',
 			'meta.ruleTemplates' => 'ルールテンプレート',
-			'meta.proxyGroupsTemplates' => 'プロキシグループテンプレート',
+			'meta.proxyGroupsTemplates' => 'グループテンプレート',
 			'meta.proxyGroups' => 'プロキシグループ',
 			'meta.proxyNodeList' => 'プロキシノードリスト',
 			'meta.proxyNodeFailure' => ({required Object p}) => '以下のプロキシノードは期限切れのため自動的に削除されました: ${p}',
@@ -911,7 +911,7 @@ extension on TranslationsJa {
 			'meta.setting' => '設定',
 			'meta.settingCore' => 'コア設定',
 			'meta.settingApp' => 'アプリ設定',
-			'meta.coreOverwrite' => 'コア上書き',
+			'meta.coreOverwrite' => 'コア上書き設定',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
 			'meta.lanSync' => 'LAN同期',
@@ -926,11 +926,11 @@ extension on TranslationsJa {
 			'meta.fileNotExist' => ({required Object p}) => 'ファイルが存在しません: ${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => '無効なファイルタイプ: ${p}',
 			'meta.uwpExemption' => 'UWPネットワーク分離免除',
-			'meta.getProfile' => 'プロファイルを取得',
-			'meta.buyProfile' => 'プロファイルを購入',
-			'meta.addProfile' => 'プロファイルを追加',
-			'meta.myProfiles' => 'マイプロファイル',
-			'meta.profileEdit' => 'プロファイルを編集',
+			'meta.getProfile' => 'サブスクリプションを取得',
+			'meta.buyProfile' => 'サブスクリプションを購入',
+			'meta.addProfile' => 'サブスクリプションを追加',
+			'meta.myProfiles' => 'サブスクリプション設定',
+			'meta.profileEdit' => 'サブスクリプション設定を編集',
 			'meta.profileNeedActive' => '先にこのプロファイルを現在のプロファイルに設定し、接続/再接続してください',
 			'meta.profileDownloadBackupChannel' => 'バックアップダウンロードチャネルを有効化',
 			'meta.profileDownloadBackupChannelTips' => 'Wmimo が提供するプロキシダウンロードチャネル（情報は一切保存されません）',
@@ -938,10 +938,10 @@ extension on TranslationsJa {
 			'meta.profileRulesAppendApplePush' => 'Appleプッシュ通知ルールを追加',
 			'meta.profileRulesAppendProxyTips' => 'ルールは元の設定の [proxy-groups] 内で、タイプが [url-test] または [select] の最初のプロキシに自動設定されます',
 			'meta.profileImport' => 'プロファイルファイルをインポート',
-			'meta.profileAddUrlOrContent' => 'プロファイルリンクを追加',
-			'meta.profileUrlOrContent' => 'Clash設定リンク',
-			'meta.profileUrlOrContentHit' => 'Clash設定リンク [必須]',
-			'meta.profileUrlOrContentCannotEmpty' => 'プロファイルリンクを空にすることはできません',
+			'meta.profileAddUrlOrContent' => 'サブスクリプションURLを追加',
+			'meta.profileUrlOrContent' => 'サブスクリプションURL / ノード内容',
+			'meta.profileUrlOrContentHit' => 'サブスクリプションURLまたは内容 [必須]',
+			'meta.profileUrlOrContentCannotEmpty' => 'サブスクリプションURLまたは内容は空にできません',
 			'meta.overview' => '概要',
 			'meta.trafficStats' => 'トラフィック統計',
 			'meta.realtimeMonitor' => 'リアルタイム監視',
@@ -964,8 +964,8 @@ extension on TranslationsJa {
 			'meta.editYamlConfig' => 'YAML設定を編集',
 			'meta.copySubscriptionUrl' => 'サブスクリプションURLをコピー',
 			'meta.qrCode' => 'QRコード',
-			'meta.deleteProfile' => 'プロファイルを削除',
-			'meta.noProfilesYet' => 'プロファイルがありません',
+			'meta.deleteProfile' => '設定を削除',
+			'meta.noProfilesYet' => 'サブスクリプション設定がありません',
 			'meta.addProfilePrompt' => '右上の + をクリックしてURLを追加またはファイルをインポート',
 			'meta.subscriptionUrlCopied' => 'サブスクリプションURLがクリップボードにコピーされました',
 			'meta.autoGroupTip' => ({required Object group, required Object type}) => '「${group}」は ${type} 自動ポリシーグループです。システムが遅延/可用性に基づいて自動的にノードを選択します。手動で選択する場合は「ノード選択」グループで切り替えてください。',
@@ -992,8 +992,8 @@ extension on TranslationsJa {
 			'meta.noLogsPrompt' => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。',
 			'meta.searchLogsHint' => ' (IP, ドメイン, ルール, エラー...)',
 			'meta.offlinePreviewPrompt' => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。',
-			'meta.manualSelect' => '手動切替',
-			'meta.autoSelect' => '自動',
+			'meta.manualSelect' => '手動選択',
+			'meta.autoSelect' => '自動最適化',
 			'meta.speedTestGroup' => 'グループ速度テスト',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',

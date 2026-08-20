@@ -244,7 +244,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get timeout => 'Тайм-аут';
 	@override String get timeoutDuration => 'Длительность тайм-аута';
 	@override String get latency => 'Задерживать';
-	@override String get latencyTest => 'Обнаружение задержки';
+	@override String get latencyTest => 'Проверка задержки';
 	@override String get networkCheck => 'Проверка сети';
 	@override String get language => 'Язык';
 	@override String get next => 'Дальше';
@@ -284,11 +284,11 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get overwriteTips => 'Исходная конфигурация <- Пользовательское переопределение <- Переопределение приложения';
 	@override String get noOverwrite => 'Не перезаписывать';
 	@override String get overwriteSettings => 'Переопределить настройки';
-	@override String get diversionTemplates => 'Шаблон сортировки пациентов';
-	@override String get ruleProviders => 'Поставщик правил';
+	@override String get diversionTemplates => 'Шаблоны маршрутизации';
+	@override String get ruleProviders => 'Наборы правил (RuleSet)';
 	@override String get ruleTemplates => 'Шаблон правила';
-	@override String get proxyGroupsTemplates => 'Шаблон группы агентов';
-	@override String get proxyGroups => 'Группа агентов';
+	@override String get proxyGroupsTemplates => 'Шаблоны групп';
+	@override String get proxyGroups => 'Группы прокси';
 	@override String get proxyNodeList => 'Список прокси-узлов';
 	@override String proxyNodeFailure({required Object p}) => 'Срок действия следующих прокси-узлов истек, и они были автоматически удалены: ${p}';
 	@override String get externalController => 'Внешнее управление';
@@ -359,7 +359,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get termOfUse => 'Условия использования';
 	@override String get privacyPolicy => 'Политика конфиденциальности';
 	@override String get log => 'Журнал';
-	@override String get coreLog => 'Журнал ядра';
+	@override String get coreLog => 'Логи ядра';
 	@override String get core => 'Ядро';
 	@override String get help => 'Помощь';
 	@override String get tutorial => 'Руководство';
@@ -372,7 +372,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get searchConnections => 'Поиск соединений (Домен/IP/Правило/Процесс)';
 	@override String get noFilterResults => 'Нет подходящих соединений';
 	@override String get searchRules => 'Поиск правил (Тип/Пейлоад/Прокси)';
-	@override String get rules => 'Правила';
+	@override String get rules => 'Правила маршрутизации';
 	@override String get clear => 'Очистить';
 	@override String get copySuccess => 'Скопировано';
 	@override String get alwayOnVPN => 'VPN всегда включен';
@@ -411,7 +411,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get setting => 'Настройки';
 	@override String get settingCore => 'Настройки ядра';
 	@override String get settingApp => 'Настройки приложения';
-	@override String get coreOverwrite => 'Переопределение ядра';
+	@override String get coreOverwrite => 'Переопределения ядра';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
 	@override String get lanSync => 'Синхронизация по локальной сети';
@@ -426,22 +426,22 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String fileNotExist({required Object p}) => 'Файла не существует:${p}';
 	@override String fileTypeInvalid({required Object p}) => 'Неверный тип файла:${p}';
 	@override String get uwpExemption => 'Исключение из изоляции сети UWP';
-	@override String get getProfile => 'Получить профиль';
-	@override String get buyProfile => 'Купить профиль';
-	@override String get addProfile => 'Добавить профиль';
-	@override String get myProfiles => 'Профили';
-	@override String get profileEdit => 'Редактирование профилей';
+	@override String get getProfile => 'Получить подписку';
+	@override String get buyProfile => 'Купить подписку';
+	@override String get addProfile => 'Добавить подписку';
+	@override String get myProfiles => 'Подписки';
+	@override String get profileEdit => 'Редактировать подписку';
 	@override String get profileNeedActive => 'Сначала сделайте этот профиль текущим, затем включите подключение/переподключитесь';
 	@override String get profileDownloadBackupChannel => 'Включить резервный канал загрузки';
 	@override String get profileDownloadBackupChannelTips => 'Прокси-канал загрузки, предоставляемый Wmimo (никакая информация не сохраняется)';
 	@override String get profileEditReloadAfterProfileUpdate => 'Перезагрузить после обновления профиля';
 	@override String get profileRulesAppendApplePush => 'Добавить правила Push-уведомлений Apple';
 	@override String get profileRulesAppendProxyTips => 'Правила будут автоматически установлены на первый прокси в [proxy-groups] исходной конфигурации с типом [url-test] или [select]';
-	@override String get profileImport => 'Импорт файла конфигурации';
-	@override String get profileAddUrlOrContent => 'Добавление подписки';
-	@override String get profileUrlOrContent => 'Ссылка на профиль Clash';
-	@override String get profileUrlOrContentHit => 'Ссылка на профиль Clash [обязательно]';
-	@override String get profileUrlOrContentCannotEmpty => 'Ссылка на подписку не может быть пустой';
+	@override String get profileImport => 'Импорт файла профиля';
+	@override String get profileAddUrlOrContent => 'Добавить ссылку на подписку';
+	@override String get profileUrlOrContent => 'Ссылка на подписку / Содержимое';
+	@override String get profileUrlOrContentHit => 'Ссылка на подписку или конфиг [Обязательно]';
+	@override String get profileUrlOrContentCannotEmpty => 'Ссылка или содержимое не могут быть пустыми';
 	@override String get overview => 'Обзор';
 	@override String get trafficStats => 'Статистика трафика';
 	@override String get realtimeMonitor => 'Мониторинг';
@@ -465,8 +465,8 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get copySubscriptionUrl => 'Скопировать URL подписки';
 	@override String get qrCode => 'QR-код';
 	@override String get deleteProfile => 'Удалить профиль';
-	@override String get noProfilesYet => 'Нет профилей';
-	@override String get addProfilePrompt => 'Нажмите + в правом верхнем углу, чтобы добавить URL или импортировать файл';
+	@override String get noProfilesYet => 'Нет сохраненных подписок';
+	@override String get addProfilePrompt => 'Нажмите + в правом верхнем углу, чтобы добавить URL или файл';
 	@override String get subscriptionUrlCopied => 'URL подписки скопирован в буфер обмена';
 	@override String autoGroupTip({required Object group, required Object type}) => '«${group}» — автоматическая группа (${type}), которая выбирает узлы по задержке/доступности. Для ручного выбора переключитесь в ручной группе, например «Выбор узла».';
 	@override String switchNodeFailed({required Object p}) => 'Не удалось переключить узел: ${p}';
@@ -492,9 +492,9 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get noLogsPrompt => 'Логов пока нет. Логи ядра появятся после запуска прокси.';
 	@override String get searchLogsHint => ' (IP, Домен, Правило, Ошибка...)';
 	@override String get offlinePreviewPrompt => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.';
-	@override String get manualSelect => 'Вручную';
-	@override String get autoSelect => 'Авто';
-	@override String get speedTestGroup => 'Проверить задержку группы';
+	@override String get manualSelect => 'Ручной выбор';
+	@override String get autoSelect => 'Автовыбор';
+	@override String get speedTestGroup => 'Тест скорости группы';
 }
 
 // Path: permission
@@ -600,24 +600,24 @@ class _Translations$main$tray$ru implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => 'Открыть';
 	@override String get menuExit => 'Выход';
-	@override String get coreDisconnected => 'Wmimo · Ядро не подключено';
-	@override String get coreRunning => 'Wmimo · Ядро запущено';
+	@override String get coreDisconnected => 'Wmimo · Ядро не запущено';
+	@override String get coreRunning => 'Wmimo · Ядро работает';
 	@override String get startProxy => 'Запустить прокси-соединение';
 	@override String get stopProxy => 'Отключить прокси';
-	@override String get restartCore => 'Перезапустить ядро';
+	@override String get restartCore => 'Перезапустить ядро прокси';
 	@override String get systemProxyItem => 'Системный прокси';
 	@override String get tunModeItem => 'Режим TUN';
 	@override String get outboundMode => 'Режим маршрутизации';
 	@override String get modeRule => 'По правилам';
 	@override String get modeGlobal => 'Глобальный прокси';
 	@override String get modeDirect => 'Прямое подключение';
-	@override String get profilesMenu => 'Профили';
-	@override String get updateAllProfiles => 'Обновить все профили';
+	@override String get profilesMenu => 'Подписки';
+	@override String get updateAllProfiles => 'Обновить все подписки';
 	@override String get proxyNodes => 'Прокси-узлы';
 	@override String get tools => 'Инструменты';
 	@override String get copyProxyCmd => 'Копировать команду терминала (CMD / Bash)';
-	@override String get delayTestAll => 'Тест задержки всех узлов';
-	@override String get openDashboard => 'Открыть панель управления';
+	@override String get delayTestAll => 'Проверить скорость всех узлов';
+	@override String get openDashboard => 'Панель управления';
 }
 
 /// The flat map containing all translations for locale <ru>.
@@ -680,24 +680,24 @@ extension on TranslationsRu {
 			'loginScreen.providerDisclaimer' => 'Отказ от ответственности: ${_root.loginScreen.provider} — это сторонний сервис и не связан с этим приложением',
 			'main.tray.menuOpen' => 'Открыть',
 			'main.tray.menuExit' => 'Выход',
-			'main.tray.coreDisconnected' => 'Wmimo · Ядро не подключено',
-			'main.tray.coreRunning' => 'Wmimo · Ядро запущено',
+			'main.tray.coreDisconnected' => 'Wmimo · Ядро не запущено',
+			'main.tray.coreRunning' => 'Wmimo · Ядро работает',
 			'main.tray.startProxy' => 'Запустить прокси-соединение',
 			'main.tray.stopProxy' => 'Отключить прокси',
-			'main.tray.restartCore' => 'Перезапустить ядро',
+			'main.tray.restartCore' => 'Перезапустить ядро прокси',
 			'main.tray.systemProxyItem' => 'Системный прокси',
 			'main.tray.tunModeItem' => 'Режим TUN',
 			'main.tray.outboundMode' => 'Режим маршрутизации',
 			'main.tray.modeRule' => 'По правилам',
 			'main.tray.modeGlobal' => 'Глобальный прокси',
 			'main.tray.modeDirect' => 'Прямое подключение',
-			'main.tray.profilesMenu' => 'Профили',
-			'main.tray.updateAllProfiles' => 'Обновить все профили',
+			'main.tray.profilesMenu' => 'Подписки',
+			'main.tray.updateAllProfiles' => 'Обновить все подписки',
 			'main.tray.proxyNodes' => 'Прокси-узлы',
 			'main.tray.tools' => 'Инструменты',
 			'main.tray.copyProxyCmd' => 'Копировать команду терминала (CMD / Bash)',
-			'main.tray.delayTestAll' => 'Тест задержки всех узлов',
-			'main.tray.openDashboard' => 'Открыть панель управления',
+			'main.tray.delayTestAll' => 'Проверить скорость всех узлов',
+			'main.tray.openDashboard' => 'Панель управления',
 			'meta.enable' => 'Включить',
 			'meta.disable' => 'Запретить',
 			'meta.open' => 'Открыть',
@@ -744,7 +744,7 @@ extension on TranslationsRu {
 			'meta.timeout' => 'Тайм-аут',
 			'meta.timeoutDuration' => 'Длительность тайм-аута',
 			'meta.latency' => 'Задерживать',
-			'meta.latencyTest' => 'Обнаружение задержки',
+			'meta.latencyTest' => 'Проверка задержки',
 			'meta.networkCheck' => 'Проверка сети',
 			'meta.language' => 'Язык',
 			'meta.next' => 'Дальше',
@@ -784,11 +784,11 @@ extension on TranslationsRu {
 			'meta.overwriteTips' => 'Исходная конфигурация <- Пользовательское переопределение <- Переопределение приложения',
 			'meta.noOverwrite' => 'Не перезаписывать',
 			'meta.overwriteSettings' => 'Переопределить настройки',
-			'meta.diversionTemplates' => 'Шаблон сортировки пациентов',
-			'meta.ruleProviders' => 'Поставщик правил',
+			'meta.diversionTemplates' => 'Шаблоны маршрутизации',
+			'meta.ruleProviders' => 'Наборы правил (RuleSet)',
 			'meta.ruleTemplates' => 'Шаблон правила',
-			'meta.proxyGroupsTemplates' => 'Шаблон группы агентов',
-			'meta.proxyGroups' => 'Группа агентов',
+			'meta.proxyGroupsTemplates' => 'Шаблоны групп',
+			'meta.proxyGroups' => 'Группы прокси',
 			'meta.proxyNodeList' => 'Список прокси-узлов',
 			'meta.proxyNodeFailure' => ({required Object p}) => 'Срок действия следующих прокси-узлов истек, и они были автоматически удалены: ${p}',
 			'meta.externalController' => 'Внешнее управление',
@@ -859,7 +859,7 @@ extension on TranslationsRu {
 			'meta.termOfUse' => 'Условия использования',
 			'meta.privacyPolicy' => 'Политика конфиденциальности',
 			'meta.log' => 'Журнал',
-			'meta.coreLog' => 'Журнал ядра',
+			'meta.coreLog' => 'Логи ядра',
 			'meta.core' => 'Ядро',
 			'meta.help' => 'Помощь',
 			'meta.tutorial' => 'Руководство',
@@ -872,7 +872,7 @@ extension on TranslationsRu {
 			'meta.searchConnections' => 'Поиск соединений (Домен/IP/Правило/Процесс)',
 			'meta.noFilterResults' => 'Нет подходящих соединений',
 			'meta.searchRules' => 'Поиск правил (Тип/Пейлоад/Прокси)',
-			'meta.rules' => 'Правила',
+			'meta.rules' => 'Правила маршрутизации',
 			'meta.clear' => 'Очистить',
 			'meta.copySuccess' => 'Скопировано',
 			'meta.alwayOnVPN' => 'VPN всегда включен',
@@ -911,7 +911,7 @@ extension on TranslationsRu {
 			'meta.setting' => 'Настройки',
 			'meta.settingCore' => 'Настройки ядра',
 			'meta.settingApp' => 'Настройки приложения',
-			'meta.coreOverwrite' => 'Переопределение ядра',
+			'meta.coreOverwrite' => 'Переопределения ядра',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
 			'meta.lanSync' => 'Синхронизация по локальной сети',
@@ -926,22 +926,22 @@ extension on TranslationsRu {
 			'meta.fileNotExist' => ({required Object p}) => 'Файла не существует:${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => 'Неверный тип файла:${p}',
 			'meta.uwpExemption' => 'Исключение из изоляции сети UWP',
-			'meta.getProfile' => 'Получить профиль',
-			'meta.buyProfile' => 'Купить профиль',
-			'meta.addProfile' => 'Добавить профиль',
-			'meta.myProfiles' => 'Профили',
-			'meta.profileEdit' => 'Редактирование профилей',
+			'meta.getProfile' => 'Получить подписку',
+			'meta.buyProfile' => 'Купить подписку',
+			'meta.addProfile' => 'Добавить подписку',
+			'meta.myProfiles' => 'Подписки',
+			'meta.profileEdit' => 'Редактировать подписку',
 			'meta.profileNeedActive' => 'Сначала сделайте этот профиль текущим, затем включите подключение/переподключитесь',
 			'meta.profileDownloadBackupChannel' => 'Включить резервный канал загрузки',
 			'meta.profileDownloadBackupChannelTips' => 'Прокси-канал загрузки, предоставляемый Wmimo (никакая информация не сохраняется)',
 			'meta.profileEditReloadAfterProfileUpdate' => 'Перезагрузить после обновления профиля',
 			'meta.profileRulesAppendApplePush' => 'Добавить правила Push-уведомлений Apple',
 			'meta.profileRulesAppendProxyTips' => 'Правила будут автоматически установлены на первый прокси в [proxy-groups] исходной конфигурации с типом [url-test] или [select]',
-			'meta.profileImport' => 'Импорт файла конфигурации',
-			'meta.profileAddUrlOrContent' => 'Добавление подписки',
-			'meta.profileUrlOrContent' => 'Ссылка на профиль Clash',
-			'meta.profileUrlOrContentHit' => 'Ссылка на профиль Clash [обязательно]',
-			'meta.profileUrlOrContentCannotEmpty' => 'Ссылка на подписку не может быть пустой',
+			'meta.profileImport' => 'Импорт файла профиля',
+			'meta.profileAddUrlOrContent' => 'Добавить ссылку на подписку',
+			'meta.profileUrlOrContent' => 'Ссылка на подписку / Содержимое',
+			'meta.profileUrlOrContentHit' => 'Ссылка на подписку или конфиг [Обязательно]',
+			'meta.profileUrlOrContentCannotEmpty' => 'Ссылка или содержимое не могут быть пустыми',
 			'meta.overview' => 'Обзор',
 			'meta.trafficStats' => 'Статистика трафика',
 			'meta.realtimeMonitor' => 'Мониторинг',
@@ -965,8 +965,8 @@ extension on TranslationsRu {
 			'meta.copySubscriptionUrl' => 'Скопировать URL подписки',
 			'meta.qrCode' => 'QR-код',
 			'meta.deleteProfile' => 'Удалить профиль',
-			'meta.noProfilesYet' => 'Нет профилей',
-			'meta.addProfilePrompt' => 'Нажмите + в правом верхнем углу, чтобы добавить URL или импортировать файл',
+			'meta.noProfilesYet' => 'Нет сохраненных подписок',
+			'meta.addProfilePrompt' => 'Нажмите + в правом верхнем углу, чтобы добавить URL или файл',
 			'meta.subscriptionUrlCopied' => 'URL подписки скопирован в буфер обмена',
 			'meta.autoGroupTip' => ({required Object group, required Object type}) => '«${group}» — автоматическая группа (${type}), которая выбирает узлы по задержке/доступности. Для ручного выбора переключитесь в ручной группе, например «Выбор узла».',
 			'meta.switchNodeFailed' => ({required Object p}) => 'Не удалось переключить узел: ${p}',
@@ -992,9 +992,9 @@ extension on TranslationsRu {
 			'meta.noLogsPrompt' => 'Логов пока нет. Логи ядра появятся после запуска прокси.',
 			'meta.searchLogsHint' => ' (IP, Домен, Правило, Ошибка...)',
 			'meta.offlinePreviewPrompt' => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.',
-			'meta.manualSelect' => 'Вручную',
-			'meta.autoSelect' => 'Авто',
-			'meta.speedTestGroup' => 'Проверить задержку группы',
+			'meta.manualSelect' => 'Ручной выбор',
+			'meta.autoSelect' => 'Автовыбор',
+			'meta.speedTestGroup' => 'Тест скорости группы',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

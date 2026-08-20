@@ -244,7 +244,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get timeout => '超時';
 	@override String get timeoutDuration => '超時時長';
 	@override String get latency => '延遲';
-	@override String get latencyTest => '延遲檢測';
+	@override String get latencyTest => '延遲測速';
 	@override String get networkCheck => '網路檢測';
 	@override String get language => '語言';
 	@override String get next => '下一步';
@@ -285,10 +285,10 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get noOverwrite => '不覆寫';
 	@override String get overwriteSettings => '覆寫設置';
 	@override String get diversionTemplates => '分流模板';
-	@override String get ruleProviders => '規則提供者';
+	@override String get ruleProviders => '規則集 (RuleSet)';
 	@override String get ruleTemplates => '規則模板';
-	@override String get proxyGroupsTemplates => '代理組模板';
-	@override String get proxyGroups => '代理組';
+	@override String get proxyGroupsTemplates => '策略組模板';
+	@override String get proxyGroups => '策略組';
 	@override String get proxyNodeList => '代理節點列表';
 	@override String proxyNodeFailure({required Object p}) => '下列代理節點已失效,已自動移除:${p}';
 	@override String get externalController => '外部控制';
@@ -410,7 +410,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get donate => '捐助';
 	@override String get setting => '設定';
 	@override String get settingCore => '核心設定';
-	@override String get settingApp => '應用設定';
+	@override String get settingApp => '應用程式設定';
 	@override String get coreOverwrite => '核心覆寫';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
@@ -426,22 +426,22 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String fileNotExist({required Object p}) => '文件不存在:${p}';
 	@override String fileTypeInvalid({required Object p}) => '無效的文件類型:${p}';
 	@override String get uwpExemption => 'UWP網絡隔離豁免';
-	@override String get getProfile => '獲取設定';
-	@override String get buyProfile => '購買設定';
-	@override String get addProfile => '添加設定';
-	@override String get myProfiles => '我的設定';
-	@override String get profileEdit => '編輯設定';
+	@override String get getProfile => '獲取訂閱';
+	@override String get buyProfile => '購買訂閱';
+	@override String get addProfile => '新增訂閱';
+	@override String get myProfiles => '訂閱設定';
+	@override String get profileEdit => '編輯訂閱設定';
 	@override String get profileNeedActive => '請先將本設定設為目前設定，並開啟連線/重新連線';
 	@override String get profileDownloadBackupChannel => '啟用備用下載通道';
 	@override String get profileDownloadBackupChannelTips => 'Wmimo 提供的代理下載通道（不儲存任何資訊）';
 	@override String get profileEditReloadAfterProfileUpdate => '設定更新後重新載入';
 	@override String get profileRulesAppendApplePush => '附加 Apple 推送通知規則';
 	@override String get profileRulesAppendProxyTips => '規則將自動設為原始設定中 [proxy-groups] 內第一個類型為 [url-test] 或 [select] 的代理';
-	@override String get profileImport => '匯入設定檔';
-	@override String get profileAddUrlOrContent => '添加設定連結';
-	@override String get profileUrlOrContent => 'Clash設定連結';
-	@override String get profileUrlOrContentHit => 'Clash設定連結[必填]';
-	@override String get profileUrlOrContentCannotEmpty => '設定連結不能為空';
+	@override String get profileImport => '匯入設定檔案';
+	@override String get profileAddUrlOrContent => '新增訂閱連結';
+	@override String get profileUrlOrContent => '訂閱連結 / 節點內容';
+	@override String get profileUrlOrContentHit => '訂閱連結或設定內容 [必填]';
+	@override String get profileUrlOrContentCannotEmpty => '訂閱連結或內容不能為空';
 	@override String get overview => '概覽';
 	@override String get trafficStats => '流量統計';
 	@override String get realtimeMonitor => '即時監控';
@@ -492,8 +492,8 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get noLogsPrompt => '暫無日誌，啟動代理後將即時捕獲核心日誌';
 	@override String get searchLogsHint => ' (IP, 網域名稱, 規則, 錯誤...)';
 	@override String get offlinePreviewPrompt => '離線設定預覽中，開啟代理後可進行分流與節點測速';
-	@override String get manualSelect => '手動切換';
-	@override String get autoSelect => '自動';
+	@override String get manualSelect => '手動選擇';
+	@override String get autoSelect => '自動優選';
 	@override String get speedTestGroup => '策略組測速';
 }
 
@@ -600,8 +600,8 @@ class Translations$main$tray$zh_TW implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => '開啟';
 	@override String get menuExit => '結束';
-	@override String get coreDisconnected => 'Wmimo · 核心未連線';
-	@override String get coreRunning => 'Wmimo · 核心運行中';
+	@override String get coreDisconnected => 'Wmimo · 核心未執行';
+	@override String get coreRunning => 'Wmimo · 核心執行中';
 	@override String get startProxy => '啟動代理連線';
 	@override String get stopProxy => '中斷代理連線';
 	@override String get restartCore => '重啟代理核心';
@@ -612,7 +612,7 @@ class Translations$main$tray$zh_TW implements Translations$main$tray$en {
 	@override String get modeGlobal => '全域代理';
 	@override String get modeDirect => '直接連線';
 	@override String get profilesMenu => '訂閱設定';
-	@override String get updateAllProfiles => '更新所有訂閱設定';
+	@override String get updateAllProfiles => '更新全部訂閱設定';
 	@override String get proxyNodes => '代理節點';
 	@override String get tools => '實用工具';
 	@override String get copyProxyCmd => '複製終端代理指令 (CMD / Bash)';
@@ -680,8 +680,8 @@ extension on TranslationsZhTw {
 			'loginScreen.providerDisclaimer' => '免責聲明:${_root.loginScreen.provider}為第三方服務,與本App無關',
 			'main.tray.menuOpen' => '開啟',
 			'main.tray.menuExit' => '結束',
-			'main.tray.coreDisconnected' => 'Wmimo · 核心未連線',
-			'main.tray.coreRunning' => 'Wmimo · 核心運行中',
+			'main.tray.coreDisconnected' => 'Wmimo · 核心未執行',
+			'main.tray.coreRunning' => 'Wmimo · 核心執行中',
 			'main.tray.startProxy' => '啟動代理連線',
 			'main.tray.stopProxy' => '中斷代理連線',
 			'main.tray.restartCore' => '重啟代理核心',
@@ -692,7 +692,7 @@ extension on TranslationsZhTw {
 			'main.tray.modeGlobal' => '全域代理',
 			'main.tray.modeDirect' => '直接連線',
 			'main.tray.profilesMenu' => '訂閱設定',
-			'main.tray.updateAllProfiles' => '更新所有訂閱設定',
+			'main.tray.updateAllProfiles' => '更新全部訂閱設定',
 			'main.tray.proxyNodes' => '代理節點',
 			'main.tray.tools' => '實用工具',
 			'main.tray.copyProxyCmd' => '複製終端代理指令 (CMD / Bash)',
@@ -744,7 +744,7 @@ extension on TranslationsZhTw {
 			'meta.timeout' => '超時',
 			'meta.timeoutDuration' => '超時時長',
 			'meta.latency' => '延遲',
-			'meta.latencyTest' => '延遲檢測',
+			'meta.latencyTest' => '延遲測速',
 			'meta.networkCheck' => '網路檢測',
 			'meta.language' => '語言',
 			'meta.next' => '下一步',
@@ -785,10 +785,10 @@ extension on TranslationsZhTw {
 			'meta.noOverwrite' => '不覆寫',
 			'meta.overwriteSettings' => '覆寫設置',
 			'meta.diversionTemplates' => '分流模板',
-			'meta.ruleProviders' => '規則提供者',
+			'meta.ruleProviders' => '規則集 (RuleSet)',
 			'meta.ruleTemplates' => '規則模板',
-			'meta.proxyGroupsTemplates' => '代理組模板',
-			'meta.proxyGroups' => '代理組',
+			'meta.proxyGroupsTemplates' => '策略組模板',
+			'meta.proxyGroups' => '策略組',
 			'meta.proxyNodeList' => '代理節點列表',
 			'meta.proxyNodeFailure' => ({required Object p}) => '下列代理節點已失效,已自動移除:${p}',
 			'meta.externalController' => '外部控制',
@@ -910,7 +910,7 @@ extension on TranslationsZhTw {
 			'meta.donate' => '捐助',
 			'meta.setting' => '設定',
 			'meta.settingCore' => '核心設定',
-			'meta.settingApp' => '應用設定',
+			'meta.settingApp' => '應用程式設定',
 			'meta.coreOverwrite' => '核心覆寫',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
@@ -926,22 +926,22 @@ extension on TranslationsZhTw {
 			'meta.fileNotExist' => ({required Object p}) => '文件不存在:${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => '無效的文件類型:${p}',
 			'meta.uwpExemption' => 'UWP網絡隔離豁免',
-			'meta.getProfile' => '獲取設定',
-			'meta.buyProfile' => '購買設定',
-			'meta.addProfile' => '添加設定',
-			'meta.myProfiles' => '我的設定',
-			'meta.profileEdit' => '編輯設定',
+			'meta.getProfile' => '獲取訂閱',
+			'meta.buyProfile' => '購買訂閱',
+			'meta.addProfile' => '新增訂閱',
+			'meta.myProfiles' => '訂閱設定',
+			'meta.profileEdit' => '編輯訂閱設定',
 			'meta.profileNeedActive' => '請先將本設定設為目前設定，並開啟連線/重新連線',
 			'meta.profileDownloadBackupChannel' => '啟用備用下載通道',
 			'meta.profileDownloadBackupChannelTips' => 'Wmimo 提供的代理下載通道（不儲存任何資訊）',
 			'meta.profileEditReloadAfterProfileUpdate' => '設定更新後重新載入',
 			'meta.profileRulesAppendApplePush' => '附加 Apple 推送通知規則',
 			'meta.profileRulesAppendProxyTips' => '規則將自動設為原始設定中 [proxy-groups] 內第一個類型為 [url-test] 或 [select] 的代理',
-			'meta.profileImport' => '匯入設定檔',
-			'meta.profileAddUrlOrContent' => '添加設定連結',
-			'meta.profileUrlOrContent' => 'Clash設定連結',
-			'meta.profileUrlOrContentHit' => 'Clash設定連結[必填]',
-			'meta.profileUrlOrContentCannotEmpty' => '設定連結不能為空',
+			'meta.profileImport' => '匯入設定檔案',
+			'meta.profileAddUrlOrContent' => '新增訂閱連結',
+			'meta.profileUrlOrContent' => '訂閱連結 / 節點內容',
+			'meta.profileUrlOrContentHit' => '訂閱連結或設定內容 [必填]',
+			'meta.profileUrlOrContentCannotEmpty' => '訂閱連結或內容不能為空',
 			'meta.overview' => '概覽',
 			'meta.trafficStats' => '流量統計',
 			'meta.realtimeMonitor' => '即時監控',
@@ -992,8 +992,8 @@ extension on TranslationsZhTw {
 			'meta.noLogsPrompt' => '暫無日誌，啟動代理後將即時捕獲核心日誌',
 			'meta.searchLogsHint' => ' (IP, 網域名稱, 規則, 錯誤...)',
 			'meta.offlinePreviewPrompt' => '離線設定預覽中，開啟代理後可進行分流與節點測速',
-			'meta.manualSelect' => '手動切換',
-			'meta.autoSelect' => '自動',
+			'meta.manualSelect' => '手動選擇',
+			'meta.autoSelect' => '自動優選',
 			'meta.speedTestGroup' => '策略組測速',
 			'permission.camera' => '攝像頭',
 			'permission.screen' => '屏幕錄製',

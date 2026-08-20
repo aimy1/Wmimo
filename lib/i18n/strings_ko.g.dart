@@ -244,7 +244,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get timeout => '시간 초과';
 	@override String get timeoutDuration => '시간 초과 기간';
 	@override String get latency => '지연 시간';
-	@override String get latencyTest => '지연 시간 확인';
+	@override String get latencyTest => '지연 속도 테스트';
 	@override String get networkCheck => '네트워크 점검';
 	@override String get language => '언어';
 	@override String get next => '다음';
@@ -284,10 +284,10 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get overwriteTips => '원본 프로필 <- 사용자 정의 덮어쓰기 <- 앱 덮어쓰기';
 	@override String get noOverwrite => '덮어쓰지 않음';
 	@override String get overwriteSettings => '덮어쓰기 설정';
-	@override String get diversionTemplates => '전환 템플릿';
-	@override String get ruleProviders => '규칙 공급자';
+	@override String get diversionTemplates => '분류 템플릿';
+	@override String get ruleProviders => '규칙 세트 (RuleSet)';
 	@override String get ruleTemplates => '규칙 템플릿';
-	@override String get proxyGroupsTemplates => '프록시 그룹 템플릿';
+	@override String get proxyGroupsTemplates => '그룹 템플릿';
 	@override String get proxyGroups => '프록시 그룹';
 	@override String get proxyNodeList => '프록시 노드 목록';
 	@override String proxyNodeFailure({required Object p}) => '다음 프록시 노드가 만료되어 자동으로 제거되었습니다: ${p}';
@@ -372,7 +372,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get searchConnections => '연결 검색 (도메인/IP/규칙/프로세스)';
 	@override String get noFilterResults => '일치하는 연결 없음';
 	@override String get searchRules => '규칙 검색 (유형/페이로드/프록시)';
-	@override String get rules => '규칙';
+	@override String get rules => '분류 규칙';
 	@override String get clear => '지우기';
 	@override String get copySuccess => '복사되었습니다';
 	@override String get alwayOnVPN => '상시 연결';
@@ -426,22 +426,22 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String fileNotExist({required Object p}) => '파일이 존재하지 않습니다: ${p}';
 	@override String fileTypeInvalid({required Object p}) => '유효하지 않은 파일 형식: ${p}';
 	@override String get uwpExemption => 'UWP 네트워크 격리 면제';
-	@override String get getProfile => '프로필 가져오기';
-	@override String get buyProfile => '프로필 구매';
-	@override String get addProfile => '프로필 추가';
-	@override String get myProfiles => '내 프로필';
-	@override String get profileEdit => '프로필 편집';
+	@override String get getProfile => '구독 가져오기';
+	@override String get buyProfile => '구독 구매';
+	@override String get addProfile => '구독 추가';
+	@override String get myProfiles => '구독 설정';
+	@override String get profileEdit => '구독 설정 편집';
 	@override String get profileNeedActive => '먼저 이 프로필을 현재 프로필로 설정한 뒤 연결/재연결하세요';
 	@override String get profileDownloadBackupChannel => '백업 다운로드 채널 사용';
 	@override String get profileDownloadBackupChannelTips => 'Wmimo에서 제공하는 프록시 다운로드 채널(어떤 정보도 저장하지 않음)';
 	@override String get profileEditReloadAfterProfileUpdate => '프로필 업데이트 후 다시 로드';
 	@override String get profileRulesAppendApplePush => 'Apple 푸시 알림 규칙 추가';
 	@override String get profileRulesAppendProxyTips => '규칙은 원본 설정의 [proxy-groups]에서 [url-test] 또는 [select] 유형의 첫 번째 프록시로 자동 설정됩니다';
-	@override String get profileImport => '프로필 파일 가져오기';
-	@override String get profileAddUrlOrContent => '프로필 링크 추가';
-	@override String get profileUrlOrContent => 'Clash 설정 링크';
-	@override String get profileUrlOrContentHit => 'Clash 설정 링크 [필수]';
-	@override String get profileUrlOrContentCannotEmpty => '프로필 링크는 비워둘 수 없습니다';
+	@override String get profileImport => '설정 파일 가져오기';
+	@override String get profileAddUrlOrContent => '구독 링크 추가';
+	@override String get profileUrlOrContent => '구독 링크 / 노드 내용';
+	@override String get profileUrlOrContentHit => '구독 링크 또는 설정 내용 [필수]';
+	@override String get profileUrlOrContentCannotEmpty => '구독 링크 또는 내용은 비워 둘 수 없습니다';
 	@override String get overview => '개요';
 	@override String get trafficStats => '트래픽 통계';
 	@override String get realtimeMonitor => '실시간 모니터링';
@@ -464,14 +464,14 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get editYamlConfig => 'YAML 설정 편집';
 	@override String get copySubscriptionUrl => '구독 URL 복사';
 	@override String get qrCode => 'QR 코드';
-	@override String get deleteProfile => '프로필 삭제';
-	@override String get noProfilesYet => '구독 프로필이 없습니다';
-	@override String get addProfilePrompt => '오른쪽 상단의 + 를 클릭하여 구독 URL을 추가하거나 로컬 파일을 가져오세요';
+	@override String get deleteProfile => '설정 삭제';
+	@override String get noProfilesYet => '등록된 구독 설정이 없습니다';
+	@override String get addProfilePrompt => '오른쪽 상단 + 를 눌러 링크 추가 또는 파일 가져오기';
 	@override String get subscriptionUrlCopied => '구독 URL이 클립보드에 복사되었습니다';
 	@override String autoGroupTip({required Object group, required Object type}) => '「${group}」은(는) ${type} 자동 정책 그룹으로 지연 시간/가용성에 따라 노드가 자동 선택됩니다. 수동으로 선택하려면 \'노드 선택\' 그룹에서 전환하세요.';
 	@override String switchNodeFailed({required Object p}) => '노드 전환 실패: ${p}';
 	@override String nodeSelected({required Object p}) => '선택된 노드: ${p}';
-	@override String get startingCoreAndTesting => '코어를 시작하고 지연 시간을 테스트하는 중...';
+	@override String get startingCoreAndTesting => '코어를 시작하고 지연 속도를 측정하는 중...';
 	@override String chartMinutes({required Object p}) => '${p} 분';
 	@override String get chartUpload => '업로드';
 	@override String get chartDownload => '다운로드';
@@ -493,8 +493,8 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get searchLogsHint => ' (IP, 도메인, 규칙, 오류...)';
 	@override String get offlinePreviewPrompt => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.';
 	@override String get manualSelect => '수동 선택';
-	@override String get autoSelect => '자동';
-	@override String get speedTestGroup => '그룹 지연 테스트';
+	@override String get autoSelect => '자동 최적화';
+	@override String get speedTestGroup => '그룹 속도 테스트';
 }
 
 // Path: permission
@@ -600,24 +600,24 @@ class _Translations$main$tray$ko implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => '열기';
 	@override String get menuExit => '종료';
-	@override String get coreDisconnected => 'Wmimo · 코어 미연결';
+	@override String get coreDisconnected => 'Wmimo · 코어 미실행';
 	@override String get coreRunning => 'Wmimo · 코어 실행 중';
 	@override String get startProxy => '프록시 연결 시작';
-	@override String get stopProxy => '프록시 연결 해제';
-	@override String get restartCore => '코어 재시작';
+	@override String get stopProxy => '프록시 연결 끊기';
+	@override String get restartCore => '프록시 코어 재시작';
 	@override String get systemProxyItem => '시스템 프록시';
 	@override String get tunModeItem => 'TUN 모드';
 	@override String get outboundMode => '아웃바운드 모드';
 	@override String get modeRule => '규칙 라우팅';
 	@override String get modeGlobal => '글로벌 프록시';
 	@override String get modeDirect => '직접 연결';
-	@override String get profilesMenu => '프로필';
-	@override String get updateAllProfiles => '모든 프로필 업데이트';
+	@override String get profilesMenu => '구독 설정';
+	@override String get updateAllProfiles => '모든 구독 설정 업데이트';
 	@override String get proxyNodes => '프록시 노드';
 	@override String get tools => '도구';
 	@override String get copyProxyCmd => '터미널 프록시 명령 복사 (CMD / Bash)';
-	@override String get delayTestAll => '모든 노드 지연 시간 테스트';
-	@override String get openDashboard => '대시보드 열기';
+	@override String get delayTestAll => '모든 노드 지연 속도 측정';
+	@override String get openDashboard => '제어판 열기';
 }
 
 /// The flat map containing all translations for locale <ko>.
@@ -680,24 +680,24 @@ extension on TranslationsKo {
 			'loginScreen.providerDisclaimer' => '면책 조항: ${_root.loginScreen.provider}는 제3자 서비스이며, 본 앱과는 무관합니다',
 			'main.tray.menuOpen' => '열기',
 			'main.tray.menuExit' => '종료',
-			'main.tray.coreDisconnected' => 'Wmimo · 코어 미연결',
+			'main.tray.coreDisconnected' => 'Wmimo · 코어 미실행',
 			'main.tray.coreRunning' => 'Wmimo · 코어 실행 중',
 			'main.tray.startProxy' => '프록시 연결 시작',
-			'main.tray.stopProxy' => '프록시 연결 해제',
-			'main.tray.restartCore' => '코어 재시작',
+			'main.tray.stopProxy' => '프록시 연결 끊기',
+			'main.tray.restartCore' => '프록시 코어 재시작',
 			'main.tray.systemProxyItem' => '시스템 프록시',
 			'main.tray.tunModeItem' => 'TUN 모드',
 			'main.tray.outboundMode' => '아웃바운드 모드',
 			'main.tray.modeRule' => '규칙 라우팅',
 			'main.tray.modeGlobal' => '글로벌 프록시',
 			'main.tray.modeDirect' => '직접 연결',
-			'main.tray.profilesMenu' => '프로필',
-			'main.tray.updateAllProfiles' => '모든 프로필 업데이트',
+			'main.tray.profilesMenu' => '구독 설정',
+			'main.tray.updateAllProfiles' => '모든 구독 설정 업데이트',
 			'main.tray.proxyNodes' => '프록시 노드',
 			'main.tray.tools' => '도구',
 			'main.tray.copyProxyCmd' => '터미널 프록시 명령 복사 (CMD / Bash)',
-			'main.tray.delayTestAll' => '모든 노드 지연 시간 테스트',
-			'main.tray.openDashboard' => '대시보드 열기',
+			'main.tray.delayTestAll' => '모든 노드 지연 속도 측정',
+			'main.tray.openDashboard' => '제어판 열기',
 			'meta.enable' => '활성화',
 			'meta.disable' => '비활성화',
 			'meta.open' => '열기',
@@ -744,7 +744,7 @@ extension on TranslationsKo {
 			'meta.timeout' => '시간 초과',
 			'meta.timeoutDuration' => '시간 초과 기간',
 			'meta.latency' => '지연 시간',
-			'meta.latencyTest' => '지연 시간 확인',
+			'meta.latencyTest' => '지연 속도 테스트',
 			'meta.networkCheck' => '네트워크 점검',
 			'meta.language' => '언어',
 			'meta.next' => '다음',
@@ -784,10 +784,10 @@ extension on TranslationsKo {
 			'meta.overwriteTips' => '원본 프로필 <- 사용자 정의 덮어쓰기 <- 앱 덮어쓰기',
 			'meta.noOverwrite' => '덮어쓰지 않음',
 			'meta.overwriteSettings' => '덮어쓰기 설정',
-			'meta.diversionTemplates' => '전환 템플릿',
-			'meta.ruleProviders' => '규칙 공급자',
+			'meta.diversionTemplates' => '분류 템플릿',
+			'meta.ruleProviders' => '규칙 세트 (RuleSet)',
 			'meta.ruleTemplates' => '규칙 템플릿',
-			'meta.proxyGroupsTemplates' => '프록시 그룹 템플릿',
+			'meta.proxyGroupsTemplates' => '그룹 템플릿',
 			'meta.proxyGroups' => '프록시 그룹',
 			'meta.proxyNodeList' => '프록시 노드 목록',
 			'meta.proxyNodeFailure' => ({required Object p}) => '다음 프록시 노드가 만료되어 자동으로 제거되었습니다: ${p}',
@@ -872,7 +872,7 @@ extension on TranslationsKo {
 			'meta.searchConnections' => '연결 검색 (도메인/IP/규칙/프로세스)',
 			'meta.noFilterResults' => '일치하는 연결 없음',
 			'meta.searchRules' => '규칙 검색 (유형/페이로드/프록시)',
-			'meta.rules' => '규칙',
+			'meta.rules' => '분류 규칙',
 			'meta.clear' => '지우기',
 			'meta.copySuccess' => '복사되었습니다',
 			'meta.alwayOnVPN' => '상시 연결',
@@ -926,22 +926,22 @@ extension on TranslationsKo {
 			'meta.fileNotExist' => ({required Object p}) => '파일이 존재하지 않습니다: ${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => '유효하지 않은 파일 형식: ${p}',
 			'meta.uwpExemption' => 'UWP 네트워크 격리 면제',
-			'meta.getProfile' => '프로필 가져오기',
-			'meta.buyProfile' => '프로필 구매',
-			'meta.addProfile' => '프로필 추가',
-			'meta.myProfiles' => '내 프로필',
-			'meta.profileEdit' => '프로필 편집',
+			'meta.getProfile' => '구독 가져오기',
+			'meta.buyProfile' => '구독 구매',
+			'meta.addProfile' => '구독 추가',
+			'meta.myProfiles' => '구독 설정',
+			'meta.profileEdit' => '구독 설정 편집',
 			'meta.profileNeedActive' => '먼저 이 프로필을 현재 프로필로 설정한 뒤 연결/재연결하세요',
 			'meta.profileDownloadBackupChannel' => '백업 다운로드 채널 사용',
 			'meta.profileDownloadBackupChannelTips' => 'Wmimo에서 제공하는 프록시 다운로드 채널(어떤 정보도 저장하지 않음)',
 			'meta.profileEditReloadAfterProfileUpdate' => '프로필 업데이트 후 다시 로드',
 			'meta.profileRulesAppendApplePush' => 'Apple 푸시 알림 규칙 추가',
 			'meta.profileRulesAppendProxyTips' => '규칙은 원본 설정의 [proxy-groups]에서 [url-test] 또는 [select] 유형의 첫 번째 프록시로 자동 설정됩니다',
-			'meta.profileImport' => '프로필 파일 가져오기',
-			'meta.profileAddUrlOrContent' => '프로필 링크 추가',
-			'meta.profileUrlOrContent' => 'Clash 설정 링크',
-			'meta.profileUrlOrContentHit' => 'Clash 설정 링크 [필수]',
-			'meta.profileUrlOrContentCannotEmpty' => '프로필 링크는 비워둘 수 없습니다',
+			'meta.profileImport' => '설정 파일 가져오기',
+			'meta.profileAddUrlOrContent' => '구독 링크 추가',
+			'meta.profileUrlOrContent' => '구독 링크 / 노드 내용',
+			'meta.profileUrlOrContentHit' => '구독 링크 또는 설정 내용 [필수]',
+			'meta.profileUrlOrContentCannotEmpty' => '구독 링크 또는 내용은 비워 둘 수 없습니다',
 			'meta.overview' => '개요',
 			'meta.trafficStats' => '트래픽 통계',
 			'meta.realtimeMonitor' => '실시간 모니터링',
@@ -964,14 +964,14 @@ extension on TranslationsKo {
 			'meta.editYamlConfig' => 'YAML 설정 편집',
 			'meta.copySubscriptionUrl' => '구독 URL 복사',
 			'meta.qrCode' => 'QR 코드',
-			'meta.deleteProfile' => '프로필 삭제',
-			'meta.noProfilesYet' => '구독 프로필이 없습니다',
-			'meta.addProfilePrompt' => '오른쪽 상단의 + 를 클릭하여 구독 URL을 추가하거나 로컬 파일을 가져오세요',
+			'meta.deleteProfile' => '설정 삭제',
+			'meta.noProfilesYet' => '등록된 구독 설정이 없습니다',
+			'meta.addProfilePrompt' => '오른쪽 상단 + 를 눌러 링크 추가 또는 파일 가져오기',
 			'meta.subscriptionUrlCopied' => '구독 URL이 클립보드에 복사되었습니다',
 			'meta.autoGroupTip' => ({required Object group, required Object type}) => '「${group}」은(는) ${type} 자동 정책 그룹으로 지연 시간/가용성에 따라 노드가 자동 선택됩니다. 수동으로 선택하려면 \'노드 선택\' 그룹에서 전환하세요.',
 			'meta.switchNodeFailed' => ({required Object p}) => '노드 전환 실패: ${p}',
 			'meta.nodeSelected' => ({required Object p}) => '선택된 노드: ${p}',
-			'meta.startingCoreAndTesting' => '코어를 시작하고 지연 시간을 테스트하는 중...',
+			'meta.startingCoreAndTesting' => '코어를 시작하고 지연 속도를 측정하는 중...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} 분',
 			'meta.chartUpload' => '업로드',
 			'meta.chartDownload' => '다운로드',
@@ -993,8 +993,8 @@ extension on TranslationsKo {
 			'meta.searchLogsHint' => ' (IP, 도메인, 규칙, 오류...)',
 			'meta.offlinePreviewPrompt' => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.',
 			'meta.manualSelect' => '수동 선택',
-			'meta.autoSelect' => '자동',
-			'meta.speedTestGroup' => '그룹 지연 테스트',
+			'meta.autoSelect' => '자동 최적화',
+			'meta.speedTestGroup' => '그룹 속도 테스트',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

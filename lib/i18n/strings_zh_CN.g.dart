@@ -244,7 +244,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get timeout => '超时';
 	@override String get timeoutDuration => '超时时长';
 	@override String get latency => '延迟';
-	@override String get latencyTest => '延迟检测';
+	@override String get latencyTest => '延迟测速';
 	@override String get networkCheck => '网络检测';
 	@override String get language => '语言';
 	@override String get next => '下一步';
@@ -285,10 +285,10 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get noOverwrite => '不覆写';
 	@override String get overwriteSettings => '覆写设置';
 	@override String get diversionTemplates => '分流模板';
-	@override String get ruleProviders => '规则提供者';
+	@override String get ruleProviders => '规则集 (RuleSet)';
 	@override String get ruleTemplates => '规则模板';
-	@override String get proxyGroupsTemplates => '代理组模板';
-	@override String get proxyGroups => '代理组';
+	@override String get proxyGroupsTemplates => '策略组模板';
+	@override String get proxyGroups => '策略组';
 	@override String get proxyNodeList => '代理节点列表';
 	@override String proxyNodeFailure({required Object p}) => '下列代理节点已失效,已自动移除:${p}';
 	@override String get externalController => '外部控制';
@@ -359,8 +359,8 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get termOfUse => '使用条款';
 	@override String get privacyPolicy => '隐私政策';
 	@override String get log => '日志';
-	@override String get coreLog => '日志';
-	@override String get core => '核心';
+	@override String get coreLog => '内核日志';
+	@override String get core => '内核';
 	@override String get help => '帮助';
 	@override String get tutorial => '使用教程';
 	@override String get board => '面板';
@@ -372,7 +372,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get searchConnections => '搜索连接 (域名/IP/规则/进程)';
 	@override String get noFilterResults => '没有匹配的连接';
 	@override String get searchRules => '搜索规则 (类型/特征/目标代理)';
-	@override String get rules => '规则';
+	@override String get rules => '分流规则';
 	@override String get clear => '清除';
 	@override String get copySuccess => '复制成功';
 	@override String get alwayOnVPN => '始终开启连接';
@@ -409,9 +409,9 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get port => '端口';
 	@override String get donate => '捐助';
 	@override String get setting => '设置';
-	@override String get settingCore => '核心设置';
-	@override String get settingApp => '设置';
-	@override String get coreOverwrite => '核心覆写';
+	@override String get settingCore => '内核设置';
+	@override String get settingApp => '应用设置';
+	@override String get coreOverwrite => '内核覆写';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
 	@override String get lanSync => '局域网同步';
@@ -426,11 +426,11 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String fileNotExist({required Object p}) => '文件不存在:${p}';
 	@override String fileTypeInvalid({required Object p}) => '无效的文件类型:${p}';
 	@override String get uwpExemption => 'UWP网络隔离豁免';
-	@override String get getProfile => '获取配置';
-	@override String get buyProfile => '购买配置';
-	@override String get addProfile => '添加配置';
-	@override String get myProfiles => '订阅';
-	@override String get profileEdit => '编辑配置';
+	@override String get getProfile => '获取订阅';
+	@override String get buyProfile => '购买订阅';
+	@override String get addProfile => '添加订阅';
+	@override String get myProfiles => '订阅配置';
+	@override String get profileEdit => '编辑订阅配置';
 	@override String get profileNeedActive => '请先将本配置设置为当前配置,并开启连接/重新连接';
 	@override String get profileDownloadBackupChannel => '启用备用下载通道';
 	@override String get profileDownloadBackupChannelTips => 'Wmimo提供的代理下载通道(不存储任何信息)';
@@ -438,10 +438,10 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get profileRulesAppendApplePush => '附加 Apple 推送通知规则';
 	@override String get profileRulesAppendProxyTips => '规则将自动设置为原始配置里[proxy-groups]中的第一个类型为[url-test]或[select]的代理';
 	@override String get profileImport => '导入配置文件';
-	@override String get profileAddUrlOrContent => '添加配置链接';
-	@override String get profileUrlOrContent => 'Clash配置链接';
-	@override String get profileUrlOrContentHit => 'Clash配置链接[必填]';
-	@override String get profileUrlOrContentCannotEmpty => '配置链接不能为空';
+	@override String get profileAddUrlOrContent => '添加订阅链接';
+	@override String get profileUrlOrContent => '订阅链接 / 节点内容';
+	@override String get profileUrlOrContentHit => '订阅链接或配置内容 [必填]';
+	@override String get profileUrlOrContentCannotEmpty => '订阅链接或内容不能为空';
 	@override String get overview => '首页';
 	@override String get trafficStats => '流量统计';
 	@override String get realtimeMonitor => '实时监控';
@@ -471,7 +471,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String autoGroupTip({required Object group, required Object type}) => '「${group}」属于 ${type} 自动策略组，由系统按延迟/可用性自动优选节点。如需自选节点，请在「节点选择」等手动策略组中切换。';
 	@override String switchNodeFailed({required Object p}) => '切换节点失败: ${p}';
 	@override String nodeSelected({required Object p}) => '已选择节点: ${p}';
-	@override String get startingCoreAndTesting => '正在启动代理核心并测速...';
+	@override String get startingCoreAndTesting => '正在启动代理内核并测速...';
 	@override String chartMinutes({required Object p}) => '${p} 分钟';
 	@override String get chartUpload => '上传';
 	@override String get chartDownload => '下载';
@@ -492,8 +492,8 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get noLogsPrompt => '暂无日志，启动代理后将实时捕获核心日志';
 	@override String get searchLogsHint => ' (IP, 域名, 规则, 错误...)';
 	@override String get offlinePreviewPrompt => '离线配置预览中，开启代理后可进行分流与节点测速';
-	@override String get manualSelect => '手动切换';
-	@override String get autoSelect => '自动';
+	@override String get manualSelect => '手动选择';
+	@override String get autoSelect => '自动优选';
 	@override String get speedTestGroup => '策略组测速';
 }
 
@@ -600,11 +600,11 @@ class Translations$main$tray$zh_CN implements Translations$main$tray$en {
 	// Translations
 	@override String get menuOpen => '打开';
 	@override String get menuExit => '退出';
-	@override String get coreDisconnected => 'Wmimo · 核心未连接';
-	@override String get coreRunning => 'Wmimo · 核心运行中';
+	@override String get coreDisconnected => 'Wmimo · 内核未运行';
+	@override String get coreRunning => 'Wmimo · 内核运行中';
 	@override String get startProxy => '启动代理连接';
 	@override String get stopProxy => '断开代理连接';
-	@override String get restartCore => '重启代理核心';
+	@override String get restartCore => '重启代理内核';
 	@override String get systemProxyItem => '系统代理';
 	@override String get tunModeItem => 'TUN 模式';
 	@override String get outboundMode => '出站模式';
@@ -612,7 +612,7 @@ class Translations$main$tray$zh_CN implements Translations$main$tray$en {
 	@override String get modeGlobal => '全局代理';
 	@override String get modeDirect => '直接连接';
 	@override String get profilesMenu => '订阅配置';
-	@override String get updateAllProfiles => '更新所有订阅配置';
+	@override String get updateAllProfiles => '更新全部订阅配置';
 	@override String get proxyNodes => '代理节点';
 	@override String get tools => '实用工具';
 	@override String get copyProxyCmd => '复制终端代理命令 (CMD / Bash)';
@@ -680,11 +680,11 @@ extension on TranslationsZhCn {
 			'loginScreen.providerDisclaimer' => '免责声明:${_root.loginScreen.provider}为三方服务,与本App无关',
 			'main.tray.menuOpen' => '打开',
 			'main.tray.menuExit' => '退出',
-			'main.tray.coreDisconnected' => 'Wmimo · 核心未连接',
-			'main.tray.coreRunning' => 'Wmimo · 核心运行中',
+			'main.tray.coreDisconnected' => 'Wmimo · 内核未运行',
+			'main.tray.coreRunning' => 'Wmimo · 内核运行中',
 			'main.tray.startProxy' => '启动代理连接',
 			'main.tray.stopProxy' => '断开代理连接',
-			'main.tray.restartCore' => '重启代理核心',
+			'main.tray.restartCore' => '重启代理内核',
 			'main.tray.systemProxyItem' => '系统代理',
 			'main.tray.tunModeItem' => 'TUN 模式',
 			'main.tray.outboundMode' => '出站模式',
@@ -692,7 +692,7 @@ extension on TranslationsZhCn {
 			'main.tray.modeGlobal' => '全局代理',
 			'main.tray.modeDirect' => '直接连接',
 			'main.tray.profilesMenu' => '订阅配置',
-			'main.tray.updateAllProfiles' => '更新所有订阅配置',
+			'main.tray.updateAllProfiles' => '更新全部订阅配置',
 			'main.tray.proxyNodes' => '代理节点',
 			'main.tray.tools' => '实用工具',
 			'main.tray.copyProxyCmd' => '复制终端代理命令 (CMD / Bash)',
@@ -744,7 +744,7 @@ extension on TranslationsZhCn {
 			'meta.timeout' => '超时',
 			'meta.timeoutDuration' => '超时时长',
 			'meta.latency' => '延迟',
-			'meta.latencyTest' => '延迟检测',
+			'meta.latencyTest' => '延迟测速',
 			'meta.networkCheck' => '网络检测',
 			'meta.language' => '语言',
 			'meta.next' => '下一步',
@@ -785,10 +785,10 @@ extension on TranslationsZhCn {
 			'meta.noOverwrite' => '不覆写',
 			'meta.overwriteSettings' => '覆写设置',
 			'meta.diversionTemplates' => '分流模板',
-			'meta.ruleProviders' => '规则提供者',
+			'meta.ruleProviders' => '规则集 (RuleSet)',
 			'meta.ruleTemplates' => '规则模板',
-			'meta.proxyGroupsTemplates' => '代理组模板',
-			'meta.proxyGroups' => '代理组',
+			'meta.proxyGroupsTemplates' => '策略组模板',
+			'meta.proxyGroups' => '策略组',
 			'meta.proxyNodeList' => '代理节点列表',
 			'meta.proxyNodeFailure' => ({required Object p}) => '下列代理节点已失效,已自动移除:${p}',
 			'meta.externalController' => '外部控制',
@@ -859,8 +859,8 @@ extension on TranslationsZhCn {
 			'meta.termOfUse' => '使用条款',
 			'meta.privacyPolicy' => '隐私政策',
 			'meta.log' => '日志',
-			'meta.coreLog' => '日志',
-			'meta.core' => '核心',
+			'meta.coreLog' => '内核日志',
+			'meta.core' => '内核',
 			'meta.help' => '帮助',
 			'meta.tutorial' => '使用教程',
 			'meta.board' => '面板',
@@ -872,7 +872,7 @@ extension on TranslationsZhCn {
 			'meta.searchConnections' => '搜索连接 (域名/IP/规则/进程)',
 			'meta.noFilterResults' => '没有匹配的连接',
 			'meta.searchRules' => '搜索规则 (类型/特征/目标代理)',
-			'meta.rules' => '规则',
+			'meta.rules' => '分流规则',
 			'meta.clear' => '清除',
 			'meta.copySuccess' => '复制成功',
 			'meta.alwayOnVPN' => '始终开启连接',
@@ -909,9 +909,9 @@ extension on TranslationsZhCn {
 			'meta.port' => '端口',
 			'meta.donate' => '捐助',
 			'meta.setting' => '设置',
-			'meta.settingCore' => '核心设置',
-			'meta.settingApp' => '设置',
-			'meta.coreOverwrite' => '核心覆写',
+			'meta.settingCore' => '内核设置',
+			'meta.settingApp' => '应用设置',
+			'meta.coreOverwrite' => '内核覆写',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
 			'meta.lanSync' => '局域网同步',
@@ -926,11 +926,11 @@ extension on TranslationsZhCn {
 			'meta.fileNotExist' => ({required Object p}) => '文件不存在:${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => '无效的文件类型:${p}',
 			'meta.uwpExemption' => 'UWP网络隔离豁免',
-			'meta.getProfile' => '获取配置',
-			'meta.buyProfile' => '购买配置',
-			'meta.addProfile' => '添加配置',
-			'meta.myProfiles' => '订阅',
-			'meta.profileEdit' => '编辑配置',
+			'meta.getProfile' => '获取订阅',
+			'meta.buyProfile' => '购买订阅',
+			'meta.addProfile' => '添加订阅',
+			'meta.myProfiles' => '订阅配置',
+			'meta.profileEdit' => '编辑订阅配置',
 			'meta.profileNeedActive' => '请先将本配置设置为当前配置,并开启连接/重新连接',
 			'meta.profileDownloadBackupChannel' => '启用备用下载通道',
 			'meta.profileDownloadBackupChannelTips' => 'Wmimo提供的代理下载通道(不存储任何信息)',
@@ -938,10 +938,10 @@ extension on TranslationsZhCn {
 			'meta.profileRulesAppendApplePush' => '附加 Apple 推送通知规则',
 			'meta.profileRulesAppendProxyTips' => '规则将自动设置为原始配置里[proxy-groups]中的第一个类型为[url-test]或[select]的代理',
 			'meta.profileImport' => '导入配置文件',
-			'meta.profileAddUrlOrContent' => '添加配置链接',
-			'meta.profileUrlOrContent' => 'Clash配置链接',
-			'meta.profileUrlOrContentHit' => 'Clash配置链接[必填]',
-			'meta.profileUrlOrContentCannotEmpty' => '配置链接不能为空',
+			'meta.profileAddUrlOrContent' => '添加订阅链接',
+			'meta.profileUrlOrContent' => '订阅链接 / 节点内容',
+			'meta.profileUrlOrContentHit' => '订阅链接或配置内容 [必填]',
+			'meta.profileUrlOrContentCannotEmpty' => '订阅链接或内容不能为空',
 			'meta.overview' => '首页',
 			'meta.trafficStats' => '流量统计',
 			'meta.realtimeMonitor' => '实时监控',
@@ -971,7 +971,7 @@ extension on TranslationsZhCn {
 			'meta.autoGroupTip' => ({required Object group, required Object type}) => '「${group}」属于 ${type} 自动策略组，由系统按延迟/可用性自动优选节点。如需自选节点，请在「节点选择」等手动策略组中切换。',
 			'meta.switchNodeFailed' => ({required Object p}) => '切换节点失败: ${p}',
 			'meta.nodeSelected' => ({required Object p}) => '已选择节点: ${p}',
-			'meta.startingCoreAndTesting' => '正在启动代理核心并测速...',
+			'meta.startingCoreAndTesting' => '正在启动代理内核并测速...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} 分钟',
 			'meta.chartUpload' => '上传',
 			'meta.chartDownload' => '下载',
@@ -992,8 +992,8 @@ extension on TranslationsZhCn {
 			'meta.noLogsPrompt' => '暂无日志，启动代理后将实时捕获核心日志',
 			'meta.searchLogsHint' => ' (IP, 域名, 规则, 错误...)',
 			'meta.offlinePreviewPrompt' => '离线配置预览中，开启代理后可进行分流与节点测速',
-			'meta.manualSelect' => '手动切换',
-			'meta.autoSelect' => '自动',
+			'meta.manualSelect' => '手动选择',
+			'meta.autoSelect' => '自动优选',
 			'meta.speedTestGroup' => '策略组测速',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',

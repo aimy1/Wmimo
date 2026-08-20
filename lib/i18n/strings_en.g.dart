@@ -447,8 +447,8 @@ class Translations$meta$en {
 	/// en: 'Latency'
 	String get latency => 'Latency';
 
-	/// en: 'Latency Checks'
-	String get latencyTest => 'Latency Checks';
+	/// en: 'Latency Test'
+	String get latencyTest => 'Latency Test';
 
 	/// en: 'Network Check'
 	String get networkCheck => 'Network Check';
@@ -567,20 +567,20 @@ class Translations$meta$en {
 	/// en: 'Overwrite Settings'
 	String get overwriteSettings => 'Overwrite Settings';
 
-	/// en: 'Diversion Template'
-	String get diversionTemplates => 'Diversion Template';
+	/// en: 'Routing Templates'
+	String get diversionTemplates => 'Routing Templates';
 
-	/// en: 'Rule Providers'
-	String get ruleProviders => 'Rule Providers';
+	/// en: 'Rule Sets (RuleSet)'
+	String get ruleProviders => 'Rule Sets (RuleSet)';
 
 	/// en: 'Rule Templates'
 	String get ruleTemplates => 'Rule Templates';
 
-	/// en: 'Proxy Group Template'
-	String get proxyGroupsTemplates => 'Proxy Group Template';
+	/// en: 'Group Templates'
+	String get proxyGroupsTemplates => 'Group Templates';
 
-	/// en: 'Proxy Group'
-	String get proxyGroups => 'Proxy Group';
+	/// en: 'Proxy Groups'
+	String get proxyGroups => 'Proxy Groups';
 
 	/// en: 'Proxy Node list'
 	String get proxyNodeList => 'Proxy Node list';
@@ -792,8 +792,8 @@ class Translations$meta$en {
 	/// en: 'Log'
 	String get log => 'Log';
 
-	/// en: 'Core Log'
-	String get coreLog => 'Core Log';
+	/// en: 'Core Logs'
+	String get coreLog => 'Core Logs';
 
 	/// en: 'Core'
 	String get core => 'Core';
@@ -831,8 +831,8 @@ class Translations$meta$en {
 	/// en: 'Search rules (Type/Payload/Proxy)'
 	String get searchRules => 'Search rules (Type/Payload/Proxy)';
 
-	/// en: 'Rules'
-	String get rules => 'Rules';
+	/// en: 'Routing Rules'
+	String get rules => 'Routing Rules';
 
 	/// en: 'Clear'
 	String get clear => 'Clear';
@@ -993,20 +993,20 @@ class Translations$meta$en {
 	/// en: 'UWP Network Isolation Exemptions'
 	String get uwpExemption => 'UWP Network Isolation Exemptions';
 
-	/// en: 'Get Profile'
-	String get getProfile => 'Get Profile';
+	/// en: 'Get Subscription'
+	String get getProfile => 'Get Subscription';
 
-	/// en: 'Buy Profile'
-	String get buyProfile => 'Buy Profile';
+	/// en: 'Buy Subscription'
+	String get buyProfile => 'Buy Subscription';
 
-	/// en: 'Add Profile'
-	String get addProfile => 'Add Profile';
+	/// en: 'Add Subscription'
+	String get addProfile => 'Add Subscription';
 
-	/// en: 'My Profiles'
-	String get myProfiles => 'My Profiles';
+	/// en: 'Subscriptions'
+	String get myProfiles => 'Subscriptions';
 
-	/// en: 'Profile Edit'
-	String get profileEdit => 'Profile Edit';
+	/// en: 'Edit Profile'
+	String get profileEdit => 'Edit Profile';
 
 	/// en: 'Please set this profile as the current profile first, then start/reconnect'
 	String get profileNeedActive => 'Please set this profile as the current profile first, then start/reconnect';
@@ -1026,20 +1026,20 @@ class Translations$meta$en {
 	/// en: 'Rules will be automatically set to the first proxy in [proxy-groups] of the original config with type [url-test] or [select]'
 	String get profileRulesAppendProxyTips => 'Rules will be automatically set to the first proxy in [proxy-groups] of the original config with type [url-test] or [select]';
 
-	/// en: 'Import Profile File'
-	String get profileImport => 'Import Profile File';
+	/// en: 'Import Profile'
+	String get profileImport => 'Import Profile';
 
-	/// en: 'Add Profile Link'
-	String get profileAddUrlOrContent => 'Add Profile Link';
+	/// en: 'Add Subscription URL'
+	String get profileAddUrlOrContent => 'Add Subscription URL';
 
-	/// en: 'Clash Profile Link'
-	String get profileUrlOrContent => 'Clash Profile Link';
+	/// en: 'Subscription URL / Content'
+	String get profileUrlOrContent => 'Subscription URL / Content';
 
-	/// en: 'Clash Profile Link [Required]'
-	String get profileUrlOrContentHit => 'Clash Profile Link [Required]';
+	/// en: 'Subscription URL or Content [Required]'
+	String get profileUrlOrContentHit => 'Subscription URL or Content [Required]';
 
-	/// en: 'Profile Link can not be empty'
-	String get profileUrlOrContentCannotEmpty => 'Profile Link can not be empty';
+	/// en: 'Subscription URL or content cannot be empty'
+	String get profileUrlOrContentCannotEmpty => 'Subscription URL or content cannot be empty';
 
 	/// en: 'Overview'
 	String get overview => 'Overview';
@@ -1110,11 +1110,11 @@ class Translations$meta$en {
 	/// en: 'Delete Profile'
 	String get deleteProfile => 'Delete Profile';
 
-	/// en: 'No profiles yet'
-	String get noProfilesYet => 'No profiles yet';
+	/// en: 'No Subscriptions Yet'
+	String get noProfilesYet => 'No Subscriptions Yet';
 
-	/// en: 'Click + in the top right to add a subscription URL or import a local file'
-	String get addProfilePrompt => 'Click + in the top right to add a subscription URL or import a local file';
+	/// en: 'Click + in the top right to add a URL or import a file'
+	String get addProfilePrompt => 'Click + in the top right to add a URL or import a file';
 
 	/// en: 'Subscription URL copied to clipboard'
 	String get subscriptionUrlCopied => 'Subscription URL copied to clipboard';
@@ -1194,8 +1194,8 @@ class Translations$meta$en {
 	/// en: 'Manual'
 	String get manualSelect => 'Manual';
 
-	/// en: 'Auto'
-	String get autoSelect => 'Auto';
+	/// en: 'Auto Select'
+	String get autoSelect => 'Auto Select';
 
 	/// en: 'Test Group Latency'
 	String get speedTestGroup => 'Test Group Latency';
@@ -1389,8 +1389,8 @@ class Translations$main$tray$en {
 	/// en: 'Exit'
 	String get menuExit => 'Exit';
 
-	/// en: 'Wmimo · Core Disconnected'
-	String get coreDisconnected => 'Wmimo · Core Disconnected';
+	/// en: 'Wmimo · Core Not Running'
+	String get coreDisconnected => 'Wmimo · Core Not Running';
 
 	/// en: 'Wmimo · Core Running'
 	String get coreRunning => 'Wmimo · Core Running';
@@ -1401,8 +1401,8 @@ class Translations$main$tray$en {
 	/// en: 'Disconnect Proxy'
 	String get stopProxy => 'Disconnect Proxy';
 
-	/// en: 'Restart Core'
-	String get restartCore => 'Restart Core';
+	/// en: 'Restart Proxy Core'
+	String get restartCore => 'Restart Proxy Core';
 
 	/// en: 'System Proxy'
 	String get systemProxyItem => 'System Proxy';
@@ -1422,11 +1422,11 @@ class Translations$main$tray$en {
 	/// en: 'Direct Connection'
 	String get modeDirect => 'Direct Connection';
 
-	/// en: 'Profiles'
-	String get profilesMenu => 'Profiles';
+	/// en: 'Subscriptions'
+	String get profilesMenu => 'Subscriptions';
 
-	/// en: 'Update All Profiles'
-	String get updateAllProfiles => 'Update All Profiles';
+	/// en: 'Update All Subscriptions'
+	String get updateAllProfiles => 'Update All Subscriptions';
 
 	/// en: 'Proxy Nodes'
 	String get proxyNodes => 'Proxy Nodes';
@@ -1504,19 +1504,19 @@ extension on Translations {
 			'loginScreen.providerDisclaimer' => 'Disclaimer: ${_root.loginScreen.provider} is a third-party service and is not affiliated with this app',
 			'main.tray.menuOpen' => 'Open',
 			'main.tray.menuExit' => 'Exit',
-			'main.tray.coreDisconnected' => 'Wmimo · Core Disconnected',
+			'main.tray.coreDisconnected' => 'Wmimo · Core Not Running',
 			'main.tray.coreRunning' => 'Wmimo · Core Running',
 			'main.tray.startProxy' => 'Start Proxy Connection',
 			'main.tray.stopProxy' => 'Disconnect Proxy',
-			'main.tray.restartCore' => 'Restart Core',
+			'main.tray.restartCore' => 'Restart Proxy Core',
 			'main.tray.systemProxyItem' => 'System Proxy',
 			'main.tray.tunModeItem' => 'TUN Mode',
 			'main.tray.outboundMode' => 'Outbound Mode',
 			'main.tray.modeRule' => 'Rule Routing',
 			'main.tray.modeGlobal' => 'Global Proxy',
 			'main.tray.modeDirect' => 'Direct Connection',
-			'main.tray.profilesMenu' => 'Profiles',
-			'main.tray.updateAllProfiles' => 'Update All Profiles',
+			'main.tray.profilesMenu' => 'Subscriptions',
+			'main.tray.updateAllProfiles' => 'Update All Subscriptions',
 			'main.tray.proxyNodes' => 'Proxy Nodes',
 			'main.tray.tools' => 'Tools',
 			'main.tray.copyProxyCmd' => 'Copy Terminal Proxy Command (CMD / Bash)',
@@ -1568,7 +1568,7 @@ extension on Translations {
 			'meta.timeout' => 'Timeout',
 			'meta.timeoutDuration' => 'Timeout Duration',
 			'meta.latency' => 'Latency',
-			'meta.latencyTest' => 'Latency Checks',
+			'meta.latencyTest' => 'Latency Test',
 			'meta.networkCheck' => 'Network Check',
 			'meta.language' => 'Language',
 			'meta.next' => 'Next',
@@ -1608,11 +1608,11 @@ extension on Translations {
 			'meta.overwriteTips' => 'Original Profile <- Custom Overwrite <- App Overwrite',
 			'meta.noOverwrite' => 'Do not overwrite',
 			'meta.overwriteSettings' => 'Overwrite Settings',
-			'meta.diversionTemplates' => 'Diversion Template',
-			'meta.ruleProviders' => 'Rule Providers',
+			'meta.diversionTemplates' => 'Routing Templates',
+			'meta.ruleProviders' => 'Rule Sets (RuleSet)',
 			'meta.ruleTemplates' => 'Rule Templates',
-			'meta.proxyGroupsTemplates' => 'Proxy Group Template',
-			'meta.proxyGroups' => 'Proxy Group',
+			'meta.proxyGroupsTemplates' => 'Group Templates',
+			'meta.proxyGroups' => 'Proxy Groups',
 			'meta.proxyNodeList' => 'Proxy Node list',
 			'meta.proxyNodeFailure' => ({required Object p}) => 'The following proxy nodes have expired and have been automatically removed: ${p}',
 			'meta.externalController' => 'External Controller',
@@ -1683,7 +1683,7 @@ extension on Translations {
 			'meta.termOfUse' => 'Terms of Service',
 			'meta.privacyPolicy' => 'Privacy & Policy',
 			'meta.log' => 'Log',
-			'meta.coreLog' => 'Core Log',
+			'meta.coreLog' => 'Core Logs',
 			'meta.core' => 'Core',
 			'meta.help' => 'Help',
 			'meta.tutorial' => 'Tutorial',
@@ -1696,7 +1696,7 @@ extension on Translations {
 			'meta.searchConnections' => 'Search connections (Domain/IP/Rule/Process)',
 			'meta.noFilterResults' => 'No matching connections',
 			'meta.searchRules' => 'Search rules (Type/Payload/Proxy)',
-			'meta.rules' => 'Rules',
+			'meta.rules' => 'Routing Rules',
 			'meta.clear' => 'Clear',
 			'meta.copySuccess' => 'Copied to clipboard',
 			'meta.alwayOnVPN' => 'Always-on Connection',
@@ -1750,22 +1750,22 @@ extension on Translations {
 			'meta.fileNotExist' => ({required Object p}) => 'File does not exist:${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => 'Invalid file type:${p}',
 			'meta.uwpExemption' => 'UWP Network Isolation Exemptions',
-			'meta.getProfile' => 'Get Profile',
-			'meta.buyProfile' => 'Buy Profile',
-			'meta.addProfile' => 'Add Profile',
-			'meta.myProfiles' => 'My Profiles',
-			'meta.profileEdit' => 'Profile Edit',
+			'meta.getProfile' => 'Get Subscription',
+			'meta.buyProfile' => 'Buy Subscription',
+			'meta.addProfile' => 'Add Subscription',
+			'meta.myProfiles' => 'Subscriptions',
+			'meta.profileEdit' => 'Edit Profile',
 			'meta.profileNeedActive' => 'Please set this profile as the current profile first, then start/reconnect',
 			'meta.profileDownloadBackupChannel' => 'Enable backup download channel',
 			'meta.profileDownloadBackupChannelTips' => 'Proxy download channel provided by Wmimo (no information is stored)',
 			'meta.profileEditReloadAfterProfileUpdate' => 'Reload after Profile update',
 			'meta.profileRulesAppendApplePush' => 'Append Apple Push Notification rules',
 			'meta.profileRulesAppendProxyTips' => 'Rules will be automatically set to the first proxy in [proxy-groups] of the original config with type [url-test] or [select]',
-			'meta.profileImport' => 'Import Profile File',
-			'meta.profileAddUrlOrContent' => 'Add Profile Link',
-			'meta.profileUrlOrContent' => 'Clash Profile Link',
-			'meta.profileUrlOrContentHit' => 'Clash Profile Link [Required]',
-			'meta.profileUrlOrContentCannotEmpty' => 'Profile Link can not be empty',
+			'meta.profileImport' => 'Import Profile',
+			'meta.profileAddUrlOrContent' => 'Add Subscription URL',
+			'meta.profileUrlOrContent' => 'Subscription URL / Content',
+			'meta.profileUrlOrContentHit' => 'Subscription URL or Content [Required]',
+			'meta.profileUrlOrContentCannotEmpty' => 'Subscription URL or content cannot be empty',
 			'meta.overview' => 'Overview',
 			'meta.trafficStats' => 'Traffic Statistics',
 			'meta.realtimeMonitor' => 'Real-time Monitor',
@@ -1789,8 +1789,8 @@ extension on Translations {
 			'meta.copySubscriptionUrl' => 'Copy Subscription URL',
 			'meta.qrCode' => 'QR Code',
 			'meta.deleteProfile' => 'Delete Profile',
-			'meta.noProfilesYet' => 'No profiles yet',
-			'meta.addProfilePrompt' => 'Click + in the top right to add a subscription URL or import a local file',
+			'meta.noProfilesYet' => 'No Subscriptions Yet',
+			'meta.addProfilePrompt' => 'Click + in the top right to add a URL or import a file',
 			'meta.subscriptionUrlCopied' => 'Subscription URL copied to clipboard',
 			'meta.autoGroupTip' => ({required Object group, required Object type}) => '[${group}] is an auto policy group (${type}), which automatically selects nodes based on latency/availability. To manually select a node, please switch in manual policy groups.',
 			'meta.switchNodeFailed' => ({required Object p}) => 'Failed to switch node: ${p}',
@@ -1817,7 +1817,7 @@ extension on Translations {
 			'meta.searchLogsHint' => ' (IP, Domain, Rule, Error...)',
 			'meta.offlinePreviewPrompt' => 'Offline preview mode. Start proxy to enable routing and latency testing.',
 			'meta.manualSelect' => 'Manual',
-			'meta.autoSelect' => 'Auto',
+			'meta.autoSelect' => 'Auto Select',
 			'meta.speedTestGroup' => 'Test Group Latency',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',

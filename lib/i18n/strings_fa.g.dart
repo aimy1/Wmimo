@@ -244,7 +244,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get timeout => 'تایم اوت';
 	@override String get timeoutDuration => 'مدت زمان وقفه';
 	@override String get latency => 'تاخیر';
-	@override String get latencyTest => 'بررسی تاخیر';
+	@override String get latencyTest => 'تست تأخیر و سرعت';
 	@override String get networkCheck => 'بررسی شبکه';
 	@override String get language => 'زبان';
 	@override String get next => 'بعدی';
@@ -284,11 +284,11 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get overwriteTips => 'پیکربندی اصلی <- لغو سفارشی <- لغو برنامه';
 	@override String get noOverwrite => 'رونویسی نکنید';
 	@override String get overwriteSettings => 'لغو تنظیمات';
-	@override String get diversionTemplates => 'الگوی تریاژ';
-	@override String get ruleProviders => 'ارائه دهنده قانون';
+	@override String get diversionTemplates => 'الگوهای مسیریابی';
+	@override String get ruleProviders => 'مجموعه قوانین (RuleSet)';
 	@override String get ruleTemplates => 'الگوی قانون';
-	@override String get proxyGroupsTemplates => 'الگوی گروه نمایندگان';
-	@override String get proxyGroups => 'گروه نمایندگان';
+	@override String get proxyGroupsTemplates => 'الگوهای گروه‌ها';
+	@override String get proxyGroups => 'گروه‌های پروکسی';
 	@override String get proxyNodeList => 'فهرست گره‌های پروکسی';
 	@override String proxyNodeFailure({required Object p}) => 'گره‌های پروکسی زیر منقضی شده و به طور خودکار حذف شده‌اند: ${p}';
 	@override String get externalController => 'کنترل خارجی';
@@ -359,7 +359,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get termOfUse => 'شرایط استفاده';
 	@override String get privacyPolicy => 'سیاست حریم خصوصی';
 	@override String get log => 'ورود به سیستم';
-	@override String get coreLog => 'گزارش هسته';
+	@override String get coreLog => 'لاگ‌های هسته';
 	@override String get core => 'هسته';
 	@override String get help => 'کمک کند';
 	@override String get tutorial => 'آموزش';
@@ -372,7 +372,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get searchConnections => 'جستجوی اتصال‌ها (دامنه/IP/قاعده/پردازش)';
 	@override String get noFilterResults => 'اتصالی یافت نشد';
 	@override String get searchRules => 'جستجوی قوانین (نوع/محتوا/پروکسی)';
-	@override String get rules => 'قوانین';
+	@override String get rules => 'قوانین مسیریابی';
 	@override String get clear => 'پاک کردن';
 	@override String get copySuccess => 'کپی شد';
 	@override String get alwayOnVPN => 'اتصال همیشه باز';
@@ -409,9 +409,9 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get port => 'بندر';
 	@override String get donate => 'اهدا کنید';
 	@override String get setting => 'تنظیمات';
-	@override String get settingCore => 'تنظیمات اصلی';
+	@override String get settingCore => 'تنظیمات هسته';
 	@override String get settingApp => 'تنظیمات برنامه';
-	@override String get coreOverwrite => 'Core Override';
+	@override String get coreOverwrite => 'بازنویسی هسته';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
 	@override String get lanSync => 'LAN Sync';
@@ -426,22 +426,22 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String fileNotExist({required Object p}) => 'فایل وجود ندارد:${p}';
 	@override String fileTypeInvalid({required Object p}) => 'نوع فایل نامعتبر:${p}';
 	@override String get uwpExemption => 'معافیت جداسازی شبکه UWP';
-	@override String get getProfile => 'پیکربندی را دریافت کنید';
-	@override String get buyProfile => 'خرید پروفایل';
-	@override String get addProfile => 'افزودن پروفایل';
-	@override String get myProfiles => 'پروفایل‌ها';
-	@override String get profileEdit => 'ویرایش پروفایل';
+	@override String get getProfile => 'دریافت اشتراک';
+	@override String get buyProfile => 'خرید اشتراک';
+	@override String get addProfile => 'افزودن اشتراک';
+	@override String get myProfiles => 'اشتراک‌ها';
+	@override String get profileEdit => 'ویرایش اشتراک';
 	@override String get profileNeedActive => 'ابتدا این پروفایل را به‌عنوان پروفایل فعلی تنظیم کنید، سپس اتصال را فعال/دوباره متصل کنید';
 	@override String get profileDownloadBackupChannel => 'فعال‌سازی کانال دانلود پشتیبان';
 	@override String get profileDownloadBackupChannelTips => 'کانال دانلود پراکسی ارائه‌شده توسط Wmimo (هیچ اطلاعاتی ذخیره نمی‌شود)';
 	@override String get profileEditReloadAfterProfileUpdate => 'بارگذاری مجدد پس‌از به‌روزرسانی پروفایل';
 	@override String get profileRulesAppendApplePush => 'افزودن قوانین اعلان‌های Push اپل';
 	@override String get profileRulesAppendProxyTips => 'قوانین به‌صورت خودکار روی نخستین پراکسی با نوع [url-test] یا [select] در [proxy-groups] پیکربندی اصلی تنظیم می‌شوند';
-	@override String get profileImport => 'وارد‌کردن فایل پروفایل';
-	@override String get profileAddUrlOrContent => 'افزودن لینک پروفایل';
-	@override String get profileUrlOrContent => 'پیوند پیکربندی Clash';
-	@override String get profileUrlOrContentHit => 'پیوند پیکربندی Clash [الزامی]';
-	@override String get profileUrlOrContentCannotEmpty => 'لینک پروفایل نمی‌تواند خالی باشد';
+	@override String get profileImport => 'وارد کردن فایل پیکربندی';
+	@override String get profileAddUrlOrContent => 'افزودن لینک اشتراک';
+	@override String get profileUrlOrContent => 'لینک اشتراک / محتوا';
+	@override String get profileUrlOrContentHit => 'لینک اشتراک یا محتوا [الزامی]';
+	@override String get profileUrlOrContentCannotEmpty => 'لینک اشتراک نمی‌تواند خالی باشد';
 	@override String get overview => 'نمای کلی';
 	@override String get trafficStats => 'آمار ترافیک';
 	@override String get realtimeMonitor => 'نظارت زنده';
@@ -464,14 +464,14 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get editYamlConfig => 'ویرایش پیکربندی YAML';
 	@override String get copySubscriptionUrl => 'کپی پیوند اشتراک';
 	@override String get qrCode => 'کد QR';
-	@override String get deleteProfile => 'حذف پروفایل';
-	@override String get noProfilesYet => 'هنوز پروفایلی وجود ندارد';
-	@override String get addProfilePrompt => 'برای افزودن پیوند اشتراک یا وارد کردن فایل، روی + در بالا سمت راست کلیک کنید';
+	@override String get deleteProfile => 'حذف پیکربندی';
+	@override String get noProfilesYet => 'هنوز اشتراکی وجود ندارد';
+	@override String get addProfilePrompt => 'برای افزودن لینک یا وارد کردن فایل، روی + در بالا ضربه بزنید';
 	@override String get subscriptionUrlCopied => 'پیوند اشتراک در کلیپ‌بورد کپی شد';
 	@override String autoGroupTip({required Object group, required Object type}) => '«${group}» یک گروه سیاست خودکار (${type}) است. برای انتخاب دستی گره، لطفاً در گروه‌های دستی جابه‌جا شوید.';
 	@override String switchNodeFailed({required Object p}) => 'تغییر گره ناموفق بود: ${p}';
 	@override String nodeSelected({required Object p}) => 'گره انتخاب شده: ${p}';
-	@override String get startingCoreAndTesting => 'در حال راه‌اندازی هسته و تست تاخیر...';
+	@override String get startingCoreAndTesting => 'در حال شروع هسته و تست سرعت...';
 	@override String chartMinutes({required Object p}) => '${p} دقیقه';
 	@override String get chartUpload => 'آپلود';
 	@override String get chartDownload => 'دانلود';
@@ -492,9 +492,9 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get noLogsPrompt => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.';
 	@override String get searchLogsHint => ' (IP, دامنه, قانون, خطا...)';
 	@override String get offlinePreviewPrompt => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.';
-	@override String get manualSelect => 'دستی';
-	@override String get autoSelect => 'خودکار';
-	@override String get speedTestGroup => 'تست تأخیر گروه';
+	@override String get manualSelect => 'انتخاب دستی';
+	@override String get autoSelect => 'انتخاب خودکار';
+	@override String get speedTestGroup => 'تست سرعت گروه';
 }
 
 // Path: permission
@@ -601,23 +601,23 @@ class _Translations$main$tray$fa implements Translations$main$tray$en {
 	@override String get menuOpen => 'باز کردن';
 	@override String get menuExit => 'خروج';
 	@override String get coreDisconnected => 'Wmimo · هسته متصل نیست';
-	@override String get coreRunning => 'Wmimo · هسته در حال اجرا';
+	@override String get coreRunning => 'Wmimo · هسته در حال اجرا است';
 	@override String get startProxy => 'شروع اتصال پروکسی';
 	@override String get stopProxy => 'قطع اتصال پروکسی';
-	@override String get restartCore => 'راه‌اندازی مجدد هسته';
+	@override String get restartCore => 'راه‌اندازی مجدد هسته پروکسی';
 	@override String get systemProxyItem => 'پروکسی سیستم';
 	@override String get tunModeItem => 'حالت TUN';
 	@override String get outboundMode => 'حالت خروجی';
 	@override String get modeRule => 'مسیریابی بر اساس قانون';
 	@override String get modeGlobal => 'پروکسی سرتاسری';
 	@override String get modeDirect => 'اتصال مستقیم';
-	@override String get profilesMenu => 'پروفایل‌ها';
-	@override String get updateAllProfiles => 'به‌روزرسانی همه پروفایل‌ها';
+	@override String get profilesMenu => 'اشتراک‌ها';
+	@override String get updateAllProfiles => 'به‌روزرسانی همه اشتراک‌ها';
 	@override String get proxyNodes => 'گره‌های پروکسی';
 	@override String get tools => 'ابزارها';
 	@override String get copyProxyCmd => 'کپی دستور پروکسی ترمینال (CMD / Bash)';
-	@override String get delayTestAll => 'تست تاخیر همه گره‌ها';
-	@override String get openDashboard => 'باز کردن داشبورد';
+	@override String get delayTestAll => 'تست سرعت همه سرورها';
+	@override String get openDashboard => 'باز کردن کنترل پنل';
 }
 
 /// The flat map containing all translations for locale <fa>.
@@ -681,23 +681,23 @@ extension on TranslationsFa {
 			'main.tray.menuOpen' => 'باز کردن',
 			'main.tray.menuExit' => 'خروج',
 			'main.tray.coreDisconnected' => 'Wmimo · هسته متصل نیست',
-			'main.tray.coreRunning' => 'Wmimo · هسته در حال اجرا',
+			'main.tray.coreRunning' => 'Wmimo · هسته در حال اجرا است',
 			'main.tray.startProxy' => 'شروع اتصال پروکسی',
 			'main.tray.stopProxy' => 'قطع اتصال پروکسی',
-			'main.tray.restartCore' => 'راه‌اندازی مجدد هسته',
+			'main.tray.restartCore' => 'راه‌اندازی مجدد هسته پروکسی',
 			'main.tray.systemProxyItem' => 'پروکسی سیستم',
 			'main.tray.tunModeItem' => 'حالت TUN',
 			'main.tray.outboundMode' => 'حالت خروجی',
 			'main.tray.modeRule' => 'مسیریابی بر اساس قانون',
 			'main.tray.modeGlobal' => 'پروکسی سرتاسری',
 			'main.tray.modeDirect' => 'اتصال مستقیم',
-			'main.tray.profilesMenu' => 'پروفایل‌ها',
-			'main.tray.updateAllProfiles' => 'به‌روزرسانی همه پروفایل‌ها',
+			'main.tray.profilesMenu' => 'اشتراک‌ها',
+			'main.tray.updateAllProfiles' => 'به‌روزرسانی همه اشتراک‌ها',
 			'main.tray.proxyNodes' => 'گره‌های پروکسی',
 			'main.tray.tools' => 'ابزارها',
 			'main.tray.copyProxyCmd' => 'کپی دستور پروکسی ترمینال (CMD / Bash)',
-			'main.tray.delayTestAll' => 'تست تاخیر همه گره‌ها',
-			'main.tray.openDashboard' => 'باز کردن داشبورد',
+			'main.tray.delayTestAll' => 'تست سرعت همه سرورها',
+			'main.tray.openDashboard' => 'باز کردن کنترل پنل',
 			'meta.enable' => 'فعال‌سازی',
 			'meta.disable' => 'غیرفعال',
 			'meta.open' => 'باز کن',
@@ -744,7 +744,7 @@ extension on TranslationsFa {
 			'meta.timeout' => 'تایم اوت',
 			'meta.timeoutDuration' => 'مدت زمان وقفه',
 			'meta.latency' => 'تاخیر',
-			'meta.latencyTest' => 'بررسی تاخیر',
+			'meta.latencyTest' => 'تست تأخیر و سرعت',
 			'meta.networkCheck' => 'بررسی شبکه',
 			'meta.language' => 'زبان',
 			'meta.next' => 'بعدی',
@@ -784,11 +784,11 @@ extension on TranslationsFa {
 			'meta.overwriteTips' => 'پیکربندی اصلی <- لغو سفارشی <- لغو برنامه',
 			'meta.noOverwrite' => 'رونویسی نکنید',
 			'meta.overwriteSettings' => 'لغو تنظیمات',
-			'meta.diversionTemplates' => 'الگوی تریاژ',
-			'meta.ruleProviders' => 'ارائه دهنده قانون',
+			'meta.diversionTemplates' => 'الگوهای مسیریابی',
+			'meta.ruleProviders' => 'مجموعه قوانین (RuleSet)',
 			'meta.ruleTemplates' => 'الگوی قانون',
-			'meta.proxyGroupsTemplates' => 'الگوی گروه نمایندگان',
-			'meta.proxyGroups' => 'گروه نمایندگان',
+			'meta.proxyGroupsTemplates' => 'الگوهای گروه‌ها',
+			'meta.proxyGroups' => 'گروه‌های پروکسی',
 			'meta.proxyNodeList' => 'فهرست گره‌های پروکسی',
 			'meta.proxyNodeFailure' => ({required Object p}) => 'گره‌های پروکسی زیر منقضی شده و به طور خودکار حذف شده‌اند: ${p}',
 			'meta.externalController' => 'کنترل خارجی',
@@ -859,7 +859,7 @@ extension on TranslationsFa {
 			'meta.termOfUse' => 'شرایط استفاده',
 			'meta.privacyPolicy' => 'سیاست حریم خصوصی',
 			'meta.log' => 'ورود به سیستم',
-			'meta.coreLog' => 'گزارش هسته',
+			'meta.coreLog' => 'لاگ‌های هسته',
 			'meta.core' => 'هسته',
 			'meta.help' => 'کمک کند',
 			'meta.tutorial' => 'آموزش',
@@ -872,7 +872,7 @@ extension on TranslationsFa {
 			'meta.searchConnections' => 'جستجوی اتصال‌ها (دامنه/IP/قاعده/پردازش)',
 			'meta.noFilterResults' => 'اتصالی یافت نشد',
 			'meta.searchRules' => 'جستجوی قوانین (نوع/محتوا/پروکسی)',
-			'meta.rules' => 'قوانین',
+			'meta.rules' => 'قوانین مسیریابی',
 			'meta.clear' => 'پاک کردن',
 			'meta.copySuccess' => 'کپی شد',
 			'meta.alwayOnVPN' => 'اتصال همیشه باز',
@@ -909,9 +909,9 @@ extension on TranslationsFa {
 			'meta.port' => 'بندر',
 			'meta.donate' => 'اهدا کنید',
 			'meta.setting' => 'تنظیمات',
-			'meta.settingCore' => 'تنظیمات اصلی',
+			'meta.settingCore' => 'تنظیمات هسته',
 			'meta.settingApp' => 'تنظیمات برنامه',
-			'meta.coreOverwrite' => 'Core Override',
+			'meta.coreOverwrite' => 'بازنویسی هسته',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
 			'meta.lanSync' => 'LAN Sync',
@@ -926,22 +926,22 @@ extension on TranslationsFa {
 			'meta.fileNotExist' => ({required Object p}) => 'فایل وجود ندارد:${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => 'نوع فایل نامعتبر:${p}',
 			'meta.uwpExemption' => 'معافیت جداسازی شبکه UWP',
-			'meta.getProfile' => 'پیکربندی را دریافت کنید',
-			'meta.buyProfile' => 'خرید پروفایل',
-			'meta.addProfile' => 'افزودن پروفایل',
-			'meta.myProfiles' => 'پروفایل‌ها',
-			'meta.profileEdit' => 'ویرایش پروفایل',
+			'meta.getProfile' => 'دریافت اشتراک',
+			'meta.buyProfile' => 'خرید اشتراک',
+			'meta.addProfile' => 'افزودن اشتراک',
+			'meta.myProfiles' => 'اشتراک‌ها',
+			'meta.profileEdit' => 'ویرایش اشتراک',
 			'meta.profileNeedActive' => 'ابتدا این پروفایل را به‌عنوان پروفایل فعلی تنظیم کنید، سپس اتصال را فعال/دوباره متصل کنید',
 			'meta.profileDownloadBackupChannel' => 'فعال‌سازی کانال دانلود پشتیبان',
 			'meta.profileDownloadBackupChannelTips' => 'کانال دانلود پراکسی ارائه‌شده توسط Wmimo (هیچ اطلاعاتی ذخیره نمی‌شود)',
 			'meta.profileEditReloadAfterProfileUpdate' => 'بارگذاری مجدد پس‌از به‌روزرسانی پروفایل',
 			'meta.profileRulesAppendApplePush' => 'افزودن قوانین اعلان‌های Push اپل',
 			'meta.profileRulesAppendProxyTips' => 'قوانین به‌صورت خودکار روی نخستین پراکسی با نوع [url-test] یا [select] در [proxy-groups] پیکربندی اصلی تنظیم می‌شوند',
-			'meta.profileImport' => 'وارد‌کردن فایل پروفایل',
-			'meta.profileAddUrlOrContent' => 'افزودن لینک پروفایل',
-			'meta.profileUrlOrContent' => 'پیوند پیکربندی Clash',
-			'meta.profileUrlOrContentHit' => 'پیوند پیکربندی Clash [الزامی]',
-			'meta.profileUrlOrContentCannotEmpty' => 'لینک پروفایل نمی‌تواند خالی باشد',
+			'meta.profileImport' => 'وارد کردن فایل پیکربندی',
+			'meta.profileAddUrlOrContent' => 'افزودن لینک اشتراک',
+			'meta.profileUrlOrContent' => 'لینک اشتراک / محتوا',
+			'meta.profileUrlOrContentHit' => 'لینک اشتراک یا محتوا [الزامی]',
+			'meta.profileUrlOrContentCannotEmpty' => 'لینک اشتراک نمی‌تواند خالی باشد',
 			'meta.overview' => 'نمای کلی',
 			'meta.trafficStats' => 'آمار ترافیک',
 			'meta.realtimeMonitor' => 'نظارت زنده',
@@ -964,14 +964,14 @@ extension on TranslationsFa {
 			'meta.editYamlConfig' => 'ویرایش پیکربندی YAML',
 			'meta.copySubscriptionUrl' => 'کپی پیوند اشتراک',
 			'meta.qrCode' => 'کد QR',
-			'meta.deleteProfile' => 'حذف پروفایل',
-			'meta.noProfilesYet' => 'هنوز پروفایلی وجود ندارد',
-			'meta.addProfilePrompt' => 'برای افزودن پیوند اشتراک یا وارد کردن فایل، روی + در بالا سمت راست کلیک کنید',
+			'meta.deleteProfile' => 'حذف پیکربندی',
+			'meta.noProfilesYet' => 'هنوز اشتراکی وجود ندارد',
+			'meta.addProfilePrompt' => 'برای افزودن لینک یا وارد کردن فایل، روی + در بالا ضربه بزنید',
 			'meta.subscriptionUrlCopied' => 'پیوند اشتراک در کلیپ‌بورد کپی شد',
 			'meta.autoGroupTip' => ({required Object group, required Object type}) => '«${group}» یک گروه سیاست خودکار (${type}) است. برای انتخاب دستی گره، لطفاً در گروه‌های دستی جابه‌جا شوید.',
 			'meta.switchNodeFailed' => ({required Object p}) => 'تغییر گره ناموفق بود: ${p}',
 			'meta.nodeSelected' => ({required Object p}) => 'گره انتخاب شده: ${p}',
-			'meta.startingCoreAndTesting' => 'در حال راه‌اندازی هسته و تست تاخیر...',
+			'meta.startingCoreAndTesting' => 'در حال شروع هسته و تست سرعت...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} دقیقه',
 			'meta.chartUpload' => 'آپلود',
 			'meta.chartDownload' => 'دانلود',
@@ -992,9 +992,9 @@ extension on TranslationsFa {
 			'meta.noLogsPrompt' => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.',
 			'meta.searchLogsHint' => ' (IP, دامنه, قانون, خطا...)',
 			'meta.offlinePreviewPrompt' => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.',
-			'meta.manualSelect' => 'دستی',
-			'meta.autoSelect' => 'خودکار',
-			'meta.speedTestGroup' => 'تست تأخیر گروه',
+			'meta.manualSelect' => 'انتخاب دستی',
+			'meta.autoSelect' => 'انتخاب خودکار',
+			'meta.speedTestGroup' => 'تست سرعت گروه',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

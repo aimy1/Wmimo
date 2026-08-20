@@ -244,7 +244,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get timeout => 'نفذ الوقت';
 	@override String get timeoutDuration => 'مدة مهلة الانتظار';
 	@override String get latency => 'تأخير';
-	@override String get latencyTest => 'كشف التأخير';
+	@override String get latencyTest => 'اختبار سرعة الاستجابة';
 	@override String get networkCheck => 'فحص الشبكة';
 	@override String get language => 'لغة';
 	@override String get next => 'التالي';
@@ -284,11 +284,11 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get overwriteTips => 'التكوين الأصلي <- تجاوز مخصص <- تجاوز التطبيق';
 	@override String get noOverwrite => 'لا تكتب فوق';
 	@override String get overwriteSettings => 'تجاوز الإعدادات';
-	@override String get diversionTemplates => 'نموذج الفرز';
-	@override String get ruleProviders => 'موفر القواعد';
+	@override String get diversionTemplates => 'قوالب التوجيه';
+	@override String get ruleProviders => 'مجموعات القواعد (RuleSet)';
 	@override String get ruleTemplates => 'نموذج القاعدة';
-	@override String get proxyGroupsTemplates => 'نموذج مجموعة الوكلاء';
-	@override String get proxyGroups => 'مجموعة الوكلاء';
+	@override String get proxyGroupsTemplates => 'قوالب المجموعات';
+	@override String get proxyGroups => 'مجموعات البروكسي';
 	@override String get proxyNodeList => 'قائمة عقد الوكيل';
 	@override String proxyNodeFailure({required Object p}) => 'انتهت صلاحية عقد الوكيل التالية وتمت إزالتها تلقائيًا: ${p}';
 	@override String get externalController => 'الرقابة الخارجية';
@@ -359,8 +359,8 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get termOfUse => 'شرط الخدمة';
 	@override String get privacyPolicy => 'سياسة الخصوصية';
 	@override String get log => 'سجل';
-	@override String get coreLog => 'سجل النواة';
-	@override String get core => 'جوهر';
+	@override String get coreLog => 'سجلات النواة';
+	@override String get core => 'النواة';
 	@override String get help => 'يساعد';
 	@override String get tutorial => 'درس تعليمي';
 	@override String get board => 'لوحة';
@@ -372,7 +372,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get searchConnections => 'بحث في الاتصالات (النطاق/IP/القاعدة/العملية)';
 	@override String get noFilterResults => 'لا توجد اتصالات مطابقة';
 	@override String get searchRules => 'بحث في القواعد (النوع/الحمولة/الوكيل)';
-	@override String get rules => 'القواعد';
+	@override String get rules => 'قواعد التوجيه';
 	@override String get clear => 'مسح';
 	@override String get copySuccess => 'تم النسخ';
 	@override String get alwayOnVPN => 'اتصال مفتوح دائمًا';
@@ -409,9 +409,9 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get port => 'ميناء';
 	@override String get donate => 'يتبرع';
 	@override String get setting => 'إعدادات';
-	@override String get settingCore => 'الإعدادات الأساسية';
+	@override String get settingCore => 'إعدادات النواة';
 	@override String get settingApp => 'إعدادات التطبيق';
-	@override String get coreOverwrite => 'تجاوز النواة';
+	@override String get coreOverwrite => 'تجاوز إعدادات النواة';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
 	@override String get lanSync => 'LAN SYNC';
@@ -426,22 +426,22 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String fileNotExist({required Object p}) => 'الملف غير موجود: ${p}';
 	@override String fileTypeInvalid({required Object p}) => 'نوع الملف غير صالح:${p}';
 	@override String get uwpExemption => 'إعفاء عزل شبكة UWP';
-	@override String get getProfile => 'احصل على التكوين';
-	@override String get buyProfile => 'شراء ملف تعريف';
-	@override String get addProfile => 'إضافة ملف تعريف';
-	@override String get myProfiles => 'مظهر';
-	@override String get profileEdit => 'تحرير الملف الشخصي';
+	@override String get getProfile => 'الحصول على اشتراك';
+	@override String get buyProfile => 'شراء اشتراك';
+	@override String get addProfile => 'إضافة اشتراك';
+	@override String get myProfiles => 'الاشتراكات';
+	@override String get profileEdit => 'تعديل الاشتراك';
 	@override String get profileNeedActive => 'يرجى أولاً تعيين هذا الملف كملف التعريف الحالي، ثم بدء الاتصال/إعادة الاتصال';
 	@override String get profileDownloadBackupChannel => 'تمكين قناة التنزيل الاحتياطية';
 	@override String get profileDownloadBackupChannelTips => 'قناة تنزيل عبر الوكيل توفرها Wmimo (لا يتم تخزين أي معلومات)';
 	@override String get profileEditReloadAfterProfileUpdate => 'إعادة التحميل بعد تحديث الملف الشخصي';
 	@override String get profileRulesAppendApplePush => 'إضافة قواعد إشعارات Apple Push';
 	@override String get profileRulesAppendProxyTips => 'سيتم تعيين القواعد تلقائيًا إلى أول وكيل في [proxy-groups] من التكوين الأصلي يكون نوعه [url-test] أو [select]';
-	@override String get profileImport => 'استيراد ملف الملف الشخصي';
-	@override String get profileAddUrlOrContent => 'إضافة رابط ملف التعريف';
-	@override String get profileUrlOrContent => 'رابط إعداد Clash';
-	@override String get profileUrlOrContentHit => 'رابط إعداد Clash [مطلوب]';
-	@override String get profileUrlOrContentCannotEmpty => 'لا يمكن أن يكون رابط الملف الشخصي فارغًا';
+	@override String get profileImport => 'استيراد ملف الإعدادات';
+	@override String get profileAddUrlOrContent => 'إضافة رابط الاشتراك';
+	@override String get profileUrlOrContent => 'رابط الاشتراك / المحتوى';
+	@override String get profileUrlOrContentHit => 'رابط الاشتراك أو المحتوى [مطلوب]';
+	@override String get profileUrlOrContentCannotEmpty => 'لا يمكن أن يكون رابط الاشتراك فارغاً';
 	@override String get overview => 'نظرة عامة';
 	@override String get trafficStats => 'إحصائيات البيانات';
 	@override String get realtimeMonitor => 'مراقبة في الوقت الفعلي';
@@ -464,14 +464,14 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get editYamlConfig => 'تعديل تكوين YAML';
 	@override String get copySubscriptionUrl => 'نسخ رابط الاشتراك';
 	@override String get qrCode => 'رمز الاستجابة السريعة';
-	@override String get deleteProfile => 'حذف ملف التعريف';
-	@override String get noProfilesYet => 'لا توجد ملفات تعريف بعد';
-	@override String get addProfilePrompt => 'انقر على + في أعلى اليمين لإضافة رابط اشتراك أو استيراد ملف';
+	@override String get deleteProfile => 'حذف الإعدادات';
+	@override String get noProfilesYet => 'لا توجد اشتراكات مضافة بعد';
+	@override String get addProfilePrompt => 'انقر على + في الأعلى لإضافة رابط أو استيراد ملف';
 	@override String get subscriptionUrlCopied => 'تم نسخ رابط الاشتراك إلى الحافظة';
 	@override String autoGroupTip({required Object group, required Object type}) => '«${group}» هي مجموعة سياسات تلقائية (${type}). لتحديد عقدة يدويًا، يُرجى التبديل في مجموعات السياسات اليدوية.';
 	@override String switchNodeFailed({required Object p}) => 'فشل تبديل العقدة: ${p}';
 	@override String nodeSelected({required Object p}) => 'العقدة المحددة: ${p}';
-	@override String get startingCoreAndTesting => 'جارٍ تشغيل النواة واختبار زمن الانتقال...';
+	@override String get startingCoreAndTesting => 'جارٍ تشغيل النواة واختبار السرعة...';
 	@override String chartMinutes({required Object p}) => '${p} دقيقة';
 	@override String get chartUpload => 'رفع';
 	@override String get chartDownload => 'تنزيل';
@@ -492,8 +492,8 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get noLogsPrompt => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.';
 	@override String get searchLogsHint => ' (IP, النطاق, القاعدة, الخطأ...)';
 	@override String get offlinePreviewPrompt => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.';
-	@override String get manualSelect => 'يدوي';
-	@override String get autoSelect => 'تلقائي';
+	@override String get manualSelect => 'اختيار يدوي';
+	@override String get autoSelect => 'اختيار تلقائي';
 	@override String get speedTestGroup => 'اختبار سرعة المجموعة';
 }
 
@@ -602,21 +602,21 @@ class _Translations$main$tray$ar implements Translations$main$tray$en {
 	@override String get menuExit => 'خروج';
 	@override String get coreDisconnected => 'Wmimo · النواة غير متصلة';
 	@override String get coreRunning => 'Wmimo · النواة قيد التشغيل';
-	@override String get startProxy => 'بدء اتصال الوكيل';
-	@override String get stopProxy => 'قطع اتصال الوكيل';
-	@override String get restartCore => 'إعادة تشغيل النواة';
+	@override String get startProxy => 'بدء اتصال البروكسي';
+	@override String get stopProxy => 'قطع اتصال البروكسي';
+	@override String get restartCore => 'إعادة تشغيل نواة البروكسي';
 	@override String get systemProxyItem => 'وكيل النظام';
 	@override String get tunModeItem => 'وضع TUN';
 	@override String get outboundMode => 'وضع الإرسال';
 	@override String get modeRule => 'توجيه القواعد';
 	@override String get modeGlobal => 'وكيل شامل';
 	@override String get modeDirect => 'اتصال مباشر';
-	@override String get profilesMenu => 'ملفات التعريف';
-	@override String get updateAllProfiles => 'تحديث جميع ملفات التعريف';
+	@override String get profilesMenu => 'الاشتراكات';
+	@override String get updateAllProfiles => 'تحديث جميع الاشتراكات';
 	@override String get proxyNodes => 'عقد الوكيل';
 	@override String get tools => 'الأدوات';
 	@override String get copyProxyCmd => 'نسخ أمر وكيل الطرفية (CMD / Bash)';
-	@override String get delayTestAll => 'اختبار زمن انتقال جميع العقد';
+	@override String get delayTestAll => 'اختبار سرعة جميع العقد';
 	@override String get openDashboard => 'فتح لوحة التحكم';
 }
 
@@ -682,21 +682,21 @@ extension on TranslationsAr {
 			'main.tray.menuExit' => 'خروج',
 			'main.tray.coreDisconnected' => 'Wmimo · النواة غير متصلة',
 			'main.tray.coreRunning' => 'Wmimo · النواة قيد التشغيل',
-			'main.tray.startProxy' => 'بدء اتصال الوكيل',
-			'main.tray.stopProxy' => 'قطع اتصال الوكيل',
-			'main.tray.restartCore' => 'إعادة تشغيل النواة',
+			'main.tray.startProxy' => 'بدء اتصال البروكسي',
+			'main.tray.stopProxy' => 'قطع اتصال البروكسي',
+			'main.tray.restartCore' => 'إعادة تشغيل نواة البروكسي',
 			'main.tray.systemProxyItem' => 'وكيل النظام',
 			'main.tray.tunModeItem' => 'وضع TUN',
 			'main.tray.outboundMode' => 'وضع الإرسال',
 			'main.tray.modeRule' => 'توجيه القواعد',
 			'main.tray.modeGlobal' => 'وكيل شامل',
 			'main.tray.modeDirect' => 'اتصال مباشر',
-			'main.tray.profilesMenu' => 'ملفات التعريف',
-			'main.tray.updateAllProfiles' => 'تحديث جميع ملفات التعريف',
+			'main.tray.profilesMenu' => 'الاشتراكات',
+			'main.tray.updateAllProfiles' => 'تحديث جميع الاشتراكات',
 			'main.tray.proxyNodes' => 'عقد الوكيل',
 			'main.tray.tools' => 'الأدوات',
 			'main.tray.copyProxyCmd' => 'نسخ أمر وكيل الطرفية (CMD / Bash)',
-			'main.tray.delayTestAll' => 'اختبار زمن انتقال جميع العقد',
+			'main.tray.delayTestAll' => 'اختبار سرعة جميع العقد',
 			'main.tray.openDashboard' => 'فتح لوحة التحكم',
 			'meta.enable' => 'يُمكَِن',
 			'meta.disable' => 'إبطال',
@@ -744,7 +744,7 @@ extension on TranslationsAr {
 			'meta.timeout' => 'نفذ الوقت',
 			'meta.timeoutDuration' => 'مدة مهلة الانتظار',
 			'meta.latency' => 'تأخير',
-			'meta.latencyTest' => 'كشف التأخير',
+			'meta.latencyTest' => 'اختبار سرعة الاستجابة',
 			'meta.networkCheck' => 'فحص الشبكة',
 			'meta.language' => 'لغة',
 			'meta.next' => 'التالي',
@@ -784,11 +784,11 @@ extension on TranslationsAr {
 			'meta.overwriteTips' => 'التكوين الأصلي <- تجاوز مخصص <- تجاوز التطبيق',
 			'meta.noOverwrite' => 'لا تكتب فوق',
 			'meta.overwriteSettings' => 'تجاوز الإعدادات',
-			'meta.diversionTemplates' => 'نموذج الفرز',
-			'meta.ruleProviders' => 'موفر القواعد',
+			'meta.diversionTemplates' => 'قوالب التوجيه',
+			'meta.ruleProviders' => 'مجموعات القواعد (RuleSet)',
 			'meta.ruleTemplates' => 'نموذج القاعدة',
-			'meta.proxyGroupsTemplates' => 'نموذج مجموعة الوكلاء',
-			'meta.proxyGroups' => 'مجموعة الوكلاء',
+			'meta.proxyGroupsTemplates' => 'قوالب المجموعات',
+			'meta.proxyGroups' => 'مجموعات البروكسي',
 			'meta.proxyNodeList' => 'قائمة عقد الوكيل',
 			'meta.proxyNodeFailure' => ({required Object p}) => 'انتهت صلاحية عقد الوكيل التالية وتمت إزالتها تلقائيًا: ${p}',
 			'meta.externalController' => 'الرقابة الخارجية',
@@ -859,8 +859,8 @@ extension on TranslationsAr {
 			'meta.termOfUse' => 'شرط الخدمة',
 			'meta.privacyPolicy' => 'سياسة الخصوصية',
 			'meta.log' => 'سجل',
-			'meta.coreLog' => 'سجل النواة',
-			'meta.core' => 'جوهر',
+			'meta.coreLog' => 'سجلات النواة',
+			'meta.core' => 'النواة',
 			'meta.help' => 'يساعد',
 			'meta.tutorial' => 'درس تعليمي',
 			'meta.board' => 'لوحة',
@@ -872,7 +872,7 @@ extension on TranslationsAr {
 			'meta.searchConnections' => 'بحث في الاتصالات (النطاق/IP/القاعدة/العملية)',
 			'meta.noFilterResults' => 'لا توجد اتصالات مطابقة',
 			'meta.searchRules' => 'بحث في القواعد (النوع/الحمولة/الوكيل)',
-			'meta.rules' => 'القواعد',
+			'meta.rules' => 'قواعد التوجيه',
 			'meta.clear' => 'مسح',
 			'meta.copySuccess' => 'تم النسخ',
 			'meta.alwayOnVPN' => 'اتصال مفتوح دائمًا',
@@ -909,9 +909,9 @@ extension on TranslationsAr {
 			'meta.port' => 'ميناء',
 			'meta.donate' => 'يتبرع',
 			'meta.setting' => 'إعدادات',
-			'meta.settingCore' => 'الإعدادات الأساسية',
+			'meta.settingCore' => 'إعدادات النواة',
 			'meta.settingApp' => 'إعدادات التطبيق',
-			'meta.coreOverwrite' => 'تجاوز النواة',
+			'meta.coreOverwrite' => 'تجاوز إعدادات النواة',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
 			'meta.lanSync' => 'LAN SYNC',
@@ -926,22 +926,22 @@ extension on TranslationsAr {
 			'meta.fileNotExist' => ({required Object p}) => 'الملف غير موجود: ${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => 'نوع الملف غير صالح:${p}',
 			'meta.uwpExemption' => 'إعفاء عزل شبكة UWP',
-			'meta.getProfile' => 'احصل على التكوين',
-			'meta.buyProfile' => 'شراء ملف تعريف',
-			'meta.addProfile' => 'إضافة ملف تعريف',
-			'meta.myProfiles' => 'مظهر',
-			'meta.profileEdit' => 'تحرير الملف الشخصي',
+			'meta.getProfile' => 'الحصول على اشتراك',
+			'meta.buyProfile' => 'شراء اشتراك',
+			'meta.addProfile' => 'إضافة اشتراك',
+			'meta.myProfiles' => 'الاشتراكات',
+			'meta.profileEdit' => 'تعديل الاشتراك',
 			'meta.profileNeedActive' => 'يرجى أولاً تعيين هذا الملف كملف التعريف الحالي، ثم بدء الاتصال/إعادة الاتصال',
 			'meta.profileDownloadBackupChannel' => 'تمكين قناة التنزيل الاحتياطية',
 			'meta.profileDownloadBackupChannelTips' => 'قناة تنزيل عبر الوكيل توفرها Wmimo (لا يتم تخزين أي معلومات)',
 			'meta.profileEditReloadAfterProfileUpdate' => 'إعادة التحميل بعد تحديث الملف الشخصي',
 			'meta.profileRulesAppendApplePush' => 'إضافة قواعد إشعارات Apple Push',
 			'meta.profileRulesAppendProxyTips' => 'سيتم تعيين القواعد تلقائيًا إلى أول وكيل في [proxy-groups] من التكوين الأصلي يكون نوعه [url-test] أو [select]',
-			'meta.profileImport' => 'استيراد ملف الملف الشخصي',
-			'meta.profileAddUrlOrContent' => 'إضافة رابط ملف التعريف',
-			'meta.profileUrlOrContent' => 'رابط إعداد Clash',
-			'meta.profileUrlOrContentHit' => 'رابط إعداد Clash [مطلوب]',
-			'meta.profileUrlOrContentCannotEmpty' => 'لا يمكن أن يكون رابط الملف الشخصي فارغًا',
+			'meta.profileImport' => 'استيراد ملف الإعدادات',
+			'meta.profileAddUrlOrContent' => 'إضافة رابط الاشتراك',
+			'meta.profileUrlOrContent' => 'رابط الاشتراك / المحتوى',
+			'meta.profileUrlOrContentHit' => 'رابط الاشتراك أو المحتوى [مطلوب]',
+			'meta.profileUrlOrContentCannotEmpty' => 'لا يمكن أن يكون رابط الاشتراك فارغاً',
 			'meta.overview' => 'نظرة عامة',
 			'meta.trafficStats' => 'إحصائيات البيانات',
 			'meta.realtimeMonitor' => 'مراقبة في الوقت الفعلي',
@@ -964,14 +964,14 @@ extension on TranslationsAr {
 			'meta.editYamlConfig' => 'تعديل تكوين YAML',
 			'meta.copySubscriptionUrl' => 'نسخ رابط الاشتراك',
 			'meta.qrCode' => 'رمز الاستجابة السريعة',
-			'meta.deleteProfile' => 'حذف ملف التعريف',
-			'meta.noProfilesYet' => 'لا توجد ملفات تعريف بعد',
-			'meta.addProfilePrompt' => 'انقر على + في أعلى اليمين لإضافة رابط اشتراك أو استيراد ملف',
+			'meta.deleteProfile' => 'حذف الإعدادات',
+			'meta.noProfilesYet' => 'لا توجد اشتراكات مضافة بعد',
+			'meta.addProfilePrompt' => 'انقر على + في الأعلى لإضافة رابط أو استيراد ملف',
 			'meta.subscriptionUrlCopied' => 'تم نسخ رابط الاشتراك إلى الحافظة',
 			'meta.autoGroupTip' => ({required Object group, required Object type}) => '«${group}» هي مجموعة سياسات تلقائية (${type}). لتحديد عقدة يدويًا، يُرجى التبديل في مجموعات السياسات اليدوية.',
 			'meta.switchNodeFailed' => ({required Object p}) => 'فشل تبديل العقدة: ${p}',
 			'meta.nodeSelected' => ({required Object p}) => 'العقدة المحددة: ${p}',
-			'meta.startingCoreAndTesting' => 'جارٍ تشغيل النواة واختبار زمن الانتقال...',
+			'meta.startingCoreAndTesting' => 'جارٍ تشغيل النواة واختبار السرعة...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} دقيقة',
 			'meta.chartUpload' => 'رفع',
 			'meta.chartDownload' => 'تنزيل',
@@ -992,8 +992,8 @@ extension on TranslationsAr {
 			'meta.noLogsPrompt' => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.',
 			'meta.searchLogsHint' => ' (IP, النطاق, القاعدة, الخطأ...)',
 			'meta.offlinePreviewPrompt' => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.',
-			'meta.manualSelect' => 'يدوي',
-			'meta.autoSelect' => 'تلقائي',
+			'meta.manualSelect' => 'اختيار يدوي',
+			'meta.autoSelect' => 'اختيار تلقائي',
 			'meta.speedTestGroup' => 'اختبار سرعة المجموعة',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
