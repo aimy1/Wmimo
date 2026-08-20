@@ -24,12 +24,15 @@
 
 ---
 
-## 📌 Platform Support & Status
+## 📌 Platform Support & Linux Multi-Distro Matrix
 
-| Platform | Status | Package Types | Highlights |
+| Platform / Distro | Status | Supported Formats | Description |
 | :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Production Ready** | Setup Installer (`.exe`) & Portable (`.zip`) | Full desktop sidebar, rich system tray menu, real-time speed & traffic chart, TUN mode, system proxy, auto-update. |
-| 🐧 **Linux** | ✅ **Ready** | Debian Package (`.deb`) & Portable (`.tar.gz`) | Native GTK3 desktop shell, system tray integration, embedded Mihomo service daemon. |
+| 🪟 **Windows** | ✅ **Production Ready** | Setup (`.exe`) & Portable (`.zip`) | Full desktop sidebar, rich system tray menu, real-time speed & traffic chart, TUN mode, system proxy, auto-update. |
+| 🐧 **Linux (Universal)** | ✅ **Ready** | Universal AppImage (`.AppImage`) & Portable (`.tar.gz`) | Self-contained executable, works out-of-the-box on all Linux distributions. |
+| 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **Ready** | Debian Package (`.deb`) | Native package with desktop entry, icons, and system service integration. |
+| 🐧 **Fedora / RHEL / openSUSE** | ✅ **Ready** | RedHat Package (`.rpm`) | Standard RPM package with system dependencies and desktop shortcuts. |
+| 🐧 **Arch Linux / Manjaro** | ✅ **Ready** | Arch Package (`.pkg.tar.zst`) & `PKGBUILD` | Native pacman binary package and AUR build script. |
 | 📱 **Android** | ✅ **Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, compact mobile UI, background persistence. |
 | 🍎 **macOS** | 🚧 **In Progress** | DMG Installer | NetworkExtension daemon architecture in development. |
 | 🍏 **iOS** | 🚧 **In Progress** | IPA | NetworkExtension framework integration. |
@@ -92,8 +95,9 @@ flutter run
 # Windows Release
 flutter build windows --release
 
-# Linux Release
+# Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
+bash tool/package_linux.sh v1.0.32
 
 # Android APK
 flutter build apk --release
@@ -106,7 +110,7 @@ flutter build apk --release
 Automated multi-platform packaging is handled seamlessly via GitHub Actions (`.github/workflows/release.yml`):
 
 - **Windows x64 / ARM64**: Inno Setup Installer (`.exe`) + Portable Zip (`.zip`)
-- **Linux x64**: Debian Package (`.deb`) + Portable Bundle (`.tar.gz`)
+- **Linux (All Distros)**: Debian (`.deb`) + RedHat (`.rpm`) + Universal (`.AppImage`) + Arch (`.pkg.tar.zst`) + Portable (`.tar.gz`)
 - **Android**: Split ABIs (`arm64-v8a`, `armeabi-v7a`, `x86_64`) + Universal APK
 - **Checksums**: Auto-generated `SHA256SUMS.txt` for security verification.
 

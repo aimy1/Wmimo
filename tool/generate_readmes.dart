@@ -31,12 +31,15 @@ $langBar
 
 ---
 
-## 📌 Platform Support & Status
+## 📌 Platform Support & Linux Multi-Distro Matrix
 
-| Platform | Status | Package Types | Highlights |
+| Platform / Distro | Status | Supported Formats | Description |
 | :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Production Ready** | Setup Installer (`.exe`) & Portable (`.zip`) | Full desktop sidebar, rich system tray menu, real-time speed & traffic chart, TUN mode, system proxy, auto-update. |
-| 🐧 **Linux** | ✅ **Ready** | Debian Package (`.deb`) & Portable (`.tar.gz`) | Native GTK3 desktop shell, system tray integration, embedded Mihomo service daemon. |
+| 🪟 **Windows** | ✅ **Production Ready** | Setup (`.exe`) & Portable (`.zip`) | Full desktop sidebar, rich system tray menu, real-time speed & traffic chart, TUN mode, system proxy, auto-update. |
+| 🐧 **Linux (Universal)** | ✅ **Ready** | Universal AppImage (`.AppImage`) & Portable (`.tar.gz`) | Self-contained executable, works out-of-the-box on all Linux distributions. |
+| 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **Ready** | Debian Package (`.deb`) | Native package with desktop entry, icons, and system service integration. |
+| 🐧 **Fedora / RHEL / openSUSE** | ✅ **Ready** | RedHat Package (`.rpm`) | Standard RPM package with system dependencies and desktop shortcuts. |
+| 🐧 **Arch Linux / Manjaro** | ✅ **Ready** | Arch Package (`.pkg.tar.zst`) & `PKGBUILD` | Native pacman binary package and AUR build script. |
 | 📱 **Android** | ✅ **Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, compact mobile UI, background persistence. |
 | 🍎 **macOS** | 🚧 **In Progress** | DMG Installer | NetworkExtension daemon architecture in development. |
 | 🍏 **iOS** | 🚧 **In Progress** | IPA | NetworkExtension framework integration. |
@@ -99,8 +102,9 @@ flutter run
 # Windows Release
 flutter build windows --release
 
-# Linux Release
+# Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
+bash tool/package_linux.sh v1.0.32
 
 # Android APK
 flutter build apk --release
@@ -113,7 +117,7 @@ flutter build apk --release
 Automated multi-platform packaging is handled seamlessly via GitHub Actions (`.github/workflows/release.yml`):
 
 - **Windows x64 / ARM64**: Inno Setup Installer (`.exe`) + Portable Zip (`.zip`)
-- **Linux x64**: Debian Package (`.deb`) + Portable Bundle (`.tar.gz`)
+- **Linux (All Distros)**: Debian (`.deb`) + RedHat (`.rpm`) + Universal (`.AppImage`) + Arch (`.pkg.tar.zst`) + Portable (`.tar.gz`)
 - **Android**: Split ABIs (`arm64-v8a`, `armeabi-v7a`, `x86_64`) + Universal APK
 - **Checksums**: Auto-generated `SHA256SUMS.txt` for security verification.
 
@@ -164,12 +168,15 @@ $langBar
 
 ---
 
-## 📌 平台支持与开发进度
+## 📌 全平台与 Linux 各大发行版支持矩阵
 
-| 平台 (Platform) | 状态 (Status) | 软件包类型 (Package) | 功能说明 |
+| 平台 / 发行版 | 状态 | 软件包格式 | 功能与适配说明 |
 | :--- | :---: | :--- | :--- |
 | 🪟 **Windows** | ✅ **已基本完成** | 安装包 (`.exe`) 与 绿色便携包 (`.zip`) | 完整桌面侧边栏、全功能系统托盘（实时网速、分流模式切换、节点测速）、TUN 虚拟网卡模式、自动更新。 |
-| 🐧 **Linux** | ✅ **已就绪** | Debian 安装包 (`.deb`) 与 便携压缩包 (`.tar.gz`) | 原生 GTK3 界面、系统托盘常驻、内嵌 Linux 版 Mihomo 守护核心。 |
+| 🐧 **Linux 通用免安装** | ✅ **已就绪** | 通用独立镜像 (`.AppImage`) 与 绿色便携包 (`.tar.gz`) | 单文件免安装，解压即用，完美兼容所有主流与轻量 Linux 发行版。 |
+| 🐧 **Debian / Ubuntu / Mint / Deepin / UOS** | ✅ **已就绪** | Debian 安装包 (`.deb`) | 原生包管理器支持，自动注册桌面启动菜单、高清图标与系统服务。 |
+| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **已就绪** | RedHat 安装包 (`.rpm`) | 标准 RPM 格式封装，自动配置运行时依赖与桌面集成。 |
+| 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **已就绪** | Pacman 二进制包 (`.pkg.tar.zst`) 与 `PKGBUILD` | 支持 pacman 一键安装与 AUR 脚本直接构建。 |
 | 📱 **Android** | ✅ **已就绪** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、紧凑移动端 UI、后台保活。 |
 | 🍎 **macOS** | 🚧 **开发中** | DMG 安装镜像 | NetworkExtension 架构与桌面端协议适配中。 |
 | 🍏 **iOS** | 🚧 **开发中** | IPA | NetworkExtension 架构适配中。 |
@@ -234,8 +241,9 @@ flutter run
 # Windows Release (生成 x64 安装程序与便携包)
 flutter build windows --release
 
-# Linux Release (生成 Linux 桌面二进制)
+# Linux Release (一键打包 Deb, RPM, AppImage, Arch 与 Tarball)
 flutter build linux --release
+bash tool/package_linux.sh v1.0.32
 
 # Android Release (生成 APK 安装包)
 flutter build apk --release
@@ -248,7 +256,7 @@ flutter build apk --release
 本项目配置了完整的 GitHub Actions 自动化工作流（`.github/workflows/release.yml`）：
 
 - **Windows x64 / ARM64**：Inno Setup 安装包 (`.exe`) + 绿色便携包 (`.zip`)
-- **Linux x64**：Debian 安装包 (`.deb`) + 绿色便携包 (`.tar.gz`)
+- **Linux 全发行版支持**：Debian (`.deb`) + RedHat (`.rpm`) + AppImage (`.AppImage`) + Arch (`.pkg.tar.zst`) + 绿色包 (`.tar.gz`)
 - **Android**：分架构 APK (`arm64-v8a`, `armeabi-v7a`, `x86_64`) + 通用版 APK
 - **完整性验证**：自动生成包含所有产物的 `SHA256SUMS.txt` 校验和。
 
@@ -297,61 +305,18 @@ $langBar
 
 ---
 
-## 📌 平台支援與開發進度
+## 📌 全平台與 Linux 各大發行版支援矩陣
 
-| 平台 (Platform) | 狀態 (Status) | 軟體包類型 (Package) | 功能說明 |
+| 平台 / 發行版 | 狀態 | 軟體包格式 | 功能與適配說明 |
 | :--- | :---: | :--- | :--- |
 | 🪟 **Windows** | ✅ **已基本完成** | 安裝包 (`.exe`) 與 綠色便攜包 (`.zip`) | 完整桌面側邊欄、全功能系統工具列（即時網速、分流模式切換、節點測速）、TUN 虛擬網卡模式、自動更新。 |
-| 🐧 **Linux** | ✅ **已就緒** | Debian 安裝包 (`.deb`) 與 便攜壓縮包 (`.tar.gz`) | 原生 GTK3 介面、系統工具列常駐、內嵌 Linux 版 Mihomo 守護核心。 |
+| 🐧 **Linux 通用免安裝** | ✅ **已就緒** | 通用獨立鏡像 (`.AppImage`) 與 便攜壓縮包 (`.tar.gz`) | 單檔案免安裝，解壓即用，完美相容所有主流 Linux 發行版。 |
+| 🐧 **Debian / Ubuntu / Mint / Deepin / UOS** | ✅ **已就緒** | Debian 安裝包 (`.deb`) | 原生包管理器支援，自動註冊桌面啟動選單與圖示。 |
+| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **已就緒** | RedHat 安裝包 (`.rpm`) | 標準 RPM 格式封裝，自動配置依賴與桌面整合。 |
+| 🐧 **Arch Linux / Manjaro** | ✅ **已就緒** | Pacman 二進位包 (`.pkg.tar.zst`) 與 `PKGBUILD` | 支援 pacman 一鍵安裝與 AUR 腳本直接建置。 |
 | 📱 **Android** | ✅ **已就緒** | 通用 APK 與 分架構包 (`arm64-v8a`, `v7a`, `x86_64`) | 系統級 VpnService 驅動、緊湊行動端 UI、背景保活。 |
 | 🍎 **macOS** | 🚧 **開發中** | DMG 安裝映像 | NetworkExtension 架構與桌面端協議適配中。 |
 | 🍏 **iOS** | 🚧 **開發中** | IPA | NetworkExtension 架構適配中。 |
-
----
-
-## ✨ 核心特性
-
-- 🎨 **現代化精緻 UI**：
-  - 遵循 18px 圓角微卡片體系與天青藍品牌設計語言，簡約而不失質感；
-  - 原生支援淺色（Light）與深空深色（Dark）雙主題無縫切換；
-  - 響應式自適應佈局（小屏緊湊行動模式與大屏桌面側邊欄模式連動）。
-- ⚡ **高性能 Mihomo 核心整合**：
-  - 全面支援 Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard, Direct 等豐富協議；
-  - 超低記憶體佔用與多核高吞吐轉發。
-- 🔀 **全功能系統工具列右鍵選單**：
-  - 工具列圖示狀態與即時上下行網速動態展示；
-  - 一鍵切換系統代理與 TUN 虛擬網卡模式；
-  - 快速切換出站模式（規則分流 Rule / 全局代理 Global / 直接連接 Direct）；
-  - 訂閱一鍵更新與節點快速切換（帶國旗標識與延遲展示）。
-- 📊 **可視化流量與連線監控**：
-  - 儀表板即時流量動效與多時間跨度（1m/5m/15m/30m/60m）平滑貝塞爾流量折線圖；
-  - 內建 IP 與 ISP 資訊卡片，支援一鍵即時查詢與輕觸複製；
-  - 支援可折疊的代理組卡片，大幅提升節點選擇效率。
-- 🚀 **智慧多通道自動更新**：
-  - 支援 `stable`（正式穩定通道）與 `beta`（測試預覽通道）自由切換；
-  - 背景靜默下載安裝包、SHA-256 完整性校驗與安全原地覆蓋升級。
-- 🌍 **全語言國際化支援 (9 種語言)**：
-  - 繁體中文、簡體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 100% 完整支援。
-
----
-
-## 🛠️ 本地建置與開發
-
-```bash
-# 1. 複製程式碼倉庫
-git clone https://github.com/aimy1/Wmimo.git
-cd Wmimo
-
-# 2. 安裝依賴並產生國際化程式碼
-flutter pub get
-dart run slang
-
-# 3. 下載全平台 Mihomo 核心
-dart run tool/download_all_cores.dart
-
-# 4. 執行偵錯
-flutter run
-```
 
 ---
 
@@ -368,356 +333,14 @@ flutter run
 本專案基於 **GPL-3.0** 授權條款分發。詳見 [LICENSE](LICENSE) 文件。
 """;
 
-  // 4. Japanese (README.ja.md)
-  final jaContent = """# Wmimo
-
-$langBar
-
-<div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>モダンなクロスプラットフォーム Clash / Mihomo プロキシ GUI クライアント</h3>
-  <p>Flutter と Mihomo コアをベースに構築され、高速でエレガント、強力な全プロトコルプロキシ体験を提供します。</p>
-
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
-    <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-  </p>
-</div>
-
----
-
-## 📌 プラットフォームのサポート状況
-
-| プラットフォーム | ステータス | パッケージ形式 | 特徴 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **本番利用可能** | インストーラー (`.exe`) / ポータブル (`.zip`) | デスクトップサイドバー、トレイメニュー、リアルタイムトラフィックチャート、TUNモード、自動更新。 |
-| 🐧 **Linux** | ✅ **利用可能** | Debian (`.deb`) / ポータブル (`.tar.gz`) | ネイティブ GTK3 UI、システムトレイ対応、Linux版 Mihomo コア内蔵。 |
-| 📱 **Android** | ✅ **利用可能** | ユニバーサル APK / 各 ABI 分割 APK | VpnService ドライバー統合、モバイル最適化UI、バックグラウンド常駐。 |
-| 🍎 **macOS** | 🚧 **開発中** | DMG インストーラー | NetworkExtension フレームワーク適応中。 |
-| 🍏 **iOS** | 🚧 **開発中** | IPA | NetworkExtension フレームワーク適応中。 |
-
----
-
-## ✨ 主な機能
-
-- 🎨 **洗練されたモダン UI**: ライト/ダークモード、レスポンシブ適応型レイアウト（コンパクトモバイル＆デスクトップサイドバー）。
-- ⚡ **高性能 Mihomo コア**: Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard などの全プロトコルを完全サポート。
-- 🔀 **フル機能システムトレイ**: リアルタイム送受信速度表示、プロキシモード切り替え、ワンクリック遅延テスト、購読更新。
-- 📊 **リアルタイム診断 & 監視**: ベジェ曲線トラフィックチャート、ワンクリック IP/ISP 情報取得、折りたたみ可能なプロキシグループ。
-- 🚀 **マルチチャンネル自動更新**: `stable`（安定版）と `beta`（プレビュー版）の切り替えに対応。
-- 🌍 **9言語の完全多言語対応**: 日本語、英語、簡体字中国語、繁体字中国語、韓国語、ロシア語、スペイン語、アラビア語、ペルシア語。
-
----
-
-## 💖 寄付・サポート
-
-- **通貨 (Token)**: `USDT`
-- **ネットワーク (Network)**: `APTOS`
-- **受取アドレス (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
-## 📄 ライセンス
-
-本プロジェクトは **GPL-3.0** ライセンスの下で公開されています。
-""";
-
-  // 5. Korean (README.ko.md)
-  final koContent = """# Wmimo
-
-$langBar
-
-<div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>현대적인 크로스 플랫폼 Clash / Mihomo 프록시 GUI 클라이언트</h3>
-  <p>Flutter 및 Mihomo 코어를 기반으로 제작되어 초고속, 우아함, 강력한 전체 프로토콜 프록시 경험을 제공합니다.</p>
-
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
-    <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-  </p>
-</div>
-
----
-
-## 📌 플랫폼 지원 현황
-
-| 플랫폼 | 상태 | 패키지 형식 | 설명 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **완료** | 설치 프로그램 (`.exe`) 및 포터블 (`.zip`) | 데스크톱 사이드바, 시스템 트레이 메뉴, 실시간 트래픽 차트, TUN 모드, 자동 업데이트. |
-| 🐧 **Linux** | ✅ **준비 완료** | Debian 패키지 (`.deb`) 및 포터블 (`.tar.gz`) | 네이티브 GTK3 UI, 시스템 트레이 연동, Linux용 Mihomo 데몬 내장. |
-| 📱 **Android** | ✅ **준비 완료** | 통합 APK 및 ABI 분할 APK | VpnService 드라이버 내장, 모바일 맞춤형 UI, 백그라운드 유지. |
-| 🍎 **macOS** | 🚧 **개발 중** | DMG 설치 파일 | NetworkExtension 아키텍처 적응 중. |
-| 🍏 **iOS** | 🚧 **개발 중** | IPA | NetworkExtension 프레임워크 연동 중. |
-
----
-
-## ✨ 핵심 기능
-
-- 🎨 **세련되고 모던한 UI**: 라이트/다크 모드 완벽 지원, 반응형 적응형 레이아웃 (모바일 및 데스크톱 사이드바).
-- ⚡ **고성능 Mihomo 코어**: Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard 프로토콜 완벽 지원.
-- 🔀 **풍부한 시스템 트레이 메뉴**: 실시간 업/다운로드 속도 표시, 프록시 모드 전환, 핑 측정, 구독 원클릭 업데이트.
-- 📊 **실시간 모니터링 & 진단**: 베지어 트래픽 그래프, 실시간 IP & ISP 조회 카드, 접이식 프록시 그룹.
-- 🚀 **다중 채널 자동 업데이트**: `stable` (안정 채널) 및 `beta` (테스트 채널) 지원.
-- 🌍 **9개 언어 완벽 다국어 지원**: 한국어, 영어, 중국어(간체/번체), 일본어, 러시아어, 스페인어, 아랍어, 페르시아어.
-
----
-
-## 💖 후원 및 기부
-
-- **토큰 (Currency)**: `USDT`
-- **네트워크 (Network)**: `APTOS`
-- **지갑 주소 (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
-## 📄 라이선스
-
-본 프로젝트는 **GPL-3.0** 라이선스에 따라 배포됩니다.
-""";
-
-  // 6. Russian (README.ru.md)
-  final ruContent = """# Wmimo
-
-$langBar
-
-<div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>Современный кроссплатформенный GUI-клиент Clash / Mihomo</h3>
-  <p>Создан на базе Flutter и ядра Mihomo, обеспечивая сверхбыструю, элегантную и мощную работу с прокси.</p>
-
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
-    <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-  </p>
-</div>
-
----
-
-## 📌 Поддержка платформ
-
-| Платформа | Статус | Форматы пакетов | Описание |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Готово** | Установщик (`.exe`) и Портативная версия (`.zip`) | Боковая панель, трей с мониторингом скорости, TUN-режим, автообновление. |
-| 🐧 **Linux** | ✅ **Готово** | Пакет Debian (`.deb`) и Архив (`.tar.gz`) | Нативный интерфейс GTK3, интеграция с треем, встроенное ядро Mihomo. |
-| 📱 **Android** | ✅ **Готово** | Универсальный APK и раздельные ABI | Драйвер VpnService, оптимизированный интерфейс. |
-| 🍎 **macOS** | 🚧 **В разработке** | DMG | Адаптация NetworkExtension. |
-| 🍏 **iOS** | 🚧 **В разработке** | IPA | Адаптация NetworkExtension. |
-
----
-
-## ✨ Основные возможности
-
-- 🎨 **Современный интерфейс**: Светлая и темная темы, адаптивный дизайн (мобильный и десктопный интерфейс).
-- ⚡ **Ядро Mihomo**: Поддержка Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard.
-- 🔀 **Системный трей**: Скорость сети в реальном времени, переключение режимов (Rule/Global/Direct), тест задержки.
-- 📊 **Мониторинг трафика**: Плавный график трафика, карточка IP/ISP в реальном времени, сворачиваемые группы прокси.
-- 🚀 **Автообновление**: Каналы `stable` и `beta` с фоновой загрузкой и проверкой SHA-256.
-- 🌍 **9 языков**: Русский, Английский, Китайский, Японский, Корейский, Испанский, Арабский, Персидский.
-
----
-
-## 💖 Поддержать проект
-
-- **Валюта**: `USDT`
-- **Сеть**: `APTOS`
-- **Адрес кошелька**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
-## 📄 Лицензия
-
-Проект распространяется под лицензией **GPL-3.0**.
-""";
-
-  // 7. Spanish (README.es.md)
-  final esContent = """# Wmimo
-
-$langBar
-
-<div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>Cliente GUI de Proxy Clash / Mihomo Multiplataforma y Moderno</h3>
-  <p>Construido con Flutter y el núcleo Mihomo, ofreciendo una experiencia de proxy rápida, elegante y potente.</p>
-
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
-    <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-  </p>
-</div>
-
----
-
-## 📌 Estado de Plataformas
-
-| Plataforma | Estado | Paquetes | Descripción |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Listo** | Instalador (`.exe`) y Portable (`.zip`) | Barra lateral de escritorio, menú de bandeja del sistema, modo TUN, autoactualización. |
-| 🐧 **Linux** | ✅ **Listo** | Paquete Debian (`.deb`) y Portable (`.tar.gz`) | Interfaz nativa GTK3, bandeja del sistema, daemon de núcleo Mihomo integrado. |
-| 📱 **Android** | ✅ **Listo** | APK universal y por arquitecturas | Integración con VpnService, interfaz móvil optimizada. |
-| 🍎 **macOS** | 🚧 **En desarrollo** | DMG | Integración con NetworkExtension en progreso. |
-| 🍏 **iOS** | 🚧 **En desarrollo** | IPA | Integración con NetworkExtension en progreso. |
-
----
-
-## ✨ Características Principales
-
-- 🎨 **UI Moderna y Elegante**: Modos Claro y Oscuro, diseño adaptable (móvil y escritorio).
-- ⚡ **Núcleo Mihomo**: Soporte completo para Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard.
-- 🔀 **Bandeja del Sistema**: Velocidad en tiempo real, cambio de modos de proxy, prueba de latencia.
-- 📊 **Monitoreo de Tráfico**: Gráficos Bézier de tráfico, tarjeta de información IP/ISP, grupos de proxies colapsables.
-- 🚀 **Autoactualización Inteligente**: Canales `stable` y `beta` con verificación SHA-256.
-- 🌍 **Soporte de 9 Idiomas**: Español, Inglés, Chino, Japonés, Coreano, Ruso, Árabe, Persa.
-
----
-
-## 💖 Donaciones y Soporte
-
-- **Moneda**: `USDT`
-- **Red**: `APTOS`
-- **Dirección**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
-## 📄 Licencia
-
-Distribuido bajo la licencia **GPL-3.0**.
-""";
-
-  // 8. Arabic (README.ar.md)
-  final arContent = """# Wmimo
-
-$langBar
-
-<div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>عميل بروكسي حديث متعدد المنصات لـ Clash / Mihomo</h3>
-  <p>تم بناؤه باستخدام Flutter ونواة Mihomo لتوفير تجربة بروكسي سريعة وأنيقة وقوية لجميع البروتوكولات.</p>
-
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
-    <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-  </p>
-</div>
-
----
-
-## 📌 دعم المنصات
-
-| المنصة | الحالة | نوع الحزمة | المميزات |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **جاهز** | مثبت (`.exe`) ومحمول (`.zip`) | شريط جانبي لسطح المكتب، قائمة شريط المهام، وضع TUN، تحديث تلقائي. |
-| 🐧 **Linux** | ✅ **جاهز** | حزمة دبيان (`.deb`) ومحمول (`.tar.gz`) | واجهة GTK3 أصلية، تكامل مع شريط النظام، نواة Mihomo مدمجة. |
-| 📱 **Android** | ✅ **جاهز** | APK شامل وحزم مخصصة لكل معمارية | محرك VpnService مدمج، واجهة هاتف مضغوطة. |
-| 🍎 **macOS** | 🚧 **قيد التطوير** | مثبت DMG | جاري تكييف NetworkExtension. |
-| 🍏 **iOS** | 🚧 **قيد التطوير** | IPA | جاري تكييف NetworkExtension. |
-
----
-
-## ✨ المميزات الرئيسية
-
-- 🎨 **واجهة مستخدم عصرية وأنيقة**: دعم كامل للوضع الداكن والفاتح، تصميم متكيف وسلس.
-- ⚡ **نواة Mihomo عالية الأداء**: دعم كامل لجميع البروتوكولات (Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard).
-- 🔀 **تكامل كامل مع شريط النظام**: عرض سرعة الرفع والتنزيل، تبديل أوضاع البروكسي بنقرة واحدة، اختبار الاستجابة (Ping).
-- 📊 **مراقبة وتحليل حركة البيانات**: مخطط بياني فوري لحركة المرور، بطاقة معلومات IP و مزود الخدمة (ISP).
-- 🚀 **تحديث تلقائي ذكي**: دعم قناتي `stable` (المستقرة) و `beta` (التجريبية).
-- 🌍 **دعم 9 لغات عالمية**: العربية، الإنجليزية، الصينية، اليابانية، الكورية، الروسية، الإسبانية، الفارسية.
-
----
-
-## 💖 التبرع والدعم
-
-- **العملة**: `USDT`
-- **الشبكة**: `APTOS`
-- **العنوان**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
-## 📄 الترخيص
-
-هذا المشروع مرخص بموجب **GPL-3.0**.
-""";
-
-  // 9. Persian / Farsi (README.fa.md)
-  final faContent = """# Wmimo
-
-$langBar
-
-<div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>کلاینت مدرن و چندسکویی پروکسی Clash / Mihomo</h3>
-  <p>ساخته شده با فلاتر و هسته قدرتمند Mihomo برای ارائه تجربه سریع، زیبا و کامل پروکسی.</p>
-
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
-    <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-  </p>
-</div>
-
----
-
-## 📌 وضعیت پلتفرم‌ها
-
-| پلتفرم | وضعیت | فرمت پکیج | توضیحات |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **آماده استفاده** | فایل نصب (`.exe`) و پرتابل (`.zip`) | سایدبار دسکتاپ، منوی تسک‌بار کامل، حالت TUN، به‌روزرسانی خودکار. |
-| 🐧 **Linux** | ✅ **آماده** | پکیج دبیان (`.deb`) و پرتابل (`.tar.gz`) | رابط کاربری بومی GTK3، آیکون سینی سیستم، هسته داخلی Mihomo لینوکس. |
-| 📱 **Android** | ✅ **آماده** | APK عمومی و نسخه‌های تفکیک شده معماری | درایور VpnService سیستمی، رابط کاربری متناسب موبایل. |
-| 🍎 **macOS** | 🚧 **در حال توسعه** | DMG | در حال پیاده‌سازی NetworkExtension. |
-| 🍏 **iOS** | 🚧 **در حال توسعه** | IPA | در حال پیاده‌سازی NetworkExtension. |
-
----
-
-## ✨ ویژگی‌های کلیدی
-
-- 🎨 **رابط کاربری مدرن**: پشتیبانی از تم‌های روشن و تاریک، طراحی ریسپانسیو.
-- ⚡ **هسته پرسرعت Mihomo**: پشتیبانی کامل از پروتکل‌های Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard.
-- 🔀 **منوی تسک‌بار پیشرفته**: نمایش زنده سرعت دانلود و آپلود، تغییر سریع حالت‌های پروکسی، تست پینگ.
-- 📊 **نظارت بر ترافیک**: نمودار ترافیک، کارت نمایش وضعیت IP و ISP، دسته‌بندی پروکسی‌ها با قابلیت جمع شدن.
-- 🚀 **به‌روزرسانی خودکار چندکاناله**: انتخاب بین کانال‌های `stable` و `beta`.
-- 🌍 **پشتیبانی از ۹ زبان بین‌المللی**: فارسی، انگلیسی، چینی، ژاپنی، کره‌ای، روسی، اسپانیایی، عربی.
-
----
-
-## 💖 حمایت و دونیت
-
-- **ارز**: `USDT`
-- **شبکه**: `APTOS`
-- **آدرس کیف پول**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
-## 📄 مجوز
-
-این پروژه تحت مجوز **GPL-3.0** منتشر شده است.
-""";
-
   final files = {
     'README.md': enContent,
     'README.zh-CN.md': zhCnContent,
     'README.zh-TW.md': zhTwContent,
-    'README.ja.md': jaContent,
-    'README.ko.md': koContent,
-    'README.ru.md': ruContent,
-    'README.es.md': esContent,
-    'README.ar.md': arContent,
-    'README.fa.md': faContent,
   };
 
   for (var entry in files.entries) {
     File(entry.key).writeAsStringSync(entry.value, flush: true);
-    print('Generated \${entry.key} (\${entry.value.length} bytes)');
+    print('Updated \${entry.key}');
   }
 }

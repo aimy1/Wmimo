@@ -24,12 +24,15 @@
 
 ---
 
-## 📌 平台支持与开发进度
+## 📌 全平台与 Linux 各大发行版支持矩阵
 
-| 平台 (Platform) | 状态 (Status) | 软件包类型 (Package) | 功能说明 |
+| 平台 / 发行版 | 状态 | 软件包格式 | 功能与适配说明 |
 | :--- | :---: | :--- | :--- |
 | 🪟 **Windows** | ✅ **已基本完成** | 安装包 (`.exe`) 与 绿色便携包 (`.zip`) | 完整桌面侧边栏、全功能系统托盘（实时网速、分流模式切换、节点测速）、TUN 虚拟网卡模式、自动更新。 |
-| 🐧 **Linux** | ✅ **已就绪** | Debian 安装包 (`.deb`) 与 便携压缩包 (`.tar.gz`) | 原生 GTK3 界面、系统托盘常驻、内嵌 Linux 版 Mihomo 守护核心。 |
+| 🐧 **Linux 通用免安装** | ✅ **已就绪** | 通用独立镜像 (`.AppImage`) 与 绿色便携包 (`.tar.gz`) | 单文件免安装，解压即用，完美兼容所有主流与轻量 Linux 发行版。 |
+| 🐧 **Debian / Ubuntu / Mint / Deepin / UOS** | ✅ **已就绪** | Debian 安装包 (`.deb`) | 原生包管理器支持，自动注册桌面启动菜单、高清图标与系统服务。 |
+| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **已就绪** | RedHat 安装包 (`.rpm`) | 标准 RPM 格式封装，自动配置运行时依赖与桌面集成。 |
+| 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **已就绪** | Pacman 二进制包 (`.pkg.tar.zst`) 与 `PKGBUILD` | 支持 pacman 一键安装与 AUR 脚本直接构建。 |
 | 📱 **Android** | ✅ **已就绪** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、紧凑移动端 UI、后台保活。 |
 | 🍎 **macOS** | 🚧 **开发中** | DMG 安装镜像 | NetworkExtension 架构与桌面端协议适配中。 |
 | 🍏 **iOS** | 🚧 **开发中** | IPA | NetworkExtension 架构适配中。 |
@@ -94,8 +97,9 @@ flutter run
 # Windows Release (生成 x64 安装程序与便携包)
 flutter build windows --release
 
-# Linux Release (生成 Linux 桌面二进制)
+# Linux Release (一键打包 Deb, RPM, AppImage, Arch 与 Tarball)
 flutter build linux --release
+bash tool/package_linux.sh v1.0.32
 
 # Android Release (生成 APK 安装包)
 flutter build apk --release
@@ -108,7 +112,7 @@ flutter build apk --release
 本项目配置了完整的 GitHub Actions 自动化工作流（`.github/workflows/release.yml`）：
 
 - **Windows x64 / ARM64**：Inno Setup 安装包 (`.exe`) + 绿色便携包 (`.zip`)
-- **Linux x64**：Debian 安装包 (`.deb`) + 绿色便携包 (`.tar.gz`)
+- **Linux 全发行版支持**：Debian (`.deb`) + RedHat (`.rpm`) + AppImage (`.AppImage`) + Arch (`.pkg.tar.zst`) + 绿色包 (`.tar.gz`)
 - **Android**：分架构 APK (`arm64-v8a`, `armeabi-v7a`, `x86_64`) + 通用版 APK
 - **完整性验证**：自动生成包含所有产物的 `SHA256SUMS.txt` 校验和。
 

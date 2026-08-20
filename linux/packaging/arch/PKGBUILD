@@ -1,0 +1,35 @@
+# Maintainer: Wmimo <https://github.com/aimy1/Wmimo>
+pkgname=wmimo-bin
+pkgver=1.0.32
+pkgrel=1
+pkgdesc="A modern, sleek cross-platform Clash/Mihomo GUI proxy client."
+arch=('x86_64')
+url="https://github.com/aimy1/Wmimo"
+license=('GPL3')
+depends=('gtk3' 'libayatana-appindicator' 'libkeybinder3' 'libsecret')
+provides=('wmimo')
+conflicts=('wmimo')
+source=("https://github.com/aimy1/Wmimo/releases/download/v${pkgver}/Wmimo-Linux-x64-v${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+package() {
+  mkdir -p "${pkgdir}/opt/wmimo" "${pkgdir}/usr/bin" "${pkgdir}/usr/share/applications" "${pkgdir}/usr/share/icons/hicolor/256x256/apps"
+  cp -r "${srcdir}/Wmimo-Linux-x64-v${pkgver}"/* "${pkgdir}/opt/wmimo/"
+  ln -sf /opt/wmimo/wmimo "${pkgdir}/usr/bin/wmimo"
+  
+  if [ -f "${pkgdir}/opt/wmimo/wmimo.png" ]; then
+    cp "${pkgdir}/opt/wmimo/wmimo.png" "${pkgdir}/usr/share/icons/hicolor/256x256/apps/wmimo.png"
+  fi
+  
+  cat << EOF > "${pkgdir}/usr/share/applications/wmimo.desktop"
+[Desktop Entry]
+Name=Wmimo
+Comment=Modern cross-platform Clash/Mihomo GUI proxy client.
+Exec=/opt/wmimo/wmimo %u
+Icon=wmimo
+Terminal=false
+Type=Application
+Categories=Network;Utility;
+StartupNotify=true
+EOF
+}
