@@ -88,6 +88,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
 
     return Card(
       elevation: 0,
+      margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
@@ -96,7 +97,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

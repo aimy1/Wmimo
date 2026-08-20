@@ -571,12 +571,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             expireInfo: tranfficExpire,
           ),
         ],
+        const SizedBox(height: 10),
         IpInfoCard(
           isConnected: _state == FlutterVpnServiceState.connected,
           mixedPort: ClashSettingManager.getMixedPort(),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         Card(
+          margin: EdgeInsets.zero,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
             child: Row(
@@ -856,14 +858,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         : (percent > 0.7 ? Colors.orange : ThemeDefine.kColorBlue);
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: isDark
             ? const Color(0xFF151D2E)
             : const Color(0xFFF1F5F9).withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: theme.dividerColor.withValues(alpha: 0.4),
+          color: theme.dividerColor.withValues(alpha: 0.35),
           width: 0.8,
         ),
       ),
