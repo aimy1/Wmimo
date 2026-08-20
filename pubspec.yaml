@@ -5,7 +5,7 @@ repository: https://github.com/aimy1/Wmimo.git
 issue_tracker: https://github.com/aimy1/Wmimo/issues
 
 publish_to: none 
-version: 1.0.31+1409
+version: 1.0.32+1410
 environment:
   sdk: ">=3.12.2 <4.0.0"
   flutter: ">=3.35.0"
