@@ -1474,10 +1474,6 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }
 
   Future<void> _onTapRules() async {
-    if (widget.onNavigateToTab != null) {
-      widget.onNavigateToTab!(4);
-      return;
-    }
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -1488,10 +1484,6 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }
 
   Future<void> _onTapLogs() async {
-    if (widget.onNavigateToTab != null) {
-      widget.onNavigateToTab!(5);
-      return;
-    }
     await Navigator.push(
       context,
       MaterialPageRoute(
