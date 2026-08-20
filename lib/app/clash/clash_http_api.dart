@@ -544,14 +544,17 @@ class ClashHttpApi {
 
   static Future<ReturnResult<int>> getDelay(
     String node, {
-    String url = "https://www.gstatic.com",
-    Duration timeout = const Duration(seconds: 5),
+    String url = "https://www.gstatic.com/generate_204",
+    Duration timeout = const Duration(seconds: 6),
   }) async {
     String secret = getSecret?.call() ?? "";
     Map<String, String> headers = getHeaders(secret);
 
     final encodeNode = Uri.encodeComponent(node);
-    final encodeUrl = Uri.encodeComponent(url);
+    final validUrl = (url.isNotEmpty && url.contains("://"))
+        ? url
+        : "https://www.gstatic.com/generate_204";
+    final encodeUrl = Uri.encodeComponent(validUrl);
     var result = await HttpUtils.httpGetRequest(
       "$host:${getControlPort?.call()}/proxies/$encodeNode/delay?url=$encodeUrl&timeout=${timeout.inMilliseconds}",
       null,
@@ -559,18 +562,26 @@ class ClashHttpApi {
       timeout + const Duration(seconds: 2),
       null,
       null,
+      checkStatuscode: false,
     );
-    if (result.error != null) {
+    if (result.error != null && result.data == null) {
       return ReturnResult(error: result.error);
     }
     try {
-      var decodedResponse = jsonDecode(result.data!.item2);
+      final responseBody = result.data?.item2 ?? "";
+      if (responseBody.isEmpty) {
+        return ReturnResult(error: result.error ?? ReturnResultError("Empty response"));
+      }
+      var decodedResponse = jsonDecode(responseBody);
       int? delay = decodedResponse["delay"];
       String? err = decodedResponse["message"];
+      if (delay != null && delay > 0) {
+        return ReturnResult(data: delay);
+      }
       if (err != null) {
         return ReturnResult(error: ReturnResultError(err));
       }
-      return ReturnResult(data: delay);
+      return ReturnResult(data: null);
     } catch (err) {
       return ReturnResult(error: ReturnResultError(err.toString()));
     }

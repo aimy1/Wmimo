@@ -505,7 +505,7 @@ tcp-concurrent: true
 find-process-mode: always
 ''';
 
-    if (tunMode) {
+    if (tunMode && !Platform.isAndroid) {
       header += '''
 tun:
   enable: true

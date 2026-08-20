@@ -194,6 +194,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         );
         return;
       }
+      try {
+        if (group.name != "GLOBAL") {
+          await ClashHttpApi.setProxiesNode("GLOBAL", node.name);
+        }
+      } catch (_) {}
     }
 
     if (mounted) {
@@ -290,43 +295,52 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final nodesToTest = group.all
         .map((name) => nodeMap[name])
         .whereType<ClashProxiesNode>()
+        .where((n) => !ClashProtocolType.isGroupType(n.type))
         .toList();
 
+    if (nodesToTest.isEmpty) return;
+
     for (var node in nodesToTest) {
-      if (!_nodesTesting.contains(node.name)) {
-        _nodesTesting.add(node.name);
-      }
+      _nodesTesting.add(node.name);
     }
     setState(() {});
 
     Timer? updateDebounce;
     void scheduleUiUpdate() {
       if (updateDebounce?.isActive == true) return;
-      updateDebounce = Timer(const Duration(milliseconds: 120), () {
+      updateDebounce = Timer(const Duration(milliseconds: 150), () {
         if (mounted) setState(() {});
       });
     }
 
-    final testFutures = nodesToTest.map((node) async {
-      try {
-        final res = await ClashHttpApi.getDelay(
-          node.name,
-          url: SettingManager.getConfig().delayTestUrl,
-        );
-        if (res.data != null && res.data! > 0) {
-          node.delay = res.data;
-        } else {
+    int nextIndex = 0;
+    Future<void> worker() async {
+      while (true) {
+        if (nextIndex >= nodesToTest.length) break;
+        final node = nodesToTest[nextIndex++];
+        try {
+          final res = await ClashHttpApi.getDelay(
+            node.name,
+            url: SettingManager.getConfig().delayTestUrl,
+          );
+          if (res.data != null && res.data! > 0) {
+            node.delay = res.data;
+          } else {
+            node.delay = -1;
+          }
+        } catch (_) {
           node.delay = -1;
+        } finally {
+          _nodesTesting.remove(node.name);
+          scheduleUiUpdate();
         }
-      } catch (_) {
-        node.delay = -1;
-      } finally {
-        _nodesTesting.remove(node.name);
-        scheduleUiUpdate();
       }
-    });
+    }
 
-    await Future.wait(testFutures);
+    final workerCount = nodesToTest.length < 6 ? nodesToTest.length : 6;
+    final workers = List.generate(workerCount, (_) => worker());
+    await Future.wait(workers);
+
     updateDebounce?.cancel();
     if (mounted) {
       setState(() {});
@@ -356,8 +370,65 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
 
     final groups = _getProxyGroups();
+    final Set<String> testedNames = {};
+    final List<ClashProxiesNode> allUniqueLeafNodes = [];
+
     for (var g in groups) {
-      _testGroupDelay(g);
+      final nodes = _getNodesForGroup(g);
+      for (var n in nodes) {
+        if (!ClashProtocolType.isGroupType(n.type) && !testedNames.contains(n.name)) {
+          testedNames.add(n.name);
+          allUniqueLeafNodes.add(n);
+        }
+      }
+    }
+
+    if (allUniqueLeafNodes.isEmpty) return;
+
+    for (var node in allUniqueLeafNodes) {
+      _nodesTesting.add(node.name);
+    }
+    setState(() {});
+
+    Timer? updateDebounce;
+    void scheduleUiUpdate() {
+      if (updateDebounce?.isActive == true) return;
+      updateDebounce = Timer(const Duration(milliseconds: 150), () {
+        if (mounted) setState(() {});
+      });
+    }
+
+    int nextIndex = 0;
+    Future<void> worker() async {
+      while (true) {
+        if (nextIndex >= allUniqueLeafNodes.length) break;
+        final node = allUniqueLeafNodes[nextIndex++];
+        try {
+          final res = await ClashHttpApi.getDelay(
+            node.name,
+            url: SettingManager.getConfig().delayTestUrl,
+          );
+          if (res.data != null && res.data! > 0) {
+            node.delay = res.data;
+          } else {
+            node.delay = -1;
+          }
+        } catch (_) {
+          node.delay = -1;
+        } finally {
+          _nodesTesting.remove(node.name);
+          scheduleUiUpdate();
+        }
+      }
+    }
+
+    final workerCount = allUniqueLeafNodes.length < 6 ? allUniqueLeafNodes.length : 6;
+    final workers = List.generate(workerCount, (_) => worker());
+    await Future.wait(workers);
+
+    updateDebounce?.cancel();
+    if (mounted) {
+      setState(() {});
     }
   }
 
