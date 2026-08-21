@@ -84,6 +84,7 @@ dist/
 /bind/linux/
 /bind/macos/
 *.zip
+!assets/datas/*.zip
 *.gz
 /dist/
 mihomo-alpha-bin/
