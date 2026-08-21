@@ -75,24 +75,24 @@ class RemoteConfigDonate {
 }
 
 class RemoteConfig {
-  static const String kDefaultHost = "wmimo.app";
-  static const String kDefaultConfig = "https://dot.$kDefaultHost/mconfig.json";
+  static const String kDefaultHost = "wmimo-website.pages.dev";
+  static const String kDefaultConfig = "https://$kDefaultHost/mconfig.json";
   static const String kDefaultAutoUpdate =
-      "https://dot.$kDefaultHost/mautoupdate.json";
+      "https://$kDefaultHost/mautoupdate.json";
 
   static const String kDefaultGetTranffic =
-      "https://$kDefaultHost/page/sponsor#list";
+      "https://$kDefaultHost/community.html";
 
-  static const String kDefaultTutorial = "https://$kDefaultHost/guide/";
-  static const String kDefaultFaq = "https://$kDefaultHost/guide/faq/";
+  static const String kDefaultTutorial = "https://$kDefaultHost/docs/";
+  static const String kDefaultFaq = "https://$kDefaultHost/docs/faq.html";
 
-  static const String kDefaultDownload = "https://$kDefaultHost/download/";
+  static const String kDefaultDownload = "https://$kDefaultHost/download.html";
   static const String kDefaultTelegram = "https://t.me/WmimoApp";
   static const String kDefaultFollow = "https://github.com/aimy1/Wmimo";
-  static const String kDefaultDonate = "http://$kDefaultHost/donate";
-  static const String kDefaultDoc = "https://wiki.metacubex.one/config/";
+  static const String kDefaultDonate = "https://$kDefaultHost/community.html";
+  static const String kDefaultDoc = "https://$kDefaultHost/docs/build.html";
   static const String kDefaultHtmlTools = "https://tools.wmimo.app/";
-  static const String kDefaultConnect = "https://wmimo.app/go";
+  static const String kDefaultConnect = "https://$kDefaultHost/";
 
   String latestCheck = "";
 

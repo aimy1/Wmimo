@@ -428,6 +428,17 @@ class GroupHelper {
       List<GroupItemOptions> options = [
         GroupItemOptions(
           pushOptions: GroupItemPushOptions(
+            name: tcontext.meta.website,
+            onPush: () async {
+              await UrlLauncherUtils.loadUrl(
+                "https://wmimo-website.pages.dev/",
+                mode: LaunchMode.externalApplication,
+              );
+            },
+          ),
+        ),
+        GroupItemOptions(
+          pushOptions: GroupItemPushOptions(
             name: tcontext.meta.download,
             onPush: () async {
               var remoteConfig = RemoteConfigManager.getConfig();

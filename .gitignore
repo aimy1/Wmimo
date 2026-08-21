@@ -29,6 +29,9 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+**/build/
+/dist/
+dist/
 
 # Rust / Cargo
 **/target/
@@ -84,3 +87,4 @@ migrate_working_dir/
 *.gz
 /dist/
 mihomo-alpha-bin/
+tool/ssh_proxy.py

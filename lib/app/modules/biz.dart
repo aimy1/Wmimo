@@ -1,4 +1,4 @@
-﻿//import 'package:device_info_plus/device_info_plus.dart';
+//import 'package:device_info_plus/device_info_plus.dart';
 
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/auto_update_manager.dart';
@@ -17,6 +17,7 @@ class Biz {
   static final List<void Function()> onEventInitAllFinish = [];
   static final List<Function(String traffic, String speed)>
   onEventTrafficChanged = [];
+  static final List<void Function(String nodeName)> onEventProxySelected = [];
 
   static bool _initFinish = false;
   static bool _initHomeFinish = false;
@@ -92,6 +93,12 @@ class Biz {
   static void trafficChanged(String traffic, String speed) {
     for (var callback in onEventTrafficChanged) {
       callback(traffic, speed);
+    }
+  }
+
+  static void proxySelected(String nodeName) {
+    for (var callback in onEventProxySelected) {
+      callback(nodeName);
     }
   }
 }

@@ -111,7 +111,7 @@
             android:name=".TileService"
             android:directBootAware="true"
             android:exported="true"
-            android:icon="@drawable/ic_tile"
+            android:icon="@mipmap/ic_launcher"
             android:label="Wmimo" 
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             tools:targetApi="n">
