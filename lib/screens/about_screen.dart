@@ -108,14 +108,12 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(18),
-                                          child: Image.asset(
-                                            'assets/images/app_icon_128.png',
-                                            width: 72,
-                                            height: 72,
-                                            fit: BoxFit.contain,
-                                          ),
+                                        Image.asset(
+                                          'assets/images/app_icon_256.png',
+                                          width: 72,
+                                          height: 72,
+                                          fit: BoxFit.contain,
+                                          filterQuality: FilterQuality.medium,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
@@ -176,6 +174,15 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
         textOptions: GroupItemTextOptions(
           name: tcontext.meta.author,
           text: "aimy1",
+        ),
+      ),
+      GroupItemOptions(
+        pushOptions: GroupItemPushOptions(
+          name: tcontext.meta.website,
+          text: "wmimo-website.pages.dev",
+          onPush: () async {
+            await UrlLauncherUtils.loadUrl("https://wmimo-website.pages.dev/");
+          },
         ),
       ),
       GroupItemOptions(

@@ -668,14 +668,12 @@ class _HomeScreenState extends State<HomeScreen>
                             padding: const EdgeInsets.fromLTRB(16, 20, 16, 14),
                             child: Row(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.asset(
-                                    'assets/images/app_icon_128.png',
-                                    width: 28,
-                                    height: 28,
-                                    fit: BoxFit.contain,
-                                  ),
+                                Image.asset(
+                                  'assets/images/app_icon_256.png',
+                                  width: 28,
+                                  height: 28,
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.medium,
                                 ),
                                 const SizedBox(width: 10),
                                 Expanded(

@@ -896,6 +896,7 @@ class DialogUtils {
                     width: 145,
                     height: 145,
                     fit: BoxFit.contain,
+                    filterQuality: FilterQuality.medium,
                   ),
                 ),
               ),

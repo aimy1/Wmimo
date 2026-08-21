@@ -223,6 +223,7 @@ class _DonateScreenState extends LasyRenderingState<DonateScreen> {
                                       width: 160,
                                       height: 160,
                                       fit: BoxFit.contain,
+                                      filterQuality: FilterQuality.medium,
                                     ),
                                   ),
                                 ),

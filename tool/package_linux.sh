@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-TAG="${1:-v1.0.32}"
+TAG="${1:-v1.0.33}"
 RAW_VERSION="${TAG#v}"
 BUNDLE_DIR="build/linux/x64/release/bundle"
 DIST_DIR="dist"

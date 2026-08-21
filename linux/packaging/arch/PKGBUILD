@@ -1,6 +1,6 @@
 # Maintainer: Wmimo <https://github.com/aimy1/Wmimo>
 pkgname=wmimo-bin
-pkgver=1.0.32
+pkgver=1.0.33
 pkgrel=1
 pkgdesc="A modern, sleek cross-platform Clash/Mihomo GUI proxy client."
 arch=('x86_64')
