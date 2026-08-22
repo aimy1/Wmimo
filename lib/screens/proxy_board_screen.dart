@@ -136,11 +136,16 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           return ClashProtocolType.isGroupType(n.type);
         }).toList();
 
-        bool hasActualGroups = groups.any((g) =>
-            g.name != "GLOBAL" ||
-            g.all.any((m) => m != "DIRECT" && m != "REJECT"));
+        // Check for actual leaf proxy nodes (excluding DIRECT and REJECT stubs)
+        final leafProxies = result.data!.where((n) {
+          return !ClashProtocolType.isGroupType(n.type) &&
+              n.name != "DIRECT" &&
+              n.name != "REJECT" &&
+              n.name != "GLOBAL" &&
+              !n.name.startsWith("🎯");
+        }).toList();
 
-        if (groups.isNotEmpty && hasActualGroups) {
+        if (groups.isNotEmpty && leafProxies.isNotEmpty) {
           for (var n in result.data!) {
             if (n.delay == null && existingDelays.containsKey(n.name)) {
               n.delay = existingDelays[n.name];

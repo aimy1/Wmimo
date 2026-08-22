@@ -88,17 +88,26 @@ class _AddProfileByUrlScreenState
     _loading = true;
     setState(() {});
 
-    final result = await ProfileManager.addRemote(
-      url,
-      remark: remark,
-      patch: _patch,
-      userAgent: _userAgent,
-      xhwid: _xhwid,
-      decryptPassword: _decryptPassword,
-      updateInterval: _updateInterval,
-      updateIntervalPreferByProfile: _updateIntervalPreferByProfile,
-      boardProviderId: _boardProviderId,
-    );
+    late ReturnResult<String> result;
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      result = await ProfileManager.addRemote(
+        url,
+        remark: remark,
+        patch: _patch,
+        userAgent: _userAgent,
+        xhwid: _xhwid,
+        decryptPassword: _decryptPassword,
+        updateInterval: _updateInterval,
+        updateIntervalPreferByProfile: _updateIntervalPreferByProfile,
+        boardProviderId: _boardProviderId,
+      );
+    } else {
+      result = await ProfileManager.addContent(
+        url,
+        remark: remark,
+        patch: _patch,
+      );
+    }
 
     if (!mounted) {
       return;

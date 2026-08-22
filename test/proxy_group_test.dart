@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:libclash_vpn_service/vpn_service.dart';
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
+import 'package:wmimo/app/utils/subscription_converter.dart';
 
 void main() {
   group('ClashProtocolType tests', () {
@@ -252,5 +254,44 @@ rules:
       expect(usNode.delay, isNull);
     });
   });
+
+  group('SubscriptionConverter tests', () {
+    test('Converts vmess and ss node URIs to valid Clash YAML', () {
+      const vmessJson = '{"v":"2","ps":"HK VMess 01","add":"1.2.3.4","port":443,"id":"a0b1c2d3-e4f5-6789-0123-456789abcdef","aid":0,"scy":"auto","net":"ws","type":"none","host":"hk.example.com","path":"/vmess","tls":"tls","sni":"hk.example.com"}';
+      final vmessUri = 'vmess://${base64.encode(utf8.encode(vmessJson))}';
+      const ssUri = 'ss://YWVzLTEyOC1nY206cGFzc3dvcmQ=@5.6.7.8:8388#US%20SS%2001';
+      const vlessUri = 'vless://uuid-1234@9.10.11.12:443?type=ws&security=tls&path=/vless&host=vless.example.com&sni=vless.example.com#SG%20VLESS%2001';
+
+      final rawSubscription = '$vmessUri\n$ssUri\n$vlessUri';
+      final clashYaml = SubscriptionConverter.convertToClashYaml(rawSubscription);
+
+      expect(SubscriptionConverter.isClashYaml(clashYaml), isTrue);
+      expect(clashYaml, contains('HK VMess 01'));
+      expect(clashYaml, contains('US SS 01'));
+      expect(clashYaml, contains('SG VLESS 01'));
+      expect(clashYaml, contains('节点选择'));
+      expect(clashYaml, contains('自动选择'));
+    });
+
+    test('Decodes and converts Base64 subscription to Clash YAML', () {
+      const vmessJson = '{"v":"2","ps":"HK VMess 01","add":"1.2.3.4","port":443,"id":"a0b1c2d3-e4f5-6789-0123-456789abcdef","aid":0,"scy":"auto","net":"ws","type":"none","host":"hk.example.com","path":"/vmess","tls":"tls","sni":"hk.example.com"}';
+      final vmessUri = 'vmess://${base64.encode(utf8.encode(vmessJson))}';
+      const ssUri = 'ss://YWVzLTEyOC1nY206cGFzc3dvcmQ=@5.6.7.8:8388#US%20SS%2001';
+      final rawLines = '$vmessUri\n$ssUri';
+
+      // Encode the entire subscription as Base64 (standard airport subscription format)
+      final base64Sub = base64.encode(utf8.encode(rawLines));
+
+      final convertedYaml = SubscriptionConverter.convertToClashYaml(base64Sub);
+      expect(SubscriptionConverter.isClashYaml(convertedYaml), isTrue);
+      expect(convertedYaml, contains('proxies:'));
+      expect(convertedYaml, contains('proxy-groups:'));
+
+      final parsedNodes = ProxyNodeLoader.parseProfileContent(base64Sub);
+      expect(parsedNodes.any((n) => n.name == 'HK VMess 01'), isTrue);
+      expect(parsedNodes.any((n) => n.name == 'US SS 01'), isTrue);
+    });
+  });
 }
+
 
