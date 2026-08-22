@@ -237,28 +237,18 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     Biz.proxySelected(node.name);
 
     if (_isVpnStarted) {
-      // 1. Try to set the node on the specific group
-      var err = await ClashHttpApi.setProxiesNode(group.name, node.name);
-
-      // 2. If group is synthesized or not present in core (e.g. 404), fallback to GLOBAL / Proxy / 节点选择
+      ReturnResultError? err = await ClashHttpApi.setProxiesNode(group.name, node.name);
       if (err != null) {
-        final fallbackGroups = ["GLOBAL", "Proxy", "PROXY", "节点选择", "🎯 节点选择", "PROXIES"];
-        for (var fallbackGroup in fallbackGroups) {
-          if (fallbackGroup != group.name) {
-            final fallbackErr = await ClashHttpApi.setProxiesNode(fallbackGroup, node.name);
-            if (fallbackErr == null) {
-              err = null;
-              break;
-            }
+        // Fallback: if group was not found in core (e.g. 404), try GLOBAL and Proxy
+        final errGlobal = await ClashHttpApi.setProxiesNode("GLOBAL", node.name);
+        if (errGlobal == null) {
+          err = null;
+        } else {
+          final errProxy = await ClashHttpApi.setProxiesNode("Proxy", node.name);
+          if (errProxy == null) {
+            err = null;
           }
         }
-      } else {
-        // Also sync to GLOBAL so traffic actively routes through this selected node
-        try {
-          if (group.name != "GLOBAL") {
-            await ClashHttpApi.setProxiesNode("GLOBAL", node.name);
-          }
-        } catch (_) {}
       }
 
       if (err != null && mounted) {
@@ -278,6 +268,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         );
         return;
       }
+      try {
+        if (group.name != "GLOBAL") {
+          await ClashHttpApi.setProxiesNode("GLOBAL", node.name);
+        }
+      } catch (_) {}
     }
 
     if (mounted) {

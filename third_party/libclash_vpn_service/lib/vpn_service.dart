@@ -276,7 +276,11 @@ class FlutterVpnService {
 
     final currentDir = Directory.current.path;
     final exeName = Platform.isWindows ? "wmimoService.exe" : "wmimoService";
+    final exeDir = File(Platform.resolvedExecutable).parent.path;
     final candidates = [
+      '$exeDir/$exeName',
+      '$exeDir/data/$exeName',
+      '$exeDir/lib/$exeName',
       '$currentDir/$exeName',
       '$currentDir/bind/windows/core/$exeName',
       '$currentDir/bind/linux/core/$exeName',
@@ -288,15 +292,17 @@ class FlutterVpnService {
       '$currentDir/clash',
     ];
 
+    if (Platform.environment['APPDIR'] != null) {
+      candidates.insert(0, '${Platform.environment['APPDIR']}/usr/bin/$exeName');
+    }
+
     // Check app support and documents directories (for desktop)
     try {
-      final exeDir = File(Platform.resolvedExecutable).parent.path;
-      candidates.insert(0, '$exeDir/$exeName');
       final appSupport = await getApplicationSupportDirectory();
-      candidates.insert(1, '${appSupport.path}/core/$exeName');
-      candidates.insert(2, '${appSupport.path}/$exeName');
+      candidates.insert(0, '${appSupport.path}/core/$exeName');
+      candidates.insert(1, '${appSupport.path}/$exeName');
       final appDoc = await getApplicationDocumentsDirectory();
-      candidates.insert(3, '${appDoc.path}/core/$exeName');
+      candidates.insert(2, '${appDoc.path}/core/$exeName');
     } catch (_) {}
 
     for (var path in candidates) {
@@ -616,6 +622,158 @@ dns:
     - 1.0.0.1
     - 8.8.4.4
 ''';
+    }
+
+    // Ensure fallback proxy-groups if not defined in subscription
+    if (!filteredLines.contains('proxy-groups:') && !filteredLines.contains('"proxy-groups":')) {
+      final List<String> proxyNames = [];
+      final lines = filteredLines.split('\n');
+      final nameRegex = RegExp(r'^\s*-\s*(?:name:\s*["'']?([^"''\n]+)["'']?|{[^}]*name:\s*["'']?([^,"''}\n]+))');
+      for (var l in lines) {
+        final match = nameRegex.firstMatch(l);
+        if (match != null) {
+          final n = (match.group(1) ?? match.group(2) ?? "").trim();
+          final upperN = n.toUpperCase();
+          if (n.isNotEmpty &&
+              upperN != "DIRECT" &&
+              upperN != "REJECT" &&
+              upperN != "REJECT-DROP" &&
+              upperN != "PASS" &&
+              upperN != "PASS-RULE" &&
+              upperN != "COMPATIBLE" &&
+              upperN != "GLOBAL" &&
+              upperN != "PROXY") {
+            if (!proxyNames.contains(n)) {
+              proxyNames.add(n);
+            }
+          }
+        }
+      }
+
+      if (proxyNames.isNotEmpty) {
+        final hkNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("香港") || u.contains("HK") || u.contains("HONG KONG");
+        }).toList();
+        final jpNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("日本") || u.contains("JP") || u.contains("JAPAN") || n.contains("东京") || n.contains("大阪");
+        }).toList();
+        final sgNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("新加坡") || u.contains("SG") || u.contains("SINGAPORE") || n.contains("狮城");
+        }).toList();
+        final twNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("台湾") || u.contains("TW") || u.contains("TAIWAN") || n.contains("台北");
+        }).toList();
+        final usNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("美国") || u.contains("US") || u.contains("USA") || n.contains("美") || u.contains("UNITED STATES");
+        }).toList();
+        final krNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("韩国") || u.contains("KR") || u.contains("KOREA") || n.contains("首尔");
+        }).toList();
+
+        final buf = StringBuffer('\nproxy-groups:\n');
+        buf.writeln('  - name: 节点选择');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        buf.writeln('      - 自动选择');
+        buf.writeln('      - 故障转移');
+        for (var p in proxyNames) {
+          buf.writeln('      - "$p"');
+        }
+        buf.writeln('      - DIRECT');
+
+        buf.writeln('  - name: 自动选择');
+        buf.writeln('    type: url-test');
+        buf.writeln('    url: http://www.gstatic.com/generate_204');
+        buf.writeln('    interval: 300');
+        buf.writeln('    proxies:');
+        for (var p in proxyNames) {
+          buf.writeln('      - "$p"');
+        }
+
+        buf.writeln('  - name: 故障转移');
+        buf.writeln('    type: fallback');
+        buf.writeln('    url: http://www.gstatic.com/generate_204');
+        buf.writeln('    interval: 300');
+        buf.writeln('    proxies:');
+        for (var p in proxyNames) {
+          buf.writeln('      - "$p"');
+        }
+
+        if (hkNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇭🇰 香港节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in hkNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (jpNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇯🇵 日本节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in jpNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (sgNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇸🇬 新加坡节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in sgNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (twNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇹🇼 台湾节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in twNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (usNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇺🇸 美国节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in usNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (krNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇰🇷 韩国节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in krNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+
+        buf.writeln('  - name: GLOBAL');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        buf.writeln('      - 节点选择');
+        buf.writeln('      - 自动选择');
+        buf.writeln('      - 故障转移');
+        for (var p in proxyNames) {
+          buf.writeln('      - "$p"');
+        }
+        buf.writeln('      - DIRECT');
+
+        filteredLines += buf.toString();
+
+        if (!filteredLines.contains('rules:') && !filteredLines.contains('"rules":')) {
+          filteredLines += '''\n
+rules:
+  - MATCH,节点选择
+''';
+        }
+      }
     }
 
     final baseDir = _savedConfig?.base_dir.isNotEmpty == true
