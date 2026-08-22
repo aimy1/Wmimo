@@ -230,7 +230,6 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       return;
     }
 
-    final prev = group.now;
     setState(() {
       group.now = node.name;
     });
@@ -238,42 +237,19 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     Biz.proxySelected(node.name);
 
     if (_isVpnStarted) {
-      ReturnResultError? err = await ClashHttpApi.setProxiesNode(group.name, node.name);
-      if (err != null) {
-        // Fallback: if group was not found in core (e.g. 404), try GLOBAL and Proxy
-        final errGlobal = await ClashHttpApi.setProxiesNode("GLOBAL", node.name);
-        if (errGlobal == null) {
-          err = null;
-        } else {
-          final errProxy = await ClashHttpApi.setProxiesNode("Proxy", node.name);
-          if (errProxy == null) {
-            err = null;
-          }
+      ClashHttpApi.setProxiesNode(group.name, node.name).then((err) {
+        if (err != null) {
+          ClashHttpApi.setProxiesNode("GLOBAL", node.name).then((err2) {
+            if (err2 != null) {
+              ClashHttpApi.setProxiesNode("Proxy", node.name);
+            }
+          });
         }
-      }
+      }).catchError((_) {});
 
-      if (err != null && mounted) {
-        final tcontext = Translations.of(context);
-        setState(() {
-          group.now = prev;
-        });
-        if (prev.isNotEmpty) {
-          Biz.proxySelected(prev);
-        }
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(tcontext.meta.switchNodeFailed(p: err.message)),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-        return;
+      if (group.name != "GLOBAL") {
+        ClashHttpApi.setProxiesNode("GLOBAL", node.name).catchError((_) => null);
       }
-      try {
-        if (group.name != "GLOBAL") {
-          await ClashHttpApi.setProxiesNode("GLOBAL", node.name);
-        }
-      } catch (_) {}
     }
 
     if (mounted) {
