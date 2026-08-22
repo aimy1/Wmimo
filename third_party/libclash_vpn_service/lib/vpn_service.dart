@@ -1109,6 +1109,15 @@ rules:
           "['localhost', '127.0.0.0/8', '::1', '10.0.0.0/8', '192.168.0.0/16', '172.16.0.0/12']"
         ]);
       } catch (_) {}
+
+      // KDE Plasma support
+      try {
+        final kwrite = (await Process.run('which', ['kwriteconfig6'])).exitCode == 0 ? 'kwriteconfig6' : 'kwriteconfig5';
+        await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'ProxyType', '1']);
+        await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'httpProxy', 'http://$host:$port']);
+        await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'httpsProxy', 'http://$host:$port']);
+        await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'socksProxy', 'socks5://$host:$port']);
+      } catch (_) {}
     }
   }
 
@@ -1140,6 +1149,10 @@ rules:
     } else if (Platform.isLinux) {
       try {
         await Process.run('gsettings', ['set', 'org.gnome.system.proxy', 'mode', 'none']);
+      } catch (_) {}
+      try {
+        final kwrite = (await Process.run('which', ['kwriteconfig6'])).exitCode == 0 ? 'kwriteconfig6' : 'kwriteconfig5';
+        await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'ProxyType', '0']);
       } catch (_) {}
     }
   }
