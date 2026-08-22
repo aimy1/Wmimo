@@ -526,16 +526,89 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       return ClashProtocolType.isGroupType(n.type) && !n.hidden;
     }).toList();
 
-    if (groups.isEmpty && _allNodes.isNotEmpty) {
-      final leafNodes = _allNodes.where((n) => !ClashProtocolType.isGroupType(n.type)).toList();
-      if (leafNodes.isNotEmpty) {
-        final fallbackGroup = ClashProxiesNode()
+    final leafNodes = _allNodes.where((n) {
+      return !ClashProtocolType.isGroupType(n.type) &&
+          n.name != "DIRECT" &&
+          n.name != "REJECT" &&
+          n.name != "GLOBAL" &&
+          !n.name.startsWith("🎯");
+    }).toList();
+
+    // Check if existing groups contain actual leaf nodes
+    bool hasLeafNodesInGroups = false;
+    for (var g in groups) {
+      if (g.name.toUpperCase() != "GLOBAL" &&
+          g.all.any((name) => leafNodes.any((l) => l.name == name))) {
+        hasLeafNodesInGroups = true;
+        break;
+      }
+    }
+
+    if (!hasLeafNodesInGroups && leafNodes.isNotEmpty) {
+      final List<ClashProxiesNode> synthesizedGroups = [];
+
+      // 1. 节点选择
+      synthesizedGroups.add(
+        ClashProxiesNode()
           ..name = "节点选择"
           ..type = "Selector"
           ..all = leafNodes.map((n) => n.name).toList()
-          ..now = leafNodes.first.name;
-        groups = [fallbackGroup];
+          ..now = leafNodes.first.name,
+      );
+
+      // 2. 自动选择
+      synthesizedGroups.add(
+        ClashProxiesNode()
+          ..name = "自动选择"
+          ..type = "URLTest"
+          ..all = leafNodes.map((n) => n.name).toList()
+          ..now = leafNodes.first.name,
+      );
+
+      // 3. Regional groups (香港, 日本, 新加坡, 美国, etc.)
+      final regions = <String, List<String>>{
+        "🇭🇰 香港节点": [],
+        "🇯🇵 日本节点": [],
+        "🇸🇬 新加坡节点": [],
+        "🇹🇼 台湾节点": [],
+        "🇺🇸 美国节点": [],
+        "🇰🇷 韩国节点": [],
+      };
+
+      for (var node in leafNodes) {
+        final name = node.name;
+        final upper = name.toUpperCase();
+        if (name.contains("香港") || upper.contains("HK") || upper.contains("HONG KONG")) {
+          regions["🇭🇰 香港节点"]!.add(name);
+        } else if (name.contains("日本") || upper.contains("JP") || upper.contains("JAPAN") || name.contains("东京") || name.contains("大阪")) {
+          regions["🇯🇵 日本节点"]!.add(name);
+        } else if (name.contains("新加坡") || name.contains("狮城") || upper.contains("SG") || upper.contains("SINGAPORE")) {
+          regions["🇸🇬 新加坡节点"]!.add(name);
+        } else if (name.contains("台湾") || name.contains("台北") || upper.contains("TW") || upper.contains("TAIWAN")) {
+          regions["🇹🇼 台湾节点"]!.add(name);
+        } else if (name.contains("美国") || upper.contains("US") || upper.contains("USA") || name.contains("美") || upper.contains("UNITED STATES")) {
+          regions["🇺🇸 美国节点"]!.add(name);
+        } else if (name.contains("韩国") || name.contains("首尔") || upper.contains("KR") || upper.contains("KOREA")) {
+          regions["🇰🇷 韩国节点"]!.add(name);
+        }
       }
+
+      regions.forEach((regionName, nodeNames) {
+        if (nodeNames.isNotEmpty) {
+          synthesizedGroups.add(
+            ClashProxiesNode()
+              ..name = regionName
+              ..type = "Selector"
+              ..all = nodeNames
+              ..now = nodeNames.first,
+          );
+        }
+      });
+
+      final otherGroups = groups
+          .where((g) => g.name != "Proxy" && g.name.toUpperCase() != "GLOBAL")
+          .toList();
+      groups = [...synthesizedGroups, ...otherGroups];
     }
 
     if (_currentMode == "global") {
