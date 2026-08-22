@@ -24,26 +24,6 @@
 
 ---
 
-## 🔥 Beta 分支专属特性 (What's New in Beta)
-
-> [!TIP]
-> 当前分支为 **`beta` 测试预览分支**，包含了最新的协议支持、Linux 深度适配优化以及多项节点稳定性改进：
-
-- 🔄 **全协议通用订阅转换器 (`SubscriptionConverter`)**：
-  - 自动识别并解析 **Base64 订阅**与各类单节点链接（支持 `vmess://`、`vless://` (Reality/Vision)、`ss://`、`trojan://`、`hysteria2://` / `hy2://`、`tuic://` 等最新协议）；
-  - 智能生成地区分组（🇭🇰 香港节点、🇯🇵 日本节点、🇸🇬 新加坡节点、🇹🇼 台湾节点、🇺🇸 美国节点、🇰🇷 韩国节点等）、`节点选择`、`自动选择`、`故障转移` 以及全局路由规则；
-  - 允许在“添加配置”界面直接粘贴单节点链接或 Base64 文本快速导入。
-- 🐧 **Linux 平台连接稳定性与工作目录权限优化**：
-  - 将内核工作目录 `work_dir` 修正至用户主目录下的可读写路径 `~/.local/share/wmimo`，彻底解决 AppImage / 安装包环境下的只读权限与 `cache.db` 创建失败问题；
-  - 启动连接前确保配置包含完整 `proxy-groups:` 结构，解决 Linux 下连接后节点消失的偶发问题。
-- 🎯 **精准内核适配器过滤与代理保护**：
-  - 精准过滤 Mihomo Meta 内部流控与规则适配器桩（如 `COMPATIBLE`、`PASS`、`PASS-RULE`、`REJECT-DROP`、`DIRECT`、`REJECT`、`DNS`），防止内置桩伪装为代理节点；
-  - 确保测速（⚡）与卡片网格始终仅针对真实的机场代理节点生效，测速前后节点永远不会消失。
-- 📦 **Linux 全主流发行版原生打包支持**：
-  - 提供 AppImage（免安装即开即用）、Debian/Ubuntu (`.deb`)、Fedora/RHEL (`.rpm`)、Arch Linux (`.pkg.tar.zst` & `PKGBUILD`) 以及通用绿色便携包 (`.tar.gz`)。
-
----
-
 ## 📌 全平台与 Linux 各大发行版支持矩阵
 
 | 平台 / 发行版 | 状态 | 软件包格式 | 功能与适配说明 |

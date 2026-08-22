@@ -290,11 +290,13 @@ class FlutterVpnService {
 
     // Check app support and documents directories (for desktop)
     try {
+      final exeDir = File(Platform.resolvedExecutable).parent.path;
+      candidates.insert(0, '$exeDir/$exeName');
       final appSupport = await getApplicationSupportDirectory();
-      candidates.insert(0, '${appSupport.path}/core/$exeName');
-      candidates.insert(1, '${appSupport.path}/$exeName');
+      candidates.insert(1, '${appSupport.path}/core/$exeName');
+      candidates.insert(2, '${appSupport.path}/$exeName');
       final appDoc = await getApplicationDocumentsDirectory();
-      candidates.insert(2, '${appDoc.path}/core/$exeName');
+      candidates.insert(3, '${appDoc.path}/core/$exeName');
     } catch (_) {}
 
     for (var path in candidates) {

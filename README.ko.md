@@ -24,26 +24,6 @@
 
 ---
 
-## 🔥 Beta 브랜치 주요 변경 사항 (What's New in Beta)
-
-> [!TIP]
-> 현재 브랜치는 **`beta` 테스트 브랜치**로, 최신 프로토콜 지원, Linux 런타임 최적화 및 프록시 노드 안정성 개선 사항이 포함되어 있습니다:
-
-- 🔄 **범용 구독 변환기 (`SubscriptionConverter`)**：
-  - **Base64 인코딩 구독** 및 개별 노드 링크(`vmess://`, `vless://` (Reality/Vision), `ss://`, `trojan://`, `hysteria2://` / `hy2://`, `tuic://` 등)를 자동 감지 및 변환;
-  - 지역별 스마트 그룹(🇭🇰 홍콩, 🇯🇵 일본, 🇸🇬 싱가포르, 🇹🇼 대만, 🇺🇸 미국, 🇰🇷 한국 등), `노드 선택`, `자동 선택`, `장애 조치(Fallback)` 자동 생성;
-  - '프로필 추가' 화면에서 노드 링크나 Base64 텍스트를 직접 붙여넣어 가져오기 지원.
-- 🐧 **Linux 연결 안정성 및 작업 디렉터리 권한 최적화**：
-  - 코어 작업 디렉터리 `work_dir`를 쓰기 가능한 `~/.local/share/wmimo`로 설정하여 AppImage 환경의 `cache.db` 권한 오류 해결;
-  - 코어 시작 전 `proxy-groups:` 완전성을 보장하여 연결 후 노드가 사라지는 문제 해결.
-- 🎯 **내부 어댑터 필터링 및 프록시 노드 보호**：
-  - Mihomo Meta 내부 제어 어댑터(`COMPATIBLE`, `PASS`, `PASS-RULE`, `REJECT-DROP`, `DIRECT`, `REJECT`, `DNS`)를 정확하게 필터링;
-  - 지연 시간 테스트(⚡) 및 UI 표시가 항상 실제 프록시 노드에만 적용되도록 보장.
-- 📦 **모든 주요 Linux 배포판 패키징 지원**：
-  - AppImage(무설치 포터블), Debian/Ubuntu(`.deb`), Fedora/RHEL(`.rpm`), Arch Linux(`.pkg.tar.zst` & `PKGBUILD`), 포터블 아카이브(`.tar.gz`) 지원.
-
----
-
 ## 📌 플랫폼 지원 현황
 
 | 플랫폼 | 상태 | 패키지 형식 | 설명 |

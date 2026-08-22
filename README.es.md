@@ -24,26 +24,6 @@
 
 ---
 
-## 🔥 Novedades en la rama Beta (What's New in Beta)
-
-> [!TIP]
-> Esta es la **rama de vista previa `beta`**, que incluye compatibilidad con nuevos protocolos, optimización profunda para Linux y mayor estabilidad de nodos:
-
-- 🔄 **Convertidor universal de suscripciones (`SubscriptionConverter`)**:
-  - Detección y decodificación automática de **suscripciones Base64** y enlaces directos (`vmess://`, `vless://` con Reality/Vision, `ss://`, `trojan://`, `hysteria2://` / `hy2://`, `tuic://`, etc.);
-  - Generación inteligente de grupos regionales (🇭🇰 Hong Kong, 🇯🇵 Japón, 🇸🇬 Singapur, 🇹🇼 Taiwán, 🇺🇸 EE. UU., 🇰🇷 Corea, etc.), `Selección de nodo`, `Selección automática`, `Fallback` y reglas de enrutamiento;
-  - Permite pegar enlaces directos o texto Base64 en la pantalla de "Añadir perfil".
-- 🐧 **Estabilidad de conexión en Linux y corrección de permisos en `work_dir`**:
-  - Directorio de trabajo `work_dir` reubicado en `~/.local/share/wmimo` con permisos de escritura, eliminando errores de `cache.db` en AppImage;
-  - Síntesis completa de `proxy-groups:` antes de iniciar el núcleo para evitar la pérdida de nodos tras conectar.
-- 🎯 **Filtrado preciso de adaptadores internos del núcleo**:
-  - Filtrado de adaptadores internos de Mihomo Meta (`COMPATIBLE`, `PASS`, `PASS-RULE`, `REJECT-DROP`, `DIRECT`, `REJECT`, `DNS`);
-  - Las pruebas de latencia (⚡) y las tarjetas visuales se aplican exclusivamente a nodos proxy reales.
-- 📦 **Compatibilidad con las principales distribuciones de Linux**:
-  - Paquetes AppImage (portable sin instalación), Debian/Ubuntu (`.deb`), Fedora/RHEL (`.rpm`), Arch Linux (`.pkg.tar.zst` & `PKGBUILD`) y archivo portable (`.tar.gz`).
-
----
-
 ## 📌 Estado de Plataformas
 
 | Plataforma | Estado | Paquetes | Descripción |
