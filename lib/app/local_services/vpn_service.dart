@@ -18,6 +18,7 @@ import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/network_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
+import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:libclash_vpn_service/proxy_manager.dart';
 import 'package:libclash_vpn_service/state.dart';
@@ -154,6 +155,7 @@ class VPNService {
 
   static Future<bool> _prepareConfig(ProfileSetting profile) async {
     final corePath = path.join(await PathUtils.profilesDir(), profile.id);
+    await ProxyNodeLoader.ensureProfileHasProxyGroups(corePath);
     final patch = ProfilePatchManager.getProfilePatch(profile.patch);
     final setting = ClashSettingManager.getConfig();
     final appSetting = SettingManager.getConfig();
@@ -192,7 +194,7 @@ class VPNService {
     config.mode = setting.Mode ?? "rule";
     config.tun_mode = setting.Tun?.Enable == true;
     config.base_dir = await PathUtils.profileDir();
-    config.work_dir = PathUtils.appAssetsDir();
+    config.work_dir = await PathUtils.profileDir();
     config.cache_dir = await PathUtils.cacheDir();
     if (patch.type == ProfilePatchFileType.yaml) {
       config.core_path = corePath;

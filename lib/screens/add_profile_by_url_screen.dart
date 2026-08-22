@@ -7,6 +7,7 @@ import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/app/runtime/return_result.dart';
 import 'package:wmimo/app/utils/http_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
@@ -88,17 +89,26 @@ class _AddProfileByUrlScreenState
     _loading = true;
     setState(() {});
 
-    final result = await ProfileManager.addRemote(
-      url,
-      remark: remark,
-      patch: _patch,
-      userAgent: _userAgent,
-      xhwid: _xhwid,
-      decryptPassword: _decryptPassword,
-      updateInterval: _updateInterval,
-      updateIntervalPreferByProfile: _updateIntervalPreferByProfile,
-      boardProviderId: _boardProviderId,
-    );
+    late ReturnResult<String> result;
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      result = await ProfileManager.addRemote(
+        url,
+        remark: remark,
+        patch: _patch,
+        userAgent: _userAgent,
+        xhwid: _xhwid,
+        decryptPassword: _decryptPassword,
+        updateInterval: _updateInterval,
+        updateIntervalPreferByProfile: _updateIntervalPreferByProfile,
+        boardProviderId: _boardProviderId,
+      );
+    } else {
+      result = await ProfileManager.addContent(
+        url,
+        remark: remark,
+        patch: _patch,
+      );
+    }
 
     if (!mounted) {
       return;

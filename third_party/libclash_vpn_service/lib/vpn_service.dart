@@ -584,8 +584,12 @@ tun:
 
       // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
       String processedLine = rawLine;
-      if (!tunMode && (processedLine.contains(':53') || processedLine.contains('0.0.0.0:53'))) {
-        processedLine = processedLine.replaceAll(':53', ':1053').replaceAll('0.0.0.0:53', '127.0.0.1:1053');
+      if (!tunMode) {
+        if (trimmed.startsWith('listen:') && trimmed.contains(':53')) {
+          processedLine = rawLine.replaceAll(':53', ':1053');
+        } else if (trimmed.startsWith('bind-address:') && trimmed.contains(':53')) {
+          processedLine = rawLine.replaceAll(':53', ':1053');
+        }
       }
 
       resultLines.add(processedLine);
@@ -615,6 +619,11 @@ dns:
     final baseDir = _savedConfig?.base_dir.isNotEmpty == true
         ? _savedConfig!.base_dir
         : Directory.current.path;
+    try {
+      if (!Directory(baseDir).existsSync()) {
+        Directory(baseDir).createSync(recursive: true);
+      }
+    } catch (_) {}
     final runtimePath = "$baseDir/runtime_active_config.yaml";
     try {
       await File(runtimePath).writeAsString(header + '\n' + filteredLines, flush: true);
@@ -705,10 +714,10 @@ dns:
     await stop();
 
     String workDir = "";
-    if (_savedConfig?.work_dir.isNotEmpty == true && Directory(_savedConfig!.work_dir).existsSync()) {
-      workDir = _savedConfig!.work_dir;
-    } else if (_savedConfig?.base_dir.isNotEmpty == true && Directory(_savedConfig!.base_dir).existsSync()) {
+    if (_savedConfig?.base_dir.isNotEmpty == true && Directory(_savedConfig!.base_dir).existsSync()) {
       workDir = _savedConfig!.base_dir;
+    } else if (_savedConfig?.work_dir.isNotEmpty == true && Directory(_savedConfig!.work_dir).existsSync()) {
+      workDir = _savedConfig!.work_dir;
     } else {
       try {
         final appSupport = await getApplicationSupportDirectory();

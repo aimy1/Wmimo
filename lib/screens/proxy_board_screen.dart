@@ -113,12 +113,45 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
   }
 
+  static bool isRealLeafProxy(ClashProxiesNode n) {
+    if (ClashProtocolType.isGroupType(n.type)) return false;
+    final lowerType = n.type.toLowerCase().replaceAll('-', '').replaceAll('_', '').trim();
+    if (lowerType == "direct" ||
+        lowerType == "reject" ||
+        lowerType == "rejectdrop" ||
+        lowerType == "pass" ||
+        lowerType == "passrule" ||
+        lowerType == "compatible" ||
+        lowerType == "dns") {
+      return false;
+    }
+    final upperName = n.name.toUpperCase().trim();
+    if (upperName == "DIRECT" ||
+        upperName == "REJECT" ||
+        upperName == "REJECT-DROP" ||
+        upperName == "PASS" ||
+        upperName == "PASS-RULE" ||
+        upperName == "COMPATIBLE" ||
+        upperName == "GLOBAL" ||
+        upperName == "PROXY" ||
+        upperName.startsWith("🎯")) {
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _fetchProxies() async {
     if (mounted) {
       setState(() {
         _loading = true;
       });
     }
+
+    // Keep existing delays so they don't get wiped upon fetching
+    final existingDelays = <String, int?>{
+      for (var n in _allNodes)
+        if (n.delay != null) n.name: n.delay,
+    };
 
     final started = await VPNService.getStarted();
     _isVpnStarted = started;
@@ -130,11 +163,15 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           return ClashProtocolType.isGroupType(n.type);
         }).toList();
 
-        bool hasActualGroups = groups.any((g) =>
-            g.name != "GLOBAL" ||
-            g.all.any((m) => m != "DIRECT" && m != "REJECT"));
+        // Check for actual leaf proxy nodes (excluding internal dummy stubs)
+        final leafProxies = result.data!.where((n) => isRealLeafProxy(n)).toList();
 
-        if (groups.isNotEmpty && hasActualGroups) {
+        if (groups.isNotEmpty && leafProxies.isNotEmpty) {
+          for (var n in result.data!) {
+            if (n.delay == null && existingDelays.containsKey(n.name)) {
+              n.delay = existingDelays[n.name];
+            }
+          }
           if (mounted) {
             setState(() {
               _allNodes = result.data!;
@@ -148,6 +185,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     // Offline / Local profile fallback: load directly from active profile YAML/JSON
     final offlineNodes = await ProxyNodeLoader.loadCurrentProfileNodes();
+    for (var n in offlineNodes) {
+      if (n.delay == null && existingDelays.containsKey(n.name)) {
+        n.delay = existingDelays[n.name];
+      }
+    }
     if (!mounted) return;
 
     setState(() {
@@ -201,7 +243,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         setState(() {
           group.now = prev;
         });
-        if (prev != null) {
+        if (prev.isNotEmpty) {
           Biz.proxySelected(prev);
         }
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -253,30 +295,38 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         }
       }
       if (!_isVpnStarted) return;
+      await _fetchProxies();
     }
 
     if (_nodesTesting.contains(node.name)) return;
     setState(() {
       _nodesTesting.add(node.name);
     });
+    final setting = SettingManager.getConfig();
     try {
       final res = await ClashHttpApi.getDelay(
         node.name,
-        url: SettingManager.getConfig().delayTestUrl,
+        url: setting.delayTestUrl,
+        timeout: Duration(milliseconds: setting.delayTestTimeout),
       );
+      final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
       if (mounted) {
         setState(() {
-          if (res.data != null && res.data! > 0) {
-            node.delay = res.data;
-          } else {
-            node.delay = -1; // -1 represents Error / Failed
+          for (var n in _allNodes) {
+            if (n.name == node.name) {
+              n.delay = testDelay;
+            }
           }
         });
       }
     } catch (_) {
       if (mounted) {
         setState(() {
-          node.delay = -1;
+          for (var n in _allNodes) {
+            if (n.name == node.name) {
+              n.delay = -1;
+            }
+          }
         });
       }
     } finally {
@@ -308,22 +358,39 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         }
       }
       if (!_isVpnStarted) return;
+      await _fetchProxies();
     }
 
     final nodeMap = {for (var n in _allNodes) n.name: n};
-    final nodesToTest = group.all
-        .map((name) => nodeMap[name])
-        .whereType<ClashProxiesNode>()
-        .where((n) => !ClashProtocolType.isGroupType(n.type))
-        .toList();
+    final nodesToTest = <String>[];
+    for (var name in group.all) {
+      final n = nodeMap[name];
+      if (n != null) {
+        if (!ClashProtocolType.isGroupType(n.type)) {
+          if (!nodesToTest.contains(n.name)) {
+            nodesToTest.add(n.name);
+          }
+        } else {
+          for (var subName in n.all) {
+            final subNode = nodeMap[subName];
+            if (subNode != null &&
+                !ClashProtocolType.isGroupType(subNode.type) &&
+                !nodesToTest.contains(subName)) {
+              nodesToTest.add(subName);
+            }
+          }
+        }
+      }
+    }
 
     if (nodesToTest.isEmpty) return;
 
-    for (var node in nodesToTest) {
-      _nodesTesting.add(node.name);
+    for (var name in nodesToTest) {
+      _nodesTesting.add(name);
     }
     setState(() {});
 
+    final setting = SettingManager.getConfig();
     Timer? updateDebounce;
     void scheduleUiUpdate() {
       if (updateDebounce?.isActive == true) return;
@@ -336,27 +403,33 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     Future<void> worker() async {
       while (true) {
         if (nextIndex >= nodesToTest.length) break;
-        final node = nodesToTest[nextIndex++];
+        final nodeName = nodesToTest[nextIndex++];
         try {
           final res = await ClashHttpApi.getDelay(
-            node.name,
-            url: SettingManager.getConfig().delayTestUrl,
+            nodeName,
+            url: setting.delayTestUrl,
+            timeout: Duration(milliseconds: setting.delayTestTimeout),
           );
-          if (res.data != null && res.data! > 0) {
-            node.delay = res.data;
-          } else {
-            node.delay = -1;
+          final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
+          for (var n in _allNodes) {
+            if (n.name == nodeName) {
+              n.delay = testDelay;
+            }
           }
         } catch (_) {
-          node.delay = -1;
+          for (var n in _allNodes) {
+            if (n.name == nodeName) {
+              n.delay = -1;
+            }
+          }
         } finally {
-          _nodesTesting.remove(node.name);
+          _nodesTesting.remove(nodeName);
           scheduleUiUpdate();
         }
       }
     }
 
-    final workerCount = nodesToTest.length < 6 ? nodesToTest.length : 6;
+    final workerCount = nodesToTest.length < 8 ? nodesToTest.length : 8;
     final workers = List.generate(workerCount, (_) => worker());
     await Future.wait(workers);
 
@@ -386,29 +459,38 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         }
       }
       if (!_isVpnStarted) return;
+      await _fetchProxies();
     }
 
     final groups = _getProxyGroups();
     final Set<String> testedNames = {};
-    final List<ClashProxiesNode> allUniqueLeafNodes = [];
+    final List<String> allLeafNodeNames = [];
 
     for (var g in groups) {
       final nodes = _getNodesForGroup(g);
       for (var n in nodes) {
-        if (!ClashProtocolType.isGroupType(n.type) && !testedNames.contains(n.name)) {
+        if (isRealLeafProxy(n) && !testedNames.contains(n.name)) {
           testedNames.add(n.name);
-          allUniqueLeafNodes.add(n);
+          allLeafNodeNames.add(n.name);
         }
       }
     }
 
-    if (allUniqueLeafNodes.isEmpty) return;
+    for (var n in _allNodes) {
+      if (isRealLeafProxy(n) && !testedNames.contains(n.name)) {
+        testedNames.add(n.name);
+        allLeafNodeNames.add(n.name);
+      }
+    }
 
-    for (var node in allUniqueLeafNodes) {
-      _nodesTesting.add(node.name);
+    if (allLeafNodeNames.isEmpty) return;
+
+    for (var name in allLeafNodeNames) {
+      _nodesTesting.add(name);
     }
     setState(() {});
 
+    final setting = SettingManager.getConfig();
     Timer? updateDebounce;
     void scheduleUiUpdate() {
       if (updateDebounce?.isActive == true) return;
@@ -420,28 +502,34 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     int nextIndex = 0;
     Future<void> worker() async {
       while (true) {
-        if (nextIndex >= allUniqueLeafNodes.length) break;
-        final node = allUniqueLeafNodes[nextIndex++];
+        if (nextIndex >= allLeafNodeNames.length) break;
+        final nodeName = allLeafNodeNames[nextIndex++];
         try {
           final res = await ClashHttpApi.getDelay(
-            node.name,
-            url: SettingManager.getConfig().delayTestUrl,
+            nodeName,
+            url: setting.delayTestUrl,
+            timeout: Duration(milliseconds: setting.delayTestTimeout),
           );
-          if (res.data != null && res.data! > 0) {
-            node.delay = res.data;
-          } else {
-            node.delay = -1;
+          final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
+          for (var n in _allNodes) {
+            if (n.name == nodeName) {
+              n.delay = testDelay;
+            }
           }
         } catch (_) {
-          node.delay = -1;
+          for (var n in _allNodes) {
+            if (n.name == nodeName) {
+              n.delay = -1;
+            }
+          }
         } finally {
-          _nodesTesting.remove(node.name);
+          _nodesTesting.remove(nodeName);
           scheduleUiUpdate();
         }
       }
     }
 
-    final workerCount = allUniqueLeafNodes.length < 6 ? allUniqueLeafNodes.length : 6;
+    final workerCount = allLeafNodeNames.length < 8 ? allLeafNodeNames.length : 8;
     final workers = List.generate(workerCount, (_) => worker());
     await Future.wait(workers);
 
@@ -452,31 +540,121 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   }
 
   List<ClashProxiesNode> _getProxyGroups() {
-    return _allNodes.where((n) {
+    List<ClashProxiesNode> groups = _allNodes.where((n) {
       return ClashProtocolType.isGroupType(n.type) && !n.hidden;
     }).toList();
+
+    final leafNodes = _allNodes.where((n) => isRealLeafProxy(n)).toList();
+
+    // Check if existing groups contain actual leaf nodes
+    bool hasLeafNodesInGroups = false;
+    for (var g in groups) {
+      if (g.name.toUpperCase() != "GLOBAL" &&
+          g.all.any((name) => leafNodes.any((l) => l.name == name))) {
+        hasLeafNodesInGroups = true;
+        break;
+      }
+    }
+
+    if (!hasLeafNodesInGroups && leafNodes.isNotEmpty) {
+      final List<ClashProxiesNode> synthesizedGroups = [];
+
+      // 1. 节点选择
+      synthesizedGroups.add(
+        ClashProxiesNode()
+          ..name = "节点选择"
+          ..type = "Selector"
+          ..all = leafNodes.map((n) => n.name).toList()
+          ..now = leafNodes.first.name,
+      );
+
+      // 2. 自动选择
+      synthesizedGroups.add(
+        ClashProxiesNode()
+          ..name = "自动选择"
+          ..type = "URLTest"
+          ..all = leafNodes.map((n) => n.name).toList()
+          ..now = leafNodes.first.name,
+      );
+
+      // 3. Regional groups (香港, 日本, 新加坡, 美国, etc.)
+      final regions = <String, List<String>>{
+        "🇭🇰 香港节点": [],
+        "🇯🇵 日本节点": [],
+        "🇸🇬 新加坡节点": [],
+        "🇹🇼 台湾节点": [],
+        "🇺🇸 美国节点": [],
+        "🇰🇷 韩国节点": [],
+      };
+
+      for (var node in leafNodes) {
+        final name = node.name;
+        final upper = name.toUpperCase();
+        if (name.contains("香港") || upper.contains("HK") || upper.contains("HONG KONG")) {
+          regions["🇭🇰 香港节点"]!.add(name);
+        } else if (name.contains("日本") || upper.contains("JP") || upper.contains("JAPAN") || name.contains("东京") || name.contains("大阪")) {
+          regions["🇯🇵 日本节点"]!.add(name);
+        } else if (name.contains("新加坡") || name.contains("狮城") || upper.contains("SG") || upper.contains("SINGAPORE")) {
+          regions["🇸🇬 新加坡节点"]!.add(name);
+        } else if (name.contains("台湾") || name.contains("台北") || upper.contains("TW") || upper.contains("TAIWAN")) {
+          regions["🇹🇼 台湾节点"]!.add(name);
+        } else if (name.contains("美国") || upper.contains("US") || upper.contains("USA") || name.contains("美") || upper.contains("UNITED STATES")) {
+          regions["🇺🇸 美国节点"]!.add(name);
+        } else if (name.contains("韩国") || name.contains("首尔") || upper.contains("KR") || upper.contains("KOREA")) {
+          regions["🇰🇷 韩国节点"]!.add(name);
+        }
+      }
+
+      regions.forEach((regionName, nodeNames) {
+        if (nodeNames.isNotEmpty) {
+          synthesizedGroups.add(
+            ClashProxiesNode()
+              ..name = regionName
+              ..type = "Selector"
+              ..all = nodeNames
+              ..now = nodeNames.first,
+          );
+        }
+      });
+
+      final otherGroups = groups
+          .where((g) => g.name != "Proxy" && g.name.toUpperCase() != "GLOBAL")
+          .toList();
+      groups = [...synthesizedGroups, ...otherGroups];
+    }
+
+    if (_currentMode == "global") {
+      groups.sort((a, b) {
+        if (a.name.toUpperCase() == "GLOBAL") return -1;
+        if (b.name.toUpperCase() == "GLOBAL") return 1;
+        return 0;
+      });
+    } else {
+      groups.sort((a, b) {
+        if (a.name.toUpperCase() == "GLOBAL") return 1;
+        if (b.name.toUpperCase() == "GLOBAL") return -1;
+        return 0;
+      });
+    }
+    return groups;
   }
 
   bool _isGroupExpandedByDefault(ClashProxiesNode group, int index) {
     if (_groupExpanded.containsKey(group.name)) {
       return _groupExpanded[group.name]!;
     }
-    if (_currentMode == "global") {
-      return group.name.toUpperCase() == "GLOBAL" || index == 0;
-    }
-    // In rule mode: only expand the primary/first selector group by default; fold all other secondary groups
-    if (index == 0) return true;
-    final lower = group.name.toLowerCase();
-    if (lower == "proxies" || lower == "proxy" || lower == "节点选择" || lower == "手动选择" || lower == "select") {
-      return true;
-    }
-    return false;
+    // Default to true (expanded) so all nodes under all proxy groups are immediately visible
+    return true;
   }
 
   List<ClashProxiesNode> _getNodesForGroup(ClashProxiesNode group) {
     final nodeMap = {for (var n in _allNodes) n.name: n};
     List<ClashProxiesNode> list = group.all
         .map((name) => nodeMap[name] ?? (ClashProxiesNode()..name = name))
+        .where((n) {
+          if (group.name.toUpperCase() == "GLOBAL") return true;
+          return isRealLeafProxy(n) || ClashProtocolType.isGroupType(n.type);
+        })
         .toList();
 
     if (_searchKeyword.isNotEmpty) {
