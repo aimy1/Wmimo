@@ -113,6 +113,33 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
   }
 
+  static bool isRealLeafProxy(ClashProxiesNode n) {
+    if (ClashProtocolType.isGroupType(n.type)) return false;
+    final lowerType = n.type.toLowerCase().replaceAll('-', '').replaceAll('_', '').trim();
+    if (lowerType == "direct" ||
+        lowerType == "reject" ||
+        lowerType == "rejectdrop" ||
+        lowerType == "pass" ||
+        lowerType == "passrule" ||
+        lowerType == "compatible" ||
+        lowerType == "dns") {
+      return false;
+    }
+    final upperName = n.name.toUpperCase().trim();
+    if (upperName == "DIRECT" ||
+        upperName == "REJECT" ||
+        upperName == "REJECT-DROP" ||
+        upperName == "PASS" ||
+        upperName == "PASS-RULE" ||
+        upperName == "COMPATIBLE" ||
+        upperName == "GLOBAL" ||
+        upperName == "PROXY" ||
+        upperName.startsWith("🎯")) {
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _fetchProxies() async {
     if (mounted) {
       setState(() {
@@ -136,14 +163,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           return ClashProtocolType.isGroupType(n.type);
         }).toList();
 
-        // Check for actual leaf proxy nodes (excluding DIRECT and REJECT stubs)
-        final leafProxies = result.data!.where((n) {
-          return !ClashProtocolType.isGroupType(n.type) &&
-              n.name != "DIRECT" &&
-              n.name != "REJECT" &&
-              n.name != "GLOBAL" &&
-              !n.name.startsWith("🎯");
-        }).toList();
+        // Check for actual leaf proxy nodes (excluding internal dummy stubs)
+        final leafProxies = result.data!.where((n) => isRealLeafProxy(n)).toList();
 
         if (groups.isNotEmpty && leafProxies.isNotEmpty) {
           for (var n in result.data!) {
@@ -448,7 +469,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     for (var g in groups) {
       final nodes = _getNodesForGroup(g);
       for (var n in nodes) {
-        if (!ClashProtocolType.isGroupType(n.type) && !testedNames.contains(n.name)) {
+        if (isRealLeafProxy(n) && !testedNames.contains(n.name)) {
           testedNames.add(n.name);
           allLeafNodeNames.add(n.name);
         }
@@ -456,10 +477,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
 
     for (var n in _allNodes) {
-      if (!ClashProtocolType.isGroupType(n.type) &&
-          n.name != "DIRECT" &&
-          n.name != "REJECT" &&
-          !testedNames.contains(n.name)) {
+      if (isRealLeafProxy(n) && !testedNames.contains(n.name)) {
         testedNames.add(n.name);
         allLeafNodeNames.add(n.name);
       }
@@ -526,13 +544,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       return ClashProtocolType.isGroupType(n.type) && !n.hidden;
     }).toList();
 
-    final leafNodes = _allNodes.where((n) {
-      return !ClashProtocolType.isGroupType(n.type) &&
-          n.name != "DIRECT" &&
-          n.name != "REJECT" &&
-          n.name != "GLOBAL" &&
-          !n.name.startsWith("🎯");
-    }).toList();
+    final leafNodes = _allNodes.where((n) => isRealLeafProxy(n)).toList();
 
     // Check if existing groups contain actual leaf nodes
     bool hasLeafNodesInGroups = false;
@@ -639,6 +651,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final nodeMap = {for (var n in _allNodes) n.name: n};
     List<ClashProxiesNode> list = group.all
         .map((name) => nodeMap[name] ?? (ClashProxiesNode()..name = name))
+        .where((n) {
+          if (group.name.toUpperCase() == "GLOBAL") return true;
+          return isRealLeafProxy(n) || ClashProtocolType.isGroupType(n.type);
+        })
         .toList();
 
     if (_searchKeyword.isNotEmpty) {

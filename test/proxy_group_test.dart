@@ -291,6 +291,25 @@ rules:
       expect(parsedNodes.any((n) => n.name == 'HK VMess 01'), isTrue);
       expect(parsedNodes.any((n) => n.name == 'US SS 01'), isTrue);
     });
+
+    test('Excludes internal dummy adapters (COMPATIBLE, PASS, REJECT-DROP) from proxy nodes', () {
+      const dummyYaml = '''
+proxies:
+  - {name: "COMPATIBLE", type: "Compatible"}
+  - {name: "PASS", type: "Pass"}
+  - {name: "PASS-RULE", type: "PassRule"}
+  - {name: "REJECT-DROP", type: "RejectDrop"}
+  - {name: "DIRECT", type: "Direct"}
+  - {name: "REJECT", type: "Reject"}
+  - {name: "Real Proxy 01", type: "Shadowsocks", server: "1.2.3.4", port: 8388, cipher: "aes-128-gcm", password: "pwd"}
+''';
+      final parsed = ProxyNodeLoader.parseProfileContent(dummyYaml);
+      expect(parsed.any((n) => n.name == 'Real Proxy 01'), isTrue);
+      expect(parsed.any((n) => n.name == 'COMPATIBLE'), isFalse);
+      expect(parsed.any((n) => n.name == 'PASS'), isFalse);
+      expect(parsed.any((n) => n.name == 'PASS-RULE'), isFalse);
+      expect(parsed.any((n) => n.name == 'REJECT-DROP'), isFalse);
+    });
   });
 }
 

@@ -366,6 +366,26 @@ class ProxyNodeLoader {
     for (var item in proxiesList) {
       final name = item['name']?.toString() ?? "";
       final type = item['type']?.toString() ?? "Shadowsocks";
+      final upperName = name.toUpperCase().trim();
+      final lowerType = type.toLowerCase().replaceAll('-', '').replaceAll('_', '').trim();
+
+      // Filter out internal Clash Meta dummy adapters
+      if (upperName == "DIRECT" ||
+          upperName == "REJECT" ||
+          upperName == "REJECT-DROP" ||
+          upperName == "PASS" ||
+          upperName == "PASS-RULE" ||
+          upperName == "COMPATIBLE" ||
+          lowerType == "direct" ||
+          lowerType == "reject" ||
+          lowerType == "rejectdrop" ||
+          lowerType == "pass" ||
+          lowerType == "passrule" ||
+          lowerType == "compatible" ||
+          lowerType == "dns") {
+        continue;
+      }
+
       if (name.isNotEmpty) {
         allProxyNames.add(name);
         final node = ClashProxiesNode()
