@@ -24,6 +24,26 @@
 
 ---
 
+## 🔥 What's New in the Beta Branch
+
+> [!TIP]
+> This is the **`beta` preview branch**, featuring our latest protocol extensions, deep Linux runtime optimizations, and proxy node stability improvements:
+
+- 🔄 **Universal Multi-Protocol Subscription Converter (`SubscriptionConverter`)**:
+  - Automatically identifies and decodes **Base64 subscriptions** and raw node URIs (including `vmess://`, `vless://` with Reality/Vision, `ss://`, `trojan://`, `hysteria2://` / `hy2://`, `tuic://`, etc.).
+  - Synthesizes intelligent regional proxy groups (🇭🇰 Hong Kong, 🇯🇵 Japan, 🇸🇬 Singapore, 🇹🇼 Taiwan, 🇺🇸 United States, 🇰🇷 Korea, etc.), `Node Selection`, `Auto Select`, `Fallback`, and routing rules.
+  - Allows pasting single node URIs or Base64 payloads directly into the "Add Profile" screen.
+- 🐧 **Linux Connection Stability & Writable `work_dir` Fix**:
+  - Sets Mihomo's working directory `work_dir` to the user-writable path `~/.local/share/wmimo`, eliminating `Permission denied` / read-only `cache.db` issues under AppImage and package installations.
+  - Guarantees full `proxy-groups:` synthesis before starting the core, eliminating node disappearance upon connection.
+- 🎯 **Accurate Mihomo Internal Adapter Filtering**:
+  - Accurately filters out Mihomo Meta internal rule and flow adapters (`COMPATIBLE`, `PASS`, `PASS-RULE`, `REJECT-DROP`, `DIRECT`, `REJECT`, `DNS`).
+  - Ensures latency tests (⚡) and proxy cards only operate on genuine airport proxy nodes, preventing nodes from disappearing before or after speed testing.
+- 📦 **Multi-Distro Linux Distribution Matrix**:
+  - Out-of-the-box support for AppImage (zero-install portable), Debian/Ubuntu (`.deb`), Fedora/RHEL (`.rpm`), Arch Linux (`.pkg.tar.zst` & `PKGBUILD`), and Portable Tarball (`.tar.gz`).
+
+---
+
 ## 📌 Platform Support & Linux Multi-Distro Matrix
 
 | Platform / Distro | Status | Supported Formats | Description |
