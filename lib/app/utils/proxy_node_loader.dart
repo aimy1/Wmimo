@@ -6,6 +6,7 @@ import 'package:yaml_writer/yaml_writer.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
+import 'package:wmimo/app/utils/subscription_converter.dart';
 
 class ProxyNodeLoader {
   /// Load proxies and proxy groups from the currently active profile
@@ -48,6 +49,14 @@ class ProxyNodeLoader {
 
       var content = await file.readAsString();
       if (content.trim().isEmpty) return;
+
+      // Automatically convert Base64 subscription or node URIs into valid Clash YAML
+      final convertedYaml = SubscriptionConverter.convertToClashYaml(content);
+      if (convertedYaml != content && SubscriptionConverter.isClashYaml(convertedYaml)) {
+        content = convertedYaml;
+        await file.writeAsString(content, flush: true);
+      }
+
       content = content.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
 
       final proxiesList = extractProxiesList(content);
@@ -210,17 +219,28 @@ class ProxyNodeLoader {
     } catch (_) {}
 
     final block = extractBlock(content, 'proxies');
-    if (block.isEmpty) return [];
+    if (block.isNotEmpty) {
+      try {
+        final parsed = loadYaml('proxies:\n$block');
+        if (parsed is Map && parsed['proxies'] is List) {
+          return (parsed['proxies'] as List)
+              .whereType<Map>()
+              .map((m) => Map<String, dynamic>.from(m))
+              .toList();
+        }
+      } catch (_) {}
+    }
 
-    try {
-      final parsed = loadYaml('proxies:\n$block');
-      if (parsed is Map && parsed['proxies'] is List) {
-        return (parsed['proxies'] as List)
-            .whereType<Map>()
-            .map((m) => Map<String, dynamic>.from(m))
-            .toList();
-      }
-    } catch (_) {}
+    // Direct node URIs extraction
+    final nodes = SubscriptionConverter.parseAllNodes(content);
+    if (nodes.isNotEmpty) return nodes;
+
+    // Base64 decoded node URIs extraction
+    final decoded = SubscriptionConverter.safeBase64Decode(content);
+    if (decoded != null && decoded.isNotEmpty) {
+      final decodedNodes = SubscriptionConverter.parseAllNodes(decoded);
+      if (decodedNodes.isNotEmpty) return decodedNodes;
+    }
 
     return [];
   }
@@ -336,7 +356,8 @@ class ProxyNodeLoader {
 
   /// Parse YAML or JSON content to extract ClashProxiesNode items
   static List<ClashProxiesNode> parseProfileContent(String rawContent) {
-    final content = rawContent.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+    var content = SubscriptionConverter.convertToClashYaml(rawContent);
+    content = content.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
     final List<ClashProxiesNode> result = [];
     final List<String> allProxyNames = [];
 
@@ -345,6 +366,26 @@ class ProxyNodeLoader {
     for (var item in proxiesList) {
       final name = item['name']?.toString() ?? "";
       final type = item['type']?.toString() ?? "Shadowsocks";
+      final upperName = name.toUpperCase().trim();
+      final lowerType = type.toLowerCase().replaceAll('-', '').replaceAll('_', '').trim();
+
+      // Filter out internal Clash Meta dummy adapters
+      if (upperName == "DIRECT" ||
+          upperName == "REJECT" ||
+          upperName == "REJECT-DROP" ||
+          upperName == "PASS" ||
+          upperName == "PASS-RULE" ||
+          upperName == "COMPATIBLE" ||
+          lowerType == "direct" ||
+          lowerType == "reject" ||
+          lowerType == "rejectdrop" ||
+          lowerType == "pass" ||
+          lowerType == "passrule" ||
+          lowerType == "compatible" ||
+          lowerType == "dns") {
+        continue;
+      }
+
       if (name.isNotEmpty) {
         allProxyNames.add(name);
         final node = ClashProxiesNode()

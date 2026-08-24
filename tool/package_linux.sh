@@ -212,7 +212,11 @@ chmod +x "$APP_DIR/AppRun"
 # Download appimagetool if not present
 if [ ! -f "appimagetool" ]; then
   echo "Downloading appimagetool..."
-  wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O appimagetool || true
+  if command -v wget >/dev/null 2>&1; then
+    wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O appimagetool || true
+  elif command -v curl >/dev/null 2>&1; then
+    curl -sSL https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -o appimagetool || true
+  fi
   if [ -f "appimagetool" ]; then
     chmod +x appimagetool
   fi

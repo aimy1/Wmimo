@@ -26,6 +26,12 @@ releases:
           target: rpm
           dart-define:
             PACKAGE_TARGET: rpm
+      - name: linux-appimage
+        package:
+          platform: linux
+          target: appimage
+          dart-define:
+            PACKAGE_TARGET: appimage
       - name: macos-dmg
         package:
           platform: macos

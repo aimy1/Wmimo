@@ -28,6 +28,7 @@ import 'package:libclash_vpn_service/state.dart';
 import 'package:path/path.dart' as path;
 import 'package:tuple/tuple.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
+import 'package:wmimo/app/utils/subscription_converter.dart';
 
 const int kRemarkMaxLength = 32;
 
@@ -595,12 +596,65 @@ class ProfileManager {
     if (content.startsWith("<!DOCTYPE html>") || content.startsWith("<html")) {
       return ReturnResultError("Invalid format: html");
     }
-    if (!content.contains("proxies") && !content.contains("proxy-providers")) {
-      return ReturnResultError(
-        "Invalid Clash Yaml file: proxies and proxy-providers not found",
+    if (SubscriptionConverter.isClashYaml(content)) {
+      return null;
+    }
+    final converted = SubscriptionConverter.convertToClashYaml(content);
+    if (SubscriptionConverter.isClashYaml(converted)) {
+      await file.writeAsString(converted, flush: true);
+      return null;
+    }
+    return ReturnResultError(
+      "Invalid Clash Yaml file: proxies and proxy-providers not found",
+    );
+  }
+
+  static Future<ReturnResult<String>> addContent(
+    String rawContent, {
+    String remark = "",
+    String patch = "",
+  }) async {
+    final converted = SubscriptionConverter.convertToClashYaml(rawContent);
+    if (!SubscriptionConverter.isClashYaml(converted)) {
+      return ReturnResult(
+        error: ReturnResultError("Invalid node links or YAML content"),
       );
     }
-    return null;
+
+    final id = "${rawContent.hashCode.abs()}.yaml";
+    final savePath = path.join(await PathUtils.profilesDir(), id);
+    if (remark.isEmpty) {
+      final now = DateTime.now();
+      remark =
+          "Imported-${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}";
+    }
+
+    try {
+      await File(savePath).writeAsString(converted, flush: true);
+      await ProxyNodeLoader.ensureProfileHasProxyGroups(savePath);
+
+      int index = _config.profiles.indexWhere((value) => value.id == id);
+      final profile = ProfileSetting(
+        id: id,
+        remark: remark,
+        update: DateTime.now(),
+        patch: patch,
+      );
+      if (index < 0) {
+        _config.profiles.add(profile);
+      } else {
+        _config.profiles[index] = profile;
+      }
+      await save();
+
+      for (var event in onEventAdd) {
+        event(id);
+      }
+      setCurrent(id, force: true);
+      return ReturnResult(data: id);
+    } catch (err) {
+      return ReturnResult(error: ReturnResultError(err.toString()));
+    }
   }
 
   static Future<ReturnResult<String>> addRemote(

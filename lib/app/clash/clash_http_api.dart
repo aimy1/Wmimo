@@ -277,11 +277,13 @@ class ClashProxiesNode {
     all = List.from(map['all'] ?? []);
     hidden = map['hidden'] ?? false;
     var history = map['history'];
-    if (history is List) {
-      if (history.isNotEmpty) {
-        delay = history.last["delay"] as int;
-        if (delay == 0) {
-          delay = null;
+    if (history is List && history.isNotEmpty) {
+      final last = history.last;
+      if (last is Map) {
+        final d = last["delay"];
+        if (d is num) {
+          final intVal = d.toInt();
+          delay = intVal > 0 ? intVal : null;
         }
       }
     }
@@ -302,12 +304,14 @@ class ClashProxies {
     if (p is Map) {
       Set<String> toRemove = {};
       p.forEach((key, value) {
-        var node = ClashProxiesNode();
-        node.fromJson(value);
-        if (node.type.toLowerCase() != "dns") {
-          proxies.add(node);
-        } else {
-          toRemove.add(node.name);
+        if (value is Map) {
+          var node = ClashProxiesNode();
+          node.fromJson(Map<String, dynamic>.from(value));
+          if (node.type.toLowerCase() != "dns") {
+            proxies.add(node);
+          } else {
+            toRemove.add(node.name);
+          }
         }
       });
       List<String> globalAll = [];
@@ -340,17 +344,21 @@ class ClashProxies {
     final p = map['providers'];
     if (p is Map) {
       p.forEach((key, value) {
-        final p = value['proxies'];
-        if (p != null && p is List) {
-          for (var item in p) {
-            var node = ClashProxiesNode();
-            node.fromJson(item);
-            if (node.type.toLowerCase() != "dns") {
-              final index = proxies.indexWhere(
-                (element) => element.name == node.name,
-              );
-              if (index < 0) {
-                proxies.add(node);
+        if (value is Map) {
+          final p = value['proxies'];
+          if (p != null && p is List) {
+            for (var item in p) {
+              if (item is Map) {
+                var node = ClashProxiesNode();
+                node.fromJson(Map<String, dynamic>.from(item));
+                if (node.type.toLowerCase() != "dns") {
+                  final index = proxies.indexWhere(
+                    (element) => element.name == node.name,
+                  );
+                  if (index < 0) {
+                    proxies.add(node);
+                  }
+                }
               }
             }
           }
@@ -359,13 +367,19 @@ class ClashProxies {
     }
   }
 
-  int? updateGroupDelay(ClashProxiesNode node) {
+  int? updateGroupDelay(ClashProxiesNode node, [Set<String>? visited]) {
     if (!ClashProtocolType.isGroupType(node.type)) {
       return node.delay;
     }
     if (node.now.isEmpty) {
       return node.delay;
     }
+    visited ??= <String>{};
+    if (visited.contains(node.name)) {
+      return node.delay;
+    }
+    visited.add(node.name);
+
     ClashProxiesNode? nextNode;
     for (var proxy in proxies) {
       if (proxy.name == node.now) {
@@ -377,7 +391,7 @@ class ClashProxies {
     if (nextNode == null) {
       return node.delay;
     }
-    final delay = updateGroupDelay(nextNode);
+    final delay = updateGroupDelay(nextNode, visited);
     if (delay != null) {
       return delay;
     }
@@ -573,12 +587,12 @@ class ClashHttpApi {
         return ReturnResult(error: result.error ?? ReturnResultError("Empty response"));
       }
       var decodedResponse = jsonDecode(responseBody);
-      int? delay = decodedResponse["delay"];
-      String? err = decodedResponse["message"];
+      int? delay = (decodedResponse["delay"] as num?)?.toInt();
+      String? err = decodedResponse["message"]?.toString();
       if (delay != null && delay > 0) {
         return ReturnResult(data: delay);
       }
-      if (err != null) {
+      if (err != null && err.isNotEmpty) {
         return ReturnResult(error: ReturnResultError(err));
       }
       return ReturnResult(data: null);
