@@ -37,6 +37,7 @@ class TranslationsAr with BaseTranslations<AppLocale, Translations> implements T
 	TranslationsAr $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsAr(meta: meta ?? this.$meta);
 
 	// Translations
+	@override late final _Translations$WelcomeLanguageScreen$ar WelcomeLanguageScreen = _Translations$WelcomeLanguageScreen$ar._(_root);
 	@override late final _Translations$BackupAndSyncWebdavScreen$ar BackupAndSyncWebdavScreen = _Translations$BackupAndSyncWebdavScreen$ar._(_root);
 	@override late final _Translations$LaunchFailedScreen$ar LaunchFailedScreen = _Translations$LaunchFailedScreen$ar._(_root);
 	@override late final _Translations$PerAppAndroidScreen$ar PerAppAndroidScreen = _Translations$PerAppAndroidScreen$ar._(_root);
@@ -66,6 +67,19 @@ class TranslationsAr with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+}
+
+// Path: WelcomeLanguageScreen
+class _Translations$WelcomeLanguageScreen$ar implements Translations$WelcomeLanguageScreen$en {
+	_Translations$WelcomeLanguageScreen$ar._(this._root);
+
+	final TranslationsAr _root; // ignore: unused_field
+
+	// Translations
+	@override String get welcomeTitle => 'مرحبًا بك في Wmimo';
+	@override String get selectLanguage => 'اختر اللغة';
+	@override String get subtitle => 'يرجى اختيار لغتك المفضلة. يمكنك تغييرها في أي وقت من الإعدادات.';
+	@override String get start => 'ابدأ الآن';
 }
 
 // Path: BackupAndSyncWebdavScreen
@@ -648,6 +662,10 @@ class _Translations$main$tray$ar implements Translations$main$tray$en {
 extension on TranslationsAr {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
+			'WelcomeLanguageScreen.welcomeTitle' => 'مرحبًا بك في Wmimo',
+			'WelcomeLanguageScreen.selectLanguage' => 'اختر اللغة',
+			'WelcomeLanguageScreen.subtitle' => 'يرجى اختيار لغتك المفضلة. يمكنك تغييرها في أي وقت من الإعدادات.',
+			'WelcomeLanguageScreen.start' => 'ابدأ الآن',
 			'BackupAndSyncWebdavScreen.webdavServerUrl' => 'عنوان URL الخادم',
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'لايمكن ان يكون فارغا',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'فشل تسجيل الدخول:',

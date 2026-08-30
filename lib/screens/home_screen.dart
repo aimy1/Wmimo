@@ -20,7 +20,7 @@ import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/home_screen_widgets.dart';
 import 'package:wmimo/screens/connections_screen.dart';
-import 'package:wmimo/screens/language_settings_screen.dart';
+import 'package:wmimo/screens/welcome_language_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen.dart';
 import 'package:wmimo/screens/proxy_board_screen.dart';
 import 'package:wmimo/screens/scheme_handler.dart';
@@ -51,6 +51,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with WidgetsBindingObserver, ProtocolListener, AfterLayoutMixin {
   static const String userAgreementAgreedIdKey = 'userAgreementAgreedKey';
+  static const String firstLaunchLanguageKey = 'first_launch_language_selected';
 
   bool _onInitAllFinished = false;
   String _initUrl = "";
@@ -175,6 +176,24 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void showAgreement() async {
+    String? languageSelected;
+    try {
+      languageSelected = await LocalStorage.read(firstLaunchLanguageKey);
+    } catch (e) {}
+
+    if (languageSelected == null) {
+      if (!mounted) return;
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          settings: WelcomeLanguageScreen.routSettings(),
+          fullscreenDialog: true,
+          builder: (context) => const WelcomeLanguageScreen(),
+        ),
+      );
+      await LocalStorage.write(firstLaunchLanguageKey, "true");
+    }
+
     String? agreement;
     try {
       if (Platform.isIOS || Platform.isMacOS) {
@@ -188,6 +207,7 @@ class _HomeScreenState extends State<HomeScreen>
       return;
     }
     if (Platform.isIOS || Platform.isMacOS) {
+      if (!mounted) return;
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -198,22 +218,6 @@ class _HomeScreenState extends State<HomeScreen>
       );
       LocalStorage.write(userAgreementAgreedIdKey, "true");
     }
-
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        settings: LanguageSettingsScreen.routSettings(),
-        fullscreenDialog: true,
-        builder: (context) => LanguageSettingsScreen(
-          canPop: false,
-          canGoBack: false,
-          nextText: () {
-            var tcontext = Translations.of(context);
-            return tcontext.meta.done;
-          },
-        ),
-      ),
-    );
   }
 
   void _init() async {

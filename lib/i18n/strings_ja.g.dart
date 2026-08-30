@@ -37,6 +37,7 @@ class TranslationsJa with BaseTranslations<AppLocale, Translations> implements T
 	TranslationsJa $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsJa(meta: meta ?? this.$meta);
 
 	// Translations
+	@override late final _Translations$WelcomeLanguageScreen$ja WelcomeLanguageScreen = _Translations$WelcomeLanguageScreen$ja._(_root);
 	@override late final _Translations$BackupAndSyncWebdavScreen$ja BackupAndSyncWebdavScreen = _Translations$BackupAndSyncWebdavScreen$ja._(_root);
 	@override late final _Translations$LaunchFailedScreen$ja LaunchFailedScreen = _Translations$LaunchFailedScreen$ja._(_root);
 	@override late final _Translations$PerAppAndroidScreen$ja PerAppAndroidScreen = _Translations$PerAppAndroidScreen$ja._(_root);
@@ -66,6 +67,19 @@ class TranslationsJa with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+}
+
+// Path: WelcomeLanguageScreen
+class _Translations$WelcomeLanguageScreen$ja implements Translations$WelcomeLanguageScreen$en {
+	_Translations$WelcomeLanguageScreen$ja._(this._root);
+
+	final TranslationsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get welcomeTitle => 'Wmimo へようこそ';
+	@override String get selectLanguage => '言語を選択';
+	@override String get subtitle => 'ご希望の言語を選択してください。設定からいつでも変更できます。';
+	@override String get start => '始める';
 }
 
 // Path: BackupAndSyncWebdavScreen
@@ -648,6 +662,10 @@ class _Translations$main$tray$ja implements Translations$main$tray$en {
 extension on TranslationsJa {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
+			'WelcomeLanguageScreen.welcomeTitle' => 'Wmimo へようこそ',
+			'WelcomeLanguageScreen.selectLanguage' => '言語を選択',
+			'WelcomeLanguageScreen.subtitle' => 'ご希望の言語を選択してください。設定からいつでも変更できます。',
+			'WelcomeLanguageScreen.start' => '始める',
 			'BackupAndSyncWebdavScreen.webdavServerUrl' => 'サーバーURL',
 			'BackupAndSyncWebdavScreen.webdavRequired' => '空にすることはできません',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'ログインに失敗しました:',

@@ -37,6 +37,7 @@ class TranslationsKo with BaseTranslations<AppLocale, Translations> implements T
 	TranslationsKo $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsKo(meta: meta ?? this.$meta);
 
 	// Translations
+	@override late final _Translations$WelcomeLanguageScreen$ko WelcomeLanguageScreen = _Translations$WelcomeLanguageScreen$ko._(_root);
 	@override late final _Translations$BackupAndSyncWebdavScreen$ko BackupAndSyncWebdavScreen = _Translations$BackupAndSyncWebdavScreen$ko._(_root);
 	@override late final _Translations$LaunchFailedScreen$ko LaunchFailedScreen = _Translations$LaunchFailedScreen$ko._(_root);
 	@override late final _Translations$PerAppAndroidScreen$ko PerAppAndroidScreen = _Translations$PerAppAndroidScreen$ko._(_root);
@@ -66,6 +67,19 @@ class TranslationsKo with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+}
+
+// Path: WelcomeLanguageScreen
+class _Translations$WelcomeLanguageScreen$ko implements Translations$WelcomeLanguageScreen$en {
+	_Translations$WelcomeLanguageScreen$ko._(this._root);
+
+	final TranslationsKo _root; // ignore: unused_field
+
+	// Translations
+	@override String get welcomeTitle => 'Wmimo에 오신 것을 환영합니다';
+	@override String get selectLanguage => '언어 선택';
+	@override String get subtitle => '원하시는 언어를 선택해 주세요. 설정에서 언제든지 변경할 수 있습니다.';
+	@override String get start => '시작하기';
 }
 
 // Path: BackupAndSyncWebdavScreen
@@ -648,6 +662,10 @@ class _Translations$main$tray$ko implements Translations$main$tray$en {
 extension on TranslationsKo {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
+			'WelcomeLanguageScreen.welcomeTitle' => 'Wmimo에 오신 것을 환영합니다',
+			'WelcomeLanguageScreen.selectLanguage' => '언어 선택',
+			'WelcomeLanguageScreen.subtitle' => '원하시는 언어를 선택해 주세요. 설정에서 언제든지 변경할 수 있습니다.',
+			'WelcomeLanguageScreen.start' => '시작하기',
 			'BackupAndSyncWebdavScreen.webdavServerUrl' => '서버 URL',
 			'BackupAndSyncWebdavScreen.webdavRequired' => '비워둘 수 없습니다',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => '로그인 실패:',

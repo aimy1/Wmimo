@@ -37,6 +37,7 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 	TranslationsEs $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsEs(meta: meta ?? this.$meta);
 
 	// Translations
+	@override late final _Translations$WelcomeLanguageScreen$es WelcomeLanguageScreen = _Translations$WelcomeLanguageScreen$es._(_root);
 	@override late final _Translations$BackupAndSyncWebdavScreen$es BackupAndSyncWebdavScreen = _Translations$BackupAndSyncWebdavScreen$es._(_root);
 	@override late final _Translations$LaunchFailedScreen$es LaunchFailedScreen = _Translations$LaunchFailedScreen$es._(_root);
 	@override late final _Translations$PerAppAndroidScreen$es PerAppAndroidScreen = _Translations$PerAppAndroidScreen$es._(_root);
@@ -66,6 +67,19 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+}
+
+// Path: WelcomeLanguageScreen
+class _Translations$WelcomeLanguageScreen$es implements Translations$WelcomeLanguageScreen$en {
+	_Translations$WelcomeLanguageScreen$es._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get welcomeTitle => 'Bienvenido a Wmimo';
+	@override String get selectLanguage => 'Seleccionar idioma';
+	@override String get subtitle => 'Seleccione su idioma preferido. Puede cambiarlo en cualquier momento en la configuración.';
+	@override String get start => 'Comenzar';
 }
 
 // Path: BackupAndSyncWebdavScreen
@@ -648,6 +662,10 @@ class _Translations$main$tray$es implements Translations$main$tray$en {
 extension on TranslationsEs {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
+			'WelcomeLanguageScreen.welcomeTitle' => 'Bienvenido a Wmimo',
+			'WelcomeLanguageScreen.selectLanguage' => 'Seleccionar idioma',
+			'WelcomeLanguageScreen.subtitle' => 'Seleccione su idioma preferido. Puede cambiarlo en cualquier momento en la configuración.',
+			'WelcomeLanguageScreen.start' => 'Comenzar',
 			'BackupAndSyncWebdavScreen.webdavServerUrl' => 'URL del Servidor',
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'No puede estar vacío',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'Fallo al iniciar sesión:',

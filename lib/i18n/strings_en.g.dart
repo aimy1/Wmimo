@@ -40,6 +40,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
 
 	// Translations
+	late final Translations$WelcomeLanguageScreen$en WelcomeLanguageScreen = Translations$WelcomeLanguageScreen$en._(_root);
 	late final Translations$BackupAndSyncWebdavScreen$en BackupAndSyncWebdavScreen = Translations$BackupAndSyncWebdavScreen$en._(_root);
 	late final Translations$LaunchFailedScreen$en LaunchFailedScreen = Translations$LaunchFailedScreen$en._(_root);
 	late final Translations$PerAppAndroidScreen$en PerAppAndroidScreen = Translations$PerAppAndroidScreen$en._(_root);
@@ -76,6 +77,27 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+}
+
+// Path: WelcomeLanguageScreen
+class Translations$WelcomeLanguageScreen$en {
+	Translations$WelcomeLanguageScreen$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Welcome to Wmimo'
+	String get welcomeTitle => 'Welcome to Wmimo';
+
+	/// en: 'Select Language'
+	String get selectLanguage => 'Select Language';
+
+	/// en: 'Please select your preferred language. You can change it anytime in settings.'
+	String get subtitle => 'Please select your preferred language. You can change it anytime in settings.';
+
+	/// en: 'Get Started'
+	String get start => 'Get Started';
 }
 
 // Path: BackupAndSyncWebdavScreen
@@ -1512,6 +1534,10 @@ class Translations$main$tray$en {
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
+			'WelcomeLanguageScreen.welcomeTitle' => 'Welcome to Wmimo',
+			'WelcomeLanguageScreen.selectLanguage' => 'Select Language',
+			'WelcomeLanguageScreen.subtitle' => 'Please select your preferred language. You can change it anytime in settings.',
+			'WelcomeLanguageScreen.start' => 'Get Started',
 			'BackupAndSyncWebdavScreen.webdavServerUrl' => 'Server Url',
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'Can not be empty',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'Login failed:',

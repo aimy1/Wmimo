@@ -37,6 +37,7 @@ class TranslationsFa with BaseTranslations<AppLocale, Translations> implements T
 	TranslationsFa $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsFa(meta: meta ?? this.$meta);
 
 	// Translations
+	@override late final _Translations$WelcomeLanguageScreen$fa WelcomeLanguageScreen = _Translations$WelcomeLanguageScreen$fa._(_root);
 	@override late final _Translations$BackupAndSyncWebdavScreen$fa BackupAndSyncWebdavScreen = _Translations$BackupAndSyncWebdavScreen$fa._(_root);
 	@override late final _Translations$LaunchFailedScreen$fa LaunchFailedScreen = _Translations$LaunchFailedScreen$fa._(_root);
 	@override late final _Translations$PerAppAndroidScreen$fa PerAppAndroidScreen = _Translations$PerAppAndroidScreen$fa._(_root);
@@ -66,6 +67,19 @@ class TranslationsFa with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+}
+
+// Path: WelcomeLanguageScreen
+class _Translations$WelcomeLanguageScreen$fa implements Translations$WelcomeLanguageScreen$en {
+	_Translations$WelcomeLanguageScreen$fa._(this._root);
+
+	final TranslationsFa _root; // ignore: unused_field
+
+	// Translations
+	@override String get welcomeTitle => 'به Wmimo خوش آمدید';
+	@override String get selectLanguage => 'انتخاب زبان';
+	@override String get subtitle => 'لطفاً زبان مورد نظر خود را انتخاب کنید. می‌توانید در هر زمان در تنظیمات آن را تغییر دهید.';
+	@override String get start => 'شروع کنید';
 }
 
 // Path: BackupAndSyncWebdavScreen
@@ -648,6 +662,10 @@ class _Translations$main$tray$fa implements Translations$main$tray$en {
 extension on TranslationsFa {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
+			'WelcomeLanguageScreen.welcomeTitle' => 'به Wmimo خوش آمدید',
+			'WelcomeLanguageScreen.selectLanguage' => 'انتخاب زبان',
+			'WelcomeLanguageScreen.subtitle' => 'لطفاً زبان مورد نظر خود را انتخاب کنید. می‌توانید در هر زمان در تنظیمات آن را تغییر دهید.',
+			'WelcomeLanguageScreen.start' => 'شروع کنید',
 			'BackupAndSyncWebdavScreen.webdavServerUrl' => 'آدرس URL سرور',
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'نمی‌تواند خالی باشد',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'ورود ناموفق بود:',

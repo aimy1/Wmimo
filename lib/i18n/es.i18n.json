@@ -1,4 +1,10 @@
 {
+  "WelcomeLanguageScreen": {
+    "welcomeTitle": "Bienvenido a Wmimo",
+    "selectLanguage": "Seleccionar idioma",
+    "subtitle": "Seleccione su idioma preferido. Puede cambiarlo en cualquier momento en la configuración.",
+    "start": "Comenzar"
+  },
   "BackupAndSyncWebdavScreen": {
     "webdavServerUrl": "URL del Servidor",
     "webdavRequired": "No puede estar vacío",

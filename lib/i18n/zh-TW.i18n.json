@@ -1,4 +1,10 @@
 {
+  "WelcomeLanguageScreen": {
+    "welcomeTitle": "歡迎使用 Wmimo",
+    "selectLanguage": "選擇軟體語言",
+    "subtitle": "請選擇您的首選語言，您隨時可以在設定中更改",
+    "start": "進入應用"
+  },
   "BackupAndSyncWebdavScreen": {
     "webdavServerUrl": "伺服器地址",
     "webdavRequired": "不能為空",

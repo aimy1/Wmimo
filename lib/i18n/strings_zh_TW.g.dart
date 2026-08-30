@@ -37,6 +37,7 @@ class TranslationsZhTw with BaseTranslations<AppLocale, Translations> implements
 	TranslationsZhTw $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsZhTw(meta: meta ?? this.$meta);
 
 	// Translations
+	@override late final Translations$WelcomeLanguageScreen$zh_TW WelcomeLanguageScreen = Translations$WelcomeLanguageScreen$zh_TW.internal(_root);
 	@override late final Translations$BackupAndSyncWebdavScreen$zh_TW BackupAndSyncWebdavScreen = Translations$BackupAndSyncWebdavScreen$zh_TW.internal(_root);
 	@override late final Translations$LaunchFailedScreen$zh_TW LaunchFailedScreen = Translations$LaunchFailedScreen$zh_TW.internal(_root);
 	@override late final Translations$PerAppAndroidScreen$zh_TW PerAppAndroidScreen = Translations$PerAppAndroidScreen$zh_TW.internal(_root);
@@ -66,6 +67,19 @@ class TranslationsZhTw with BaseTranslations<AppLocale, Translations> implements
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+}
+
+// Path: WelcomeLanguageScreen
+class Translations$WelcomeLanguageScreen$zh_TW implements Translations$WelcomeLanguageScreen$en {
+	Translations$WelcomeLanguageScreen$zh_TW.internal(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get welcomeTitle => '歡迎使用 Wmimo';
+	@override String get selectLanguage => '選擇軟體語言';
+	@override String get subtitle => '請選擇您的首選語言，您隨時可以在設定中更改';
+	@override String get start => '進入應用';
 }
 
 // Path: BackupAndSyncWebdavScreen
@@ -648,6 +662,10 @@ class Translations$main$tray$zh_TW implements Translations$main$tray$en {
 extension on TranslationsZhTw {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
+			'WelcomeLanguageScreen.welcomeTitle' => '歡迎使用 Wmimo',
+			'WelcomeLanguageScreen.selectLanguage' => '選擇軟體語言',
+			'WelcomeLanguageScreen.subtitle' => '請選擇您的首選語言，您隨時可以在設定中更改',
+			'WelcomeLanguageScreen.start' => '進入應用',
 			'BackupAndSyncWebdavScreen.webdavServerUrl' => '伺服器地址',
 			'BackupAndSyncWebdavScreen.webdavRequired' => '不能為空',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => '登錄失敗:',

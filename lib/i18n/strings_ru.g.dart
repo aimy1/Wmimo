@@ -37,6 +37,7 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 	TranslationsRu $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsRu(meta: meta ?? this.$meta);
 
 	// Translations
+	@override late final _Translations$WelcomeLanguageScreen$ru WelcomeLanguageScreen = _Translations$WelcomeLanguageScreen$ru._(_root);
 	@override late final _Translations$BackupAndSyncWebdavScreen$ru BackupAndSyncWebdavScreen = _Translations$BackupAndSyncWebdavScreen$ru._(_root);
 	@override late final _Translations$LaunchFailedScreen$ru LaunchFailedScreen = _Translations$LaunchFailedScreen$ru._(_root);
 	@override late final _Translations$PerAppAndroidScreen$ru PerAppAndroidScreen = _Translations$PerAppAndroidScreen$ru._(_root);
@@ -66,6 +67,19 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+}
+
+// Path: WelcomeLanguageScreen
+class _Translations$WelcomeLanguageScreen$ru implements Translations$WelcomeLanguageScreen$en {
+	_Translations$WelcomeLanguageScreen$ru._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get welcomeTitle => 'Добро пожаловать в Wmimo';
+	@override String get selectLanguage => 'Выберите язык';
+	@override String get subtitle => 'Пожалуйста, выберите предпочитаемый язык. Вы можете изменить его в настройках в любое время.';
+	@override String get start => 'Начать';
 }
 
 // Path: BackupAndSyncWebdavScreen
@@ -648,6 +662,10 @@ class _Translations$main$tray$ru implements Translations$main$tray$en {
 extension on TranslationsRu {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
+			'WelcomeLanguageScreen.welcomeTitle' => 'Добро пожаловать в Wmimo',
+			'WelcomeLanguageScreen.selectLanguage' => 'Выберите язык',
+			'WelcomeLanguageScreen.subtitle' => 'Пожалуйста, выберите предпочитаемый язык. Вы можете изменить его в настройках в любое время.',
+			'WelcomeLanguageScreen.start' => 'Начать',
 			'BackupAndSyncWebdavScreen.webdavServerUrl' => 'Адрес сервера',
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'Не может быть пустым',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'Ошибка входа:',

@@ -1,4 +1,10 @@
 {
+  "WelcomeLanguageScreen": {
+    "welcomeTitle": "Добро пожаловать в Wmimo",
+    "selectLanguage": "Выберите язык",
+    "subtitle": "Пожалуйста, выберите предпочитаемый язык. Вы можете изменить его в настройках в любое время.",
+    "start": "Начать"
+  },
   "BackupAndSyncWebdavScreen": {
     "webdavServerUrl": "Адрес сервера",
     "webdavRequired": "Не может быть пустым",

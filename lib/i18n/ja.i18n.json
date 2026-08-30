@@ -1,4 +1,10 @@
 {
+  "WelcomeLanguageScreen": {
+    "welcomeTitle": "Wmimo へようこそ",
+    "selectLanguage": "言語を選択",
+    "subtitle": "ご希望の言語を選択してください。設定からいつでも変更できます。",
+    "start": "始める"
+  },
   "BackupAndSyncWebdavScreen": {
     "webdavServerUrl": "サーバーURL",
     "webdavRequired": "空にすることはできません",
