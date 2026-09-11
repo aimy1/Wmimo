@@ -1,8 +1,5 @@
 // ignore_for_file: unused_catch_stack
 
-import 'dart:io';
-
-import 'package:wmimo/app/modules/remote_config_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/file_utils.dart';
@@ -10,13 +7,11 @@ import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/url_launcher_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
-import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/donate_screen.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
 import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/group_screen.dart';
 import 'package:wmimo/screens/theme_config.dart';
-import 'package:wmimo/screens/webview_helper.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 import 'package:flutter/material.dart';
 
@@ -147,7 +142,6 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
 
   Future<List<GroupItem>> getGroupOptions() async {
     final tcontext = Translations.of(context);
-    var remoteConfig = RemoteConfigManager.getConfig();
     final coreVersion = AppUtils.getCoreVersion();
     List<GroupItem> groupOptions = [];
 

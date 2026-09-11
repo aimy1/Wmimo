@@ -48,7 +48,6 @@ class _MapStringAndStringAddScreenState
 
   @override
   Widget build(BuildContext context) {
-    Size windowSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
       body: SafeArea(

@@ -1,4 +1,4 @@
-﻿import 'package:wmimo/app/runtime/return_result.dart';
+import 'package:wmimo/app/runtime/return_result.dart';
 import 'package:wmimo/app/utils/app_url_utils.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
@@ -19,7 +19,7 @@ class UrlLauncherUtils {
         webOnlyWindowName: webOnlyWindowName,
       );
       return ret ? null : ReturnResultError("launchUrl failed $url");
-    } catch (err, _) {
+    } catch (err) {
       Log.w('UrlLauncherUtils.loadUrl exception: $url\n ${err.toString()}');
       return ReturnResultError(err.toString());
     }
@@ -62,7 +62,7 @@ class UrlLauncherUtils {
     }
     try {
       closeInAppWebView();
-    } catch (err, _) {
+    } catch (err) {
       Log.i('UrlLauncherUtils.closeWebview exception ${err.toString()}');
     }
   }

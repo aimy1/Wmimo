@@ -16,7 +16,6 @@ import 'package:tuple/tuple.dart';
 typedef DecodeCallback = String Function(String);
 
 abstract final class HttpUtils {
-  static const String _proxy = "PROXY 127.0.0.1:8888";
   static const String kStatusError = "http statusCode:";
   static bool isStatusError(ReturnResultError error) {
     return error.message.contains(kStatusError);
@@ -69,7 +68,7 @@ abstract final class HttpUtils {
       }
 
       return ReturnResult(data: Tuple2(response.statusCode, response.headers));
-    } catch (err, _) {
+    } catch (err) {
       Log.i('http HeadRequest ${uri.toString()} exception: ${err.toString()}');
       return ReturnResult(
         error: ReturnResultError("http exception: ${err.toString()}"),
@@ -161,7 +160,7 @@ abstract final class HttpUtils {
         );
       }
       return ReturnResult(data: response.headers);
-    } catch (err, _) {
+    } catch (err) {
       Log.i('http Download ${uri.toString()} exception: ${err.toString()}');
       return ReturnResult(
         error: ReturnResultError("http exception: ${err.toString()}"),
@@ -199,7 +198,7 @@ abstract final class HttpUtils {
       if (response.statusCode != 200) {
         return ReturnResultError("$kStatusError ${response.statusCode}");
       }
-    } catch (err, _) {
+    } catch (err) {
       Log.i('http Upload ${uri.toString()} exception: ${err.toString()}');
       return ReturnResultError("http exception: ${err.toString()}");
     } finally {
@@ -264,7 +263,7 @@ abstract final class HttpUtils {
       }
       var stringData = await response.transform(utf8.decoder).join();
       return ReturnResult(data: Tuple2(response.statusCode, stringData));
-    } catch (err, _) {
+    } catch (err) {
       Log.i('http GetRequest $url exception: ${err.toString()}');
       return ReturnResult(
         error: ReturnResultError("http exception: ${err.toString()}"),

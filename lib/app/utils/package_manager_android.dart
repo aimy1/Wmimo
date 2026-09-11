@@ -74,8 +74,8 @@ class PackageManagerAndroid {
         packageInfos = await _getInstalledPackagesFallback();
       }
 
-      return _buildPackageInfoList(packageInfos, onValid: onValid);
-    } catch (err, stacktrace) {}
+      return await _buildPackageInfoList(packageInfos, onValid: onValid);
+    } catch (_) {}
     return [];
   }
 
@@ -161,7 +161,7 @@ class PackageManagerAndroid {
     }
     try {
       return await _pkgMgr!.getApplicationLabel(packageName: packageName) ?? "";
-    } catch (err, stacktrace) {
+    } catch (_) {
       return packageName;
     }
   }
@@ -179,7 +179,7 @@ class PackageManagerAndroid {
         return null;
       }
       return Image.memory(data, cacheHeight: size, cacheWidth: size);
-    } catch (err, stacktrace) {
+    } catch (_) {
       return null;
     }
   }

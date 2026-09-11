@@ -23,7 +23,6 @@ import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:libclash_vpn_service/proxy_manager.dart';
 import 'package:libclash_vpn_service/state.dart';
 import 'package:libclash_vpn_service/vpn_service.dart';
-import 'package:libclash_vpn_service/vpn_service_platform_interface.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 

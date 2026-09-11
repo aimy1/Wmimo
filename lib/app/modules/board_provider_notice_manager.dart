@@ -7,7 +7,6 @@ import 'dart:io';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
-import 'package:wmimo/app/private/app_url_utils_private.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/did.dart';
@@ -19,7 +18,6 @@ import 'package:wmimo/app/utils/notice_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/private/board_provider_private.dart';
-import 'package:tuple/tuple.dart';
 import 'package:libclash_vpn_service/state.dart';
 
 class BoardProviderNoticeItem {

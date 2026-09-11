@@ -7,7 +7,6 @@ import 'dart:io';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
-import 'package:wmimo/app/private/app_url_utils_private.dart';
 import 'package:wmimo/app/runtime/return_result.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/app_utils.dart';

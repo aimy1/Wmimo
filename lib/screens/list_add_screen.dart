@@ -45,7 +45,6 @@ class _ListAddScreenState extends LasyRenderingState<ListAddScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size windowSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
       body: SafeArea(

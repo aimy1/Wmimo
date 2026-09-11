@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:flutter_install_referrer/flutter_install_referrer.dart';
 import 'package:wmimo/app/utils/log.dart';
@@ -11,7 +11,7 @@ abstract final class InstallReferrerUtils {
         try {
           var app = await InstallReferrer.app;
           _referrer = app.referrer;
-        } catch (err, _) {
+        } catch (err) {
           Log.i("InstallReferrerUtils.get exception ${err.toString()}");
         }
       }

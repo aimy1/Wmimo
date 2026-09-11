@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: unused_catch_stack, empty_catches
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wmimo/app/utils/log.dart';
@@ -19,7 +19,7 @@ class SecureStorageUtils {
       try {
         _storage ??= _initStorage();
         value = await _storage!.read(key: key);
-      } catch (err, stacktrace) {}
+      } catch (_) {}
     }
     return value;
   }
@@ -27,18 +27,17 @@ class SecureStorageUtils {
   static Future<void> write(String key, String? value) async {
     try {
       return await SecureStorage.write(key, value);
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w('SecureStorageUtils write exception ${err.toString()}');
       try {
         _storage ??= _initStorage();
         return await _storage!.write(key: key, value: value);
-      } catch (err, stacktrace) {}
+      } catch (_) {}
     }
   }
 
   static FlutterSecureStorage _initStorage() {
-    AndroidOptions getAndroidOptions() =>
-        const AndroidOptions(encryptedSharedPreferences: false);
+    AndroidOptions getAndroidOptions() => const AndroidOptions();
     return FlutterSecureStorage(aOptions: getAndroidOptions());
   }
 }

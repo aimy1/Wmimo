@@ -101,7 +101,6 @@ class _AddProfileByScanQrcodeScanScreenState
 
   List<Widget> buildBar(BuildContext context) {
     final tcontext = Translations.of(context);
-    Size windowSize = MediaQuery.of(context).size;
     if (PlatformUtils.isMobile()) {
       return [
         InkWell(
@@ -465,7 +464,7 @@ class _AddProfileByScanQrcodeScanScreenState
           setState(() {});
         }
       }
-    } catch (err, _) {
+    } catch (err) {
       if (!mounted) {
         return;
       }
@@ -522,7 +521,7 @@ class _AddProfileByScanQrcodeScanScreenState
           }
         }
       }
-    } catch (err, _) {
+    } catch (err) {
       if (!mounted) {
         return;
       }
@@ -559,7 +558,7 @@ class _AddProfileByScanQrcodeScanScreenState
         mode: CaptureMode.region,
         copyToClipboard: true,
       );
-    } catch (err, _) {}
+    } catch (_) {}
 
     if ((capturedData != null) && (capturedData.imageBytes != null)) {
       _image = Image.memory(capturedData.imageBytes!);
@@ -579,7 +578,7 @@ class _AddProfileByScanQrcodeScanScreenState
             setState(() {});
           }
         }
-      } catch (err, _) {
+      } catch (err) {
         DialogUtils.showAlertDialog(
           context,
           err.toString(),

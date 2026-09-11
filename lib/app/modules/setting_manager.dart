@@ -16,7 +16,6 @@ import 'package:wmimo/screens/widgets/text_field.dart';
 
 import 'package:path/path.dart' as path;
 import 'package:win32_registry/win32_registry.dart';
-import 'package:libclash_vpn_service/proxy_manager.dart';
 
 const List<String> ProxyBypassDoaminsDefault = [
   "127.0.0.1",
@@ -347,7 +346,7 @@ class SettingManager {
         var config = jsonDecode(content);
         _config.fromJson(config);
       }
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w("SettingManager.load exception $filePath ${err.toString()}");
     }
   }
@@ -362,7 +361,7 @@ class SettingManager {
     String content = encoder.convert(_config.toJson());
     try {
       await File(filePath).writeAsString(content, flush: true);
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w("SettingManager.save exception  $filePath ${err.toString()}");
     }
     _saving = false;

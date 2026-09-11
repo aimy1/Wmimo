@@ -53,7 +53,6 @@ class _ProfilesPatchSettingsEditScreenState
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
-    Size windowSize = MediaQuery.of(context).size;
     var profile = ProfilePatchManager.getProfilePatch(widget.profileid);
 
     return Scaffold(

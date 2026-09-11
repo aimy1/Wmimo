@@ -1,4 +1,4 @@
-﻿// ignore_for_file: empty_catches, no_leading_underscores_for_local_identifiers
+// ignore_for_file: empty_catches, no_leading_underscores_for_local_identifiers
 
 import 'dart:convert';
 import 'dart:io';
@@ -91,7 +91,7 @@ abstract final class AutoupdateUtils {
           }
         }
       }
-    } catch (err, _) {
+    } catch (err) {
       Log.i('AutoupdateUtils getAutoupdate exception ${err.toString()}');
     }
     return ReturnResult(data: items);
@@ -124,7 +124,7 @@ abstract final class AutoupdateUtils {
         var decodedResponse = jsonDecode(response.data!.item2);
         rc.fromJson(decodedResponse);
       }
-    } catch (err, _) {
+    } catch (err) {
       Log.i('AutoupdateUtils getRemoteConfig exception ${err.toString()}');
     }
     return ReturnResult(data: rc);

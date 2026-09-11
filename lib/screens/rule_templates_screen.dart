@@ -31,7 +31,6 @@ class _RuleTemplatesScreenState
 
   @override
   Widget build(BuildContext context) {
-    Size windowSize = MediaQuery.of(context).size;
     final tcontext = Translations.of(context);
     return Scaffold(
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),

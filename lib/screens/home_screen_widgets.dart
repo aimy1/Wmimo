@@ -7,13 +7,10 @@ import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/auto_update_manager.dart';
 import 'package:wmimo/app/modules/biz.dart';
-import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/modules/board_provider_notice_manager.dart';
-import 'package:wmimo/app/modules/board_session_persistent_manager.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
-import 'package:wmimo/screens/connections_screen.dart';
 import 'package:wmimo/screens/rules_screen.dart';
 import 'package:wmimo/screens/logs_screen.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
@@ -37,7 +34,6 @@ import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/ip_info_card.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
 import 'package:wmimo/screens/widgets/traffic_chart_card.dart';
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:libclash_vpn_service/state.dart';
 import 'package:libclash_vpn_service/vpn_service.dart';
@@ -211,35 +207,11 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     final tcontext = Translations.of(context);
     bool connected = _state == FlutterVpnServiceState.connected;
     final currentProfile = ProfileManager.getCurrent();
-    final currentProfileName = currentProfile?.getShowName() ?? "";
-    final provider = BoardProviderManager.getProviderById(
-      currentProfile?.boardProviderId ?? "",
-    );
-
     final settings = SettingManager.getConfig();
-    String tranffic = "";
     Tuple2<bool, String>? tranfficExpire;
-    if (currentProfile != null && currentProfile.isRemote()) {
-      if (currentProfile.upload != 0 ||
-          currentProfile.download != 0 ||
-          currentProfile.total != 0) {
-        String upload = ClashHttpApi.convertTrafficToStringDouble(
-          currentProfile.upload,
-        );
-        String download = ClashHttpApi.convertTrafficToStringDouble(
-          currentProfile.download,
-        );
-        String total = ClashHttpApi.convertTrafficToStringDouble(
-          currentProfile.total,
-        );
-        tranffic = "↑ $upload ↓ $download/$total";
-      }
-      if (currentProfile.expire.isNotEmpty) {
-        tranfficExpire = currentProfile.getExpireTime(settings.languageTag);
-      }
+    if (currentProfile != null && currentProfile.isRemote() && currentProfile.expire.isNotEmpty) {
+      tranfficExpire = currentProfile.getExpireTime(settings.languageTag);
     }
-    bool notice =
-        BoardProviderNoticeManager.getFirstUnread(provider?.id ?? "") != null;
     return Column(
       children: [
         Card(
@@ -951,19 +923,6 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     );
   }
 
-  Widget _buildWithValue(BuildContext context, String value, Widget? child) {
-    return Text(
-      value,
-      textAlign: TextAlign.start,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        color: ThemeDefine.kColorBlue,
-        fontWeight: FontWeight.w500,
-        fontFamily: Platform.isWindows ? 'Emoji' : null,
-      ),
-    );
-  }
-
   Future<void> _onInitAllFinish() async {
     VpnActionHandler.vpnConnect = _vpnConnect;
     VpnActionHandler.vpnDisconnect = _vpnDisconnect;
@@ -1330,11 +1289,11 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       if (offlineNodes.isNotEmpty) {
         // Look for proxy group with 'now' or first proxy
         final groupWithSelection = offlineNodes.firstWhere(
-          (n) => n.now != null && n.now!.isNotEmpty,
+          (n) => n.now.isNotEmpty,
           orElse: () => offlineNodes.first,
         );
-        if (groupWithSelection.now != null && groupWithSelection.now!.isNotEmpty) {
-          _proxyNow.value = groupWithSelection.now!;
+        if (groupWithSelection.now.isNotEmpty) {
+          _proxyNow.value = groupWithSelection.now;
         } else if (groupWithSelection.name.isNotEmpty) {
           _proxyNow.value = groupWithSelection.name;
         }

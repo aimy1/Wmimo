@@ -78,7 +78,6 @@ class _LoginScreenState extends State<LoginStepAccountScreen> {
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
-    Size windowSize = MediaQuery.of(context).size;
 
     return PopScope(
       canPop: !_logining,

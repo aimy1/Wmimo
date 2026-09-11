@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:wmimo/app/utils/file_utils.dart';
@@ -33,7 +33,7 @@ abstract final class LocalStorage {
       }
       try {
         _storage = jsonDecode(content);
-      } catch (err, _) {
+      } catch (err) {
         Log.w("LocalStorage.load exception ${err.toString()}");
       }
     }
