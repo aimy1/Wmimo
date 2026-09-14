@@ -24,7 +24,7 @@
 
 ---
 
-## 📌 Platform Support & Linux Multi-Distro Matrix
+## Platform Support & Linux Multi-Distro Matrix
 
 | Platform / Distro | Status | Supported Formats | Description |
 | :--- | :---: | :--- | :--- |
