@@ -1,9 +1,7 @@
 // ignore_for_file: empty_catches, unused_catch_stack
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:wmimo/app/clash/clash_config.dart';
@@ -130,19 +128,19 @@ Future<void> run(List<String> args) async {
     if (PlatformUtils.isPC()) {
       await windowManager.ensureInitialized();
       WindowOptions windowOptions = const WindowOptions(
-        size: Size(1020, 680),
-        minimumSize: Size(360, 500),
+        size: Size(800, 560),
+        minimumSize: Size(360, 480),
         center: true,
         backgroundColor: Colors.transparent,
         skipTaskbar: false,
         titleBarStyle: TitleBarStyle.normal,
       );
       windowManager.waitUntilReadyToShow(windowOptions, () async {
-        await windowManager.setMinimumSize(const Size(360, 500));
+        await windowManager.setMinimumSize(const Size(360, 480));
         await windowManager.show();
         await windowManager.focus();
       });
-      await windowManager.setMinimumSize(const Size(360, 500));
+      await windowManager.setMinimumSize(const Size(360, 480));
       await windowManager.show();
       await windowManager.focus();
     }
@@ -479,15 +477,22 @@ class MyAppState extends State<MyApp>
 
     Biz.onEventVPNStateChanged = ((bool connected) {
       if (PlatformUtils.isPC()) {
-        if (_trayGrey == !connected) {
-          return;
-        }
         _setTray(!connected, false, false);
         if (Platform.isMacOS && !connected) {
           _trafficOld = "";
           _speedOld = "";
           trayManager.setTitle("");
         }
+      }
+    });
+    ProfileManager.onEventCurrentChanged.add((String id) {
+      if (PlatformUtils.isPC()) {
+        _setTray(_trayGrey, false, false);
+      }
+    });
+    ClashSettingManager.onEventModeChanged.add(() {
+      if (PlatformUtils.isPC()) {
+        _setTrayMenu(_trayGrey);
       }
     });
     firstShowWindow(true);
@@ -523,8 +528,34 @@ class MyAppState extends State<MyApp>
     });
   }
 
+  Future<void> _toggleWindowVisibility() async {
+    try {
+      bool isVisible = await windowManager.isVisible();
+      bool isMinimized = await windowManager.isMinimized();
+      if (!isVisible || isMinimized) {
+        await windowManager.show();
+        await windowManager.restore();
+        await windowManager.focus();
+        onWindowRestore();
+      } else {
+        bool isFocused = await windowManager.isFocused();
+        if (!isFocused) {
+          await windowManager.focus();
+        } else {
+          await windowManager.hide();
+          _windowVisibleForMac = false;
+          AppLifecycleStateNofity.statePaused("tray_hide");
+        }
+      }
+    } catch (e) {
+      Log.w("toggleWindowVisibility error: $e");
+      await windowManager.show();
+      await windowManager.focus();
+    }
+  }
+
   void _setTray(bool grey, bool destroy, bool quitIfFailed) {
-    Future.delayed(const Duration(milliseconds: 300), () async {
+    Future.delayed(const Duration(milliseconds: 100), () async {
       if (destroy || Platform.isLinux) {
         try {
           await trayManager.destroy();
@@ -552,54 +583,32 @@ class MyAppState extends State<MyApp>
           );
         }
         _trayGrey = grey;
-      } catch (err, stacktrace) {
+      } catch (err) {
         Log.w("setIcon exception: ${err.toString()}");
-        print(">>> TRAY SET ICON EXCEPTION (IGNORED): $err");
       }
       try {
-        if (!Platform.isLinux) {
-          await trayManager.setToolTip(AppUtils.getName());
+        final curProfile = ProfileManager.getCurrent();
+        final profileName = (curProfile != null && curProfile.remark.isNotEmpty)
+            ? curProfile.remark
+            : (curProfile?.url.isNotEmpty == true ? curProfile!.url : (curProfile?.id ?? ''));
+        String tip = AppUtils.getName();
+        if (!grey) {
+          tip = "$tip - ${t.meta.connected}${profileName.isNotEmpty ? ' ($profileName)' : ''}";
         } else {
-          await _setTrayMenu(grey);
+          tip = "$tip - ${t.meta.disconnected}";
+        }
+        if (!Platform.isLinux) {
+          await trayManager.setToolTip(tip);
         }
       } catch (e) {
-        print(">>> TRAY SET TOOLTIP EXCEPTION (IGNORED): $e");
+        Log.w("setToolTip exception: $e");
+      }
+      try {
+        await _setTrayMenu(grey);
+      } catch (e) {
+        Log.w("setTrayMenu exception: $e");
       }
     });
-  }
-
-  static String _getNodeEmoji(String name) {
-    final upper = name.toUpperCase();
-    if (name.contains("香港") || upper.contains("HK") || upper.contains("HONG KONG")) {
-      return "🇭🇰";
-    } else if (name.contains("日本") || upper.contains("JP") || upper.contains("JAPAN") || upper.contains("TOKYO")) {
-      return "🇯🇵";
-    } else if (name.contains("美国") || upper.contains("US") || upper.contains("USA") || upper.contains("UNITED STATES")) {
-      return "🇺🇸";
-    } else if (name.contains("新加坡") || upper.contains("SG") || upper.contains("SINGAPORE") || name.contains("狮城")) {
-      return "🇸🇬";
-    } else if (name.contains("台湾") || upper.contains("TW") || upper.contains("TAIWAN")) {
-      return "🇹🇼";
-    } else if (name.contains("韩国") || upper.contains("KR") || upper.contains("KOREA") || name.contains("首尔")) {
-      return "🇰🇷";
-    } else if (name.contains("德国") || upper.contains("DE") || upper.contains("GERMANY")) {
-      return "🇩🇪";
-    } else if (name.contains("英国") || upper.contains("UK") || upper.contains("GB") || upper.contains("BRITAIN")) {
-      return "🇬🇧";
-    } else if (name.contains("加拿大") || upper.contains("CA") || upper.contains("CANADA")) {
-      return "🇨🇦";
-    } else if (name.contains("澳大利亚") || upper.contains("AU") || upper.contains("AUSTRALIA") || name.contains("澳洲")) {
-      return "🇦🇺";
-    } else if (name.contains("法国") || upper.contains("FR") || upper.contains("FRANCE")) {
-      return "🇫🇷";
-    } else if (name.contains("俄罗斯") || upper.contains("RU") || upper.contains("RUSSIA")) {
-      return "🇷🇺";
-    } else if (name.contains("直连") || upper.contains("DIRECT")) {
-      return "⚡";
-    } else if (name.contains("自动") || upper.contains("AUTO") || upper.contains("URLTEST")) {
-      return "♻️";
-    }
-    return "🌐";
   }
 
   Future<void> _setTrayMenu(bool grey) async {
@@ -607,183 +616,105 @@ class MyAppState extends State<MyApp>
       return;
     }
     final mode = ClashSettingManager.getConfigsMode();
-    final isSysProxy = await VPNService.getSystemProxyEnable();
+    final isSysProxy = SettingManager.getConfig().autoSetSystemProxy;
     final tunEnable = ClashSettingManager.getConfig().Tun?.Enable ?? false;
     final profiles = ProfileManager.getProfiles();
     final currentProfile = ProfileManager.getCurrent();
 
-    // Query traffic speed if connected
-    String statusLabel = grey ? "⚪  ${t.main.tray.coreDisconnected}" : "🚀  ${t.main.tray.coreRunning}";
-    if (!grey) {
-      try {
-        final trafficJson = await FlutterVpnService.clashiApiTraffic();
-        final data = jsonDecode(trafficJson);
-        final num up = data['up'] ?? 0;
-        final num down = data['down'] ?? 0;
-        final upStr = ClashHttpApi.convertTrafficToStringDouble(up);
-        final downStr = ClashHttpApi.convertTrafficToStringDouble(down);
-        statusLabel = "🚀  Wmimo · ↑ $upStr/s  ↓ $downStr/s";
-      } catch (_) {}
-    }
-
-    String modeName = mode == ClashConfigsMode.rule
-        ? t.main.tray.modeRule
-        : mode == ClashConfigsMode.global
-            ? t.main.tray.modeGlobal
-            : t.main.tray.modeDirect;
-
-    // 1. Status and Core Control
     List<MenuItem> items = [
-      MenuItem(
-        key: kMenuStatus,
-        label: "  $statusLabel  ",
-        disabled: true,
-      ),
+      MenuItem(key: kMenuOpen, label: t.main.tray.menuOpen),
       MenuItem.separator(),
       if (grey) ...[
-        MenuItem(key: kMenuConnect, label: "  ▶️   ${t.main.tray.startProxy}  "),
+        MenuItem(key: kMenuConnect, label: t.main.tray.startProxy),
       ],
       if (!grey) ...[
-        MenuItem(key: kMenuDisconnect, label: "  ⏹️   ${t.main.tray.stopProxy}  "),
-        MenuItem(key: kMenuRestartCore, label: "  🔄   ${t.main.tray.restartCore}  "),
+        MenuItem(key: kMenuDisconnect, label: t.main.tray.stopProxy),
+        MenuItem(key: kMenuRestartCore, label: t.main.tray.restartCore),
       ],
       MenuItem.separator(),
 
-      // 2. System Proxy & TUN Switch
+      // System Proxy & TUN Switch
       MenuItem.checkbox(
         key: kMenuSystemProxy,
         checked: isSysProxy,
-        label: "  🌐  ${t.main.tray.systemProxyItem}  ",
+        label: t.main.tray.systemProxyItem,
       ),
       MenuItem.checkbox(
         key: kMenuTunMode,
         checked: tunEnable,
-        label: "  🛡️  ${t.main.tray.tunModeItem}  ",
+        label: t.main.tray.tunModeItem,
       ),
       MenuItem.separator(),
 
-      // 3. Outbound Mode Submenu
+      // Outbound Mode Submenu
       MenuItem.submenu(
-        label: "  🔀  ${t.main.tray.outboundMode} ($modeName)  ",
+        label: t.main.tray.outboundMode,
         submenu: Menu(
           items: [
             MenuItem.checkbox(
               key: kMenuModeRule,
               checked: mode == ClashConfigsMode.rule,
-              label: "  🎯  ${t.main.tray.modeRule}  ",
+              label: t.main.tray.modeRule,
             ),
             MenuItem.checkbox(
               key: kMenuModeGlobal,
               checked: mode == ClashConfigsMode.global,
-              label: "  🌍  ${t.main.tray.modeGlobal}  ",
+              label: t.main.tray.modeGlobal,
             ),
             MenuItem.checkbox(
               key: kMenuModeDirect,
               checked: mode == ClashConfigsMode.direct,
-              label: "  ⚡  ${t.main.tray.modeDirect}  ",
+              label: t.main.tray.modeDirect,
             ),
           ],
         ),
       ),
-    ];
 
-    // 4. Profiles Submenu
-    List<MenuItem> profileItems = [];
-    if (profiles.isNotEmpty) {
-      for (var p in profiles) {
-        final displayName = p.remark.isNotEmpty ? p.remark : (p.url.isNotEmpty ? p.url : p.id);
-        profileItems.add(
-          MenuItem.checkbox(
-            key: "profile_${p.id}",
-            checked: currentProfile?.id == p.id,
-            label: "  📌  $displayName  ",
-          ),
-        );
-      }
-      profileItems.add(MenuItem.separator());
-    }
-    profileItems.add(
-      MenuItem(key: kMenuUpdateAllProfiles, label: "  🔄  ${t.main.tray.updateAllProfiles}  "),
-    );
-    final curProfileName = currentProfile != null
-        ? (currentProfile.remark.isNotEmpty ? currentProfile.remark : currentProfile.id)
-        : t.meta.none;
-    items.add(
+      // Profiles Submenu
       MenuItem.submenu(
-        label: "  📑  ${t.main.tray.profilesMenu} ($curProfileName)  ",
-        submenu: Menu(items: profileItems),
-      ),
-    );
-
-    // 5. Proxy Nodes Submenu
-    try {
-      final nodes = await ProxyNodeLoader.loadCurrentProfileNodes();
-      if (nodes.isNotEmpty) {
-        List<MenuItem> nodeMenuItems = [];
-        final selectableNodes =
-            nodes.where((n) => !ClashProtocolType.isGroupType(n.type)).toList();
-        if (selectableNodes.isNotEmpty) {
-          for (var i = 0; i < math.min(20, selectableNodes.length); i++) {
-            final node = selectableNodes[i];
-            final flag = _getNodeEmoji(node.name);
-            nodeMenuItems.add(
-              MenuItem(
-                key: "node_GLOBAL:::_:::${node.name}",
-                label: "  $flag  ${node.name}  ",
-              ),
-            );
-          }
-          items.add(
-            MenuItem.submenu(
-              label: "  ⚡  ${t.main.tray.proxyNodes} (${selectableNodes.length})  ",
-              submenu: Menu(items: nodeMenuItems),
-            ),
-          );
-        }
-      }
-    } catch (_) {}
-
-    // 6. Tools Submenu
-    items.add(
-      MenuItem.submenu(
-        label: "  🛠️  ${t.main.tray.tools}  ",
+        label: t.main.tray.profilesMenu,
         submenu: Menu(
           items: [
-            MenuItem(key: kMenuCopyProxyCmd, label: "  📋  ${t.main.tray.copyProxyCmd}  "),
-            MenuItem(key: kMenuDelayTest, label: "  ⚡  ${t.main.tray.delayTestAll}  "),
-            MenuItem.separator(),
-            MenuItem(key: kMenuOpenConfigDir, label: "  📁  ${t.meta.openDir}  "),
-            MenuItem(key: kMenuOpenLogs, label: "  📄  ${t.meta.coreLog}  "),
+            if (profiles.isNotEmpty) ...[
+              for (var p in profiles)
+                MenuItem.checkbox(
+                  key: "profile_${p.id}",
+                  checked: currentProfile?.id == p.id,
+                  label: p.remark.isNotEmpty ? p.remark : (p.url.isNotEmpty ? p.url : p.id),
+                ),
+              MenuItem.separator(),
+            ],
+            MenuItem(
+              key: kMenuUpdateAllProfiles,
+              label: t.main.tray.updateAllProfiles,
+            ),
           ],
         ),
       ),
-    );
-    items.add(MenuItem.separator());
+      MenuItem.separator(),
 
-    // 7. Window & Exit
-    items.add(MenuItem(key: kMenuOpen, label: "  🖥️  ${t.main.tray.menuOpen}  "));
-    items.add(MenuItem(key: kMenuExit, label: "  ❌  ${t.main.tray.menuExit}  "));
+      MenuItem(key: kMenuCopyProxyCmd, label: t.main.tray.copyProxyCmd),
+      MenuItem.separator(),
+
+      MenuItem(key: kMenuExit, label: t.main.tray.menuExit),
+    ];
 
     _menu = Menu(items: items);
     await trayManager.setContextMenu(_menu!);
-    if (!Platform.isLinux) {
-      await trayManager.popUpContextMenu();
-    }
   }
 
   @override
   void onTrayIconMouseDown() async {
-    if (await windowManager.isMinimized()) {
-      await windowManager.restore();
-    } else {
-      await windowManager.show();
-      onWindowRestore();
-    }
+    await _toggleWindowVisibility();
   }
 
   @override
   void onTrayIconRightMouseDown() async {
     await _setTrayMenu(_trayGrey);
+    if (!Platform.isLinux) {
+      // ignore: deprecated_member_use
+      await trayManager.popUpContextMenu(bringAppToFront: true);
+    }
   }
 
   @override
@@ -796,12 +727,19 @@ class MyAppState extends State<MyApp>
     } else if (key == kMenuRestartCore) {
       VpnActionHandler.vpnReconnect?.call("menu", false);
     } else if (key == kMenuSystemProxy) {
-      final isSys = await VPNService.getSystemProxyEnable();
-      await VPNService.setSystemProxy(!isSys);
+      final cur = SettingManager.getConfig().autoSetSystemProxy;
+      SettingManager.getConfig().autoSetSystemProxy = !cur;
+      SettingManager.save();
+      if (PlatformUtils.isPC()) {
+        if (!_trayGrey) {
+          await VPNService.setSystemProxy(!cur);
+        }
+      }
       await _setTrayMenu(_trayGrey);
     } else if (key == kMenuTunMode) {
       final config = ClashSettingManager.getConfig();
       final currentTun = config.Tun?.Enable ?? false;
+      config.Tun?.OverWrite = true;
       config.Tun?.Enable = !currentTun;
       await ClashSettingManager.save();
       if (!_trayGrey) {
@@ -824,13 +762,12 @@ class MyAppState extends State<MyApp>
         VpnActionHandler.vpnReconnect?.call("profile_change", false);
       }
       await _setTrayMenu(_trayGrey);
-    } else if (key.startsWith("node_")) {
-      final parts = key.substring("node_".length).split(":::_:::");
-      if (parts.length == 2) {
-        await ClashHttpApi.setProxiesNode(parts[0], parts[1]);
-      }
     } else if (key == kMenuUpdateAllProfiles) {
-      await ProfileManager.updateAll();
+      for (var p in ProfileManager.getProfiles()) {
+        if (p.isRemote()) {
+          ProfileManager.update(p.id);
+        }
+      }
     } else if (key == kMenuCopyProxyCmd) {
       final port = ClashSettingManager.getMixedPort();
       final cmd = Platform.isWindows
@@ -870,12 +807,10 @@ class MyAppState extends State<MyApp>
         }
       }
     } else if (key == kMenuOpen) {
-      if (await windowManager.isMinimized()) {
-        await windowManager.restore();
-      } else {
-        await windowManager.show();
-        onWindowRestore();
-      }
+      await windowManager.show();
+      await windowManager.restore();
+      await windowManager.focus();
+      onWindowRestore();
     } else if (key == kMenuExit) {
       await _quit();
     }
