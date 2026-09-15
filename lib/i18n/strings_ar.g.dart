@@ -43,6 +43,7 @@ class TranslationsAr with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _Translations$PerAppAndroidScreen$ar PerAppAndroidScreen = _Translations$PerAppAndroidScreen$ar._(_root);
 	@override late final _Translations$UserAgreementScreen$ar UserAgreementScreen = _Translations$UserAgreementScreen$ar._(_root);
 	@override late final _Translations$NetCheckScreen$ar NetCheckScreen = _Translations$NetCheckScreen$ar._(_root);
+	@override late final _Translations$SpeedTestScreen$ar SpeedTestScreen = _Translations$SpeedTestScreen$ar._(_root);
 	@override late final _Translations$VersionUpdateScreen$ar VersionUpdateScreen = _Translations$VersionUpdateScreen$ar._(_root);
 	@override late final _Translations$loginScreen$ar loginScreen = _Translations$loginScreen$ar._(_root);
 	@override late final _Translations$main$ar main = _Translations$main$ar._(_root);
@@ -139,20 +140,52 @@ class _Translations$NetCheckScreen$ar implements Translations$NetCheckScreen$en 
 	final TranslationsAr _root; // ignore: unused_field
 
 	// Translations
-	@override String get enterDomain => 'أدخل اسم النطاق';
-	@override String get checking => 'جارٍ الفحص...';
+	@override String get enterDomain => 'يرجى إدخال اسم النطاق';
+	@override String get checking => 'جاري الفحص...';
 	@override String aQueryFailed({required Object p}) => 'فشل استعلام A: ${p}';
 	@override String aaaaQueryFailed({required Object p}) => 'فشل استعلام AAAA: ${p}';
-	@override String get success => 'نجاح';
+	@override String get success => 'نجح';
 	@override String get failed => 'فشل';
-	@override String get suspectedPollution => 'يُشتبه في تسميم DNS';
+	@override String get suspectedPollution => 'اشتباه في تلوث DNS';
 	@override String get domainLabel => 'النطاق';
 	@override String get checkButton => 'فحص';
 	@override String get dnsSection => '1. استعلام DNS';
 	@override String get directHttpSection => '2. HTTP (عبر TUN، يرجى تفعيل TUN أولاً)';
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (عبر الوكيل، المنفذ: ${p})';
-	@override String get tunNotEnabled => 'TUN غير مفعّل';
+	@override String get tunNotEnabled => 'TUN غير مفعل';
 	@override String get routeTableSection => '4. جدول التوجيه';
+}
+
+// Path: SpeedTestScreen
+class _Translations$SpeedTestScreen$ar implements Translations$SpeedTestScreen$en {
+	_Translations$SpeedTestScreen$ar._(this._root);
+
+	final TranslationsAr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'اختبار السرعة';
+	@override String get startTest => 'بدء الاختبار';
+	@override String get stopTest => 'إيقاف';
+	@override String get reTest => 'إعادة الاختبار';
+	@override String get ready => 'جاهز';
+	@override String get testingPing => 'جاري اختبار الاستجابة والتذبذب...';
+	@override String get testingDownload => 'جاري اختبار سرعة التنزيل...';
+	@override String get testingUpload => 'جاري اختبار سرعة الرفع...';
+	@override String get completed => 'اكتمل الاختبار';
+	@override String get stopped => 'تم الإيقاف';
+	@override String get ping => 'الاستجابة';
+	@override String get jitter => 'التذبذب';
+	@override String get download => 'التنزيل';
+	@override String get upload => 'الرفع';
+	@override String get currentProxy => 'الوكيل الحالي';
+	@override String get directConnection => 'اتصال مباشر';
+	@override String get server => 'خادم الاختبار';
+	@override String get serverLocation => 'موقع الخادم';
+	@override String get realtimeSpeed => 'مخطط السرعة الفعلي';
+	@override String get peakSpeed => 'السرعة القصوى';
+	@override String get avgSpeed => 'متوسط السرعة';
+	@override String get testHistory => 'سجل الاختبارات';
+	@override String get clearHistory => 'مسح السجل';
 }
 
 // Path: VersionUpdateScreen
@@ -258,10 +291,11 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get connectTimeout => 'ربط مهلة';
 	@override String get timeout => 'نفذ الوقت';
 	@override String get timeoutDuration => 'مدة مهلة الانتظار';
-	@override String get latency => 'تأخير';
-	@override String get latencyTest => 'اختبار سرعة الاستجابة';
+	@override String get latency => 'الاستجابة';
+	@override String get latencyTest => 'اختبار الاستجابة';
 	@override String get networkCheck => 'فحص الشبكة';
-	@override String get language => 'لغة';
+	@override String get speedTest => 'اختبار السرعة';
+	@override String get language => 'اللغة';
 	@override String get next => 'التالي';
 	@override String get done => 'منتهي';
 	@override String get apply => 'يتقدم';
@@ -680,20 +714,43 @@ extension on TranslationsAr {
 			'PerAppAndroidScreen.whiteListModeTip' => 'عند التمكين: فقط التطبيقات التي تم فحصها هي وكلاء ؛عندما لا يتم تمكينها: فقط التطبيقات التي لم يتم فحصها هي وكلاء',
 			'UserAgreementScreen.privacyFirst' => 'خصوصيتك تأتي أولا',
 			'UserAgreementScreen.agreeAndContinue' => 'قبول ومتابعة',
-			'NetCheckScreen.enterDomain' => 'أدخل اسم النطاق',
-			'NetCheckScreen.checking' => 'جارٍ الفحص...',
+			'NetCheckScreen.enterDomain' => 'يرجى إدخال اسم النطاق',
+			'NetCheckScreen.checking' => 'جاري الفحص...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'فشل استعلام A: ${p}',
 			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'فشل استعلام AAAA: ${p}',
-			'NetCheckScreen.success' => 'نجاح',
+			'NetCheckScreen.success' => 'نجح',
 			'NetCheckScreen.failed' => 'فشل',
-			'NetCheckScreen.suspectedPollution' => 'يُشتبه في تسميم DNS',
+			'NetCheckScreen.suspectedPollution' => 'اشتباه في تلوث DNS',
 			'NetCheckScreen.domainLabel' => 'النطاق',
 			'NetCheckScreen.checkButton' => 'فحص',
 			'NetCheckScreen.dnsSection' => '1. استعلام DNS',
 			'NetCheckScreen.directHttpSection' => '2. HTTP (عبر TUN، يرجى تفعيل TUN أولاً)',
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (عبر الوكيل، المنفذ: ${p})',
-			'NetCheckScreen.tunNotEnabled' => 'TUN غير مفعّل',
+			'NetCheckScreen.tunNotEnabled' => 'TUN غير مفعل',
 			'NetCheckScreen.routeTableSection' => '4. جدول التوجيه',
+			'SpeedTestScreen.title' => 'اختبار السرعة',
+			'SpeedTestScreen.startTest' => 'بدء الاختبار',
+			'SpeedTestScreen.stopTest' => 'إيقاف',
+			'SpeedTestScreen.reTest' => 'إعادة الاختبار',
+			'SpeedTestScreen.ready' => 'جاهز',
+			'SpeedTestScreen.testingPing' => 'جاري اختبار الاستجابة والتذبذب...',
+			'SpeedTestScreen.testingDownload' => 'جاري اختبار سرعة التنزيل...',
+			'SpeedTestScreen.testingUpload' => 'جاري اختبار سرعة الرفع...',
+			'SpeedTestScreen.completed' => 'اكتمل الاختبار',
+			'SpeedTestScreen.stopped' => 'تم الإيقاف',
+			'SpeedTestScreen.ping' => 'الاستجابة',
+			'SpeedTestScreen.jitter' => 'التذبذب',
+			'SpeedTestScreen.download' => 'التنزيل',
+			'SpeedTestScreen.upload' => 'الرفع',
+			'SpeedTestScreen.currentProxy' => 'الوكيل الحالي',
+			'SpeedTestScreen.directConnection' => 'اتصال مباشر',
+			'SpeedTestScreen.server' => 'خادم الاختبار',
+			'SpeedTestScreen.serverLocation' => 'موقع الخادم',
+			'SpeedTestScreen.realtimeSpeed' => 'مخطط السرعة الفعلي',
+			'SpeedTestScreen.peakSpeed' => 'السرعة القصوى',
+			'SpeedTestScreen.avgSpeed' => 'متوسط السرعة',
+			'SpeedTestScreen.testHistory' => 'سجل الاختبارات',
+			'SpeedTestScreen.clearHistory' => 'مسح السجل',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'الإصدار الجديد [${p}] جاهز',
 			'VersionUpdateScreen.update' => 'أعد التشغيل للتحديث',
 			'VersionUpdateScreen.cancel' => 'ليس الآن',
@@ -782,10 +839,11 @@ extension on TranslationsAr {
 			'meta.connectTimeout' => 'ربط مهلة',
 			'meta.timeout' => 'نفذ الوقت',
 			'meta.timeoutDuration' => 'مدة مهلة الانتظار',
-			'meta.latency' => 'تأخير',
-			'meta.latencyTest' => 'اختبار سرعة الاستجابة',
+			'meta.latency' => 'الاستجابة',
+			'meta.latencyTest' => 'اختبار الاستجابة',
 			'meta.networkCheck' => 'فحص الشبكة',
-			'meta.language' => 'لغة',
+			'meta.speedTest' => 'اختبار السرعة',
+			'meta.language' => 'اللغة',
 			'meta.next' => 'التالي',
 			'meta.done' => 'منتهي',
 			'meta.apply' => 'يتقدم',
