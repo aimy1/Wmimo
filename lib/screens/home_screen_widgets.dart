@@ -28,6 +28,7 @@ import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/file_view_screen.dart';
 import 'package:wmimo/screens/group_helper.dart';
 import 'package:wmimo/screens/net_check_screen.dart';
+import 'package:wmimo/screens/speed_test_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen.dart';
 import 'package:wmimo/screens/proxy_board_screen.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -216,7 +217,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       children: [
         Card(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
             child: Column(
               children: [
                 Row(
@@ -226,8 +227,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                       child: Row(
                         children: [
                           Container(
-                            width: 10,
-                            height: 10,
+                            width: 8,
+                            height: 8,
                             decoration: BoxDecoration(
                               color: connected
                                   ? ThemeDefine.kColorGreenBright
@@ -238,25 +239,25 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                       BoxShadow(
                                         color: ThemeDefine.kColorGreenBright
                                             .withValues(alpha: 0.4),
-                                        blurRadius: 8,
-                                        spreadRadius: 2,
+                                        blurRadius: 6,
+                                        spreadRadius: 1.5,
                                       ),
                                     ]
                                   : null,
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           Text(
                             connected
                                 ? tcontext.meta.connected
                                 : tcontext.meta.disconnected,
                             style: const TextStyle(
-                              fontSize: 16.5,
+                              fontSize: 15,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0.2,
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           Flexible(
                             child: ValueListenableBuilder<String>(
                               valueListenable: _proxyNow,
@@ -282,8 +283,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 3,
+                                      horizontal: 7,
+                                      vertical: 2.5,
                                     ),
                                     decoration: BoxDecoration(
                                       color: Theme.of(context)
@@ -304,7 +305,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                       children: [
                                         Icon(
                                           Icons.flight_takeoff_rounded,
-                                          size: 13,
+                                          size: 12,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .primary,
@@ -316,7 +317,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 11.5,
                                               fontWeight: FontWeight.w600,
                                               color: Theme.of(context)
                                                   .colorScheme
@@ -339,7 +340,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                       alignment: Alignment.center,
                       children: [
                         Transform.scale(
-                          scale: 0.95,
+                          scale: 0.88,
                           child: Switch.adaptive(
                             value: _state == FlutterVpnServiceState.connected,
                             activeThumbColor: Colors.white,
@@ -360,11 +361,11 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                           const Positioned(
                             left: 6,
                             child: SizedBox(
-                              width: 22,
-                              height: 22,
+                              width: 20,
+                              height: 20,
                               child: CircularProgressIndicator(
                                 color: ThemeDefine.kColorGreenBright,
-                                strokeWidth: 2.5,
+                                strokeWidth: 2.2,
                               ),
                             ),
                           ),
@@ -372,9 +373,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 SizedBox(
-                  height: 44,
+                  height: 38,
                   child: SegmentedElevatedButton(
                     segments: [
                       SegemntedElevatedButtonItem(
@@ -391,7 +392,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                       ),
                     ],
                     selected: ClashSettingManager.getConfigsMode().index,
-                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    padding: const EdgeInsets.symmetric(vertical: 1),
                     onPressed: (int value) async {
                       ClashConfigsMode type = ClashConfigsMode.values[value];
                       var error = await ClashSettingManager.setConfigsMode(type);
@@ -410,7 +411,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     },
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 // Clash Verge 风格开关: 系统代理 & TUN 模式
                 Row(
                   children: [
@@ -468,81 +469,16 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         // 流量统计卡片
         TrafficChartCard(
           history: _trafficHistory,
           isConnected: connected,
           tickNotifier: _chartTick,
-        ),
-        const SizedBox(height: 10),
-        // 4 个指标小卡片
-        Row(
-          children: [
-            Expanded(
-              child: ValueListenableBuilder<num>(
-                valueListenable: _uploadSpeedRaw,
-                builder: (context, value, _) {
-                  return _buildTrafficTile(
-                    context: context,
-                    icon: Icons.arrow_upward_rounded,
-                    iconColor: const Color(0xFFF59E0B),
-                    label: tcontext.meta.realtimeUpload,
-                    value: '${ClashHttpApi.convertTrafficToStringDouble(value)}/s',
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: ValueListenableBuilder<num>(
-                valueListenable: _downloadSpeedRaw,
-                builder: (context, value, _) {
-                  return _buildTrafficTile(
-                    context: context,
-                    icon: Icons.arrow_downward_rounded,
-                    iconColor: const Color(0xFF38BDF8),
-                    label: tcontext.meta.realtimeDownload,
-                    value: '${ClashHttpApi.convertTrafficToStringDouble(value)}/s',
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: ValueListenableBuilder<num>(
-                valueListenable: _uploadTotalRaw,
-                builder: (context, value, _) {
-                  return _buildTrafficTile(
-                    context: context,
-                    icon: Icons.cloud_upload_outlined,
-                    iconColor: const Color(0xFFF59E0B),
-                    label: tcontext.meta.sessionUpload,
-                    value: ClashHttpApi.convertTrafficToStringDouble(value),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: ValueListenableBuilder<num>(
-                valueListenable: _downloadTotalRaw,
-                builder: (context, value, _) {
-                  return _buildTrafficTile(
-                    context: context,
-                    icon: Icons.cloud_download_outlined,
-                    iconColor: const Color(0xFF38BDF8),
-                    label: tcontext.meta.sessionDownload,
-                    value: ClashHttpApi.convertTrafficToStringDouble(value),
-                  );
-                },
-              ),
-            ),
-          ],
+          uploadSpeed: _uploadSpeedRaw,
+          downloadSpeed: _downloadSpeedRaw,
+          uploadTotal: _uploadTotalRaw,
+          downloadTotal: _downloadTotalRaw,
         ),
         // 订阅套餐流量进度
         if (currentProfile != null && currentProfile.isRemote() && currentProfile.total > 0) ...[
@@ -588,6 +524,13 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 const SizedBox(width: 4),
                 _buildQuickActionTile(
                   context: context,
+                  icon: Icons.speed_rounded,
+                  label: tcontext.meta.speedTest,
+                  onTap: _onTapSpeedTest,
+                ),
+                const SizedBox(width: 4),
+                _buildQuickActionTile(
+                  context: context,
                   icon: Icons.description_outlined,
                   label: tcontext.meta.runtimeProfile,
                   onTap: _onTapRunTimeProfile,
@@ -609,28 +552,28 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     return Expanded(
       child: Material(
         color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
                   icon,
-                  size: 22,
+                  size: 19,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 Text(
                   label,
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 11,
+                    fontSize: 10.5,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -750,71 +693,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     );
   }
 
-  Widget _buildTrafficTile({
-    required BuildContext context,
-    required IconData icon,
-    required Color iconColor,
-    required String label,
-    required String value,
-  }) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF0F172A).withValues(alpha: 0.6)
-            : const Color(0xFFF1F5F9),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: theme.dividerColor.withValues(alpha: 0.3),
-          width: 0.8,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: isDark ? 0.2 : 0.12),
-              borderRadius: BorderRadius.circular(7),
-            ),
-            child: Icon(icon, size: 16, color: iconColor),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 12.5,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildSubscriptionQuotaSection({
     required BuildContext context,
@@ -1365,6 +1244,16 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       MaterialPageRoute(
         settings: NetCheckScreen.routSettings(),
         builder: (context) => const NetCheckScreen(),
+      ),
+    );
+  }
+
+  Future<void> _onTapSpeedTest() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        settings: SpeedTestScreen.routSettings(),
+        builder: (context) => const SpeedTestScreen(),
       ),
     );
   }
