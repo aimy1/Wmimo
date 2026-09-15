@@ -43,6 +43,7 @@ class TranslationsKo with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _Translations$PerAppAndroidScreen$ko PerAppAndroidScreen = _Translations$PerAppAndroidScreen$ko._(_root);
 	@override late final _Translations$UserAgreementScreen$ko UserAgreementScreen = _Translations$UserAgreementScreen$ko._(_root);
 	@override late final _Translations$NetCheckScreen$ko NetCheckScreen = _Translations$NetCheckScreen$ko._(_root);
+	@override late final _Translations$SpeedTestScreen$ko SpeedTestScreen = _Translations$SpeedTestScreen$ko._(_root);
 	@override late final _Translations$VersionUpdateScreen$ko VersionUpdateScreen = _Translations$VersionUpdateScreen$ko._(_root);
 	@override late final _Translations$loginScreen$ko loginScreen = _Translations$loginScreen$ko._(_root);
 	@override late final _Translations$main$ko main = _Translations$main$ko._(_root);
@@ -140,19 +141,51 @@ class _Translations$NetCheckScreen$ko implements Translations$NetCheckScreen$en 
 
 	// Translations
 	@override String get enterDomain => '도메인 이름을 입력하세요';
-	@override String get checking => '점검 중...';
-	@override String aQueryFailed({required Object p}) => 'A 쿼리 실패: ${p}';
-	@override String aaaaQueryFailed({required Object p}) => 'AAAA 쿼리 실패: ${p}';
+	@override String get checking => '확인 중...';
+	@override String aQueryFailed({required Object p}) => 'A 레코드 조회 실패: ${p}';
+	@override String aaaaQueryFailed({required Object p}) => 'AAAA 레코드 조회 실패: ${p}';
 	@override String get success => '성공';
 	@override String get failed => '실패';
 	@override String get suspectedPollution => 'DNS 오염 의심';
 	@override String get domainLabel => '도메인';
-	@override String get checkButton => '점검';
+	@override String get checkButton => '진단';
 	@override String get dnsSection => '1. DNS 조회';
-	@override String get directHttpSection => '2. HTTP (TUN 경유, TUN 먼저 활성화 필요)';
+	@override String get directHttpSection => '2. HTTP (TUN 경유, 먼저 TUN을 활성화하세요)';
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (프록시 경유, 포트: ${p})';
 	@override String get tunNotEnabled => 'TUN이 활성화되지 않았습니다';
 	@override String get routeTableSection => '4. 라우팅 테이블';
+}
+
+// Path: SpeedTestScreen
+class _Translations$SpeedTestScreen$ko implements Translations$SpeedTestScreen$en {
+	_Translations$SpeedTestScreen$ko._(this._root);
+
+	final TranslationsKo _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '속도 측정';
+	@override String get startTest => '측정 시작';
+	@override String get stopTest => '중지';
+	@override String get reTest => '다시 측정';
+	@override String get ready => '준비 완료';
+	@override String get testingPing => 'Ping & 지터 측정 중...';
+	@override String get testingDownload => '다운로드 속도 측정 중...';
+	@override String get testingUpload => '업로드 속도 측정 중...';
+	@override String get completed => '측정 완료';
+	@override String get stopped => '중지됨';
+	@override String get ping => '지연 시간';
+	@override String get jitter => '지터';
+	@override String get download => '다운로드';
+	@override String get upload => '업로드';
+	@override String get currentProxy => '현재 프록시';
+	@override String get directConnection => '직접 연결';
+	@override String get server => '측정 서버';
+	@override String get serverLocation => '서버 위치';
+	@override String get realtimeSpeed => '실시간 속도 그래프';
+	@override String get peakSpeed => '최대 속도';
+	@override String get avgSpeed => '평균 속도';
+	@override String get testHistory => '측정 기록';
+	@override String get clearHistory => '기록 삭제';
 }
 
 // Path: VersionUpdateScreen
@@ -261,6 +294,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get latency => '지연 시간';
 	@override String get latencyTest => '지연 속도 테스트';
 	@override String get networkCheck => '네트워크 점검';
+	@override String get speedTest => '속도 측정';
 	@override String get language => '언어';
 	@override String get next => '다음';
 	@override String get done => '완료';
@@ -681,19 +715,42 @@ extension on TranslationsKo {
 			'UserAgreementScreen.privacyFirst' => '개인 정보 보호 우선',
 			'UserAgreementScreen.agreeAndContinue' => '동의 및 계속',
 			'NetCheckScreen.enterDomain' => '도메인 이름을 입력하세요',
-			'NetCheckScreen.checking' => '점검 중...',
-			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'A 쿼리 실패: ${p}',
-			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'AAAA 쿼리 실패: ${p}',
+			'NetCheckScreen.checking' => '확인 중...',
+			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'A 레코드 조회 실패: ${p}',
+			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'AAAA 레코드 조회 실패: ${p}',
 			'NetCheckScreen.success' => '성공',
 			'NetCheckScreen.failed' => '실패',
 			'NetCheckScreen.suspectedPollution' => 'DNS 오염 의심',
 			'NetCheckScreen.domainLabel' => '도메인',
-			'NetCheckScreen.checkButton' => '점검',
+			'NetCheckScreen.checkButton' => '진단',
 			'NetCheckScreen.dnsSection' => '1. DNS 조회',
-			'NetCheckScreen.directHttpSection' => '2. HTTP (TUN 경유, TUN 먼저 활성화 필요)',
+			'NetCheckScreen.directHttpSection' => '2. HTTP (TUN 경유, 먼저 TUN을 활성화하세요)',
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (프록시 경유, 포트: ${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN이 활성화되지 않았습니다',
 			'NetCheckScreen.routeTableSection' => '4. 라우팅 테이블',
+			'SpeedTestScreen.title' => '속도 측정',
+			'SpeedTestScreen.startTest' => '측정 시작',
+			'SpeedTestScreen.stopTest' => '중지',
+			'SpeedTestScreen.reTest' => '다시 측정',
+			'SpeedTestScreen.ready' => '준비 완료',
+			'SpeedTestScreen.testingPing' => 'Ping & 지터 측정 중...',
+			'SpeedTestScreen.testingDownload' => '다운로드 속도 측정 중...',
+			'SpeedTestScreen.testingUpload' => '업로드 속도 측정 중...',
+			'SpeedTestScreen.completed' => '측정 완료',
+			'SpeedTestScreen.stopped' => '중지됨',
+			'SpeedTestScreen.ping' => '지연 시간',
+			'SpeedTestScreen.jitter' => '지터',
+			'SpeedTestScreen.download' => '다운로드',
+			'SpeedTestScreen.upload' => '업로드',
+			'SpeedTestScreen.currentProxy' => '현재 프록시',
+			'SpeedTestScreen.directConnection' => '직접 연결',
+			'SpeedTestScreen.server' => '측정 서버',
+			'SpeedTestScreen.serverLocation' => '서버 위치',
+			'SpeedTestScreen.realtimeSpeed' => '실시간 속도 그래프',
+			'SpeedTestScreen.peakSpeed' => '최대 속도',
+			'SpeedTestScreen.avgSpeed' => '평균 속도',
+			'SpeedTestScreen.testHistory' => '측정 기록',
+			'SpeedTestScreen.clearHistory' => '기록 삭제',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '새 버전 [${p}]이 준비되었습니다',
 			'VersionUpdateScreen.update' => '업데이트를 위해 재시작',
 			'VersionUpdateScreen.cancel' => '나중에',
@@ -785,6 +842,7 @@ extension on TranslationsKo {
 			'meta.latency' => '지연 시간',
 			'meta.latencyTest' => '지연 속도 테스트',
 			'meta.networkCheck' => '네트워크 점검',
+			'meta.speedTest' => '속도 측정',
 			'meta.language' => '언어',
 			'meta.next' => '다음',
 			'meta.done' => '완료',
