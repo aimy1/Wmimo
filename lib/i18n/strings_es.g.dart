@@ -44,6 +44,7 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _Translations$UserAgreementScreen$es UserAgreementScreen = _Translations$UserAgreementScreen$es._(_root);
 	@override late final _Translations$VersionUpdateScreen$es VersionUpdateScreen = _Translations$VersionUpdateScreen$es._(_root);
 	@override late final _Translations$NetCheckScreen$es NetCheckScreen = _Translations$NetCheckScreen$es._(_root);
+	@override late final _Translations$SpeedTestScreen$es SpeedTestScreen = _Translations$SpeedTestScreen$es._(_root);
 	@override late final _Translations$loginScreen$es loginScreen = _Translations$loginScreen$es._(_root);
 	@override late final _Translations$main$es main = _Translations$main$es._(_root);
 	@override late final _Translations$meta$es meta = _Translations$meta$es._(_root);
@@ -153,18 +154,50 @@ class _Translations$NetCheckScreen$es implements Translations$NetCheckScreen$en 
 	// Translations
 	@override String get enterDomain => 'Por favor, introduzca un dominio';
 	@override String get checking => 'Comprobando...';
-	@override String aQueryFailed({required Object p}) => 'Fallo en la consulta A: ${p}';
-	@override String aaaaQueryFailed({required Object p}) => 'Fallo en la consulta AAAA: ${p}';
+	@override String aQueryFailed({required Object p}) => 'Fallo en consulta A: ${p}';
+	@override String aaaaQueryFailed({required Object p}) => 'Fallo en consulta AAAA: ${p}';
 	@override String get success => 'Éxito';
 	@override String get failed => 'Fallo';
-	@override String get suspectedPollution => 'Sospecha de envenenamiento DNS';
+	@override String get suspectedPollution => 'Sospecha de contaminación DNS';
 	@override String get domainLabel => 'Dominio';
 	@override String get checkButton => 'Comprobar';
 	@override String get dnsSection => '1. Consulta DNS';
-	@override String get directHttpSection => '2. HTTP (vía TUN, habilite TUN primero)';
+	@override String get directHttpSection => '2. HTTP (vía TUN, active TUN primero)';
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (vía Proxy, puerto: ${p})';
-	@override String get tunNotEnabled => 'TUN no está habilitado';
-	@override String get routeTableSection => '4. Tabla de Rutas';
+	@override String get tunNotEnabled => 'TUN no está activado';
+	@override String get routeTableSection => '4. Tabla de rutas';
+}
+
+// Path: SpeedTestScreen
+class _Translations$SpeedTestScreen$es implements Translations$SpeedTestScreen$en {
+	_Translations$SpeedTestScreen$es._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Test de velocidad';
+	@override String get startTest => 'Iniciar prueba';
+	@override String get stopTest => 'Detener';
+	@override String get reTest => 'Reintentar';
+	@override String get ready => 'Listo';
+	@override String get testingPing => 'Comprobando Ping y Jitter...';
+	@override String get testingDownload => 'Probando descarga...';
+	@override String get testingUpload => 'Probando subida...';
+	@override String get completed => 'Prueba completada';
+	@override String get stopped => 'Detenido';
+	@override String get ping => 'Ping';
+	@override String get jitter => 'Jitter';
+	@override String get download => 'Descarga';
+	@override String get upload => 'Subida';
+	@override String get currentProxy => 'Proxy actual';
+	@override String get directConnection => 'Conexión directa';
+	@override String get server => 'Servidor de prueba';
+	@override String get serverLocation => 'Ubicación';
+	@override String get realtimeSpeed => 'Gráfico de velocidad';
+	@override String get peakSpeed => 'Velocidad máxima';
+	@override String get avgSpeed => 'Velocidad media';
+	@override String get testHistory => 'Historial';
+	@override String get clearHistory => 'Borrar historial';
 }
 
 // Path: loginScreen
@@ -261,6 +294,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get latency => 'Latencia';
 	@override String get latencyTest => 'Prueba de latencia';
 	@override String get networkCheck => 'Comprobación de red';
+	@override String get speedTest => 'Test de velocidad';
 	@override String get language => 'Idioma';
 	@override String get next => 'Siguiente';
 	@override String get done => 'Hecho';
@@ -685,18 +719,41 @@ extension on TranslationsEs {
 			'VersionUpdateScreen.cancel' => 'Ahora no',
 			'NetCheckScreen.enterDomain' => 'Por favor, introduzca un dominio',
 			'NetCheckScreen.checking' => 'Comprobando...',
-			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'Fallo en la consulta A: ${p}',
-			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'Fallo en la consulta AAAA: ${p}',
+			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'Fallo en consulta A: ${p}',
+			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'Fallo en consulta AAAA: ${p}',
 			'NetCheckScreen.success' => 'Éxito',
 			'NetCheckScreen.failed' => 'Fallo',
-			'NetCheckScreen.suspectedPollution' => 'Sospecha de envenenamiento DNS',
+			'NetCheckScreen.suspectedPollution' => 'Sospecha de contaminación DNS',
 			'NetCheckScreen.domainLabel' => 'Dominio',
 			'NetCheckScreen.checkButton' => 'Comprobar',
 			'NetCheckScreen.dnsSection' => '1. Consulta DNS',
-			'NetCheckScreen.directHttpSection' => '2. HTTP (vía TUN, habilite TUN primero)',
+			'NetCheckScreen.directHttpSection' => '2. HTTP (vía TUN, active TUN primero)',
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (vía Proxy, puerto: ${p})',
-			'NetCheckScreen.tunNotEnabled' => 'TUN no está habilitado',
-			'NetCheckScreen.routeTableSection' => '4. Tabla de Rutas',
+			'NetCheckScreen.tunNotEnabled' => 'TUN no está activado',
+			'NetCheckScreen.routeTableSection' => '4. Tabla de rutas',
+			'SpeedTestScreen.title' => 'Test de velocidad',
+			'SpeedTestScreen.startTest' => 'Iniciar prueba',
+			'SpeedTestScreen.stopTest' => 'Detener',
+			'SpeedTestScreen.reTest' => 'Reintentar',
+			'SpeedTestScreen.ready' => 'Listo',
+			'SpeedTestScreen.testingPing' => 'Comprobando Ping y Jitter...',
+			'SpeedTestScreen.testingDownload' => 'Probando descarga...',
+			'SpeedTestScreen.testingUpload' => 'Probando subida...',
+			'SpeedTestScreen.completed' => 'Prueba completada',
+			'SpeedTestScreen.stopped' => 'Detenido',
+			'SpeedTestScreen.ping' => 'Ping',
+			'SpeedTestScreen.jitter' => 'Jitter',
+			'SpeedTestScreen.download' => 'Descarga',
+			'SpeedTestScreen.upload' => 'Subida',
+			'SpeedTestScreen.currentProxy' => 'Proxy actual',
+			'SpeedTestScreen.directConnection' => 'Conexión directa',
+			'SpeedTestScreen.server' => 'Servidor de prueba',
+			'SpeedTestScreen.serverLocation' => 'Ubicación',
+			'SpeedTestScreen.realtimeSpeed' => 'Gráfico de velocidad',
+			'SpeedTestScreen.peakSpeed' => 'Velocidad máxima',
+			'SpeedTestScreen.avgSpeed' => 'Velocidad media',
+			'SpeedTestScreen.testHistory' => 'Historial',
+			'SpeedTestScreen.clearHistory' => 'Borrar historial',
 			'loginScreen.login' => 'Iniciar sesión',
 			'loginScreen.register' => 'Registrar cuenta',
 			'loginScreen.forgotPassword' => 'Olvidé mi contraseña',
@@ -785,6 +842,7 @@ extension on TranslationsEs {
 			'meta.latency' => 'Latencia',
 			'meta.latencyTest' => 'Prueba de latencia',
 			'meta.networkCheck' => 'Comprobación de red',
+			'meta.speedTest' => 'Test de velocidad',
 			'meta.language' => 'Idioma',
 			'meta.next' => 'Siguiente',
 			'meta.done' => 'Hecho',
