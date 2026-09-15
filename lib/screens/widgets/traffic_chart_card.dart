@@ -21,12 +21,20 @@ class TrafficChartCard extends StatefulWidget {
   final List<TrafficDataRecord> history;
   final bool isConnected;
   final ValueNotifier<int> tickNotifier;
+  final ValueNotifier<num>? uploadSpeed;
+  final ValueNotifier<num>? downloadSpeed;
+  final ValueNotifier<num>? uploadTotal;
+  final ValueNotifier<num>? downloadTotal;
 
   const TrafficChartCard({
     super.key,
     required this.history,
     required this.isConnected,
     required this.tickNotifier,
+    this.uploadSpeed,
+    this.downloadSpeed,
+    this.uploadTotal,
+    this.downloadTotal,
   });
 
   @override
@@ -58,7 +66,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -67,15 +75,15 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
               children: [
                 // Speedometer Gauge icon with orange gradient badge
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: 28,
+                  height: 28,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [Color(0xFFF59E0B), Color(0xFFD97706)],
                     ),
-                    borderRadius: BorderRadius.circular(9),
+                    borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
                         color: const Color(0xFFF59E0B).withValues(alpha: 0.35),
@@ -87,14 +95,14 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                   child: const Icon(
                     Icons.speed_rounded,
                     color: Colors.white,
-                    size: 18,
+                    size: 16,
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Text(
                   tcontext.meta.trafficStats,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.2,
                   ),
@@ -102,7 +110,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                 const Spacer(),
                 // Connection status badge
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: widget.isConnected
                         ? ThemeDefine.kColorGreenBright.withValues(
@@ -121,8 +129,8 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        width: 6,
-                        height: 6,
+                        width: 5,
+                        height: 5,
                         decoration: BoxDecoration(
                           color: widget.isConnected
                               ? ThemeDefine.kColorGreenBright
@@ -130,13 +138,13 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 5),
+                      const SizedBox(width: 4),
                       Text(
                         widget.isConnected
                             ? tcontext.meta.realtimeMonitor
                             : tcontext.meta.disconnected,
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 10.5,
                           fontWeight: FontWeight.w600,
                           color: widget.isConnected
                               ? ThemeDefine.kColorGreenBright
@@ -148,15 +156,15 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
 
             // Chart Box
             Container(
-              height: 140,
+              height: 110,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: chartBgColor,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: borderColor,
                   width: 0.8,
@@ -258,9 +266,152 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                 ],
               ),
             ),
+            if (widget.uploadSpeed != null &&
+                widget.downloadSpeed != null &&
+                widget.uploadTotal != null &&
+                widget.downloadTotal != null) ...[
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? const Color(0xFF111827).withValues(alpha: 0.6)
+                      : const Color(0xFFF1F5F9).withValues(alpha: 0.8),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: theme.dividerColor.withValues(alpha: 0.25),
+                    width: 0.8,
+                  ),
+                ),
+                child: IntrinsicHeight(
+                  child: Row(
+                    children: [
+                      // 1. 实时上传
+                      Expanded(
+                        child: ValueListenableBuilder<num>(
+                          valueListenable: widget.uploadSpeed!,
+                          builder: (context, value, _) {
+                            return _buildStatItem(
+                              context: context,
+                              icon: Icons.arrow_upward_rounded,
+                              iconColor: uploadColor,
+                              label: tcontext.meta.realtimeUpload,
+                              value: '${ClashHttpApi.convertTrafficToStringDouble(value)}/s',
+                            );
+                          },
+                        ),
+                      ),
+                      _buildDivider(theme),
+                      // 2. 实时下载
+                      Expanded(
+                        child: ValueListenableBuilder<num>(
+                          valueListenable: widget.downloadSpeed!,
+                          builder: (context, value, _) {
+                            return _buildStatItem(
+                              context: context,
+                              icon: Icons.arrow_downward_rounded,
+                              iconColor: downloadColor,
+                              label: tcontext.meta.realtimeDownload,
+                              value: '${ClashHttpApi.convertTrafficToStringDouble(value)}/s',
+                            );
+                          },
+                        ),
+                      ),
+                      _buildDivider(theme),
+                      // 3. 累计上传
+                      Expanded(
+                        child: ValueListenableBuilder<num>(
+                          valueListenable: widget.uploadTotal!,
+                          builder: (context, value, _) {
+                            return _buildStatItem(
+                              context: context,
+                              icon: Icons.cloud_upload_outlined,
+                              iconColor: uploadColor.withValues(alpha: 0.85),
+                              label: tcontext.meta.sessionUpload,
+                              value: ClashHttpApi.convertTrafficToStringDouble(value),
+                            );
+                          },
+                        ),
+                      ),
+                      _buildDivider(theme),
+                      // 4. 累计下载
+                      Expanded(
+                        child: ValueListenableBuilder<num>(
+                          valueListenable: widget.downloadTotal!,
+                          builder: (context, value, _) {
+                            return _buildStatItem(
+                              context: context,
+                              icon: Icons.cloud_download_outlined,
+                              iconColor: downloadColor.withValues(alpha: 0.85),
+                              label: tcontext.meta.sessionDownload,
+                              value: ClashHttpApi.convertTrafficToStringDouble(value),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildStatItem({
+    required BuildContext context,
+    required IconData icon,
+    required Color iconColor,
+    required String label,
+    required String value,
+  }) {
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 11.5, color: iconColor),
+            const SizedBox(width: 3),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.2,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDivider(ThemeData theme) {
+    return Container(
+      width: 0.8,
+      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+      color: theme.dividerColor.withValues(alpha: 0.2),
     );
   }
 }
