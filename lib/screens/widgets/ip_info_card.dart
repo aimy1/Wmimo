@@ -96,7 +96,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -105,23 +105,23 @@ class _IpInfoCardState extends State<IpInfoCard> {
             Row(
               children: [
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: 26,
+                  height: 26,
                   decoration: BoxDecoration(
                     color: const Color(0xFF1E3A5F).withValues(alpha: isDark ? 0.8 : 0.2),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(7),
                   ),
                   child: const Icon(
                     Icons.location_on_rounded,
                     color: Color(0xFF38BDF8),
-                    size: 18,
+                    size: 16,
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Text(
                   tcontext.meta.ipInfo,
                   style: const TextStyle(
-                    fontSize: 15.5,
+                    fontSize: 14.5,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.2,
                   ),
@@ -131,23 +131,23 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   borderRadius: BorderRadius.circular(16),
                   onTap: _loading ? null : _fetchIpInfo,
                   child: Padding(
-                    padding: const EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(4),
                     child: _loading
                         ? const SizedBox(
-                            width: 17,
-                            height: 17,
+                            width: 15,
+                            height: 15,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : Icon(
                             Icons.refresh_rounded,
-                            size: 20,
+                            size: 18,
                             color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.7),
                           ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
 
             // 2. Simplified Content Area
             if (_loading && _ipInfo == null)
