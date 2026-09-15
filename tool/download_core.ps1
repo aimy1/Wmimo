@@ -7,7 +7,7 @@ New-Item -ItemType Directory -Force -Path $coreDir | Out-Null
 New-Item -ItemType Directory -Force -Path $releaseDir | Out-Null
 
 Write-Host "Fetching latest Mihomo core for Windows x64..." -ForegroundColor Cyan
-$zipUrl = "https://github.com/MetaCubeX/mihomo/releases/download/v1.19.2/mihomo-windows-amd64-v1.19.2.zip"
+$zipUrl = "https://github.com/MetaCubeX/mihomo/releases/download/v1.19.31/mihomo-windows-amd64-v1.19.31.zip"
 $zipPath = Join-Path $coreDir "mihomo.zip"
 
 Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath -UseBasicParsing

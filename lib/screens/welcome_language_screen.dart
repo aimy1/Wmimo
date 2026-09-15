@@ -1,7 +1,8 @@
-// ignore_for_file: unused_catch_stack
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
@@ -129,6 +130,12 @@ class _WelcomeLanguageScreenState
 
     return PopScope(
       canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (Platform.isAndroid || Platform.isIOS) {
+          MoveToBackgroundUtils.moveToBackground();
+        }
+      },
       child: Scaffold(
         backgroundColor: bgColor,
         appBar: PreferredSize(

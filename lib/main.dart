@@ -22,7 +22,6 @@ import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/device_utils.dart';
 import 'package:wmimo/app/utils/log.dart';
-import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
@@ -377,20 +376,12 @@ class MyAppState extends State<MyApp>
               supportedLocales: AppLocaleUtils.supportedLocales,
               localizationsDelegates: GlobalMaterialLocalizations.delegates,
               navigatorObservers: observers,
-              home: PopScope(
-                canPop: false,
-                onPopInvokedWithResult: (didPop, result) {
-                  if (Platform.isAndroid || Platform.isIOS) {
-                    MoveToBackgroundUtils.moveToBackground();
-                  }
-                },
-                child: startFailedReason != null
-                    ? LaunchFailedScreen(
-                        startFailedReason: startFailedReason!,
-                        startFailedReasonDesc: startFailedReasonDesc,
-                      )
-                    : HomeScreen(launchUrl: schemeArg.trim()),
-              ),
+              home: startFailedReason != null
+                  ? LaunchFailedScreen(
+                      startFailedReason: startFailedReason!,
+                      startFailedReasonDesc: startFailedReasonDesc,
+                    )
+                  : HomeScreen(launchUrl: schemeArg.trim()),
               builder: SettingManager.getConfig().ui.disableFontScaler
                   ? (context, widget) {
                       return MediaQuery(

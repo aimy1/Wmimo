@@ -1,6 +1,7 @@
-﻿// ignore_for_file: unused_catch_stack
+import 'dart:io';
 
 import 'package:wmimo/app/utils/assets_utils.dart';
+import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
@@ -33,6 +34,12 @@ class _UserAgreementScreenState
 
     return PopScope(
       canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (Platform.isAndroid || Platform.isIOS) {
+          MoveToBackgroundUtils.moveToBackground();
+        }
+      },
       child: Scaffold(
         appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
         body: SafeArea(

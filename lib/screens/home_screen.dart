@@ -14,6 +14,7 @@ import 'package:wmimo/app/utils/error_reporter_utils.dart';
 import 'package:wmimo/app/utils/local_storage.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/mobile_permission_helper.dart';
+import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
@@ -644,6 +645,14 @@ class _HomeScreenState extends State<HomeScreen>
               _navigatorKeys[_currentNavIndex].currentState;
           if (currentNavigator != null && currentNavigator.canPop()) {
             currentNavigator.pop();
+          } else if (_currentNavIndex != 0) {
+            setState(() {
+              _currentNavIndex = 0;
+            });
+          } else {
+            if (Platform.isAndroid || Platform.isIOS) {
+              MoveToBackgroundUtils.moveToBackground();
+            }
           }
         },
         child: SafeArea(

@@ -391,7 +391,7 @@ class FlutterVpnService {
         targetFile.parent.createSync(recursive: true);
       }
 
-      const String kVersion = 'v1.19.30';
+      const String kVersion = 'v1.19.31';
       const String kBaseUrl = 'https://github.com/MetaCubeX/mihomo/releases/download/$kVersion';
 
       String? url;
