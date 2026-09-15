@@ -43,6 +43,7 @@ class TranslationsJa with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _Translations$PerAppAndroidScreen$ja PerAppAndroidScreen = _Translations$PerAppAndroidScreen$ja._(_root);
 	@override late final _Translations$UserAgreementScreen$ja UserAgreementScreen = _Translations$UserAgreementScreen$ja._(_root);
 	@override late final _Translations$NetCheckScreen$ja NetCheckScreen = _Translations$NetCheckScreen$ja._(_root);
+	@override late final _Translations$SpeedTestScreen$ja SpeedTestScreen = _Translations$SpeedTestScreen$ja._(_root);
 	@override late final _Translations$VersionUpdateScreen$ja VersionUpdateScreen = _Translations$VersionUpdateScreen$ja._(_root);
 	@override late final _Translations$loginScreen$ja loginScreen = _Translations$loginScreen$ja._(_root);
 	@override late final _Translations$main$ja main = _Translations$main$ja._(_root);
@@ -139,20 +140,52 @@ class _Translations$NetCheckScreen$ja implements Translations$NetCheckScreen$en 
 	final TranslationsJa _root; // ignore: unused_field
 
 	// Translations
-	@override String get enterDomain => 'ドメイン名を入力してください';
-	@override String get checking => '確認中...';
-	@override String aQueryFailed({required Object p}) => 'Aレコード照会失敗: ${p}';
-	@override String aaaaQueryFailed({required Object p}) => 'AAAAレコード照会失敗: ${p}';
+	@override String get enterDomain => 'ドメインを入力してください';
+	@override String get checking => '診断中...';
+	@override String aQueryFailed({required Object p}) => 'A クエリ失敗: ${p}';
+	@override String aaaaQueryFailed({required Object p}) => 'AAAA クエリ失敗: ${p}';
 	@override String get success => '成功';
 	@override String get failed => '失敗';
 	@override String get suspectedPollution => 'DNS汚染の疑い';
 	@override String get domainLabel => 'ドメイン';
 	@override String get checkButton => '診断';
-	@override String get dnsSection => '1. DNS照会';
-	@override String get directHttpSection => '2. HTTP (TUN経由、先にTUNを有効にしてください)';
-	@override String proxyHttpSection({required Object p}) => '3. HTTP (プロキシ経由、ポート: ${p})';
-	@override String get tunNotEnabled => 'TUN が有効になっていません';
-	@override String get routeTableSection => '4. ルートテーブル';
+	@override String get dnsSection => '1. DNSクエリ';
+	@override String get directHttpSection => '2. HTTP (TUN経由,先にTUNを有効化)';
+	@override String proxyHttpSection({required Object p}) => '3. HTTP (プロキシ経由,ポート:${p})';
+	@override String get tunNotEnabled => 'TUN が無効です';
+	@override String get routeTableSection => '4. ルーティングテーブル';
+}
+
+// Path: SpeedTestScreen
+class _Translations$SpeedTestScreen$ja implements Translations$SpeedTestScreen$en {
+	_Translations$SpeedTestScreen$ja._(this._root);
+
+	final TranslationsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'スピードテスト';
+	@override String get startTest => 'テスト開始';
+	@override String get stopTest => '停止';
+	@override String get reTest => '再テスト';
+	@override String get ready => '準備完了';
+	@override String get testingPing => 'Ping & Jitter をテスト中...';
+	@override String get testingDownload => 'ダウンロード速度をテスト中...';
+	@override String get testingUpload => 'アップロード速度をテスト中...';
+	@override String get completed => 'テスト完了';
+	@override String get stopped => '停止しました';
+	@override String get ping => 'Ping';
+	@override String get jitter => 'Jitter';
+	@override String get download => 'ダウンロード';
+	@override String get upload => 'アップロード';
+	@override String get currentProxy => '現在のプロキシ';
+	@override String get directConnection => 'ダイレクト接続';
+	@override String get server => '測定サーバー';
+	@override String get serverLocation => 'サーバー位置';
+	@override String get realtimeSpeed => 'リアルタイム速度グラフ';
+	@override String get peakSpeed => 'ピーク速度';
+	@override String get avgSpeed => '平均速度';
+	@override String get testHistory => 'テスト履歴';
+	@override String get clearHistory => '履歴をクリア';
 }
 
 // Path: VersionUpdateScreen
@@ -258,9 +291,10 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get connectTimeout => '接続タイムアウト';
 	@override String get timeout => 'タイムアウト';
 	@override String get timeoutDuration => 'タイムアウト時間';
-	@override String get latency => '遅延';
+	@override String get latency => 'レイテンシ';
 	@override String get latencyTest => '遅延テスト';
 	@override String get networkCheck => 'ネットワーク診断';
+	@override String get speedTest => 'スピードテスト';
 	@override String get language => '言語';
 	@override String get next => '次へ';
 	@override String get done => '完了';
@@ -680,20 +714,43 @@ extension on TranslationsJa {
 			'PerAppAndroidScreen.whiteListModeTip' => '有効な場合：チェックされたアプリのみがプロキシされます。無効な場合：チェックされていないアプリのみがプロキシされます',
 			'UserAgreementScreen.privacyFirst' => 'プライバシーを第一に',
 			'UserAgreementScreen.agreeAndContinue' => '同意して続行',
-			'NetCheckScreen.enterDomain' => 'ドメイン名を入力してください',
-			'NetCheckScreen.checking' => '確認中...',
-			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'Aレコード照会失敗: ${p}',
-			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'AAAAレコード照会失敗: ${p}',
+			'NetCheckScreen.enterDomain' => 'ドメインを入力してください',
+			'NetCheckScreen.checking' => '診断中...',
+			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'A クエリ失敗: ${p}',
+			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'AAAA クエリ失敗: ${p}',
 			'NetCheckScreen.success' => '成功',
 			'NetCheckScreen.failed' => '失敗',
 			'NetCheckScreen.suspectedPollution' => 'DNS汚染の疑い',
 			'NetCheckScreen.domainLabel' => 'ドメイン',
 			'NetCheckScreen.checkButton' => '診断',
-			'NetCheckScreen.dnsSection' => '1. DNS照会',
-			'NetCheckScreen.directHttpSection' => '2. HTTP (TUN経由、先にTUNを有効にしてください)',
-			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (プロキシ経由、ポート: ${p})',
-			'NetCheckScreen.tunNotEnabled' => 'TUN が有効になっていません',
-			'NetCheckScreen.routeTableSection' => '4. ルートテーブル',
+			'NetCheckScreen.dnsSection' => '1. DNSクエリ',
+			'NetCheckScreen.directHttpSection' => '2. HTTP (TUN経由,先にTUNを有効化)',
+			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (プロキシ経由,ポート:${p})',
+			'NetCheckScreen.tunNotEnabled' => 'TUN が無効です',
+			'NetCheckScreen.routeTableSection' => '4. ルーティングテーブル',
+			'SpeedTestScreen.title' => 'スピードテスト',
+			'SpeedTestScreen.startTest' => 'テスト開始',
+			'SpeedTestScreen.stopTest' => '停止',
+			'SpeedTestScreen.reTest' => '再テスト',
+			'SpeedTestScreen.ready' => '準備完了',
+			'SpeedTestScreen.testingPing' => 'Ping & Jitter をテスト中...',
+			'SpeedTestScreen.testingDownload' => 'ダウンロード速度をテスト中...',
+			'SpeedTestScreen.testingUpload' => 'アップロード速度をテスト中...',
+			'SpeedTestScreen.completed' => 'テスト完了',
+			'SpeedTestScreen.stopped' => '停止しました',
+			'SpeedTestScreen.ping' => 'Ping',
+			'SpeedTestScreen.jitter' => 'Jitter',
+			'SpeedTestScreen.download' => 'ダウンロード',
+			'SpeedTestScreen.upload' => 'アップロード',
+			'SpeedTestScreen.currentProxy' => '現在のプロキシ',
+			'SpeedTestScreen.directConnection' => 'ダイレクト接続',
+			'SpeedTestScreen.server' => '測定サーバー',
+			'SpeedTestScreen.serverLocation' => 'サーバー位置',
+			'SpeedTestScreen.realtimeSpeed' => 'リアルタイム速度グラフ',
+			'SpeedTestScreen.peakSpeed' => 'ピーク速度',
+			'SpeedTestScreen.avgSpeed' => '平均速度',
+			'SpeedTestScreen.testHistory' => 'テスト履歴',
+			'SpeedTestScreen.clearHistory' => '履歴をクリア',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '新しいバージョン [${p}] の準備ができました',
 			'VersionUpdateScreen.update' => '再起動して更新',
 			'VersionUpdateScreen.cancel' => '今はしない',
@@ -782,9 +839,10 @@ extension on TranslationsJa {
 			'meta.connectTimeout' => '接続タイムアウト',
 			'meta.timeout' => 'タイムアウト',
 			'meta.timeoutDuration' => 'タイムアウト時間',
-			'meta.latency' => '遅延',
+			'meta.latency' => 'レイテンシ',
 			'meta.latencyTest' => '遅延テスト',
 			'meta.networkCheck' => 'ネットワーク診断',
+			'meta.speedTest' => 'スピードテスト',
 			'meta.language' => '言語',
 			'meta.next' => '次へ',
 			'meta.done' => '完了',
