@@ -43,6 +43,7 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _Translations$PerAppAndroidScreen$ru PerAppAndroidScreen = _Translations$PerAppAndroidScreen$ru._(_root);
 	@override late final _Translations$UserAgreementScreen$ru UserAgreementScreen = _Translations$UserAgreementScreen$ru._(_root);
 	@override late final _Translations$NetCheckScreen$ru NetCheckScreen = _Translations$NetCheckScreen$ru._(_root);
+	@override late final _Translations$SpeedTestScreen$ru SpeedTestScreen = _Translations$SpeedTestScreen$ru._(_root);
 	@override late final _Translations$VersionUpdateScreen$ru VersionUpdateScreen = _Translations$VersionUpdateScreen$ru._(_root);
 	@override late final _Translations$loginScreen$ru loginScreen = _Translations$loginScreen$ru._(_root);
 	@override late final _Translations$main$ru main = _Translations$main$ru._(_root);
@@ -141,18 +142,50 @@ class _Translations$NetCheckScreen$ru implements Translations$NetCheckScreen$en 
 	// Translations
 	@override String get enterDomain => 'Введите доменное имя';
 	@override String get checking => 'Проверка...';
-	@override String aQueryFailed({required Object p}) => 'Ошибка запроса A: ${p}';
-	@override String aaaaQueryFailed({required Object p}) => 'Ошибка запроса AAAA: ${p}';
-	@override String get success => 'Успех';
-	@override String get failed => 'Ошибка';
-	@override String get suspectedPollution => 'Подозрение на DNS-отравление';
+	@override String aQueryFailed({required Object p}) => 'Ошибка запроса A-записи: ${p}';
+	@override String aaaaQueryFailed({required Object p}) => 'Ошибка запроса AAAA-записи: ${p}';
+	@override String get success => 'Успешно';
+	@override String get failed => 'Не удалось';
+	@override String get suspectedPollution => 'Подозрение на DNS-спуфинг';
 	@override String get domainLabel => 'Домен';
 	@override String get checkButton => 'Проверить';
 	@override String get dnsSection => '1. DNS-запрос';
 	@override String get directHttpSection => '2. HTTP (через TUN, сначала включите TUN)';
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (через прокси, порт: ${p})';
-	@override String get tunNotEnabled => 'TUN не включён';
-	@override String get routeTableSection => '4. Таблица маршрутов';
+	@override String get tunNotEnabled => 'TUN не включен';
+	@override String get routeTableSection => '4. Таблица маршрутизации';
+}
+
+// Path: SpeedTestScreen
+class _Translations$SpeedTestScreen$ru implements Translations$SpeedTestScreen$en {
+	_Translations$SpeedTestScreen$ru._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Тест скорости';
+	@override String get startTest => 'Начать тест';
+	@override String get stopTest => 'Остановить';
+	@override String get reTest => 'Повторить';
+	@override String get ready => 'Готово';
+	@override String get testingPing => 'Проверка задержки и джиттера...';
+	@override String get testingDownload => 'Тестирование загрузки...';
+	@override String get testingUpload => 'Тестирование отдачи...';
+	@override String get completed => 'Тест завершен';
+	@override String get stopped => 'Остановлено';
+	@override String get ping => 'Пинг';
+	@override String get jitter => 'Джиттер';
+	@override String get download => 'Скачивание';
+	@override String get upload => 'Загрузка';
+	@override String get currentProxy => 'Текущий прокси';
+	@override String get directConnection => 'Прямое соединение';
+	@override String get server => 'Сервер тестирования';
+	@override String get serverLocation => 'Расположение';
+	@override String get realtimeSpeed => 'График скорости';
+	@override String get peakSpeed => 'Пиковая скорость';
+	@override String get avgSpeed => 'Средняя скорость';
+	@override String get testHistory => 'История тестов';
+	@override String get clearHistory => 'Очистить историю';
 }
 
 // Path: VersionUpdateScreen
@@ -258,9 +291,10 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get connectTimeout => 'Таймаут при соединении';
 	@override String get timeout => 'Тайм-аут';
 	@override String get timeoutDuration => 'Длительность тайм-аута';
-	@override String get latency => 'Задерживать';
-	@override String get latencyTest => 'Проверка задержки';
+	@override String get latency => 'Задержка';
+	@override String get latencyTest => 'Тест задержки';
 	@override String get networkCheck => 'Проверка сети';
+	@override String get speedTest => 'Тест скорости';
 	@override String get language => 'Язык';
 	@override String get next => 'Дальше';
 	@override String get done => 'Готово';
@@ -682,18 +716,41 @@ extension on TranslationsRu {
 			'UserAgreementScreen.agreeAndContinue' => 'Принять и продолжить',
 			'NetCheckScreen.enterDomain' => 'Введите доменное имя',
 			'NetCheckScreen.checking' => 'Проверка...',
-			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'Ошибка запроса A: ${p}',
-			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'Ошибка запроса AAAA: ${p}',
-			'NetCheckScreen.success' => 'Успех',
-			'NetCheckScreen.failed' => 'Ошибка',
-			'NetCheckScreen.suspectedPollution' => 'Подозрение на DNS-отравление',
+			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'Ошибка запроса A-записи: ${p}',
+			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'Ошибка запроса AAAA-записи: ${p}',
+			'NetCheckScreen.success' => 'Успешно',
+			'NetCheckScreen.failed' => 'Не удалось',
+			'NetCheckScreen.suspectedPollution' => 'Подозрение на DNS-спуфинг',
 			'NetCheckScreen.domainLabel' => 'Домен',
 			'NetCheckScreen.checkButton' => 'Проверить',
 			'NetCheckScreen.dnsSection' => '1. DNS-запрос',
 			'NetCheckScreen.directHttpSection' => '2. HTTP (через TUN, сначала включите TUN)',
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (через прокси, порт: ${p})',
-			'NetCheckScreen.tunNotEnabled' => 'TUN не включён',
-			'NetCheckScreen.routeTableSection' => '4. Таблица маршрутов',
+			'NetCheckScreen.tunNotEnabled' => 'TUN не включен',
+			'NetCheckScreen.routeTableSection' => '4. Таблица маршрутизации',
+			'SpeedTestScreen.title' => 'Тест скорости',
+			'SpeedTestScreen.startTest' => 'Начать тест',
+			'SpeedTestScreen.stopTest' => 'Остановить',
+			'SpeedTestScreen.reTest' => 'Повторить',
+			'SpeedTestScreen.ready' => 'Готово',
+			'SpeedTestScreen.testingPing' => 'Проверка задержки и джиттера...',
+			'SpeedTestScreen.testingDownload' => 'Тестирование загрузки...',
+			'SpeedTestScreen.testingUpload' => 'Тестирование отдачи...',
+			'SpeedTestScreen.completed' => 'Тест завершен',
+			'SpeedTestScreen.stopped' => 'Остановлено',
+			'SpeedTestScreen.ping' => 'Пинг',
+			'SpeedTestScreen.jitter' => 'Джиттер',
+			'SpeedTestScreen.download' => 'Скачивание',
+			'SpeedTestScreen.upload' => 'Загрузка',
+			'SpeedTestScreen.currentProxy' => 'Текущий прокси',
+			'SpeedTestScreen.directConnection' => 'Прямое соединение',
+			'SpeedTestScreen.server' => 'Сервер тестирования',
+			'SpeedTestScreen.serverLocation' => 'Расположение',
+			'SpeedTestScreen.realtimeSpeed' => 'График скорости',
+			'SpeedTestScreen.peakSpeed' => 'Пиковая скорость',
+			'SpeedTestScreen.avgSpeed' => 'Средняя скорость',
+			'SpeedTestScreen.testHistory' => 'История тестов',
+			'SpeedTestScreen.clearHistory' => 'Очистить историю',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'Новая версия [${p}] доступна',
 			'VersionUpdateScreen.update' => 'Перезапустить',
 			'VersionUpdateScreen.cancel' => 'Не сейчас',
@@ -782,9 +839,10 @@ extension on TranslationsRu {
 			'meta.connectTimeout' => 'Таймаут при соединении',
 			'meta.timeout' => 'Тайм-аут',
 			'meta.timeoutDuration' => 'Длительность тайм-аута',
-			'meta.latency' => 'Задерживать',
-			'meta.latencyTest' => 'Проверка задержки',
+			'meta.latency' => 'Задержка',
+			'meta.latencyTest' => 'Тест задержки',
 			'meta.networkCheck' => 'Проверка сети',
+			'meta.speedTest' => 'Тест скорости',
 			'meta.language' => 'Язык',
 			'meta.next' => 'Дальше',
 			'meta.done' => 'Готово',
