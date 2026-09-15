@@ -47,6 +47,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$UserAgreementScreen$en UserAgreementScreen = Translations$UserAgreementScreen$en._(_root);
 	late final Translations$VersionUpdateScreen$en VersionUpdateScreen = Translations$VersionUpdateScreen$en._(_root);
 	late final Translations$NetCheckScreen$en NetCheckScreen = Translations$NetCheckScreen$en._(_root);
+	late final Translations$SpeedTestScreen$en SpeedTestScreen = Translations$SpeedTestScreen$en._(_root);
 	late final Translations$loginScreen$en loginScreen = Translations$loginScreen$en._(_root);
 	late final Translations$main$en main = Translations$main$en._(_root);
 	late final Translations$meta$en meta = Translations$meta$en._(_root);
@@ -245,6 +246,84 @@ class Translations$NetCheckScreen$en {
 
 	/// en: '4. Route Table'
 	String get routeTableSection => '4. Route Table';
+}
+
+// Path: SpeedTestScreen
+class Translations$SpeedTestScreen$en {
+	Translations$SpeedTestScreen$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Speed Test'
+	String get title => 'Speed Test';
+
+	/// en: 'Start Test'
+	String get startTest => 'Start Test';
+
+	/// en: 'Stop Test'
+	String get stopTest => 'Stop Test';
+
+	/// en: 'Retest'
+	String get reTest => 'Retest';
+
+	/// en: 'Ready'
+	String get ready => 'Ready';
+
+	/// en: 'Testing Ping & Jitter...'
+	String get testingPing => 'Testing Ping & Jitter...';
+
+	/// en: 'Testing Download Speed...'
+	String get testingDownload => 'Testing Download Speed...';
+
+	/// en: 'Testing Upload Speed...'
+	String get testingUpload => 'Testing Upload Speed...';
+
+	/// en: 'Test Completed'
+	String get completed => 'Test Completed';
+
+	/// en: 'Stopped'
+	String get stopped => 'Stopped';
+
+	/// en: 'Ping'
+	String get ping => 'Ping';
+
+	/// en: 'Jitter'
+	String get jitter => 'Jitter';
+
+	/// en: 'Download'
+	String get download => 'Download';
+
+	/// en: 'Upload'
+	String get upload => 'Upload';
+
+	/// en: 'Current Proxy'
+	String get currentProxy => 'Current Proxy';
+
+	/// en: 'Direct Mode'
+	String get directConnection => 'Direct Mode';
+
+	/// en: 'Speed Test Server'
+	String get server => 'Speed Test Server';
+
+	/// en: 'Server Location'
+	String get serverLocation => 'Server Location';
+
+	/// en: 'Real-time Speed Curve'
+	String get realtimeSpeed => 'Real-time Speed Curve';
+
+	/// en: 'Peak Speed'
+	String get peakSpeed => 'Peak Speed';
+
+	/// en: 'Avg Speed'
+	String get avgSpeed => 'Avg Speed';
+
+	/// en: 'History'
+	String get testHistory => 'History';
+
+	/// en: 'Clear History'
+	String get clearHistory => 'Clear History';
 }
 
 // Path: loginScreen
@@ -477,6 +556,9 @@ class Translations$meta$en {
 
 	/// en: 'Network Check'
 	String get networkCheck => 'Network Check';
+
+	/// en: 'Speed Test'
+	String get speedTest => 'Speed Test';
 
 	/// en: 'Language'
 	String get language => 'Language';
@@ -1465,26 +1547,26 @@ class Translations$main$tray$en {
 
 	// Translations
 
-	/// en: 'Open'
-	String get menuOpen => 'Open';
+	/// en: 'Show Window'
+	String get menuOpen => 'Show Window';
 
 	/// en: 'Exit'
 	String get menuExit => 'Exit';
 
-	/// en: 'Wmimo · Core Not Running'
-	String get coreDisconnected => 'Wmimo · Core Not Running';
+	/// en: 'Disconnected'
+	String get coreDisconnected => 'Disconnected';
 
-	/// en: 'Wmimo · Core Running'
-	String get coreRunning => 'Wmimo · Core Running';
+	/// en: 'Connected'
+	String get coreRunning => 'Connected';
 
-	/// en: 'Start Proxy Connection'
-	String get startProxy => 'Start Proxy Connection';
+	/// en: 'Connect'
+	String get startProxy => 'Connect';
 
-	/// en: 'Disconnect Proxy'
-	String get stopProxy => 'Disconnect Proxy';
+	/// en: 'Disconnect'
+	String get stopProxy => 'Disconnect';
 
-	/// en: 'Restart Proxy Core'
-	String get restartCore => 'Restart Proxy Core';
+	/// en: 'Restart Core'
+	String get restartCore => 'Restart Core';
 
 	/// en: 'System Proxy'
 	String get systemProxyItem => 'System Proxy';
@@ -1492,23 +1574,23 @@ class Translations$main$tray$en {
 	/// en: 'TUN Mode'
 	String get tunModeItem => 'TUN Mode';
 
-	/// en: 'Outbound Mode'
-	String get outboundMode => 'Outbound Mode';
+	/// en: 'Proxy Mode'
+	String get outboundMode => 'Proxy Mode';
 
-	/// en: 'Rule Routing'
-	String get modeRule => 'Rule Routing';
+	/// en: 'Rule'
+	String get modeRule => 'Rule';
 
-	/// en: 'Global Proxy'
-	String get modeGlobal => 'Global Proxy';
+	/// en: 'Global'
+	String get modeGlobal => 'Global';
 
-	/// en: 'Direct Connection'
-	String get modeDirect => 'Direct Connection';
+	/// en: 'Direct'
+	String get modeDirect => 'Direct';
 
-	/// en: 'Subscriptions'
-	String get profilesMenu => 'Subscriptions';
+	/// en: 'Profiles'
+	String get profilesMenu => 'Profiles';
 
-	/// en: 'Update All Subscriptions'
-	String get updateAllProfiles => 'Update All Subscriptions';
+	/// en: 'Update All Profiles'
+	String get updateAllProfiles => 'Update All Profiles';
 
 	/// en: 'Proxy Nodes'
 	String get proxyNodes => 'Proxy Nodes';
@@ -1516,11 +1598,11 @@ class Translations$main$tray$en {
 	/// en: 'Tools'
 	String get tools => 'Tools';
 
-	/// en: 'Copy Terminal Proxy Command (CMD / Bash)'
-	String get copyProxyCmd => 'Copy Terminal Proxy Command (CMD / Bash)';
+	/// en: 'Copy Proxy Command'
+	String get copyProxyCmd => 'Copy Proxy Command';
 
-	/// en: 'Test Latency for All Nodes'
-	String get delayTestAll => 'Test Latency for All Nodes';
+	/// en: 'Speed Test All Nodes'
+	String get delayTestAll => 'Speed Test All Nodes';
 
 	/// en: 'Open Dashboard'
 	String get openDashboard => 'Open Dashboard';
@@ -1569,6 +1651,29 @@ extension on Translations {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (via Proxy, port: ${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN is not enabled',
 			'NetCheckScreen.routeTableSection' => '4. Route Table',
+			'SpeedTestScreen.title' => 'Speed Test',
+			'SpeedTestScreen.startTest' => 'Start Test',
+			'SpeedTestScreen.stopTest' => 'Stop Test',
+			'SpeedTestScreen.reTest' => 'Retest',
+			'SpeedTestScreen.ready' => 'Ready',
+			'SpeedTestScreen.testingPing' => 'Testing Ping & Jitter...',
+			'SpeedTestScreen.testingDownload' => 'Testing Download Speed...',
+			'SpeedTestScreen.testingUpload' => 'Testing Upload Speed...',
+			'SpeedTestScreen.completed' => 'Test Completed',
+			'SpeedTestScreen.stopped' => 'Stopped',
+			'SpeedTestScreen.ping' => 'Ping',
+			'SpeedTestScreen.jitter' => 'Jitter',
+			'SpeedTestScreen.download' => 'Download',
+			'SpeedTestScreen.upload' => 'Upload',
+			'SpeedTestScreen.currentProxy' => 'Current Proxy',
+			'SpeedTestScreen.directConnection' => 'Direct Mode',
+			'SpeedTestScreen.server' => 'Speed Test Server',
+			'SpeedTestScreen.serverLocation' => 'Server Location',
+			'SpeedTestScreen.realtimeSpeed' => 'Real-time Speed Curve',
+			'SpeedTestScreen.peakSpeed' => 'Peak Speed',
+			'SpeedTestScreen.avgSpeed' => 'Avg Speed',
+			'SpeedTestScreen.testHistory' => 'History',
+			'SpeedTestScreen.clearHistory' => 'Clear History',
 			'loginScreen.login' => 'Login',
 			'loginScreen.register' => 'Register Account',
 			'loginScreen.forgotPassword' => 'Forgot Password',
@@ -1589,25 +1694,25 @@ extension on Translations {
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => 'Please request the provider code/alias from your ${_root.loginScreen.provider}.\nFor ${_root.loginScreen.provider} integration, please refer to: ${p}',
 			'loginScreen.providerDisclaimer' => 'Disclaimer: ${_root.loginScreen.provider} is a third-party service and is not affiliated with this app',
 			'loginScreen.createSessionFailed' => 'Failed to create session, check provider or account',
-			'main.tray.menuOpen' => 'Open',
+			'main.tray.menuOpen' => 'Show Window',
 			'main.tray.menuExit' => 'Exit',
-			'main.tray.coreDisconnected' => 'Wmimo · Core Not Running',
-			'main.tray.coreRunning' => 'Wmimo · Core Running',
-			'main.tray.startProxy' => 'Start Proxy Connection',
-			'main.tray.stopProxy' => 'Disconnect Proxy',
-			'main.tray.restartCore' => 'Restart Proxy Core',
+			'main.tray.coreDisconnected' => 'Disconnected',
+			'main.tray.coreRunning' => 'Connected',
+			'main.tray.startProxy' => 'Connect',
+			'main.tray.stopProxy' => 'Disconnect',
+			'main.tray.restartCore' => 'Restart Core',
 			'main.tray.systemProxyItem' => 'System Proxy',
 			'main.tray.tunModeItem' => 'TUN Mode',
-			'main.tray.outboundMode' => 'Outbound Mode',
-			'main.tray.modeRule' => 'Rule Routing',
-			'main.tray.modeGlobal' => 'Global Proxy',
-			'main.tray.modeDirect' => 'Direct Connection',
-			'main.tray.profilesMenu' => 'Subscriptions',
-			'main.tray.updateAllProfiles' => 'Update All Subscriptions',
+			'main.tray.outboundMode' => 'Proxy Mode',
+			'main.tray.modeRule' => 'Rule',
+			'main.tray.modeGlobal' => 'Global',
+			'main.tray.modeDirect' => 'Direct',
+			'main.tray.profilesMenu' => 'Profiles',
+			'main.tray.updateAllProfiles' => 'Update All Profiles',
 			'main.tray.proxyNodes' => 'Proxy Nodes',
 			'main.tray.tools' => 'Tools',
-			'main.tray.copyProxyCmd' => 'Copy Terminal Proxy Command (CMD / Bash)',
-			'main.tray.delayTestAll' => 'Test Latency for All Nodes',
+			'main.tray.copyProxyCmd' => 'Copy Proxy Command',
+			'main.tray.delayTestAll' => 'Speed Test All Nodes',
 			'main.tray.openDashboard' => 'Open Dashboard',
 			'meta.enable' => 'Enable',
 			'meta.disable' => 'Disable',
@@ -1657,6 +1762,7 @@ extension on Translations {
 			'meta.latency' => 'Latency',
 			'meta.latencyTest' => 'Latency Test',
 			'meta.networkCheck' => 'Network Check',
+			'meta.speedTest' => 'Speed Test',
 			'meta.language' => 'Language',
 			'meta.next' => 'Next',
 			'meta.done' => 'Done',
