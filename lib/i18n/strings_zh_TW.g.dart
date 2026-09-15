@@ -43,6 +43,7 @@ class TranslationsZhTw with BaseTranslations<AppLocale, Translations> implements
 	@override late final Translations$PerAppAndroidScreen$zh_TW PerAppAndroidScreen = Translations$PerAppAndroidScreen$zh_TW.internal(_root);
 	@override late final Translations$UserAgreementScreen$zh_TW UserAgreementScreen = Translations$UserAgreementScreen$zh_TW.internal(_root);
 	@override late final Translations$NetCheckScreen$zh_TW NetCheckScreen = Translations$NetCheckScreen$zh_TW.internal(_root);
+	@override late final Translations$SpeedTestScreen$zh_TW SpeedTestScreen = Translations$SpeedTestScreen$zh_TW.internal(_root);
 	@override late final Translations$VersionUpdateScreen$zh_TW VersionUpdateScreen = Translations$VersionUpdateScreen$zh_TW.internal(_root);
 	@override late final Translations$loginScreen$zh_TW loginScreen = Translations$loginScreen$zh_TW.internal(_root);
 	@override late final Translations$main$zh_TW main = Translations$main$zh_TW.internal(_root);
@@ -155,6 +156,38 @@ class Translations$NetCheckScreen$zh_TW implements Translations$NetCheckScreen$e
 	@override String get routeTableSection => '4. 路由表';
 }
 
+// Path: SpeedTestScreen
+class Translations$SpeedTestScreen$zh_TW implements Translations$SpeedTestScreen$en {
+	Translations$SpeedTestScreen$zh_TW.internal(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '網路測速';
+	@override String get startTest => '開始測速';
+	@override String get stopTest => '停止測速';
+	@override String get reTest => '重新測速';
+	@override String get ready => '準備就緒';
+	@override String get testingPing => '正在測試延遲與抖動...';
+	@override String get testingDownload => '正在測試下載頻寬...';
+	@override String get testingUpload => '正在測試上傳頻寬...';
+	@override String get completed => '測速完成';
+	@override String get stopped => '已停止';
+	@override String get ping => '延遲';
+	@override String get jitter => '抖動';
+	@override String get download => '下載速度';
+	@override String get upload => '上傳速度';
+	@override String get currentProxy => '當前代理';
+	@override String get directConnection => '直連模式';
+	@override String get server => '測速伺服器';
+	@override String get serverLocation => '伺服器位置';
+	@override String get realtimeSpeed => '即時頻寬曲線';
+	@override String get peakSpeed => '峰值速率';
+	@override String get avgSpeed => '平均速率';
+	@override String get testHistory => '測速歷史';
+	@override String get clearHistory => '清空歷史';
+}
+
 // Path: VersionUpdateScreen
 class Translations$VersionUpdateScreen$zh_TW implements Translations$VersionUpdateScreen$en {
 	Translations$VersionUpdateScreen$zh_TW.internal(this._root);
@@ -261,6 +294,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get latency => '延遲';
 	@override String get latencyTest => '延遲測速';
 	@override String get networkCheck => '網路檢測';
+	@override String get speedTest => '網路測速';
 	@override String get language => '語言';
 	@override String get next => '下一步';
 	@override String get done => '完成';
@@ -632,25 +666,25 @@ class Translations$main$tray$zh_TW implements Translations$main$tray$en {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get menuOpen => '開啟';
+	@override String get menuOpen => '顯示主視窗';
 	@override String get menuExit => '結束';
-	@override String get coreDisconnected => 'Wmimo · 核心未執行';
-	@override String get coreRunning => 'Wmimo · 核心執行中';
-	@override String get startProxy => '啟動代理連線';
-	@override String get stopProxy => '中斷代理連線';
-	@override String get restartCore => '重啟代理核心';
+	@override String get coreDisconnected => '未連線';
+	@override String get coreRunning => '已連線';
+	@override String get startProxy => '啟動連線';
+	@override String get stopProxy => '中斷連線';
+	@override String get restartCore => '重啟核心';
 	@override String get systemProxyItem => '系統代理';
 	@override String get tunModeItem => 'TUN 模式';
-	@override String get outboundMode => '出站模式';
-	@override String get modeRule => '規則分流';
-	@override String get modeGlobal => '全域代理';
-	@override String get modeDirect => '直接連線';
+	@override String get outboundMode => '代理模式';
+	@override String get modeRule => '規則模式';
+	@override String get modeGlobal => '全局模式';
+	@override String get modeDirect => '直連模式';
 	@override String get profilesMenu => '訂閱設定';
-	@override String get updateAllProfiles => '更新全部訂閱設定';
+	@override String get updateAllProfiles => '更新全部訂閱';
 	@override String get proxyNodes => '代理節點';
 	@override String get tools => '實用工具';
-	@override String get copyProxyCmd => '複製終端代理指令 (CMD / Bash)';
-	@override String get delayTestAll => '一鍵全節點延遲測速';
+	@override String get copyProxyCmd => '複製代理指令';
+	@override String get delayTestAll => '全節點測速';
 	@override String get openDashboard => '開啟控制面板';
 }
 
@@ -694,6 +728,29 @@ extension on TranslationsZhTw {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (經由代理,連接埠:${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN 未啟用',
 			'NetCheckScreen.routeTableSection' => '4. 路由表',
+			'SpeedTestScreen.title' => '網路測速',
+			'SpeedTestScreen.startTest' => '開始測速',
+			'SpeedTestScreen.stopTest' => '停止測速',
+			'SpeedTestScreen.reTest' => '重新測速',
+			'SpeedTestScreen.ready' => '準備就緒',
+			'SpeedTestScreen.testingPing' => '正在測試延遲與抖動...',
+			'SpeedTestScreen.testingDownload' => '正在測試下載頻寬...',
+			'SpeedTestScreen.testingUpload' => '正在測試上傳頻寬...',
+			'SpeedTestScreen.completed' => '測速完成',
+			'SpeedTestScreen.stopped' => '已停止',
+			'SpeedTestScreen.ping' => '延遲',
+			'SpeedTestScreen.jitter' => '抖動',
+			'SpeedTestScreen.download' => '下載速度',
+			'SpeedTestScreen.upload' => '上傳速度',
+			'SpeedTestScreen.currentProxy' => '當前代理',
+			'SpeedTestScreen.directConnection' => '直連模式',
+			'SpeedTestScreen.server' => '測速伺服器',
+			'SpeedTestScreen.serverLocation' => '伺服器位置',
+			'SpeedTestScreen.realtimeSpeed' => '即時頻寬曲線',
+			'SpeedTestScreen.peakSpeed' => '峰值速率',
+			'SpeedTestScreen.avgSpeed' => '平均速率',
+			'SpeedTestScreen.testHistory' => '測速歷史',
+			'SpeedTestScreen.clearHistory' => '清空歷史',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '新版本[${p}]已就緒',
 			'VersionUpdateScreen.update' => '重啟更新',
 			'VersionUpdateScreen.cancel' => '暫不更新',
@@ -717,25 +774,25 @@ extension on TranslationsZhTw {
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => '編碼/別名請向${_root.loginScreen.provider}索取\n${_root.loginScreen.provider}接入請參考:${p}',
 			'loginScreen.providerDisclaimer' => '免責聲明:${_root.loginScreen.provider}為第三方服務,與本App無關',
 			'loginScreen.createSessionFailed' => '建立工作階段失敗，請檢查服務商或帳號密碼',
-			'main.tray.menuOpen' => '開啟',
+			'main.tray.menuOpen' => '顯示主視窗',
 			'main.tray.menuExit' => '結束',
-			'main.tray.coreDisconnected' => 'Wmimo · 核心未執行',
-			'main.tray.coreRunning' => 'Wmimo · 核心執行中',
-			'main.tray.startProxy' => '啟動代理連線',
-			'main.tray.stopProxy' => '中斷代理連線',
-			'main.tray.restartCore' => '重啟代理核心',
+			'main.tray.coreDisconnected' => '未連線',
+			'main.tray.coreRunning' => '已連線',
+			'main.tray.startProxy' => '啟動連線',
+			'main.tray.stopProxy' => '中斷連線',
+			'main.tray.restartCore' => '重啟核心',
 			'main.tray.systemProxyItem' => '系統代理',
 			'main.tray.tunModeItem' => 'TUN 模式',
-			'main.tray.outboundMode' => '出站模式',
-			'main.tray.modeRule' => '規則分流',
-			'main.tray.modeGlobal' => '全域代理',
-			'main.tray.modeDirect' => '直接連線',
+			'main.tray.outboundMode' => '代理模式',
+			'main.tray.modeRule' => '規則模式',
+			'main.tray.modeGlobal' => '全局模式',
+			'main.tray.modeDirect' => '直連模式',
 			'main.tray.profilesMenu' => '訂閱設定',
-			'main.tray.updateAllProfiles' => '更新全部訂閱設定',
+			'main.tray.updateAllProfiles' => '更新全部訂閱',
 			'main.tray.proxyNodes' => '代理節點',
 			'main.tray.tools' => '實用工具',
-			'main.tray.copyProxyCmd' => '複製終端代理指令 (CMD / Bash)',
-			'main.tray.delayTestAll' => '一鍵全節點延遲測速',
+			'main.tray.copyProxyCmd' => '複製代理指令',
+			'main.tray.delayTestAll' => '全節點測速',
 			'main.tray.openDashboard' => '開啟控制面板',
 			'meta.enable' => '啟用',
 			'meta.disable' => '禁用',
@@ -785,6 +842,7 @@ extension on TranslationsZhTw {
 			'meta.latency' => '延遲',
 			'meta.latencyTest' => '延遲測速',
 			'meta.networkCheck' => '網路檢測',
+			'meta.speedTest' => '網路測速',
 			'meta.language' => '語言',
 			'meta.next' => '下一步',
 			'meta.done' => '完成',
