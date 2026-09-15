@@ -1,15 +1,31 @@
 #!/usr/bin/env bash
 set -e
 
-TAG="${1:-v1.0.35}"
-VERSION="${TAG#v}"
+# Extract version from argument, environment, or pubspec.yaml
+TAG="${1:-$TAG}"
+if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+  if [ -f "pubspec.yaml" ]; then
+    PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+    TAG="v${PUBSPEC_VER}"
+  else
+    TAG="v1.0.35"
+  fi
+fi
+
+# Ensure TAG starts with 'v'
+if [[ "$TAG" != v* ]]; then
+  TAG="v$TAG"
+fi
+
+RAW_VERSION="${TAG#v}"
+VERSION="$RAW_VERSION"
 BUNDLE_DIR="build/linux/x64/release/bundle"
 DIST_DIR="dist"
 
 mkdir -p "$DIST_DIR"
 
 echo "=========================================================="
-echo " Packaging Wmimo for all Linux Distributions ($TAG) "
+echo " Packaging Wmimo for all Linux Distributions ($TAG, version: $RAW_VERSION) "
 echo "=========================================================="
 
 # 0. Ensure Linux core service is copied & executable

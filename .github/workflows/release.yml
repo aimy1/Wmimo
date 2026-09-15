@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.0.33)'
+        description: 'Release Tag (e.g. v1.0.35)'
         required: false
-        default: 'v1.0.33'
+        default: 'v1.0.35'
 
 permissions:
   contents: write
@@ -51,11 +51,16 @@ jobs:
         shell: pwsh
         run: |
           $tag = "${{ github.event.inputs.tag_name }}"
-          if (-not $tag -or $tag -eq "") {
+          if (-not $tag -or $tag -eq "" -or $tag -eq "main") {
             $tag = "${{ github.ref_name }}"
           }
           if ($tag -eq "main" -or -not $tag -or $tag -eq "") {
-            $tag = "v1.0.33"
+            if (Test-Path "pubspec.yaml") {
+              $pubVer = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[0]
+              $tag = "v$pubVer"
+            } else {
+              $tag = "v1.0.35"
+            }
           }
 
           $releasePath = (Resolve-Path "build/windows/x64/runner/Release").Path
@@ -186,11 +191,18 @@ jobs:
       - name: Package Linux Artifacts (.deb & .tar.gz)
         run: |
           TAG="${{ github.event.inputs.tag_name }}"
-          if [ -z "$TAG" ]; then
-            TAG="${{ github.ref_name }}"
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+              TAG="${{ github.ref_name }}"
+            fi
           fi
-          if [ "$TAG" = "main" ] || [ -z "$TAG" ]; then
-            TAG="v1.0.33"
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [ -f "pubspec.yaml" ]; then
+              PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+              TAG="v${PUBSPEC_VER}"
+            else
+              TAG="v1.0.35"
+            fi
           fi
           chmod +x tool/package_linux.sh
           bash tool/package_linux.sh "$TAG"
@@ -252,11 +264,18 @@ jobs:
         run: |
           mkdir -p dist
           TAG="${{ github.event.inputs.tag_name }}"
-          if [ -z "$TAG" ]; then
-            TAG="${{ github.ref_name }}"
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+              TAG="${{ github.ref_name }}"
+            fi
           fi
-          if [ "$TAG" = "main" ] || [ -z "$TAG" ]; then
-            TAG="v1.0.33"
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [ -f "pubspec.yaml" ]; then
+              PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+              TAG="v${PUBSPEC_VER}"
+            else
+              TAG="v1.0.35"
+            fi
           fi
           
           if [ -f "build/app/outputs/flutter-apk/app-arm64-v8a-release.apk" ]; then
@@ -289,11 +308,17 @@ jobs:
         id: tag_info
         run: |
           TAG="${{ github.event.inputs.tag_name }}"
-          if [ -z "$TAG" ]; then
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
             if [[ "${{ github.ref }}" == refs/tags/* ]]; then
               TAG="${{ github.ref_name }}"
+            fi
+          fi
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [ -f "pubspec.yaml" ]; then
+              PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+              TAG="v${PUBSPEC_VER}"
             else
-              TAG="v1.0.33"
+              TAG="v1.0.35"
             fi
           fi
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT
