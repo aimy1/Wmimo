@@ -43,6 +43,7 @@ class TranslationsFa with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _Translations$PerAppAndroidScreen$fa PerAppAndroidScreen = _Translations$PerAppAndroidScreen$fa._(_root);
 	@override late final _Translations$UserAgreementScreen$fa UserAgreementScreen = _Translations$UserAgreementScreen$fa._(_root);
 	@override late final _Translations$NetCheckScreen$fa NetCheckScreen = _Translations$NetCheckScreen$fa._(_root);
+	@override late final _Translations$SpeedTestScreen$fa SpeedTestScreen = _Translations$SpeedTestScreen$fa._(_root);
 	@override late final _Translations$VersionUpdateScreen$fa VersionUpdateScreen = _Translations$VersionUpdateScreen$fa._(_root);
 	@override late final _Translations$loginScreen$fa loginScreen = _Translations$loginScreen$fa._(_root);
 	@override late final _Translations$main$fa main = _Translations$main$fa._(_root);
@@ -139,20 +140,52 @@ class _Translations$NetCheckScreen$fa implements Translations$NetCheckScreen$en 
 	final TranslationsFa _root; // ignore: unused_field
 
 	// Translations
-	@override String get enterDomain => 'لطفاً نام دامنه را وارد کنید';
+	@override String get enterDomain => 'لطفا یک دامنه وارد کنید';
 	@override String get checking => 'در حال بررسی...';
-	@override String aQueryFailed({required Object p}) => 'خطا در پرس‌وجوی A: ${p}';
-	@override String aaaaQueryFailed({required Object p}) => 'خطا در پرس‌وجوی AAAA: ${p}';
-	@override String get success => 'موفق';
+	@override String aQueryFailed({required Object p}) => 'خطای استعلام رکورد A: ${p}';
+	@override String aaaaQueryFailed({required Object p}) => 'خطای استعلام رکورد AAAA: ${p}';
+	@override String get success => 'موفقیت‌آمیز';
 	@override String get failed => 'ناموفق';
 	@override String get suspectedPollution => 'مشکوک به مسمومیت DNS';
 	@override String get domainLabel => 'دامنه';
 	@override String get checkButton => 'بررسی';
-	@override String get dnsSection => '1. پرس‌وجوی DNS';
-	@override String get directHttpSection => '2. HTTP (از طریق TUN، ابتدا TUN را فعال کنید)';
-	@override String proxyHttpSection({required Object p}) => '3. HTTP (از طریق پروکسی، پورت: ${p})';
+	@override String get dnsSection => '۱. استعلام DNS';
+	@override String get directHttpSection => '۲. HTTP (از طریق TUN، ابتدا TUN را فعال کنید)';
+	@override String proxyHttpSection({required Object p}) => '۳. HTTP (از طریق پروکسی، پورت: ${p})';
 	@override String get tunNotEnabled => 'TUN فعال نیست';
-	@override String get routeTableSection => '4. جدول مسیریابی';
+	@override String get routeTableSection => '۴. جدول مسیریابی';
+}
+
+// Path: SpeedTestScreen
+class _Translations$SpeedTestScreen$fa implements Translations$SpeedTestScreen$en {
+	_Translations$SpeedTestScreen$fa._(this._root);
+
+	final TranslationsFa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'تست سرعت';
+	@override String get startTest => 'شروع تست';
+	@override String get stopTest => 'توقف';
+	@override String get reTest => 'تست مجدد';
+	@override String get ready => 'آماده';
+	@override String get testingPing => 'در حال تست پینگ و نوسان...';
+	@override String get testingDownload => 'در حال تست سرعت دانلود...';
+	@override String get testingUpload => 'در حال تست سرعت آپلود...';
+	@override String get completed => 'تست تکمیل شد';
+	@override String get stopped => 'متوقف شد';
+	@override String get ping => 'پینگ';
+	@override String get jitter => 'نوسان (Jitter)';
+	@override String get download => 'دانلود';
+	@override String get upload => 'آپلود';
+	@override String get currentProxy => 'پروکسی فعلی';
+	@override String get directConnection => 'اتصال مستقیم';
+	@override String get server => 'سرور تست';
+	@override String get serverLocation => 'موقعیت سرور';
+	@override String get realtimeSpeed => 'نمودار لحظه‌ای سرعت';
+	@override String get peakSpeed => 'اوج سرعت';
+	@override String get avgSpeed => 'میانگین سرعت';
+	@override String get testHistory => 'تاریخچه تست';
+	@override String get clearHistory => 'پاک کردن تاریخچه';
 }
 
 // Path: VersionUpdateScreen
@@ -258,9 +291,10 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get connectTimeout => 'اتمام مهلت اتصال';
 	@override String get timeout => 'تایم اوت';
 	@override String get timeoutDuration => 'مدت زمان وقفه';
-	@override String get latency => 'تاخیر';
-	@override String get latencyTest => 'تست تأخیر و سرعت';
+	@override String get latency => 'پینگ';
+	@override String get latencyTest => 'تست پینگ';
 	@override String get networkCheck => 'بررسی شبکه';
+	@override String get speedTest => 'تست سرعت';
 	@override String get language => 'زبان';
 	@override String get next => 'بعدی';
 	@override String get done => 'انجام‌شد';
@@ -680,20 +714,43 @@ extension on TranslationsFa {
 			'PerAppAndroidScreen.whiteListModeTip' => 'وقتی فعال باشد: فقط برنامه‌هایی که انتخاب شده‌اند پروکسی می‌شوند؛ وقتی فعال نباشد: فقط برنامه‌هایی که انتخاب نشده‌اند پروکسی می‌شوند',
 			'UserAgreementScreen.privacyFirst' => 'حریم‌خصوصی شما اولویت دارد',
 			'UserAgreementScreen.agreeAndContinue' => 'پذیرفتن و ادامه',
-			'NetCheckScreen.enterDomain' => 'لطفاً نام دامنه را وارد کنید',
+			'NetCheckScreen.enterDomain' => 'لطفا یک دامنه وارد کنید',
 			'NetCheckScreen.checking' => 'در حال بررسی...',
-			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'خطا در پرس‌وجوی A: ${p}',
-			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'خطا در پرس‌وجوی AAAA: ${p}',
-			'NetCheckScreen.success' => 'موفق',
+			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'خطای استعلام رکورد A: ${p}',
+			'NetCheckScreen.aaaaQueryFailed' => ({required Object p}) => 'خطای استعلام رکورد AAAA: ${p}',
+			'NetCheckScreen.success' => 'موفقیت‌آمیز',
 			'NetCheckScreen.failed' => 'ناموفق',
 			'NetCheckScreen.suspectedPollution' => 'مشکوک به مسمومیت DNS',
 			'NetCheckScreen.domainLabel' => 'دامنه',
 			'NetCheckScreen.checkButton' => 'بررسی',
-			'NetCheckScreen.dnsSection' => '1. پرس‌وجوی DNS',
-			'NetCheckScreen.directHttpSection' => '2. HTTP (از طریق TUN، ابتدا TUN را فعال کنید)',
-			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (از طریق پروکسی، پورت: ${p})',
+			'NetCheckScreen.dnsSection' => '۱. استعلام DNS',
+			'NetCheckScreen.directHttpSection' => '۲. HTTP (از طریق TUN، ابتدا TUN را فعال کنید)',
+			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '۳. HTTP (از طریق پروکسی، پورت: ${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN فعال نیست',
-			'NetCheckScreen.routeTableSection' => '4. جدول مسیریابی',
+			'NetCheckScreen.routeTableSection' => '۴. جدول مسیریابی',
+			'SpeedTestScreen.title' => 'تست سرعت',
+			'SpeedTestScreen.startTest' => 'شروع تست',
+			'SpeedTestScreen.stopTest' => 'توقف',
+			'SpeedTestScreen.reTest' => 'تست مجدد',
+			'SpeedTestScreen.ready' => 'آماده',
+			'SpeedTestScreen.testingPing' => 'در حال تست پینگ و نوسان...',
+			'SpeedTestScreen.testingDownload' => 'در حال تست سرعت دانلود...',
+			'SpeedTestScreen.testingUpload' => 'در حال تست سرعت آپلود...',
+			'SpeedTestScreen.completed' => 'تست تکمیل شد',
+			'SpeedTestScreen.stopped' => 'متوقف شد',
+			'SpeedTestScreen.ping' => 'پینگ',
+			'SpeedTestScreen.jitter' => 'نوسان (Jitter)',
+			'SpeedTestScreen.download' => 'دانلود',
+			'SpeedTestScreen.upload' => 'آپلود',
+			'SpeedTestScreen.currentProxy' => 'پروکسی فعلی',
+			'SpeedTestScreen.directConnection' => 'اتصال مستقیم',
+			'SpeedTestScreen.server' => 'سرور تست',
+			'SpeedTestScreen.serverLocation' => 'موقعیت سرور',
+			'SpeedTestScreen.realtimeSpeed' => 'نمودار لحظه‌ای سرعت',
+			'SpeedTestScreen.peakSpeed' => 'اوج سرعت',
+			'SpeedTestScreen.avgSpeed' => 'میانگین سرعت',
+			'SpeedTestScreen.testHistory' => 'تاریخچه تست',
+			'SpeedTestScreen.clearHistory' => 'پاک کردن تاریخچه',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'نسخه جدید [${p}] آماده است',
 			'VersionUpdateScreen.update' => 'راه‌اندازی مجدد برای به‌روزرسانی',
 			'VersionUpdateScreen.cancel' => 'الان‌ نه',
@@ -782,9 +839,10 @@ extension on TranslationsFa {
 			'meta.connectTimeout' => 'اتمام مهلت اتصال',
 			'meta.timeout' => 'تایم اوت',
 			'meta.timeoutDuration' => 'مدت زمان وقفه',
-			'meta.latency' => 'تاخیر',
-			'meta.latencyTest' => 'تست تأخیر و سرعت',
+			'meta.latency' => 'پینگ',
+			'meta.latencyTest' => 'تست پینگ',
 			'meta.networkCheck' => 'بررسی شبکه',
+			'meta.speedTest' => 'تست سرعت',
 			'meta.language' => 'زبان',
 			'meta.next' => 'بعدی',
 			'meta.done' => 'انجام‌شد',
