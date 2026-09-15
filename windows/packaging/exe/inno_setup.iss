@@ -5,7 +5,7 @@
   #define MyAppName "Wmimo"
 #endif
 #ifndef MyAppVersion
-  #define MyAppVersion "1.0.34"
+  #define MyAppVersion "1.0.35"
 #endif
 #ifndef MyAppPublisher
   #define MyAppPublisher "aimy1"

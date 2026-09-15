@@ -24,7 +24,7 @@
 
 ---
 
-## Platform Support & Linux Multi-Distro Matrix
+## 📌 Platform Support & Linux Multi-Distro Matrix
 
 | Platform / Distro | Status | Supported Formats | Description |
 | :--- | :---: | :--- | :--- |
@@ -97,7 +97,7 @@ flutter build windows --release
 
 # Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.0.34
+bash tool/package_linux.sh v1.0.35
 
 # Android APK
 flutter build apk --release

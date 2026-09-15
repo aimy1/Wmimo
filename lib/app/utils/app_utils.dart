@@ -33,7 +33,7 @@ abstract final class AppUtils {
   }
 
   static String getBuildinVersion() {
-    return _cachedPackageVersion ?? "1.0.34.1421";
+    return _cachedPackageVersion ?? "1.0.35.1422";
   }
 
   static DateTime getBuildinVersionDate() {
