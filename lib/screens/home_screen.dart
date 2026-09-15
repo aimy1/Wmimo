@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen>
       _TabNavigator(
         navigatorKey: _navigatorKeys[0],
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen>
                     });
                   },
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -105,13 +105,13 @@ class _HomeScreenState extends State<HomeScreen>
       _TabNavigator(
         navigatorKey: _navigatorKeys[4],
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: const [
                 HomeScreenWidgetPart2(),
-                SizedBox(height: 24),
+                SizedBox(height: 20),
               ],
             ),
           ),
@@ -661,7 +661,7 @@ class _HomeScreenState extends State<HomeScreen>
                   children: [
                     // Left Sidebar Navigation (Clash Verge Style)
                     Container(
-                      width: 200,
+                      width: 180,
                       decoration: BoxDecoration(
                         color: isDark
                             ? const Color(0xFF0F172A)
@@ -678,7 +678,7 @@ class _HomeScreenState extends State<HomeScreen>
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 20, 16, 14),
+                            padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
                             child: Row(
                               children: [
                                 Image.asset(
