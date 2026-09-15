@@ -19,8 +19,8 @@ fi
 
 RAW_VERSION="${TAG#v}"
 if [ -z "$RAW_VERSION" ] || [ "$RAW_VERSION" = "v" ]; then
-  RAW_VERSION="1.0.35"
-  TAG="v1.0.35"
+  RAW_VERSION="1.1.0"
+  TAG="v1.1.0"
 fi
 VERSION="$RAW_VERSION"
 BUNDLE_DIR="build/linux/x64/release/bundle"
