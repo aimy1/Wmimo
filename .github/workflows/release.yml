@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.0.35)'
+        description: 'Release Tag (e.g. v1.1.0)'
         required: false
-        default: 'v1.0.35'
+        default: 'v1.1.0'
 
 permissions:
   contents: write
@@ -59,7 +59,7 @@ jobs:
               $pubVer = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[0]
               $tag = "v$pubVer"
             } else {
-              $tag = "v1.0.35"
+              $tag = "v1.1.0"
             }
           }
 
@@ -274,7 +274,7 @@ jobs:
               PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
               TAG="v${PUBSPEC_VER}"
             else
-              TAG="v1.0.35"
+              TAG="v1.1.0"
             fi
           fi
           
@@ -318,7 +318,7 @@ jobs:
               PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
               TAG="v${PUBSPEC_VER}"
             else
-              TAG="v1.0.35"
+              TAG="v1.1.0"
             fi
           fi
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT
