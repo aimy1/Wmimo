@@ -17,6 +17,7 @@ import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/modules/remote_config_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/runtime/return_result.dart';
+import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/backup_and_sync_utils.dart';
 import 'package:wmimo/app/utils/device_utils.dart';
 import 'package:wmimo/app/utils/did.dart';
@@ -647,6 +648,41 @@ class GroupHelper {
           ),
         ],
         if (AutoUpdateManager.isSupport()) ...[
+          GroupItemOptions(
+            pushOptions: GroupItemPushOptions(
+              name: tcontext.meta.autoUpdate,
+              icon: Icons.system_update_alt_rounded,
+              reddot: AutoUpdateManager.getVersionCheck().newVersion,
+              reddotColor: ThemeDefine.kColorAmber,
+              text: AutoUpdateManager.getVersionCheck().newVersion
+                  ? tcontext.meta.hasNewVersion(
+                      p: AutoUpdateManager.getVersionCheck().version,
+                    )
+                  : 'v${AppUtils.getBuildinVersion()}',
+              textColor: AutoUpdateManager.getVersionCheck().newVersion
+                  ? ThemeDefine.kColorAmber
+                  : null,
+              onPush: () async {
+                if (AutoUpdateManager.getVersionCheck().newVersion) {
+                  await GroupHelper.newVersionUpdate(context);
+                } else {
+                  await AutoUpdateManager.check(force: true);
+                  if (context.mounted) {
+                    final latest = AutoUpdateManager.getVersionCheck();
+                    if (latest.newVersion) {
+                      setstate?.call();
+                      await GroupHelper.newVersionUpdate(context);
+                    } else {
+                      DialogUtils.showAlertDialog(
+                        context,
+                        "已是最新版本 (v${AppUtils.getBuildinVersion()})",
+                      );
+                    }
+                  }
+                }
+              },
+            ),
+          ),
           GroupItemOptions(
             stringPickerOptions: GroupItemStringPickerOptions(
               name: tcontext.meta.updateChannel,

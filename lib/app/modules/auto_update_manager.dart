@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: unused_catch_stack, empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -167,6 +167,13 @@ class AutoUpdateManager {
   static void updateChannelChanged() {
     _versionCheck.clear();
     _check();
+  }
+
+  static Future<void> check({bool force = false}) async {
+    if (force) {
+      _versionCheck.latestCheck = "";
+    }
+    await _check();
   }
 
   static AutoUpdateCheckVersion getVersionCheck() {

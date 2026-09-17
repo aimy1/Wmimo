@@ -129,7 +129,14 @@ class _HomeScreenState extends State<HomeScreen>
       SchemeHandler.handle(context, url);
     };
     _initUrl = widget.launchUrl;
+    AutoUpdateManager.onEventCheck.add(_onAutoUpdateCheck);
     _init();
+  }
+
+  void _onAutoUpdateCheck() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -228,9 +235,6 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Future<void> _onInitAllFinish() async {
-    AutoUpdateManager.onEventCheck.add(() {
-      setState(() {});
-    });
     DialogUtils.faqCallback = (BuildContext context, String text) async {
       final tcontext = Translations.of(context);
       var remoteConfig = RemoteConfigManager.getConfig();
@@ -305,6 +309,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
+    AutoUpdateManager.onEventCheck.remove(_onAutoUpdateCheck);
     protocolHandler.removeListener(this);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -349,12 +354,40 @@ class _HomeScreenState extends State<HomeScreen>
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             child: Row(
               children: [
-                Icon(
-                  icon,
-                  size: 20,
-                  color: isSelected
-                      ? ThemeDefine.kColorBlue
-                      : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Icon(
+                      icon,
+                      size: 20,
+                      color: isSelected
+                          ? ThemeDefine.kColorBlue
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                    ),
+                    if (index == 4 && AutoUpdateManager.getVersionCheck().newVersion)
+                      Positioned(
+                        top: -2,
+                        right: -2,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFF3B30),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isDark ? const Color(0xFF0F172A) : Colors.white,
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFFFF3B30).withValues(alpha: 0.5),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -579,14 +612,43 @@ class _HomeScreenState extends State<HomeScreen>
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: Icon(
-                          isSelected ? item.selectedIcon : item.icon,
-                          size: 21,
-                          color: isSelected
-                              ? ThemeDefine.kColorBlue
-                              : (isDark
-                                  ? const Color(0xFF64748B)
-                                  : const Color(0xFF64748B)),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Icon(
+                              isSelected ? item.selectedIcon : item.icon,
+                              size: 21,
+                              color: isSelected
+                                  ? ThemeDefine.kColorBlue
+                                  : (isDark
+                                      ? const Color(0xFF64748B)
+                                      : const Color(0xFF64748B)),
+                            ),
+                            if (item.index == 4 && AutoUpdateManager.getVersionCheck().newVersion)
+                              Positioned(
+                                top: -2,
+                                right: -3,
+                                child: Container(
+                                  width: 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFF3B30),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: isDark ? const Color(0xFF0F172A) : Colors.white,
+                                      width: 1.5,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: const Color(0xFFFF3B30).withValues(alpha: 0.5),
+                                        blurRadius: 4,
+                                        spreadRadius: 0.5,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 2.5),
