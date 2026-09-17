@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
+import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/http_utils.dart';
@@ -43,13 +44,38 @@ class _AddProfilePatchByUrlScreenState
   final _textControllerRemark = TextEditingController();
   ProfilePatchFileType _type = ProfilePatchFileType.yaml;
   bool _loading = false;
+  String _lastAutoRemark = "";
 
   @override
   void initState() {
     ++AddProfilePatchByUrlScreen.pushed;
     _textControllerLink.text = widget.url.trim();
-    _textControllerRemark.text = widget.remark.trim();
+    if (widget.remark.trim().isNotEmpty) {
+      _textControllerRemark.text = widget.remark.trim();
+    } else if (widget.url.trim().isNotEmpty) {
+      final smart = ProfileManager.extractSmartRemark(widget.url.trim());
+      if (smart.isNotEmpty) {
+        _lastAutoRemark = smart;
+        _textControllerRemark.text = smart;
+      }
+    }
+    _textControllerLink.addListener(_onLinkChanged);
     super.initState();
+  }
+
+  void _onLinkChanged() {
+    final text = _textControllerLink.text.trim();
+    if (text.isEmpty) return;
+
+    final currentRemark = _textControllerRemark.text.trim();
+    if (currentRemark.isEmpty || currentRemark == _lastAutoRemark) {
+      final smart = ProfileManager.extractSmartRemark(text);
+      if (smart.isNotEmpty && smart != currentRemark) {
+        _lastAutoRemark = smart;
+        _textControllerRemark.text = smart;
+        setState(() {});
+      }
+    }
   }
 
   @override
@@ -58,6 +84,7 @@ class _AddProfilePatchByUrlScreenState
   @override
   void dispose() {
     --AddProfilePatchByUrlScreen.pushed;
+    _textControllerLink.removeListener(_onLinkChanged);
     _textControllerLink.dispose();
     _textControllerRemark.dispose();
     super.dispose();
@@ -67,6 +94,9 @@ class _AddProfilePatchByUrlScreenState
     final tcontext = Translations.of(context);
     String url = _textControllerLink.text.trim();
     String remark = _textControllerRemark.text.trim();
+    if (remark.isEmpty && url.isNotEmpty) {
+      remark = ProfileManager.extractSmartRemark(url);
+    }
     _loading = true;
     setState(() {});
 
