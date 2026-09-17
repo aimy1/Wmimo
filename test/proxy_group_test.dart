@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:libclash_vpn_service/vpn_service.dart';
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
+import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/subscription_converter.dart';
 
@@ -309,6 +310,63 @@ proxies:
       expect(parsed.any((n) => n.name == 'PASS'), isFalse);
       expect(parsed.any((n) => n.name == 'PASS-RULE'), isFalse);
       expect(parsed.any((n) => n.name == 'REJECT-DROP'), isFalse);
+    });
+  });
+
+  group('ProfileManager.extractSmartRemark tests', () {
+    test('Extracts remark from URL fragment with encoding', () {
+      expect(
+        ProfileManager.extractSmartRemark('https://sub.domain.com/link#%E6%88%91%E7%9A%84%E6%9C%BA%E5%9C%BA'),
+        equals('我的机场'),
+      );
+      expect(
+        ProfileManager.extractSmartRemark('https://sub.domain.com/sub#VIP-Airport'),
+        equals('VIP-Airport'),
+      );
+    });
+
+    test('Extracts remark from Clash/Scheme URL query parameters', () {
+      expect(
+        ProfileManager.extractSmartRemark('clash://install-config?url=https%3A%2F%2Fsub.com&name=%E6%9C%BA%E5%9C%BA1'),
+        equals('机场1'),
+      );
+      expect(
+        ProfileManager.extractSmartRemark('clash://install-config?url=https%3A%2F%2Fsub.com%23NestedRemark'),
+        equals('NestedRemark'),
+      );
+    });
+
+    test('Extracts remark from URL query name or title', () {
+      expect(
+        ProfileManager.extractSmartRemark('https://domain.com/sub?name=FastSub'),
+        equals('FastSub'),
+      );
+      expect(
+        ProfileManager.extractSmartRemark('https://domain.com/sub?title=MyTitle'),
+        equals('MyTitle'),
+      );
+    });
+
+    test('Extracts remark from host when no fragment or query exists', () {
+      expect(
+        ProfileManager.extractSmartRemark('https://sub.fastcloud.net/api/v1/client/subscribe?token=abc'),
+        equals('fastcloud.net'),
+      );
+      expect(
+        ProfileManager.extractSmartRemark('https://mysite.com/clash.yaml'),
+        equals('mysite.com'),
+      );
+    });
+
+    test('Extracts remark from node links', () {
+      expect(
+        ProfileManager.extractSmartRemark('vless://1234@1.1.1.1:443?type=ws#HongKong-Node-01'),
+        equals('HongKong-Node-01'),
+      );
+      expect(
+        ProfileManager.extractSmartRemark('ss://YWVzLTEyOC1nY206cGFzc3dvcmRAMS4yLjMuNDo4Mzg4#Tokyo-SS'),
+        equals('Tokyo-SS'),
+      );
     });
   });
 }
