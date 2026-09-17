@@ -391,6 +391,11 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get qrcodeScan => '扫描二维码';
 	@override String get qrcodeScanResult => '扫描结果';
 	@override String get qrcodeScanFromImage => '打开二维码图片';
+	@override String get qrcodeScanFromClipboard => '剪贴板识别';
+	@override String get qrcodeRecognized => '二维码识别成功';
+	@override String get qrcodeDropHint => '点击上方按钮截取屏幕或选择图片';
+	@override String get confirmImport => '确认导入';
+	@override String get reScan => '重新扫描';
 	@override String get qrcodeScanResultFailed => '解析图片失败,请确保截图为有效的二维码';
 	@override String get qrcodeScanResultEmpty => '扫描结果为空';
 	@override String get screenshot => '截图';
@@ -939,6 +944,11 @@ extension on TranslationsZhCn {
 			'meta.qrcodeScan' => '扫描二维码',
 			'meta.qrcodeScanResult' => '扫描结果',
 			'meta.qrcodeScanFromImage' => '打开二维码图片',
+			'meta.qrcodeScanFromClipboard' => '剪贴板识别',
+			'meta.qrcodeRecognized' => '二维码识别成功',
+			'meta.qrcodeDropHint' => '点击上方按钮截取屏幕或选择图片',
+			'meta.confirmImport' => '确认导入',
+			'meta.reScan' => '重新扫描',
 			'meta.qrcodeScanResultFailed' => '解析图片失败,请确保截图为有效的二维码',
 			'meta.qrcodeScanResultEmpty' => '扫描结果为空',
 			'meta.screenshot' => '截图',
