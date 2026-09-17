@@ -54,11 +54,22 @@ class _AddProfileByUrlScreenState
   String _decryptPassword = "";
   String _patch = "";
   bool _loading = false;
+  String _lastAutoRemark = "";
+
   @override
   void initState() {
     ++AddProfileByUrlScreen.pushed;
     _textControllerLink.text = widget.url.trim();
-    _textControllerRemark.text = widget.remark.trim();
+    if (widget.remark.trim().isNotEmpty) {
+      _textControllerRemark.text = widget.remark.trim();
+    } else if (widget.url.trim().isNotEmpty) {
+      final smart = ProfileManager.extractSmartRemark(widget.url.trim());
+      if (smart.isNotEmpty) {
+        _lastAutoRemark = smart;
+        _textControllerRemark.text = smart;
+      }
+    }
+    _textControllerLink.addListener(_onLinkChanged);
     var setting = SettingManager.getConfig();
     _userAgent = setting.userAgent();
     if (widget.overwrite == true) {
@@ -71,12 +82,28 @@ class _AddProfileByUrlScreenState
     super.initState();
   }
 
+  void _onLinkChanged() {
+    final text = _textControllerLink.text.trim();
+    if (text.isEmpty) return;
+
+    final currentRemark = _textControllerRemark.text.trim();
+    if (currentRemark.isEmpty || currentRemark == _lastAutoRemark) {
+      final smart = ProfileManager.extractSmartRemark(text);
+      if (smart.isNotEmpty && smart != currentRemark) {
+        _lastAutoRemark = smart;
+        _textControllerRemark.text = smart;
+        setState(() {});
+      }
+    }
+  }
+
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {}
 
   @override
   void dispose() {
     --AddProfileByUrlScreen.pushed;
+    _textControllerLink.removeListener(_onLinkChanged);
     _textControllerLink.dispose();
     _textControllerRemark.dispose();
     super.dispose();
@@ -86,6 +113,9 @@ class _AddProfileByUrlScreenState
     final tcontext = Translations.of(context);
     String url = _textControllerLink.text.trim();
     String remark = _textControllerRemark.text.trim();
+    if (remark.isEmpty && url.isNotEmpty) {
+      remark = ProfileManager.extractSmartRemark(url);
+    }
     _loading = true;
     setState(() {});
 
