@@ -391,6 +391,11 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get qrcodeScan => 'Escanear Código QR';
 	@override String get qrcodeScanResult => 'Resultado del Escaneo';
 	@override String get qrcodeScanFromImage => 'Escanear desde Imagen';
+	@override String get qrcodeScanFromClipboard => 'Desde Portapapeles';
+	@override String get qrcodeRecognized => 'Código QR Reconocido';
+	@override String get qrcodeDropHint => 'Haga clic arriba para capturar pantalla o seleccionar imagen';
+	@override String get confirmImport => 'Confirmar Importación';
+	@override String get reScan => 'Escanear de Nuevo';
 	@override String get qrcodeScanResultFailed => 'Error al analizar la imagen, asegúrese de que la captura sea un código QR válido';
 	@override String get qrcodeScanResultEmpty => 'El resultado del escaneo está vacío';
 	@override String get screenshot => 'Captura de pantalla';
@@ -939,6 +944,11 @@ extension on TranslationsEs {
 			'meta.qrcodeScan' => 'Escanear Código QR',
 			'meta.qrcodeScanResult' => 'Resultado del Escaneo',
 			'meta.qrcodeScanFromImage' => 'Escanear desde Imagen',
+			'meta.qrcodeScanFromClipboard' => 'Desde Portapapeles',
+			'meta.qrcodeRecognized' => 'Código QR Reconocido',
+			'meta.qrcodeDropHint' => 'Haga clic arriba para capturar pantalla o seleccionar imagen',
+			'meta.confirmImport' => 'Confirmar Importación',
+			'meta.reScan' => 'Escanear de Nuevo',
 			'meta.qrcodeScanResultFailed' => 'Error al analizar la imagen, asegúrese de que la captura sea un código QR válido',
 			'meta.qrcodeScanResultEmpty' => 'El resultado del escaneo está vacío',
 			'meta.screenshot' => 'Captura de pantalla',
