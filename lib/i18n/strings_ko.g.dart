@@ -391,6 +391,11 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get qrcodeScan => 'QR 코드 스캔';
 	@override String get qrcodeScanResult => '스캔 결과';
 	@override String get qrcodeScanFromImage => '이미지에서 스캔';
+	@override String get qrcodeScanFromClipboard => '클립보드에서 읽기';
+	@override String get qrcodeRecognized => 'QR 코드가 인식되었습니다';
+	@override String get qrcodeDropHint => '위 버튼을 클릭하여 화면 캡처 또는 이미지 선택';
+	@override String get confirmImport => '가져오기 확인';
+	@override String get reScan => '다시 스캔';
 	@override String get qrcodeScanResultFailed => '이미지 분석 실패. 스크린샷이 유효한 QR 코드인지 확인하십시오';
 	@override String get qrcodeScanResultEmpty => '스캔 결과가 비어 있습니다';
 	@override String get screenshot => '스크린샷';
@@ -939,6 +944,11 @@ extension on TranslationsKo {
 			'meta.qrcodeScan' => 'QR 코드 스캔',
 			'meta.qrcodeScanResult' => '스캔 결과',
 			'meta.qrcodeScanFromImage' => '이미지에서 스캔',
+			'meta.qrcodeScanFromClipboard' => '클립보드에서 읽기',
+			'meta.qrcodeRecognized' => 'QR 코드가 인식되었습니다',
+			'meta.qrcodeDropHint' => '위 버튼을 클릭하여 화면 캡처 또는 이미지 선택',
+			'meta.confirmImport' => '가져오기 확인',
+			'meta.reScan' => '다시 스캔',
 			'meta.qrcodeScanResultFailed' => '이미지 분석 실패. 스크린샷이 유효한 QR 코드인지 확인하십시오',
 			'meta.qrcodeScanResultEmpty' => '스캔 결과가 비어 있습니다',
 			'meta.screenshot' => '스크린샷',
