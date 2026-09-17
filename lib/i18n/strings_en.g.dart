@@ -848,6 +848,21 @@ class Translations$meta$en {
 	/// en: 'Scan From Image'
 	String get qrcodeScanFromImage => 'Scan From Image';
 
+	/// en: 'From Clipboard'
+	String get qrcodeScanFromClipboard => 'From Clipboard';
+
+	/// en: 'QR Code Recognized'
+	String get qrcodeRecognized => 'QR Code Recognized';
+
+	/// en: 'Click buttons above to capture screen or select an image'
+	String get qrcodeDropHint => 'Click buttons above to capture screen or select an image';
+
+	/// en: 'Confirm Import'
+	String get confirmImport => 'Confirm Import';
+
+	/// en: 'Scan Again'
+	String get reScan => 'Scan Again';
+
 	/// en: 'Failed to parse the image, please make sure the screenshot is a valid QR code'
 	String get qrcodeScanResultFailed => 'Failed to parse the image, please make sure the screenshot is a valid QR code';
 
@@ -1859,6 +1874,11 @@ extension on Translations {
 			'meta.qrcodeScan' => 'Scan QR Code',
 			'meta.qrcodeScanResult' => 'Scan Result',
 			'meta.qrcodeScanFromImage' => 'Scan From Image',
+			'meta.qrcodeScanFromClipboard' => 'From Clipboard',
+			'meta.qrcodeRecognized' => 'QR Code Recognized',
+			'meta.qrcodeDropHint' => 'Click buttons above to capture screen or select an image',
+			'meta.confirmImport' => 'Confirm Import',
+			'meta.reScan' => 'Scan Again',
 			'meta.qrcodeScanResultFailed' => 'Failed to parse the image, please make sure the screenshot is a valid QR code',
 			'meta.qrcodeScanResultEmpty' => 'Scan Result is empty',
 			'meta.screenshot' => 'Screenshot',
