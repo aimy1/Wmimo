@@ -35,8 +35,13 @@ if (Test-Path "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe") {
     $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
 }
 
-Write-Host "Compiling Inno Setup Installer for Windows x64 ($Tag)..." -ForegroundColor Cyan
-& $iscc "/DMyAppVersion=$Tag" "/DMyAppArch=x64" "/DSourceDir=$releasePath" "/DOutputDir=$distPath" packaging/windows/setup.iss
+if (-not $Tag.StartsWith("v")) {
+    $Tag = "v$Tag"
+}
+$rawVer = $Tag.TrimStart('v')
+
+Write-Host "Compiling Inno Setup Installer for Windows x64 ($Tag, rawVersion: $rawVer)..." -ForegroundColor Cyan
+& $iscc "/DMyAppVersion=$rawVer" "/DMyAppArch=x64" "/DSourceDir=$releasePath" "/DOutputDir=$distPath" packaging/windows/setup.iss
 
 Write-Host "Creating Portable Zip archive..." -ForegroundColor Cyan
 $zipName = "Wmimo-Windows-x64-$Tag.zip"

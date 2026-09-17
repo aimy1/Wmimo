@@ -6,7 +6,7 @@
 #endif
 
 #ifndef MyAppVersion
-  #define MyAppVersion "1.0.35"
+  #define MyAppVersion "1.1.3"
 #endif
 
 #ifndef MyAppPublisher
@@ -50,7 +50,7 @@ DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputDir={#OutputDir}
-OutputBaseFilename=Wmimo-Windows-{#MyAppArch}-Setup-{#MyAppVersion}
+OutputBaseFilename=Wmimo-Windows-{#MyAppArch}-Setup-v{#MyAppVersion}
 SetupIconFile=..\..\windows\runner\resources\app_icon.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/ultra64
