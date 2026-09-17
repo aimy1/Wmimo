@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: unused_catch_stack, empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -129,7 +129,23 @@ class ProfilePatchSetting {
     if (id == kProfilePatchBuildinNoOverwrite) {
       return tcontext.profilePatchMode.noOverwrite;
     }
-    return remark.isEmpty ? id : remark;
+    if (remark.trim().isNotEmpty) {
+      return remark.trim();
+    }
+    if (url.isNotEmpty) {
+      final uri = Uri.tryParse(url);
+      if (uri != null) {
+        if (uri.fragment.isNotEmpty) {
+          try {
+            return Uri.decodeComponent(uri.fragment);
+          } catch (_) {}
+        }
+        if (uri.host.isNotEmpty) {
+          return uri.host;
+        }
+      }
+    }
+    return id.replaceAll('.yaml', '').replaceAll('.js', '');
   }
 
   ProfilePatchSetting clone() {
@@ -473,6 +489,19 @@ class ProfilePatchManager {
     if (!await file.exists()) {
       return ReturnResultError("file not exist: $filePath");
     }
+
+    if (remark.trim().isEmpty) {
+      remark = path.basenameWithoutExtension(filePath);
+      if (remark.trim().isEmpty) {
+        final now = DateTime.now();
+        remark =
+            "Patch-${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}";
+      }
+    }
+    if (remark.length > kRemarkMaxLength) {
+      remark = remark.substring(0, kRemarkMaxLength);
+    }
+
     try {
       await file.copy(savePath);
       int index = _config.profiles.indexWhere((value) {
@@ -559,13 +588,38 @@ class ProfilePatchManager {
       await FileUtils.append(savePath, "\n$urlComment$url\n");
     }
 
-    if (remark.isEmpty) {
-      final result = await HttpUtils.httpGetTitle(url, userAgent);
-      if (result.data == null || result.data!.length > 32) {
-        remark = uri.host;
-      } else {
-        remark = result.data!;
+    if (remark.trim().isEmpty) {
+      if (uri.fragment.isNotEmpty) {
+        try {
+          remark = Uri.decodeComponent(uri.fragment).trim();
+        } catch (_) {
+          remark = uri.fragment.trim();
+        }
       }
+    }
+    if (remark.trim().isEmpty) {
+      for (var key in ["name", "title", "remark", "tag"]) {
+        final val = uri.queryParameters[key];
+        if (val != null && val.trim().isNotEmpty) {
+          try {
+            remark = Uri.decodeComponent(val.trim());
+            break;
+          } catch (_) {}
+        }
+      }
+    }
+    if (remark.trim().isEmpty) {
+      final result = await HttpUtils.httpGetTitle(url, userAgent);
+      if (result.data != null &&
+          result.data!.isNotEmpty &&
+          result.data!.length <= kRemarkMaxLength) {
+        remark = result.data!;
+      } else {
+        remark = uri.host;
+      }
+    }
+    if (remark.length > kRemarkMaxLength) {
+      remark = remark.substring(0, kRemarkMaxLength);
     }
 
     int index = _config.profiles.indexWhere((value) {
