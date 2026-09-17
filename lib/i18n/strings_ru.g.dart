@@ -391,6 +391,11 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get qrcodeScan => 'Сканировать QR-код';
 	@override String get qrcodeScanResult => 'Результат сканирования';
 	@override String get qrcodeScanFromImage => 'Открыть';
+	@override String get qrcodeScanFromClipboard => 'Из буфера обмена';
+	@override String get qrcodeRecognized => 'QR-код успешно распознан';
+	@override String get qrcodeDropHint => 'Нажмите кнопки выше, чтобы сделать снимок экрана или выбрать изображение';
+	@override String get confirmImport => 'Подтвердить импорт';
+	@override String get reScan => 'Сканировать снова';
 	@override String get qrcodeScanResultFailed => 'Не удалось проанализировать изображение. Убедитесь, что снимок экрана представляет собой действительный QR-код.';
 	@override String get qrcodeScanResultEmpty => 'Пустой результат сканирования.';
 	@override String get screenshot => 'Скриншот';
@@ -939,6 +944,11 @@ extension on TranslationsRu {
 			'meta.qrcodeScan' => 'Сканировать QR-код',
 			'meta.qrcodeScanResult' => 'Результат сканирования',
 			'meta.qrcodeScanFromImage' => 'Открыть',
+			'meta.qrcodeScanFromClipboard' => 'Из буфера обмена',
+			'meta.qrcodeRecognized' => 'QR-код успешно распознан',
+			'meta.qrcodeDropHint' => 'Нажмите кнопки выше, чтобы сделать снимок экрана или выбрать изображение',
+			'meta.confirmImport' => 'Подтвердить импорт',
+			'meta.reScan' => 'Сканировать снова',
 			'meta.qrcodeScanResultFailed' => 'Не удалось проанализировать изображение. Убедитесь, что снимок экрана представляет собой действительный QR-код.',
 			'meta.qrcodeScanResultEmpty' => 'Пустой результат сканирования.',
 			'meta.screenshot' => 'Скриншот',
