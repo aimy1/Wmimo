@@ -391,6 +391,11 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get qrcodeScan => 'مسح رمز الاستجابة السريعة';
 	@override String get qrcodeScanResult => 'نتيجة المسح';
 	@override String get qrcodeScanFromImage => 'مسح من الصورة';
+	@override String get qrcodeScanFromClipboard => 'من الحافظة';
+	@override String get qrcodeRecognized => 'تم التعرف على رمز الاستجابة السريعة';
+	@override String get qrcodeDropHint => 'انقر فوق الأزرار أعلاه لالتقاط الشاشة أو تحديد صورة';
+	@override String get confirmImport => 'تأكيد الاستيراد';
+	@override String get reScan => 'إعادة المسح';
 	@override String get qrcodeScanResultFailed => 'فشل في تحليل الصورة ، يرجى التأكد من أن لقطة الشاشة هي رمز QR صالح';
 	@override String get qrcodeScanResultEmpty => 'نتيجة الفحص فارغة';
 	@override String get screenshot => 'لقطة شاشة';
@@ -939,6 +944,11 @@ extension on TranslationsAr {
 			'meta.qrcodeScan' => 'مسح رمز الاستجابة السريعة',
 			'meta.qrcodeScanResult' => 'نتيجة المسح',
 			'meta.qrcodeScanFromImage' => 'مسح من الصورة',
+			'meta.qrcodeScanFromClipboard' => 'من الحافظة',
+			'meta.qrcodeRecognized' => 'تم التعرف على رمز الاستجابة السريعة',
+			'meta.qrcodeDropHint' => 'انقر فوق الأزرار أعلاه لالتقاط الشاشة أو تحديد صورة',
+			'meta.confirmImport' => 'تأكيد الاستيراد',
+			'meta.reScan' => 'إعادة المسح',
 			'meta.qrcodeScanResultFailed' => 'فشل في تحليل الصورة ، يرجى التأكد من أن لقطة الشاشة هي رمز QR صالح',
 			'meta.qrcodeScanResultEmpty' => 'نتيجة الفحص فارغة',
 			'meta.screenshot' => 'لقطة شاشة',
