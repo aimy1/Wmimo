@@ -200,7 +200,16 @@ class ProfileSetting {
   }
 
   String getShowName() {
-    return remark.isEmpty ? id : remark;
+    if (remark.trim().isNotEmpty) {
+      return remark.trim();
+    }
+    if (url.isNotEmpty) {
+      final smart = ProfileManager.extractSmartRemark(url);
+      if (smart.isNotEmpty && !smart.startsWith("Sub-")) {
+        return smart;
+      }
+    }
+    return id.replaceAll('.yaml', '').replaceAll('.json', '').replaceAll('.conf', '');
   }
 
   void updateSubscriptionTraffic(HttpHeaders? header) {
@@ -542,6 +551,131 @@ class ProfileManager {
     return _config.profiles;
   }
 
+  static String extractSmartRemark(String input) {
+    var raw = input.trim();
+    if (raw.isEmpty) {
+      return "";
+    }
+
+    // 1. Clash / Scheme URLs (clash://install-config?url=...&name=...)
+    if (raw.startsWith("clash://") ||
+        raw.startsWith("clashmeta://") ||
+        raw.startsWith("wmimo://") ||
+        raw.startsWith("sing-box://")) {
+      try {
+        final qIndex = raw.indexOf('?');
+        if (qIndex != -1) {
+          final queryStr = raw.substring(qIndex + 1);
+          final params = Uri.splitQueryString(queryStr);
+          final nameParam = params["name"] ?? params["title"] ?? params["remark"];
+          if (nameParam != null && nameParam.trim().isNotEmpty) {
+            String decodedName;
+            try {
+              decodedName = Uri.decodeComponent(nameParam.trim());
+            } catch (_) {
+              decodedName = nameParam.trim();
+            }
+            if (decodedName.trim().isNotEmpty) {
+              final res = decodedName.trim();
+              return res.length > kRemarkMaxLength
+                  ? res.substring(0, kRemarkMaxLength)
+                  : res;
+            }
+          }
+          var innerUrl = params["url"];
+          if (innerUrl != null && innerUrl.isNotEmpty) {
+            try {
+              raw = Uri.decodeComponent(innerUrl.trim());
+            } catch (_) {
+              raw = innerUrl.trim();
+            }
+          }
+        }
+      } catch (_) {}
+    }
+
+    // 2. HTTP / HTTPS URLs
+    if (raw.startsWith("http://") || raw.startsWith("https://")) {
+      try {
+        // P1: Check URL Fragment (#...)
+        final hashIndex = raw.indexOf('#');
+        if (hashIndex != -1) {
+          final frag = raw.substring(hashIndex + 1).trim();
+          if (frag.isNotEmpty) {
+            String decodedFrag;
+            try {
+              decodedFrag = Uri.decodeComponent(frag);
+            } catch (_) {
+              decodedFrag = frag;
+            }
+            if (decodedFrag.trim().isNotEmpty) {
+              final res = decodedFrag.trim();
+              return res.length > kRemarkMaxLength
+                  ? res.substring(0, kRemarkMaxLength)
+                  : res;
+            }
+          }
+        }
+
+        // P2: Check Query Parameters (name, title, remark, tag, profile)
+        final uri = Uri.tryParse(raw);
+        if (uri != null) {
+          for (var key in ["name", "title", "remark", "tag", "profile", "config"]) {
+            final val = uri.queryParameters[key];
+            if (val != null && val.trim().isNotEmpty) {
+              String decodedVal;
+              try {
+                decodedVal = Uri.decodeComponent(val.trim());
+              } catch (_) {
+                decodedVal = val.trim();
+              }
+              if (decodedVal.isNotEmpty) {
+                return decodedVal.length > kRemarkMaxLength
+                    ? decodedVal.substring(0, kRemarkMaxLength)
+                    : decodedVal;
+              }
+            }
+          }
+
+          // P3: Extract Host / Domain
+          if (uri.host.isNotEmpty) {
+            var host = uri.host;
+            final parts = host.split('.');
+            if (parts.length >= 3) {
+              final first = parts[0].toLowerCase();
+              if (["sub", "subscribe", "api", "client", "app", "node", "link", "vip"].contains(first)) {
+                host = parts.sublist(1).join('.');
+              }
+            }
+            if (host.isNotEmpty) {
+              return host.length > kRemarkMaxLength
+                  ? host.substring(0, kRemarkMaxLength)
+                  : host;
+            }
+          }
+        }
+      } catch (_) {}
+    }
+
+    // 3. Single / Multi Node URIs (vmess://, vless://, ss://, trojan://, etc.)
+    final lines = raw.split('\n');
+    for (var line in lines) {
+      final trimmed = line.trim();
+      if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
+      final node = SubscriptionConverter.parseNodeUri(trimmed);
+      if (node != null && node['name'] != null && node['name'].toString().trim().isNotEmpty) {
+        var nodeName = node['name'].toString().trim();
+        return nodeName.length > kRemarkMaxLength
+            ? nodeName.substring(0, kRemarkMaxLength)
+            : nodeName;
+      }
+    }
+
+    // 4. Default Date Fallback
+    final now = DateTime.now();
+    return "Sub-${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}";
+  }
+
   static Future<ReturnResultError?> addLocal(
     String filePath, {
     String remark = "",
@@ -552,6 +686,19 @@ class ProfileManager {
     if (!await file.exists()) {
       return ReturnResultError("file not exist: $filePath");
     }
+
+    if (remark.trim().isEmpty) {
+      remark = path.basenameWithoutExtension(filePath);
+      if (remark.trim().isEmpty) {
+        final now = DateTime.now();
+        remark =
+            "Local-${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}";
+      }
+    }
+    if (remark.length > kRemarkMaxLength) {
+      remark = remark.substring(0, kRemarkMaxLength);
+    }
+
     try {
       await file.copy(savePath);
       int index = _config.profiles.indexWhere((value) {
@@ -622,10 +769,16 @@ class ProfileManager {
 
     final id = "${rawContent.hashCode.abs()}.yaml";
     final savePath = path.join(await PathUtils.profilesDir(), id);
-    if (remark.isEmpty) {
+    if (remark.trim().isEmpty) {
+      remark = extractSmartRemark(rawContent);
+    }
+    if (remark.trim().isEmpty) {
       final now = DateTime.now();
       remark =
           "Imported-${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}";
+    }
+    if (remark.length > kRemarkMaxLength) {
+      remark = remark.substring(0, kRemarkMaxLength);
     }
 
     try {
@@ -746,7 +899,14 @@ class ProfileManager {
           updateIntervalByProfile = Duration(hours: hours);
         }
       }
-      if (remark.isEmpty) {
+      if (remark.trim().isEmpty) {
+        // P1: Check URL smart remark (fragment / query)
+        final smart = extractSmartRemark(url);
+        if (smart.isNotEmpty && !smart.startsWith("Sub-")) {
+          remark = smart;
+        }
+      }
+      if (remark.trim().isEmpty) {
         final profileTitle = result.data!.value("profile-title");
         if (profileTitle != null && profileTitle.isNotEmpty) {
           if (profileTitle.startsWith("base64:")) {
@@ -764,17 +924,20 @@ class ProfileManager {
               remark = profileTitle;
             }
           }
-          if (remark.length > kRemarkMaxLength) {
-            remark = remark.substring(0, kRemarkMaxLength);
-          }
         }
       }
     }
-    if (remark.isEmpty) {
+    if (remark.trim().isEmpty) {
       final result = await HttpUtils.httpGetTitle(url, userAgent);
       if (result.data != null && result.data!.isNotEmpty) {
         remark = result.data!;
       }
+    }
+    if (remark.trim().isEmpty) {
+      remark = extractSmartRemark(url);
+    }
+    if (remark.length > kRemarkMaxLength) {
+      remark = remark.substring(0, kRemarkMaxLength);
     }
 
     await FileUtils.append(savePath, "\n$urlComment$url\n");
