@@ -1,5 +1,5 @@
 param (
-    [string]$Tag = "v1.1.2"
+    [string]$Tag = "v1.1.3"
 )
 
 $ErrorActionPreference = "Stop"
@@ -9,7 +9,7 @@ if (-not $Tag -or $Tag -eq "" -or $Tag -eq "main") {
         $pubVer = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[0]
         $Tag = "v$pubVer"
     } else {
-        $Tag = "v1.1.2"
+        $Tag = "v1.1.3"
     }
 }
 

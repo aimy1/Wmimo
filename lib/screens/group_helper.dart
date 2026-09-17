@@ -506,18 +506,6 @@ class GroupHelper {
         ),
         GroupItemOptions(
           pushOptions: GroupItemPushOptions(
-            name: tcontext.meta.htmlTools,
-            onPush: () async {
-              var remoteConfig = RemoteConfigManager.getConfig();
-              await UrlLauncherUtils.loadUrl(
-                remoteConfig.htmlTools,
-                mode: LaunchMode.externalApplication,
-              );
-            },
-          ),
-        ),
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
             name: tcontext.meta.submitFeedback,
             text: "Issues",
             onPush: () async {
