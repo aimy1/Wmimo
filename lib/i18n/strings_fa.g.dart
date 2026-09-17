@@ -391,6 +391,11 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get qrcodeScan => 'اسکن QRکد';
 	@override String get qrcodeScanResult => 'نتایج اسکن';
 	@override String get qrcodeScanFromImage => 'اسکن از عکس';
+	@override String get qrcodeScanFromClipboard => 'از کلیپ‌بورد';
+	@override String get qrcodeRecognized => 'کد QR با موفقیت شناسایی شد';
+	@override String get qrcodeDropHint => 'برای عکس‌برداری یا انتخاب تصویر، دکمه‌های بالا را کلیک کنید';
+	@override String get confirmImport => 'تأیید واردسازی';
+	@override String get reScan => 'اسکن مجدد';
 	@override String get qrcodeScanResultFailed => 'تجزیه عکس ناموفق بود، لطفا مطمعن شوید اسکرین‌شات یک کدQR معتبر است';
 	@override String get qrcodeScanResultEmpty => 'نتیجه اسکن خالی است';
 	@override String get screenshot => 'اسکرین‌شات';
@@ -939,6 +944,11 @@ extension on TranslationsFa {
 			'meta.qrcodeScan' => 'اسکن QRکد',
 			'meta.qrcodeScanResult' => 'نتایج اسکن',
 			'meta.qrcodeScanFromImage' => 'اسکن از عکس',
+			'meta.qrcodeScanFromClipboard' => 'از کلیپ‌بورد',
+			'meta.qrcodeRecognized' => 'کد QR با موفقیت شناسایی شد',
+			'meta.qrcodeDropHint' => 'برای عکس‌برداری یا انتخاب تصویر، دکمه‌های بالا را کلیک کنید',
+			'meta.confirmImport' => 'تأیید واردسازی',
+			'meta.reScan' => 'اسکن مجدد',
 			'meta.qrcodeScanResultFailed' => 'تجزیه عکس ناموفق بود، لطفا مطمعن شوید اسکرین‌شات یک کدQR معتبر است',
 			'meta.qrcodeScanResultEmpty' => 'نتیجه اسکن خالی است',
 			'meta.screenshot' => 'اسکرین‌شات',
