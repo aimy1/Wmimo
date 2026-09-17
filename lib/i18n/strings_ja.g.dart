@@ -391,6 +391,11 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get qrcodeScan => 'QRコードをスキャン';
 	@override String get qrcodeScanResult => 'スキャン結果';
 	@override String get qrcodeScanFromImage => '画像からスキャン';
+	@override String get qrcodeScanFromClipboard => 'クリップボードから読取';
+	@override String get qrcodeRecognized => 'QRコードを認識しました';
+	@override String get qrcodeDropHint => '上のボタンをクリックして画面キャプチャまたは画像を選択';
+	@override String get confirmImport => 'インポートを確認';
+	@override String get reScan => '再スキャン';
 	@override String get qrcodeScanResultFailed => '画像の解析に失敗しました。スクリーンショットが有効なQRコードであることを確認してください';
 	@override String get qrcodeScanResultEmpty => 'スキャン結果が空です';
 	@override String get screenshot => 'スクリーンショット';
@@ -939,6 +944,11 @@ extension on TranslationsJa {
 			'meta.qrcodeScan' => 'QRコードをスキャン',
 			'meta.qrcodeScanResult' => 'スキャン結果',
 			'meta.qrcodeScanFromImage' => '画像からスキャン',
+			'meta.qrcodeScanFromClipboard' => 'クリップボードから読取',
+			'meta.qrcodeRecognized' => 'QRコードを認識しました',
+			'meta.qrcodeDropHint' => '上のボタンをクリックして画面キャプチャまたは画像を選択',
+			'meta.confirmImport' => 'インポートを確認',
+			'meta.reScan' => '再スキャン',
 			'meta.qrcodeScanResultFailed' => '画像の解析に失敗しました。スクリーンショットが有効なQRコードであることを確認してください',
 			'meta.qrcodeScanResultEmpty' => 'スキャン結果が空です',
 			'meta.screenshot' => 'スクリーンショット',
