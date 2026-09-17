@@ -391,6 +391,11 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get qrcodeScan => '掃描二維碼';
 	@override String get qrcodeScanResult => '掃描結果';
 	@override String get qrcodeScanFromImage => '打開二維碼圖片';
+	@override String get qrcodeScanFromClipboard => '剪貼簿識別';
+	@override String get qrcodeRecognized => '二維碼識別成功';
+	@override String get qrcodeDropHint => '點擊上方按鈕擷取螢幕或選取圖片';
+	@override String get confirmImport => '確認匯入';
+	@override String get reScan => '重新掃描';
 	@override String get qrcodeScanResultFailed => '解析圖片失敗,請確保截圖為有效的二維碼';
 	@override String get qrcodeScanResultEmpty => '掃描結果為空';
 	@override String get screenshot => '截圖';
@@ -939,6 +944,11 @@ extension on TranslationsZhTw {
 			'meta.qrcodeScan' => '掃描二維碼',
 			'meta.qrcodeScanResult' => '掃描結果',
 			'meta.qrcodeScanFromImage' => '打開二維碼圖片',
+			'meta.qrcodeScanFromClipboard' => '剪貼簿識別',
+			'meta.qrcodeRecognized' => '二維碼識別成功',
+			'meta.qrcodeDropHint' => '點擊上方按鈕擷取螢幕或選取圖片',
+			'meta.confirmImport' => '確認匯入',
+			'meta.reScan' => '重新掃描',
 			'meta.qrcodeScanResultFailed' => '解析圖片失敗,請確保截圖為有效的二維碼',
 			'meta.qrcodeScanResultEmpty' => '掃描結果為空',
 			'meta.screenshot' => '截圖',
