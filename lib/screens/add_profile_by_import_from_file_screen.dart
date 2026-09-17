@@ -46,6 +46,9 @@ class _AddProfileByImportFromFileScreenState
     final tcontext = Translations.of(context);
 
     String text = _textControllerRemark.text.trim();
+    if (text.isEmpty && _filePath.isNotEmpty) {
+      text = path.basenameWithoutExtension(_filePath);
+    }
 
     final error = await ProfileManager.addLocal(_filePath, remark: text);
 
@@ -211,10 +214,11 @@ class _AddProfileByImportFromFileScreenState
           return;
         }
         _filePath = fresult.files.first.path!;
-
+        final baseName =
+            path.basenameWithoutExtension(fresult.files.first.name);
         if (_textControllerRemark.text.isEmpty) {
           _textControllerRemark.value = _textControllerRemark.value.copyWith(
-            text: fresult.files.first.name,
+            text: baseName,
           );
           setState(() {});
         }
