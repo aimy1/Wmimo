@@ -11,8 +11,8 @@
 
 <div align="center">
   <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>Современный кроссплатформенный GUI-клиент Clash / Mihomo</h3>
-  <p>Создан на базе Flutter и ядра Mihomo, обеспечивая сверхбыструю, элегантную и мощную работу с прокси.</p>
+  <h3>Современный кроссплатформенный GUI-клиент прокси Clash / Mihomo</h3>
+  <p>Создан на Flutter с ядром Mihomo, обеспечивая сверхбыстрый, элегантный и мощный прокси-сервис.</p>
 
   <p>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
@@ -20,41 +20,35 @@
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
   </p>
+
+  <br/>
+  <img src="docs/preview.png" alt="Wmimo Интерфейс" width="380" />
+  <br/>
+  <sub><em>✨ Эстетика микро-карточек 18px, мониторинг трафика в реальном времени и диагностика сети</em></sub>
 </div>
 
 ---
 
-## 📌 Поддержка платформ
+## 📌 Поддержка платформ и дистрибутивов Linux
 
-| Платформа | Статус | Форматы пакетов | Описание |
+| Платформа | Статус | Формат пакетов | Описание |
 | :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Готово** | Установщик (`.exe`) и Портативная версия (`.zip`) | Боковая панель, трей с мониторингом скорости, TUN-режим, автообновление. |
-| 🐧 **Linux** | ✅ **Готово** | Пакет Debian (`.deb`) и Архив (`.tar.gz`) | Нативный интерфейс GTK3, интеграция с треем, встроенное ядро Mihomo. |
-| 📱 **Android** | ✅ **Готово** | Универсальный APK и раздельные ABI | Драйвер VpnService, оптимизированный интерфейс. |
-| 🍎 **macOS** | 🚧 **В разработке** | DMG | Адаптация NetworkExtension. |
-| 🍏 **iOS** | 🚧 **В разработке** | IPA | Адаптация NetworkExtension. |
+| 🪟 **Windows** | ✅ **Готово** | Установщик (`.exe`) и Portable (`.zip`) | Боковая панель, меню в трее, график трафика, режим TUN, автообновление. |
+| 🐧 **Linux** | ✅ **Готово** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), Portable (`.tar.gz`) | Нативный интерфейс GTK3, интеграция с системным треем, встроенное ядро Mihomo. |
+| 📱 **Android** | ✅ **Готово** | Universal APK и Split ABIs | Интеграция VpnService, постоянная подпись Release, адаптивный интерфейс. |
+| 🍎 **macOS** | 🚧 **В разработке** | DMG установщик | Адаптация NetworkExtension в процессе. |
+| 🍏 **iOS** | 🚧 **В разработке** | IPA | Интеграция NetworkExtension. |
 
 ---
 
-## ✨ Основные возможности
+## 💖 Поддержка и донаты
 
-- 🎨 **Современный интерфейс**: Светлая и темная темы, адаптивный дизайн (мобильный и десктопный интерфейс).
-- ⚡ **Ядро Mihomo**: Поддержка Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard.
-- 🔀 **Системный трей**: Скорость сети в реальном времени, переключение режимов (Rule/Global/Direct), тест задержки.
-- 📊 **Мониторинг трафика**: Плавный график трафика, карточка IP/ISP в реальном времени, сворачиваемые группы прокси.
-- 🚀 **Автообновление**: Каналы `stable` и `beta` с фоновой загрузкой и проверкой SHA-256.
-- 🌍 **9 языков**: Русский, Английский, Китайский, Японский, Корейский, Испанский, Арабский, Персидский.
-
----
-
-## 💖 Поддержать проект
-
-- **Валюта**: `USDT`
-- **Сеть**: `APTOS`
-- **Адрес кошелька**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
+- **Валюта (Token)**: `USDT`
+- **Сеть (Network)**: `APTOS`
+- **Адрес (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
 
 ---
 
 ## 📄 Лицензия
 
-Проект распространяется под лицензией **GPL-3.0**.
+Проект распространяется под лицензией **GPL-3.0**. См. файл [LICENSE](LICENSE).

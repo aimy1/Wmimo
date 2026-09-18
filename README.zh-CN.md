@@ -20,6 +20,11 @@
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
   </p>
+
+  <br/>
+  <img src="docs/preview.png" alt="Wmimo 界面预览" width="380" />
+  <br/>
+  <sub><em>✨ 18px 微卡片设计美学、实时平滑流量监控与丰富网络诊断工具</em></sub>
 </div>
 
 ---
@@ -33,7 +38,7 @@
 | 🐧 **Debian / Ubuntu / Mint / Deepin / UOS** | ✅ **已就绪** | Debian 安装包 (`.deb`) | 原生包管理器支持，自动注册桌面启动菜单、高清图标与系统服务。 |
 | 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **已就绪** | RedHat 安装包 (`.rpm`) | 标准 RPM 格式封装，自动配置运行时依赖与桌面集成。 |
 | 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **已就绪** | Pacman 二进制包 (`.pkg.tar.zst`) 与 `PKGBUILD` | 支持 pacman 一键安装与 AUR 脚本直接构建。 |
-| 📱 **Android** | ✅ **已就绪** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、紧凑移动端 UI、后台保活。 |
+| 📱 **Android** | ✅ **已就绪** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、固定 Release 签名（支持无缝覆盖升级）、紧凑移动端 UI、后台保活。 |
 | 🍎 **macOS** | 🚧 **开发中** | DMG 安装镜像 | NetworkExtension 架构与桌面端协议适配中。 |
 | 🍏 **iOS** | 🚧 **开发中** | IPA | NetworkExtension 架构适配中。 |
 
@@ -57,7 +62,8 @@
 - 📊 **可视化流量与连接监控**：
   - 仪表盘实时流量动效与多时间跨度（1m/5m/15m/30m/60m）平滑贝塞尔流量折线图；
   - 内置 IP 与 ISP 信息卡片，支持一键实时查询与轻触复制；
-  - 支持可折叠的代理组卡片，大幅提升节点选择效率。
+  - 订阅套餐流量进度条与到期时间倒计时；
+  - 快捷实用工具集：路由规则、内核日志、网络检测、节点测速、运行时配置。
 - 🚀 **智能多通道自动更新**：
   - 支持 `stable`（正式稳定通道）与 `beta`（测试预览通道）自由切换；
   - 后台静默下载安装包、SHA-256 完整性校验与安全原地覆盖升级。
@@ -99,7 +105,7 @@ flutter build windows --release
 
 # Linux Release (一键打包 Deb, RPM, AppImage, Arch 与 Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.0.35
+bash tool/package_linux.sh v1.1.4
 
 # Android Release (生成 APK 安装包)
 flutter build apk --release

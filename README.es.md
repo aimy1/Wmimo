@@ -11,8 +11,8 @@
 
 <div align="center">
   <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>Cliente GUI de Proxy Clash / Mihomo Multiplataforma y Moderno</h3>
-  <p>Construido con Flutter y el núcleo Mihomo, ofreciendo una experiencia de proxy rápida, elegante y potente.</p>
+  <h3>Cliente GUI de proxy moderno y multiplataforma para Clash / Mihomo</h3>
+  <p>Desarrollado con Flutter y el núcleo Mihomo, ofreciendo una experiencia de proxy ultrarrápida, elegante y potente.</p>
 
   <p>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
@@ -20,41 +20,35 @@
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
   </p>
+
+  <br/>
+  <img src="docs/preview.png" alt="Wmimo Vista Previa" width="380" />
+  <br/>
+  <sub><em>✨ Diseño moderno de micro-tarjetas de 18px, monitoreo de tráfico en tiempo real y herramientas de diagnóstico</em></sub>
 </div>
 
 ---
 
-## 📌 Estado de Plataformas
+## 📌 Matriz de soporte de plataformas y Linux
 
-| Plataforma | Estado | Paquetes | Descripción |
+| Plataforma | Estado | Formatos soportados | Descripción |
 | :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Listo** | Instalador (`.exe`) y Portable (`.zip`) | Barra lateral de escritorio, menú de bandeja del sistema, modo TUN, autoactualización. |
-| 🐧 **Linux** | ✅ **Listo** | Paquete Debian (`.deb`) y Portable (`.tar.gz`) | Interfaz nativa GTK3, bandeja del sistema, daemon de núcleo Mihomo integrado. |
-| 📱 **Android** | ✅ **Listo** | APK universal y por arquitecturas | Integración con VpnService, interfaz móvil optimizada. |
-| 🍎 **macOS** | 🚧 **En desarrollo** | DMG | Integración con NetworkExtension en progreso. |
-| 🍏 **iOS** | 🚧 **En desarrollo** | IPA | Integración con NetworkExtension en progreso. |
+| 🪟 **Windows** | ✅ **Listo para producción** | Instalador (`.exe`) y Portable (`.zip`) | Barra lateral, menú de bandeja del sistema, gráfico de velocidad en tiempo real, modo TUN, autoactualización. |
+| 🐧 **Linux** | ✅ **Listo** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), Portable (`.tar.gz`) | Interfaz GTK3 nativa, soporte de bandeja del sistema, núcleo Mihomo integrado. |
+| 📱 **Android** | ✅ **Listo** | APK Universal y APKs por ABI | Integración VpnService, firma Release permanente, interfaz móvil compacta. |
+| 🍎 **macOS** | 🚧 **En desarrollo** | Instalador DMG | Adaptación de NetworkExtension en progreso. |
+| 🍏 **iOS** | 🚧 **En desarrollo** | IPA | Integración del framework NetworkExtension. |
 
 ---
 
-## ✨ Características Principales
+## 💖 Donaciones y patrocinio
 
-- 🎨 **UI Moderna y Elegante**: Modos Claro y Oscuro, diseño adaptable (móvil y escritorio).
-- ⚡ **Núcleo Mihomo**: Soporte completo para Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard.
-- 🔀 **Bandeja del Sistema**: Velocidad en tiempo real, cambio de modos de proxy, prueba de latencia.
-- 📊 **Monitoreo de Tráfico**: Gráficos Bézier de tráfico, tarjeta de información IP/ISP, grupos de proxies colapsables.
-- 🚀 **Autoactualización Inteligente**: Canales `stable` y `beta` con verificación SHA-256.
-- 🌍 **Soporte de 9 Idiomas**: Español, Inglés, Chino, Japonés, Coreano, Ruso, Árabe, Persa.
-
----
-
-## 💖 Donaciones y Soporte
-
-- **Moneda**: `USDT`
-- **Red**: `APTOS`
-- **Dirección**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
+- **Moneda (Token)**: `USDT`
+- **Red (Network)**: `APTOS`
+- **Dirección (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
 
 ---
 
 ## 📄 Licencia
 
-Distribuido bajo la licencia **GPL-3.0**.
+Este proyecto está bajo la licencia **GPL-3.0**. Consulte el archivo [LICENSE](LICENSE).

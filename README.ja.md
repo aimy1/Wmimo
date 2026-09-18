@@ -20,6 +20,11 @@
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
   </p>
+
+  <br/>
+  <img src="docs/preview.png" alt="Wmimo プレビュー" width="380" />
+  <br/>
+  <sub><em>✨ 洗練された 18px マイクロカード UI、リアルタイムトラフィック監視、豊富なネットワーク診断ツール</em></sub>
 </div>
 
 ---
@@ -29,8 +34,8 @@
 | プラットフォーム | ステータス | パッケージ形式 | 特徴 |
 | :--- | :---: | :--- | :--- |
 | 🪟 **Windows** | ✅ **本番利用可能** | インストーラー (`.exe`) / ポータブル (`.zip`) | デスクトップサイドバー、トレイメニュー、リアルタイムトラフィックチャート、TUNモード、自動更新。 |
-| 🐧 **Linux** | ✅ **利用可能** | Debian (`.deb`) / ポータブル (`.tar.gz`) | ネイティブ GTK3 UI、システムトレイ対応、Linux版 Mihomo コア内蔵。 |
-| 📱 **Android** | ✅ **利用可能** | ユニバーサル APK / 各 ABI 分割 APK | VpnService ドライバー統合、モバイル最適化UI、バックグラウンド常駐。 |
+| 🐧 **Linux** | ✅ **利用可能** | AppImage (`.AppImage`) / Debian (`.deb`) / RPM (`.rpm`) / ポータブル (`.tar.gz`) | ネイティブ GTK3 UI、システムトレイ対応、Linux版 Mihomo コア内蔵。 |
+| 📱 **Android** | ✅ **利用可能** | ユニバーサル APK / 各 ABI 分割 APK | VpnService ドライバー統合、固定 Release 署名、モバイル最適化UI、バックグラウンド常駐。 |
 | 🍎 **macOS** | 🚧 **開発中** | DMG インストーラー | NetworkExtension フレームワーク適応中。 |
 | 🍏 **iOS** | 🚧 **開発中** | IPA | NetworkExtension フレームワーク適応中。 |
 

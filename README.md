@@ -20,6 +20,11 @@
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
   </p>
+
+  <br/>
+  <img src="docs/preview.png" alt="Wmimo UI Preview" width="380" />
+  <br/>
+  <sub><em>✨ Sleek 18px micro-card aesthetic, real-time traffic monitor, and comprehensive network diagnostics</em></sub>
 </div>
 
 ---
@@ -33,7 +38,7 @@
 | 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **Ready** | Debian Package (`.deb`) | Native package with desktop entry, icons, and system service integration. |
 | 🐧 **Fedora / RHEL / openSUSE** | ✅ **Ready** | RedHat Package (`.rpm`) | Standard RPM package with system dependencies and desktop shortcuts. |
 | 🐧 **Arch Linux / Manjaro** | ✅ **Ready** | Arch Package (`.pkg.tar.zst`) & `PKGBUILD` | Native pacman binary package and AUR build script. |
-| 📱 **Android** | ✅ **Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, compact mobile UI, background persistence. |
+| 📱 **Android** | ✅ **Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, persistent release keystore, compact mobile UI, background keep-alive. |
 | 🍎 **macOS** | 🚧 **In Progress** | DMG Installer | NetworkExtension daemon architecture in development. |
 | 🍏 **iOS** | 🚧 **In Progress** | IPA | NetworkExtension framework integration. |
 
@@ -55,7 +60,8 @@
 - 📊 **Real-Time Visual Diagnostics**:
   - Smooth Bezier traffic curves with customizable multi-interval viewing (1m / 5m / 15m / 30m / 60m).
   - Built-in IP & ISP info card with instant geo-lookup and tap-to-copy.
-  - Collapsible proxy group boards for streamlined node navigation.
+  - Subscription plan usage progress bar & expiration countdown.
+  - Quick utility toolset: Routing Rules, Core Logs, Network Check, Speed Test, Runtime Config.
 - 🚀 **Intelligent Multi-Channel Auto-Update**:
   - Dual update channels: `stable` (production) and `beta` (preview).
   - Background silent download with SHA-256 verification and automatic in-place installer execution.
@@ -97,7 +103,7 @@ flutter build windows --release
 
 # Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.0.35
+bash tool/package_linux.sh v1.1.4
 
 # Android APK
 flutter build apk --release
