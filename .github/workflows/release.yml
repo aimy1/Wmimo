@@ -341,8 +341,20 @@ jobs:
               TAG="v1.1.3"
             fi
           fi
+
+          RAW_VER="${TAG#v}"
+          BUILD_NUM=""
+          if [ -f "pubspec.yaml" ]; then
+            BUILD_NUM=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+          fi
+          if [ -z "$BUILD_NUM" ] || [ "$BUILD_NUM" = "$RAW_VER" ]; then
+            BUILD_NUM="1426"
+          fi
+
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT
-          echo "Using release tag: $TAG"
+          echo "version_name=$RAW_VER" >> $GITHUB_OUTPUT
+          echo "build_number=$BUILD_NUM" >> $GITHUB_OUTPUT
+          echo "Using release tag: $TAG, build number: $BUILD_NUM"
 
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
@@ -360,7 +372,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag_info.outputs.release_tag }}
-          name: "Wmimo ${{ steps.tag_info.outputs.release_tag }}"
+          name: "Wmimo ${{ steps.tag_info.outputs.release_tag }} (Build ${{ steps.tag_info.outputs.build_number }})"
+          body: |
+            ### 📌 版本信息 / Version Info
+            - **版本号 (Version)**: `${{ steps.tag_info.outputs.release_tag }}`
+            - **内部构建号 (Build Number)**: `${{ steps.tag_info.outputs.build_number }}`
+            - **完整版本 (Full Version)**: `${{ steps.tag_info.outputs.version_name }}.${{ steps.tag_info.outputs.build_number }}` (`${{ steps.tag_info.outputs.version_name }}+${{ steps.tag_info.outputs.build_number }}`)
           files: release-assets/*
           draft: false
           prerelease: false
