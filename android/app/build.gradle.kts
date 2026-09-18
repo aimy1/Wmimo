@@ -41,70 +41,60 @@ android {
         versionName = flutter.versionName
     }
 
-    buildTypes {
-        val keystore = rootProject.file("key.properties")
-        val prop = Properties()
-        var hasReleaseKey = false
-        var releaseKeyFile: java.io.File? = null
-        if (keystore.exists()) {
-            try {
-                keystore.inputStream().use { prop.load(it) }
-                val storeFilePath = prop.getProperty("storeFile.release")
-                if (storeFilePath != null) {
-                    val candidate = if (rootProject.file(storeFilePath).exists()) {
-                        rootProject.file(storeFilePath)
-                    } else if (file(storeFilePath).exists()) {
-                        file(storeFilePath)
-                    } else {
-                        null
-                    }
-                    if (candidate != null) {
-                        releaseKeyFile = candidate
-                        hasReleaseKey = true
-                    }
+    val keystoreProps = Properties()
+    val keystoreFile = rootProject.file("key.properties")
+    var releaseKeyFile: java.io.File? = null
+
+    if (keystoreFile.exists()) {
+        try {
+            keystoreFile.inputStream().use { keystoreProps.load(it) }
+            val storeFilePath = keystoreProps.getProperty("storeFile.release")
+            if (storeFilePath != null) {
+                val candidate = if (rootProject.file(storeFilePath).exists()) {
+                    rootProject.file(storeFilePath)
+                } else if (file(storeFilePath).exists()) {
+                    file(storeFilePath)
+                } else {
+                    null
                 }
-            } catch (_: Exception) {}
+                if (candidate != null) {
+                    releaseKeyFile = candidate
+                }
+            }
+        } catch (_: Exception) {}
+    }
+    if (releaseKeyFile == null) {
+        val fallbackKey = file("wmimo.release.keystore")
+        if (fallbackKey.exists()) {
+            releaseKeyFile = fallbackKey
+            keystoreProps.setProperty("storePassword.release", "wmimo")
+            keystoreProps.setProperty("keyPassword.release", "wmimo")
+            keystoreProps.setProperty("keyAlias.release", "wmimo")
         }
-        if (!hasReleaseKey) {
-            val fallbackKey = file("wmimo.release.keystore")
-            if (fallbackKey.exists()) {
-                releaseKeyFile = fallbackKey
-                hasReleaseKey = true
-                prop.setProperty("storePassword.release", "wmimo")
-                prop.setProperty("keyPassword.release", "wmimo")
-                prop.setProperty("keyAlias.release", "wmimo")
+    }
+
+    signingConfigs {
+        if (releaseKeyFile != null) {
+            create("release") {
+                storeFile = releaseKeyFile
+                storePassword = keystoreProps.getProperty("storePassword.release", "wmimo")
+                keyAlias = keystoreProps.getProperty("keyAlias.release", "wmimo")
+                keyPassword = keystoreProps.getProperty("keyPassword.release", "wmimo")
             }
         }
+    }
 
+    buildTypes {
         named("debug") { ndk { abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64", "x86") } }
         named("profile") {
-            if (hasReleaseKey && releaseKeyFile != null) {
-                signingConfig =
-                        signingConfigs.create("profile") {
-                            storeFile = releaseKeyFile
-                            storePassword = prop.getProperty("storePassword.release", "wmimo")
-                            keyAlias = prop.getProperty("keyAlias.release", "wmimo")
-                            keyPassword = prop.getProperty("keyPassword.release", "wmimo")
-                        }
-            }
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
             ndk { abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64", "x86") }
         }
         named("release") {
-            if (hasReleaseKey && releaseKeyFile != null) {
-                signingConfig =
-                        signingConfigs.create("release") {
-                            storeFile = releaseKeyFile
-                            storePassword = prop.getProperty("storePassword.release", "wmimo")
-                            keyAlias = prop.getProperty("keyAlias.release", "wmimo")
-                            keyPassword = prop.getProperty("keyPassword.release", "wmimo")
-                        }
-            } else {
-                signingConfig = signingConfigs.getByName("debug")
-            }
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
             ndk {
                 abiFilters.clear()
                 abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
-                // debugSymbolLevel = 'FULL'
             }
         }
     }

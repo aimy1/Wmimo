@@ -269,6 +269,20 @@ jobs:
       - name: Download Multiplatform Mihomo Cores
         run: dart run tool/download_all_cores.dart
 
+      - name: Verify or Prepare Android Keystore
+        run: |
+          if [ -f "android/app/wmimo.release.keystore" ]; then
+            echo "Verifying existing android/app/wmimo.release.keystore with keytool..."
+            keytool -list -v -keystore android/app/wmimo.release.keystore -storepass wmimo -alias wmimo || {
+              echo "Re-generating valid release keystore via keytool..."
+              rm -f android/app/wmimo.release.keystore
+              keytool -genkeypair -v -keystore android/app/wmimo.release.keystore -alias wmimo -keyalg RSA -keysize 2048 -validity 18250 -storepass wmimo -keypass wmimo -dname "CN=Wmimo, OU=Wmimo, O=Wmimo, L=Unknown, ST=Unknown, C=US"
+            }
+          else
+            echo "Generating release keystore via keytool..."
+            keytool -genkeypair -v -keystore android/app/wmimo.release.keystore -alias wmimo -keyalg RSA -keysize 2048 -validity 18250 -storepass wmimo -keypass wmimo -dname "CN=Wmimo, OU=Wmimo, O=Wmimo, L=Unknown, ST=Unknown, C=US"
+          fi
+
       - name: Build Android APK
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
