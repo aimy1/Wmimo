@@ -1518,25 +1518,6 @@ class _HomeScreenWidgetPart2State extends State<HomeScreenWidgetPart2> {
                     GroupHelper.showBackupAndSync(context);
                   },
                 ),
-                if (versionCheck.newVersion) ...[
-                  const Divider(height: 1, thickness: 0.8),
-                  ListTile(
-                    title: Text(
-                      tcontext.meta.hasNewVersion(p: versionCheck.version),
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    leading: const Icon(
-                      Icons.new_releases_rounded,
-                      size: 22,
-                      color: ThemeDefine.kColorAmber,
-                    ),
-                    trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
-                    minVerticalPadding: 16,
-                    onTap: () async {
-                      GroupHelper.newVersionUpdate(context);
-                    },
-                  ),
-                ],
               ],
             ),
           ),
