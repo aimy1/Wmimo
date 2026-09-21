@@ -17,8 +17,8 @@ abstract class LasyRenderingState<T extends LasyRenderingStatefulWidget>
     AppLifecycleStateNofity.onStateResumed(_hashCode, () async {
       _tryRedraw("onStateResumed");
     });
-    AppRouteObserver.instance.pushRoute(hashCode);
-    AppRouteObserver.instance.onRouteChanged(hashCode, () {
+    AppRouteObserver.instance.pushRoute(_hashCode);
+    AppRouteObserver.instance.onRouteChanged(_hashCode, () {
       _tryRedraw("onRouteChanged");
     });
   }
@@ -26,8 +26,8 @@ abstract class LasyRenderingState<T extends LasyRenderingStatefulWidget>
   @override
   void dispose() {
     AppLifecycleStateNofity.onStateResumed(_hashCode, null);
-    AppRouteObserver.instance.onRouteChanged(hashCode, null);
-    AppRouteObserver.instance.popRoute(hashCode);
+    AppRouteObserver.instance.onRouteChanged(_hashCode, null);
+    AppRouteObserver.instance.popRoute(_hashCode);
 
     super.dispose();
   }
@@ -37,19 +37,20 @@ abstract class LasyRenderingState<T extends LasyRenderingStatefulWidget>
     if (!mounted) {
       return;
     }
+    fn();
     _needRedraw = true;
     if (AppLifecycleStateNofity.isPaused()) {
-      _print("delay redraw by paused:${T.toString()} $hashCode ");
+      _print("delay redraw by paused:${T.toString()} $_hashCode ");
       return;
     }
     final route = ModalRoute.of(context);
     if (route != null && !route.isCurrent) {
-      _print("delay redraw by route:${T.toString()} $hashCode");
+      _print("delay redraw by route:${T.toString()} $_hashCode");
       return;
     }
-    _print("redraw by setState:${T.toString()} $hashCode");
+    _print("redraw by setState:${T.toString()} $_hashCode");
     _needRedraw = false;
-    super.setState(fn);
+    super.setState(() {});
   }
 
   void _tryRedraw(String from) {
@@ -63,7 +64,7 @@ abstract class LasyRenderingState<T extends LasyRenderingStatefulWidget>
     if (!_needRedraw) {
       return;
     }
-    _print("redraw by route $from :${T.toString()} $hashCode");
+    _print("redraw by route $from :${T.toString()} $_hashCode");
     _needRedraw = false;
     super.setState(() {});
   }

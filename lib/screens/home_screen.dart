@@ -7,8 +7,10 @@ import 'package:after_layout/after_layout.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/auto_update_manager.dart';
 import 'package:wmimo/app/modules/biz.dart';
+import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/remote_config_manager.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
+import 'package:wmimo/screens/widgets/routes.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/error_reporter_utils.dart';
 import 'package:wmimo/app/utils/local_storage.dart';
@@ -79,6 +81,9 @@ class _HomeScreenState extends State<HomeScreen>
               children: [
                 HomeScreenWidgetPart1(
                   onNavigateToTab: (index) {
+                    if (index == 2) {
+                      ProfileManager.load();
+                    }
                     setState(() {
                       _currentNavIndex = index;
                     });
@@ -345,6 +350,9 @@ class _HomeScreenState extends State<HomeScreen>
                 } catch (_) {}
               }
             } else {
+              if (index == 2) {
+                ProfileManager.load();
+              }
               setState(() {
                 _currentNavIndex = index;
               });
@@ -588,6 +596,9 @@ class _HomeScreenState extends State<HomeScreen>
                         } catch (_) {}
                       }
                     } else {
+                      if (item.index == 2) {
+                        ProfileManager.load();
+                      }
                       setState(() {
                         _currentNavIndex = item.index;
                       });
@@ -856,6 +867,7 @@ class _TabNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Navigator(
       key: navigatorKey,
+      observers: [AppRouteObserver.instance],
       onGenerateInitialRoutes: (NavigatorState navigator, String initialRoute) {
         return [
           MaterialPageRoute(

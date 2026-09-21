@@ -327,6 +327,7 @@ class ProfileConfig {
     }
     _currentId = map['current_id'] ?? '';
     final p = map['profiles'];
+    profiles.clear();
     if (p is List) {
       for (var value in p) {
         ProfileSetting ps = ProfileSetting();

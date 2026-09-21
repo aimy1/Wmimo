@@ -16,12 +16,11 @@ import 'package:wmimo/screens/login_step_provider_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen_widgets.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/webview_helper.dart';
-import 'package:wmimo/screens/widgets/framework.dart';
 import 'package:wmimo/screens/widgets/sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ProfilesBoardScreen extends LasyRenderingStatefulWidget {
+class ProfilesBoardScreen extends StatefulWidget {
   static RouteSettings routSettings() {
     return const RouteSettings(name: "/");
   }
@@ -33,7 +32,7 @@ class ProfilesBoardScreen extends LasyRenderingStatefulWidget {
   State<ProfilesBoardScreen> createState() => _ProfilesBoardScreenState();
 }
 
-class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
+class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
     with WidgetsBindingObserver, AfterLayoutMixin {
   @override
   void initState() {
@@ -42,10 +41,19 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
     ProfileManager.onEventRemove.add(_onRemove);
     ProfileManager.onEventUpdate.add(_onUpdate);
     ProfileManager.onEventCurrentChanged.add(_onCurrentChanged);
+    _reloadProfiles();
+  }
+
+  Future<void> _reloadProfiles() async {
+    await ProfileManager.load();
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
+    await _reloadProfiles();
     if (widget.navigateToAdd) {
       onTapAdd();
     }
@@ -203,6 +211,7 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
             builder: (context) => const LoginStepProviderScreen(),
           ),
         );
+        await _reloadProfiles();
       },
     );
     var widgets = [
@@ -232,6 +241,7 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
               title: tcontext.meta.getProfile,
               inappWebViewOpenExternal: true,
             );
+            await _reloadProfiles();
           },
         ),
       ],
@@ -248,6 +258,7 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
               builder: (context) => AddProfileByUrlScreen(),
             ),
           );
+          await _reloadProfiles();
         },
       ),
       ListTile(
@@ -284,6 +295,7 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
               builder: (context) => AddProfileByUrlScreen(url: data!.text!),
             ),
           );
+          await _reloadProfiles();
         },
       ),
       ListTile(
@@ -291,27 +303,27 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
         title: Text(tcontext.meta.qrcodeScan),
         onTap: () async {
           Navigator.of(context).pop();
-          Navigator.push(
+          final value = await Navigator.push(
             context,
             MaterialPageRoute(
               settings: AddProfileByScanQrcodeScanScreen.routSettings(),
               builder: (context) => const AddProfileByScanQrcodeScanScreen(),
             ),
-          ).then((value) {
-            if ((value != null) && (value.qrcode != null)) {
-              if (!mounted) {
-                return;
-              }
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  settings: AddProfileByUrlScreen.routSettings(),
-                  builder: (context) =>
-                      AddProfileByUrlScreen(url: value.qrcode!),
-                ),
-              );
+          );
+          if ((value != null) && (value.qrcode != null)) {
+            if (!mounted) {
+              return;
             }
-          });
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                settings: AddProfileByUrlScreen.routSettings(),
+                builder: (context) =>
+                    AddProfileByUrlScreen(url: value.qrcode!),
+              ),
+            );
+          }
+          await _reloadProfiles();
         },
       ),
       ListTile(
@@ -319,13 +331,14 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
         title: Text(tcontext.meta.profileImport),
         onTap: () async {
           Navigator.of(context).pop();
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
               settings: AddProfileByImportFromFileScreen.routSettings(),
               builder: (context) => const AddProfileByImportFromFileScreen(),
             ),
           );
+          await _reloadProfiles();
         },
       ),
       if (!cn) ...[login],
@@ -354,18 +367,22 @@ class _ProfilesBoardScreenState extends LasyRenderingState<ProfilesBoardScreen>
   }
 
   Future<void> _onAdd(String id) async {
-    setState(() {});
+    await _reloadProfiles();
   }
 
   Future<void> _onRemove(String id) async {
-    setState(() {});
+    await _reloadProfiles();
   }
 
   Future<void> _onUpdate(String id, bool finish) async {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<void> _onCurrentChanged(String id) async {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 }
