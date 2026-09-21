@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.1.4)'
+        description: 'Release Tag (e.g. v1.1.5)'
         required: false
-        default: 'v1.1.4'
+        default: 'v1.1.5'
 
 permissions:
   contents: write
@@ -49,7 +49,7 @@ jobs:
         run: |
           $pubVer = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[0]
           $pubBuild = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[1]
-          if (-not $pubBuild) { $pubBuild = "1427" }
+          if (-not $pubBuild) { $pubBuild = "1428" }
           Write-Host "Building Windows Application version $pubVer+$pubBuild..."
           flutter build windows --release --build-name=$pubVer --build-number=$pubBuild
 
@@ -65,7 +65,7 @@ jobs:
               $pubVer = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[0]
               $tag = "v$pubVer"
             } else {
-              $tag = "v1.1.4"
+              $tag = "v1.1.5"
             }
           }
           if (-not $tag.StartsWith("v")) {
@@ -199,7 +199,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1427"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1428"
           flutter build linux --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
       - name: Package Linux Artifacts (.deb & .tar.gz)
@@ -215,7 +215,7 @@ jobs:
               PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
               TAG="v${PUBSPEC_VER}"
             else
-              TAG="v1.1.4"
+              TAG="v1.1.5"
             fi
           fi
           chmod +x tool/package_linux.sh
@@ -287,7 +287,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1427"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1428"
           flutter build apk --release --split-per-abi --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
           flutter build apk --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
@@ -305,7 +305,7 @@ jobs:
               PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
               TAG="v${PUBSPEC_VER}"
             else
-              TAG="v1.1.4"
+              TAG="v1.1.5"
             fi
           fi
           
@@ -352,7 +352,7 @@ jobs:
               PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
               TAG="v${PUBSPEC_VER}"
             else
-              TAG="v1.1.4"
+              TAG="v1.1.5"
             fi
           fi
 
@@ -362,7 +362,7 @@ jobs:
             BUILD_NUM=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
           fi
           if [ -z "$BUILD_NUM" ] || [ "$BUILD_NUM" = "$RAW_VER" ]; then
-            BUILD_NUM="1427"
+            BUILD_NUM="1428"
           fi
 
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT

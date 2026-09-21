@@ -6,7 +6,7 @@ import 'package:wmimo/generated/build_time.dart' as build_time;
 abstract final class AppUtils {
   static String? _cachedPackageVersion;
 
-  static const String kDefaultFallbackVersion = "1.1.4.1427";
+  static const String kDefaultFallbackVersion = "1.1.5.1428";
 
   static Future<String> getPackgetVersion() async {
     if (_cachedPackageVersion != null && _cachedPackageVersion!.isNotEmpty) {
