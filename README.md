@@ -103,7 +103,7 @@ flutter build windows --release
 
 # Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.1.5
+bash tool/package_linux.sh v1.1.6
 
 # Android APK
 flutter build apk --release
