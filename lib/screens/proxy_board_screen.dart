@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:libclash_vpn_service/state.dart';
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
@@ -12,6 +13,7 @@ import 'package:wmimo/app/modules/biz.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/app/utils/node_region_helper.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
@@ -37,7 +39,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   bool _loading = false;
   bool _isVpnStarted = false;
   String _searchKeyword = "";
-  bool _sortByDelay = false;
+  String _sortMode = "default"; // "default", "delay_asc", "name_asc", "region"
+  bool _hideTimeoutNodes = false;
+  String _selectedRegionCode = "ALL";
+  LatencyTestTarget _activeLatencyTarget = LatencyTestTarget.defaultTarget;
   String _currentMode = "rule"; // rule, global, direct
   final Set<String> _nodesTesting = {};
   final Map<String, bool> _groupExpanded = {};
@@ -292,10 +297,14 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       _nodesTesting.add(node.name);
     });
     final setting = SettingManager.getConfig();
+    final testUrl = _activeLatencyTarget.url.isNotEmpty
+        ? _activeLatencyTarget.url
+        : setting.delayTestUrl;
+
     try {
       final res = await ClashHttpApi.getDelay(
         node.name,
-        url: setting.delayTestUrl,
+        url: testUrl,
         timeout: Duration(milliseconds: setting.delayTestTimeout),
       );
       final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
@@ -380,6 +389,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     setState(() {});
 
     final setting = SettingManager.getConfig();
+    final testUrl = _activeLatencyTarget.url.isNotEmpty
+        ? _activeLatencyTarget.url
+        : setting.delayTestUrl;
+
     Timer? updateDebounce;
     void scheduleUiUpdate() {
       if (updateDebounce?.isActive == true) return;
@@ -396,7 +409,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         try {
           final res = await ClashHttpApi.getDelay(
             nodeName,
-            url: setting.delayTestUrl,
+            url: testUrl,
             timeout: Duration(milliseconds: setting.delayTestTimeout),
           );
           final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
@@ -480,6 +493,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     setState(() {});
 
     final setting = SettingManager.getConfig();
+    final testUrl = _activeLatencyTarget.url.isNotEmpty
+        ? _activeLatencyTarget.url
+        : setting.delayTestUrl;
+
     Timer? updateDebounce;
     void scheduleUiUpdate() {
       if (updateDebounce?.isActive == true) return;
@@ -496,7 +513,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         try {
           final res = await ClashHttpApi.getDelay(
             nodeName,
-            url: setting.delayTestUrl,
+            url: testUrl,
             timeout: Duration(milliseconds: setting.delayTestTimeout),
           );
           final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
@@ -566,7 +583,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           ..now = leafNodes.first.name,
       );
 
-      // 3. Regional groups (香港, 日本, 新加坡, 美国, etc.)
+      // 3. Regional groups (using NodeRegionHelper)
       final regions = <String, List<String>>{
         "🇭🇰 香港节点": [],
         "🇯🇵 日本节点": [],
@@ -577,20 +594,19 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       };
 
       for (var node in leafNodes) {
-        final name = node.name;
-        final upper = name.toUpperCase();
-        if (name.contains("香港") || upper.contains("HK") || upper.contains("HONG KONG")) {
-          regions["🇭🇰 香港节点"]!.add(name);
-        } else if (name.contains("日本") || upper.contains("JP") || upper.contains("JAPAN") || name.contains("东京") || name.contains("大阪")) {
-          regions["🇯🇵 日本节点"]!.add(name);
-        } else if (name.contains("新加坡") || name.contains("狮城") || upper.contains("SG") || upper.contains("SINGAPORE")) {
-          regions["🇸🇬 新加坡节点"]!.add(name);
-        } else if (name.contains("台湾") || name.contains("台北") || upper.contains("TW") || upper.contains("TAIWAN")) {
-          regions["🇹🇼 台湾节点"]!.add(name);
-        } else if (name.contains("美国") || upper.contains("US") || upper.contains("USA") || name.contains("美") || upper.contains("UNITED STATES")) {
-          regions["🇺🇸 美国节点"]!.add(name);
-        } else if (name.contains("韩国") || name.contains("首尔") || upper.contains("KR") || upper.contains("KOREA")) {
-          regions["🇰🇷 韩国节点"]!.add(name);
+        final reg = NodeRegionHelper.getRegion(node.name);
+        if (reg.code == "HK") {
+          regions["🇭🇰 香港节点"]!.add(node.name);
+        } else if (reg.code == "JP") {
+          regions["🇯🇵 日本节点"]!.add(node.name);
+        } else if (reg.code == "SG") {
+          regions["🇸🇬 新加坡节点"]!.add(node.name);
+        } else if (reg.code == "TW") {
+          regions["🇹🇼 台湾节点"]!.add(node.name);
+        } else if (reg.code == "US") {
+          regions["🇺🇸 美国节点"]!.add(node.name);
+        } else if (reg.code == "KR") {
+          regions["🇰🇷 韩国节点"]!.add(node.name);
         }
       }
 
@@ -646,52 +662,736 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         })
         .toList();
 
-    if (_searchKeyword.isNotEmpty) {
-      list = list.where((n) => n.name.toLowerCase().contains(_searchKeyword)).toList();
+    // 1. Region filter
+    if (_selectedRegionCode != "ALL") {
+      list = list.where((n) {
+        if (ClashProtocolType.isGroupType(n.type)) return true;
+        final region = NodeRegionHelper.getRegion(n.name);
+        return region.code == _selectedRegionCode;
+      }).toList();
     }
 
-    if (_sortByDelay) {
+    // 2. Hide timeout nodes filter
+    if (_hideTimeoutNodes) {
+      list = list.where((n) {
+        if (ClashProtocolType.isGroupType(n.type)) return true;
+        return n.delay == null || n.delay! >= 0;
+      }).toList();
+    }
+
+    // 3. Search keyword filter
+    if (_searchKeyword.isNotEmpty) {
+      list = list.where((n) {
+        final region = NodeRegionHelper.getRegion(n.name);
+        return n.name.toLowerCase().contains(_searchKeyword) ||
+            region.name.toLowerCase().contains(_searchKeyword) ||
+            region.code.toLowerCase().contains(_searchKeyword) ||
+            n.type.toLowerCase().contains(_searchKeyword);
+      }).toList();
+    }
+
+    // 4. Sorting
+    if (_sortMode == "delay_asc") {
       list.sort((a, b) {
-        final aDelay = a.delay ?? 99999;
-        final bDelay = b.delay ?? 99999;
-        final aVal = aDelay <= 0 ? 99998 : aDelay;
-        final bVal = bDelay <= 0 ? 99998 : bDelay;
-        return aVal.compareTo(bVal);
+        final aDelay = a.delay ?? 999999;
+        final bDelay = b.delay ?? 999999;
+        final aScore = aDelay < 0 ? 9999999 : (aDelay == 0 ? 999999 : aDelay);
+        final bScore = bDelay < 0 ? 9999999 : (bDelay == 0 ? 999999 : bDelay);
+        final cmp = aScore.compareTo(bScore);
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
+    } else if (_sortMode == "name_asc") {
+      list.sort((a, b) => a.name.compareTo(b.name));
+    } else if (_sortMode == "region") {
+      list.sort((a, b) {
+        final regA = NodeRegionHelper.getRegion(a.name).name;
+        final regB = NodeRegionHelper.getRegion(b.name).name;
+        final cmp = regA.compareTo(regB);
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
       });
     }
 
     return list;
   }
 
-  static String getFlagEmoji(String name) {
-    final upper = name.toUpperCase();
-    if (name.contains("香港") || upper.contains("HK") || upper.contains("HONG KONG")) return "🇭🇰";
-    if (name.contains("日本") || upper.contains("JP") || upper.contains("JAPAN") || name.contains("东京") || name.contains("大阪")) return "🇯🇵";
-    if (name.contains("新加坡") || name.contains("狮城") || upper.contains("SG") || upper.contains("SINGAPORE")) return "🇸🇬";
-    if (name.contains("台湾") || name.contains("台北") || upper.contains("TW") || upper.contains("TAIWAN")) return "🇹🇼";
-    if (name.contains("美国") || upper.contains("US") || upper.contains("USA") || name.contains("美") || upper.contains("UNITED STATES")) return "🇺🇸";
-    if (name.contains("韩国") || name.contains("首尔") || upper.contains("KR") || upper.contains("KOREA")) return "🇰🇷";
-    if (name.contains("英国") || name.contains("伦敦") || upper.contains("UK") || upper.contains("GB") || upper.contains("BRITAIN")) return "🇬🇧";
-    if (name.contains("德国") || name.contains("法兰克福") || upper.contains("DE") || upper.contains("GERMANY")) return "🇩🇪";
-    if (name.contains("法国") || name.contains("巴黎") || upper.contains("FR") || upper.contains("FRANCE")) return "🇫🇷";
-    if (name.contains("加拿大") || upper.contains("CA") || upper.contains("CANADA")) return "🇨🇦";
-    if (name.contains("澳大利亚") || name.contains("悉尼") || upper.contains("AU") || upper.contains("AUSTRALIA")) return "🇦🇺";
-    if (name.contains("俄罗斯") || name.contains("莫斯科") || upper.contains("RU") || upper.contains("RUSSIA")) return "🇷🇺";
-    if (name.contains("印度") || upper.contains("IN") || upper.contains("INDIA")) return "🇮🇳";
-    if (name.contains("印尼") || name.contains("雅加达") || upper.contains("ID") || upper.contains("INDONESIA")) return "🇮🇩";
-    if (name.contains("泰国") || name.contains("曼谷") || upper.contains("TH") || upper.contains("THAILAND")) return "🇹🇭";
-    if (name.contains("荷兰") || upper.contains("NL") || upper.contains("NETHERLANDS")) return "🇳🇱";
-    if (name.contains("菲律宾") || upper.contains("PH") || upper.contains("PHILIPPINES")) return "🇵🇭";
-    if (name.contains("越南") || upper.contains("VN") || upper.contains("VIETNAM")) return "🇻🇳";
-    if (name.contains("马来西亚") || upper.contains("MY") || upper.contains("MALAYSIA")) return "🇲🇾";
-    if (name.contains("土耳其") || upper.contains("TR") || upper.contains("TURKEY")) return "🇹🇷";
-    if (name.contains("阿根廷") || upper.contains("AR") || upper.contains("ARGENTINA")) return "🇦🇷";
-    if (name.contains("巴西") || upper.contains("BR") || upper.contains("BRAZIL")) return "🇧🇷";
-    if (name.contains("自动") || upper.contains("AUTO") || upper.contains("URL-TEST")) return "⚡";
-    if (name.contains("故障") || upper.contains("FALLBACK")) return "🛡️";
-    if (name.contains("直连") || upper.contains("DIRECT")) return "🎯";
-    if (name.contains("拒绝") || upper.contains("REJECT")) return "🚫";
-    return "🌐";
+  static String getFlagEmoji(String name) => NodeRegionHelper.getFlag(name);
+
+  void _showSortFilterBottomSheet() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: isDark ? const Color(0xFF151D2E) : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Handle bar
+                    Center(
+                      child: Container(
+                        width: 36,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Header
+                    Row(
+                      children: [
+                        const Icon(Icons.tune_rounded, size: 20, color: ThemeDefine.kColorBlue),
+                        const SizedBox(width: 8),
+                        const Text(
+                          "节点排序与过滤",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        const Spacer(),
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _sortMode = "default";
+                              _hideTimeoutNodes = false;
+                              _selectedRegionCode = "ALL";
+                            });
+                            setSheetState(() {});
+                            Navigator.pop(context);
+                          },
+                          child: const Text("重置", style: TextStyle(fontSize: 13)),
+                        ),
+                      ],
+                    ),
+                    const Divider(height: 16),
+
+                    // Sort section
+                    const Text(
+                      "排序方式",
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _buildSortOptionChip(
+                          title: "默认排序",
+                          icon: Icons.list_rounded,
+                          mode: "default",
+                          setSheetState: setSheetState,
+                        ),
+                        _buildSortOptionChip(
+                          title: "延迟最低",
+                          icon: Icons.bolt_rounded,
+                          mode: "delay_asc",
+                          setSheetState: setSheetState,
+                        ),
+                        _buildSortOptionChip(
+                          title: "名称 A-Z",
+                          icon: Icons.sort_by_alpha_rounded,
+                          mode: "name_asc",
+                          setSheetState: setSheetState,
+                        ),
+                        _buildSortOptionChip(
+                          title: "国家地区",
+                          icon: Icons.public_rounded,
+                          mode: "region",
+                          setSheetState: setSheetState,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Filter section
+                    const Text(
+                      "过滤选项",
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: theme.dividerColor.withValues(alpha: 0.3),
+                          width: 0.8,
+                        ),
+                      ),
+                      child: SwitchListTile(
+                        title: const Text(
+                          "隐藏超时与不可用节点",
+                          style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500),
+                        ),
+                        subtitle: const Text(
+                          "自动过滤测速失败或连接超时的节点",
+                          style: TextStyle(fontSize: 11.5, color: Colors.grey),
+                        ),
+                        value: _hideTimeoutNodes,
+                        activeThumbColor: ThemeDefine.kColorBlue,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                        onChanged: (val) {
+                          setState(() {
+                            _hideTimeoutNodes = val;
+                          });
+                          setSheetState(() {});
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Target Selector Shortcut
+                    InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _showLatencyTargetBottomSheet();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: theme.dividerColor.withValues(alpha: 0.3),
+                            width: 0.8,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.radar_rounded, size: 18, color: ThemeDefine.kColorBlue),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "当前测速目标场景",
+                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    "${_activeLatencyTarget.icon} ${_activeLatencyTarget.name} • ${_activeLatencyTarget.url}",
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(Icons.chevron_right_rounded, size: 20, color: Colors.grey),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildSortOptionChip({
+    required String title,
+    required IconData icon,
+    required String mode,
+    required StateSetter setSheetState,
+  }) {
+    final isSelected = _sortMode == mode;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () {
+        setState(() {
+          _sortMode = mode;
+        });
+        setSheetState(() {});
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? ThemeDefine.kColorBlue
+              : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? ThemeDefine.kColorBlue : theme.dividerColor.withValues(alpha: 0.3),
+            width: 0.8,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 15,
+              color: isSelected ? Colors.white : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showLatencyTargetBottomSheet() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final presets = LatencyTestTarget.presets;
+    final customController = TextEditingController(
+      text: _activeLatencyTarget.id == "custom" ? _activeLatencyTarget.url : "",
+    );
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: isDark ? const Color(0xFF151D2E) : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  20,
+                  12,
+                  20,
+                  MediaQuery.of(context).viewInsets.bottom + 16,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Handle bar
+                    Center(
+                      child: Container(
+                        width: 36,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Header
+                    Row(
+                      children: [
+                        const Icon(Icons.radar_rounded, size: 20, color: ThemeDefine.kColorBlue),
+                        const SizedBox(width: 8),
+                        const Text(
+                          "测速目标场景切换",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "选择不同服务测试节点的真实可用性与连通延迟",
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                      ),
+                    ),
+                    const Divider(height: 16),
+
+                    // Preset target list
+                    Flexible(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: presets.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 6),
+                        itemBuilder: (context, idx) {
+                          final target = presets[idx];
+                          final isSelected = _activeLatencyTarget.id == target.id;
+
+                          return InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            onTap: () {
+                              setState(() {
+                                _activeLatencyTarget = target;
+                              });
+                              setSheetState(() {});
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("已切换测速目标场景: ${target.name}"),
+                                  duration: const Duration(seconds: 1),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? ThemeDefine.kColorBlue.withValues(alpha: 0.12)
+                                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC)),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? ThemeDefine.kColorBlue
+                                      : theme.dividerColor.withValues(alpha: 0.25),
+                                  width: isSelected ? 1.2 : 0.8,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? ThemeDefine.kColorBlue
+                                          : theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        target.icon,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          target.name,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                                            color: isSelected ? ThemeDefine.kColorBlue : null,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          target.url,
+                                          style: TextStyle(
+                                            fontSize: 10.5,
+                                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Custom URL input
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: _activeLatencyTarget.id == "custom"
+                              ? ThemeDefine.kColorBlue
+                              : theme.dividerColor.withValues(alpha: 0.25),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.link_rounded, size: 18, color: Colors.grey),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              controller: customController,
+                              decoration: const InputDecoration(
+                                hintText: "自定义测速 URL (例如 http://...)",
+                                hintStyle: TextStyle(fontSize: 12),
+                                border: InputBorder.none,
+                                isDense: true,
+                              ),
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ThemeDefine.kColorBlue,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                            ),
+                            onPressed: () {
+                              final text = customController.text.trim();
+                              if (text.isNotEmpty && text.contains("://")) {
+                                setState(() {
+                                  _activeLatencyTarget = LatencyTestTarget(
+                                    id: "custom",
+                                    name: "自定义目标",
+                                    nameEn: "Custom Target",
+                                    icon: "🌐",
+                                    url: text,
+                                  );
+                                });
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: const Text("使用", style: TextStyle(fontSize: 11)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showNodeDetailDialog(ClashProxiesNode group, ClashProxiesNode node) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final region = NodeRegionHelper.getRegion(node.name);
+
+    String delayInfo = "未测速";
+    Color delayColor = Colors.grey;
+    if (node.delay != null) {
+      if (node.delay! < 0) {
+        delayInfo = "超时 / 无法连接";
+        delayColor = Colors.redAccent;
+      } else if (node.delay! > 0) {
+        delayInfo = "${node.delay} ms";
+        if (node.delay! < 300) {
+          delayColor = ThemeDefine.kColorGreenBright;
+        } else if (node.delay! < 800) {
+          delayColor = Colors.lightGreen;
+        } else if (node.delay! < 1200) {
+          delayColor = Colors.amber;
+        } else {
+          delayColor = Colors.orange;
+        }
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: isDark ? const Color(0xFF151D2E) : Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          titlePadding: const EdgeInsets.fromLTRB(18, 18, 18, 8),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          actionsPadding: const EdgeInsets.fromLTRB(14, 8, 14, 14),
+          title: Row(
+            children: [
+              Text(region.flag, style: const TextStyle(fontSize: 22)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  node.name,
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Divider(height: 12),
+              _buildDetailRow("识别地区", "${region.flag} ${region.name} (${region.code})"),
+              _buildDetailRow("节点协议", node.type.isEmpty ? "Unknown" : node.type.toUpperCase()),
+              _buildDetailRow("当前延迟", delayInfo, valueColor: delayColor, isBold: true),
+              _buildDetailRow("测速场景", "${_activeLatencyTarget.icon} ${_activeLatencyTarget.name}"),
+              _buildDetailRow("所属分组", group.name),
+              const Divider(height: 16),
+            ],
+          ),
+          actions: [
+            TextButton.icon(
+              icon: const Icon(Icons.copy_rounded, size: 16),
+              label: const Text("复制名称"),
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: node.name));
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("已复制节点名称"),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+              },
+            ),
+            TextButton.icon(
+              icon: const Icon(Icons.bolt_rounded, size: 16),
+              label: const Text("单独测速"),
+              onPressed: () {
+                Navigator.pop(context);
+                _testNodeDelay(node);
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ThemeDefine.kColorBlue,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                _selectNode(group, node);
+              },
+              child: const Text("选择此节点"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value, {Color? valueColor, bool isBold = false}) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
+                color: valueColor ?? theme.colorScheme.onSurface,
+              ),
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRegionFilterBar(List<ClashProxiesNode> leafNodes) {
+    if (leafNodes.isEmpty) return const SizedBox.shrink();
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final regionSummaries = NodeRegionHelper.extractAvailableRegions(leafNodes);
+    if (regionSummaries.length <= 1) return const SizedBox.shrink();
+
+    return Container(
+      height: 32,
+      margin: const EdgeInsets.only(top: 8, bottom: 2),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: regionSummaries.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 6),
+        itemBuilder: (context, index) {
+          final summary = regionSummaries[index];
+          final isSelected = _selectedRegionCode == summary.region.code;
+
+          return InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () {
+              setState(() {
+                if (_selectedRegionCode == summary.region.code) {
+                  _selectedRegionCode = "ALL";
+                } else {
+                  _selectedRegionCode = summary.region.code;
+                }
+              });
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? ThemeDefine.kColorBlue
+                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected
+                      ? ThemeDefine.kColorBlue
+                      : theme.dividerColor.withValues(alpha: 0.25),
+                  width: 0.8,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    summary.region.flag,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    "${summary.region.name} (${summary.count})",
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                      color: isSelected
+                          ? Colors.white
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -700,6 +1400,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final groups = _getProxyGroups();
+    final leafNodes = _allNodes.where((n) => isRealLeafProxy(n)).toList();
 
     return Scaffold(
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
@@ -748,7 +1449,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         ],
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
 
                     // Toggle Collapse / Expand All button
                     Tooltip(
@@ -782,29 +1483,45 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                     ),
                     const SizedBox(width: 4),
 
-                    // Sort button
+                    // Sort & Filter button
                     Tooltip(
-                      message: tcontext.meta.sort,
+                      message: "排序与过滤",
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
-                        onTap: () {
-                          setState(() {
-                            _sortByDelay = !_sortByDelay;
-                          });
-                        },
+                        onTap: _showSortFilterBottomSheet,
                         child: Container(
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: _sortByDelay
+                            color: (_sortMode != "default" || _hideTimeoutNodes || _selectedRegionCode != "ALL")
                                 ? ThemeDefine.kColorBlue.withValues(alpha: 0.2)
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Icon(
-                            Icons.sort_rounded,
-                            size: 20,
-                            color: _sortByDelay ? ThemeDefine.kColorBlue : null,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Icon(
+                                Icons.tune_rounded,
+                                size: 20,
+                                color: (_sortMode != "default" || _hideTimeoutNodes || _selectedRegionCode != "ALL")
+                                    ? ThemeDefine.kColorBlue
+                                    : null,
+                              ),
+                              if (_sortMode != "default" || _hideTimeoutNodes || _selectedRegionCode != "ALL")
+                                Positioned(
+                                  top: 5,
+                                  right: 5,
+                                  child: Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: const BoxDecoration(
+                                      color: ThemeDefine.kColorBlue,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       ),
@@ -813,10 +1530,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
                     // Latency Test All button
                     Tooltip(
-                      message: tcontext.meta.latencyTest,
+                      message: "${tcontext.meta.latencyTest} (${_activeLatencyTarget.name})",
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
                         onTap: _nodesTesting.isNotEmpty ? null : _testAllDelay,
+                        onLongPress: _showLatencyTargetBottomSheet,
                         child: Container(
                           width: 32,
                           height: 32,
@@ -868,44 +1586,99 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               ),
               const SizedBox(height: 12),
 
-              // Search Bar
+              // Search Bar + Target Selector Chip Row
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? const Color(0xFF1E293B)
-                        : const Color(0xFFF1F5F9),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: tcontext.meta.search,
-                      hintStyle: TextStyle(
-                        fontSize: 12.5,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? const Color(0xFF1E293B)
+                              : const Color(0xFFF1F5F9),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: "${tcontext.meta.search} (节点/地区/协议)",
+                            hintStyle: TextStyle(
+                              fontSize: 12.5,
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              size: 18,
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                            ),
+                            suffixIcon: _searchKeyword.isNotEmpty
+                                ? InkWell(
+                                    onTap: () => _searchController.clear(),
+                                    child: const Icon(Icons.clear, size: 16),
+                                  )
+                                : null,
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                          ),
+                          style: const TextStyle(fontSize: 13),
+                        ),
                       ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        size: 18,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                      ),
-                      suffixIcon: _searchKeyword.isNotEmpty
-                          ? InkWell(
-                              onTap: () => _searchController.clear(),
-                              child: const Icon(Icons.clear, size: 16),
-                            )
-                          : null,
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    style: const TextStyle(fontSize: 13),
-                  ),
+                    const SizedBox(width: 8),
+
+                    // Test Target Selector Chip
+                    InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: _showLatencyTargetBottomSheet,
+                      child: Container(
+                        height: 36,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? const Color(0xFF1E293B)
+                              : const Color(0xFFF1F5F9),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: theme.dividerColor.withValues(alpha: 0.25),
+                            width: 0.8,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.radar_rounded,
+                              size: 15,
+                              color: ThemeDefine.kColorBlue,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              _activeLatencyTarget.name.replaceAll(RegExp(r'^[^\w\s\u4e00-\u9fa5]+'), '').trim(),
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                              ),
+                            ),
+                            const SizedBox(width: 2),
+                            Icon(
+                              Icons.arrow_drop_down_rounded,
+                              size: 18,
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
+
+              // Region Filter Chips Bar
+              _buildRegionFilterBar(leafNodes),
+              const SizedBox(height: 6),
 
               // Offline Status Notice Banner (when VPN not connected but groups exist)
               if (!_isVpnStarted && groups.isNotEmpty)
@@ -1179,7 +1952,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
                   // Ping this group button
                   Tooltip(
-                    message: tcontext.meta.speedTestGroup,
+                    message: "${tcontext.meta.speedTestGroup} (${_activeLatencyTarget.name})",
                     child: InkWell(
                       borderRadius: BorderRadius.circular(6),
                       onTap: () => _testGroupDelay(group),
@@ -1267,7 +2040,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final isTesting = _nodesTesting.contains(node.name);
     final flag = getFlagEmoji(node.name);
 
-    // Latency text and color (Clash Verge style)
+    // Latency text and color (Clash Verge style with enhanced color tiers)
     Color delayColor = ThemeDefine.kColorGreenBright;
     String delayText = "";
 
@@ -1281,12 +2054,14 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       delayColor = Colors.redAccent;
     } else {
       delayText = "${node.delay}";
-      if (node.delay! < 600) {
+      if (node.delay! < 300) {
         delayColor = ThemeDefine.kColorGreenBright;
+      } else if (node.delay! < 800) {
+        delayColor = Colors.lightGreen;
       } else if (node.delay! < 1200) {
         delayColor = Colors.amber;
       } else {
-        delayColor = Colors.redAccent;
+        delayColor = Colors.orange;
       }
     }
 
@@ -1302,6 +2077,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
         onTap: () => _selectNode(group, node),
+        onLongPress: () => _showNodeDetailDialog(group, node),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
@@ -1348,7 +2124,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               borderRadius: BorderRadius.circular(3),
                             ),
                             child: Text(
-                              node.type,
+                              node.type.toUpperCase(),
                               style: TextStyle(
                                 fontSize: 8.5,
                                 fontWeight: FontWeight.w600,
