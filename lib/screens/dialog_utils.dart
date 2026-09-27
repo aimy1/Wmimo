@@ -21,38 +21,58 @@ class DialogUtilsResult<T> {
 class DialogUtils {
   static Future<void> Function(BuildContext context, String text)? faqCallback;
 
+  // Single-instance alert dialog guard to prevent popups from stacking and freezing the app
+  static bool _isShowingAlertDialog = false;
+  static String? _activeDialogText;
+  static BuildContext? _activeDialogContext;
+
+  // Single-instance confirm dialog guard
+  static bool _isShowingConfirmDialog = false;
+  static BuildContext? _activeConfirmDialogContext;
+
   static Future<void> showAlertDialog(
     BuildContext context,
     String text, {
+    String? title,
     bool showCopy = false,
     bool showFAQ = false,
     bool withVersion = false,
+    bool barrierDismissible = true,
   }) async {
     if (!context.mounted) {
       return;
     }
-    double width = 60;
-    if (showCopy) {
-      width = 20;
+
+    // 1. Deduplication guard: if the exact same alert is already visible, ignore to prevent stacking
+    if (_isShowingAlertDialog && _activeDialogText == text) {
+      return;
     }
+
+    // 2. Singleton guard: if an older alert is still open, safely close it first
+    // so multiple errors NEVER stack and freeze the UI!
+    if (_isShowingAlertDialog && _activeDialogContext != null && _activeDialogContext!.mounted) {
+      try {
+        Navigator.of(_activeDialogContext!).pop();
+      } catch (_) {}
+      _isShowingAlertDialog = false;
+      _activeDialogText = null;
+      _activeDialogContext = null;
+    }
+
     if (withVersion) {
       text =
           "${AppUtils.getBuildinVersion()} ${Platform.operatingSystem}\n\n$text";
     }
 
-    const int kMaxLength = 1024;
+    const int kMaxLength = 4096;
     if (text.length > kMaxLength) {
-      text = text.substring(
-        0,
-        kMaxLength,
-      ); //android https://www.cnblogs.com/yyhimmy/p/12583251.html
+      text = "${text.substring(0, kMaxLength)}\n\n...";
     }
 
     if (showFAQ && Platform.isAndroid) {
       String version = await FlutterVpnService.getSystemVersion();
       int? v = int.tryParse(version);
       if (v != null && v == 27) {
-        //android 8.1 flutter_inappwebview_android exception:AbstractMethodError: abstract method "void android.webkit.WebSettings.setSafeBrowsingEnabled(boolean)"
         showFAQ = false;
       }
       if (!context.mounted) {
@@ -61,68 +81,141 @@ class DialogUtils {
     }
 
     final tcontext = Translations.of(context);
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      routeSettings: const RouteSettings(name: "showAlertDialog"),
-      builder: (context) {
-        return SimpleDialog(
-          title: Text(
-            tcontext.meta.tips,
-            style: const TextStyle(fontSize: ThemeConfig.kFontSizeListSubItem),
-          ),
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Text(
-                text,
-                style: const TextStyle(
-                  fontSize: ThemeConfig.kFontSizeListSubItem,
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final isError = text.toLowerCase().contains("fail") ||
+        text.toLowerCase().contains("error") ||
+        text.toLowerCase().contains("exception") ||
+        text.contains("失败") ||
+        text.contains("错误") ||
+        text.contains("异常") ||
+        text.contains("denied");
+
+    final dialogTitle = title ?? (isError ? "提示" : tcontext.meta.tips);
+
+    _isShowingAlertDialog = true;
+    _activeDialogText = text;
+
+    try {
+      await showDialog<void>(
+        context: context,
+        barrierDismissible: barrierDismissible,
+        routeSettings: const RouteSettings(name: "showAlertDialog"),
+        builder: (dialogCtx) {
+          _activeDialogContext = dialogCtx;
+          bool copied = false;
+
+          return StatefulBuilder(
+            builder: (context, setDialogState) {
+              return AlertDialog(
+                backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  child: Text(tcontext.meta.ok),
-                  onPressed: () {
-                    if (!context.mounted) {
-                      return;
-                    }
-                    Navigator.pop(context);
-                  },
+                titlePadding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
+                contentPadding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+                actionsPadding: const EdgeInsets.fromLTRB(16, 4, 16, 14),
+                title: Row(
+                  children: [
+                    Icon(
+                      isError ? Icons.error_outline_rounded : Icons.info_outline_rounded,
+                      size: 20,
+                      color: isError ? Colors.redAccent : ThemeDefine.kColorBlue,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        dialogTitle,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                if (showCopy) ...[
-                  SizedBox(width: width),
+                content: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.45,
+                    maxWidth: 440,
+                  ),
+                  child: SingleChildScrollView(
+                    child: SelectableText(
+                      text,
+                      style: TextStyle(
+                        fontSize: 13,
+                        height: 1.45,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                      ),
+                    ),
+                  ),
+                ),
+                actions: [
+                  if (showFAQ)
+                    TextButton(
+                      child: Text(tcontext.meta.faq),
+                      onPressed: () async {
+                        await faqCallback?.call(context, text);
+                      },
+                    ),
+                  if (showCopy || text.length > 20 || isError)
+                    TextButton.icon(
+                      icon: Icon(
+                        copied ? Icons.check_rounded : Icons.copy_rounded,
+                        size: 15,
+                        color: copied ? Colors.green : null,
+                      ),
+                      label: Text(
+                        copied ? "已复制" : tcontext.meta.copy,
+                        style: TextStyle(
+                          color: copied ? Colors.green : null,
+                        ),
+                      ),
+                      onPressed: () async {
+                        try {
+                          await Clipboard.setData(ClipboardData(text: text));
+                          setDialogState(() {
+                            copied = true;
+                          });
+                          Future.delayed(const Duration(seconds: 2), () {
+                            if (dialogCtx.mounted) {
+                              setDialogState(() {
+                                copied = false;
+                              });
+                            }
+                          });
+                        } catch (_) {}
+                      },
+                    ),
                   ElevatedButton(
-                    child: Text(tcontext.meta.copy),
-                    onPressed: () async {
-                      try {
-                        await Clipboard.setData(ClipboardData(text: text));
-                      } catch (e) {}
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeDefine.kColorBlue,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      minimumSize: const Size(64, 34),
+                    ),
+                    child: Text(tcontext.meta.ok),
+                    onPressed: () {
+                      if (dialogCtx.mounted) {
+                        Navigator.of(dialogCtx).pop();
+                      }
                     },
                   ),
                 ],
-              ],
-            ),
-            const SizedBox(height: 20),
-            if (showFAQ) ...[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: ElevatedButton(
-                  child: Text(tcontext.meta.faq),
-                  onPressed: () async {
-                    await faqCallback?.call(context, text);
-                  },
-                ),
-              ),
-            ],
-          ],
-        );
-      },
-    );
+              );
+            },
+          );
+        },
+      );
+    } finally {
+      _isShowingAlertDialog = false;
+      _activeDialogText = null;
+      _activeDialogContext = null;
+    }
   }
 
   static Future<bool?> showConfirmDialog(
@@ -130,75 +223,148 @@ class DialogUtils {
     String text, {
     bool showCopy = false,
     bool withVersion = false,
+    bool barrierDismissible = true,
   }) async {
     if (!context.mounted) {
       return null;
     }
+
+    if (_isShowingConfirmDialog && _activeConfirmDialogContext != null && _activeConfirmDialogContext!.mounted) {
+      try {
+        Navigator.of(_activeConfirmDialogContext!).pop(false);
+      } catch (_) {}
+      _isShowingConfirmDialog = false;
+      _activeConfirmDialogContext = null;
+    }
+
     if (withVersion) {
       text =
           "${AppUtils.getBuildinVersion()} ${Platform.operatingSystem}\n\n$text";
     }
     final tcontext = Translations.of(context);
-    return await showDialog<bool>(
-      context: context,
-      routeSettings: const RouteSettings(name: "showConfirmDialog"),
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child: Text(
-                text,
-                maxLines: 20,
-                style: const TextStyle(
-                  fontSize: ThemeConfig.kFontSizeListSubItem,
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    _isShowingConfirmDialog = true;
+    try {
+      return await showDialog<bool>(
+        context: context,
+        routeSettings: const RouteSettings(name: "showConfirmDialog"),
+        barrierDismissible: barrierDismissible,
+        builder: (BuildContext dialogCtx) {
+          _activeConfirmDialogContext = dialogCtx;
+          bool copied = false;
+
+          return StatefulBuilder(
+            builder: (context, setDialogState) {
+              return AlertDialog(
+                backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  child: Text(tcontext.meta.cancel),
-                  onPressed: () {
-                    if (!context.mounted) {
-                      return;
-                    }
-                    Navigator.pop(context, false);
-                  },
+                titlePadding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
+                contentPadding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+                actionsPadding: const EdgeInsets.fromLTRB(16, 4, 16, 14),
+                title: Row(
+                  children: [
+                    const Icon(
+                      Icons.help_outline_rounded,
+                      size: 20,
+                      color: ThemeDefine.kColorBlue,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        tcontext.meta.tips,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 60),
-                ElevatedButton(
-                  child: Text(tcontext.meta.ok),
-                  onPressed: () {
-                    if (!context.mounted) {
-                      return;
-                    }
-                    Navigator.pop(context, true);
-                  },
+                content: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.45,
+                    maxWidth: 440,
+                  ),
+                  child: SingleChildScrollView(
+                    child: SelectableText(
+                      text,
+                      style: TextStyle(
+                        fontSize: 13,
+                        height: 1.45,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                      ),
+                    ),
+                  ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            if (showCopy) ...[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: ElevatedButton(
-                  child: Text(tcontext.meta.copy),
-                  onPressed: () async {
-                    try {
-                      await Clipboard.setData(ClipboardData(text: text));
-                    } catch (e) {}
-                  },
-                ),
-              ),
-            ],
-          ],
-        );
-      },
-    );
+                actions: [
+                  if (showCopy)
+                    TextButton.icon(
+                      icon: Icon(
+                        copied ? Icons.check_rounded : Icons.copy_rounded,
+                        size: 15,
+                        color: copied ? Colors.green : null,
+                      ),
+                      label: Text(
+                        copied ? "已复制" : tcontext.meta.copy,
+                        style: TextStyle(
+                          color: copied ? Colors.green : null,
+                        ),
+                      ),
+                      onPressed: () async {
+                        try {
+                          await Clipboard.setData(ClipboardData(text: text));
+                          setDialogState(() {
+                            copied = true;
+                          });
+                          Future.delayed(const Duration(seconds: 2), () {
+                            if (dialogCtx.mounted) {
+                              setDialogState(() {
+                                copied = false;
+                              });
+                            }
+                          });
+                        } catch (_) {}
+                      },
+                    ),
+                  TextButton(
+                    child: Text(tcontext.meta.cancel),
+                    onPressed: () {
+                      if (dialogCtx.mounted) {
+                        Navigator.of(dialogCtx).pop(false);
+                      }
+                    },
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeDefine.kColorBlue,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      minimumSize: const Size(64, 34),
+                    ),
+                    child: Text(tcontext.meta.ok),
+                    onPressed: () {
+                      if (dialogCtx.mounted) {
+                        Navigator.of(dialogCtx).pop(true);
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+    } finally {
+      _isShowingConfirmDialog = false;
+      _activeConfirmDialogContext = null;
+    }
   }
 
   static Future<String?> showPasswordInputDialog(BuildContext context) async {
