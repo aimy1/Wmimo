@@ -71,25 +71,22 @@ class GroupHelper {
     String url = remoteConfig.download.isEmpty
         ? versionCheck.url
         : remoteConfig.download;
+    if (PathUtils.portableMode()) {
+      DialogUtils.showAlertDialog(
+        context,
+        "检测到当前运行在免安装便携模式。\n便携版不支持应用内自覆盖更新，请前往官网下载最新压缩包覆盖解压。\n\n最新版本: v${versionCheck.version}",
+        title: "便携模式更新提示",
+      );
+      return;
+    }
     if (AutoUpdateManager.isSupport()) {
-      String? installerNew = await AutoUpdateManager.checkReplace();
-      if (!context.mounted) {
-        return;
-      }
-      if (installerNew != null) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            settings: VersionUpdateScreen.routSettings(),
-            builder: (context) => const VersionUpdateScreen(),
-          ),
-        );
-      } else {
-        await UrlLauncherUtils.loadUrl(
-          url,
-          mode: LaunchMode.externalApplication,
-        );
-      }
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          settings: VersionUpdateScreen.routSettings(),
+          builder: (context) => const VersionUpdateScreen(),
+        ),
+      );
     } else {
       await UrlLauncherUtils.loadUrl(url, mode: LaunchMode.externalApplication);
     }
@@ -653,19 +650,33 @@ class GroupHelper {
               onPush: () async {
                 if (AutoUpdateManager.getVersionCheck().newVersion) {
                   await GroupHelper.newVersionUpdate(context);
-                } else {
-                  await AutoUpdateManager.check(force: true);
-                  if (context.mounted) {
-                    final latest = AutoUpdateManager.getVersionCheck();
-                    if (latest.newVersion) {
-                      setstate?.call();
-                      await GroupHelper.newVersionUpdate(context);
-                    } else {
-                      DialogUtils.showAlertDialog(
-                        context,
-                        "已是最新版本 (v${AppUtils.getBuildinVersion()})",
-                      );
-                    }
+                  return;
+                }
+                DialogUtils.showLoadingDialog(
+                  context,
+                  text: tcontext.meta.loading,
+                );
+                final result = await AutoUpdateManager.check(force: true);
+                if (context.mounted) {
+                  try {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  } catch (_) {}
+
+                  if (result.status == AutoUpdateCheckStatus.hasNewVersion) {
+                    setstate?.call();
+                    await GroupHelper.newVersionUpdate(context);
+                  } else if (result.status ==
+                      AutoUpdateCheckStatus.alreadyLatest) {
+                    DialogUtils.showAlertDialog(
+                      context,
+                      "已是最新版本 (v${AppUtils.getBuildinVersion()})",
+                    );
+                  } else if (result.status == AutoUpdateCheckStatus.error) {
+                    DialogUtils.showAlertDialog(
+                      context,
+                      "检查更新失败，请检查网络连接\n${result.errorMessage ?? ''}",
+                      showCopy: true,
+                    );
                   }
                 }
               },

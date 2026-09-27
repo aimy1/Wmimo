@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack
+// ignore_for_file: unused_catch_stack
 
 import 'dart:io';
 import 'dart:ui';
@@ -31,14 +31,57 @@ class VersionUpdateScreen extends LasyRenderingStatefulWidget {
 class _VersionUpdateScreenState
     extends LasyRenderingState<VersionUpdateScreen> {
   bool _installing = false;
+  bool _downloading = false;
+  String? _installerPath;
+
   @override
   void initState() {
     super.initState();
+    AutoUpdateManager.onEventCheck.add(_onUpdateEvent);
+    _checkStatus();
   }
 
   @override
   void dispose() {
+    AutoUpdateManager.onEventCheck.remove(_onUpdateEvent);
     super.dispose();
+  }
+
+  void _onUpdateEvent() {
+    if (mounted) {
+      _checkStatus();
+    }
+  }
+
+  Future<void> _checkStatus() async {
+    final path = await AutoUpdateManager.checkReplace();
+    final downloading = AutoUpdateManager.isDownloading();
+    if (mounted) {
+      setState(() {
+        _installerPath = path;
+        _downloading = downloading;
+      });
+    }
+  }
+
+  Future<void> _startDownload() async {
+    setState(() {
+      _downloading = true;
+    });
+    final success = await AutoUpdateManager.download(force: true);
+    if (!mounted) return;
+    if (!success) {
+      setState(() {
+        _downloading = false;
+      });
+      DialogUtils.showAlertDialog(
+        context,
+        "下载更新安装包失败，请检查网络或点击下方前往网页下载。",
+        showCopy: true,
+      );
+    } else {
+      await _checkStatus();
+    }
   }
 
   @override
@@ -47,7 +90,14 @@ class _VersionUpdateScreenState
     var checkVersion = AutoUpdateManager.getVersionCheck();
 
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: AppBar(
+        title: Text(tcontext.meta.autoUpdate),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Stack(
         children: [
           Container(
@@ -56,42 +106,110 @@ class _VersionUpdateScreenState
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      tcontext.VersionUpdateScreen.versionReady(
-                        p: checkVersion.version,
-                      ),
-                      style: const TextStyle(
-                        fontSize: ThemeConfig.kFontSizeListItem,
-                        fontWeight: ThemeConfig.kFontWeightListItem,
-                        color: ThemeDefine.kColorBlue,
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: ThemeDefine.kColorBlue.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.system_update_rounded,
+                    color: ThemeDefine.kColorBlue,
+                    size: 38,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  _installerPath != null
+                      ? tcontext.VersionUpdateScreen.versionReady(
+                          p: checkVersion.version,
+                        )
+                      : "发现新版本: v${checkVersion.version}",
+                  style: const TextStyle(
+                    fontSize: ThemeConfig.kFontSizeListItem,
+                    fontWeight: ThemeConfig.kFontWeightListItem,
+                    color: ThemeDefine.kColorBlue,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                if (_installing) ...[
+                  const SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: RepaintBoundary(
+                      child: CircularProgressIndicator(
+                        color: ThemeDefine.kColorGreenBright,
                       ),
                     ),
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      height: 45.0,
-                      child: ElevatedButton(
-                        onPressed: _installing
-                            ? null
-                            : () async {
-                                await checkReplace();
-                              },
-                        child: _installing
-                            ? SizedBox(
-                                width: 26,
-                                height: 26,
-                                child: RepaintBoundary(
-                                  child: CircularProgressIndicator(
-                                    color: ThemeDefine.kColorGreenBright,
-                                  ),
-                                ),
-                              )
-                            : Text(tcontext.VersionUpdateScreen.update),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text("正在准备启动更新..."),
+                ] else if (_installerPath != null) ...[
+                  SizedBox(
+                    height: 45.0,
+                    width: 200,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ThemeDefine.kColorBlue,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
+                      onPressed: () async {
+                        await checkReplace();
+                      },
+                      child: Text(tcontext.VersionUpdateScreen.update),
                     ),
-                  ],
+                  ),
+                ] else if (_downloading) ...[
+                  const SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: RepaintBoundary(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text("安装包正在下载中，请稍候..."),
+                ] else ...[
+                  SizedBox(
+                    height: 45.0,
+                    width: 200,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ThemeDefine.kColorBlue,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: _startDownload,
+                      child: const Text("立即下载更新"),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  if (checkVersion.url.isNotEmpty)
+                    TextButton(
+                      onPressed: () async {
+                        await launchUrl(
+                          Uri.parse(checkVersion.url),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                      child: const Text("前往网页下载安装包"),
+                    ),
+                ],
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    tcontext.VersionUpdateScreen.cancel,
+                    style: TextStyle(
+                      color: Theme.of(context).hintColor,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -107,7 +225,10 @@ class _VersionUpdateScreenState
       return;
     }
     if (installer == null) {
-      Navigator.pop(context);
+      await _checkStatus();
+      if (_installerPath == null) {
+        await _startDownload();
+      }
       return;
     }
     if (_installing) {
@@ -118,15 +239,25 @@ class _VersionUpdateScreenState
     try {
       await VPNService.stop();
       if (Platform.isWindows) {
-        await launchUrl(Uri(path: installer, scheme: 'file'));
+        await launchUrl(Uri.file(installer));
+        await Future.delayed(const Duration(milliseconds: 500));
         await ServicesBinding.instance.exitApplication(AppExitType.required);
       } else if (Platform.isMacOS) {
-        await launchUrl(Uri(path: installer, scheme: 'file'));
+        await launchUrl(Uri.file(installer));
+        await Future.delayed(const Duration(milliseconds: 500));
         await ServicesBinding.instance.exitApplication(AppExitType.required);
       } else if (Platform.isAndroid) {
         await AppInstaller.installApk(installer);
       } else if (Platform.isLinux) {
         if (!mounted) {
+          return;
+        }
+
+        final channelName = InstallReferrerUtils.getBuildChannelName();
+        if (channelName.toLowerCase().contains("appimage")) {
+          await Process.run("chmod", ["+x", installer]);
+          await Process.start(installer, [], mode: ProcessStartMode.detached);
+          await ServicesBinding.instance.exitApplication(AppExitType.required);
           return;
         }
 
@@ -138,15 +269,10 @@ class _VersionUpdateScreenState
         }
         final shell = Platform.environment['SHELL'] ?? 'bash';
         final arguments = ["-c"];
-        final channelName = InstallReferrerUtils.getBuildChannelName();
         if (channelName.toLowerCase().contains("deb")) {
           arguments.add('echo "$password" | sudo -S dpkg -i "$installer"');
         } else if (channelName.toLowerCase().contains("rpm")) {
           arguments.add('echo "$password" | sudo -S rpm -i "$installer"');
-        } else if (channelName.toLowerCase().contains("appimage")) {
-          _installing = false;
-          setState(() {});
-          return;
         } else {
           arguments.add('echo "$password" | sudo -S dpkg -i "$installer"');
         }

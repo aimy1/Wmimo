@@ -47,6 +47,19 @@ class VPNService {
     if (Platform.isAndroid) {
       String abisAll = await FlutterVpnService.getABIs();
       _abis = abisAll.replaceAll("[", "").replaceAll("]", "").split(",");
+    } else {
+      String ver = Platform.version.toLowerCase();
+      if (ver.contains("arm64") || ver.contains("aarch64")) {
+        _abis = ["arm64", "aarch64"];
+      } else if (ver.contains("x64") || ver.contains("x86_64")) {
+        _abis = ["x86_64", "x64"];
+      } else if (ver.contains("arm")) {
+        _abis = ["arm", "armeabi-v7a"];
+      } else if (ver.contains("ia32") || ver.contains("x86")) {
+        _abis = ["x86"];
+      } else {
+        _abis = ["x86_64", "x64"];
+      }
     }
   }
 

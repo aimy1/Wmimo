@@ -22,6 +22,24 @@ import 'package:wmimo/app/utils/version_compare_utils.dart';
 import 'package:libclash_vpn_service/state.dart';
 import 'package:path/path.dart' as path;
 
+enum AutoUpdateCheckStatus {
+  hasNewVersion,
+  alreadyLatest,
+  error,
+}
+
+class AutoUpdateCheckResult {
+  final AutoUpdateCheckStatus status;
+  final String? errorMessage;
+  final AutoUpdateCheckVersion versionCheck;
+
+  AutoUpdateCheckResult({
+    required this.status,
+    this.errorMessage,
+    required this.versionCheck,
+  });
+}
+
 class AutoUpdateCheckVersion {
   String latestCheck = "";
   bool newVersion = false;
@@ -68,7 +86,9 @@ class AutoUpdateCheckVersion {
       } else if (channelName.toLowerCase().contains("rpm")) {
         ext = ".rpm";
       } else if (channelName.toLowerCase().contains("appimage")) {
-        return "";
+        ext = ".AppImage";
+      } else {
+        ext = ".deb";
       }
     }
     return ext;
@@ -152,11 +172,14 @@ class AutoUpdateManager {
       _check();
     });
 
-    if (PlatformUtils.isPC()) {
-      _timerChecker = Timer.periodic(const Duration(minutes: 30), (timer) {
+    _timerChecker = Timer.periodic(
+      PlatformUtils.isPC()
+          ? const Duration(minutes: 30)
+          : const Duration(hours: 4),
+      (timer) {
         _check();
-      });
-    }
+      },
+    );
   }
 
   static Future<void> uninit() async {
@@ -169,11 +192,20 @@ class AutoUpdateManager {
     _check();
   }
 
-  static Future<void> check({bool force = false}) async {
+  static bool isDownloading() {
+    return _downloading;
+  }
+
+  static Completer<AutoUpdateCheckResult>? _activeCheckCompleter;
+
+  static Future<AutoUpdateCheckResult> check({bool force = false}) async {
+    if (_checking && _activeCheckCompleter != null) {
+      return _activeCheckCompleter!.future;
+    }
     if (force) {
       _versionCheck.latestCheck = "";
     }
-    await _check();
+    return await _check(manual: force);
   }
 
   static AutoUpdateCheckVersion getVersionCheck() {
@@ -235,21 +267,21 @@ class AutoUpdateManager {
     return null;
   }
 
-  static Future<void> download() async {
-    if (!SettingManager.getConfig().autoDownloadUpdatePkg) {
-      return;
+  static Future<bool> download({bool force = false}) async {
+    if (!force && !SettingManager.getConfig().autoDownloadUpdatePkg) {
+      return false;
     }
     if (!isSupport()) {
-      return;
+      return false;
     }
     if (PathUtils.portableMode()) {
-      return;
+      return false;
     }
     if (_versionCheck.version.isEmpty || _versionCheck.url.isEmpty) {
-      return;
+      return false;
     }
     if (_downloading) {
-      return;
+      return false;
     }
     List<int?> ports = await VPNService.getPortsByPrefer(true);
     String version = AppUtils.getBuildinVersion();
@@ -257,26 +289,28 @@ class AutoUpdateManager {
         0) {
       String downloadPath = await _versionCheck.getDownloadPath();
       if (downloadPath.isEmpty) {
-        return;
+        return false;
       }
       if (await File(downloadPath).exists()) {
-        return;
+        return true;
       }
       String dir = await PathUtils.cacheDir();
       final ext = _versionCheck.getExtension();
       if (ext.isEmpty) {
-        return;
+        return false;
       }
       var files = FileUtils.recursionFile(dir, extensionFilter: {ext});
       for (var file in files) {
-        await FileUtils.deletePath(file);
+        final filename = path.basename(file).toLowerCase();
+        if (filename.contains("wmimo") ||
+            filename.startsWith("1.") ||
+            filename.startsWith("2.")) {
+          await FileUtils.deletePath(file);
+        }
       }
       Uri? uri = Uri.tryParse(_versionCheck.url);
       if (uri == null) {
-        return;
-      }
-      if (_downloading) {
-        return;
+        return false;
       }
       _downloading = true;
       late ReturnResult<HttpHeaders> result;
@@ -294,6 +328,7 @@ class AutoUpdateManager {
       }
 
       if (result.error != null) {
+        _downloading = false;
         if (result.error!.message.contains("404")) {
           _versionCheck.newVersion = false;
           _versionCheck.version = "";
@@ -302,12 +337,15 @@ class AutoUpdateManager {
 
           save();
         }
+        return false;
       }
       if (_versionCheck.sha256.isNotEmpty) {
         final hash = await CryptoUtils.getFileSha256(downloadPath);
         if (hash != null) {
           if (_versionCheck.sha256 != hash) {
             await FileUtils.deletePath(downloadPath);
+            _downloading = false;
+            return false;
           }
         }
       }
@@ -318,7 +356,9 @@ class AutoUpdateManager {
           callback();
         }
       });
+      return true;
     }
+    return false;
   }
 
   static Future<void> _sanitizeMacOSInstaller(String downloadPath) async {
@@ -360,18 +400,28 @@ class AutoUpdateManager {
     }
   }
 
-  static Future<void> _check() async {
-    if (_checking) {
-      return;
+  static Future<AutoUpdateCheckResult> _check({bool manual = false}) async {
+    if (_checking && _activeCheckCompleter != null) {
+      return _activeCheckCompleter!.future;
     }
+
+    _activeCheckCompleter = Completer<AutoUpdateCheckResult>();
 
     var last = DateTime.tryParse(_versionCheck.latestCheck);
     DateTime now = DateTime.now();
-    if (last != null) {
+    if (last != null && !manual) {
       Duration dur = now.difference(last);
       if (dur.inSeconds < _duration.inSeconds) {
         await download();
-        return;
+        final res = AutoUpdateCheckResult(
+          status: _versionCheck.newVersion
+              ? AutoUpdateCheckStatus.hasNewVersion
+              : AutoUpdateCheckStatus.alreadyLatest,
+          versionCheck: _versionCheck,
+        );
+        _activeCheckCompleter?.complete(res);
+        _activeCheckCompleter = null;
+        return res;
       }
     }
     var autoUpdateChannel = SettingManager.getConfig().autoUpdateChannel;
@@ -391,10 +441,17 @@ class AutoUpdateManager {
         _checking = false;
         _duration = const Duration(minutes: 10);
         save();
-        return;
+        final res = AutoUpdateCheckResult(
+          status: AutoUpdateCheckStatus.error,
+          errorMessage: items.error!.message,
+          versionCheck: _versionCheck,
+        );
+        _activeCheckCompleter?.complete(res);
+        _activeCheckCompleter = null;
+        return res;
       }
       _duration = const Duration(hours: 3);
-      if (items.data!.isNotEmpty) {
+      if (items.data != null && items.data!.isNotEmpty) {
         final abis = VPNService.getABIs();
 
         String channel = await InstallReferrerUtils.getString();
@@ -451,13 +508,34 @@ class AutoUpdateManager {
         save();
         await download();
       }
+
+      final res = AutoUpdateCheckResult(
+        status: _versionCheck.newVersion
+            ? AutoUpdateCheckStatus.hasNewVersion
+            : AutoUpdateCheckStatus.alreadyLatest,
+        versionCheck: _versionCheck,
+      );
+      _checking = false;
+      _activeCheckCompleter?.complete(res);
+      _activeCheckCompleter = null;
+      Future.delayed(_duration, () async {
+        _check();
+      });
+      return res;
     } catch (err, _) {
       Log.w("AutoUpdateManager._check exception ${err.toString()}");
+      _checking = false;
+      final res = AutoUpdateCheckResult(
+        status: AutoUpdateCheckStatus.error,
+        errorMessage: err.toString(),
+        versionCheck: _versionCheck,
+      );
+      _activeCheckCompleter?.complete(res);
+      _activeCheckCompleter = null;
+      Future.delayed(_duration, () async {
+        _check();
+      });
+      return res;
     }
-
-    _checking = false;
-    Future.delayed(_duration, () async {
-      _check();
-    });
   }
 }
