@@ -775,16 +775,35 @@ class MyAppState extends State<MyApp>
           : 'export http_proxy=http://127.0.0.1:$port\nexport https_proxy=http://127.0.0.1:$port\nexport all_proxy=socks5://127.0.0.1:$port';
       await Clipboard.setData(ClipboardData(text: cmd));
     } else if (key == kMenuDelayTest) {
+      final setting = SettingManager.getConfig();
+      final testUrl = setting.delayTestUrl.isNotEmpty
+          ? setting.delayTestUrl
+          : "https://cp.cloudflare.com/generate_204";
+      final timeout = Duration(milliseconds: setting.delayTestTimeout);
       final nodes = await ProxyNodeLoader.loadCurrentProfileNodes();
-      for (var n in nodes) {
-        if (!ClashProtocolType.isGroupType(n.type)) {
-          ClashHttpApi.getDelay(
-            n.name,
-            url: "http://www.gstatic.com/generate_204",
-            timeout: const Duration(seconds: 5),
-          );
+      final leafNodes =
+          nodes.where((n) => !ClashProtocolType.isGroupType(n.type)).toList();
+
+      int nextIdx = 0;
+      const workerCount = 12;
+      Future<void> worker() async {
+        while (nextIdx < leafNodes.length) {
+          final node = leafNodes[nextIdx++];
+          try {
+            await ClashHttpApi.getDelay(
+              node.name,
+              url: testUrl,
+              timeout: timeout,
+            );
+          } catch (_) {}
         }
       }
+
+      final workers = List.generate(
+        leafNodes.length < workerCount ? leafNodes.length : workerCount,
+        (_) => worker(),
+      );
+      await Future.wait(workers);
     } else if (key == kMenuOpenConfigDir) {
       final dir = await PathUtils.profileDir();
       if (Platform.isWindows) {

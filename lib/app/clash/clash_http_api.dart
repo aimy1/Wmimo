@@ -601,6 +601,58 @@ class ClashHttpApi {
     }
   }
 
+  static Future<ReturnResult<Map<String, int>>> getGroupDelay(
+    String group, {
+    String url = "https://www.gstatic.com/generate_204",
+    Duration timeout = const Duration(seconds: 6),
+  }) async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+
+    final encodeGroup = Uri.encodeComponent(group);
+    final validUrl = (url.isNotEmpty && url.contains("://"))
+        ? url
+        : "https://www.gstatic.com/generate_204";
+    final encodeUrl = Uri.encodeComponent(validUrl);
+    var result = await HttpUtils.httpGetRequest(
+      "$host:${getControlPort?.call()}/group/$encodeGroup/delay?url=$encodeUrl&timeout=${timeout.inMilliseconds}",
+      null,
+      headers,
+      timeout + const Duration(seconds: 3),
+      null,
+      null,
+      checkStatuscode: false,
+    );
+    if (result.error != null && result.data == null) {
+      return ReturnResult(error: result.error);
+    }
+    try {
+      final responseBody = result.data?.item2 ?? "";
+      if (responseBody.isEmpty) {
+        return ReturnResult(
+          error: result.error ?? ReturnResultError("Empty response"),
+        );
+      }
+      var decodedResponse = jsonDecode(responseBody);
+      if (decodedResponse is Map) {
+        final Map<String, int> delays = {};
+        decodedResponse.forEach((key, val) {
+          if (val is num && val > 0) {
+            delays[key.toString()] = val.toInt();
+          } else if (val is num && val <= 0) {
+            delays[key.toString()] = -1;
+          }
+        });
+        if (delays.isNotEmpty) {
+          return ReturnResult(data: delays);
+        }
+      }
+      return ReturnResult(error: ReturnResultError("Unexpected response format"));
+    } catch (err) {
+      return ReturnResult(error: ReturnResultError(err.toString()));
+    }
+  }
+
   static Future<ReturnResult<List<ClashProxiesNode>>> getProxies() async {
     String secret = getSecret?.call() ?? "";
     Map<String, String> headers = getHeaders(secret);

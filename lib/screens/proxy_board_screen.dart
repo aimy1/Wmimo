@@ -392,52 +392,81 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final testUrl = _activeLatencyTarget.url.isNotEmpty
         ? _activeLatencyTarget.url
         : setting.delayTestUrl;
+    final timeout = Duration(milliseconds: setting.delayTestTimeout);
 
-    Timer? updateDebounce;
-    void scheduleUiUpdate() {
-      if (updateDebounce?.isActive == true) return;
-      updateDebounce = Timer(const Duration(milliseconds: 150), () {
+    // Try Mihomo native group delay test first (core-level batch test)
+    bool groupDelaySucceeded = false;
+    try {
+      final res = await ClashHttpApi.getGroupDelay(
+        group.name,
+        url: testUrl,
+        timeout: timeout,
+      );
+      if (res.data != null && res.data!.isNotEmpty) {
+        final groupDelays = res.data!;
+        for (var n in _allNodes) {
+          if (groupDelays.containsKey(n.name)) {
+            final d = groupDelays[n.name]!;
+            n.delay = d > 0 ? d : -1;
+          } else if (nodesToTest.contains(n.name)) {
+            n.delay = -1;
+          }
+        }
+        _nodesTesting.removeAll(nodesToTest);
+        groupDelaySucceeded = true;
         if (mounted) setState(() {});
-      });
+      }
+    } catch (_) {
+      groupDelaySucceeded = false;
     }
 
-    int nextIndex = 0;
-    Future<void> worker() async {
-      while (true) {
-        if (nextIndex >= nodesToTest.length) break;
-        final nodeName = nodesToTest[nextIndex++];
-        try {
-          final res = await ClashHttpApi.getDelay(
-            nodeName,
-            url: testUrl,
-            timeout: Duration(milliseconds: setting.delayTestTimeout),
-          );
-          final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
-          for (var n in _allNodes) {
-            if (n.name == nodeName) {
-              n.delay = testDelay;
+    if (!groupDelaySucceeded) {
+      Timer? updateDebounce;
+      void scheduleUiUpdate() {
+        if (updateDebounce?.isActive == true) return;
+        updateDebounce = Timer(const Duration(milliseconds: 150), () {
+          if (mounted) setState(() {});
+        });
+      }
+
+      int nextIndex = 0;
+      Future<void> worker() async {
+        while (true) {
+          if (nextIndex >= nodesToTest.length) break;
+          final nodeName = nodesToTest[nextIndex++];
+          try {
+            final res = await ClashHttpApi.getDelay(
+              nodeName,
+              url: testUrl,
+              timeout: timeout,
+            );
+            final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
+            for (var n in _allNodes) {
+              if (n.name == nodeName) {
+                n.delay = testDelay;
+              }
             }
-          }
-        } catch (_) {
-          for (var n in _allNodes) {
-            if (n.name == nodeName) {
-              n.delay = -1;
+          } catch (_) {
+            for (var n in _allNodes) {
+              if (n.name == nodeName) {
+                n.delay = -1;
+              }
             }
+          } finally {
+            _nodesTesting.remove(nodeName);
+            scheduleUiUpdate();
           }
-        } finally {
-          _nodesTesting.remove(nodeName);
-          scheduleUiUpdate();
         }
       }
-    }
 
-    final workerCount = nodesToTest.length < 8 ? nodesToTest.length : 8;
-    final workers = List.generate(workerCount, (_) => worker());
-    await Future.wait(workers);
+      final workerCount = nodesToTest.length < 16 ? nodesToTest.length : 16;
+      final workers = List.generate(workerCount, (_) => worker());
+      await Future.wait(workers);
 
-    updateDebounce?.cancel();
-    if (mounted) {
-      setState(() {});
+      updateDebounce?.cancel();
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 
@@ -535,7 +564,109 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       }
     }
 
-    final workerCount = allLeafNodeNames.length < 8 ? allLeafNodeNames.length : 8;
+    final workerCount = allLeafNodeNames.length < 20 ? allLeafNodeNames.length : 20;
+    final workers = List.generate(workerCount, (_) => worker());
+    await Future.wait(workers);
+
+    updateDebounce?.cancel();
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _testTimeoutNodesDelay() async {
+    if (!_isVpnStarted) {
+      final tcontext = Translations.of(context);
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(tcontext.meta.startingCoreAndTesting),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      VpnActionHandler.vpnConnect?.call("proxy_test", false);
+      for (int i = 0; i < 15; i++) {
+        await Future.delayed(const Duration(milliseconds: 300));
+        final started = await VPNService.getStarted();
+        if (started) {
+          _isVpnStarted = true;
+          break;
+        }
+      }
+      if (!_isVpnStarted) return;
+      await _fetchProxies();
+    }
+
+    final targetNodes = _allNodes
+        .where((n) => isRealLeafProxy(n) && (n.delay == null || n.delay! <= 0))
+        .map((n) => n.name)
+        .toSet()
+        .toList();
+
+    if (targetNodes.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("所有节点均正常可用，无需重测"),
+            duration: Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+      return;
+    }
+
+    for (var name in targetNodes) {
+      _nodesTesting.add(name);
+    }
+    setState(() {});
+
+    final setting = SettingManager.getConfig();
+    final testUrl = _activeLatencyTarget.url.isNotEmpty
+        ? _activeLatencyTarget.url
+        : setting.delayTestUrl;
+    final timeout = Duration(milliseconds: setting.delayTestTimeout);
+
+    Timer? updateDebounce;
+    void scheduleUiUpdate() {
+      if (updateDebounce?.isActive == true) return;
+      updateDebounce = Timer(const Duration(milliseconds: 150), () {
+        if (mounted) setState(() {});
+      });
+    }
+
+    int nextIndex = 0;
+    Future<void> worker() async {
+      while (true) {
+        if (nextIndex >= targetNodes.length) break;
+        final nodeName = targetNodes[nextIndex++];
+        try {
+          final res = await ClashHttpApi.getDelay(
+            nodeName,
+            url: testUrl,
+            timeout: timeout,
+          );
+          final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
+          for (var n in _allNodes) {
+            if (n.name == nodeName) {
+              n.delay = testDelay;
+            }
+          }
+        } catch (_) {
+          for (var n in _allNodes) {
+            if (n.name == nodeName) {
+              n.delay = -1;
+            }
+          }
+        } finally {
+          _nodesTesting.remove(nodeName);
+          scheduleUiUpdate();
+        }
+      }
+    }
+
+    final workerCount = targetNodes.length < 16 ? targetNodes.length : 16;
     final workers = List.generate(workerCount, (_) => worker());
     await Future.wait(workers);
 
@@ -1025,6 +1156,48 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       ),
                     ),
                     const Divider(height: 16),
+
+                    // Quick Action Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              side: BorderSide(color: ThemeDefine.kColorBlue.withValues(alpha: 0.4)),
+                            ),
+                            icon: const Icon(Icons.bolt_rounded, size: 16, color: ThemeDefine.kColorBlue),
+                            label: const Text("全量极速测速", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                            onPressed: _nodesTesting.isNotEmpty
+                                ? null
+                                : () {
+                                    Navigator.pop(context);
+                                    _testAllDelay();
+                                  },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              side: BorderSide(color: Colors.orange.withValues(alpha: 0.4)),
+                            ),
+                            icon: const Icon(Icons.replay_rounded, size: 16, color: Colors.orange),
+                            label: const Text("仅重测超时节点", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                            onPressed: _nodesTesting.isNotEmpty
+                                ? null
+                                : () {
+                                    Navigator.pop(context);
+                                    _testTimeoutNodesDelay();
+                                  },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
 
                     // Preset target list
                     Flexible(

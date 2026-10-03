@@ -1,16 +1,19 @@
 // ignore_for_file: use_build_context_synchronously, empty_catches
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
+import 'package:wmimo/app/utils/local_storage.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_config.dart';
+import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 
 enum SpeedTestPhase {
@@ -22,6 +25,180 @@ enum SpeedTestPhase {
   stopped,
 }
 
+class SpeedTestServer {
+  final String id;
+  final String name;
+  final String region;
+  final String icon;
+  final List<String> pingUrls;
+  final String downloadUrl;
+  final String uploadUrl;
+
+  const SpeedTestServer({
+    required this.id,
+    required this.name,
+    required this.region,
+    required this.icon,
+    required this.pingUrls,
+    required this.downloadUrl,
+    required this.uploadUrl,
+  });
+
+  static const List<SpeedTestServer> presets = [
+    SpeedTestServer(
+      id: 'cloudflare',
+      name: 'Cloudflare Anycast',
+      region: '全球边缘加速 (Anycast)',
+      icon: '⚡',
+      pingUrls: [
+        'https://speed.cloudflare.com/__down?bytes=0',
+        'https://cp.cloudflare.com/generate_204',
+        'https://1.1.1.1/cdn-cgi/trace',
+      ],
+      downloadUrl: 'https://speed.cloudflare.com/__down?bytes=25000000',
+      uploadUrl: 'https://speed.cloudflare.com/__up',
+    ),
+    SpeedTestServer(
+      id: 'fast',
+      name: 'Fast.com / Netflix',
+      region: '流媒体专属加速骨干',
+      icon: '🎬',
+      pingUrls: [
+        'https://api.fast.com/netflix/speedtest/v2',
+        'https://speed.cloudflare.com/__down?bytes=0',
+      ],
+      downloadUrl: 'https://ipv4-c001-sjc001-ix.1.oca.nflxvideo.net/speedtest?size=25000000',
+      uploadUrl: 'https://speed.cloudflare.com/__up',
+    ),
+    SpeedTestServer(
+      id: 'apple',
+      name: 'Apple / Akamai CDN',
+      region: '全球高可用边缘节点',
+      icon: '🍎',
+      pingUrls: [
+        'https://captive.apple.com/hotspot-detect.html',
+        'https://speed.cloudflare.com/__down?bytes=0',
+      ],
+      downloadUrl: 'https://speed.cloudflare.com/__down?bytes=25000000',
+      uploadUrl: 'https://speed.cloudflare.com/__up',
+    ),
+    SpeedTestServer(
+      id: 'cachefly',
+      name: 'CacheFly CDN',
+      region: '国际骨干 CDN 节点',
+      icon: '🚀',
+      pingUrls: [
+        'https://testfile.cachefly.net/10mb.test',
+        'https://speed.cloudflare.com/__down?bytes=0',
+      ],
+      downloadUrl: 'https://testfile.cachefly.net/100mb.test',
+      uploadUrl: 'https://speed.cloudflare.com/__up',
+    ),
+  ];
+}
+
+class NetworkGrade {
+  final String gameGrade;
+  final String gameDesc;
+  final Color gameColor;
+  final String streamGrade;
+  final String streamDesc;
+  final Color streamColor;
+  final String meetingGrade;
+  final String meetingDesc;
+  final Color meetingColor;
+
+  const NetworkGrade({
+    required this.gameGrade,
+    required this.gameDesc,
+    required this.gameColor,
+    required this.streamGrade,
+    required this.streamDesc,
+    required this.streamColor,
+    required this.meetingGrade,
+    required this.meetingDesc,
+    required this.meetingColor,
+  });
+
+  factory NetworkGrade.calculate({
+    required double ping,
+    required double jitter,
+    required double download,
+    required double upload,
+  }) {
+    String gGrade;
+    String gDesc;
+    Color gColor;
+    if (ping > 0 && ping <= 45 && jitter <= 10) {
+      gGrade = 'S 级';
+      gDesc = '职业电竞级 / 极速丝滑';
+      gColor = const Color(0xFF10B981);
+    } else if (ping > 0 && ping <= 85 && jitter <= 20) {
+      gGrade = 'A 级';
+      gDesc = '稳定顺畅 / 主流竞技无压力';
+      gColor = const Color(0xFF00E5FF);
+    } else if (ping > 0 && ping <= 160) {
+      gGrade = 'B 级';
+      gDesc = '略有延迟 / 轻度休闲可用';
+      gColor = const Color(0xFFF59E0B);
+    } else {
+      gGrade = 'C 级';
+      gDesc = '延迟偏高 / 建议切换优质节点';
+      gColor = const Color(0xFFEF4444);
+    }
+
+    String sGrade;
+    String sDesc;
+    Color sColor;
+    if (download >= 80) {
+      sGrade = '8K 超清';
+      sDesc = '极速秒开 / 蓝光无损画质';
+      sColor = const Color(0xFF8B5CF6);
+    } else if (download >= 30) {
+      sGrade = '4K 臻彩';
+      sDesc = '秒播无阻 / 杜比视界';
+      sColor = const Color(0xFF00E5FF);
+    } else if (download >= 12) {
+      sGrade = '1080P';
+      sDesc = '高清流畅 / 无缝播放';
+      sColor = const Color(0xFF10B981);
+    } else {
+      sGrade = '标清';
+      sDesc = '轻微缓冲 / 适合基础网页';
+      sColor = const Color(0xFFF59E0B);
+    }
+
+    String mGrade;
+    String mDesc;
+    Color mColor;
+    if (upload >= 20 && jitter <= 15) {
+      mGrade = '极佳';
+      mDesc = '高清多方视讯 / 桌面演示无延迟';
+      mColor = const Color(0xFF10B981);
+    } else if (upload >= 6 && jitter <= 30) {
+      mGrade = '良好';
+      mDesc = '日常语音视频清晰连贯';
+      mColor = const Color(0xFF00E5FF);
+    } else {
+      mGrade = '一般';
+      mDesc = '上行较慢 / 建议优先音频';
+      mColor = const Color(0xFFF59E0B);
+    }
+
+    return NetworkGrade(
+      gameGrade: gGrade,
+      gameDesc: gDesc,
+      gameColor: gColor,
+      streamGrade: sGrade,
+      streamDesc: sDesc,
+      streamColor: sColor,
+      meetingGrade: mGrade,
+      meetingDesc: mDesc,
+      meetingColor: mColor,
+    );
+  }
+}
+
 class SpeedTestRecord {
   final DateTime time;
   final String nodeName;
@@ -30,6 +207,7 @@ class SpeedTestRecord {
   final double downloadSpeed;
   final double uploadSpeed;
   final bool isProxy;
+  final String serverName;
 
   SpeedTestRecord({
     required this.time,
@@ -39,7 +217,34 @@ class SpeedTestRecord {
     required this.downloadSpeed,
     required this.uploadSpeed,
     required this.isProxy,
+    this.serverName = 'Cloudflare',
   });
+
+  Map<String, dynamic> toJson() => {
+    'time': time.millisecondsSinceEpoch,
+    'nodeName': nodeName,
+    'ping': ping,
+    'jitter': jitter,
+    'downloadSpeed': downloadSpeed,
+    'uploadSpeed': uploadSpeed,
+    'isProxy': isProxy,
+    'serverName': serverName,
+  };
+
+  factory SpeedTestRecord.fromJson(Map<String, dynamic> map) {
+    return SpeedTestRecord(
+      time: DateTime.fromMillisecondsSinceEpoch(
+        map['time'] as int? ?? DateTime.now().millisecondsSinceEpoch,
+      ),
+      nodeName: map['nodeName'] as String? ?? '',
+      ping: (map['ping'] as num?)?.toDouble() ?? 0.0,
+      jitter: (map['jitter'] as num?)?.toDouble() ?? 0.0,
+      downloadSpeed: (map['downloadSpeed'] as num?)?.toDouble() ?? 0.0,
+      uploadSpeed: (map['uploadSpeed'] as num?)?.toDouble() ?? 0.0,
+      isProxy: map['isProxy'] as bool? ?? true,
+      serverName: map['serverName'] as String? ?? 'Cloudflare',
+    );
+  }
 }
 
 class SpeedTestScreen extends LasyRenderingStatefulWidget {
@@ -57,6 +262,8 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     with SingleTickerProviderStateMixin {
   SpeedTestPhase _phase = SpeedTestPhase.idle;
   bool _useProxy = true;
+  SpeedTestServer _currentServer = SpeedTestServer.presets.first;
+  bool _isDetectingServer = false;
 
   // Realtime target bandwidth & stats
   double _targetSpeedMbps = 0.0;
@@ -83,6 +290,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
   @override
   void initState() {
     super.initState();
+    _loadHistory();
     // 60/120 FPS Physics Ticker for authentic spring needle movement
     _ticker = createTicker(_onPhysicsTick);
     _ticker.start();
@@ -160,6 +368,127 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     return client;
   }
 
+  static const String _kHistoryKey = 'speedtest_history';
+
+  Future<void> _loadHistory() async {
+    try {
+      final raw = await LocalStorage.read(_kHistoryKey);
+      if (raw != null && raw.isNotEmpty) {
+        final decoded = jsonDecode(raw);
+        if (decoded is List) {
+          final list = decoded
+              .map((item) => SpeedTestRecord.fromJson(Map<String, dynamic>.from(item as Map)))
+              .toList();
+          if (mounted) {
+            setState(() {
+              _history.clear();
+              _history.addAll(list);
+            });
+          }
+        }
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _saveHistory() async {
+    try {
+      final data = _history.take(30).map((e) => e.toJson()).toList();
+      await LocalStorage.write(_kHistoryKey, jsonEncode(data));
+    } catch (_) {}
+  }
+
+  Future<void> _detectBestServer() async {
+    if (_phase == SpeedTestPhase.ping ||
+        _phase == SpeedTestPhase.download ||
+        _phase == SpeedTestPhase.upload ||
+        _isDetectingServer) {
+      return;
+    }
+    setState(() {
+      _isDetectingServer = true;
+    });
+
+    final client = _createHttpClient();
+    SpeedTestServer? bestServer;
+    double bestPing = double.infinity;
+
+    try {
+      for (var server in SpeedTestServer.presets) {
+        if (!mounted) break;
+        final pingUrl = server.pingUrls.first;
+        final sw = Stopwatch()..start();
+        try {
+          final req = await client.getUrl(Uri.parse(pingUrl)).timeout(const Duration(seconds: 2));
+          final res = await req.close().timeout(const Duration(seconds: 2));
+          await res.drain<void>();
+          sw.stop();
+          final ms = sw.elapsedMicroseconds / 1000.0;
+          if (ms > 0 && ms < bestPing) {
+            bestPing = ms;
+            bestServer = server;
+          }
+        } catch (_) {}
+      }
+    } finally {
+      client.close(force: true);
+    }
+
+    if (mounted) {
+      setState(() {
+        _isDetectingServer = false;
+        if (bestServer != null) {
+          _currentServer = bestServer;
+        }
+      });
+      if (bestServer != null) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("已自动优选最快测速源: ${bestServer.name} (${bestPing.toStringAsFixed(0)} ms)"),
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
+  void _shareResult() {
+    final nodeName = _useProxy
+        ? _getProxyNodeName()
+        : Translations.of(context).SpeedTestScreen.directConnection;
+    final grade = NetworkGrade.calculate(
+      ping: _pingMs,
+      jitter: _jitterMs,
+      download: _downloadFinalMbps,
+      upload: _uploadFinalMbps,
+    );
+
+    final sb = StringBuffer();
+    sb.writeln("🚀 Wmimo 网络测速战报");
+    sb.writeln("---------------------------------");
+    sb.writeln("📍 测试节点: $nodeName (${_useProxy ? '代理加速' : '本地直连'})");
+    sb.writeln("🌐 测速服务: ${_currentServer.name} (${_currentServer.region})");
+    sb.writeln("⏱️ 网络延迟: ${_pingMs.toStringAsFixed(0)} ms (抖动: ${_jitterMs.toStringAsFixed(0)} ms)");
+    sb.writeln("📥 下载速率: ${_downloadFinalMbps.toStringAsFixed(1)} Mbps");
+    sb.writeln("📤 上传速率: ${_uploadFinalMbps.toStringAsFixed(1)} Mbps");
+    sb.writeln("---------------------------------");
+    sb.writeln("🎮 电竞体验: ${grade.gameGrade} (${grade.gameDesc})");
+    sb.writeln("🎬 超清流媒体: ${grade.streamGrade} (${grade.streamDesc})");
+    sb.writeln("💼 协同办公: ${grade.meetingGrade} (${grade.meetingDesc})");
+    sb.writeln("⏰ 测速时间: ${DateTime.now().toString().substring(0, 19)}");
+
+    Clipboard.setData(ClipboardData(text: sb.toString()));
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("测速战报已复制到剪贴板，可直接粘贴分享"),
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   void _stopTest() {
     _aborted = true;
     _sampleTimer?.cancel();
@@ -228,8 +557,10 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
           downloadSpeed: _downloadFinalMbps,
           uploadSpeed: _uploadFinalMbps,
           isProxy: _useProxy,
+          serverName: _currentServer.name,
         ),
       );
+      _saveHistory();
     } catch (e) {
       if (!_aborted && mounted) {
         setState(() {
@@ -244,14 +575,13 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     final pingSamples = <double>[];
     final client = _createHttpClient();
 
-    const pingUrls = [
-      'https://speed.cloudflare.com/__down?bytes=0',
-      'https://cp.cloudflare.com/generate_204',
-      'https://1.1.1.1/cdn-cgi/trace',
-      'https://speed.cloudflare.com/__down?bytes=0',
-      'https://cp.cloudflare.com/generate_204',
-      'https://1.1.1.1/cdn-cgi/trace',
-    ];
+    final rawUrls = _currentServer.pingUrls.isNotEmpty
+        ? _currentServer.pingUrls
+        : ['https://speed.cloudflare.com/__down?bytes=0', 'https://cp.cloudflare.com/generate_204'];
+    final List<String> pingUrls = [];
+    while (pingUrls.length < 6) {
+      pingUrls.addAll(rawUrls);
+    }
 
     try {
       for (int i = 0; i < pingUrls.length; i++) {
@@ -317,6 +647,42 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
 
     final List<StreamSubscription> subscriptions = [];
     final testCompleter = Completer<void>();
+    int activeWorkers = 0;
+    const maxWorkers = 10;
+
+    void launchWorker(int workerId) {
+      activeWorkers++;
+      () async {
+        while (!testCompleter.isCompleted && !_aborted) {
+          try {
+            final uri = Uri.parse(
+              '${_currentServer.downloadUrl}${_currentServer.downloadUrl.contains('?') ? '&' : '?'}w=$workerId&r=${Random().nextInt(999999)}',
+            );
+            final request =
+                await client.getUrl(uri).timeout(const Duration(seconds: 6));
+            final response = await request.close();
+            final sub = response.listen(
+              (chunk) {
+                totalBytes += chunk.length;
+              },
+              cancelOnError: true,
+            );
+            subscriptions.add(sub);
+            await sub.asFuture<void>();
+          } catch (_) {
+            await Future.delayed(const Duration(milliseconds: 80));
+          }
+        }
+      }();
+    }
+
+    // Start with initial 4 workers
+    for (int i = 0; i < 4; i++) {
+      launchWorker(i);
+    }
+
+    bool scaledTo8 = false;
+    bool scaledTo10 = false;
 
     _sampleTimer = Timer.periodic(const Duration(milliseconds: 120), (timer) {
       if (_aborted || stopwatch.elapsed >= testDuration) {
@@ -353,35 +719,21 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
             recentSamples.reduce((a, b) => a + b) / recentSamples.length;
 
         _setTargetSpeed(displaySpeed);
-      }
-    });
 
-    // 6 Concurrent high-throughput download workers
-    const chunkUrl = 'https://speed.cloudflare.com/__down?bytes=25000000';
-    for (int worker = 0; worker < 6; worker++) {
-      () async {
-        while (!testCompleter.isCompleted && !_aborted) {
-          try {
-            final uri = Uri.parse(
-              '$chunkUrl&w=$worker&r=${Random().nextInt(999999)}',
-            );
-            final request =
-                await client.getUrl(uri).timeout(const Duration(seconds: 6));
-            final response = await request.close();
-            final sub = response.listen(
-              (chunk) {
-                totalBytes += chunk.length;
-              },
-              cancelOnError: true,
-            );
-            subscriptions.add(sub);
-            await sub.asFuture<void>();
-          } catch (_) {
-            await Future.delayed(const Duration(milliseconds: 80));
+        // Adaptive worker scaling for high-bandwidth connections
+        if (displaySpeed > 50 && !scaledTo8 && activeWorkers < 8) {
+          scaledTo8 = true;
+          for (int w = activeWorkers; w < 8; w++) {
+            launchWorker(w);
+          }
+        } else if (displaySpeed > 180 && !scaledTo10 && activeWorkers < maxWorkers) {
+          scaledTo10 = true;
+          for (int w = activeWorkers; w < maxWorkers; w++) {
+            launchWorker(w);
           }
         }
-      }();
-    }
+      }
+    });
 
     await Future.any([
       testCompleter.future,
@@ -436,6 +788,37 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     final speedHistory = <double>[];
 
     final testCompleter = Completer<void>();
+    int activeUploadWorkers = 0;
+
+    void launchUploadWorker() {
+      activeUploadWorkers++;
+      () async {
+        while (!testCompleter.isCompleted && !_aborted) {
+          try {
+            final request = await client
+                .postUrl(Uri.parse(_currentServer.uploadUrl))
+                .timeout(const Duration(seconds: 5));
+            request.headers.set(
+              HttpHeaders.contentLengthHeader,
+              dummyData.length,
+            );
+            request.add(dummyData);
+            final response = await request.close();
+            await response.drain<void>();
+            totalBytesUploaded += dummyData.length;
+          } catch (_) {
+            await Future.delayed(const Duration(milliseconds: 80));
+          }
+        }
+      }();
+    }
+
+    // Start with 4 upload workers
+    for (int i = 0; i < 4; i++) {
+      launchUploadWorker();
+    }
+
+    bool scaledUpload = false;
 
     _sampleTimer = Timer.periodic(const Duration(milliseconds: 120), (timer) {
       if (_aborted || stopwatch.elapsed >= testDuration) {
@@ -472,32 +855,14 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
             recentSamples.reduce((a, b) => a + b) / recentSamples.length;
 
         _setTargetSpeed(displaySpeed);
+
+        if (displaySpeed > 30 && !scaledUpload && activeUploadWorkers < 6) {
+          scaledUpload = true;
+          launchUploadWorker();
+          launchUploadWorker();
+        }
       }
     });
-
-    // 4 Parallel upload workers
-    const uploadUrl = 'https://speed.cloudflare.com/__up';
-    for (int worker = 0; worker < 4; worker++) {
-      () async {
-        while (!testCompleter.isCompleted && !_aborted) {
-          try {
-            final request = await client
-                .postUrl(Uri.parse(uploadUrl))
-                .timeout(const Duration(seconds: 5));
-            request.headers.set(
-              HttpHeaders.contentLengthHeader,
-              dummyData.length,
-            );
-            request.add(dummyData);
-            final response = await request.close();
-            await response.drain<void>();
-            totalBytesUploaded += dummyData.length;
-          } catch (_) {
-            await Future.delayed(const Duration(milliseconds: 80));
-          }
-        }
-      }();
-    }
 
     await Future.any([
       testCompleter.future,
@@ -800,52 +1165,81 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                         width: 0.8,
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            _useProxy
-                                ? Icons.dns_rounded
-                                : Icons.public_rounded,
-                            size: 18,
-                            color: theme.colorScheme.primary,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _useProxy
-                                      ? '${tcontext.SpeedTestScreen.currentProxy}: $nodeName'
-                                      : tcontext.SpeedTestScreen.directConnection,
-                                  style: const TextStyle(
-                                    fontSize: 12.5,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  '${tcontext.SpeedTestScreen.server}: Cloudflare Speed CDN (Anycast)',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: (isDark ? Colors.white : Colors.black)
-                                        .withValues(alpha: 0.55),
-                                  ),
-                                ),
-                              ],
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(14),
+                      onTap: isRunning ? null : _showServerPickerBottomSheet,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 10,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              _useProxy
+                                  ? Icons.dns_rounded
+                                  : Icons.public_rounded,
+                              size: 18,
+                              color: theme.colorScheme.primary,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _useProxy
+                                        ? '${tcontext.SpeedTestScreen.currentProxy}: $nodeName'
+                                        : tcontext.SpeedTestScreen.directConnection,
+                                    style: const TextStyle(
+                                      fontSize: 12.5,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    '${tcontext.SpeedTestScreen.server}: ${_currentServer.icon} ${_currentServer.name} (${_currentServer.region})',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: (isDark ? Colors.white : Colors.black)
+                                          .withValues(alpha: 0.55),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: ThemeDefine.kColorBlue.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "切换源",
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: ThemeDefine.kColorBlue,
+                                    ),
+                                  ),
+                                  SizedBox(width: 2),
+                                  Icon(Icons.keyboard_arrow_right_rounded, size: 14, color: ThemeDefine.kColorBlue),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
+
+                  if (_phase == SpeedTestPhase.completed)
+                    _buildNetworkQualityCard(theme, isDark),
 
                   // History Section
                   if (_history.isNotEmpty) ...[
@@ -865,6 +1259,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                             setState(() {
                               _history.clear();
                             });
+                            _saveHistory();
                           },
                           icon: const Icon(Icons.delete_outline, size: 15),
                           label: Text(
@@ -1033,7 +1428,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    timeStr,
+                    '$timeStr • ${record.serverName}',
                     style: TextStyle(
                       fontSize: 10,
                       color: (isDark ? Colors.white : Colors.black)
@@ -1081,6 +1476,406 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showServerPickerBottomSheet() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final presets = SpeedTestServer.presets;
+    final customController = TextEditingController(
+      text: _currentServer.id == 'custom' ? _currentServer.downloadUrl : '',
+    );
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: isDark ? const Color(0xFF151D2E) : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  20,
+                  12,
+                  20,
+                  MediaQuery.of(context).viewInsets.bottom + 16,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 36,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        const Icon(Icons.speed_rounded, size: 20, color: ThemeDefine.kColorBlue),
+                        const SizedBox(width: 8),
+                        const Text(
+                          "测速服务器切换",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        const Spacer(),
+                        if (!_isDetectingServer)
+                          TextButton.icon(
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            icon: const Icon(Icons.flash_on_rounded, size: 15, color: ThemeDefine.kColorBlue),
+                            label: const Text(
+                              "自动探测最优",
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: ThemeDefine.kColorBlue),
+                            ),
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await _detectBestServer();
+                            },
+                          )
+                        else
+                          const SizedBox(
+                            width: 14,
+                            height: 14,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "选择不同的测速 CDN 源评估线路带宽与吞吐极限",
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                      ),
+                    ),
+                    const Divider(height: 16),
+                    Flexible(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: presets.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 6),
+                        itemBuilder: (context, idx) {
+                          final server = presets[idx];
+                          final isSelected = _currentServer.id == server.id;
+
+                          return InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            onTap: () {
+                              setState(() {
+                                _currentServer = server;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? ThemeDefine.kColorBlue.withValues(alpha: 0.12)
+                                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC)),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? ThemeDefine.kColorBlue
+                                      : theme.dividerColor.withValues(alpha: 0.25),
+                                  width: isSelected ? 1.2 : 0.8,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? ThemeDefine.kColorBlue
+                                          : theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        server.icon,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          server.name,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                                            color: isSelected ? ThemeDefine.kColorBlue : null,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          server.region,
+                                          style: TextStyle(
+                                            fontSize: 10.5,
+                                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (isSelected)
+                                    const Icon(Icons.check_circle_rounded, size: 18, color: ThemeDefine.kColorBlue),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: _currentServer.id == 'custom'
+                              ? ThemeDefine.kColorBlue
+                              : theme.dividerColor.withValues(alpha: 0.25),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.link_rounded, size: 18, color: Colors.grey),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              controller: customController,
+                              decoration: const InputDecoration(
+                                hintText: "自定义测速下载 URL (https://...)",
+                                hintStyle: TextStyle(fontSize: 12),
+                                border: InputBorder.none,
+                                isDense: true,
+                              ),
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ThemeDefine.kColorBlue,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                            ),
+                            onPressed: () {
+                              final text = customController.text.trim();
+                              if (text.isNotEmpty && text.contains("://")) {
+                                setState(() {
+                                  _currentServer = SpeedTestServer(
+                                    id: 'custom',
+                                    name: '自定义测速源',
+                                    region: '用户指定 URL',
+                                    icon: '🌐',
+                                    pingUrls: [text],
+                                    downloadUrl: text,
+                                    uploadUrl: 'https://speed.cloudflare.com/__up',
+                                  );
+                                });
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: const Text("使用", style: TextStyle(fontSize: 11)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildNetworkQualityCard(ThemeData theme, bool isDark) {
+    final grade = NetworkGrade.calculate(
+      ping: _pingMs,
+      jitter: _jitterMs,
+      download: _downloadFinalMbps,
+      upload: _uploadFinalMbps,
+    );
+
+    return Card(
+      elevation: 0,
+      margin: const EdgeInsets.only(top: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(
+          color: ThemeDefine.kColorBlue.withValues(alpha: 0.3),
+          width: 1.0,
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.08 : 0.04),
+              isDark ? const Color(0xFF1E293B) : Colors.white,
+            ],
+          ),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.verified_rounded, size: 17, color: ThemeDefine.kColorBlue),
+                const SizedBox(width: 6),
+                const Text(
+                  "网络体质综合评分",
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+                const Spacer(),
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                    side: BorderSide(color: ThemeDefine.kColorBlue.withValues(alpha: 0.4)),
+                  ),
+                  icon: const Icon(Icons.share_rounded, size: 13, color: ThemeDefine.kColorBlue),
+                  label: const Text(
+                    "复制战报",
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: ThemeDefine.kColorBlue),
+                  ),
+                  onPressed: _shareResult,
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildGradeItem(
+                    icon: "🎮",
+                    title: "电竞体验",
+                    badge: grade.gameGrade,
+                    badgeColor: grade.gameColor,
+                    desc: grade.gameDesc,
+                    isDark: isDark,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: _buildGradeItem(
+                    icon: "🎬",
+                    title: "超清流媒体",
+                    badge: grade.streamGrade,
+                    badgeColor: grade.streamColor,
+                    desc: grade.streamDesc,
+                    isDark: isDark,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: _buildGradeItem(
+                    icon: "💼",
+                    title: "远程视讯",
+                    badge: grade.meetingGrade,
+                    badgeColor: grade.meetingColor,
+                    desc: grade.meetingDesc,
+                    isDark: isDark,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGradeItem({
+    required String icon,
+    required String title,
+    required String badge,
+    required Color badgeColor,
+    required String desc,
+    required bool isDark,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      decoration: BoxDecoration(
+        color: (isDark ? Colors.black : Colors.grey.shade50).withValues(alpha: 0.25),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.06),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(icon, style: const TextStyle(fontSize: 12)),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.grey),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+            decoration: BoxDecoration(
+              color: badgeColor.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              badge,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                color: badgeColor,
+              ),
+            ),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            desc,
+            style: const TextStyle(fontSize: 9, color: Colors.grey),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }
