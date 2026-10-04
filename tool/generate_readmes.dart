@@ -46,8 +46,10 @@ $langBar
 | 🐧 **Fedora / RHEL / openSUSE** | ✅ **Ready** | RedHat Package (`.rpm`) | Standard RPM package with system dependencies and desktop shortcuts. |
 | 🐧 **Arch Linux / Manjaro** | ✅ **Ready** | Arch Package (`.pkg.tar.zst`) & `PKGBUILD` | Native pacman binary package and AUR build script. |
 | 📱 **Android** | ✅ **Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, persistent release keystore, compact mobile UI, background keep-alive. |
-| 🍎 **macOS** | 🚧 **In Progress** | DMG Installer | NetworkExtension daemon architecture in development. |
-| 🍏 **iOS** | 🚧 **In Progress** | IPA | NetworkExtension framework integration. |
+| 🍎 **macOS** | 🛠️ **Source Ready** | DMG / Local Build | System proxy and TUN mode are fully implemented in code. Supports local build (`flutter run -d macos`); prebuilt DMG is not distributed in official Releases. |
+| 🍏 **iOS** | 📦 **Framework Ready** | IPA / Source | NetworkExtension architecture and MethodChannel are fully wired. Not officially distributed due to Apple signing requirements; use third-party clients for subscriptions. |
+
+> 💡 **Distribution Policy**: Official CI/CD automated releases provide prebuilt binaries for **Windows**, **Linux**, and **Android**. macOS and iOS source code is fully aligned with platform standards, but prebuilt Apple packages are not distributed in GitHub Releases.
 
 ---
 
@@ -189,8 +191,13 @@ $langBar
 | 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **已就绪** | RedHat 安装包 (`.rpm`) | 标准 RPM 格式封装，自动配置运行时依赖与桌面集成。 |
 | 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **已就绪** | Pacman 二进制包 (`.pkg.tar.zst`) 与 `PKGBUILD` | 支持 pacman 一键安装与 AUR 脚本直接构建。 |
 | 📱 **Android** | ✅ **已就绪** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、固定 Release 签名（支持无缝覆盖升级）、紧凑移动端 UI、后台保活。 |
-| 🍎 **macOS** | 🚧 **开发中** | DMG 安装镜像 | NetworkExtension 架构与桌面端协议适配中。 |
-| 🍏 **iOS** | 🚧 **开发中** | IPA | NetworkExtension 架构适配中。 |
+| 🍎 **macOS** | 🛠️ **源码已就绪** | DMG / 本地构建 | 系统代理与 TUN 模式底层均已实现，支持用户本地编译运行 (`flutter run -d macos`)；官方 Release 暂未提供预编译包。 |
+| 🍏 **iOS** | 📦 **架构已打通** | IPA / 源码 | NetworkExtension 架构与通信通道已搭建。因受限于 Apple 开发者证书签名，官方暂不提供预编译 IPA 分发，建议使用第三方成熟客户端导入订阅。 |
+
+> 💡 **平台发布策略说明**：
+> 本项目专注于 **Windows**、**Linux** 与 **Android** 平台的官方自动化预编译与发布。
+> - **macOS**：代码层已完整支持系统代理与 TUN 提权，如需使用可克隆源码在本地通过 `flutter build macos` 自行编译。
+> - **iOS**：工程框架与系统扩展接口已就绪，因受限于 Apple 开发者证书与签名体系，官方暂不提供官方打包分发，建议 iOS 用户使用同生态客户端导入订阅。
 
 ---
 
@@ -332,8 +339,13 @@ $langBar
 | 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **已就緒** | RedHat 安裝包 (`.rpm`) | 標準 RPM 格式封裝，自動配置依賴與桌面整合。 |
 | 🐧 **Arch Linux / Manjaro** | ✅ **已就緒** | Pacman 二進位包 (`.pkg.tar.zst`) 與 `PKGBUILD` | 支援 pacman 一鍵安裝與 AUR 腳本直接建置。 |
 | 📱 **Android** | ✅ **已就緒** | 通用 APK 與 分架構包 (`arm64-v8a`, `v7a`, `x86_64`) | 系統級 VpnService 驅動、固定 Release 簽名（支援無縫覆蓋升級）、緊湊行動端 UI、背景保活。 |
-| 🍎 **macOS** | 🚧 **開發中** | DMG 安裝映像 | NetworkExtension 架構與桌面端協議適配中。 |
-| 🍏 **iOS** | 🚧 **開發中** | IPA | NetworkExtension 架構適配中。 |
+| 🍎 **macOS** | 🛠️ **源碼已就緒** | DMG / 本地建置 | 系統代理與 TUN 模式底層均已實現，支援用戶本地編譯運行 (`flutter run -d macos`)；官方 Release 暫未提供預編譯包。 |
+| 🍏 **iOS** | 📦 **架構已打通** | IPA / 源碼 | NetworkExtension 架構與通信通道已搭建。因受限於 Apple 開發者證書簽名，官方暫不提供預編譯 IPA 分發，建議使用第三方成熟客戶端導入訂閱。 |
+
+> 💡 **平台發布策略說明**：
+> 本專案專注於 **Windows**、**Linux** 與 **Android** 平台的官方自動化預編譯與發布。
+> - **macOS**：代碼層已完整支援系統代理與 TUN 提權，如需使用可複製源碼在本地透過 `flutter build macos` 自行編譯。
+> - **iOS**：工程架構與系統擴充介面已就緒，因受限於 Apple 開發者證書與簽名體系，暫不提供官方打包分發，建議 iOS 用戶使用同生態客戶端導入訂閱。
 
 ---
 
@@ -382,8 +394,10 @@ $langBar
 | 🪟 **Windows** | ✅ **本番利用可能** | インストーラー (`.exe`) / ポータブル (`.zip`) | デスクトップサイドバー、トレイメニュー、リアルタイムトラフィックチャート、TUNモード、自動更新。 |
 | 🐧 **Linux** | ✅ **利用可能** | AppImage (`.AppImage`) / Debian (`.deb`) / RPM (`.rpm`) / ポータブル (`.tar.gz`) | ネイティブ GTK3 UI、システムトレイ対応、Linux版 Mihomo コア内蔵。 |
 | 📱 **Android** | ✅ **利用可能** | ユニバーサル APK / 各 ABI 分割 APK | VpnService ドライバー統合、固定 Release 署名、モバイル最適化UI、バックグラウンド常駐。 |
-| 🍎 **macOS** | 🚧 **開発中** | DMG インストーラー | NetworkExtension フレームワーク適応中。 |
-| 🍏 **iOS** | 🚧 **開発中** | IPA | NetworkExtension フレームワーク適応中。 |
+| 🍎 **macOS** | 🛠️ **ソース対応済** | DMG / ローカルビルド | システムプロキシとTUNモードはコード上で完全対応。ローカルビルド（`flutter run -d macos`）をサポート。公式Releaseでの事前ビルド配布は現在未提供。 |
+| 🍏 **iOS** | 📦 **構造対応済** | IPA / ソース | NetworkExtensionアーキテクチャ統合済み。Apple署名証明書の制限のため公式IPAの配布は行っていません。既存のiOSクライアントのご利用を推奨します。 |
+
+> 💡 **配布ポリシー**：公式CI/CDでは **Windows**、**Linux**、**Android** の事前ビルドパッケージを配布しています。macOSおよびiOSはソースコードが整備されていますが、公式Releaseでの事前ビルド配布は行っていません。
 
 ---
 
@@ -443,8 +457,10 @@ $langBar
 | 🪟 **Windows** | ✅ **완료** | 설치 프로그램 (`.exe`) 및 포터블 (`.zip`) | 데스크톱 사이드바, 시스템 트레이 메뉴, 실시간 트래픽 차트, TUN 모드, 자동 업데이트. |
 | 🐧 **Linux** | ✅ **준비 완료** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), 포터블 (`.tar.gz`) | 네이티브 GTK3 UI, 시스템 트레이 연동, Linux용 Mihomo 데몬 내장. |
 | 📱 **Android** | ✅ **준비 완료** | 통합 APK 및 ABI 분할 APK | VpnService 드라이버 내장, 고정 Release 서명(원활한 덮어쓰기 업데이트), 모바일 맞춤형 UI, 백그라운드 유지. |
-| 🍎 **macOS** | 🚧 **개발 중** | DMG 설치 파일 | NetworkExtension 아키텍처 적응 중. |
-| 🍏 **iOS** | 🚧 **개발 중** | IPA | NetworkExtension 프레임워크 연동 중. |
+| 🍎 **macOS** | 🛠️ **소스 지원** | DMG / 로컬 빌드 | 시스템 프록시 및 TUN 모드 코드 레벨 지원 완료. 로컬 빌드(`flutter run -d macos`) 지원. 공식 릴리스 사전 빌드 배포는 미포함. |
+| 🍏 **iOS** | 📦 **프레임워크 준비** | IPA / 소스 | NetworkExtension 아키텍처 및 채널 연동 완료. Apple 서명 제한으로 인해 사전 빌드 IPA는 배포되지 않으며 타사 클라이언트 사용 권장. |
+
+> 💡 **배포 정책**：공식 CI/CD는 **Windows**, **Linux**, **Android** 플랫폼의 사전 빌드 패키지 배포에 집중합니다. macOS 및 iOS는 소스 코드가 준비되어 있으나 공식 릴리스에 사전 빌드 파일은 배포되지 않습니다.
 
 ---
 
@@ -504,8 +520,10 @@ $langBar
 | 🪟 **Windows** | ✅ **Готово** | Установщик (`.exe`) и Portable (`.zip`) | Боковая панель, меню в трее, график трафика, режим TUN, автообновление. |
 | 🐧 **Linux** | ✅ **Готово** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), Portable (`.tar.gz`) | Нативный интерфейс GTK3, интеграция с системным треем, встроенное ядро Mihomo. |
 | 📱 **Android** | ✅ **Готово** | Universal APK и Split ABIs | Интеграция VpnService, постоянная подпись Release, адаптивный интерфейс. |
-| 🍎 **macOS** | 🚧 **В разработке** | DMG установщик | Адаптация NetworkExtension в процессе. |
-| 🍏 **iOS** | 🚧 **В разработке** | IPA | Интеграция NetworkExtension. |
+| 🍎 **macOS** | 🛠️ **Исходный код готов** | DMG / Локальная сборка | Системный прокси и режим TUN реализованы в коде. Поддерживается локальная сборка (`flutter run -d macos`); готовые DMG не публикуются в Release. |
+| 🍏 **iOS** | 📦 **Архитектура готова** | IPA / Исходный код | Архитектура NetworkExtension интегрирована. Из-за требований к сертификатам Apple официальный IPA не распространяется. |
+
+> 💡 **Политика распространения**: Официальный CI/CD выпускает сборки для **Windows**, **Linux** и **Android**. Исходный код macOS и iOS готов, но предварительно скомпилированные пакеты для платформ Apple не публикуются в Releases.
 
 ---
 
@@ -554,8 +572,10 @@ $langBar
 | 🪟 **Windows** | ✅ **Listo para producción** | Instalador (`.exe`) y Portable (`.zip`) | Barra lateral, menú de bandeja del sistema, gráfico de velocidad en tiempo real, modo TUN, autoactualización. |
 | 🐧 **Linux** | ✅ **Listo** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), Portable (`.tar.gz`) | Interfaz GTK3 nativa, soporte de bandeja del sistema, núcleo Mihomo integrado. |
 | 📱 **Android** | ✅ **Listo** | APK Universal y APKs por ABI | Integración VpnService, firma Release permanente, interfaz móvil compacta. |
-| 🍎 **macOS** | 🚧 **En desarrollo** | Instalador DMG | Adaptación de NetworkExtension en progreso. |
-| 🍏 **iOS** | 🚧 **En desarrollo** | IPA | Integración del framework NetworkExtension. |
+| 🍎 **macOS** | 🛠️ **Código listo** | DMG / Compilación local | Proxy del sistema y modo TUN implementados en código. Admite compilación local (`flutter run -d macos`); no se distribuyen DMG precompilados en Release. |
+| 🍏 **iOS** | 📦 **Estructura lista** | IPA / Código fuente | Arquitectura NetworkExtension integrada. No se distribuyen paquetes IPA oficiales debido a requisitos de certificados de Apple. |
+
+> 💡 **Política de distribución**: El CI/CD oficial se centra en distribuir paquetes para **Windows**, **Linux** y **Android**. El código fuente de macOS e iOS está listo, pero no se distribuyen binarios precompilados en Releases.
 
 ---
 
@@ -604,8 +624,10 @@ $langBar
 | 🪟 **Windows** | ✅ **جاهز** | مثبت (`.exe`) ومحمول (`.zip`) | شريط جانبي، قائمة شريط المهام، رسم بياني للسرعة، وضع TUN، تحديث تلقائي. |
 | 🐧 **Linux** | ✅ **جاهز** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), Portable (`.tar.gz`) | واجهة GTK3 أصلية، تكامل شريط المهام، نواة Mihomo مدمجة. |
 | 📱 **Android** | ✅ **جاهز** | APK شامل و APK مقسم حسب المعمارية | تكامل VpnService، توقيع Release دائم، واجهة هاتف مضغوطة. |
-| 🍎 **macOS** | 🚧 **قيد التطوير** | مثبت DMG | جاري تكييف بنية NetworkExtension. |
-| 🍏 **iOS** | 🚧 **قيد التطوير** | IPA | جاري دمج إطار عمل NetworkExtension. |
+| 🍎 **macOS** | 🛠️ **الكود جاهز** | DMG / بناء محلي | تم تطبيق بروكسي النظام ووضع TUN في الكود. يدعم البناء المحلي (`flutter run -d macos`)؛ لا يتم توفير حزم DMG مسبقة البناء في الإصدارات الرسمية. |
+| 🍏 **iOS** | 📦 **الهيكل جاهز** | IPA / المصدر | بنية NetworkExtension متكاملة. لا يتم توزيع ملفات IPA رسمية بسبب قيود شهادات Apple؛ يُنصح باستخدام تطبيقات بديلة للاشتراكات. |
+
+> 💡 **سياسة التوزيع**: يوفر CI/CD الرسمي حزمًا مسبقة الصنع لأنظمة **Windows** و **Linux** و **Android**. كود macOS و iOS جاهز، ولكن لا يتم توفير حزم جاهزة لأنظمة Apple في الإصدارات الرسمية.
 
 ---
 
@@ -654,8 +676,10 @@ $langBar
 | 🪟 **Windows** | ✅ **آماده استفاده** | فایل نصبی (`.exe`) و قابل حمل (`.zip`) | نوار کناری دسکتاپ، منوی تسک‌بار، نمودار بلادرنگ ترافیک، حالت TUN، آپدیت خودکار. |
 | 🐧 **Linux** | ✅ **آماده** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), Portable (`.tar.gz`) | رابط GTK3 بومی، پشتیبانی از سینی سیستم، هسته داخلی Mihomo. |
 | 📱 **Android** | ✅ **آماده** | APK عمومی و تفکیک شده بر اساس معماری | یکپارچه‌سازی درایور VpnService، امضای دائمی Release، رابط فشرده موبایل. |
-| 🍎 **macOS** | 🚧 **در حال توسعه** | فایل نصبی DMG | سازگاری با چارچوب NetworkExtension. |
-| 🍏 **iOS** | 🚧 **در حال توسعه** | IPA | سازگاری با چارچوب NetworkExtension. |
+| 🍎 **macOS** | 🛠️ **کد آماده** | DMG / ساخت محلی | پروکسی سیستم و حالت TUN به طور کامل در کد پیاده‌سازی شده‌اند. پشتیبانی از بیلد محلی (`flutter run -d macos`)؛ فایل‌های DMG از پیش ساخته منتشر نمی‌شوند. |
+| 🍏 **iOS** | 📦 **معماری آماده** | IPA / کد منبع | معماری NetworkExtension یکپارچه‌سازی شده است. به دلیل الزامات امضای اپل، فایل IPA رسمی منتشر نمی‌شود؛ استفاده از برنامه‌های دیگر پیشنهاد می‌شود. |
+
+> 💡 **خط‌مشی انتشار**: فرآیند رسمی CI/CD بسته‌های از پیش ساخته شده را برای **Windows**، **Linux** و **Android** ارائه می‌دهد. کدهای macOS و iOS آماده هستند اما بسته‌های از پیش ساخته برای پلتفرم‌های اپل منتشر نمی‌شوند.
 
 ---
 

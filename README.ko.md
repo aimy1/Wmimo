@@ -36,8 +36,10 @@
 | 🪟 **Windows** | ✅ **완료** | 설치 프로그램 (`.exe`) 및 포터블 (`.zip`) | 데스크톱 사이드바, 시스템 트레이 메뉴, 실시간 트래픽 차트, TUN 모드, 자동 업데이트. |
 | 🐧 **Linux** | ✅ **준비 완료** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), 포터블 (`.tar.gz`) | 네이티브 GTK3 UI, 시스템 트레이 연동, Linux용 Mihomo 데몬 내장. |
 | 📱 **Android** | ✅ **준비 완료** | 통합 APK 및 ABI 분할 APK | VpnService 드라이버 내장, 고정 Release 서명(원활한 덮어쓰기 업데이트), 모바일 맞춤형 UI, 백그라운드 유지. |
-| 🍎 **macOS** | 🚧 **개발 중** | DMG 설치 파일 | NetworkExtension 아키텍처 적응 중. |
-| 🍏 **iOS** | 🚧 **개발 중** | IPA | NetworkExtension 프레임워크 연동 중. |
+| 🍎 **macOS** | 🛠️ **소스 지원** | DMG / 로컬 빌드 | 시스템 프록시 및 TUN 모드 코드 레벨 지원 완료. 로컬 빌드(`flutter run -d macos`) 지원. 공식 릴리스 사전 빌드 배포는 미포함. |
+| 🍏 **iOS** | 📦 **프레임워크 준비** | IPA / 소스 | NetworkExtension 아키텍처 및 채널 연동 완료. Apple 서명 제한으로 인해 사전 빌드 IPA는 배포되지 않으며 타사 클라이언트 사용 권장. |
+
+> 💡 **배포 정책**：공식 CI/CD는 **Windows**, **Linux**, **Android** 플랫폼의 사전 빌드 패키지 배포에 집중합니다. macOS 및 iOS는 소스 코드가 준비되어 있으나 공식 릴리스에 사전 빌드 파일은 배포되지 않습니다.
 
 ---
 

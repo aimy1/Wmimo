@@ -39,8 +39,13 @@
 | 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **已就绪** | RedHat 安装包 (`.rpm`) | 标准 RPM 格式封装，自动配置运行时依赖与桌面集成。 |
 | 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **已就绪** | Pacman 二进制包 (`.pkg.tar.zst`) 与 `PKGBUILD` | 支持 pacman 一键安装与 AUR 脚本直接构建。 |
 | 📱 **Android** | ✅ **已就绪** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、固定 Release 签名（支持无缝覆盖升级）、紧凑移动端 UI、后台保活。 |
-| 🍎 **macOS** | 🚧 **开发中** | DMG 安装镜像 | NetworkExtension 架构与桌面端协议适配中。 |
-| 🍏 **iOS** | 🚧 **开发中** | IPA | NetworkExtension 架构适配中。 |
+| 🍎 **macOS** | 🛠️ **源码已就绪** | DMG / 本地构建 | 系统代理与 TUN 模式底层均已实现，支持用户本地编译运行 (`flutter run -d macos`)；官方 Release 暂未提供预编译包。 |
+| 🍏 **iOS** | 📦 **架构已打通** | IPA / 源码 | NetworkExtension 架构与通信通道已搭建。因受限于 Apple 开发者证书签名，官方暂不提供预编译 IPA 分发，建议使用第三方成熟客户端导入订阅。 |
+
+> 💡 **平台发布策略说明**：
+> 本项目专注于 **Windows**、**Linux** 与 **Android** 平台的官方自动化预编译与发布。
+> - **macOS**：代码层已完整支持系统代理与 TUN 提权，如需使用可克隆源码在本地通过 `flutter build macos` 自行编译。
+> - **iOS**：工程框架与系统扩展接口已就绪，因受限于 Apple 开发者证书与签名体系，官方暂不提供官方打包分发，建议 iOS 用户使用同生态客户端导入订阅。
 
 ---
 

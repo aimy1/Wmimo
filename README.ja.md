@@ -36,8 +36,10 @@
 | 🪟 **Windows** | ✅ **本番利用可能** | インストーラー (`.exe`) / ポータブル (`.zip`) | デスクトップサイドバー、トレイメニュー、リアルタイムトラフィックチャート、TUNモード、自動更新。 |
 | 🐧 **Linux** | ✅ **利用可能** | AppImage (`.AppImage`) / Debian (`.deb`) / RPM (`.rpm`) / ポータブル (`.tar.gz`) | ネイティブ GTK3 UI、システムトレイ対応、Linux版 Mihomo コア内蔵。 |
 | 📱 **Android** | ✅ **利用可能** | ユニバーサル APK / 各 ABI 分割 APK | VpnService ドライバー統合、固定 Release 署名、モバイル最適化UI、バックグラウンド常駐。 |
-| 🍎 **macOS** | 🚧 **開発中** | DMG インストーラー | NetworkExtension フレームワーク適応中。 |
-| 🍏 **iOS** | 🚧 **開発中** | IPA | NetworkExtension フレームワーク適応中。 |
+| 🍎 **macOS** | 🛠️ **ソース対応済** | DMG / ローカルビルド | システムプロキシとTUNモードはコード上で完全対応。ローカルビルド（`flutter run -d macos`）をサポート。公式Releaseでの事前ビルド配布は現在未提供。 |
+| 🍏 **iOS** | 📦 **構造対応済** | IPA / ソース | NetworkExtensionアーキテクチャ統合済み。Apple署名証明書の制限のため公式IPAの配布は行っていません。既存のiOSクライアントのご利用を推奨します。 |
+
+> 💡 **配布ポリシー**：公式CI/CDでは **Windows**、**Linux**、**Android** の事前ビルドパッケージを配布しています。macOSおよびiOSはソースコードが整備されていますが、公式Releaseでの事前ビルド配布は行っていません。
 
 ---
 

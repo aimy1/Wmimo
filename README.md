@@ -39,8 +39,10 @@
 | 🐧 **Fedora / RHEL / openSUSE** | ✅ **Ready** | RedHat Package (`.rpm`) | Standard RPM package with system dependencies and desktop shortcuts. |
 | 🐧 **Arch Linux / Manjaro** | ✅ **Ready** | Arch Package (`.pkg.tar.zst`) & `PKGBUILD` | Native pacman binary package and AUR build script. |
 | 📱 **Android** | ✅ **Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, persistent release keystore, compact mobile UI, background keep-alive. |
-| 🍎 **macOS** | 🚧 **In Progress** | DMG Installer | NetworkExtension daemon architecture in development. |
-| 🍏 **iOS** | 🚧 **In Progress** | IPA | NetworkExtension framework integration. |
+| 🍎 **macOS** | 🛠️ **Source Ready** | DMG / Local Build | System proxy and TUN mode are fully implemented in code. Supports local build (`flutter run -d macos`); prebuilt DMG is not distributed in official Releases. |
+| 🍏 **iOS** | 📦 **Framework Ready** | IPA / Source | NetworkExtension architecture and MethodChannel are fully wired. Not officially distributed due to Apple signing requirements; use third-party clients for subscriptions. |
+
+> 💡 **Distribution Policy**: Official CI/CD automated releases provide prebuilt binaries for **Windows**, **Linux**, and **Android**. macOS and iOS source code is fully aligned with platform standards, but prebuilt Apple packages are not distributed in GitHub Releases.
 
 ---
 

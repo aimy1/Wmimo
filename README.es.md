@@ -36,8 +36,10 @@
 | 🪟 **Windows** | ✅ **Listo para producción** | Instalador (`.exe`) y Portable (`.zip`) | Barra lateral, menú de bandeja del sistema, gráfico de velocidad en tiempo real, modo TUN, autoactualización. |
 | 🐧 **Linux** | ✅ **Listo** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), Portable (`.tar.gz`) | Interfaz GTK3 nativa, soporte de bandeja del sistema, núcleo Mihomo integrado. |
 | 📱 **Android** | ✅ **Listo** | APK Universal y APKs por ABI | Integración VpnService, firma Release permanente, interfaz móvil compacta. |
-| 🍎 **macOS** | 🚧 **En desarrollo** | Instalador DMG | Adaptación de NetworkExtension en progreso. |
-| 🍏 **iOS** | 🚧 **En desarrollo** | IPA | Integración del framework NetworkExtension. |
+| 🍎 **macOS** | 🛠️ **Código listo** | DMG / Compilación local | Proxy del sistema y modo TUN implementados en código. Admite compilación local (`flutter run -d macos`); no se distribuyen DMG precompilados en Release. |
+| 🍏 **iOS** | 📦 **Estructura lista** | IPA / Código fuente | Arquitectura NetworkExtension integrada. No se distribuyen paquetes IPA oficiales debido a requisitos de certificados de Apple. |
+
+> 💡 **Política de distribución**: El CI/CD oficial se centra en distribuir paquetes para **Windows**, **Linux** y **Android**. El código fuente de macOS e iOS está listo, pero no se distribuyen binarios precompilados en Releases.
 
 ---
 
