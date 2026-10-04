@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:archive/archive.dart';
 
-const String kVersion = 'v1.19.31';
+const String kVersion = 'v1.19.32';
 const String kBaseUrl = 'https://github.com/MetaCubeX/mihomo/releases/download/$kVersion';
 
 final Map<String, List<String>> targets = {
@@ -112,7 +112,8 @@ Future<List<int>?> downloadBytes(HttpClient client, String originalUrl) async {
   return null;
 }
 
-Future<void> main() async {
+Future<void> main(List<String> args) async {
+  final force = args.contains('--force') || args.contains('-f');
   print('Starting multi-platform Mihomo core downloader ($kVersion)...');
   final client = HttpClient();
   client.badCertificateCallback = (cert, host, port) => true;
@@ -131,7 +132,7 @@ Future<void> main() async {
         break;
       }
     }
-    if (allExist) {
+    if (!force && allExist) {
       print('\n[Skipping] Already downloaded: ${destinations.first}');
       continue;
     }
