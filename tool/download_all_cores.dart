@@ -17,31 +17,24 @@ final Map<String, List<String>> targets = {
   // Android
   '$kBaseUrl/mihomo-android-arm64-v8-$kVersion.gz': [
     'android/app/src/main/jniLibs/arm64-v8a/libwmimoService.so',
-    'assets/core/android/arm64-v8a/wmimoService',
   ],
   '$kBaseUrl/mihomo-android-armv7-$kVersion.gz': [
     'android/app/src/main/jniLibs/armeabi-v7a/libwmimoService.so',
-    'assets/core/android/armeabi-v7a/wmimoService',
   ],
   '$kBaseUrl/mihomo-android-amd64-$kVersion.gz': [
     'android/app/src/main/jniLibs/x86_64/libwmimoService.so',
-    'assets/core/android/x86_64/wmimoService',
   ],
   // Linux
   '$kBaseUrl/mihomo-linux-amd64-$kVersion.gz': [
     'bind/linux/core/wmimoService',
-    'assets/core/linux/wmimoService',
   ],
   // macOS
   '$kBaseUrl/mihomo-darwin-arm64-$kVersion.gz': [
     'bind/macos/core/wmimoService_arm64',
-    'assets/core/macos/wmimoService_arm64',
   ],
   '$kBaseUrl/mihomo-darwin-amd64-$kVersion.gz': [
     'bind/macos/core/wmimoService_amd64',
-    'assets/core/macos/wmimoService_amd64',
     'bind/macos/core/wmimoService',
-    'assets/core/macos/wmimoService',
   ],
 };
 
