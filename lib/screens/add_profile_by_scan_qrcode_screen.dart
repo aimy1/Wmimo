@@ -13,6 +13,7 @@ import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/qrcode_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
+import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 
@@ -92,8 +93,8 @@ class _AddProfileByScanQrcodeScanScreenState
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final tcontext = Translations.of(context);
+    final isMobile = PlatformUtils.isMobile();
 
     return PopScope(
       canPop: true,
@@ -103,155 +104,96 @@ class _AddProfileByScanQrcodeScanScreenState
         }
       },
       child: Scaffold(
-        backgroundColor: isDark ? const Color(0xFF0B0F19) : const Color(0xFFF8FAFC),
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(52),
-          child: SafeArea(
-            child: _buildHeader(context),
-          ),
-        ),
+        appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
         body: SafeArea(
-          child: PlatformUtils.isMobile()
-              ? _scanFromFile
-                  ? _buildMobileImportView(context)
-                  : _buildMobileCameraView(context)
-              : _buildDesktopView(context),
-        ),
-      ),
-    );
-  }
+          child: isMobile && !_scanFromFile
+              ? _buildMobileCameraView(context)
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Column(
+                    children: [
+                      // Wmimo Standard Header Row
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () => Navigator.pop(context),
+                              child: const SizedBox(
+                                width: 50,
+                                height: 30,
+                                child: Icon(Icons.arrow_back_ios_outlined, size: 26),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                tcontext.meta.qrcodeScan,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: ThemeConfig.kFontWeightTitle,
+                                  fontSize: ThemeConfig.kFontSizeTitle,
+                                ),
+                              ),
+                            ),
+                            if (_isScanning)
+                              const SizedBox(
+                                width: 50,
+                                height: 30,
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: RepaintBoundary(
+                                      child: CircularProgressIndicator(strokeWidth: 2),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            else if (_qrContent.isNotEmpty)
+                              InkWell(
+                                onTap: _onConfirm,
+                                child: Tooltip(
+                                  message: tcontext.meta.save,
+                                  child: const SizedBox(
+                                    width: 50,
+                                    height: 30,
+                                    child: Icon(Icons.done, size: 26),
+                                  ),
+                                ),
+                              )
+                            else if (isMobile && _scanFromFile)
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _scanFromFile = false;
+                                    _resetScan();
+                                  });
+                                },
+                                child: const SizedBox(
+                                  width: 50,
+                                  height: 30,
+                                  child: Icon(Icons.camera_alt_outlined, size: 24),
+                                ),
+                              )
+                            else
+                              const SizedBox(width: 50, height: 30),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
 
-  // ---------------------------------------------------------------------------
-  // Top App Bar Header
-  // ---------------------------------------------------------------------------
-  Widget _buildHeader(BuildContext context) {
-    final tcontext = Translations.of(context);
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return Container(
-      height: 52,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF111827).withValues(alpha: 0.8) : Colors.white.withValues(alpha: 0.9),
-        border: Border(
-          bottom: BorderSide(
-            color: theme.dividerColor.withValues(alpha: isDark ? 0.2 : 0.35),
-            width: 0.8,
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          // Back Button
-          InkWell(
-            borderRadius: BorderRadius.circular(10),
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: theme.dividerColor.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 16,
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-
-          // Title
-          Expanded(
-            child: Text(
-              tcontext.meta.qrcodeScan,
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 15.5,
-                letterSpacing: 0.2,
-              ),
-            ),
-          ),
-
-          // Actions
-          if (PlatformUtils.isMobile()) ...[
-            if (!_scanFromFile)
-              IconButton(
-                icon: FutureBuilder<bool>(
-                  future: getFlashState(),
-                  builder: (context, snapshot) {
-                    final isOn = snapshot.hasData && snapshot.data == true;
-                    return Icon(
-                      isOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
-                      color: isOn ? ThemeDefine.kColorAmber : null,
-                      size: 20,
-                    );
-                  },
+                      // Main Content
+                      Expanded(
+                        child: isMobile
+                            ? _buildMobileImportView(context)
+                            : _buildDesktopView(context),
+                      ),
+                    ],
+                  ),
                 ),
-                tooltip: "闪光灯",
-                onPressed: () async {
-                  try {
-                    await controller?.toggleFlash();
-                  } catch (err) {
-                    DialogUtils.showAlertDialog(
-                      context,
-                      err.toString(),
-                      showCopy: true,
-                      showFAQ: true,
-                      withVersion: true,
-                    );
-                  }
-                  setState(() {});
-                },
-              ),
-            IconButton(
-              icon: Icon(
-                _scanFromFile ? Icons.camera_alt_outlined : Icons.photo_library_outlined,
-                size: 20,
-              ),
-              tooltip: _scanFromFile ? "相机扫码" : "相册选图",
-              onPressed: () {
-                setState(() {
-                  _scanFromFile = !_scanFromFile;
-                  _resetScan();
-                });
-              },
-            ),
-          ] else ...[
-            // Desktop: Reset button if content or image loaded
-            if (_image != null || _qrContent.isNotEmpty)
-              IconButton(
-                icon: const Icon(Icons.refresh_rounded, size: 20),
-                tooltip: tcontext.meta.reScan,
-                onPressed: _resetScan,
-              ),
-          ],
-
-          // Done / Import Button in Header
-          if (_qrContent.isNotEmpty) ...[
-            const SizedBox(width: 4),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ThemeDefine.kColorBlue,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              icon: const Icon(Icons.done_rounded, size: 16),
-              label: Text(
-                tcontext.meta.save,
-                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-              ),
-              onPressed: _onConfirm,
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }
@@ -262,20 +204,20 @@ class _AddProfileByScanQrcodeScanScreenState
   Widget _buildDesktopView(BuildContext context) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 580),
+          constraints: const BoxConstraints(maxWidth: 560),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 1. Quick Action Cards (Screenshot, File Picker, Clipboard)
               _buildActionGrid(context),
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
 
               // 2. Central Scanner Viewfinder / Drop Zone
               _buildScannerZone(context),
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
 
               // 3. Scan Result Card (if recognized) or Failure Hint
               if (_qrContent.isNotEmpty)
@@ -304,9 +246,8 @@ class _AddProfileByScanQrcodeScanScreenState
             child: _buildActionTile(
               context: context,
               icon: Icons.crop_free_rounded,
-              gradientColors: const [Color(0xFF00BCDF), Color(0xFF0284C7)],
               title: tcontext.meta.screenshot,
-              subtitle: "截取屏幕二维码",
+              subtitle: "截取屏幕",
               onTap: onPressScreenshot,
             ),
           ),
@@ -317,10 +258,9 @@ class _AddProfileByScanQrcodeScanScreenState
         Expanded(
           child: _buildActionTile(
             context: context,
-            icon: Icons.image_search_rounded,
-            gradientColors: const [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
+            icon: Icons.image_outlined,
             title: tcontext.meta.qrcodeScanFromImage,
-            subtitle: "选择本地图片",
+            subtitle: "本地文件",
             onTap: isMobile ? onPressScanFromImageMobile : onPressScanFromImagePC,
           ),
         ),
@@ -331,9 +271,8 @@ class _AddProfileByScanQrcodeScanScreenState
           child: _buildActionTile(
             context: context,
             icon: Icons.content_paste_rounded,
-            gradientColors: const [Color(0xFF10B981), Color(0xFF059669)],
             title: tcontext.meta.qrcodeScanFromClipboard,
-            subtitle: "读取剪贴板链接",
+            subtitle: "读取链接",
             onTap: onPressFromClipboard,
           ),
         ),
@@ -344,76 +283,61 @@ class _AddProfileByScanQrcodeScanScreenState
   Widget _buildActionTile({
     required BuildContext context,
     required IconData icon,
-    required List<Color> gradientColors,
     required String title,
-    required String subtitle,
+    String? subtitle,
     required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Material(
-      color: isDark ? const Color(0xFF151D2E) : Colors.white,
-      borderRadius: BorderRadius.circular(14),
+    return Card(
       elevation: 0,
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: ThemeDefine.kCardBorderRadius,
         onTap: _isScanning ? null : onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: theme.dividerColor.withValues(alpha: isDark ? 0.25 : 0.4),
-              width: 0.8,
-            ),
-          ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 36,
-                height: 36,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: gradientColors,
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: gradientColors.first.withValues(alpha: 0.35),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  color: ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.15 : 0.08),
+                  shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: Colors.white, size: 20),
+                child: Icon(
+                  icon,
+                  color: ThemeDefine.kColorBlue,
+                  size: 22,
+                ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               Text(
                 title,
                 style: const TextStyle(
                   fontSize: 13,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: -0.2,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 10.5,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+              if (subtitle != null && subtitle.isNotEmpty) ...[
+                const SizedBox(height: 3),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
+              ],
             ],
           ),
         ),
@@ -429,150 +353,161 @@ class _AddProfileByScanQrcodeScanScreenState
     final isDark = theme.brightness == Brightness.dark;
     final tcontext = Translations.of(context);
 
-    return Container(
-      width: double.infinity,
-      constraints: const BoxConstraints(minHeight: 220),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF131A29) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: _qrContent.isNotEmpty
-              ? ThemeDefine.kColorGreenBright.withValues(alpha: 0.5)
-              : theme.dividerColor.withValues(alpha: isDark ? 0.3 : 0.4),
-          width: _qrContent.isNotEmpty ? 1.5 : 0.8,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    return Card(
+      elevation: 0,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            if (_image != null) ...[
-              // Image Display
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 240),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: _image!,
+        borderRadius: ThemeDefine.kCardBorderRadius,
+        child: Container(
+          width: double.infinity,
+          constraints: const BoxConstraints(minHeight: 220),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              if (_image != null) ...[
+                // Image Display
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 240),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: _image!,
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              // Viewfinder Cyan Corner Brackets
-              Positioned.fill(
-                child: CustomPaint(
-                  painter: _QrCornerBracketPainter(
-                    cornerColor: _qrContent.isNotEmpty
-                        ? ThemeDefine.kColorGreenBright
-                        : const Color(0xFF38BDF8),
+                // Viewfinder Cyan Corner Brackets
+                Positioned.fill(
+                  child: CustomPaint(
+                    painter: _QrCornerBracketPainter(
+                      cornerColor: _qrContent.isNotEmpty
+                          ? ThemeDefine.kColorGreenBright
+                          : ThemeDefine.kColorBlue,
+                    ),
                   ),
                 ),
-              ),
 
-              // Status indicator tag on top of image
-              Positioned(
-                top: 10,
-                right: 12,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.75),
-                    borderRadius: BorderRadius.circular(12),
+                // Status indicator tag on top of image
+                Positioned(
+                  top: 12,
+                  right: 14,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? const Color(0xFF1E293B).withValues(alpha: 0.9)
+                          : Colors.black.withValues(alpha: 0.75),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (_isScanning) ...[
+                          const SizedBox(
+                            width: 12,
+                            height: 12,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          const Text(
+                            "正在解析...",
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ] else if (_qrContent.isNotEmpty) ...[
+                          const Icon(
+                            Icons.check_circle_rounded,
+                            color: ThemeDefine.kColorGreenBright,
+                            size: 14,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            tcontext.meta.qrcodeRecognized,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ] else ...[
+                          const Icon(
+                            Icons.warning_amber_rounded,
+                            color: ThemeDefine.kColorAmber,
+                            size: 14,
+                          ),
+                          const SizedBox(width: 4),
+                          const Text(
+                            "未识别到二维码",
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
-                  child: Row(
+                ),
+              ] else ...[
+                // Standby / Empty Drop Zone
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 36),
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (_isScanning) ...[
-                        const SizedBox(
-                          width: 12,
-                          height: 12,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      // Radar / QR Graphic
+                      Container(
+                        width: 68,
+                        height: 68,
+                        decoration: BoxDecoration(
+                          color: ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.15 : 0.08),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: ThemeDefine.kColorBlue.withValues(alpha: 0.25),
+                            width: 1.5,
+                          ),
                         ),
-                        const SizedBox(width: 6),
-                        const Text(
-                          "正在解析...",
-                          style: TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w600),
+                        child: const Center(
+                          child: Icon(
+                            Icons.qr_code_scanner_rounded,
+                            size: 34,
+                            color: ThemeDefine.kColorBlue,
+                          ),
                         ),
-                      ] else if (_qrContent.isNotEmpty) ...[
-                        const Icon(Icons.check_circle_rounded, color: ThemeDefine.kColorGreenBright, size: 14),
-                        const SizedBox(width: 4),
-                        Text(
-                          tcontext.meta.qrcodeRecognized,
-                          style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        tcontext.meta.qrcodeDropHint,
+                        style: const TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ] else ...[
-                        const Icon(Icons.warning_amber_rounded, color: Color(0xFFF59E0B), size: 14),
-                        const SizedBox(width: 4),
-                        const Text(
-                          "未识别到二维码",
-                          style: TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        "支持解析各类订阅、节点及配置二维码图片",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                         ),
-                      ],
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ),
                 ),
-              ),
-            ] else ...[
-              // Standby / Empty Drop Zone
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Radar Scan Graphic
-                    Container(
-                      width: 68,
-                      height: 68,
-                      decoration: BoxDecoration(
-                        color: ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.15 : 0.08),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: ThemeDefine.kColorBlue.withValues(alpha: 0.3),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.qr_code_scanner_rounded,
-                          size: 34,
-                          color: ThemeDefine.kColorBlue,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-                    Text(
-                      tcontext.meta.qrcodeDropHint,
-                      style: const TextStyle(
-                        fontSize: 14.5,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      "支持解析各类订阅、节点及配置二维码图片",
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -586,164 +521,156 @@ class _AddProfileByScanQrcodeScanScreenState
     final isDark = theme.brightness == Brightness.dark;
     final tcontext = Translations.of(context);
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151D2E) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: ThemeDefine.kColorGreenBright.withValues(alpha: 0.35),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: ThemeDefine.kColorGreenBright.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header: Success Icon + Title
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: ThemeDefine.kColorGreenBright.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
+    return Card(
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header: Success Icon + Title
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: ThemeDefine.kColorGreenBright.withValues(alpha: 0.15),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.check_rounded,
+                    color: ThemeDefine.kColorGreenBright,
+                    size: 16,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.check_rounded,
-                  color: ThemeDefine.kColorGreenBright,
-                  size: 16,
+                const SizedBox(width: 8),
+                Text(
+                  tcontext.meta.qrcodeRecognized,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: ThemeDefine.kColorGreenBright,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                tcontext.meta.qrcodeRecognized,
-                style: const TextStyle(
-                  fontSize: 14.5,
-                  fontWeight: FontWeight.w700,
-                  color: ThemeDefine.kColorGreenBright,
-                ),
-              ),
-              const Spacer(),
-              // Re-scan text button
-              InkWell(
-                borderRadius: BorderRadius.circular(6),
-                onTap: _resetScan,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.refresh_rounded,
-                        size: 14,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                      ),
-                      const SizedBox(width: 2),
-                      Text(
-                        tcontext.meta.reScan,
-                        style: TextStyle(
-                          fontSize: 12,
+                const Spacer(),
+                // Re-scan text button
+                InkWell(
+                  borderRadius: BorderRadius.circular(6),
+                  onTap: _resetScan,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.refresh_rounded,
+                          size: 15,
                           color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 4),
+                        Text(
+                          tcontext.meta.reScan,
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
+              ],
+            ),
+            const SizedBox(height: 14),
 
-          // Monospace Content Box
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF0B0F19) : const Color(0xFFF1F5F9),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: theme.dividerColor.withValues(alpha: 0.25),
-                width: 0.8,
+            // Monospace Content Box
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: isDark ? ThemeDefine.kColorDarkBg : const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: theme.dividerColor.withValues(alpha: isDark ? 0.2 : 0.4),
+                  width: 0.8,
+                ),
+              ),
+              child: SelectableText(
+                _qrContent,
+                maxLines: 4,
+                style: TextStyle(
+                  fontFamily: "monospace",
+                  fontSize: 12.5,
+                  color: isDark ? ThemeDefine.kColorBlueLight : const Color(0xFF0369A1),
+                  height: 1.45,
+                ),
               ),
             ),
-            child: SelectableText(
-              _qrContent,
-              maxLines: 4,
-              style: TextStyle(
-                fontFamily: "monospace",
-                fontSize: 12,
-                color: isDark ? const Color(0xFF38BDF8) : const Color(0xFF0369A1),
-                height: 1.4,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          // Primary Actions Row
-          Row(
-            children: [
-              // Copy Button
-              Expanded(
-                flex: 1,
-                child: OutlinedButton.icon(
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    side: BorderSide(
-                      color: theme.dividerColor.withValues(alpha: 0.4),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  icon: const Icon(Icons.copy_rounded, size: 16),
-                  label: Text(
-                    tcontext.meta.copyUrl,
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                  ),
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: _qrContent));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(tcontext.meta.copiedToClipboard),
-                        duration: const Duration(seconds: 1),
+            // Primary Actions Row
+            Row(
+              children: [
+                // Copy Button
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(
+                    height: 42,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: theme.dividerColor.withValues(alpha: isDark ? 0.3 : 0.6),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-
-              // Confirm / Import Button
-              Expanded(
-                flex: 2,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ThemeDefine.kColorBlue,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      icon: const Icon(Icons.copy_rounded, size: 16),
+                      label: Text(
+                        tcontext.meta.copyUrl,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: _qrContent));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(tcontext.meta.copiedToClipboard),
+                            duration: const Duration(seconds: 1),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  icon: const Icon(Icons.file_download_done_rounded, size: 18),
-                  label: Text(
-                    tcontext.meta.confirmImport,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                  ),
-                  onPressed: _onConfirm,
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(width: 12),
+
+                // Confirm / Import Button
+                Expanded(
+                  flex: 2,
+                  child: SizedBox(
+                    height: 42,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ThemeDefine.kColorBlue,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      icon: const Icon(Icons.file_download_done_rounded, size: 18),
+                      label: Text(
+                        tcontext.meta.confirmImport,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                      ),
+                      onPressed: _onConfirm,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -756,50 +683,49 @@ class _AddProfileByScanQrcodeScanScreenState
     final isDark = theme.brightness == Brightness.dark;
     final tcontext = Translations.of(context);
 
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF2D1B14) : const Color(0xFFFEF3C7),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: const Color(0xFFF59E0B).withValues(alpha: 0.4),
-          width: 0.8,
+    return Card(
+      elevation: 0,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: ThemeDefine.kCardBorderRadius,
+          color: ThemeDefine.kColorAmber.withValues(alpha: isDark ? 0.12 : 0.08),
         ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.warning_amber_rounded,
-            color: Color(0xFFF59E0B),
-            size: 20,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "未能识别到有效二维码",
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFFD97706),
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  tcontext.meta.qrcodeScanResultFailed,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    color: isDark ? Colors.white70 : const Color(0xFF92400E),
-                    height: 1.3,
-                  ),
-                ),
-              ],
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: ThemeDefine.kColorAmber,
+              size: 22,
             ),
-          ),
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "未能识别到有效二维码",
+                    style: TextStyle(
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w700,
+                      color: ThemeDefine.kColorAmber,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    tcontext.meta.qrcodeScanResultFailed,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      height: 1.35,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -821,7 +747,7 @@ class _AddProfileByScanQrcodeScanScreenState
             key: qrKey,
             onQRViewCreated: _onQRViewCreated,
             overlay: QrScannerOverlayShape(
-              borderColor: const Color(0xFF38BDF8),
+              borderColor: ThemeDefine.kColorBlue,
               borderRadius: 16,
               borderLength: 32,
               borderWidth: 6,
@@ -831,9 +757,61 @@ class _AddProfileByScanQrcodeScanScreenState
           ),
         ),
 
+        // Floating Header Overlay on Camera
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () => Navigator.pop(context),
+                    child: const SizedBox(
+                      width: 50,
+                      height: 30,
+                      child: Icon(Icons.arrow_back_ios_outlined, size: 26, color: Colors.white),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      tcontext.meta.qrcodeScan,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: ThemeConfig.kFontWeightTitle,
+                        fontSize: ThemeConfig.kFontSizeTitle,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () {
+                      setState(() {
+                        _scanFromFile = true;
+                        _resetScan();
+                      });
+                    },
+                    child: const SizedBox(
+                      width: 50,
+                      height: 30,
+                      child: Icon(Icons.photo_library_outlined, size: 24, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+
         // Hint Text Banner at Top of scan area
         Positioned(
-          top: 24,
+          top: 60,
           left: 20,
           right: 20,
           child: Center(
