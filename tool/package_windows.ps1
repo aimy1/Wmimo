@@ -40,12 +40,33 @@ if (-not $Tag.StartsWith("v")) {
 }
 $rawVer = $Tag.TrimStart('v')
 
-Write-Host "Compiling Inno Setup Installer for Windows x64 ($Tag, rawVersion: $rawVer)..." -ForegroundColor Cyan
-& $iscc "/DMyAppVersion=$rawVer" "/DMyAppArch=x64" "/DSourceDir=$releasePath" "/DOutputDir=$distPath" packaging/windows/setup.iss
+# 1. Create clean Portable (免安装绿色版) directory
+$portableDir = "$distPath/Wmimo-Windows-x64-$Tag"
+Write-Host "Preparing Portable Standalone folder at $portableDir..." -ForegroundColor Cyan
+if (Test-Path $portableDir) {
+    Remove-Item -Path $portableDir -Recurse -Force
+}
+New-Item -ItemType Directory -Force -Path $portableDir | Out-Null
+Get-ChildItem -Path $releasePath -Exclude "*.pdb" | Copy-Item -Destination $portableDir -Recurse -Force
 
+# 2. Create Portable Zip archives
 Write-Host "Creating Portable Zip archive..." -ForegroundColor Cyan
 $zipName = "Wmimo-Windows-x64-$Tag.zip"
-Compress-Archive -Path "$releasePath/*" -DestinationPath "$distPath/$zipName" -Force
+$zipPath = "$distPath/$zipName"
+if (Test-Path $zipPath) {
+    Remove-Item -Path $zipPath -Force
+}
+Compress-Archive -Path "$portableDir/*" -DestinationPath $zipPath -Force
+
+$zipPortableName = "Wmimo-Windows-x64-Portable-$Tag.zip"
+$zipPortablePath = "$distPath/$zipPortableName"
+Copy-Item -Path $zipPath -Destination $zipPortablePath -Force
+
+# 3. Compile Inno Setup Installer if compiler exists
+if (Test-Path $iscc) {
+    Write-Host "Compiling Inno Setup Installer for Windows x64 ($Tag, rawVersion: $rawVer)..." -ForegroundColor Cyan
+    & $iscc "/DMyAppVersion=$rawVer" "/DMyAppArch=x64" "/DSourceDir=$releasePath" "/DOutputDir=$distPath" packaging/windows/setup.iss
+}
 
 Write-Host "==========================================" -ForegroundColor Green
 Write-Host "Successfully generated Windows artifacts in dist/:" -ForegroundColor Green
