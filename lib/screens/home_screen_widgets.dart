@@ -778,23 +778,34 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '${tcontext.meta.remaining}: $remainingStr',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-              ),
-              if (expireInfo != null)
-                Text(
-                  '📅 ${tcontext.meta.expireTime}: ${expireInfo.item2}',
+              Flexible(
+                child: Text(
+                  '${tcontext.meta.remaining}: $remainingStr',
                   style: TextStyle(
                     fontSize: 11,
-                    color: expireInfo.item1
-                        ? Colors.red
-                        : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              if (expireInfo != null) ...[
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    '📅 ${tcontext.meta.expireTime}: ${expireInfo.item2}',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: expireInfo.item1
+                          ? Colors.red
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
                   ),
                 ),
+              ],
             ],
           ),
         ],

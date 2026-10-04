@@ -554,40 +554,54 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
           // Details row
           Row(
             children: [
-              if (process.isNotEmpty) ...[
-                Icon(
-                  Icons.terminal_rounded,
-                  size: 13,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              Expanded(
+                child: Row(
+                  children: [
+                    if (process.isNotEmpty) ...[
+                      Icon(
+                        Icons.terminal_rounded,
+                        size: 13,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      ),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          process,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    if (conn.rule.isNotEmpty) ...[
+                      Icon(
+                        Icons.alt_route_rounded,
+                        size: 13,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      ),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          conn.rulePayload.isNotEmpty
+                              ? "${conn.rule}(${conn.rulePayload})"
+                              : conn.rule,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  process,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  ),
-                ),
-                const SizedBox(width: 12),
-              ],
-              if (conn.rule.isNotEmpty) ...[
-                Icon(
-                  Icons.alt_route_rounded,
-                  size: 13,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  conn.rulePayload.isNotEmpty
-                      ? "${conn.rule}(${conn.rulePayload})"
-                      : conn.rule,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  ),
-                ),
-              ],
-              const Spacer(),
+              ),
+              const SizedBox(width: 8),
               // Traffic transferred
               Row(
                 mainAxisSize: MainAxisSize.min,

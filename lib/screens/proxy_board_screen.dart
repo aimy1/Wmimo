@@ -837,6 +837,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   void _showSortFilterBottomSheet() {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final isZh = Translations.of(context).$meta.locale.languageCode.startsWith('zh');
 
     showModalBottomSheet(
       context: context,
@@ -872,9 +873,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       children: [
                         const Icon(Icons.tune_rounded, size: 20, color: ThemeDefine.kColorBlue),
                         const SizedBox(width: 8),
-                        const Text(
-                          "节点排序与过滤",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        Text(
+                          isZh ? "节点排序与过滤" : "Sort & Filter Nodes",
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const Spacer(),
                         TextButton(
@@ -887,16 +888,16 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                             setSheetState(() {});
                             Navigator.pop(context);
                           },
-                          child: const Text("重置", style: TextStyle(fontSize: 13)),
+                          child: Text(isZh ? "重置" : "Reset", style: const TextStyle(fontSize: 13)),
                         ),
                       ],
                     ),
                     const Divider(height: 16),
 
                     // Sort section
-                    const Text(
-                      "排序方式",
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+                    Text(
+                      isZh ? "排序方式" : "Sort Options",
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
                     ),
                     const SizedBox(height: 8),
                     Wrap(
@@ -904,25 +905,25 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       runSpacing: 8,
                       children: [
                         _buildSortOptionChip(
-                          title: "默认排序",
+                          title: isZh ? "默认排序" : "Default",
                           icon: Icons.list_rounded,
                           mode: "default",
                           setSheetState: setSheetState,
                         ),
                         _buildSortOptionChip(
-                          title: "延迟最低",
+                          title: isZh ? "延迟最低" : "Lowest Latency",
                           icon: Icons.bolt_rounded,
                           mode: "delay_asc",
                           setSheetState: setSheetState,
                         ),
                         _buildSortOptionChip(
-                          title: "名称 A-Z",
+                          title: isZh ? "名称 A-Z" : "Name A-Z",
                           icon: Icons.sort_by_alpha_rounded,
                           mode: "name_asc",
                           setSheetState: setSheetState,
                         ),
                         _buildSortOptionChip(
-                          title: "国家地区",
+                          title: isZh ? "国家地区" : "Region",
                           icon: Icons.public_rounded,
                           mode: "region",
                           setSheetState: setSheetState,
@@ -932,9 +933,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                     const SizedBox(height: 16),
 
                     // Filter section
-                    const Text(
-                      "过滤选项",
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+                    Text(
+                      isZh ? "过滤选项" : "Filter Options",
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
                     ),
                     const SizedBox(height: 6),
                     Container(
@@ -947,13 +948,13 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         ),
                       ),
                       child: SwitchListTile(
-                        title: const Text(
-                          "隐藏超时与不可用节点",
-                          style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500),
+                        title: Text(
+                          isZh ? "隐藏超时与不可用节点" : "Hide Timed-out & Offline Nodes",
+                          style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500),
                         ),
-                        subtitle: const Text(
-                          "自动过滤测速失败或连接超时的节点",
-                          style: TextStyle(fontSize: 11.5, color: Colors.grey),
+                        subtitle: Text(
+                          isZh ? "自动过滤测速失败或连接超时的节点" : "Automatically filter unreachable nodes",
+                          style: const TextStyle(fontSize: 11.5, color: Colors.grey),
                         ),
                         value: _hideTimeoutNodes,
                         activeThumbColor: ThemeDefine.kColorBlue,
@@ -993,9 +994,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    "当前测速目标场景",
-                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                                  Text(
+                                    isZh ? "当前测速目标场景" : "Speedtest Target Scenario",
+                                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
@@ -1081,6 +1082,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   void _showLatencyTargetBottomSheet() {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final isZh = Translations.of(context).$meta.locale.languageCode.startsWith('zh');
     final presets = LatencyTestTarget.presets;
     final customController = TextEditingController(
       text: _activeLatencyTarget.id == "custom" ? _activeLatencyTarget.url : "",
@@ -1126,15 +1128,17 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       children: [
                         const Icon(Icons.radar_rounded, size: 20, color: ThemeDefine.kColorBlue),
                         const SizedBox(width: 8),
-                        const Text(
-                          "测速目标场景切换",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        Text(
+                          isZh ? "测速目标场景切换" : "Speedtest Target Scenario",
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "选择不同服务测试节点的真实可用性与连通延迟",
+                      isZh
+                          ? "选择不同服务测试节点的真实可用性与连通延迟"
+                          : "Select targets to test real connectivity and latency",
                       style: TextStyle(
                         fontSize: 11.5,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
@@ -1153,7 +1157,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               side: BorderSide(color: ThemeDefine.kColorBlue.withValues(alpha: 0.4)),
                             ),
                             icon: const Icon(Icons.bolt_rounded, size: 16, color: ThemeDefine.kColorBlue),
-                            label: const Text("全量极速测速", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                            label: Text(
+                              isZh ? "全量极速测速" : "Test All Nodes",
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                            ),
                             onPressed: _nodesTesting.isNotEmpty
                                 ? null
                                 : () {
@@ -1171,7 +1178,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               side: BorderSide(color: Colors.orange.withValues(alpha: 0.4)),
                             ),
                             icon: const Icon(Icons.replay_rounded, size: 16, color: Colors.orange),
-                            label: const Text("仅重测超时节点", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                            label: Text(
+                              isZh ? "仅重测超时节点" : "Retest Timed-out",
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                            ),
                             onPressed: _nodesTesting.isNotEmpty
                                 ? null
                                 : () {
@@ -1205,7 +1215,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               ScaffoldMessenger.of(context).hideCurrentSnackBar();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text("已切换测速目标场景: ${target.name}"),
+                                  content: Text(
+                                    isZh
+                                        ? "已切换测速目标场景: ${target.name}"
+                                        : "Switched target: ${target.nameEn}",
+                                  ),
                                   duration: const Duration(seconds: 1),
                                   behavior: SnackBarBehavior.floating,
                                 ),
@@ -1249,7 +1263,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          target.name,
+                                          isZh ? target.name : target.nameEn,
                                           style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
@@ -1297,9 +1311,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                           Expanded(
                             child: TextField(
                               controller: customController,
-                              decoration: const InputDecoration(
-                                hintText: "自定义测速 URL (例如 http://...)",
-                                hintStyle: TextStyle(fontSize: 12),
+                              decoration: InputDecoration(
+                                hintText: isZh
+                                    ? "自定义测速 URL (例如 http://...)"
+                                    : "Custom Speedtest URL (e.g. http://...)",
+                                hintStyle: const TextStyle(fontSize: 12),
                                 border: InputBorder.none,
                                 isDense: true,
                               ),
@@ -1330,7 +1346,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                 Navigator.pop(context);
                               }
                             },
-                            child: const Text("使用", style: TextStyle(fontSize: 11)),
+                            child: Text(isZh ? "使用" : "Apply", style: const TextStyle(fontSize: 11)),
                           ),
                         ],
                       ),
@@ -2048,12 +2064,16 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               child: Row(
                 children: [
                   // Group Name
-                  Text(
-                    group.name,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.2,
+                  Flexible(
+                    child: Text(
+                      group.name,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.2,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -2167,6 +2187,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                 builder: (context, constraints) {
                   // Responsive columns: 1 on small width, 2 on medium, 3 or 4 on desktop
                   int crossAxisCount = (constraints.maxWidth / 240).floor().clamp(1, 4);
+                  final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+                  final cardExtent = (52.0 * textScale).clamp(50.0, 70.0);
 
                   return GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
@@ -2174,7 +2196,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                     itemCount: nodes.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: crossAxisCount,
-                      mainAxisExtent: 46,
+                      mainAxisExtent: cardExtent,
                       crossAxisSpacing: 6,
                       mainAxisSpacing: 6,
                     ),

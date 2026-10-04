@@ -179,23 +179,27 @@ class _IpInfoCardState extends State<IpInfoCard> {
               Row(
                 children: [
                   Text("IP: ", style: labelTitleStyle),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(4),
-                    onTap: () {
-                      Clipboard.setData(ClipboardData(text: _ipInfo!.ip));
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(tcontext.meta.ipCopied),
-                          duration: const Duration(seconds: 1),
+                  Flexible(
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(4),
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: _ipInfo!.ip));
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(tcontext.meta.ipCopied),
+                            duration: const Duration(seconds: 1),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        _formatIp(_ipInfo!.ip),
+                        style: labelValueStyle.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "monospace",
                         ),
-                      );
-                    },
-                    child: Text(
-                      _formatIp(_ipInfo!.ip),
-                      style: labelValueStyle.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "monospace",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
