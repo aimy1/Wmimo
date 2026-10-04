@@ -188,12 +188,105 @@ class FlutterVpnService {
     }
   }
 
-  static Future<bool> isServiceAuthorized(String path) async => true;
-  static Future<VpnServiceResultError?> authorizeService(String path, String password) async => null;
+  static Future<bool> isServiceAuthorized(String path) async {
+    if (Platform.isMacOS) {
+      try {
+        final result = await Process.run('stat', ['-f', '%u %p', path]);
+        if (result.exitCode == 0) {
+          final parts = result.stdout.toString().trim().split(RegExp(r'\s+'));
+          if (parts.isNotEmpty) {
+            final uid = parts[0];
+            final mode = parts.length > 1 ? parts[1] : '';
+            if (uid == '0' && (mode.contains('4755') || mode.contains('4750') || mode.startsWith('104') || mode.startsWith('4'))) {
+              return true;
+            }
+          }
+        }
+      } catch (_) {}
+      try {
+        final lsRes = await Process.run('ls', ['-l', path]);
+        if (lsRes.exitCode == 0) {
+          final out = lsRes.stdout.toString();
+          if (out.contains('root') && (out.startsWith('-rws') || out.startsWith('-r-s') || out.contains('rws') || out.contains('r-s'))) {
+            return true;
+          }
+        }
+      } catch (_) {}
+      return false;
+    } else if (Platform.isLinux) {
+      try {
+        final capRes = await Process.run('getcap', [path]);
+        if (capRes.exitCode == 0 && capRes.stdout.toString().contains('cap_net_admin')) {
+          return true;
+        }
+      } catch (_) {}
+      try {
+        final statRes = await Process.run('stat', ['-c', '%u %a', path]);
+        if (statRes.exitCode == 0) {
+          final parts = statRes.stdout.toString().trim().split(RegExp(r'\s+'));
+          if (parts.length >= 2 && parts[0] == '0' && (parts[1].startsWith('4') || parts[1] == '4755')) {
+            return true;
+          }
+        }
+      } catch (_) {}
+      return false;
+    }
+    return true;
+  }
+
+  static Future<VpnServiceResultError?> authorizeService(String path, String password) async {
+    if (Platform.isMacOS) {
+      if (password.isNotEmpty) {
+        try {
+          final cmd = 'echo "$password" | sudo -S chown root:admin "$path" && echo "$password" | sudo -S chmod +sx "$path"';
+          final res = await Process.run('sh', ['-c', cmd]);
+          if (res.exitCode == 0) return null;
+        } catch (_) {}
+      }
+      try {
+        final script = 'do shell script "chown root:admin \\"$path\\" && chmod +sx \\"$path\\"" with administrator privileges';
+        final res = await Process.run('osascript', ['-e', script]);
+        if (res.exitCode == 0) return null;
+        return VpnServiceResultError(res.exitCode, res.stderr.toString().trim().isNotEmpty ? res.stderr.toString().trim() : "macOS 提权授权被取消或失败");
+      } catch (e) {
+        return VpnServiceResultError(500, "提权执行异常: $e");
+      }
+    } else if (Platform.isLinux) {
+      if (password.isNotEmpty) {
+        try {
+          final cmd = 'echo "$password" | sudo -S setcap cap_net_admin,cap_net_bind_service=+ep "$path" || (echo "$password" | sudo -S chown root:root "$path" && echo "$password" | sudo -S chmod +sx "$path")';
+          final res = await Process.run('sh', ['-c', cmd]);
+          if (res.exitCode == 0) return null;
+        } catch (_) {}
+      }
+      try {
+        final res = await Process.run('pkexec', ['setcap', 'cap_net_admin,cap_net_bind_service=+ep', path]);
+        if (res.exitCode == 0) return null;
+      } catch (_) {}
+      return VpnServiceResultError(1, "Linux 提权失败，请检查密码或执行 sudo setcap cap_net_admin,cap_net_bind_service=+ep $path");
+    }
+    return null;
+  }
+
   static Future<VpnServiceResultError?> installService() async => null;
   static Future<VpnServiceResultError?> uninstallService() async => null;
   static Future<void> hideDockIcon(bool hide) async {}
-  static Future<Directory?> getAppGroupDirectory(String identifier) async => null;
+  static Future<Directory?> getAppGroupDirectory(String identifier) async {
+    if (Platform.isIOS || Platform.isMacOS) {
+      try {
+        const platform = MethodChannel('com.wmimo.app/native_helper');
+        final String? path = await platform.invokeMethod<String>('getAppGroupDirectory', {'groupId': identifier});
+        if (path != null && path.isNotEmpty) {
+          final dir = Directory(path);
+          if (!dir.existsSync()) {
+            dir.createSync(recursive: true);
+          }
+          return dir;
+        }
+      } catch (_) {}
+    }
+    return null;
+  }
 
   static void prepareConfig({
     dynamic config,
@@ -222,6 +315,10 @@ class FlutterVpnService {
   }
 
   static Future<String> _resolveCorePath() async {
+    if (Platform.isIOS) {
+      return "ios-embedded-core";
+    }
+
     if (_savedTunnelServicePath != null &&
         _savedTunnelServicePath!.isNotEmpty &&
         File(_savedTunnelServicePath!).existsSync()) {
@@ -857,7 +954,7 @@ rules:
     final coreExe = await _resolveCorePath();
     final configFile = await _resolveConfigFile();
 
-    if (!File(coreExe).existsSync()) {
+    if (!Platform.isIOS && !File(coreExe).existsSync()) {
       return VpnServiceWaitResult(
         type: VpnServiceWaitType.error,
         err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe"),
@@ -872,6 +969,48 @@ rules:
     }
 
     await stop();
+
+    if (Platform.isIOS) {
+      try {
+        final mixedPort = _savedConfig?.mixed_port ?? 7890;
+        final controlPort = _savedConfig?.control_port ?? 9090;
+        final secret = _savedConfig?.secret ?? "";
+
+        // Sync config file to App Group shared container if accessible
+        try {
+          final groupDir = await getAppGroupDirectory("group.com.wmimo.app");
+          if (groupDir != null) {
+            final targetConfig = File("${groupDir.path}/config.json");
+            await File(configFile).copy(targetConfig.path);
+          }
+        } catch (_) {}
+
+        const platform = MethodChannel('com.wmimo.app/native_helper');
+        final dynamic success = await platform.invokeMethod('startVpnService', {
+          'mixedPort': mixedPort,
+          'configPath': configFile,
+        });
+
+        if (success == true) {
+          _startTrafficMonitor(controlPort, secret);
+          _state = FlutterVpnServiceState.connected;
+          for (var l in _listeners) {
+            l(_state, {});
+          }
+          return VpnServiceWaitResult(type: VpnServiceWaitType.done);
+        } else {
+          return VpnServiceWaitResult(
+            type: VpnServiceWaitType.error,
+            err: VpnServiceResultError(500, "iOS NetworkExtension VPN 启动失败"),
+          );
+        }
+      } catch (e) {
+        return VpnServiceWaitResult(
+          type: VpnServiceWaitType.error,
+          err: VpnServiceResultError(500, "iOS NetworkExtension VPN 启动异常: $e"),
+        );
+      }
+    }
 
     String workDir = "";
     if (_savedConfig?.base_dir.isNotEmpty == true && Directory(_savedConfig!.base_dir).existsSync()) {
@@ -1001,7 +1140,7 @@ rules:
 
   static Future<void> stop() async {
     _stopTrafficMonitor();
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid || Platform.isIOS) {
       try {
         const platform = MethodChannel('com.wmimo.app/native_helper');
         await platform.invokeMethod('stopVpnService');

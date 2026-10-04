@@ -841,7 +841,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       setState(() {});
       return false;
     }
-    if (Platform.isLinux) {
+    final clashSetting = ClashSettingManager.getConfig();
+    final isTunEnabled = clashSetting.Tun?.Enable == true;
+    if ((Platform.isLinux || Platform.isMacOS) && isTunEnabled) {
       String? installer = await AutoUpdateManager.checkReplace();
       if (installer != null) {
         return true;
@@ -852,13 +854,13 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           return false;
         }
         String? password = await DialogUtils.showPasswordInputDialog(context);
-        if (password == null || password.isEmpty) {
+        if (Platform.isLinux && (password == null || password.isEmpty)) {
           setState(() {});
           return true;
         }
         final result = await FlutterVpnService.authorizeService(
           servicePath,
-          password,
+          password ?? "",
         );
         if (result != null) {
           if (!mounted) {
@@ -878,7 +880,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         }
       }
     }
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid || Platform.isIOS) {
       bool vpnGranted = await MobilePermissionHelper.requestVpnPermission();
       if (!vpnGranted) {
         if (mounted) setState(() {});

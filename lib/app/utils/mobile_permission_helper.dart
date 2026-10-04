@@ -22,10 +22,10 @@ abstract final class MobilePermissionHelper {
     }
   }
 
-  /// Check and request Android VpnService prepare permission
+  /// Check and request Android / iOS VpnService prepare permission
   /// Returns true if granted / prepared, false if user rejected
   static Future<bool> requestVpnPermission() async {
-    if (!Platform.isAndroid) return true;
+    if (!Platform.isAndroid && !Platform.isIOS) return true;
     try {
       final bool? granted = await _channel.invokeMethod<bool>('requestVpnPermission');
       return granted ?? true;
@@ -35,9 +35,9 @@ abstract final class MobilePermissionHelper {
     }
   }
 
-  /// Check if Android VPN permission has already been granted
+  /// Check if Android / iOS VPN permission has already been granted
   static Future<bool> checkVpnPermission() async {
-    if (!Platform.isAndroid) return true;
+    if (!Platform.isAndroid && !Platform.isIOS) return true;
     try {
       final bool? granted = await _channel.invokeMethod<bool>('checkVpnPermission');
       return granted ?? true;
