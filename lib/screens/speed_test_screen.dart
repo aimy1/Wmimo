@@ -1087,13 +1087,15 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          CustomPaint(
-                            size: const Size(270, 270),
-                            painter: _SpeedtestDialPainter(
-                              progress: _needleProgress,
-                              color: _getPhaseColor(theme),
-                              isDark: isDark,
-                              phase: _phase,
+                          RepaintBoundary(
+                            child: CustomPaint(
+                              size: const Size(270, 270),
+                              painter: _SpeedtestDialPainter(
+                                progress: _needleProgress,
+                                color: _getPhaseColor(theme),
+                                isDark: isDark,
+                                phase: _phase,
+                              ),
                             ),
                           ),
                           // Central Digital Counter (Positioned below pivot)

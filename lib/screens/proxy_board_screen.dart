@@ -36,7 +36,13 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     with WidgetsBindingObserver, AfterLayoutMixin {
   final TextEditingController _searchController = TextEditingController();
   List<ClashProxiesNode> _allNodes = [];
+  Map<String, ClashProxiesNode> _nodeMap = {};
   bool _loading = false;
+
+  void _updateAllNodes(List<ClashProxiesNode> nodes) {
+    _allNodes = nodes;
+    _nodeMap = {for (var n in nodes) n.name: n};
+  }
   bool _isVpnStarted = false;
   String _searchKeyword = "";
   String _sortMode = "default"; // "default", "delay_asc", "name_asc", "region"
@@ -179,7 +185,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           }
           if (mounted) {
             setState(() {
-              _allNodes = result.data!;
+              _updateAllNodes(result.data!);
               _loading = false;
             });
           }
@@ -198,7 +204,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     if (!mounted) return;
 
     setState(() {
-      _allNodes = offlineNodes;
+      _updateAllNodes(offlineNodes);
       _loading = false;
     });
   }
@@ -310,21 +316,15 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
       if (mounted) {
         setState(() {
-          for (var n in _allNodes) {
-            if (n.name == node.name) {
-              n.delay = testDelay;
-            }
-          }
+          _nodeMap[node.name]?.delay = testDelay;
+          node.delay = testDelay;
         });
       }
     } catch (_) {
       if (mounted) {
         setState(() {
-          for (var n in _allNodes) {
-            if (n.name == node.name) {
-              n.delay = -1;
-            }
-          }
+          _nodeMap[node.name]?.delay = -1;
+          node.delay = -1;
         });
       }
     } finally {
@@ -359,7 +359,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       await _fetchProxies();
     }
 
-    final nodeMap = {for (var n in _allNodes) n.name: n};
+    if (_nodeMap.isEmpty && _allNodes.isNotEmpty) {
+      _nodeMap = {for (var n in _allNodes) n.name: n};
+    }
+    final nodeMap = _nodeMap;
     final nodesToTest = <String>[];
     for (var name in group.all) {
       final n = nodeMap[name];
@@ -404,12 +407,15 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       );
       if (res.data != null && res.data!.isNotEmpty) {
         final groupDelays = res.data!;
-        for (var n in _allNodes) {
-          if (groupDelays.containsKey(n.name)) {
-            final d = groupDelays[n.name]!;
-            n.delay = d > 0 ? d : -1;
-          } else if (nodesToTest.contains(n.name)) {
-            n.delay = -1;
+        for (var name in nodesToTest) {
+          final n = _nodeMap[name];
+          if (n != null) {
+            if (groupDelays.containsKey(name)) {
+              final d = groupDelays[name]!;
+              n.delay = d > 0 ? d : -1;
+            } else {
+              n.delay = -1;
+            }
           }
         }
         _nodesTesting.removeAll(nodesToTest);
@@ -441,17 +447,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               timeout: timeout,
             );
             final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
-            for (var n in _allNodes) {
-              if (n.name == nodeName) {
-                n.delay = testDelay;
-              }
-            }
+            _nodeMap[nodeName]?.delay = testDelay;
           } catch (_) {
-            for (var n in _allNodes) {
-              if (n.name == nodeName) {
-                n.delay = -1;
-              }
-            }
+            _nodeMap[nodeName]?.delay = -1;
           } finally {
             _nodesTesting.remove(nodeName);
             scheduleUiUpdate();
@@ -546,17 +544,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
             timeout: Duration(milliseconds: setting.delayTestTimeout),
           );
           final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
-          for (var n in _allNodes) {
-            if (n.name == nodeName) {
-              n.delay = testDelay;
-            }
-          }
+          _nodeMap[nodeName]?.delay = testDelay;
         } catch (_) {
-          for (var n in _allNodes) {
-            if (n.name == nodeName) {
-              n.delay = -1;
-            }
-          }
+          _nodeMap[nodeName]?.delay = -1;
         } finally {
           _nodesTesting.remove(nodeName);
           scheduleUiUpdate();
@@ -648,17 +638,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
             timeout: timeout,
           );
           final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
-          for (var n in _allNodes) {
-            if (n.name == nodeName) {
-              n.delay = testDelay;
-            }
-          }
+          _nodeMap[nodeName]?.delay = testDelay;
         } catch (_) {
-          for (var n in _allNodes) {
-            if (n.name == nodeName) {
-              n.delay = -1;
-            }
-          }
+          _nodeMap[nodeName]?.delay = -1;
         } finally {
           _nodesTesting.remove(nodeName);
           scheduleUiUpdate();
@@ -784,7 +766,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   }
 
   List<ClashProxiesNode> _getNodesForGroup(ClashProxiesNode group) {
-    final nodeMap = {for (var n in _allNodes) n.name: n};
+    if (_nodeMap.isEmpty && _allNodes.isNotEmpty) {
+      _nodeMap = {for (var n in _allNodes) n.name: n};
+    }
+    final nodeMap = _nodeMap;
     List<ClashProxiesNode> list = group.all
         .map((name) => nodeMap[name] ?? (ClashProxiesNode()..name = name))
         .where((n) {
@@ -2036,8 +2021,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final isExpanded = _isGroupExpandedByDefault(group, index);
     final nodes = _getNodesForGroup(group);
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+    return RepaintBoundary(
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF151D2E) : const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(12),
@@ -2204,7 +2190,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           ],
         ],
       ),
-    );
+    ),
+  );
   }
 
   Widget _buildNodeCard(ClashProxiesNode group, ClashProxiesNode node, bool isSelected) {
@@ -2238,8 +2225,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       }
     }
 
-    return Material(
-      color: isSelected
+    return RepaintBoundary(
+      child: Material(
+        color: isSelected
           ? (isDark
               ? const Color(0xFF1E3A8A).withValues(alpha: 0.45)
               : const Color(0xFFDBEAFE).withValues(alpha: 0.7))
@@ -2355,6 +2343,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

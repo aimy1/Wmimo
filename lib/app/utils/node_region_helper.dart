@@ -508,6 +508,8 @@ class NodeRegionHelper {
   ];
 
   static final Map<String, RegExp> _codeRegexCache = {};
+  static final Map<String, NodeRegion> _regionCache = {};
+  static final Map<String, String> _flagCache = {};
 
   static RegExp _getCodeRegex(String code) {
     return _codeRegexCache.putIfAbsent(
@@ -519,6 +521,18 @@ class NodeRegionHelper {
   /// Get the matching NodeRegion for a given node name
   static NodeRegion getRegion(String nodeName) {
     if (nodeName.isEmpty) return NodeRegion.other;
+    final cached = _regionCache[nodeName];
+    if (cached != null) return cached;
+
+    final region = _resolveRegion(nodeName);
+    if (_regionCache.length >= 8000) {
+      _regionCache.clear();
+    }
+    _regionCache[nodeName] = region;
+    return region;
+  }
+
+  static NodeRegion _resolveRegion(String nodeName) {
     final upper = nodeName.toUpperCase();
 
     // Check special system names
@@ -567,7 +581,14 @@ class NodeRegionHelper {
 
   /// Get the country/region flag emoji for a node name
   static String getFlag(String nodeName) {
-    return getRegion(nodeName).flag;
+    final cached = _flagCache[nodeName];
+    if (cached != null) return cached;
+    final flag = getRegion(nodeName).flag;
+    if (_flagCache.length >= 8000) {
+      _flagCache.clear();
+    }
+    _flagCache[nodeName] = flag;
+    return flag;
   }
 
   /// Extract all available regions with their respective node counts from a list of nodes

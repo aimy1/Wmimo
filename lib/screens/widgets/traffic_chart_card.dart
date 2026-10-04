@@ -199,13 +199,15 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                                 _hoverPosition = null;
                               });
                             },
-                            child: CustomPaint(
-                              painter: ClashVergeChartPainter(
-                                history: widget.history,
-                                uploadColor: uploadColor,
-                                downloadColor: downloadColor,
-                                isDark: isDark,
-                                hoverPosition: _hoverPosition,
+                            child: RepaintBoundary(
+                              child: CustomPaint(
+                                painter: ClashVergeChartPainter(
+                                  history: widget.history,
+                                  uploadColor: uploadColor,
+                                  downloadColor: downloadColor,
+                                  isDark: isDark,
+                                  hoverPosition: _hoverPosition,
+                                ),
                               ),
                             ),
                           ),
