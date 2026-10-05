@@ -2057,6 +2057,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final isExpanded = _isGroupExpandedByDefault(group, index);
     final nodes = _getNodesForGroup(group);
+    final screenWidth = MediaQuery.sizeOf(context).width;
 
     return RepaintBoundary(
       child: Container(
@@ -2085,7 +2086,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               child: Row(
                 children: [
                   // Group Name
-                  Flexible(
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: (screenWidth - 220).clamp(80.0, screenWidth >= 640 ? 280.0 : 140.0),
+                    ),
                     child: Text(
                       group.name,
                       style: TextStyle(
@@ -2127,29 +2131,32 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   // Currently Selected Node Badge
                   if (group.now.isNotEmpty)
                     Expanded(
-                      child: Row(
-                        children: [
-                          Text(
-                            getFlagEmoji(group.now),
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontFamily: Platform.isWindows ? 'Emoji' : null,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Flexible(
-                            child: Text(
-                              group.now,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: Row(
+                          children: [
+                            Text(
+                              getFlagEmoji(group.now),
                               style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: ThemeDefine.kColorBlue,
-                                fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                                fontSize: 13,
+                                fontFamily: Platform.isWindows ? 'Emoji' : null,
                               ),
-                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                group.now,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: ThemeDefine.kColorBlue,
+                                  fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                   else
