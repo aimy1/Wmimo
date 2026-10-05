@@ -568,6 +568,73 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get copyAddressBtn => '复制地址 ✨';
 	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ 地址已复制！非常感谢你的投喂与陪伴~ 💖';
 	@override String get donateTip => '💡 提示：支持 Bybit 或任意 Aptos 兼容钱包扫码转账';
+	@override String get qrcodeParsing => '正在解析...';
+	@override String get qrcodeNotFound => '未识别到二维码';
+	@override String get qrcodeSupportHint => '支持解析各类订阅、节点及配置二维码图片';
+	@override String get qrcodeCameraHint => '将二维码放入框内即可自动扫描';
+	@override String get flashlight => '闪光灯';
+	@override String get screenshotDesc => '截取屏幕';
+	@override String get fromImageDesc => '本地文件';
+	@override String get fromClipboardDesc => '读取链接';
+	@override String get errorPrompt => '错误提示';
+	@override String get copied => '已复制';
+	@override String get sortAndFilterNodes => '节点排序与筛选';
+	@override String get sortOptions => '排序方式';
+	@override String get sortDefault => '默认排序';
+	@override String get sortLatency => '按延迟由低到高';
+	@override String get sortName => '按名称 A-Z';
+	@override String get sortRegion => '按地区分组';
+	@override String get filterOptions => '筛选选项';
+	@override String portableUpdateTip({required Object version}) => '检测到当前为免安装便携模式：\n便携版本暂不支持应用内覆盖更新，请前往官网或仓库下载最新免安装压缩包覆盖解压。\n\n最新版本: v${version}';
+	@override String get portableModeTipTitle => '便携模式提示';
+	@override String get noNodesToSpeedTest => '无可用节点，无需测速';
+	@override String alreadyLatestVersion({required Object version}) => '已是最新版本 (v${version})';
+	@override String get checkUpdateFailed => '检查更新失败，请检查网络连接';
+	@override String get hideTimeoutNodes => '隐藏超时与不可用节点';
+	@override String get hideTimeoutNodesDesc => '自动过滤测速失败或连接超时的节点';
+	@override String get speedtestScenario => '当前测速目标场景';
+	@override String get speedtestScenarioSwitch => '测速目标场景切换';
+	@override String get speedtestScenarioDesc => '选择不同服务测试节点的真实可用性与连通延迟';
+	@override String get speedtestAllNodes => '全量极速测速';
+	@override String get retestTimeoutNodes => '仅重测超时节点';
+	@override String switchedTargetScenario({required Object target}) => '已切换测速目标场景: ${target}';
+	@override String get notTested => '未测速';
+	@override String get timeoutOrFailed => '超时 / 无法连接';
+	@override String get identifiedRegion => '识别地区';
+	@override String get nodeProtocol => '节点协议';
+	@override String get currentLatency => '当前延迟';
+	@override String get testScenario => '测速场景';
+	@override String get belongsToGroup => '所属分组';
+	@override String get copyNodeName => '复制名称';
+	@override String get nodeNameCopied => '已复制节点名称';
+	@override String get testSingleNode => '单独测速';
+	@override String get selectThisNode => '选择此节点';
+	@override String get allNodesNormal => '所有节点均正常可用，无需重测';
+	@override String get customUrlPrompt => '自定义 URL (如 http://...)';
+	@override String get customTarget => '自定义目标';
+	@override String get downloadFailedTip => '下载更新安装包失败，请检查网络或点击下方前往网页下载。';
+	@override String discoveredNewVersion({required Object version}) => '发现新版本: v${version}';
+	@override String get preparingUpdate => '正在准备启动更新...';
+	@override String get downloadingPackage => '安装包正在下载中，请稍候...';
+	@override String get downloadUpdateNow => '立即下载更新';
+	@override String get downloadFromWeb => '前往网页下载安装包';
+	@override String get switchSource => '切换源';
+	@override String get serverSwitch => '测速服务器切换';
+	@override String get autoDetectBest => '自动探测最优';
+	@override String get serverSwitchDesc => '选择不同的测速 CDN 源或自定义节点进行多链路测速';
+	@override String autoSelectedBest({required Object server, required Object ping}) => '已自动选择最优测速源: ${server} (${ping} ms)';
+	@override String get networkGradeTitle => '网络体质综合评分';
+	@override String get copyReport => '复制战报';
+	@override String get reportCopied => '战报已复制到剪贴板，可直接粘贴分享';
+	@override String get gamingExperience => '电竞体验';
+	@override String get streamingExperience => '超清流媒体';
+	@override String get meetingExperience => '远程视讯';
+	@override String get customSpeedtestUrl => '自定义测速下载 URL (https://...)';
+	@override String get customSpeedtestSource => '自定义测速源';
+	@override String get userSpecifiedUrl => '用户指定 URL';
+	@override String cannotBeEmpty({required Object item}) => '${item}不能为空';
+	@override String alreadyExists({required Object item}) => '${item}已存在';
+	@override String installFailedWithCode({required Object installer, required Object code}) => '安装 ${installer} 失败，错误码: ${code}';
 }
 
 // Path: permission
@@ -1121,6 +1188,73 @@ extension on TranslationsZhCn {
 			'meta.copyAddressBtn' => '复制地址 ✨',
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ 地址已复制！非常感谢你的投喂与陪伴~ 💖',
 			'meta.donateTip' => '💡 提示：支持 Bybit 或任意 Aptos 兼容钱包扫码转账',
+			'meta.qrcodeParsing' => '正在解析...',
+			'meta.qrcodeNotFound' => '未识别到二维码',
+			'meta.qrcodeSupportHint' => '支持解析各类订阅、节点及配置二维码图片',
+			'meta.qrcodeCameraHint' => '将二维码放入框内即可自动扫描',
+			'meta.flashlight' => '闪光灯',
+			'meta.screenshotDesc' => '截取屏幕',
+			'meta.fromImageDesc' => '本地文件',
+			'meta.fromClipboardDesc' => '读取链接',
+			'meta.errorPrompt' => '错误提示',
+			'meta.copied' => '已复制',
+			'meta.sortAndFilterNodes' => '节点排序与筛选',
+			'meta.sortOptions' => '排序方式',
+			'meta.sortDefault' => '默认排序',
+			'meta.sortLatency' => '按延迟由低到高',
+			'meta.sortName' => '按名称 A-Z',
+			'meta.sortRegion' => '按地区分组',
+			'meta.filterOptions' => '筛选选项',
+			'meta.portableUpdateTip' => ({required Object version}) => '检测到当前为免安装便携模式：\n便携版本暂不支持应用内覆盖更新，请前往官网或仓库下载最新免安装压缩包覆盖解压。\n\n最新版本: v${version}',
+			'meta.portableModeTipTitle' => '便携模式提示',
+			'meta.noNodesToSpeedTest' => '无可用节点，无需测速',
+			'meta.alreadyLatestVersion' => ({required Object version}) => '已是最新版本 (v${version})',
+			'meta.checkUpdateFailed' => '检查更新失败，请检查网络连接',
+			'meta.hideTimeoutNodes' => '隐藏超时与不可用节点',
+			'meta.hideTimeoutNodesDesc' => '自动过滤测速失败或连接超时的节点',
+			'meta.speedtestScenario' => '当前测速目标场景',
+			'meta.speedtestScenarioSwitch' => '测速目标场景切换',
+			'meta.speedtestScenarioDesc' => '选择不同服务测试节点的真实可用性与连通延迟',
+			'meta.speedtestAllNodes' => '全量极速测速',
+			'meta.retestTimeoutNodes' => '仅重测超时节点',
+			'meta.switchedTargetScenario' => ({required Object target}) => '已切换测速目标场景: ${target}',
+			'meta.notTested' => '未测速',
+			'meta.timeoutOrFailed' => '超时 / 无法连接',
+			'meta.identifiedRegion' => '识别地区',
+			'meta.nodeProtocol' => '节点协议',
+			'meta.currentLatency' => '当前延迟',
+			'meta.testScenario' => '测速场景',
+			'meta.belongsToGroup' => '所属分组',
+			'meta.copyNodeName' => '复制名称',
+			'meta.nodeNameCopied' => '已复制节点名称',
+			'meta.testSingleNode' => '单独测速',
+			'meta.selectThisNode' => '选择此节点',
+			'meta.allNodesNormal' => '所有节点均正常可用，无需重测',
+			'meta.customUrlPrompt' => '自定义 URL (如 http://...)',
+			'meta.customTarget' => '自定义目标',
+			'meta.downloadFailedTip' => '下载更新安装包失败，请检查网络或点击下方前往网页下载。',
+			'meta.discoveredNewVersion' => ({required Object version}) => '发现新版本: v${version}',
+			'meta.preparingUpdate' => '正在准备启动更新...',
+			'meta.downloadingPackage' => '安装包正在下载中，请稍候...',
+			'meta.downloadUpdateNow' => '立即下载更新',
+			'meta.downloadFromWeb' => '前往网页下载安装包',
+			'meta.switchSource' => '切换源',
+			'meta.serverSwitch' => '测速服务器切换',
+			'meta.autoDetectBest' => '自动探测最优',
+			'meta.serverSwitchDesc' => '选择不同的测速 CDN 源或自定义节点进行多链路测速',
+			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => '已自动选择最优测速源: ${server} (${ping} ms)',
+			'meta.networkGradeTitle' => '网络体质综合评分',
+			'meta.copyReport' => '复制战报',
+			'meta.reportCopied' => '战报已复制到剪贴板，可直接粘贴分享',
+			'meta.gamingExperience' => '电竞体验',
+			'meta.streamingExperience' => '超清流媒体',
+			'meta.meetingExperience' => '远程视讯',
+			'meta.customSpeedtestUrl' => '自定义测速下载 URL (https://...)',
+			'meta.customSpeedtestSource' => '自定义测速源',
+			'meta.userSpecifiedUrl' => '用户指定 URL',
+			'meta.cannotBeEmpty' => ({required Object item}) => '${item}不能为空',
+			'meta.alreadyExists' => ({required Object item}) => '${item}已存在',
+			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => '安装 ${installer} 失败，错误码: ${code}',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',
@@ -1146,6 +1280,8 @@ extension on TranslationsZhCn {
 			'dns.preferH3' => 'DoH H3优先',
 			'dns.useHosts' => '使用Hosts',
 			'dns.useSystemHosts' => '使用系统Hosts',
+			_ => null,
+		} ?? switch (path) {
 			'dns.enhancedMode' => '增强模式',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} 过滤模式',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} 过滤',

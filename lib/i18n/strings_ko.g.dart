@@ -568,6 +568,73 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get copyAddressBtn => '주소 복사 ✨';
 	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ 주소가 복사되었습니다! 후원해 주셔서 진심으로 감사드립니다~ 💖';
 	@override String get donateTip => '💡 팁: Bybit 또는 모든 Aptos 호환 지갑 스캔 지원';
+	@override String get qrcodeParsing => 'QR 코드 분석 중...';
+	@override String get qrcodeNotFound => 'QR 코드가 감지되지 않았습니다';
+	@override String get qrcodeSupportHint => '각종 구독, 노드 및 설정 QR 코드 이미지 분석 지원';
+	@override String get qrcodeCameraHint => '프레임 안에 QR 코드를 맞추면 자동으로 스캔됩니다';
+	@override String get flashlight => '손전등';
+	@override String get screenshotDesc => '화면 캡처';
+	@override String get fromImageDesc => '로컬 이미지';
+	@override String get fromClipboardDesc => '클립보드 읽기';
+	@override String get errorPrompt => '오류 안내';
+	@override String get copied => '복사됨';
+	@override String get sortAndFilterNodes => '노드 정렬 및 필터링';
+	@override String get sortOptions => '정렬 옵션';
+	@override String get sortDefault => '기본 정렬';
+	@override String get sortLatency => '지연 시간 낮은 순';
+	@override String get sortName => '이름순 (A-Z)';
+	@override String get sortRegion => '지역별 그룹';
+	@override String get filterOptions => '필터 옵션';
+	@override String portableUpdateTip({required Object version}) => '포터블(무설치) 모드가 감지되었습니다:\n포터블 버전은 앱 내 덮어쓰기 업데이트를 지원하지 않습니다. 공식 저장소에서 최신 포터블 압축 파일을 다운로드하여 덮어쓰기 해주세요.\n\n최신 버전: v${version}';
+	@override String get portableModeTipTitle => '포터블 모드 안내';
+	@override String get noNodesToSpeedTest => '측정할 수 있는 노드가 없습니다';
+	@override String alreadyLatestVersion({required Object version}) => '이미 최신 버전입니다 (v${version})';
+	@override String get checkUpdateFailed => '업데이트 확인 실패, 네트워크 연결을 확인하세요';
+	@override String get hideTimeoutNodes => '시간 초과 및 오프라인 노드 숨기기';
+	@override String get hideTimeoutNodesDesc => '속도 테스트 실패 또는 시간 초과된 노드를 자동으로 숨깁니다';
+	@override String get speedtestScenario => '현재 속도 테스트 시나리오';
+	@override String get speedtestScenarioSwitch => '속도 테스트 시나리오 전환';
+	@override String get speedtestScenarioDesc => '실제 연결 지연 및 가용성을 테스트할 대상을 선택하세요';
+	@override String get speedtestAllNodes => '모든 노드 속도 측정';
+	@override String get retestTimeoutNodes => '시간 초과 노드만 재테스트';
+	@override String switchedTargetScenario({required Object target}) => '속도 테스트 시나리오 변경됨: ${target}';
+	@override String get notTested => '미측정';
+	@override String get timeoutOrFailed => '시간 초과 / 연결 불가';
+	@override String get identifiedRegion => '지역';
+	@override String get nodeProtocol => '프로토콜';
+	@override String get currentLatency => '지연 시간';
+	@override String get testScenario => '테스트 시나리오';
+	@override String get belongsToGroup => '그룹';
+	@override String get copyNodeName => '이름 복사';
+	@override String get nodeNameCopied => '노드 이름이 복사되었습니다';
+	@override String get testSingleNode => '단독 테스트';
+	@override String get selectThisNode => '이 노드 선택';
+	@override String get allNodesNormal => '모든 노드가 정상입니다. 재테스트가 필요하지 않습니다';
+	@override String get customUrlPrompt => '사용자 지정 URL (예: http://...)';
+	@override String get customTarget => '사용자 지정 대상';
+	@override String get downloadFailedTip => '설치 패키지 다운로드 실패, 네트워크를 확인하거나 웹사이트에서 다운로드하세요.';
+	@override String discoveredNewVersion({required Object version}) => '새 버전 발견됨: v${version}';
+	@override String get preparingUpdate => '업데이트 준비 중...';
+	@override String get downloadingPackage => '설치 패키지 다운로드 중, 잠시만 기다려주세요...';
+	@override String get downloadUpdateNow => '지금 업데이트 다운로드';
+	@override String get downloadFromWeb => '웹사이트에서 다운로드';
+	@override String get switchSource => '서버 변경';
+	@override String get serverSwitch => '측정 서버 전환';
+	@override String get autoDetectBest => '최적 서버 자동 감지';
+	@override String get serverSwitchDesc => '연결을 테스트할 CDN 또는 사용자 지정 대상을 선택하세요';
+	@override String autoSelectedBest({required Object server, required Object ping}) => '최적 서버 자동 선택됨: ${server} (${ping} ms)';
+	@override String get networkGradeTitle => '네트워크 품질 종합 점수';
+	@override String get copyReport => '리포트 복사';
+	@override String get reportCopied => '리포트가 복사되었습니다. 바로 공유할 수 있습니다';
+	@override String get gamingExperience => '게이밍 경험';
+	@override String get streamingExperience => '스트리밍';
+	@override String get meetingExperience => '화상 회의';
+	@override String get customSpeedtestUrl => '사용자 지정 다운로드 URL (https://...)';
+	@override String get customSpeedtestSource => '사용자 지정 측정 서버';
+	@override String get userSpecifiedUrl => '사용자 지정 URL';
+	@override String cannotBeEmpty({required Object item}) => '${item}은(는) 비워둘 수 없습니다';
+	@override String alreadyExists({required Object item}) => '${item}이(가) 이미 존재합니다';
+	@override String installFailedWithCode({required Object installer, required Object code}) => '${installer} 설치 실패, 코드: ${code}';
 }
 
 // Path: permission
@@ -1121,6 +1188,73 @@ extension on TranslationsKo {
 			'meta.copyAddressBtn' => '주소 복사 ✨',
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ 주소가 복사되었습니다! 후원해 주셔서 진심으로 감사드립니다~ 💖',
 			'meta.donateTip' => '💡 팁: Bybit 또는 모든 Aptos 호환 지갑 스캔 지원',
+			'meta.qrcodeParsing' => 'QR 코드 분석 중...',
+			'meta.qrcodeNotFound' => 'QR 코드가 감지되지 않았습니다',
+			'meta.qrcodeSupportHint' => '각종 구독, 노드 및 설정 QR 코드 이미지 분석 지원',
+			'meta.qrcodeCameraHint' => '프레임 안에 QR 코드를 맞추면 자동으로 스캔됩니다',
+			'meta.flashlight' => '손전등',
+			'meta.screenshotDesc' => '화면 캡처',
+			'meta.fromImageDesc' => '로컬 이미지',
+			'meta.fromClipboardDesc' => '클립보드 읽기',
+			'meta.errorPrompt' => '오류 안내',
+			'meta.copied' => '복사됨',
+			'meta.sortAndFilterNodes' => '노드 정렬 및 필터링',
+			'meta.sortOptions' => '정렬 옵션',
+			'meta.sortDefault' => '기본 정렬',
+			'meta.sortLatency' => '지연 시간 낮은 순',
+			'meta.sortName' => '이름순 (A-Z)',
+			'meta.sortRegion' => '지역별 그룹',
+			'meta.filterOptions' => '필터 옵션',
+			'meta.portableUpdateTip' => ({required Object version}) => '포터블(무설치) 모드가 감지되었습니다:\n포터블 버전은 앱 내 덮어쓰기 업데이트를 지원하지 않습니다. 공식 저장소에서 최신 포터블 압축 파일을 다운로드하여 덮어쓰기 해주세요.\n\n최신 버전: v${version}',
+			'meta.portableModeTipTitle' => '포터블 모드 안내',
+			'meta.noNodesToSpeedTest' => '측정할 수 있는 노드가 없습니다',
+			'meta.alreadyLatestVersion' => ({required Object version}) => '이미 최신 버전입니다 (v${version})',
+			'meta.checkUpdateFailed' => '업데이트 확인 실패, 네트워크 연결을 확인하세요',
+			'meta.hideTimeoutNodes' => '시간 초과 및 오프라인 노드 숨기기',
+			'meta.hideTimeoutNodesDesc' => '속도 테스트 실패 또는 시간 초과된 노드를 자동으로 숨깁니다',
+			'meta.speedtestScenario' => '현재 속도 테스트 시나리오',
+			'meta.speedtestScenarioSwitch' => '속도 테스트 시나리오 전환',
+			'meta.speedtestScenarioDesc' => '실제 연결 지연 및 가용성을 테스트할 대상을 선택하세요',
+			'meta.speedtestAllNodes' => '모든 노드 속도 측정',
+			'meta.retestTimeoutNodes' => '시간 초과 노드만 재테스트',
+			'meta.switchedTargetScenario' => ({required Object target}) => '속도 테스트 시나리오 변경됨: ${target}',
+			'meta.notTested' => '미측정',
+			'meta.timeoutOrFailed' => '시간 초과 / 연결 불가',
+			'meta.identifiedRegion' => '지역',
+			'meta.nodeProtocol' => '프로토콜',
+			'meta.currentLatency' => '지연 시간',
+			'meta.testScenario' => '테스트 시나리오',
+			'meta.belongsToGroup' => '그룹',
+			'meta.copyNodeName' => '이름 복사',
+			'meta.nodeNameCopied' => '노드 이름이 복사되었습니다',
+			'meta.testSingleNode' => '단독 테스트',
+			'meta.selectThisNode' => '이 노드 선택',
+			'meta.allNodesNormal' => '모든 노드가 정상입니다. 재테스트가 필요하지 않습니다',
+			'meta.customUrlPrompt' => '사용자 지정 URL (예: http://...)',
+			'meta.customTarget' => '사용자 지정 대상',
+			'meta.downloadFailedTip' => '설치 패키지 다운로드 실패, 네트워크를 확인하거나 웹사이트에서 다운로드하세요.',
+			'meta.discoveredNewVersion' => ({required Object version}) => '새 버전 발견됨: v${version}',
+			'meta.preparingUpdate' => '업데이트 준비 중...',
+			'meta.downloadingPackage' => '설치 패키지 다운로드 중, 잠시만 기다려주세요...',
+			'meta.downloadUpdateNow' => '지금 업데이트 다운로드',
+			'meta.downloadFromWeb' => '웹사이트에서 다운로드',
+			'meta.switchSource' => '서버 변경',
+			'meta.serverSwitch' => '측정 서버 전환',
+			'meta.autoDetectBest' => '최적 서버 자동 감지',
+			'meta.serverSwitchDesc' => '연결을 테스트할 CDN 또는 사용자 지정 대상을 선택하세요',
+			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => '최적 서버 자동 선택됨: ${server} (${ping} ms)',
+			'meta.networkGradeTitle' => '네트워크 품질 종합 점수',
+			'meta.copyReport' => '리포트 복사',
+			'meta.reportCopied' => '리포트가 복사되었습니다. 바로 공유할 수 있습니다',
+			'meta.gamingExperience' => '게이밍 경험',
+			'meta.streamingExperience' => '스트리밍',
+			'meta.meetingExperience' => '화상 회의',
+			'meta.customSpeedtestUrl' => '사용자 지정 다운로드 URL (https://...)',
+			'meta.customSpeedtestSource' => '사용자 지정 측정 서버',
+			'meta.userSpecifiedUrl' => '사용자 지정 URL',
+			'meta.cannotBeEmpty' => ({required Object item}) => '${item}은(는) 비워둘 수 없습니다',
+			'meta.alreadyExists' => ({required Object item}) => '${item}이(가) 이미 존재합니다',
+			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => '${installer} 설치 실패, 코드: ${code}',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',
@@ -1146,6 +1280,8 @@ extension on TranslationsKo {
 			'dns.preferH3' => 'DoH H3 우선',
 			'dns.useHosts' => 'Hosts 사용',
 			'dns.useSystemHosts' => '시스템 Hosts 사용',
+			_ => null,
+		} ?? switch (path) {
 			'dns.enhancedMode' => '향상된 모드',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} 필터 모드',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} 필터',

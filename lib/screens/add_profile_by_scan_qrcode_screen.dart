@@ -247,7 +247,7 @@ class _AddProfileByScanQrcodeScanScreenState
               context: context,
               icon: Icons.crop_free_rounded,
               title: tcontext.meta.screenshot,
-              subtitle: "截取屏幕",
+              subtitle: tcontext.meta.screenshotDesc,
               onTap: onPressScreenshot,
             ),
           ),
@@ -260,7 +260,7 @@ class _AddProfileByScanQrcodeScanScreenState
             context: context,
             icon: Icons.image_outlined,
             title: tcontext.meta.qrcodeScanFromImage,
-            subtitle: "本地文件",
+            subtitle: tcontext.meta.fromImageDesc,
             onTap: isMobile ? onPressScanFromImageMobile : onPressScanFromImagePC,
           ),
         ),
@@ -272,7 +272,7 @@ class _AddProfileByScanQrcodeScanScreenState
             context: context,
             icon: Icons.content_paste_rounded,
             title: tcontext.meta.qrcodeScanFromClipboard,
-            subtitle: "读取链接",
+            subtitle: tcontext.meta.fromClipboardDesc,
             onTap: onPressFromClipboard,
           ),
         ),
@@ -414,9 +414,9 @@ class _AddProfileByScanQrcodeScanScreenState
                             ),
                           ),
                           const SizedBox(width: 6),
-                          const Text(
-                            "正在解析...",
-                            style: TextStyle(
+                          Text(
+                            tcontext.meta.qrcodeParsing,
+                            style: const TextStyle(
                               fontSize: 11,
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -444,9 +444,9 @@ class _AddProfileByScanQrcodeScanScreenState
                             size: 14,
                           ),
                           const SizedBox(width: 4),
-                          const Text(
-                            "未识别到二维码",
-                            style: TextStyle(
+                          Text(
+                            tcontext.meta.qrcodeNotFound,
+                            style: const TextStyle(
                               fontSize: 11,
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -495,7 +495,7 @@ class _AddProfileByScanQrcodeScanScreenState
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        "支持解析各类订阅、节点及配置二维码图片",
+                        tcontext.meta.qrcodeSupportHint,
                         style: TextStyle(
                           fontSize: 12,
                           color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -704,9 +704,9 @@ class _AddProfileByScanQrcodeScanScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "未能识别到有效二维码",
-                    style: TextStyle(
+                  Text(
+                    tcontext.meta.qrcodeNotFound,
+                    style: const TextStyle(
                       fontSize: 13.5,
                       fontWeight: FontWeight.w700,
                       color: ThemeDefine.kColorAmber,
@@ -821,9 +821,9 @@ class _AddProfileByScanQrcodeScanScreenState
                 color: Colors.black.withValues(alpha: 0.65),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Text(
-                "将二维码放入框内即可自动扫描",
-                style: TextStyle(
+              child: Text(
+                tcontext.meta.qrcodeCameraHint,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12.5,
                   fontWeight: FontWeight.w500,
@@ -844,7 +844,7 @@ class _AddProfileByScanQrcodeScanScreenState
               // Flash Button
               _buildMobileCircleButton(
                 icon: Icons.flash_on_rounded,
-                label: "闪光灯",
+                label: tcontext.meta.flashlight,
                 onTap: () async {
                   await controller?.toggleFlash();
                   setState(() {});

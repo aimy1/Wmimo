@@ -92,7 +92,7 @@ class DialogUtils {
         text.contains("异常") ||
         text.contains("denied");
 
-    final dialogTitle = title ?? (isError ? "提示" : tcontext.meta.tips);
+    final dialogTitle = title ?? (isError ? tcontext.meta.errorPrompt : tcontext.meta.tips);
 
     _isShowingAlertDialog = true;
     _activeDialogText = text;
@@ -167,7 +167,7 @@ class DialogUtils {
                         color: copied ? Colors.green : null,
                       ),
                       label: Text(
-                        copied ? "已复制" : tcontext.meta.copy,
+                        copied ? tcontext.meta.copied : tcontext.meta.copy,
                         style: TextStyle(
                           color: copied ? Colors.green : null,
                         ),
@@ -309,7 +309,7 @@ class DialogUtils {
                         color: copied ? Colors.green : null,
                       ),
                       label: Text(
-                        copied ? "已复制" : tcontext.meta.copy,
+                        copied ? tcontext.meta.copied : tcontext.meta.copy,
                         style: TextStyle(
                           color: copied ? Colors.green : null,
                         ),

@@ -568,6 +568,73 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get copyAddressBtn => 'アドレスをコピー ✨';
 	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ アドレスをコピーしました！応援ありがとうございます~ 💖';
 	@override String get donateTip => '💡 ヒント：BybitまたはAptos互換ウォレットでのスキャンに対応';
+	@override String get qrcodeParsing => 'QRコードを解析中...';
+	@override String get qrcodeNotFound => 'QRコードが検出されませんでした';
+	@override String get qrcodeSupportHint => '各種サブスクリプション、ノード、設定QRコードの解析に対応';
+	@override String get qrcodeCameraHint => 'フレーム内にQRコードを合わせると自動でスキャンします';
+	@override String get flashlight => 'フラッシュ';
+	@override String get screenshotDesc => '画面キャプチャ';
+	@override String get fromImageDesc => '画像ファイル';
+	@override String get fromClipboardDesc => 'クリップボード';
+	@override String get errorPrompt => 'エラー';
+	@override String get copied => 'コピー完了';
+	@override String get sortAndFilterNodes => 'ノードの並べ替えと絞り込み';
+	@override String get sortOptions => '並べ替え';
+	@override String get sortDefault => 'デフォルト';
+	@override String get sortLatency => '遅延の少ない順';
+	@override String get sortName => '名前順 (A-Z)';
+	@override String get sortRegion => '地域別グループ';
+	@override String get filterOptions => '絞り込みオプション';
+	@override String portableUpdateTip({required Object version}) => 'ポータブル版を検出しました：\nポータブル版はアプリ内上書き更新に対応していません。公式サイトまたはリポジトリから最新のZIPをダウンロードして解凍・上書きしてください。\n\n最新バージョン: v${version}';
+	@override String get portableModeTipTitle => 'ポータブル版のヒント';
+	@override String get noNodesToSpeedTest => 'テスト可能なノードがありません';
+	@override String alreadyLatestVersion({required Object version}) => '最新バージョンです (v${version})';
+	@override String get checkUpdateFailed => 'アップデート確認に失敗しました。ネットワーク接続を確認してください';
+	@override String get hideTimeoutNodes => 'タイムアウトおよび利用不可ノードを非表示';
+	@override String get hideTimeoutNodesDesc => 'テスト失敗またはタイムアウトしたノードを自動で非表示にします';
+	@override String get speedtestScenario => '現在のスピードテストシナリオ';
+	@override String get speedtestScenarioSwitch => 'スピードテストシナリオの切替';
+	@override String get speedtestScenarioDesc => '異なるサービスを選択して接続遅延と稼働状況をテスト';
+	@override String get speedtestAllNodes => '全ノード測定';
+	@override String get retestTimeoutNodes => 'タイムアウトノードのみ再測定';
+	@override String switchedTargetScenario({required Object target}) => 'テストシナリオを切り替えました: ${target}';
+	@override String get notTested => '未測定';
+	@override String get timeoutOrFailed => 'タイムアウト / 接続不可';
+	@override String get identifiedRegion => '地域';
+	@override String get nodeProtocol => 'プロトコル';
+	@override String get currentLatency => '遅延';
+	@override String get testScenario => 'テストシナリオ';
+	@override String get belongsToGroup => 'グループ';
+	@override String get copyNodeName => '名前をコピー';
+	@override String get nodeNameCopied => 'ノード名をコピーしました';
+	@override String get testSingleNode => '個別テスト';
+	@override String get selectThisNode => 'このノードを選択';
+	@override String get allNodesNormal => 'すべてのノードが正常に動作しています。再テストは不要です';
+	@override String get customUrlPrompt => 'カスタムURL (例: http://...)';
+	@override String get customTarget => 'カスタムターゲット';
+	@override String get downloadFailedTip => 'インストーラーのダウンロードに失敗しました。ネットワークを確認するか、Webサイトからダウンロードしてください。';
+	@override String discoveredNewVersion({required Object version}) => '新しいバージョンが見つかりました: v${version}';
+	@override String get preparingUpdate => 'アップデートの準備中...';
+	@override String get downloadingPackage => 'インストーラーをダウンロード中、しばらくお待ちください...';
+	@override String get downloadUpdateNow => '今すぐアップデートをダウンロード';
+	@override String get downloadFromWeb => 'Webサイトからダウンロード';
+	@override String get switchSource => '切替';
+	@override String get serverSwitch => '測定サーバーの切替';
+	@override String get autoDetectBest => '最適なサーバーを自動検出';
+	@override String get serverSwitchDesc => 'CDNまたはカスタムターゲットを選択して接続をテスト';
+	@override String autoSelectedBest({required Object server, required Object ping}) => '最適なサーバーを選択しました: ${server} (${ping} ms)';
+	@override String get networkGradeTitle => 'ネットワーク総合評価';
+	@override String get copyReport => 'レポートをコピー';
+	@override String get reportCopied => 'レポートをコピーしました。共有できます';
+	@override String get gamingExperience => 'オンラインゲーム';
+	@override String get streamingExperience => '動画ストリーミング';
+	@override String get meetingExperience => 'ビデオ会議';
+	@override String get customSpeedtestUrl => 'カスタム測定URL (https://...)';
+	@override String get customSpeedtestSource => 'カスタム測定サーバー';
+	@override String get userSpecifiedUrl => 'ユーザー指定URL';
+	@override String cannotBeEmpty({required Object item}) => '${item}を入力してください';
+	@override String alreadyExists({required Object item}) => '${item}は既に存在します';
+	@override String installFailedWithCode({required Object installer, required Object code}) => '${installer}のインストールに失敗しました (コード: ${code})';
 }
 
 // Path: permission
@@ -1121,6 +1188,73 @@ extension on TranslationsJa {
 			'meta.copyAddressBtn' => 'アドレスをコピー ✨',
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ アドレスをコピーしました！応援ありがとうございます~ 💖',
 			'meta.donateTip' => '💡 ヒント：BybitまたはAptos互換ウォレットでのスキャンに対応',
+			'meta.qrcodeParsing' => 'QRコードを解析中...',
+			'meta.qrcodeNotFound' => 'QRコードが検出されませんでした',
+			'meta.qrcodeSupportHint' => '各種サブスクリプション、ノード、設定QRコードの解析に対応',
+			'meta.qrcodeCameraHint' => 'フレーム内にQRコードを合わせると自動でスキャンします',
+			'meta.flashlight' => 'フラッシュ',
+			'meta.screenshotDesc' => '画面キャプチャ',
+			'meta.fromImageDesc' => '画像ファイル',
+			'meta.fromClipboardDesc' => 'クリップボード',
+			'meta.errorPrompt' => 'エラー',
+			'meta.copied' => 'コピー完了',
+			'meta.sortAndFilterNodes' => 'ノードの並べ替えと絞り込み',
+			'meta.sortOptions' => '並べ替え',
+			'meta.sortDefault' => 'デフォルト',
+			'meta.sortLatency' => '遅延の少ない順',
+			'meta.sortName' => '名前順 (A-Z)',
+			'meta.sortRegion' => '地域別グループ',
+			'meta.filterOptions' => '絞り込みオプション',
+			'meta.portableUpdateTip' => ({required Object version}) => 'ポータブル版を検出しました：\nポータブル版はアプリ内上書き更新に対応していません。公式サイトまたはリポジトリから最新のZIPをダウンロードして解凍・上書きしてください。\n\n最新バージョン: v${version}',
+			'meta.portableModeTipTitle' => 'ポータブル版のヒント',
+			'meta.noNodesToSpeedTest' => 'テスト可能なノードがありません',
+			'meta.alreadyLatestVersion' => ({required Object version}) => '最新バージョンです (v${version})',
+			'meta.checkUpdateFailed' => 'アップデート確認に失敗しました。ネットワーク接続を確認してください',
+			'meta.hideTimeoutNodes' => 'タイムアウトおよび利用不可ノードを非表示',
+			'meta.hideTimeoutNodesDesc' => 'テスト失敗またはタイムアウトしたノードを自動で非表示にします',
+			'meta.speedtestScenario' => '現在のスピードテストシナリオ',
+			'meta.speedtestScenarioSwitch' => 'スピードテストシナリオの切替',
+			'meta.speedtestScenarioDesc' => '異なるサービスを選択して接続遅延と稼働状況をテスト',
+			'meta.speedtestAllNodes' => '全ノード測定',
+			'meta.retestTimeoutNodes' => 'タイムアウトノードのみ再測定',
+			'meta.switchedTargetScenario' => ({required Object target}) => 'テストシナリオを切り替えました: ${target}',
+			'meta.notTested' => '未測定',
+			'meta.timeoutOrFailed' => 'タイムアウト / 接続不可',
+			'meta.identifiedRegion' => '地域',
+			'meta.nodeProtocol' => 'プロトコル',
+			'meta.currentLatency' => '遅延',
+			'meta.testScenario' => 'テストシナリオ',
+			'meta.belongsToGroup' => 'グループ',
+			'meta.copyNodeName' => '名前をコピー',
+			'meta.nodeNameCopied' => 'ノード名をコピーしました',
+			'meta.testSingleNode' => '個別テスト',
+			'meta.selectThisNode' => 'このノードを選択',
+			'meta.allNodesNormal' => 'すべてのノードが正常に動作しています。再テストは不要です',
+			'meta.customUrlPrompt' => 'カスタムURL (例: http://...)',
+			'meta.customTarget' => 'カスタムターゲット',
+			'meta.downloadFailedTip' => 'インストーラーのダウンロードに失敗しました。ネットワークを確認するか、Webサイトからダウンロードしてください。',
+			'meta.discoveredNewVersion' => ({required Object version}) => '新しいバージョンが見つかりました: v${version}',
+			'meta.preparingUpdate' => 'アップデートの準備中...',
+			'meta.downloadingPackage' => 'インストーラーをダウンロード中、しばらくお待ちください...',
+			'meta.downloadUpdateNow' => '今すぐアップデートをダウンロード',
+			'meta.downloadFromWeb' => 'Webサイトからダウンロード',
+			'meta.switchSource' => '切替',
+			'meta.serverSwitch' => '測定サーバーの切替',
+			'meta.autoDetectBest' => '最適なサーバーを自動検出',
+			'meta.serverSwitchDesc' => 'CDNまたはカスタムターゲットを選択して接続をテスト',
+			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => '最適なサーバーを選択しました: ${server} (${ping} ms)',
+			'meta.networkGradeTitle' => 'ネットワーク総合評価',
+			'meta.copyReport' => 'レポートをコピー',
+			'meta.reportCopied' => 'レポートをコピーしました。共有できます',
+			'meta.gamingExperience' => 'オンラインゲーム',
+			'meta.streamingExperience' => '動画ストリーミング',
+			'meta.meetingExperience' => 'ビデオ会議',
+			'meta.customSpeedtestUrl' => 'カスタム測定URL (https://...)',
+			'meta.customSpeedtestSource' => 'カスタム測定サーバー',
+			'meta.userSpecifiedUrl' => 'ユーザー指定URL',
+			'meta.cannotBeEmpty' => ({required Object item}) => '${item}を入力してください',
+			'meta.alreadyExists' => ({required Object item}) => '${item}は既に存在します',
+			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => '${installer}のインストールに失敗しました (コード: ${code})',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',
@@ -1146,6 +1280,8 @@ extension on TranslationsJa {
 			'dns.preferH3' => 'DoH H3を優先',
 			'dns.useHosts' => 'Hostsを使用',
 			'dns.useSystemHosts' => 'システムHostsを使用',
+			_ => null,
+		} ?? switch (path) {
 			'dns.enhancedMode' => '拡張モード',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} フィルターモード',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} フィルター',

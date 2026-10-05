@@ -29,6 +29,7 @@ class SpeedTestServer {
   final String id;
   final String name;
   final String region;
+  final String regionEn;
   final String icon;
   final List<String> pingUrls;
   final String downloadUrl;
@@ -38,17 +39,22 @@ class SpeedTestServer {
     required this.id,
     required this.name,
     required this.region,
+    this.regionEn = '',
     required this.icon,
     required this.pingUrls,
     required this.downloadUrl,
     required this.uploadUrl,
   });
 
+  String getDisplayRegion(bool isZh) =>
+      isZh || regionEn.isEmpty ? region : regionEn;
+
   static const List<SpeedTestServer> presets = [
     SpeedTestServer(
       id: 'cloudflare',
       name: 'Cloudflare Anycast',
       region: '全球边缘加速 (Anycast)',
+      regionEn: 'Global Anycast CDN',
       icon: '⚡',
       pingUrls: [
         'https://speed.cloudflare.com/__down?bytes=0',
@@ -62,6 +68,7 @@ class SpeedTestServer {
       id: 'fast',
       name: 'Fast.com / Netflix',
       region: '流媒体专属加速骨干',
+      regionEn: 'Media Streaming Backbone',
       icon: '🎬',
       pingUrls: [
         'https://api.fast.com/netflix/speedtest/v2',
@@ -74,6 +81,7 @@ class SpeedTestServer {
       id: 'apple',
       name: 'Apple / Akamai CDN',
       region: '全球高可用边缘节点',
+      regionEn: 'Apple / Akamai Edge CDN',
       icon: '🍎',
       pingUrls: [
         'https://captive.apple.com/hotspot-detect.html',
@@ -86,6 +94,7 @@ class SpeedTestServer {
       id: 'cachefly',
       name: 'CacheFly CDN',
       region: '国际骨干 CDN 节点',
+      regionEn: 'Global Backbone CDN',
       icon: '🚀',
       pingUrls: [
         'https://testfile.cachefly.net/10mb.test',
@@ -125,25 +134,26 @@ class NetworkGrade {
     required double jitter,
     required double download,
     required double upload,
+    bool isZh = true,
   }) {
     String gGrade;
     String gDesc;
     Color gColor;
     if (ping > 0 && ping <= 45 && jitter <= 10) {
-      gGrade = 'S 级';
-      gDesc = '职业电竞级 / 极速丝滑';
+      gGrade = isZh ? 'S 级' : 'S Tier';
+      gDesc = isZh ? '职业电竞级 / 极速丝滑' : 'Pro Esports / Ultra Smooth';
       gColor = const Color(0xFF10B981);
     } else if (ping > 0 && ping <= 85 && jitter <= 20) {
-      gGrade = 'A 级';
-      gDesc = '稳定顺畅 / 主流竞技无压力';
+      gGrade = isZh ? 'A 级' : 'A Tier';
+      gDesc = isZh ? '稳定顺畅 / 主流竞技无压力' : 'Stable & Smooth / Flawless';
       gColor = const Color(0xFF00E5FF);
     } else if (ping > 0 && ping <= 160) {
-      gGrade = 'B 级';
-      gDesc = '略有延迟 / 轻度休闲可用';
+      gGrade = isZh ? 'B 级' : 'B Tier';
+      gDesc = isZh ? '略有延迟 / 轻度休闲可用' : 'Minor Latency / Casual Gaming';
       gColor = const Color(0xFFF59E0B);
     } else {
-      gGrade = 'C 级';
-      gDesc = '延迟偏高 / 建议切换优质节点';
+      gGrade = isZh ? 'C 级' : 'C Tier';
+      gDesc = isZh ? '延迟偏高 / 建议切换优质节点' : 'High Latency / Better Node Needed';
       gColor = const Color(0xFFEF4444);
     }
 
@@ -151,20 +161,20 @@ class NetworkGrade {
     String sDesc;
     Color sColor;
     if (download >= 80) {
-      sGrade = '8K 超清';
-      sDesc = '极速秒开 / 蓝光无损画质';
+      sGrade = isZh ? '8K 超清' : '8K Ultra HD';
+      sDesc = isZh ? '极速秒开 / 蓝光无损画质' : 'Instant Load / Lossless Quality';
       sColor = const Color(0xFF8B5CF6);
     } else if (download >= 30) {
-      sGrade = '4K 臻彩';
-      sDesc = '秒播无阻 / 杜比视界';
+      sGrade = isZh ? '4K 臻彩' : '4K UHD';
+      sDesc = isZh ? '秒播无阻 / 杜比视界' : 'Smooth Playback / Dolby Vision';
       sColor = const Color(0xFF00E5FF);
     } else if (download >= 12) {
       sGrade = '1080P';
-      sDesc = '高清流畅 / 无缝播放';
+      sDesc = isZh ? '高清流畅 / 无缝播放' : 'Full HD / Seamless Playback';
       sColor = const Color(0xFF10B981);
     } else {
-      sGrade = '标清';
-      sDesc = '轻微缓冲 / 适合基础网页';
+      sGrade = isZh ? '标清' : 'SD';
+      sDesc = isZh ? '轻微缓冲 / 适合基础网页' : 'Minor Buffering / Basic Web';
       sColor = const Color(0xFFF59E0B);
     }
 
@@ -172,16 +182,16 @@ class NetworkGrade {
     String mDesc;
     Color mColor;
     if (upload >= 20 && jitter <= 15) {
-      mGrade = '极佳';
-      mDesc = '高清多方视讯 / 桌面演示无延迟';
+      mGrade = isZh ? '极佳' : 'Excellent';
+      mDesc = isZh ? '高清多方视讯 / 桌面演示无延迟' : 'HD Video Calling / Zero Lag';
       mColor = const Color(0xFF10B981);
     } else if (upload >= 6 && jitter <= 30) {
-      mGrade = '良好';
-      mDesc = '日常语音视频清晰连贯';
+      mGrade = isZh ? '良好' : 'Good';
+      mDesc = isZh ? '日常语音视频清晰连贯' : 'Clear & Consistent Voice/Video';
       mColor = const Color(0xFF00E5FF);
     } else {
-      mGrade = '一般';
-      mDesc = '上行较慢 / 建议优先音频';
+      mGrade = isZh ? '一般' : 'Fair';
+      mDesc = isZh ? '上行较慢 / 建议优先音频' : 'Slow Upload / Audio Preferred';
       mColor = const Color(0xFFF59E0B);
     }
 
@@ -441,10 +451,16 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
         }
       });
       if (bestServer != null) {
+        final tcontext = Translations.of(context);
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("已自动优选最快测速源: ${bestServer.name} (${bestPing.toStringAsFixed(0)} ms)"),
+            content: Text(
+              tcontext.meta.autoSelectedBest(
+                server: bestServer.name,
+                ping: bestPing.toStringAsFixed(0),
+              ),
+            ),
             duration: const Duration(seconds: 2),
             behavior: SnackBarBehavior.floating,
           ),
@@ -454,36 +470,54 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
   }
 
   void _shareResult() {
+    final tcontext = Translations.of(context);
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final nodeName = _useProxy
         ? _getProxyNodeName()
-        : Translations.of(context).SpeedTestScreen.directConnection;
+        : tcontext.SpeedTestScreen.directConnection;
     final grade = NetworkGrade.calculate(
       ping: _pingMs,
       jitter: _jitterMs,
       download: _downloadFinalMbps,
       upload: _uploadFinalMbps,
+      isZh: isZh,
     );
 
     final sb = StringBuffer();
-    sb.writeln("🚀 Wmimo 网络测速战报");
-    sb.writeln("---------------------------------");
-    sb.writeln("📍 测试节点: $nodeName (${_useProxy ? '代理加速' : '本地直连'})");
-    sb.writeln("🌐 测速服务: ${_currentServer.name} (${_currentServer.region})");
-    sb.writeln("⏱️ 网络延迟: ${_pingMs.toStringAsFixed(0)} ms (抖动: ${_jitterMs.toStringAsFixed(0)} ms)");
-    sb.writeln("📥 下载速率: ${_downloadFinalMbps.toStringAsFixed(1)} Mbps");
-    sb.writeln("📤 上传速率: ${_uploadFinalMbps.toStringAsFixed(1)} Mbps");
-    sb.writeln("---------------------------------");
-    sb.writeln("🎮 电竞体验: ${grade.gameGrade} (${grade.gameDesc})");
-    sb.writeln("🎬 超清流媒体: ${grade.streamGrade} (${grade.streamDesc})");
-    sb.writeln("💼 协同办公: ${grade.meetingGrade} (${grade.meetingDesc})");
-    sb.writeln("⏰ 测速时间: ${DateTime.now().toString().substring(0, 19)}");
+    if (isZh) {
+      sb.writeln("🚀 Wmimo 网络测速战报");
+      sb.writeln("---------------------------------");
+      sb.writeln("📍 测试节点: $nodeName (${_useProxy ? '代理加速' : '本地直连'})");
+      sb.writeln("🌐 测速服务: ${_currentServer.name} (${_currentServer.getDisplayRegion(true)})");
+      sb.writeln("⏱️ 网络延迟: ${_pingMs.toStringAsFixed(0)} ms (抖动: ${_jitterMs.toStringAsFixed(0)} ms)");
+      sb.writeln("📥 下载速率: ${_downloadFinalMbps.toStringAsFixed(1)} Mbps");
+      sb.writeln("📤 上传速率: ${_uploadFinalMbps.toStringAsFixed(1)} Mbps");
+      sb.writeln("---------------------------------");
+      sb.writeln("🎮 电竞体验: ${grade.gameGrade} (${grade.gameDesc})");
+      sb.writeln("🎬 超清流媒体: ${grade.streamGrade} (${grade.streamDesc})");
+      sb.writeln("💼 协同办公: ${grade.meetingGrade} (${grade.meetingDesc})");
+      sb.writeln("⏰ 测速时间: ${DateTime.now().toString().substring(0, 19)}");
+    } else {
+      sb.writeln("🚀 Wmimo Speed Test Report");
+      sb.writeln("---------------------------------");
+      sb.writeln("📍 Test Node: $nodeName (${_useProxy ? 'Proxy' : 'Direct'})");
+      sb.writeln("🌐 Server: ${_currentServer.name} (${_currentServer.getDisplayRegion(false)})");
+      sb.writeln("⏱️ Latency: ${_pingMs.toStringAsFixed(0)} ms (Jitter: ${_jitterMs.toStringAsFixed(0)} ms)");
+      sb.writeln("📥 Download: ${_downloadFinalMbps.toStringAsFixed(1)} Mbps");
+      sb.writeln("📤 Upload: ${_uploadFinalMbps.toStringAsFixed(1)} Mbps");
+      sb.writeln("---------------------------------");
+      sb.writeln("🎮 Gaming: ${grade.gameGrade} (${grade.gameDesc})");
+      sb.writeln("🎬 Streaming: ${grade.streamGrade} (${grade.streamDesc})");
+      sb.writeln("💼 Video Conference: ${grade.meetingGrade} (${grade.meetingDesc})");
+      sb.writeln("⏰ Test Time: ${DateTime.now().toString().substring(0, 19)}");
+    }
 
     Clipboard.setData(ClipboardData(text: sb.toString()));
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("测速战报已复制到剪贴板，可直接粘贴分享"),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: Text(tcontext.meta.reportCopied),
+        duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -943,6 +977,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final isRunning = _phase == SpeedTestPhase.ping ||
         _phase == SpeedTestPhase.download ||
         _phase == SpeedTestPhase.upload;
@@ -1202,7 +1237,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    '${tcontext.SpeedTestScreen.server}: ${_currentServer.icon} ${_currentServer.name} (${_currentServer.region})',
+                                    '${tcontext.SpeedTestScreen.server}: ${_currentServer.icon} ${_currentServer.name} (${_currentServer.getDisplayRegion(isZh)})',
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: (isDark ? Colors.white : Colors.black)
@@ -1218,19 +1253,19 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                                 color: ThemeDefine.kColorBlue.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    "切换源",
-                                    style: TextStyle(
+                                    tcontext.meta.switchSource,
+                                    style: const TextStyle(
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,
                                       color: ThemeDefine.kColorBlue,
                                     ),
                                   ),
-                                  SizedBox(width: 2),
-                                  Icon(Icons.keyboard_arrow_right_rounded, size: 14, color: ThemeDefine.kColorBlue),
+                                  const SizedBox(width: 2),
+                                  const Icon(Icons.keyboard_arrow_right_rounded, size: 14, color: ThemeDefine.kColorBlue),
                                 ],
                               ),
                             ),
@@ -1485,6 +1520,8 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
   void _showServerPickerBottomSheet() {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final tcontext = Translations.of(context);
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final presets = SpeedTestServer.presets;
     final customController = TextEditingController(
       text: _currentServer.id == 'custom' ? _currentServer.downloadUrl : '',
@@ -1527,9 +1564,9 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                       children: [
                         const Icon(Icons.speed_rounded, size: 20, color: ThemeDefine.kColorBlue),
                         const SizedBox(width: 8),
-                        const Text(
-                          "测速服务器切换",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        Text(
+                          tcontext.meta.serverSwitch,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const Spacer(),
                         if (!_isDetectingServer)
@@ -1540,9 +1577,9 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                             icon: const Icon(Icons.flash_on_rounded, size: 15, color: ThemeDefine.kColorBlue),
-                            label: const Text(
-                              "自动探测最优",
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: ThemeDefine.kColorBlue),
+                            label: Text(
+                              tcontext.meta.autoDetectBest,
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: ThemeDefine.kColorBlue),
                             ),
                             onPressed: () async {
                               Navigator.pop(context);
@@ -1559,7 +1596,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "选择不同的测速 CDN 源评估线路带宽与吞吐极限",
+                      tcontext.meta.serverSwitchDesc,
                       style: TextStyle(
                         fontSize: 11.5,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
@@ -1630,7 +1667,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
-                                          server.region,
+                                          server.getDisplayRegion(isZh),
                                           style: TextStyle(
                                             fontSize: 10.5,
                                             color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -1667,9 +1704,9 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                           Expanded(
                             child: TextField(
                               controller: customController,
-                              decoration: const InputDecoration(
-                                hintText: "自定义测速下载 URL (https://...)",
-                                hintStyle: TextStyle(fontSize: 12),
+                              decoration: InputDecoration(
+                                hintText: tcontext.meta.customSpeedtestUrl,
+                                hintStyle: const TextStyle(fontSize: 12),
                                 border: InputBorder.none,
                                 isDense: true,
                               ),
@@ -1691,8 +1728,8 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                                 setState(() {
                                   _currentServer = SpeedTestServer(
                                     id: 'custom',
-                                    name: '自定义测速源',
-                                    region: '用户指定 URL',
+                                    name: tcontext.meta.customSpeedtestSource,
+                                    region: tcontext.meta.userSpecifiedUrl,
                                     icon: '🌐',
                                     pingUrls: [text],
                                     downloadUrl: text,
@@ -1702,7 +1739,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                                 Navigator.pop(context);
                               }
                             },
-                            child: const Text("使用", style: TextStyle(fontSize: 11)),
+                            child: Text(tcontext.meta.apply, style: const TextStyle(fontSize: 11)),
                           ),
                         ],
                       ),
@@ -1718,11 +1755,14 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
   }
 
   Widget _buildNetworkQualityCard(ThemeData theme, bool isDark) {
+    final tcontext = Translations.of(context);
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final grade = NetworkGrade.calculate(
       ping: _pingMs,
       jitter: _jitterMs,
       download: _downloadFinalMbps,
       upload: _uploadFinalMbps,
+      isZh: isZh,
     );
 
     return Card(
@@ -1755,9 +1795,9 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
               children: [
                 const Icon(Icons.verified_rounded, size: 17, color: ThemeDefine.kColorBlue),
                 const SizedBox(width: 6),
-                const Text(
-                  "网络体质综合评分",
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                Text(
+                  tcontext.meta.networkGradeTitle,
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
                 OutlinedButton.icon(
@@ -1769,9 +1809,9 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                     side: BorderSide(color: ThemeDefine.kColorBlue.withValues(alpha: 0.4)),
                   ),
                   icon: const Icon(Icons.share_rounded, size: 13, color: ThemeDefine.kColorBlue),
-                  label: const Text(
-                    "复制战报",
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: ThemeDefine.kColorBlue),
+                  label: Text(
+                    tcontext.meta.copyReport,
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: ThemeDefine.kColorBlue),
                   ),
                   onPressed: _shareResult,
                 ),
@@ -1783,7 +1823,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                 Expanded(
                   child: _buildGradeItem(
                     icon: "🎮",
-                    title: "电竞体验",
+                    title: tcontext.meta.gamingExperience,
                     badge: grade.gameGrade,
                     badgeColor: grade.gameColor,
                     desc: grade.gameDesc,
@@ -1794,7 +1834,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                 Expanded(
                   child: _buildGradeItem(
                     icon: "🎬",
-                    title: "超清流媒体",
+                    title: tcontext.meta.streamingExperience,
                     badge: grade.streamGrade,
                     badgeColor: grade.streamColor,
                     desc: grade.streamDesc,
@@ -1805,7 +1845,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                 Expanded(
                   child: _buildGradeItem(
                     icon: "💼",
-                    title: "远程视讯",
+                    title: tcontext.meta.meetingExperience,
                     badge: grade.meetingGrade,
                     badgeColor: grade.meetingColor,
                     desc: grade.meetingDesc,

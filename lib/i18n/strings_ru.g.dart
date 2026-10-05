@@ -307,7 +307,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get updateIntervalPreferByProfile => 'Приоритет настроек провайдера';
 	@override String updateFailed({required Object p}) => 'Не удалось обновить:${p}';
 	@override String get none => 'Ничего не делать';
-	@override String get reset => 'Перезагрузить';
+	@override String get reset => 'Сбросить';
 	@override String get authentication => 'Авторизация';
 	@override String get submit => 'Отправить';
 	@override String get user => 'Пользователь';
@@ -568,6 +568,73 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get copyAddressBtn => 'Скопировать адрес ✨';
 	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ Адрес скопирован! Большое спасибо за вашу поддержку~ 💖';
 	@override String get donateTip => '💡 Совет: Поддерживается сканирование через Bybit или любой кошелек Aptos';
+	@override String get qrcodeParsing => 'Распознавание QR-кода...';
+	@override String get qrcodeNotFound => 'QR-код не обнаружен';
+	@override String get qrcodeSupportHint => 'Поддерживаются QR-коды подписок, узлов и конфигураций';
+	@override String get qrcodeCameraHint => 'Поместите QR-код в рамку для автоматического сканирования';
+	@override String get flashlight => 'Фонарик';
+	@override String get screenshotDesc => 'Снимок экрана';
+	@override String get fromImageDesc => 'Файл изображения';
+	@override String get fromClipboardDesc => 'Из буфера';
+	@override String get errorPrompt => 'Ошибка';
+	@override String get copied => 'Скопировано';
+	@override String get sortAndFilterNodes => 'Сортировка и фильтрация узлов';
+	@override String get sortOptions => 'Параметры сортировки';
+	@override String get sortDefault => 'По умолчанию';
+	@override String get sortLatency => 'По наименьшей задержке';
+	@override String get sortName => 'По имени (A-Z)';
+	@override String get sortRegion => 'По регионам';
+	@override String get filterOptions => 'Параметры фильтра';
+	@override String portableUpdateTip({required Object version}) => 'Обнаружен портативный режим:\nАвтообновление внутри приложения не поддерживается в портативном режиме. Пожалуйста, скачайте свежий портативный ZIP и распакуйте с заменой.\n\nПоследняя версия: v${version}';
+	@override String get portableModeTipTitle => 'Уведомление о портативном режиме';
+	@override String get noNodesToSpeedTest => 'Нет доступных узлов для проверки скорости';
+	@override String alreadyLatestVersion({required Object version}) => 'Уже установлена последняя версия (v${version})';
+	@override String get checkUpdateFailed => 'Не удалось проверить наличие обновлений, проверьте подключение к сети';
+	@override String get hideTimeoutNodes => 'Скрыть недоступные узлы';
+	@override String get hideTimeoutNodesDesc => 'Автоматически скрывать недоступные узлы';
+	@override String get speedtestScenario => 'Сценарий проверки скорости';
+	@override String get speedtestScenarioSwitch => 'Выбор цели проверки скорости';
+	@override String get speedtestScenarioDesc => 'Выберите цель для проверки реальной задержки и доступности';
+	@override String get speedtestAllNodes => 'Проверить все узлы';
+	@override String get retestTimeoutNodes => 'Перепроверить только недоступные';
+	@override String switchedTargetScenario({required Object target}) => 'Переключено на сценарий: ${target}';
+	@override String get notTested => 'Не проверялось';
+	@override String get timeoutOrFailed => 'Тайм-аут / Недоступно';
+	@override String get identifiedRegion => 'Регион';
+	@override String get nodeProtocol => 'Протокол';
+	@override String get currentLatency => 'Задержка';
+	@override String get testScenario => 'Сценарий проверки';
+	@override String get belongsToGroup => 'Группа';
+	@override String get copyNodeName => 'Скопировать имя';
+	@override String get nodeNameCopied => 'Имя узла скопировано';
+	@override String get testSingleNode => 'Проверить узел';
+	@override String get selectThisNode => 'Выбрать этот узел';
+	@override String get allNodesNormal => 'Все узлы доступны, повторная проверка не требуется';
+	@override String get customUrlPrompt => 'Пользовательский URL (напр. http://...)';
+	@override String get customTarget => 'Пользовательская цель';
+	@override String get downloadFailedTip => 'Не удалось загрузить пакет обновления. Проверьте сеть или скачайте с сайта.';
+	@override String discoveredNewVersion({required Object version}) => 'Найдена новая версия: v${version}';
+	@override String get preparingUpdate => 'Подготовка к обновлению...';
+	@override String get downloadingPackage => 'Загрузка пакета обновления, пожалуйста, подождите...';
+	@override String get downloadUpdateNow => 'Загрузить обновление сейчас';
+	@override String get downloadFromWeb => 'Скачать с веб-сайта';
+	@override String get switchSource => 'Сменить';
+	@override String get serverSwitch => 'Выбор сервера скорости';
+	@override String get autoDetectBest => 'Автовыбор лучшего';
+	@override String get serverSwitchDesc => 'Выберите CDN или свой сервер для проверки подключения';
+	@override String autoSelectedBest({required Object server, required Object ping}) => 'Автоматически выбран лучший сервер: ${server} (${ping} ms)';
+	@override String get networkGradeTitle => 'Общая оценка качества сети';
+	@override String get copyReport => 'Скопировать отчёт';
+	@override String get reportCopied => 'Отчёт скопирован в буфер обмена';
+	@override String get gamingExperience => 'Онлайн-игры';
+	@override String get streamingExperience => 'Стриминг';
+	@override String get meetingExperience => 'Видеоконференции';
+	@override String get customSpeedtestUrl => 'Пользовательский URL загрузки (https://...)';
+	@override String get customSpeedtestSource => 'Пользовательский сервер';
+	@override String get userSpecifiedUrl => 'URL, указанный пользователем';
+	@override String cannotBeEmpty({required Object item}) => 'Поле ${item} не может быть пустым';
+	@override String alreadyExists({required Object item}) => '${item} уже существует';
+	@override String installFailedWithCode({required Object installer, required Object code}) => 'Не удалось установить ${installer}, код: ${code}';
 }
 
 // Path: permission
@@ -860,7 +927,7 @@ extension on TranslationsRu {
 			'meta.updateIntervalPreferByProfile' => 'Приоритет настроек провайдера',
 			'meta.updateFailed' => ({required Object p}) => 'Не удалось обновить:${p}',
 			'meta.none' => 'Ничего не делать',
-			'meta.reset' => 'Перезагрузить',
+			'meta.reset' => 'Сбросить',
 			'meta.authentication' => 'Авторизация',
 			'meta.submit' => 'Отправить',
 			'meta.user' => 'Пользователь',
@@ -1121,6 +1188,73 @@ extension on TranslationsRu {
 			'meta.copyAddressBtn' => 'Скопировать адрес ✨',
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ Адрес скопирован! Большое спасибо за вашу поддержку~ 💖',
 			'meta.donateTip' => '💡 Совет: Поддерживается сканирование через Bybit или любой кошелек Aptos',
+			'meta.qrcodeParsing' => 'Распознавание QR-кода...',
+			'meta.qrcodeNotFound' => 'QR-код не обнаружен',
+			'meta.qrcodeSupportHint' => 'Поддерживаются QR-коды подписок, узлов и конфигураций',
+			'meta.qrcodeCameraHint' => 'Поместите QR-код в рамку для автоматического сканирования',
+			'meta.flashlight' => 'Фонарик',
+			'meta.screenshotDesc' => 'Снимок экрана',
+			'meta.fromImageDesc' => 'Файл изображения',
+			'meta.fromClipboardDesc' => 'Из буфера',
+			'meta.errorPrompt' => 'Ошибка',
+			'meta.copied' => 'Скопировано',
+			'meta.sortAndFilterNodes' => 'Сортировка и фильтрация узлов',
+			'meta.sortOptions' => 'Параметры сортировки',
+			'meta.sortDefault' => 'По умолчанию',
+			'meta.sortLatency' => 'По наименьшей задержке',
+			'meta.sortName' => 'По имени (A-Z)',
+			'meta.sortRegion' => 'По регионам',
+			'meta.filterOptions' => 'Параметры фильтра',
+			'meta.portableUpdateTip' => ({required Object version}) => 'Обнаружен портативный режим:\nАвтообновление внутри приложения не поддерживается в портативном режиме. Пожалуйста, скачайте свежий портативный ZIP и распакуйте с заменой.\n\nПоследняя версия: v${version}',
+			'meta.portableModeTipTitle' => 'Уведомление о портативном режиме',
+			'meta.noNodesToSpeedTest' => 'Нет доступных узлов для проверки скорости',
+			'meta.alreadyLatestVersion' => ({required Object version}) => 'Уже установлена последняя версия (v${version})',
+			'meta.checkUpdateFailed' => 'Не удалось проверить наличие обновлений, проверьте подключение к сети',
+			'meta.hideTimeoutNodes' => 'Скрыть недоступные узлы',
+			'meta.hideTimeoutNodesDesc' => 'Автоматически скрывать недоступные узлы',
+			'meta.speedtestScenario' => 'Сценарий проверки скорости',
+			'meta.speedtestScenarioSwitch' => 'Выбор цели проверки скорости',
+			'meta.speedtestScenarioDesc' => 'Выберите цель для проверки реальной задержки и доступности',
+			'meta.speedtestAllNodes' => 'Проверить все узлы',
+			'meta.retestTimeoutNodes' => 'Перепроверить только недоступные',
+			'meta.switchedTargetScenario' => ({required Object target}) => 'Переключено на сценарий: ${target}',
+			'meta.notTested' => 'Не проверялось',
+			'meta.timeoutOrFailed' => 'Тайм-аут / Недоступно',
+			'meta.identifiedRegion' => 'Регион',
+			'meta.nodeProtocol' => 'Протокол',
+			'meta.currentLatency' => 'Задержка',
+			'meta.testScenario' => 'Сценарий проверки',
+			'meta.belongsToGroup' => 'Группа',
+			'meta.copyNodeName' => 'Скопировать имя',
+			'meta.nodeNameCopied' => 'Имя узла скопировано',
+			'meta.testSingleNode' => 'Проверить узел',
+			'meta.selectThisNode' => 'Выбрать этот узел',
+			'meta.allNodesNormal' => 'Все узлы доступны, повторная проверка не требуется',
+			'meta.customUrlPrompt' => 'Пользовательский URL (напр. http://...)',
+			'meta.customTarget' => 'Пользовательская цель',
+			'meta.downloadFailedTip' => 'Не удалось загрузить пакет обновления. Проверьте сеть или скачайте с сайта.',
+			'meta.discoveredNewVersion' => ({required Object version}) => 'Найдена новая версия: v${version}',
+			'meta.preparingUpdate' => 'Подготовка к обновлению...',
+			'meta.downloadingPackage' => 'Загрузка пакета обновления, пожалуйста, подождите...',
+			'meta.downloadUpdateNow' => 'Загрузить обновление сейчас',
+			'meta.downloadFromWeb' => 'Скачать с веб-сайта',
+			'meta.switchSource' => 'Сменить',
+			'meta.serverSwitch' => 'Выбор сервера скорости',
+			'meta.autoDetectBest' => 'Автовыбор лучшего',
+			'meta.serverSwitchDesc' => 'Выберите CDN или свой сервер для проверки подключения',
+			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => 'Автоматически выбран лучший сервер: ${server} (${ping} ms)',
+			'meta.networkGradeTitle' => 'Общая оценка качества сети',
+			'meta.copyReport' => 'Скопировать отчёт',
+			'meta.reportCopied' => 'Отчёт скопирован в буфер обмена',
+			'meta.gamingExperience' => 'Онлайн-игры',
+			'meta.streamingExperience' => 'Стриминг',
+			'meta.meetingExperience' => 'Видеоконференции',
+			'meta.customSpeedtestUrl' => 'Пользовательский URL загрузки (https://...)',
+			'meta.customSpeedtestSource' => 'Пользовательский сервер',
+			'meta.userSpecifiedUrl' => 'URL, указанный пользователем',
+			'meta.cannotBeEmpty' => ({required Object item}) => 'Поле ${item} не может быть пустым',
+			'meta.alreadyExists' => ({required Object item}) => '${item} уже существует',
+			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'Не удалось установить ${installer}, код: ${code}',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',
@@ -1146,6 +1280,8 @@ extension on TranslationsRu {
 			'dns.preferH3' => 'Приоритет DoH H3',
 			'dns.useHosts' => 'Использование хостов',
 			'dns.useSystemHosts' => 'Использование системных хостов',
+			_ => null,
+		} ?? switch (path) {
 			'dns.enhancedMode' => 'Расширенный режим',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} режим фильтра',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} фильтрация',

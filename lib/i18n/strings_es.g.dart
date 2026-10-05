@@ -568,6 +568,73 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get copyAddressBtn => 'Copiar dirección ✨';
 	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ ¡Dirección copiada! ¡Muchas gracias por tu generoso apoyo!~ 💖';
 	@override String get donateTip => '💡 Consejo: Admite escaneo a través de Bybit o cualquier billetera Aptos';
+	@override String get qrcodeParsing => 'Analizando código QR...';
+	@override String get qrcodeNotFound => 'No se detectó ningún código QR';
+	@override String get qrcodeSupportHint => 'Soporta QR de suscripciones, nodos y configuraciones';
+	@override String get qrcodeCameraHint => 'Coloque el código QR dentro del marco para escanear automáticamente';
+	@override String get flashlight => 'Linterna';
+	@override String get screenshotDesc => 'Capturar pantalla';
+	@override String get fromImageDesc => 'Imagen local';
+	@override String get fromClipboardDesc => 'Leer portapapeles';
+	@override String get errorPrompt => 'Error';
+	@override String get copied => 'Copiado';
+	@override String get sortAndFilterNodes => 'Ordenar y filtrar nodos';
+	@override String get sortOptions => 'Opciones de ordenación';
+	@override String get sortDefault => 'Predeterminado';
+	@override String get sortLatency => 'Menor latencia';
+	@override String get sortName => 'Por nombre (A-Z)';
+	@override String get sortRegion => 'Por región';
+	@override String get filterOptions => 'Opciones de filtro';
+	@override String portableUpdateTip({required Object version}) => 'Modo portátil detectado:\nLa actualización en la app no es compatible en modo portátil. Descargue el ZIP portátil más reciente y extráigalo para sobrescribir.\n\nÚltima versión: v${version}';
+	@override String get portableModeTipTitle => 'Aviso de modo portátil';
+	@override String get noNodesToSpeedTest => 'No hay nodos disponibles para probar';
+	@override String alreadyLatestVersion({required Object version}) => 'Ya está en la versión más reciente (v${version})';
+	@override String get checkUpdateFailed => 'Error al buscar actualizaciones, compruebe su conexión de red';
+	@override String get hideTimeoutNodes => 'Ocultar nodos sin conexión o agotados';
+	@override String get hideTimeoutNodesDesc => 'Filtrar automáticamente nodos no accesibles';
+	@override String get speedtestScenario => 'Escenario de prueba de velocidad';
+	@override String get speedtestScenarioSwitch => 'Cambiar escenario de prueba';
+	@override String get speedtestScenarioDesc => 'Seleccione destinos para probar la latencia y disponibilidad reales';
+	@override String get speedtestAllNodes => 'Probar todos los nodos';
+	@override String get retestTimeoutNodes => 'Volver a probar solo agotados';
+	@override String switchedTargetScenario({required Object target}) => 'Escenario cambiado a: ${target}';
+	@override String get notTested => 'No probado';
+	@override String get timeoutOrFailed => 'Tiempo agotado / Inaccesible';
+	@override String get identifiedRegion => 'Región';
+	@override String get nodeProtocol => 'Protocolo';
+	@override String get currentLatency => 'Latencia';
+	@override String get testScenario => 'Escenario de prueba';
+	@override String get belongsToGroup => 'Grupo';
+	@override String get copyNodeName => 'Copiar nombre';
+	@override String get nodeNameCopied => 'Nombre de nodo copiado';
+	@override String get testSingleNode => 'Probar nodo';
+	@override String get selectThisNode => 'Seleccionar nodo';
+	@override String get allNodesNormal => 'Todos los nodos están disponibles, no es necesario volver a probar';
+	@override String get customUrlPrompt => 'URL personalizada (ej. http://...)';
+	@override String get customTarget => 'Destino personalizado';
+	@override String get downloadFailedTip => 'Error al descargar el paquete de actualización. Compruebe la red o descargue desde el sitio web.';
+	@override String discoveredNewVersion({required Object version}) => 'Nueva versión descubierta: v${version}';
+	@override String get preparingUpdate => 'Preparando actualización...';
+	@override String get downloadingPackage => 'Descargando paquete de actualización, espere...';
+	@override String get downloadUpdateNow => 'Descargar actualización ahora';
+	@override String get downloadFromWeb => 'Descargar desde la web';
+	@override String get switchSource => 'Cambiar';
+	@override String get serverSwitch => 'Servidor de prueba';
+	@override String get autoDetectBest => 'Detectar mejor servidor';
+	@override String get serverSwitchDesc => 'Seleccione CDN o destino personalizado para probar la conexión';
+	@override String autoSelectedBest({required Object server, required Object ping}) => 'Mejor servidor seleccionado automáticamente: ${server} (${ping} ms)';
+	@override String get networkGradeTitle => 'Puntuación de calidad de red';
+	@override String get copyReport => 'Copiar informe';
+	@override String get reportCopied => 'Informe copiado al portapapeles, listo para compartir';
+	@override String get gamingExperience => 'Juegos online';
+	@override String get streamingExperience => 'Streaming';
+	@override String get meetingExperience => 'Videoconferencias';
+	@override String get customSpeedtestUrl => 'URL de descarga personalizada (https://...)';
+	@override String get customSpeedtestSource => 'Servidor personalizado';
+	@override String get userSpecifiedUrl => 'URL especificada por el usuario';
+	@override String cannotBeEmpty({required Object item}) => '${item} no puede estar vacío';
+	@override String alreadyExists({required Object item}) => '${item} ya existe';
+	@override String installFailedWithCode({required Object installer, required Object code}) => 'Error al instalar ${installer}, código: ${code}';
 }
 
 // Path: permission
@@ -1121,6 +1188,73 @@ extension on TranslationsEs {
 			'meta.copyAddressBtn' => 'Copiar dirección ✨',
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ ¡Dirección copiada! ¡Muchas gracias por tu generoso apoyo!~ 💖',
 			'meta.donateTip' => '💡 Consejo: Admite escaneo a través de Bybit o cualquier billetera Aptos',
+			'meta.qrcodeParsing' => 'Analizando código QR...',
+			'meta.qrcodeNotFound' => 'No se detectó ningún código QR',
+			'meta.qrcodeSupportHint' => 'Soporta QR de suscripciones, nodos y configuraciones',
+			'meta.qrcodeCameraHint' => 'Coloque el código QR dentro del marco para escanear automáticamente',
+			'meta.flashlight' => 'Linterna',
+			'meta.screenshotDesc' => 'Capturar pantalla',
+			'meta.fromImageDesc' => 'Imagen local',
+			'meta.fromClipboardDesc' => 'Leer portapapeles',
+			'meta.errorPrompt' => 'Error',
+			'meta.copied' => 'Copiado',
+			'meta.sortAndFilterNodes' => 'Ordenar y filtrar nodos',
+			'meta.sortOptions' => 'Opciones de ordenación',
+			'meta.sortDefault' => 'Predeterminado',
+			'meta.sortLatency' => 'Menor latencia',
+			'meta.sortName' => 'Por nombre (A-Z)',
+			'meta.sortRegion' => 'Por región',
+			'meta.filterOptions' => 'Opciones de filtro',
+			'meta.portableUpdateTip' => ({required Object version}) => 'Modo portátil detectado:\nLa actualización en la app no es compatible en modo portátil. Descargue el ZIP portátil más reciente y extráigalo para sobrescribir.\n\nÚltima versión: v${version}',
+			'meta.portableModeTipTitle' => 'Aviso de modo portátil',
+			'meta.noNodesToSpeedTest' => 'No hay nodos disponibles para probar',
+			'meta.alreadyLatestVersion' => ({required Object version}) => 'Ya está en la versión más reciente (v${version})',
+			'meta.checkUpdateFailed' => 'Error al buscar actualizaciones, compruebe su conexión de red',
+			'meta.hideTimeoutNodes' => 'Ocultar nodos sin conexión o agotados',
+			'meta.hideTimeoutNodesDesc' => 'Filtrar automáticamente nodos no accesibles',
+			'meta.speedtestScenario' => 'Escenario de prueba de velocidad',
+			'meta.speedtestScenarioSwitch' => 'Cambiar escenario de prueba',
+			'meta.speedtestScenarioDesc' => 'Seleccione destinos para probar la latencia y disponibilidad reales',
+			'meta.speedtestAllNodes' => 'Probar todos los nodos',
+			'meta.retestTimeoutNodes' => 'Volver a probar solo agotados',
+			'meta.switchedTargetScenario' => ({required Object target}) => 'Escenario cambiado a: ${target}',
+			'meta.notTested' => 'No probado',
+			'meta.timeoutOrFailed' => 'Tiempo agotado / Inaccesible',
+			'meta.identifiedRegion' => 'Región',
+			'meta.nodeProtocol' => 'Protocolo',
+			'meta.currentLatency' => 'Latencia',
+			'meta.testScenario' => 'Escenario de prueba',
+			'meta.belongsToGroup' => 'Grupo',
+			'meta.copyNodeName' => 'Copiar nombre',
+			'meta.nodeNameCopied' => 'Nombre de nodo copiado',
+			'meta.testSingleNode' => 'Probar nodo',
+			'meta.selectThisNode' => 'Seleccionar nodo',
+			'meta.allNodesNormal' => 'Todos los nodos están disponibles, no es necesario volver a probar',
+			'meta.customUrlPrompt' => 'URL personalizada (ej. http://...)',
+			'meta.customTarget' => 'Destino personalizado',
+			'meta.downloadFailedTip' => 'Error al descargar el paquete de actualización. Compruebe la red o descargue desde el sitio web.',
+			'meta.discoveredNewVersion' => ({required Object version}) => 'Nueva versión descubierta: v${version}',
+			'meta.preparingUpdate' => 'Preparando actualización...',
+			'meta.downloadingPackage' => 'Descargando paquete de actualización, espere...',
+			'meta.downloadUpdateNow' => 'Descargar actualización ahora',
+			'meta.downloadFromWeb' => 'Descargar desde la web',
+			'meta.switchSource' => 'Cambiar',
+			'meta.serverSwitch' => 'Servidor de prueba',
+			'meta.autoDetectBest' => 'Detectar mejor servidor',
+			'meta.serverSwitchDesc' => 'Seleccione CDN o destino personalizado para probar la conexión',
+			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => 'Mejor servidor seleccionado automáticamente: ${server} (${ping} ms)',
+			'meta.networkGradeTitle' => 'Puntuación de calidad de red',
+			'meta.copyReport' => 'Copiar informe',
+			'meta.reportCopied' => 'Informe copiado al portapapeles, listo para compartir',
+			'meta.gamingExperience' => 'Juegos online',
+			'meta.streamingExperience' => 'Streaming',
+			'meta.meetingExperience' => 'Videoconferencias',
+			'meta.customSpeedtestUrl' => 'URL de descarga personalizada (https://...)',
+			'meta.customSpeedtestSource' => 'Servidor personalizado',
+			'meta.userSpecifiedUrl' => 'URL especificada por el usuario',
+			'meta.cannotBeEmpty' => ({required Object item}) => '${item} no puede estar vacío',
+			'meta.alreadyExists' => ({required Object item}) => '${item} ya existe',
+			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'Error al instalar ${installer}, código: ${code}',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',
@@ -1146,6 +1280,8 @@ extension on TranslationsEs {
 			'dns.preferH3' => 'Preferir DoH H3',
 			'dns.useHosts' => 'Usar Hosts',
 			'dns.useSystemHosts' => 'Usar Hosts del Sistema',
+			_ => null,
+		} ?? switch (path) {
 			'dns.enhancedMode' => 'Modo Mejorado',
 			'dns.fakeIPFilterMode' => 'Modo de Filtro ${_root.dns.fakeIp}',
 			'dns.fakeIPFilter' => 'Filtro fake-ip',

@@ -1378,6 +1378,207 @@ class Translations$meta$en {
 
 	/// en: '💡 Tip: Supports scanning via Bybit or any Aptos-compatible wallet'
 	String get donateTip => '💡 Tip: Supports scanning via Bybit or any Aptos-compatible wallet';
+
+	/// en: 'Parsing QR code...'
+	String get qrcodeParsing => 'Parsing QR code...';
+
+	/// en: 'No QR code detected'
+	String get qrcodeNotFound => 'No QR code detected';
+
+	/// en: 'Supports subscription, node and config QR codes'
+	String get qrcodeSupportHint => 'Supports subscription, node and config QR codes';
+
+	/// en: 'Align QR code within the frame to scan automatically'
+	String get qrcodeCameraHint => 'Align QR code within the frame to scan automatically';
+
+	/// en: 'Flashlight'
+	String get flashlight => 'Flashlight';
+
+	/// en: 'Capture screen'
+	String get screenshotDesc => 'Capture screen';
+
+	/// en: 'Local image'
+	String get fromImageDesc => 'Local image';
+
+	/// en: 'Read clipboard'
+	String get fromClipboardDesc => 'Read clipboard';
+
+	/// en: 'Error'
+	String get errorPrompt => 'Error';
+
+	/// en: 'Copied'
+	String get copied => 'Copied';
+
+	/// en: 'Sort & Filter Nodes'
+	String get sortAndFilterNodes => 'Sort & Filter Nodes';
+
+	/// en: 'Sort Options'
+	String get sortOptions => 'Sort Options';
+
+	/// en: 'Default'
+	String get sortDefault => 'Default';
+
+	/// en: 'Lowest Latency'
+	String get sortLatency => 'Lowest Latency';
+
+	/// en: 'Name A-Z'
+	String get sortName => 'Name A-Z';
+
+	/// en: 'Region'
+	String get sortRegion => 'Region';
+
+	/// en: 'Filter Options'
+	String get filterOptions => 'Filter Options';
+
+	/// en: 'Portable mode detected: In-app auto-update is not supported in portable mode. Please download the latest portable ZIP from the repository and extract to overwrite. Latest version: v$version'
+	String portableUpdateTip({required Object version}) => 'Portable mode detected:\nIn-app auto-update is not supported in portable mode. Please download the latest portable ZIP from the repository and extract to overwrite.\n\nLatest version: v${version}';
+
+	/// en: 'Portable Mode Notice'
+	String get portableModeTipTitle => 'Portable Mode Notice';
+
+	/// en: 'No available nodes to test'
+	String get noNodesToSpeedTest => 'No available nodes to test';
+
+	/// en: 'Already the latest version (v$version)'
+	String alreadyLatestVersion({required Object version}) => 'Already the latest version (v${version})';
+
+	/// en: 'Failed to check for updates, please check your network connection'
+	String get checkUpdateFailed => 'Failed to check for updates, please check your network connection';
+
+	/// en: 'Hide Timed-out & Offline Nodes'
+	String get hideTimeoutNodes => 'Hide Timed-out & Offline Nodes';
+
+	/// en: 'Automatically filter unreachable nodes'
+	String get hideTimeoutNodesDesc => 'Automatically filter unreachable nodes';
+
+	/// en: 'Speedtest Target Scenario'
+	String get speedtestScenario => 'Speedtest Target Scenario';
+
+	/// en: 'Speedtest Target Scenario'
+	String get speedtestScenarioSwitch => 'Speedtest Target Scenario';
+
+	/// en: 'Select targets to test real connectivity and latency'
+	String get speedtestScenarioDesc => 'Select targets to test real connectivity and latency';
+
+	/// en: 'Test All Nodes'
+	String get speedtestAllNodes => 'Test All Nodes';
+
+	/// en: 'Retest Timed-out Nodes'
+	String get retestTimeoutNodes => 'Retest Timed-out Nodes';
+
+	/// en: 'Switched target scenario: $target'
+	String switchedTargetScenario({required Object target}) => 'Switched target scenario: ${target}';
+
+	/// en: 'Not tested'
+	String get notTested => 'Not tested';
+
+	/// en: 'Timeout / Unreachable'
+	String get timeoutOrFailed => 'Timeout / Unreachable';
+
+	/// en: 'Region'
+	String get identifiedRegion => 'Region';
+
+	/// en: 'Protocol'
+	String get nodeProtocol => 'Protocol';
+
+	/// en: 'Latency'
+	String get currentLatency => 'Latency';
+
+	/// en: 'Test Scenario'
+	String get testScenario => 'Test Scenario';
+
+	/// en: 'Group'
+	String get belongsToGroup => 'Group';
+
+	/// en: 'Copy Name'
+	String get copyNodeName => 'Copy Name';
+
+	/// en: 'Node name copied'
+	String get nodeNameCopied => 'Node name copied';
+
+	/// en: 'Test Node'
+	String get testSingleNode => 'Test Node';
+
+	/// en: 'Select Node'
+	String get selectThisNode => 'Select Node';
+
+	/// en: 'All nodes are available, no retest needed'
+	String get allNodesNormal => 'All nodes are available, no retest needed';
+
+	/// en: 'Custom URL (e.g. http://...)'
+	String get customUrlPrompt => 'Custom URL (e.g. http://...)';
+
+	/// en: 'Custom Target'
+	String get customTarget => 'Custom Target';
+
+	/// en: 'Failed to download update package. Please check network or download from website.'
+	String get downloadFailedTip => 'Failed to download update package. Please check network or download from website.';
+
+	/// en: 'Discovered new version: v$version'
+	String discoveredNewVersion({required Object version}) => 'Discovered new version: v${version}';
+
+	/// en: 'Preparing to start update...'
+	String get preparingUpdate => 'Preparing to start update...';
+
+	/// en: 'Downloading update package, please wait...'
+	String get downloadingPackage => 'Downloading update package, please wait...';
+
+	/// en: 'Download Update Now'
+	String get downloadUpdateNow => 'Download Update Now';
+
+	/// en: 'Download from Website'
+	String get downloadFromWeb => 'Download from Website';
+
+	/// en: 'Switch'
+	String get switchSource => 'Switch';
+
+	/// en: 'Speed Test Server'
+	String get serverSwitch => 'Speed Test Server';
+
+	/// en: 'Auto Detect Best'
+	String get autoDetectBest => 'Auto Detect Best';
+
+	/// en: 'Select CDN or custom target to test connectivity'
+	String get serverSwitchDesc => 'Select CDN or custom target to test connectivity';
+
+	/// en: 'Auto-selected best server: $server ($ping ms)'
+	String autoSelectedBest({required Object server, required Object ping}) => 'Auto-selected best server: ${server} (${ping} ms)';
+
+	/// en: 'Network Quality Score'
+	String get networkGradeTitle => 'Network Quality Score';
+
+	/// en: 'Copy Report'
+	String get copyReport => 'Copy Report';
+
+	/// en: 'Report copied to clipboard, ready to share'
+	String get reportCopied => 'Report copied to clipboard, ready to share';
+
+	/// en: 'Gaming'
+	String get gamingExperience => 'Gaming';
+
+	/// en: 'Streaming'
+	String get streamingExperience => 'Streaming';
+
+	/// en: 'Conferencing'
+	String get meetingExperience => 'Conferencing';
+
+	/// en: 'Custom download URL (https://...)'
+	String get customSpeedtestUrl => 'Custom download URL (https://...)';
+
+	/// en: 'Custom Server'
+	String get customSpeedtestSource => 'Custom Server';
+
+	/// en: 'User Specified URL'
+	String get userSpecifiedUrl => 'User Specified URL';
+
+	/// en: '$item cannot be empty'
+	String cannotBeEmpty({required Object item}) => '${item} cannot be empty';
+
+	/// en: '$item already exists'
+	String alreadyExists({required Object item}) => '${item} already exists';
+
+	/// en: 'Failed to install $installer, exit code: $code'
+	String installFailedWithCode({required Object installer, required Object code}) => 'Failed to install ${installer}, exit code: ${code}';
 }
 
 // Path: permission
@@ -2051,6 +2252,73 @@ extension on Translations {
 			'meta.copyAddressBtn' => 'Copy Address ✨',
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ Address copied! Thank you so much for your support and company~ 💖',
 			'meta.donateTip' => '💡 Tip: Supports scanning via Bybit or any Aptos-compatible wallet',
+			'meta.qrcodeParsing' => 'Parsing QR code...',
+			'meta.qrcodeNotFound' => 'No QR code detected',
+			'meta.qrcodeSupportHint' => 'Supports subscription, node and config QR codes',
+			'meta.qrcodeCameraHint' => 'Align QR code within the frame to scan automatically',
+			'meta.flashlight' => 'Flashlight',
+			'meta.screenshotDesc' => 'Capture screen',
+			'meta.fromImageDesc' => 'Local image',
+			'meta.fromClipboardDesc' => 'Read clipboard',
+			'meta.errorPrompt' => 'Error',
+			'meta.copied' => 'Copied',
+			'meta.sortAndFilterNodes' => 'Sort & Filter Nodes',
+			'meta.sortOptions' => 'Sort Options',
+			'meta.sortDefault' => 'Default',
+			'meta.sortLatency' => 'Lowest Latency',
+			'meta.sortName' => 'Name A-Z',
+			'meta.sortRegion' => 'Region',
+			'meta.filterOptions' => 'Filter Options',
+			'meta.portableUpdateTip' => ({required Object version}) => 'Portable mode detected:\nIn-app auto-update is not supported in portable mode. Please download the latest portable ZIP from the repository and extract to overwrite.\n\nLatest version: v${version}',
+			'meta.portableModeTipTitle' => 'Portable Mode Notice',
+			'meta.noNodesToSpeedTest' => 'No available nodes to test',
+			'meta.alreadyLatestVersion' => ({required Object version}) => 'Already the latest version (v${version})',
+			'meta.checkUpdateFailed' => 'Failed to check for updates, please check your network connection',
+			'meta.hideTimeoutNodes' => 'Hide Timed-out & Offline Nodes',
+			'meta.hideTimeoutNodesDesc' => 'Automatically filter unreachable nodes',
+			'meta.speedtestScenario' => 'Speedtest Target Scenario',
+			'meta.speedtestScenarioSwitch' => 'Speedtest Target Scenario',
+			'meta.speedtestScenarioDesc' => 'Select targets to test real connectivity and latency',
+			'meta.speedtestAllNodes' => 'Test All Nodes',
+			'meta.retestTimeoutNodes' => 'Retest Timed-out Nodes',
+			'meta.switchedTargetScenario' => ({required Object target}) => 'Switched target scenario: ${target}',
+			'meta.notTested' => 'Not tested',
+			'meta.timeoutOrFailed' => 'Timeout / Unreachable',
+			'meta.identifiedRegion' => 'Region',
+			'meta.nodeProtocol' => 'Protocol',
+			'meta.currentLatency' => 'Latency',
+			'meta.testScenario' => 'Test Scenario',
+			'meta.belongsToGroup' => 'Group',
+			'meta.copyNodeName' => 'Copy Name',
+			'meta.nodeNameCopied' => 'Node name copied',
+			'meta.testSingleNode' => 'Test Node',
+			'meta.selectThisNode' => 'Select Node',
+			'meta.allNodesNormal' => 'All nodes are available, no retest needed',
+			'meta.customUrlPrompt' => 'Custom URL (e.g. http://...)',
+			'meta.customTarget' => 'Custom Target',
+			'meta.downloadFailedTip' => 'Failed to download update package. Please check network or download from website.',
+			'meta.discoveredNewVersion' => ({required Object version}) => 'Discovered new version: v${version}',
+			'meta.preparingUpdate' => 'Preparing to start update...',
+			'meta.downloadingPackage' => 'Downloading update package, please wait...',
+			'meta.downloadUpdateNow' => 'Download Update Now',
+			'meta.downloadFromWeb' => 'Download from Website',
+			'meta.switchSource' => 'Switch',
+			'meta.serverSwitch' => 'Speed Test Server',
+			'meta.autoDetectBest' => 'Auto Detect Best',
+			'meta.serverSwitchDesc' => 'Select CDN or custom target to test connectivity',
+			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => 'Auto-selected best server: ${server} (${ping} ms)',
+			'meta.networkGradeTitle' => 'Network Quality Score',
+			'meta.copyReport' => 'Copy Report',
+			'meta.reportCopied' => 'Report copied to clipboard, ready to share',
+			'meta.gamingExperience' => 'Gaming',
+			'meta.streamingExperience' => 'Streaming',
+			'meta.meetingExperience' => 'Conferencing',
+			'meta.customSpeedtestUrl' => 'Custom download URL (https://...)',
+			'meta.customSpeedtestSource' => 'Custom Server',
+			'meta.userSpecifiedUrl' => 'User Specified URL',
+			'meta.cannotBeEmpty' => ({required Object item}) => '${item} cannot be empty',
+			'meta.alreadyExists' => ({required Object item}) => '${item} already exists',
+			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'Failed to install ${installer}, exit code: ${code}',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',
@@ -2076,6 +2344,8 @@ extension on Translations {
 			'dns.preferH3' => 'Prefer DoH H3',
 			'dns.useHosts' => 'Use Hosts',
 			'dns.useSystemHosts' => 'Use System Hosts',
+			_ => null,
+		} ?? switch (path) {
 			'dns.enhancedMode' => 'Enhanced Mode',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} Filter Mode',
 			'dns.fakeIPFilter' => 'fake-ip Filter',

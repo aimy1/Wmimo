@@ -74,9 +74,10 @@ class _VersionUpdateScreenState
       setState(() {
         _downloading = false;
       });
+      final tcontext = Translations.of(context);
       DialogUtils.showAlertDialog(
         context,
-        "下载更新安装包失败，请检查网络或点击下方前往网页下载。",
+        tcontext.meta.downloadFailedTip,
         showCopy: true,
       );
     } else {
@@ -125,7 +126,7 @@ class _VersionUpdateScreenState
                       ? tcontext.VersionUpdateScreen.versionReady(
                           p: checkVersion.version,
                         )
-                      : "发现新版本: v${checkVersion.version}",
+                      : tcontext.meta.discoveredNewVersion(version: checkVersion.version),
                   style: const TextStyle(
                     fontSize: ThemeConfig.kFontSizeListItem,
                     fontWeight: ThemeConfig.kFontWeightListItem,
@@ -144,7 +145,7 @@ class _VersionUpdateScreenState
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text("正在准备启动更新..."),
+                  Text(tcontext.meta.preparingUpdate),
                 ] else if (_installerPath != null) ...[
                   SizedBox(
                     height: 45.0,
@@ -172,7 +173,7 @@ class _VersionUpdateScreenState
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text("安装包正在下载中，请稍候..."),
+                  Text(tcontext.meta.downloadingPackage),
                 ] else ...[
                   SizedBox(
                     height: 45.0,
@@ -186,7 +187,7 @@ class _VersionUpdateScreenState
                         ),
                       ),
                       onPressed: _startDownload,
-                      child: const Text("立即下载更新"),
+                      child: Text(tcontext.meta.downloadUpdateNow),
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -198,7 +199,7 @@ class _VersionUpdateScreenState
                           mode: LaunchMode.externalApplication,
                         );
                       },
-                      child: const Text("前往网页下载安装包"),
+                      child: Text(tcontext.meta.downloadFromWeb),
                     ),
                 ],
                 const SizedBox(height: 16),
@@ -283,9 +284,13 @@ class _VersionUpdateScreenState
             setState(() {});
             return;
           }
+          final tcontext = Translations.of(context);
           DialogUtils.showAlertDialog(
             context,
-            "install $installer failed, exitCode: ${result.exitCode}",
+            tcontext.meta.installFailedWithCode(
+              installer: installer,
+              code: result.exitCode.toString(),
+            ),
             showCopy: true,
             showFAQ: true,
             withVersion: true,

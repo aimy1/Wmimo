@@ -72,10 +72,11 @@ class GroupHelper {
         ? versionCheck.url
         : remoteConfig.download;
     if (PathUtils.portableMode()) {
+      final tcontext = Translations.of(context);
       DialogUtils.showAlertDialog(
         context,
-        "检测到当前运行在免安装便携模式。\n便携版不支持应用内自覆盖更新，请前往官网下载最新压缩包覆盖解压。\n\n最新版本: v${versionCheck.version}",
-        title: "便携模式更新提示",
+        tcontext.meta.portableUpdateTip(version: versionCheck.version),
+        title: tcontext.meta.portableModeTipTitle,
       );
       return;
     }
@@ -667,14 +668,18 @@ class GroupHelper {
                     await GroupHelper.newVersionUpdate(context);
                   } else if (result.status ==
                       AutoUpdateCheckStatus.alreadyLatest) {
+                    final tcontext = Translations.of(context);
                     DialogUtils.showAlertDialog(
                       context,
-                      "已是最新版本 (v${AppUtils.getBuildinVersion()})",
+                      tcontext.meta.alreadyLatestVersion(
+                        version: AppUtils.getBuildinVersion(),
+                      ),
                     );
                   } else if (result.status == AutoUpdateCheckStatus.error) {
+                    final tcontext = Translations.of(context);
                     DialogUtils.showAlertDialog(
                       context,
-                      "检查更新失败，请检查网络连接\n${result.errorMessage ?? ''}",
+                      "${tcontext.meta.checkUpdateFailed}\n${result.errorMessage ?? ''}",
                       showCopy: true,
                     );
                   }

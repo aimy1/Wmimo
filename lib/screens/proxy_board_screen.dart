@@ -595,11 +595,12 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     if (targetNodes.isEmpty) {
       if (mounted) {
+        final tcontext = Translations.of(context);
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("所有节点均正常可用，无需重测"),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(tcontext.meta.allNodesNormal),
+            duration: const Duration(seconds: 2),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -837,7 +838,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   void _showSortFilterBottomSheet() {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final isZh = Translations.of(context).$meta.locale.languageCode.startsWith('zh');
+    final tcontext = Translations.of(context);
 
     showModalBottomSheet(
       context: context,
@@ -874,7 +875,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         const Icon(Icons.tune_rounded, size: 20, color: ThemeDefine.kColorBlue),
                         const SizedBox(width: 8),
                         Text(
-                          isZh ? "节点排序与过滤" : "Sort & Filter Nodes",
+                          tcontext.meta.sortAndFilterNodes,
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const Spacer(),
@@ -888,7 +889,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                             setSheetState(() {});
                             Navigator.pop(context);
                           },
-                          child: Text(isZh ? "重置" : "Reset", style: const TextStyle(fontSize: 13)),
+                          child: Text(tcontext.meta.reset, style: const TextStyle(fontSize: 13)),
                         ),
                       ],
                     ),
@@ -896,7 +897,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
                     // Sort section
                     Text(
-                      isZh ? "排序方式" : "Sort Options",
+                      tcontext.meta.sortOptions,
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
                     ),
                     const SizedBox(height: 8),
@@ -905,25 +906,25 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       runSpacing: 8,
                       children: [
                         _buildSortOptionChip(
-                          title: isZh ? "默认排序" : "Default",
+                          title: tcontext.meta.sortDefault,
                           icon: Icons.list_rounded,
                           mode: "default",
                           setSheetState: setSheetState,
                         ),
                         _buildSortOptionChip(
-                          title: isZh ? "延迟最低" : "Lowest Latency",
+                          title: tcontext.meta.sortLatency,
                           icon: Icons.bolt_rounded,
                           mode: "delay_asc",
                           setSheetState: setSheetState,
                         ),
                         _buildSortOptionChip(
-                          title: isZh ? "名称 A-Z" : "Name A-Z",
+                          title: tcontext.meta.sortName,
                           icon: Icons.sort_by_alpha_rounded,
                           mode: "name_asc",
                           setSheetState: setSheetState,
                         ),
                         _buildSortOptionChip(
-                          title: isZh ? "国家地区" : "Region",
+                          title: tcontext.meta.sortRegion,
                           icon: Icons.public_rounded,
                           mode: "region",
                           setSheetState: setSheetState,
@@ -934,7 +935,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
                     // Filter section
                     Text(
-                      isZh ? "过滤选项" : "Filter Options",
+                      tcontext.meta.filterOptions,
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
                     ),
                     const SizedBox(height: 6),
@@ -949,11 +950,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       ),
                       child: SwitchListTile(
                         title: Text(
-                          isZh ? "隐藏超时与不可用节点" : "Hide Timed-out & Offline Nodes",
+                          tcontext.meta.hideTimeoutNodes,
                           style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
-                          isZh ? "自动过滤测速失败或连接超时的节点" : "Automatically filter unreachable nodes",
+                          tcontext.meta.hideTimeoutNodesDesc,
                           style: const TextStyle(fontSize: 11.5, color: Colors.grey),
                         ),
                         value: _hideTimeoutNodes,
@@ -995,7 +996,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    isZh ? "当前测速目标场景" : "Speedtest Target Scenario",
+                                    tcontext.meta.speedtestScenario,
                                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                                   ),
                                   const SizedBox(height: 2),
@@ -1082,7 +1083,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   void _showLatencyTargetBottomSheet() {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final isZh = Translations.of(context).$meta.locale.languageCode.startsWith('zh');
+    final tcontext = Translations.of(context);
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final presets = LatencyTestTarget.presets;
     final customController = TextEditingController(
       text: _activeLatencyTarget.id == "custom" ? _activeLatencyTarget.url : "",
@@ -1129,16 +1131,14 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         const Icon(Icons.radar_rounded, size: 20, color: ThemeDefine.kColorBlue),
                         const SizedBox(width: 8),
                         Text(
-                          isZh ? "测速目标场景切换" : "Speedtest Target Scenario",
+                          tcontext.meta.speedtestScenarioSwitch,
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      isZh
-                          ? "选择不同服务测试节点的真实可用性与连通延迟"
-                          : "Select targets to test real connectivity and latency",
+                      tcontext.meta.speedtestScenarioDesc,
                       style: TextStyle(
                         fontSize: 11.5,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
@@ -1158,7 +1158,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                             ),
                             icon: const Icon(Icons.bolt_rounded, size: 16, color: ThemeDefine.kColorBlue),
                             label: Text(
-                              isZh ? "全量极速测速" : "Test All Nodes",
+                              tcontext.meta.speedtestAllNodes,
                               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                             ),
                             onPressed: _nodesTesting.isNotEmpty
@@ -1179,7 +1179,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                             ),
                             icon: const Icon(Icons.replay_rounded, size: 16, color: Colors.orange),
                             label: Text(
-                              isZh ? "仅重测超时节点" : "Retest Timed-out",
+                              tcontext.meta.retestTimeoutNodes,
                               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                             ),
                             onPressed: _nodesTesting.isNotEmpty
@@ -1216,9 +1216,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    isZh
-                                        ? "已切换测速目标场景: ${target.name}"
-                                        : "Switched target: ${target.nameEn}",
+                                    tcontext.meta.switchedTargetScenario(
+                                      target: isZh ? target.name : target.nameEn,
+                                    ),
                                   ),
                                   duration: const Duration(seconds: 1),
                                   behavior: SnackBarBehavior.floating,
@@ -1312,9 +1312,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                             child: TextField(
                               controller: customController,
                               decoration: InputDecoration(
-                                hintText: isZh
-                                    ? "自定义测速 URL (例如 http://...)"
-                                    : "Custom Speedtest URL (e.g. http://...)",
+                                hintText: tcontext.meta.customUrlPrompt,
                                 hintStyle: const TextStyle(fontSize: 12),
                                 border: InputBorder.none,
                                 isDense: true,
@@ -1337,7 +1335,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                 setState(() {
                                   _activeLatencyTarget = LatencyTestTarget(
                                     id: "custom",
-                                    name: "自定义目标",
+                                    name: tcontext.meta.customTarget,
                                     nameEn: "Custom Target",
                                     icon: "🌐",
                                     url: text,
@@ -1346,7 +1344,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                 Navigator.pop(context);
                               }
                             },
-                            child: Text(isZh ? "使用" : "Apply", style: const TextStyle(fontSize: 11)),
+                            child: Text(tcontext.meta.apply, style: const TextStyle(fontSize: 11)),
                           ),
                         ],
                       ),
@@ -1364,13 +1362,15 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   void _showNodeDetailDialog(ClashProxiesNode group, ClashProxiesNode node) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final tcontext = Translations.of(context);
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final region = NodeRegionHelper.getRegion(node.name);
 
-    String delayInfo = "未测速";
+    String delayInfo = tcontext.meta.notTested;
     Color delayColor = Colors.grey;
     if (node.delay != null) {
       if (node.delay! < 0) {
-        delayInfo = "超时 / 无法连接";
+        delayInfo = tcontext.meta.timeoutOrFailed;
         delayColor = Colors.redAccent;
       } else if (node.delay! > 0) {
         delayInfo = "${node.delay} ms";
@@ -1414,33 +1414,33 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Divider(height: 12),
-              _buildDetailRow("识别地区", "${region.flag} ${region.name} (${region.code})"),
-              _buildDetailRow("节点协议", node.type.isEmpty ? "Unknown" : node.type.toUpperCase()),
-              _buildDetailRow("当前延迟", delayInfo, valueColor: delayColor, isBold: true),
-              _buildDetailRow("测速场景", "${_activeLatencyTarget.icon} ${_activeLatencyTarget.name}"),
-              _buildDetailRow("所属分组", group.name),
+              _buildDetailRow(tcontext.meta.identifiedRegion, "${region.flag} ${region.name} (${region.code})"),
+              _buildDetailRow(tcontext.meta.nodeProtocol, node.type.isEmpty ? "Unknown" : node.type.toUpperCase()),
+              _buildDetailRow(tcontext.meta.currentLatency, delayInfo, valueColor: delayColor, isBold: true),
+              _buildDetailRow(tcontext.meta.testScenario, "${_activeLatencyTarget.icon} ${isZh ? _activeLatencyTarget.name : _activeLatencyTarget.nameEn}"),
+              _buildDetailRow(tcontext.meta.belongsToGroup, group.name),
               const Divider(height: 16),
             ],
           ),
           actions: [
             TextButton.icon(
               icon: const Icon(Icons.copy_rounded, size: 16),
-              label: const Text("复制名称"),
+              label: Text(tcontext.meta.copyNodeName),
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: node.name));
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("已复制节点名称"),
-                    duration: Duration(seconds: 1),
+                  SnackBar(
+                    content: Text(tcontext.meta.nodeNameCopied),
+                    duration: const Duration(seconds: 1),
                   ),
                 );
               },
             ),
             TextButton.icon(
               icon: const Icon(Icons.bolt_rounded, size: 16),
-              label: const Text("单独测速"),
+              label: Text(tcontext.meta.testSingleNode),
               onPressed: () {
                 Navigator.pop(context);
                 _testNodeDelay(node);
@@ -1456,7 +1456,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                 Navigator.pop(context);
                 _selectNode(group, node);
               },
-              child: const Text("选择此节点"),
+              child: Text(tcontext.meta.selectThisNode),
             ),
           ],
         );
@@ -1659,7 +1659,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
                     // Sort & Filter button
                     Tooltip(
-                      message: "排序与过滤",
+                      message: tcontext.meta.sortAndFilterNodes,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
                         onTap: _showSortFilterBottomSheet,
@@ -1777,7 +1777,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         child: TextField(
                           controller: _searchController,
                           decoration: InputDecoration(
-                            hintText: "${tcontext.meta.search} (节点/地区/协议)",
+                            hintText: "${tcontext.meta.search} (${tcontext.meta.server}/${tcontext.meta.identifiedRegion}/${tcontext.meta.nodeProtocol})",
                             hintStyle: TextStyle(
                               fontSize: 12.5,
                               color: theme.colorScheme.onSurface.withValues(alpha: 0.4),

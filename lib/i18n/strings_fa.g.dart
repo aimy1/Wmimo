@@ -307,7 +307,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get updateIntervalPreferByProfile => 'اولویت با تنظیمات ارائه‌دهنده';
 	@override String updateFailed({required Object p}) => 'به‌روزرسانی ناموفق بود:${p}';
 	@override String get none => 'هیچ‌کدام';
-	@override String get reset => 'ریست';
+	@override String get reset => 'بازنشانی';
 	@override String get authentication => 'مجوز';
 	@override String get submit => 'ارسال';
 	@override String get user => 'کاربر';
@@ -568,6 +568,73 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get copyAddressBtn => 'کپی آدرس ✨';
 	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ آدرس کپی شد! از حمایت گرم شما بسیار سپاسگزاریم~ 💖';
 	@override String get donateTip => '💡 نکته: پشتیبانی از اسکن از طریق Bybit یا هر کیف پول سازگار با Aptos';
+	@override String get qrcodeParsing => 'در حال پردازش کد QR...';
+	@override String get qrcodeNotFound => 'هیچ کد QR شناسایی نشد';
+	@override String get qrcodeSupportHint => 'پشتیبانی از کدهای QR اشتراک، نود و پیکربندی';
+	@override String get qrcodeCameraHint => 'کد QR را درون کادر قرار دهید تا به طور خودکار اسکن شود';
+	@override String get flashlight => 'چراغ قوه';
+	@override String get screenshotDesc => 'تصویربرداری صفحه';
+	@override String get fromImageDesc => 'تصویر محلی';
+	@override String get fromClipboardDesc => 'خواندن از کلیپ‌بورد';
+	@override String get errorPrompt => 'خطا';
+	@override String get copied => 'کپی شد';
+	@override String get sortAndFilterNodes => 'مرتب‌سازی و فیلتر نودها';
+	@override String get sortOptions => 'گزینه‌های مرتب‌سازی';
+	@override String get sortDefault => 'پیش‌فرض';
+	@override String get sortLatency => 'کمترین تاخیر';
+	@override String get sortName => 'بر اساس نام (A-Z)';
+	@override String get sortRegion => 'بر اساس منطقه';
+	@override String get filterOptions => 'گزینه‌های فیلتر';
+	@override String portableUpdateTip({required Object version}) => 'حالت پرتابل شناسایی شد:\nبه‌روزرسانی درون‌برنامه‌ای در حالت پرتابل پشتیبانی نمی‌شود. لطفاً آخرین نسخه فشرده پرتابل را دانلود و جایگزین کنید.\n\nآخرین نسخه: v${version}';
+	@override String get portableModeTipTitle => 'اعلان حالت پرتابل';
+	@override String get noNodesToSpeedTest => 'هیچ نودی برای آزمایش در دسترس نیست';
+	@override String alreadyLatestVersion({required Object version}) => 'در حال حاضر آخرین نسخه است (v${version})';
+	@override String get checkUpdateFailed => 'بررسی به‌روزرسانی با خطا مواجه شد، لطفاً اتصال شبکه را بررسی کنید';
+	@override String get hideTimeoutNodes => 'پنهان کردن گره‌های ناموفق و آفلاین';
+	@override String get hideTimeoutNodesDesc => 'فیلتر خودکار گره‌های غیرقابل دسترس';
+	@override String get speedtestScenario => 'سناریوی تست سرعت فعلی';
+	@override String get speedtestScenarioSwitch => 'تغییر سناریوی تست سرعت';
+	@override String get speedtestScenarioDesc => 'انتخاب اهداف برای تست تأخیر و در دسترس بودن واقعی';
+	@override String get speedtestAllNodes => 'تست همه گره‌ها';
+	@override String get retestTimeoutNodes => 'تست مجدد گره‌های تایم‌اوت شده';
+	@override String switchedTargetScenario({required Object target}) => 'تغییر سناریوی تست به: ${target}';
+	@override String get notTested => 'تست نشده';
+	@override String get timeoutOrFailed => 'تایم‌اوت / غیرقابل دسترس';
+	@override String get identifiedRegion => 'منطقه';
+	@override String get nodeProtocol => 'پروتکل';
+	@override String get currentLatency => 'تأخیر';
+	@override String get testScenario => 'سناریوی تست';
+	@override String get belongsToGroup => 'گروه';
+	@override String get copyNodeName => 'کپی نام';
+	@override String get nodeNameCopied => 'نام گره کپی شد';
+	@override String get testSingleNode => 'تست این گره';
+	@override String get selectThisNode => 'انتخاب این گره';
+	@override String get allNodesNormal => 'همه گره‌ها در دسترس هستند و نیازی به تست مجدد نیست';
+	@override String get customUrlPrompt => 'آدرس سفارشی (مانند http://...)';
+	@override String get customTarget => 'هدف سفارشی';
+	@override String get downloadFailedTip => 'دانلود بسته به‌روزرسانی ناموفق بود، لطفاً شبکه را بررسی کنید یا از وب‌سایت دانلود کنید.';
+	@override String discoveredNewVersion({required Object version}) => 'نسخه جدید یافت شد: v${version}';
+	@override String get preparingUpdate => 'در حال آماده‌سازی برای به‌روزرسانی...';
+	@override String get downloadingPackage => 'در حال دانلود بسته به‌روزرسانی، لطفاً صبر کنید...';
+	@override String get downloadUpdateNow => 'اکنون به‌روزرسانی را دانلود کنید';
+	@override String get downloadFromWeb => 'دانلود از وب‌سایت';
+	@override String get switchSource => 'تغییر';
+	@override String get serverSwitch => 'سرور تست سرعت';
+	@override String get autoDetectBest => 'شناسایی خودکار بهترین سرور';
+	@override String get serverSwitchDesc => 'انتخاب CDN یا هدف سفارشی برای تست اتصال';
+	@override String autoSelectedBest({required Object server, required Object ping}) => 'بهترین سرور به طور خودکار انتخاب شد: ${server} (${ping} ms)';
+	@override String get networkGradeTitle => 'امتیاز کیفیت شبکه';
+	@override String get copyReport => 'کپی گزارش';
+	@override String get reportCopied => 'گزارش در کلیپ‌بورد کپی شد، آماده برای اشتراک‌گذاری';
+	@override String get gamingExperience => 'بازی آنلاین';
+	@override String get streamingExperience => 'استریم ویدیو';
+	@override String get meetingExperience => 'ویدیو کنفرانس';
+	@override String get customSpeedtestUrl => 'آدرس سفارشی دانلود (https://...)';
+	@override String get customSpeedtestSource => 'منبع تست سفارشی';
+	@override String get userSpecifiedUrl => 'آدرس مشخص‌شده توسط کاربر';
+	@override String cannotBeEmpty({required Object item}) => '${item} نمی‌تواند خالی باشد';
+	@override String alreadyExists({required Object item}) => '${item} از قبل وجود دارد';
+	@override String installFailedWithCode({required Object installer, required Object code}) => 'نصب ${installer} با خطا مواجه شد، کد: ${code}';
 }
 
 // Path: permission
@@ -860,7 +927,7 @@ extension on TranslationsFa {
 			'meta.updateIntervalPreferByProfile' => 'اولویت با تنظیمات ارائه‌دهنده',
 			'meta.updateFailed' => ({required Object p}) => 'به‌روزرسانی ناموفق بود:${p}',
 			'meta.none' => 'هیچ‌کدام',
-			'meta.reset' => 'ریست',
+			'meta.reset' => 'بازنشانی',
 			'meta.authentication' => 'مجوز',
 			'meta.submit' => 'ارسال',
 			'meta.user' => 'کاربر',
@@ -1121,6 +1188,73 @@ extension on TranslationsFa {
 			'meta.copyAddressBtn' => 'کپی آدرس ✨',
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ آدرس کپی شد! از حمایت گرم شما بسیار سپاسگزاریم~ 💖',
 			'meta.donateTip' => '💡 نکته: پشتیبانی از اسکن از طریق Bybit یا هر کیف پول سازگار با Aptos',
+			'meta.qrcodeParsing' => 'در حال پردازش کد QR...',
+			'meta.qrcodeNotFound' => 'هیچ کد QR شناسایی نشد',
+			'meta.qrcodeSupportHint' => 'پشتیبانی از کدهای QR اشتراک، نود و پیکربندی',
+			'meta.qrcodeCameraHint' => 'کد QR را درون کادر قرار دهید تا به طور خودکار اسکن شود',
+			'meta.flashlight' => 'چراغ قوه',
+			'meta.screenshotDesc' => 'تصویربرداری صفحه',
+			'meta.fromImageDesc' => 'تصویر محلی',
+			'meta.fromClipboardDesc' => 'خواندن از کلیپ‌بورد',
+			'meta.errorPrompt' => 'خطا',
+			'meta.copied' => 'کپی شد',
+			'meta.sortAndFilterNodes' => 'مرتب‌سازی و فیلتر نودها',
+			'meta.sortOptions' => 'گزینه‌های مرتب‌سازی',
+			'meta.sortDefault' => 'پیش‌فرض',
+			'meta.sortLatency' => 'کمترین تاخیر',
+			'meta.sortName' => 'بر اساس نام (A-Z)',
+			'meta.sortRegion' => 'بر اساس منطقه',
+			'meta.filterOptions' => 'گزینه‌های فیلتر',
+			'meta.portableUpdateTip' => ({required Object version}) => 'حالت پرتابل شناسایی شد:\nبه‌روزرسانی درون‌برنامه‌ای در حالت پرتابل پشتیبانی نمی‌شود. لطفاً آخرین نسخه فشرده پرتابل را دانلود و جایگزین کنید.\n\nآخرین نسخه: v${version}',
+			'meta.portableModeTipTitle' => 'اعلان حالت پرتابل',
+			'meta.noNodesToSpeedTest' => 'هیچ نودی برای آزمایش در دسترس نیست',
+			'meta.alreadyLatestVersion' => ({required Object version}) => 'در حال حاضر آخرین نسخه است (v${version})',
+			'meta.checkUpdateFailed' => 'بررسی به‌روزرسانی با خطا مواجه شد، لطفاً اتصال شبکه را بررسی کنید',
+			'meta.hideTimeoutNodes' => 'پنهان کردن گره‌های ناموفق و آفلاین',
+			'meta.hideTimeoutNodesDesc' => 'فیلتر خودکار گره‌های غیرقابل دسترس',
+			'meta.speedtestScenario' => 'سناریوی تست سرعت فعلی',
+			'meta.speedtestScenarioSwitch' => 'تغییر سناریوی تست سرعت',
+			'meta.speedtestScenarioDesc' => 'انتخاب اهداف برای تست تأخیر و در دسترس بودن واقعی',
+			'meta.speedtestAllNodes' => 'تست همه گره‌ها',
+			'meta.retestTimeoutNodes' => 'تست مجدد گره‌های تایم‌اوت شده',
+			'meta.switchedTargetScenario' => ({required Object target}) => 'تغییر سناریوی تست به: ${target}',
+			'meta.notTested' => 'تست نشده',
+			'meta.timeoutOrFailed' => 'تایم‌اوت / غیرقابل دسترس',
+			'meta.identifiedRegion' => 'منطقه',
+			'meta.nodeProtocol' => 'پروتکل',
+			'meta.currentLatency' => 'تأخیر',
+			'meta.testScenario' => 'سناریوی تست',
+			'meta.belongsToGroup' => 'گروه',
+			'meta.copyNodeName' => 'کپی نام',
+			'meta.nodeNameCopied' => 'نام گره کپی شد',
+			'meta.testSingleNode' => 'تست این گره',
+			'meta.selectThisNode' => 'انتخاب این گره',
+			'meta.allNodesNormal' => 'همه گره‌ها در دسترس هستند و نیازی به تست مجدد نیست',
+			'meta.customUrlPrompt' => 'آدرس سفارشی (مانند http://...)',
+			'meta.customTarget' => 'هدف سفارشی',
+			'meta.downloadFailedTip' => 'دانلود بسته به‌روزرسانی ناموفق بود، لطفاً شبکه را بررسی کنید یا از وب‌سایت دانلود کنید.',
+			'meta.discoveredNewVersion' => ({required Object version}) => 'نسخه جدید یافت شد: v${version}',
+			'meta.preparingUpdate' => 'در حال آماده‌سازی برای به‌روزرسانی...',
+			'meta.downloadingPackage' => 'در حال دانلود بسته به‌روزرسانی، لطفاً صبر کنید...',
+			'meta.downloadUpdateNow' => 'اکنون به‌روزرسانی را دانلود کنید',
+			'meta.downloadFromWeb' => 'دانلود از وب‌سایت',
+			'meta.switchSource' => 'تغییر',
+			'meta.serverSwitch' => 'سرور تست سرعت',
+			'meta.autoDetectBest' => 'شناسایی خودکار بهترین سرور',
+			'meta.serverSwitchDesc' => 'انتخاب CDN یا هدف سفارشی برای تست اتصال',
+			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => 'بهترین سرور به طور خودکار انتخاب شد: ${server} (${ping} ms)',
+			'meta.networkGradeTitle' => 'امتیاز کیفیت شبکه',
+			'meta.copyReport' => 'کپی گزارش',
+			'meta.reportCopied' => 'گزارش در کلیپ‌بورد کپی شد، آماده برای اشتراک‌گذاری',
+			'meta.gamingExperience' => 'بازی آنلاین',
+			'meta.streamingExperience' => 'استریم ویدیو',
+			'meta.meetingExperience' => 'ویدیو کنفرانس',
+			'meta.customSpeedtestUrl' => 'آدرس سفارشی دانلود (https://...)',
+			'meta.customSpeedtestSource' => 'منبع تست سفارشی',
+			'meta.userSpecifiedUrl' => 'آدرس مشخص‌شده توسط کاربر',
+			'meta.cannotBeEmpty' => ({required Object item}) => '${item} نمی‌تواند خالی باشد',
+			'meta.alreadyExists' => ({required Object item}) => '${item} از قبل وجود دارد',
+			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'نصب ${installer} با خطا مواجه شد، کد: ${code}',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',
@@ -1146,6 +1280,8 @@ extension on TranslationsFa {
 			'dns.preferH3' => 'اولویت DoH H3',
 			'dns.useHosts' => 'استفاده از هاست ها',
 			'dns.useSystemHosts' => 'استفاده از هاست های سیستم',
+			_ => null,
+		} ?? switch (path) {
 			'dns.enhancedMode' => 'حالت پیشرفته',
 			'dns.fakeIPFilterMode' => 'حالت فیلتر ${_root.dns.fakeIp}',
 			'dns.fakeIPFilter' => 'فیلتر ${_root.dns.fakeIp}',

@@ -130,7 +130,7 @@ class _ProxyGroupTemplatesAddOrEditScreenState
     if (_data.name.isEmpty) {
       DialogUtils.showAlertDialog(
         context,
-        "${tcontext.meta.name} can not be empty",
+        tcontext.meta.cannotBeEmpty(item: tcontext.meta.name),
       );
       return;
     }
@@ -140,7 +140,7 @@ class _ProxyGroupTemplatesAddOrEditScreenState
       if (names.contains(_data.name)) {
         DialogUtils.showAlertDialog(
           context,
-          "${tcontext.meta.name}:${_data.name} already exists",
+          tcontext.meta.alreadyExists(item: "${tcontext.meta.name}: ${_data.name}"),
         );
         return;
       }
@@ -148,7 +148,7 @@ class _ProxyGroupTemplatesAddOrEditScreenState
       if ((widget.name != _data.name) && names.contains(_data.name)) {
         DialogUtils.showAlertDialog(
           context,
-          "${tcontext.meta.name}:${_data.name} already exists",
+          tcontext.meta.alreadyExists(item: "${tcontext.meta.name}: ${_data.name}"),
         );
         return;
       }

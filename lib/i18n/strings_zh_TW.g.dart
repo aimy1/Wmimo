@@ -307,7 +307,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get updateIntervalPreferByProfile => '優先使用服務商(機場)設定';
 	@override String updateFailed({required Object p}) => '更新失敗:${p}';
 	@override String get none => '無';
-	@override String get reset => '重置';
+	@override String get reset => '重設';
 	@override String get authentication => '授權';
 	@override String get submit => '提交';
 	@override String get user => '用戶';
@@ -568,6 +568,73 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get copyAddressBtn => '複製位址 ✨';
 	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ 位址已複製！非常感謝你的投餵與陪伴~ 💖';
 	@override String get donateTip => '💡 提示：支援 Bybit 或任意 Aptos 相容錢包掃碼轉帳';
+	@override String get qrcodeParsing => '正在解析...';
+	@override String get qrcodeNotFound => '未識別到二維碼';
+	@override String get qrcodeSupportHint => '支援解析各類訂閱、節點及設定二維碼圖片';
+	@override String get qrcodeCameraHint => '將二維碼放入框內即可自動掃描';
+	@override String get flashlight => '手電筒';
+	@override String get screenshotDesc => '擷取螢幕';
+	@override String get fromImageDesc => '本機圖片';
+	@override String get fromClipboardDesc => '讀取連結';
+	@override String get errorPrompt => '錯誤提示';
+	@override String get copied => '已複製';
+	@override String get sortAndFilterNodes => '節點排序與篩選';
+	@override String get sortOptions => '排序方式';
+	@override String get sortDefault => '預設排序';
+	@override String get sortLatency => '按延遲由低到高';
+	@override String get sortName => '按名稱 A-Z';
+	@override String get sortRegion => '按地區分組';
+	@override String get filterOptions => '篩選選項';
+	@override String portableUpdateTip({required Object version}) => '偵測到目前為免安裝便攜模式：\n便攜版本暫不支援應用程式內覆蓋更新，請前往官網或倉庫下載最新免安裝壓縮包覆蓋解壓。\n\n最新版本: v${version}';
+	@override String get portableModeTipTitle => '便攜模式提示';
+	@override String get noNodesToSpeedTest => '無可用節點，無需測速';
+	@override String alreadyLatestVersion({required Object version}) => '已是最新版本 (v${version})';
+	@override String get checkUpdateFailed => '檢查更新失敗，請檢查網路連線';
+	@override String get hideTimeoutNodes => '隱藏逾時與不可用節點';
+	@override String get hideTimeoutNodesDesc => '自動過濾測速失敗或連線逾時的節點';
+	@override String get speedtestScenario => '目前測速目標場景';
+	@override String get speedtestScenarioSwitch => '測速目標場景切換';
+	@override String get speedtestScenarioDesc => '選擇不同服務測試節點的真實可用性與連線延遲';
+	@override String get speedtestAllNodes => '全量極速測速';
+	@override String get retestTimeoutNodes => '僅重測逾時節點';
+	@override String switchedTargetScenario({required Object target}) => '已切換測速目標場景: ${target}';
+	@override String get notTested => '未測速';
+	@override String get timeoutOrFailed => '逾時 / 無法連線';
+	@override String get identifiedRegion => '識別地區';
+	@override String get nodeProtocol => '節點協定';
+	@override String get currentLatency => '目前延遲';
+	@override String get testScenario => '測速場景';
+	@override String get belongsToGroup => '所屬分組';
+	@override String get copyNodeName => '複製名稱';
+	@override String get nodeNameCopied => '已複製節點名稱';
+	@override String get testSingleNode => '單獨測速';
+	@override String get selectThisNode => '選擇此節點';
+	@override String get allNodesNormal => '所有節點均正常可用，無需重測';
+	@override String get customUrlPrompt => '自訂 URL (如 http://...)';
+	@override String get customTarget => '自訂目標';
+	@override String get downloadFailedTip => '下載更新安裝包失敗，請檢查網路或點擊下方前往網頁下載。';
+	@override String discoveredNewVersion({required Object version}) => '發現新版本: v${version}';
+	@override String get preparingUpdate => '正在準備啟動更新...';
+	@override String get downloadingPackage => '安裝包正在下載中，請稍候...';
+	@override String get downloadUpdateNow => '立即下載更新';
+	@override String get downloadFromWeb => '前往網頁下載安裝包';
+	@override String get switchSource => '切換源';
+	@override String get serverSwitch => '測速伺服器切換';
+	@override String get autoDetectBest => '自動探測最優';
+	@override String get serverSwitchDesc => '選擇不同的測速 CDN 源或自訂節點進行多鏈路測速';
+	@override String autoSelectedBest({required Object server, required Object ping}) => '已自動選擇最優測速源: ${server} (${ping} ms)';
+	@override String get networkGradeTitle => '網路體質綜合評分';
+	@override String get copyReport => '複製戰報';
+	@override String get reportCopied => '戰報已複製到剪貼簿，可直接貼上分享';
+	@override String get gamingExperience => '電競體驗';
+	@override String get streamingExperience => '超清串流媒體';
+	@override String get meetingExperience => '遠端視訊';
+	@override String get customSpeedtestUrl => '自訂測速下載 URL (https://...)';
+	@override String get customSpeedtestSource => '自訂測速源';
+	@override String get userSpecifiedUrl => '使用者指定 URL';
+	@override String cannotBeEmpty({required Object item}) => '${item}不能為空';
+	@override String alreadyExists({required Object item}) => '${item}已存在';
+	@override String installFailedWithCode({required Object installer, required Object code}) => '安裝 ${installer} 失敗，錯誤碼: ${code}';
 }
 
 // Path: permission
@@ -860,7 +927,7 @@ extension on TranslationsZhTw {
 			'meta.updateIntervalPreferByProfile' => '優先使用服務商(機場)設定',
 			'meta.updateFailed' => ({required Object p}) => '更新失敗:${p}',
 			'meta.none' => '無',
-			'meta.reset' => '重置',
+			'meta.reset' => '重設',
 			'meta.authentication' => '授權',
 			'meta.submit' => '提交',
 			'meta.user' => '用戶',
@@ -1121,6 +1188,73 @@ extension on TranslationsZhTw {
 			'meta.copyAddressBtn' => '複製位址 ✨',
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ 位址已複製！非常感謝你的投餵與陪伴~ 💖',
 			'meta.donateTip' => '💡 提示：支援 Bybit 或任意 Aptos 相容錢包掃碼轉帳',
+			'meta.qrcodeParsing' => '正在解析...',
+			'meta.qrcodeNotFound' => '未識別到二維碼',
+			'meta.qrcodeSupportHint' => '支援解析各類訂閱、節點及設定二維碼圖片',
+			'meta.qrcodeCameraHint' => '將二維碼放入框內即可自動掃描',
+			'meta.flashlight' => '手電筒',
+			'meta.screenshotDesc' => '擷取螢幕',
+			'meta.fromImageDesc' => '本機圖片',
+			'meta.fromClipboardDesc' => '讀取連結',
+			'meta.errorPrompt' => '錯誤提示',
+			'meta.copied' => '已複製',
+			'meta.sortAndFilterNodes' => '節點排序與篩選',
+			'meta.sortOptions' => '排序方式',
+			'meta.sortDefault' => '預設排序',
+			'meta.sortLatency' => '按延遲由低到高',
+			'meta.sortName' => '按名稱 A-Z',
+			'meta.sortRegion' => '按地區分組',
+			'meta.filterOptions' => '篩選選項',
+			'meta.portableUpdateTip' => ({required Object version}) => '偵測到目前為免安裝便攜模式：\n便攜版本暫不支援應用程式內覆蓋更新，請前往官網或倉庫下載最新免安裝壓縮包覆蓋解壓。\n\n最新版本: v${version}',
+			'meta.portableModeTipTitle' => '便攜模式提示',
+			'meta.noNodesToSpeedTest' => '無可用節點，無需測速',
+			'meta.alreadyLatestVersion' => ({required Object version}) => '已是最新版本 (v${version})',
+			'meta.checkUpdateFailed' => '檢查更新失敗，請檢查網路連線',
+			'meta.hideTimeoutNodes' => '隱藏逾時與不可用節點',
+			'meta.hideTimeoutNodesDesc' => '自動過濾測速失敗或連線逾時的節點',
+			'meta.speedtestScenario' => '目前測速目標場景',
+			'meta.speedtestScenarioSwitch' => '測速目標場景切換',
+			'meta.speedtestScenarioDesc' => '選擇不同服務測試節點的真實可用性與連線延遲',
+			'meta.speedtestAllNodes' => '全量極速測速',
+			'meta.retestTimeoutNodes' => '僅重測逾時節點',
+			'meta.switchedTargetScenario' => ({required Object target}) => '已切換測速目標場景: ${target}',
+			'meta.notTested' => '未測速',
+			'meta.timeoutOrFailed' => '逾時 / 無法連線',
+			'meta.identifiedRegion' => '識別地區',
+			'meta.nodeProtocol' => '節點協定',
+			'meta.currentLatency' => '目前延遲',
+			'meta.testScenario' => '測速場景',
+			'meta.belongsToGroup' => '所屬分組',
+			'meta.copyNodeName' => '複製名稱',
+			'meta.nodeNameCopied' => '已複製節點名稱',
+			'meta.testSingleNode' => '單獨測速',
+			'meta.selectThisNode' => '選擇此節點',
+			'meta.allNodesNormal' => '所有節點均正常可用，無需重測',
+			'meta.customUrlPrompt' => '自訂 URL (如 http://...)',
+			'meta.customTarget' => '自訂目標',
+			'meta.downloadFailedTip' => '下載更新安裝包失敗，請檢查網路或點擊下方前往網頁下載。',
+			'meta.discoveredNewVersion' => ({required Object version}) => '發現新版本: v${version}',
+			'meta.preparingUpdate' => '正在準備啟動更新...',
+			'meta.downloadingPackage' => '安裝包正在下載中，請稍候...',
+			'meta.downloadUpdateNow' => '立即下載更新',
+			'meta.downloadFromWeb' => '前往網頁下載安裝包',
+			'meta.switchSource' => '切換源',
+			'meta.serverSwitch' => '測速伺服器切換',
+			'meta.autoDetectBest' => '自動探測最優',
+			'meta.serverSwitchDesc' => '選擇不同的測速 CDN 源或自訂節點進行多鏈路測速',
+			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => '已自動選擇最優測速源: ${server} (${ping} ms)',
+			'meta.networkGradeTitle' => '網路體質綜合評分',
+			'meta.copyReport' => '複製戰報',
+			'meta.reportCopied' => '戰報已複製到剪貼簿，可直接貼上分享',
+			'meta.gamingExperience' => '電競體驗',
+			'meta.streamingExperience' => '超清串流媒體',
+			'meta.meetingExperience' => '遠端視訊',
+			'meta.customSpeedtestUrl' => '自訂測速下載 URL (https://...)',
+			'meta.customSpeedtestSource' => '自訂測速源',
+			'meta.userSpecifiedUrl' => '使用者指定 URL',
+			'meta.cannotBeEmpty' => ({required Object item}) => '${item}不能為空',
+			'meta.alreadyExists' => ({required Object item}) => '${item}已存在',
+			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => '安裝 ${installer} 失敗，錯誤碼: ${code}',
 			'permission.camera' => '攝像頭',
 			'permission.screen' => '屏幕錄製',
 			'permission.appQuery' => '獲取應用列表',
@@ -1146,6 +1280,8 @@ extension on TranslationsZhTw {
 			'dns.preferH3' => 'DoH H3優先',
 			'dns.useHosts' => '使用Hosts',
 			'dns.useSystemHosts' => '使用系統Hosts',
+			_ => null,
+		} ?? switch (path) {
 			'dns.enhancedMode' => '增強模式',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} 過濾模式',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} 過濾',

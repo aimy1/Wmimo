@@ -568,6 +568,73 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get copyAddressBtn => 'نسخ العنوان ✨';
 	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ تم نسخ العنوان! شكراً جزيلاً لدعمكم الرائع~ 💖';
 	@override String get donateTip => '💡 تلميح: يدعم المسح عبر Bybit أو أي محفظة متوافقة مع Aptos';
+	@override String get qrcodeParsing => 'جارٍ تحليل رمز الاستجابة السريعة...';
+	@override String get qrcodeNotFound => 'لم يتم العثور على رمز الاستجابة السريعة';
+	@override String get qrcodeSupportHint => 'يدعم تحليل رموز QR للاشتراكات والعقد والتكوينات';
+	@override String get qrcodeCameraHint => 'وجّه رمز QR داخل الإطار للمسح تلقائيًا';
+	@override String get flashlight => 'فلاش';
+	@override String get screenshotDesc => 'التقاط الشاشة';
+	@override String get fromImageDesc => 'صورة محلية';
+	@override String get fromClipboardDesc => 'قراءة الحافظة';
+	@override String get errorPrompt => 'خطأ';
+	@override String get copied => 'تم النسخ';
+	@override String get sortAndFilterNodes => 'فرز وتصفية العقد';
+	@override String get sortOptions => 'خيارات الفرز';
+	@override String get sortDefault => 'افتراضي';
+	@override String get sortLatency => 'أقل زمن استجابة';
+	@override String get sortName => 'بالاسم (A-Z)';
+	@override String get sortRegion => 'حسب المنطقة';
+	@override String get filterOptions => 'خيارات التصفية';
+	@override String portableUpdateTip({required Object version}) => 'تم اكتشاف الوضع المحمول:\nالتحديث التلقائي داخل التطبيق غير مدعوم في الوضع المحمول. يرجى تنزيل أحدث ملف ZIP محمول واستخراجه للاستبدال.\n\nأحدث إصدار: v${version}';
+	@override String get portableModeTipTitle => 'إشعار الوضع المحمول';
+	@override String get noNodesToSpeedTest => 'لا توجد عقد متاحة للاختبار';
+	@override String alreadyLatestVersion({required Object version}) => 'أحدث إصدار بالفعل (v${version})';
+	@override String get checkUpdateFailed => 'فشل التحقق من وجود تحديثات، يرجى التحقق من اتصالك بالشبكة';
+	@override String get hideTimeoutNodes => 'إخفاء العقد المنتهية وغير المتاحة';
+	@override String get hideTimeoutNodesDesc => 'تصفية العقد التي فشل اختبارها أو انتهت مهلتها تلقائيًا';
+	@override String get speedtestScenario => 'سيناريو اختبار السرعة الحالي';
+	@override String get speedtestScenarioSwitch => 'تبديل سيناريو اختبار السرعة';
+	@override String get speedtestScenarioDesc => 'اختر أهدافًا مختلفة لاختبار الاستجابة والاتصال الفعلي';
+	@override String get speedtestAllNodes => 'اختبار جميع العقد';
+	@override String get retestTimeoutNodes => 'إعادة اختبار العقد المنتهية فقط';
+	@override String switchedTargetScenario({required Object target}) => 'تم التبديل إلى السيناريو: ${target}';
+	@override String get notTested => 'لم يتم الاختبار';
+	@override String get timeoutOrFailed => 'مهلة منتهية / غير قابل للوصول';
+	@override String get identifiedRegion => 'المنطقة';
+	@override String get nodeProtocol => 'البروتوكول';
+	@override String get currentLatency => 'الاستجابة';
+	@override String get testScenario => 'سيناريو الاختبار';
+	@override String get belongsToGroup => 'المجموعة';
+	@override String get copyNodeName => 'نسخ الاسم';
+	@override String get nodeNameCopied => 'تم نسخ اسم العقدة';
+	@override String get testSingleNode => 'اختبار العقدة';
+	@override String get selectThisNode => 'تحديد هذه العقدة';
+	@override String get allNodesNormal => 'جميع العقد متاحة وتعمل بشكل طبيعي، لا حاجة لإعادة الاختبار';
+	@override String get customUrlPrompt => 'عنوان URL مخصص (مثل http://...)';
+	@override String get customTarget => 'هدف مخصص';
+	@override String get downloadFailedTip => 'فشل تنزيل حزمة التحديث، يرجى التحقق من الشبكة أو التنزيل من موقع الويب.';
+	@override String discoveredNewVersion({required Object version}) => 'تم اكتشاف إصدار جديد: v${version}';
+	@override String get preparingUpdate => 'جارٍ التحضير لبدء التحديث...';
+	@override String get downloadingPackage => 'جارٍ تنزيل حزمة التحديث، يرجى الانتظار...';
+	@override String get downloadUpdateNow => 'تنزيل التحديث الآن';
+	@override String get downloadFromWeb => 'التنزيل من موقع الويب';
+	@override String get switchSource => 'تبديل';
+	@override String get serverSwitch => 'خادم اختبار السرعة';
+	@override String get autoDetectBest => 'اكتشاف الأفضل تلقائيًا';
+	@override String get serverSwitchDesc => 'اختر شبكة CDN أو هدفًا مخصصًا لاختبار الاتصال';
+	@override String autoSelectedBest({required Object server, required Object ping}) => 'تم اختيار أفضل خادم تلقائيًا: ${server} (${ping} ms)';
+	@override String get networkGradeTitle => 'تقييم جودة الشبكة';
+	@override String get copyReport => 'نسخ التقرير';
+	@override String get reportCopied => 'تم نسخ التقرير إلى الحافظة، جاهز للمشاركة';
+	@override String get gamingExperience => 'ألعاب الفيديو';
+	@override String get streamingExperience => 'البث المرئي';
+	@override String get meetingExperience => 'مكالمات الفيديو';
+	@override String get customSpeedtestUrl => 'عنوان URL مخصص للتنزيل (https://...)';
+	@override String get customSpeedtestSource => 'مصدر اختبار مخصص';
+	@override String get userSpecifiedUrl => 'عنوان URL محدد من المستخدم';
+	@override String cannotBeEmpty({required Object item}) => 'لا يمكن أن يكون ${item} فارغًا';
+	@override String alreadyExists({required Object item}) => '${item} موجود بالفعل';
+	@override String installFailedWithCode({required Object installer, required Object code}) => 'فشل تثبيت ${installer}، الرمز: ${code}';
 }
 
 // Path: permission
@@ -1121,6 +1188,73 @@ extension on TranslationsAr {
 			'meta.copyAddressBtn' => 'نسخ العنوان ✨',
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ تم نسخ العنوان! شكراً جزيلاً لدعمكم الرائع~ 💖',
 			'meta.donateTip' => '💡 تلميح: يدعم المسح عبر Bybit أو أي محفظة متوافقة مع Aptos',
+			'meta.qrcodeParsing' => 'جارٍ تحليل رمز الاستجابة السريعة...',
+			'meta.qrcodeNotFound' => 'لم يتم العثور على رمز الاستجابة السريعة',
+			'meta.qrcodeSupportHint' => 'يدعم تحليل رموز QR للاشتراكات والعقد والتكوينات',
+			'meta.qrcodeCameraHint' => 'وجّه رمز QR داخل الإطار للمسح تلقائيًا',
+			'meta.flashlight' => 'فلاش',
+			'meta.screenshotDesc' => 'التقاط الشاشة',
+			'meta.fromImageDesc' => 'صورة محلية',
+			'meta.fromClipboardDesc' => 'قراءة الحافظة',
+			'meta.errorPrompt' => 'خطأ',
+			'meta.copied' => 'تم النسخ',
+			'meta.sortAndFilterNodes' => 'فرز وتصفية العقد',
+			'meta.sortOptions' => 'خيارات الفرز',
+			'meta.sortDefault' => 'افتراضي',
+			'meta.sortLatency' => 'أقل زمن استجابة',
+			'meta.sortName' => 'بالاسم (A-Z)',
+			'meta.sortRegion' => 'حسب المنطقة',
+			'meta.filterOptions' => 'خيارات التصفية',
+			'meta.portableUpdateTip' => ({required Object version}) => 'تم اكتشاف الوضع المحمول:\nالتحديث التلقائي داخل التطبيق غير مدعوم في الوضع المحمول. يرجى تنزيل أحدث ملف ZIP محمول واستخراجه للاستبدال.\n\nأحدث إصدار: v${version}',
+			'meta.portableModeTipTitle' => 'إشعار الوضع المحمول',
+			'meta.noNodesToSpeedTest' => 'لا توجد عقد متاحة للاختبار',
+			'meta.alreadyLatestVersion' => ({required Object version}) => 'أحدث إصدار بالفعل (v${version})',
+			'meta.checkUpdateFailed' => 'فشل التحقق من وجود تحديثات، يرجى التحقق من اتصالك بالشبكة',
+			'meta.hideTimeoutNodes' => 'إخفاء العقد المنتهية وغير المتاحة',
+			'meta.hideTimeoutNodesDesc' => 'تصفية العقد التي فشل اختبارها أو انتهت مهلتها تلقائيًا',
+			'meta.speedtestScenario' => 'سيناريو اختبار السرعة الحالي',
+			'meta.speedtestScenarioSwitch' => 'تبديل سيناريو اختبار السرعة',
+			'meta.speedtestScenarioDesc' => 'اختر أهدافًا مختلفة لاختبار الاستجابة والاتصال الفعلي',
+			'meta.speedtestAllNodes' => 'اختبار جميع العقد',
+			'meta.retestTimeoutNodes' => 'إعادة اختبار العقد المنتهية فقط',
+			'meta.switchedTargetScenario' => ({required Object target}) => 'تم التبديل إلى السيناريو: ${target}',
+			'meta.notTested' => 'لم يتم الاختبار',
+			'meta.timeoutOrFailed' => 'مهلة منتهية / غير قابل للوصول',
+			'meta.identifiedRegion' => 'المنطقة',
+			'meta.nodeProtocol' => 'البروتوكول',
+			'meta.currentLatency' => 'الاستجابة',
+			'meta.testScenario' => 'سيناريو الاختبار',
+			'meta.belongsToGroup' => 'المجموعة',
+			'meta.copyNodeName' => 'نسخ الاسم',
+			'meta.nodeNameCopied' => 'تم نسخ اسم العقدة',
+			'meta.testSingleNode' => 'اختبار العقدة',
+			'meta.selectThisNode' => 'تحديد هذه العقدة',
+			'meta.allNodesNormal' => 'جميع العقد متاحة وتعمل بشكل طبيعي، لا حاجة لإعادة الاختبار',
+			'meta.customUrlPrompt' => 'عنوان URL مخصص (مثل http://...)',
+			'meta.customTarget' => 'هدف مخصص',
+			'meta.downloadFailedTip' => 'فشل تنزيل حزمة التحديث، يرجى التحقق من الشبكة أو التنزيل من موقع الويب.',
+			'meta.discoveredNewVersion' => ({required Object version}) => 'تم اكتشاف إصدار جديد: v${version}',
+			'meta.preparingUpdate' => 'جارٍ التحضير لبدء التحديث...',
+			'meta.downloadingPackage' => 'جارٍ تنزيل حزمة التحديث، يرجى الانتظار...',
+			'meta.downloadUpdateNow' => 'تنزيل التحديث الآن',
+			'meta.downloadFromWeb' => 'التنزيل من موقع الويب',
+			'meta.switchSource' => 'تبديل',
+			'meta.serverSwitch' => 'خادم اختبار السرعة',
+			'meta.autoDetectBest' => 'اكتشاف الأفضل تلقائيًا',
+			'meta.serverSwitchDesc' => 'اختر شبكة CDN أو هدفًا مخصصًا لاختبار الاتصال',
+			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => 'تم اختيار أفضل خادم تلقائيًا: ${server} (${ping} ms)',
+			'meta.networkGradeTitle' => 'تقييم جودة الشبكة',
+			'meta.copyReport' => 'نسخ التقرير',
+			'meta.reportCopied' => 'تم نسخ التقرير إلى الحافظة، جاهز للمشاركة',
+			'meta.gamingExperience' => 'ألعاب الفيديو',
+			'meta.streamingExperience' => 'البث المرئي',
+			'meta.meetingExperience' => 'مكالمات الفيديو',
+			'meta.customSpeedtestUrl' => 'عنوان URL مخصص للتنزيل (https://...)',
+			'meta.customSpeedtestSource' => 'مصدر اختبار مخصص',
+			'meta.userSpecifiedUrl' => 'عنوان URL محدد من المستخدم',
+			'meta.cannotBeEmpty' => ({required Object item}) => 'لا يمكن أن يكون ${item} فارغًا',
+			'meta.alreadyExists' => ({required Object item}) => '${item} موجود بالفعل',
+			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'فشل تثبيت ${installer}، الرمز: ${code}',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',
@@ -1146,6 +1280,8 @@ extension on TranslationsAr {
 			'dns.preferH3' => 'أولوية DoH H3',
 			'dns.useHosts' => 'استخدام المضيفين',
 			'dns.useSystemHosts' => 'استخدام مضيفات النظام',
+			_ => null,
+		} ?? switch (path) {
 			'dns.enhancedMode' => 'الوضع المحسّن',
 			'dns.fakeIPFilterMode' => 'وضع التصفية ${_root.dns.fakeIp}',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} التصفية',

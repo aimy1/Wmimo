@@ -131,9 +131,9 @@ class _RuleTemplatesRuleAddOrEditScreenState
       if (_value.isEmpty) {
         DialogUtils.showAlertDialog(
           context,
-          _type == "RULE-SET"
-              ? "${tcontext.meta.ruleProviders} can not be empty"
-              : "$_type can not be empty",
+          tcontext.meta.cannotBeEmpty(
+            item: _type == "RULE-SET" ? tcontext.meta.ruleProviders : _type,
+          ),
         );
         return;
       }

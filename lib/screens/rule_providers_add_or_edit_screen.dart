@@ -131,7 +131,7 @@ class _RuleProvidersAddOrEditScreenState
     if (_data.name.isEmpty) {
       DialogUtils.showAlertDialog(
         context,
-        "${tcontext.meta.name} can not be empty",
+        tcontext.meta.cannotBeEmpty(item: tcontext.meta.name),
       );
       return;
     }
@@ -141,7 +141,7 @@ class _RuleProvidersAddOrEditScreenState
       if (names.contains(_data.name)) {
         DialogUtils.showAlertDialog(
           context,
-          "${tcontext.meta.name}:${_data.name} already exists",
+          tcontext.meta.alreadyExists(item: "${tcontext.meta.name}: ${_data.name}"),
         );
         return;
       }
@@ -149,21 +149,21 @@ class _RuleProvidersAddOrEditScreenState
       if ((widget.name != _data.name) && names.contains(_data.name)) {
         DialogUtils.showAlertDialog(
           context,
-          "${tcontext.meta.name}:${_data.name} already exists",
+          tcontext.meta.alreadyExists(item: "${tcontext.meta.name}: ${_data.name}"),
         );
         return;
       }
     }
     if (_data.http != null) {
       if (_data.http!.url.isEmpty) {
-        DialogUtils.showAlertDialog(context, "url can not be empty");
+        DialogUtils.showAlertDialog(context, tcontext.meta.urlCannotEmpty);
         return;
       }
       final url = Uri.tryParse(_data.http!.url);
       if (url == null) {
         DialogUtils.showAlertDialog(
           context,
-          "url:${_data.http!.url} is invalid",
+          "${tcontext.meta.urlInvalid}: ${_data.http!.url}",
         );
         return;
       }
