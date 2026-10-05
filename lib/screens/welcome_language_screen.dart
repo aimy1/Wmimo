@@ -383,7 +383,10 @@ class _WelcomeLanguageScreenState
                         ),
                         child: Text(
                           item.flag,
-                          style: const TextStyle(fontSize: 20),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: Platform.isWindows ? 'Emoji' : null,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),

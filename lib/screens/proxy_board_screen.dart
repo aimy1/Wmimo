@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
@@ -1399,12 +1400,22 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           actionsPadding: const EdgeInsets.fromLTRB(14, 8, 14, 14),
           title: Row(
             children: [
-              Text(region.flag, style: const TextStyle(fontSize: 22)),
+              Text(
+                region.flag,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontFamily: Platform.isWindows ? 'Emoji' : null,
+                ),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   node.name,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -1488,6 +1499,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                 fontSize: 12.5,
                 fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
                 color: valueColor ?? theme.colorScheme.onSurface,
+                fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
               ),
               textAlign: TextAlign.right,
               overflow: TextOverflow.ellipsis,
@@ -1550,7 +1562,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                 children: [
                   Text(
                     summary.region.flag,
-                    style: const TextStyle(fontSize: 12),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: Platform.isWindows ? 'Emoji' : null,
+                    ),
                   ),
                   const SizedBox(width: 4),
                   Text(
@@ -2073,10 +2088,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   Flexible(
                     child: Text(
                       group.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.2,
+                        fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -2115,7 +2131,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         children: [
                           Text(
                             getFlagEmoji(group.now),
-                            style: const TextStyle(fontSize: 13),
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontFamily: Platform.isWindows ? 'Emoji' : null,
+                            ),
                           ),
                           const SizedBox(width: 4),
                           Flexible(
@@ -2125,6 +2144,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: ThemeDefine.kColorBlue,
+                                fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -2283,7 +2303,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               // Flag emoji
               Text(
                 flag,
-                style: const TextStyle(fontSize: 13),
+                style: TextStyle(
+                  fontSize: 13,
+                  fontFamily: Platform.isWindows ? 'Emoji' : null,
+                ),
               ),
               const SizedBox(width: 6),
 
@@ -2299,6 +2322,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         fontSize: 12,
                         fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                         color: isSelected ? ThemeDefine.kColorBlue : null,
+                        fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

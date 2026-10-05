@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
@@ -245,7 +246,10 @@ class _LanguageSettingsScreenState
               children: [
                 Text(
                   item.flag,
-                  style: const TextStyle(fontSize: 22),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontFamily: Platform.isWindows ? 'Emoji' : null,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

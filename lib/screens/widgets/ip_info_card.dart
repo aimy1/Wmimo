@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/utils/ip_info_helper.dart';
@@ -231,7 +232,13 @@ class _IpInfoCardState extends State<IpInfoCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("${tcontext.meta.ipLocation}: ", style: labelTitleStyle),
-                  Text(_ipInfo!.flagEmoji, style: const TextStyle(fontSize: 14)),
+                  Text(
+                    _ipInfo!.flagEmoji,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: Platform.isWindows ? 'Emoji' : null,
+                    ),
+                  ),
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
