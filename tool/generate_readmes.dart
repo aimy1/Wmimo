@@ -141,16 +141,6 @@ We express our heartfelt gratitude to the open-source community:
 
 ---
 
-## 💖 Sponsorship & Donation
-
-If you enjoy Wmimo, consider buying the author a coffee:
-
-- **Token / Currency**: `USDT`
-- **Network / Chain**: `APTOS`
-- **Address**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
 ## 📬 Contact & Bug Reports
 
 If you encounter any bugs, crashes, or have feature requests, please contact the author or open an issue:
@@ -298,16 +288,6 @@ flutter build apk --release
 
 ---
 
-## 💖 赞助与捐赠
-
-如果 Wmimo 帮助到了你，欢迎请作者喝杯咖啡：
-
-- **币种 (Currency)**: `USDT`
-- **网络 (Network)**: `APTOS`
-- **收款地址 (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
 ## 📬 联系作者与 Bug 反馈
 
 如果您在使用过程中遇到任何 Bug、异常崩溃或有功能改进建议，欢迎联系作者进行反馈：
@@ -364,14 +344,6 @@ $langBar
 > 本專案專注於 **Windows**、**Linux** 與 **Android** 平台的官方自動化預編譯與發布。
 > - **macOS**：代碼層已完整支援系統代理與 TUN 提權，如需使用可複製源碼在本地透過 `flutter build macos` 自行編譯。
 > - **iOS**：工程架構與系統擴充介面已就緒，因受限於 Apple 開發者證書與簽名體系，暫不提供官方打包分發，建議 iOS 用戶使用同生態客戶端導入訂閱。
-
----
-
-## 💖 贊助與支持
-
-- **幣種 (Currency)**: `USDT`
-- **網路 (Network)**: `APTOS`
-- **收款地址 (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
 
 ---
 
@@ -439,14 +411,6 @@ $langBar
 
 ---
 
-## 💖 寄付・サポート
-
-- **通貨 (Token)**: `USDT`
-- **ネットワーク (Network)**: `APTOS`
-- **受取アドレス (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
 ## 📬 お問い合わせとバグ報告
 
 バグの発生や不具合、または改善のご提案がございましたら、作者までお気軽にご連絡ください：
@@ -511,14 +475,6 @@ $langBar
 
 ---
 
-## 💖 후원 및 기부
-
-- **토큰 (Currency)**: `USDT`
-- **네트워크 (Network)**: `APTOS`
-- **지갑 주소 (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
 ## 📬 개발자 문의 및 버그 신고
 
 버그나 오류가 발생하거나 기능 제안이 있으신 경우 언제든지 개발자에게 문의해 주세요:
@@ -569,14 +525,6 @@ $langBar
 | 🍏 **iOS** | 📦 **Архитектура готова** | IPA / Исходный код | Архитектура NetworkExtension интегрирована. Из-за требований к сертификатам Apple официальный IPA не распространяется. |
 
 > 💡 **Политика распространения**: Официальный CI/CD выпускает сборки для **Windows**, **Linux** и **Android**. Исходный код macOS и iOS готов, но предварительно скомпилированные пакеты для платформ Apple не публикуются в Releases.
-
----
-
-## 💖 Поддержка и донаты
-
-- **Валюта (Token)**: `USDT`
-- **Сеть (Network)**: `APTOS`
-- **Адрес (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
 
 ---
 
@@ -633,14 +581,6 @@ $langBar
 
 ---
 
-## 💖 Donaciones y patrocinio
-
-- **Moneda (Token)**: `USDT`
-- **Red (Network)**: `APTOS`
-- **Dirección (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
 ## 📬 Contacto con el autor y reporte de errores
 
 Si encuentra algún error, fallo o tiene sugerencias de mejora, póngase en contacto con el autor:
@@ -694,14 +634,6 @@ $langBar
 
 ---
 
-## 💖 التبرع والدعم
-
-- **العملة (Token)**: `USDT`
-- **الشبكة (Network)**: `APTOS`
-- **العنوان (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
 ## 📬 التواصل مع المطور والإبلاغ عن الأخطاء
 
 إذا واجهت أي أخطاء أو أعطال أو كان لديك اقتراحات للتحسين، فلا تتردد في التواصل مع المطور:
@@ -752,14 +684,6 @@ $langBar
 | 🍏 **iOS** | 📦 **معماری آماده** | IPA / کد منبع | معماری NetworkExtension یکپارچه‌سازی شده است. به دلیل الزامات امضای اپل، فایل IPA رسمی منتشر نمی‌شود؛ استفاده از برنامه‌های دیگر پیشنهاد می‌شود. |
 
 > 💡 **خط‌مشی انتشار**: فرآیند رسمی CI/CD بسته‌های از پیش ساخته شده را برای **Windows**، **Linux** و **Android** ارائه می‌دهد. کدهای macOS و iOS آماده هستند اما بسته‌های از پیش ساخته برای پلتفرم‌های اپل منتشر نمی‌شوند.
-
----
-
-## 💖 حمایت مالی و دونیت
-
-- **ارز (Token)**: `USDT`
-- **شبکه (Network)**: `APTOS`
-- **آدرس (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
 
 ---
 

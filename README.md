@@ -134,16 +134,6 @@ We express our heartfelt gratitude to the open-source community:
 
 ---
 
-## 💖 Sponsorship & Donation
-
-If you enjoy Wmimo, consider buying the author a coffee:
-
-- **Token / Currency**: `USDT`
-- **Network / Chain**: `APTOS`
-- **Address**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
 ## 📬 Contact & Bug Reports
 
 If you encounter any bugs, crashes, or have feature requests, please contact the author or open an issue:

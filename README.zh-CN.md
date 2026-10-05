@@ -137,16 +137,6 @@ flutter build apk --release
 
 ---
 
-## 💖 赞助与捐赠
-
-如果 Wmimo 帮助到了你，欢迎请作者喝杯咖啡：
-
-- **币种 (Currency)**: `USDT`
-- **网络 (Network)**: `APTOS`
-- **收款地址 (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
 ## 📬 联系作者与 Bug 反馈
 
 如果您在使用过程中遇到任何 Bug、异常崩溃或有功能改进建议，欢迎联系作者进行反馈：

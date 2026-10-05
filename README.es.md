@@ -43,14 +43,6 @@
 
 ---
 
-## 💖 Donaciones y patrocinio
-
-- **Moneda (Token)**: `USDT`
-- **Red (Network)**: `APTOS`
-- **Dirección (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
-
----
-
 ## 📬 Contacto con el autor y reporte de errores
 
 Si encuentra algún error, fallo o tiene sugerencias de mejora, póngase en contacto con el autor:
