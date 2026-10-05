@@ -112,7 +112,7 @@ flutter build windows --release
 
 # Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.1.10
+bash tool/package_linux.sh v1.1.11
 
 # Android APK
 flutter build apk --release
@@ -262,7 +262,7 @@ flutter build windows --release
 
 # Linux Release (一键打包 Deb, RPM, AppImage, Arch 与 Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.1.10
+bash tool/package_linux.sh v1.1.11
 
 # Android Release (生成 APK 安装包)
 flutter build apk --release
