@@ -802,6 +802,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         final region = NodeRegionHelper.getRegion(n.name);
         return n.name.toLowerCase().contains(_searchKeyword) ||
             region.name.toLowerCase().contains(_searchKeyword) ||
+            region.nameEn.toLowerCase().contains(_searchKeyword) ||
             region.code.toLowerCase().contains(_searchKeyword) ||
             n.type.toLowerCase().contains(_searchKeyword);
       }).toList();
@@ -839,6 +840,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final tcontext = Translations.of(context);
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
 
     showModalBottomSheet(
       context: context,
@@ -1001,7 +1003,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    "${_activeLatencyTarget.icon} ${_activeLatencyTarget.name} • ${_activeLatencyTarget.url}",
+                                    "${_activeLatencyTarget.icon} ${_activeLatencyTarget.getDisplayName(isZh)} • ${_activeLatencyTarget.url}",
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -1217,7 +1219,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                 SnackBar(
                                   content: Text(
                                     tcontext.meta.switchedTargetScenario(
-                                      target: isZh ? target.name : target.nameEn,
+                                      target: target.getDisplayName(isZh),
                                     ),
                                   ),
                                   duration: const Duration(seconds: 1),
@@ -1263,7 +1265,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          isZh ? target.name : target.nameEn,
+                                          target.getDisplayName(isZh),
                                           style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
@@ -1414,10 +1416,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Divider(height: 12),
-              _buildDetailRow(tcontext.meta.identifiedRegion, "${region.flag} ${region.name} (${region.code})"),
+              _buildDetailRow(tcontext.meta.identifiedRegion, "${region.flag} ${region.getDisplayName(isZh)} (${region.code})"),
               _buildDetailRow(tcontext.meta.nodeProtocol, node.type.isEmpty ? "Unknown" : node.type.toUpperCase()),
               _buildDetailRow(tcontext.meta.currentLatency, delayInfo, valueColor: delayColor, isBold: true),
-              _buildDetailRow(tcontext.meta.testScenario, "${_activeLatencyTarget.icon} ${isZh ? _activeLatencyTarget.name : _activeLatencyTarget.nameEn}"),
+              _buildDetailRow(tcontext.meta.testScenario, "${_activeLatencyTarget.icon} ${_activeLatencyTarget.getDisplayName(isZh)}"),
               _buildDetailRow(tcontext.meta.belongsToGroup, group.name),
               const Divider(height: 16),
             ],
@@ -1500,6 +1502,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     if (leafNodes.isEmpty) return const SizedBox.shrink();
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final tcontext = Translations.of(context);
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final regionSummaries = NodeRegionHelper.extractAvailableRegions(leafNodes);
     if (regionSummaries.length <= 1) return const SizedBox.shrink();
 
@@ -1550,7 +1554,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    "${summary.region.name} (${summary.count})",
+                    "${summary.region.getDisplayName(isZh)} (${summary.count})",
                     style: TextStyle(
                       fontSize: 11.5,
                       fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
@@ -1573,6 +1577,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final groups = _getProxyGroups();
     final leafNodes = _allNodes.where((n) => isRealLeafProxy(n)).toList();
 
@@ -1704,7 +1709,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
                     // Latency Test All button
                     Tooltip(
-                      message: "${tcontext.meta.latencyTest} (${_activeLatencyTarget.name})",
+                      message: "${tcontext.meta.latencyTest} (${_activeLatencyTarget.getDisplayName(isZh)})",
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
                         onTap: _nodesTesting.isNotEmpty ? null : _testAllDelay,
@@ -1829,7 +1834,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              _activeLatencyTarget.name.replaceAll(RegExp(r'^[^\w\s\u4e00-\u9fa5]+'), '').trim(),
+                              _activeLatencyTarget.getDisplayName(isZh).replaceAll(RegExp(r'^[^\w\s\u4e00-\u9fa5]+'), '').trim(),
                               style: TextStyle(
                                 fontSize: 11.5,
                                 fontWeight: FontWeight.w600,
@@ -2034,6 +2039,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final isExpanded = _isGroupExpandedByDefault(group, index);
     final nodes = _getNodesForGroup(group);
 
@@ -2131,7 +2137,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
                   // Ping this group button
                   Tooltip(
-                    message: "${tcontext.meta.speedTestGroup} (${_activeLatencyTarget.name})",
+                    message: "${tcontext.meta.speedTestGroup} (${_activeLatencyTarget.getDisplayName(isZh)})",
                     child: InkWell(
                       borderRadius: BorderRadius.circular(6),
                       onTap: () => _testGroupDelay(group),

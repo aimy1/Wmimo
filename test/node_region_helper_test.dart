@@ -74,5 +74,21 @@ void main() {
       expect(LatencyTestTarget.presets.any((t) => t.id == 'openai'), isTrue);
       expect(LatencyTestTarget.presets.any((t) => t.id == 'bilibili'), isTrue);
     });
+
+    test('getDisplayName returns localized names based on isZh', () {
+      final defaultTarget = LatencyTestTarget.defaultTarget;
+      expect(defaultTarget.getDisplayName(true), '默认测试 (Cloudflare)');
+      expect(defaultTarget.getDisplayName(false), 'Default (Cloudflare)');
+
+      expect(NodeRegion.all.getDisplayName(true), '全部');
+      expect(NodeRegion.all.getDisplayName(false), 'All');
+
+      expect(NodeRegion.other.getDisplayName(true), '其他');
+      expect(NodeRegion.other.getDisplayName(false), 'Others');
+
+      final hk = NodeRegionHelper.getRegion('HK-01');
+      expect(hk.getDisplayName(true), '香港');
+      expect(hk.getDisplayName(false), 'Hong Kong');
+    });
   });
 }

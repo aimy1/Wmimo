@@ -32,6 +32,8 @@ class NodeRegion {
     flag: "🌐",
     keywords: [],
   );
+
+  String getDisplayName(bool isZh) => isZh ? name : (nameEn.isNotEmpty ? nameEn : name);
 }
 
 class LatencyTestTarget {
@@ -48,6 +50,8 @@ class LatencyTestTarget {
     required this.icon,
     required this.url,
   });
+
+  String getDisplayName(bool isZh) => isZh ? name : (nameEn.isNotEmpty ? nameEn : name);
 
   static const List<LatencyTestTarget> presets = [
     LatencyTestTarget(
