@@ -62,6 +62,15 @@
 
 ---
 
+## 📬 お問い合わせとバグ報告
+
+バグの発生や不具合、または改善のご提案がございましたら、作者までお気軽にご連絡ください：
+
+- 📧 **作者メール**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [Issue を作成](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 ライセンス
 
 本プロジェクトは **GPL-3.0** ライセンスの下で公開されています。

@@ -62,6 +62,15 @@
 
 ---
 
+## 📬 개발자 문의 및 버그 신고
+
+버그나 오류가 발생하거나 기능 제안이 있으신 경우 언제든지 개발자에게 문의해 주세요:
+
+- 📧 **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [이슈 등록](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 라이선스
 
 본 프로젝트는 **GPL-3.0** 라이선스에 따라 배포됩니다.

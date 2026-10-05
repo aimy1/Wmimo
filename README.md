@@ -144,6 +144,15 @@ If you enjoy Wmimo, consider buying the author a coffee:
 
 ---
 
+## 📬 Contact & Bug Reports
+
+If you encounter any bugs, crashes, or have feature requests, please contact the author or open an issue:
+
+- 📧 **Author Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [Submit an Issue](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 License
 
 This project is licensed under the **GPL-3.0 License**. See the [LICENSE](LICENSE) file for details.

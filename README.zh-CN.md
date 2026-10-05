@@ -147,6 +147,15 @@ flutter build apk --release
 
 ---
 
+## 📬 联系作者与 Bug 反馈
+
+如果您在使用过程中遇到任何 Bug、异常崩溃或有功能改进建议，欢迎联系作者进行反馈：
+
+- 📧 **联系邮箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [提交 Issue 反馈](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 开源许可证
 
 本项目基于 **GPL-3.0** 开源许可证分发与使用。详细条款请参阅 [LICENSE](LICENSE) 文件。

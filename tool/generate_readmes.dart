@@ -151,6 +151,15 @@ If you enjoy Wmimo, consider buying the author a coffee:
 
 ---
 
+## 📬 Contact & Bug Reports
+
+If you encounter any bugs, crashes, or have feature requests, please contact the author or open an issue:
+
+- 📧 **Author Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [Submit an Issue](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 License
 
 This project is licensed under the **GPL-3.0 License**. See the [LICENSE](LICENSE) file for details.
@@ -299,6 +308,15 @@ flutter build apk --release
 
 ---
 
+## 📬 联系作者与 Bug 反馈
+
+如果您在使用过程中遇到任何 Bug、异常崩溃或有功能改进建议，欢迎联系作者进行反馈：
+
+- 📧 **联系邮箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [提交 Issue 反馈](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 开源许可证
 
 本项目基于 **GPL-3.0** 开源许可证分发与使用。详细条款请参阅 [LICENSE](LICENSE) 文件。
@@ -354,6 +372,15 @@ $langBar
 - **幣種 (Currency)**: `USDT`
 - **網路 (Network)**: `APTOS`
 - **收款地址 (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
+
+---
+
+## 📬 聯繫作者與 Bug 反饋
+
+如果您在使用過程中遇到任何 Bug、異常崩潰或有功能改進建議，歡迎聯繫作者進行反饋：
+
+- 📧 **聯繫信箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [提交 Issue 反饋](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
@@ -420,6 +447,15 @@ $langBar
 
 ---
 
+## 📬 お問い合わせとバグ報告
+
+バグの発生や不具合、または改善のご提案がございましたら、作者までお気軽にご連絡ください：
+
+- 📧 **作者メール**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [Issue を作成](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 ライセンス
 
 本プロジェクトは **GPL-3.0** ライセンスの下で公開されています。
@@ -483,6 +519,15 @@ $langBar
 
 ---
 
+## 📬 개발자 문의 및 버그 신고
+
+버그나 오류가 발생하거나 기능 제안이 있으신 경우 언제든지 개발자에게 문의해 주세요:
+
+- 📧 **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [이슈 등록](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 라이선스
 
 본 프로젝트는 **GPL-3.0** 라이선스에 따라 배포됩니다.
@@ -532,6 +577,15 @@ $langBar
 - **Валюта (Token)**: `USDT`
 - **Сеть (Network)**: `APTOS`
 - **Адрес (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
+
+---
+
+## 📬 Связь с автором и отчет об ошибках
+
+Если вы столкнулись с ошибками или у вас есть предложения по улучшению, свяжитесь с автором:
+
+- 📧 **Электронная почта автора**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [Создать Issue](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
@@ -587,6 +641,15 @@ $langBar
 
 ---
 
+## 📬 Contacto con el autor y reporte de errores
+
+Si encuentra algún error, fallo o tiene sugerencias de mejora, póngase en contacto con el autor:
+
+- 📧 **Correo del autor**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [Enviar un Issue](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 Licencia
 
 Este proyecto está bajo la licencia **GPL-3.0**. Consulte el archivo [LICENSE](LICENSE).
@@ -639,6 +702,15 @@ $langBar
 
 ---
 
+## 📬 التواصل مع المطور والإبلاغ عن الأخطاء
+
+إذا واجهت أي أخطاء أو أعطال أو كان لديك اقتراحات للتحسين، فلا تتردد في التواصل مع المطور:
+
+- 📧 **بريد المطور**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [إرسال مشكلة](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 الترخيص
 
 هذا المشروع مرخص بموجب رخصة **GPL-3.0**. راجع ملف [LICENSE](LICENSE).
@@ -688,6 +760,15 @@ $langBar
 - **ارز (Token)**: `USDT`
 - **شبکه (Network)**: `APTOS`
 - **آدرس (Address)**: `0xce0c3a1d7d8547eb7effd887095da438b89e3edd70e7c7e7927c244c2dd7f345`
+
+---
+
+## 📬 ارتباط با نویسنده و گزارش خطا
+
+اگر با هرگونه باگ، کرش یا مشکلی مواجه شدید یا پیشنهادی برای بهبود دارید، با نویسنده در ارتباط باشید:
+
+- 📧 **ایمیل نویسنده**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [ثبت Issue](https://github.com/aimy1/Wmimo/issues)
 
 ---
 

@@ -57,6 +57,15 @@
 
 ---
 
+## 📬 聯繫作者與 Bug 反饋
+
+如果您在使用過程中遇到任何 Bug、異常崩潰或有功能改進建議，歡迎聯繫作者進行反饋：
+
+- 📧 **聯繫信箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [提交 Issue 反饋](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 開源授權
 
 本專案基於 **GPL-3.0** 授權條款分發。詳見 [LICENSE](LICENSE) 文件。

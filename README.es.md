@@ -51,6 +51,15 @@
 
 ---
 
+## 📬 Contacto con el autor y reporte de errores
+
+Si encuentra algún error, fallo o tiene sugerencias de mejora, póngase en contacto con el autor:
+
+- 📧 **Correo del autor**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **GitHub Issues**: [Enviar un Issue](https://github.com/aimy1/Wmimo/issues)
+
+---
+
 ## 📄 Licencia
 
 Este proyecto está bajo la licencia **GPL-3.0**. Consulte el archivo [LICENSE](LICENSE).
