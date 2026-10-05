@@ -103,13 +103,7 @@ class _UserAgreementScreenState
     if (_res.isNotEmpty) {
       return _res;
     }
-    final languageCode = WidgetsBinding
-        .instance
-        .platformDispatcher
-        .locale
-        .languageCode
-        .toLowerCase();
-    bool isChinese = languageCode.contains('zh');
+    final isChinese = LocaleSettings.currentLocale.languageCode.startsWith('zh');
 
     _res = await AssetsUtils.loadUserAgreement(isChinese);
     return _res;

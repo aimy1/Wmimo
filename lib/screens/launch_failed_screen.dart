@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:wmimo/app/modules/biz.dart';
 import 'package:wmimo/app/modules/remote_config_manager.dart';
@@ -43,29 +43,8 @@ class _LaunchFailedScreenState extends LasyRenderingState<LaunchFailedScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 1), () {
-      String languageTag = "";
-
-      String planguageTag = [
-        WidgetsBinding.instance.platformDispatcher.locale.languageCode,
-        WidgetsBinding.instance.platformDispatcher.locale.countryCode ?? "",
-      ].join("-");
-      for (var locale in AppLocale.values) {
-        if (locale.languageTag == planguageTag) {
-          languageTag = locale.languageTag;
-          break;
-        }
-      }
-
-      if (languageTag.isEmpty) {
-        languageTag = "en";
-      }
-
-      for (var locale in AppLocale.values) {
-        if (languageTag == locale.languageTag) {
-          LocaleSettings.setLocale(locale);
-          break;
-        }
-      }
+      final locale = AppLocaleUtils.findDeviceLocale();
+      LocaleSettings.setLocale(locale);
     });
   }
 

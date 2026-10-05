@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
@@ -291,42 +290,23 @@ class SettingManager {
       }
     }
 
-    String languageTag = "en";
+    AppLocale matchedLocale = AppLocale.en;
     if (_config.languageTag.isNotEmpty) {
       for (var locale in AppLocale.values) {
         if (locale.languageTag == _config.languageTag) {
-          languageTag = locale.languageTag;
+          matchedLocale = locale;
           break;
         }
       }
     } else {
-      String planguageTag = [
-        PlatformDispatcher.instance.locale.languageCode,
-        PlatformDispatcher.instance.locale.countryCode ?? "",
-      ].join("-");
-      for (var locale in AppLocale.values) {
-        if (locale.languageTag == planguageTag) {
-          languageTag = locale.languageTag;
-          break;
-        }
-      }
+      matchedLocale = AppLocaleUtils.findDeviceLocale();
     }
 
-    if (languageTag.isEmpty) {
-      languageTag = "en";
-    }
-
-    for (var locale in AppLocale.values) {
-      if (languageTag == locale.languageTag) {
-        save = true;
-        _config.languageTag = languageTag;
-        var current = LocaleSettings.currentLocale;
-        if (current != locale) {
-          await LocaleSettings.setLocale(locale);
-        }
-
-        break;
-      }
+    _config.languageTag = matchedLocale.languageTag;
+    save = true;
+    var current = LocaleSettings.currentLocale;
+    if (current != matchedLocale) {
+      await LocaleSettings.setLocale(matchedLocale);
     }
 
     return save;

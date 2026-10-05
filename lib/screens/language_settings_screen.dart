@@ -1,10 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+class _LanguageOption {
+  final AppLocale locale;
+  final String nativeName;
+  final String englishName;
+  final String flag;
+
+  const _LanguageOption({
+    required this.locale,
+    required this.nativeName,
+    required this.englishName,
+    required this.flag,
+  });
+}
 
 class LanguageSettingsScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -29,56 +43,67 @@ class LanguageSettingsScreen extends LasyRenderingStatefulWidget {
 class _LanguageSettingsScreenState
     extends LasyRenderingState<LanguageSettingsScreen> {
   final FocusNode _focusNodeNext = FocusNode();
-  final List _langData = [];
-  List _searchedData = [];
 
-  final _searchController = TextEditingController();
-
-  @override
-  void initState() {
-    _langData.addAll([
-      AppLocale.en,
-      AppLocale.es,
-      AppLocale.zhCn,
-      AppLocale.zhTw,
-      AppLocale.ru,
-      AppLocale.fa,
-    ]);
-    for (var locale in AppLocale.values) {
-      if (!_langData.contains(locale)) {
-        _langData.add(locale);
-      }
-    }
-
-    _searchedData = _langData;
-    //
-    super.initState();
-  }
-
-  /*_loadSearch(String? textVal) {
-    if ((textVal != null) && textVal.isNotEmpty) {
-      final data = _langData.where((locale) {
-        var lang = t.locales[locale.languageTag]!;
-        return lang.toLowerCase().contains(textVal.toLowerCase());
-      }).toList();
-      _searchedData = data;
-      setState(() {});
-    } else {
-      _searchedData = _langData;
-      setState(() {});
-    }
-  }
-
-  _clearSearch() {
-    _searchController.clear();
-    _searchedData = _langData;
-    setState(() {});
-  }*/
+  static const List<_LanguageOption> _languages = [
+    _LanguageOption(
+      locale: AppLocale.zhCn,
+      nativeName: '简体中文',
+      englishName: 'Simplified Chinese',
+      flag: '🇨🇳',
+    ),
+    _LanguageOption(
+      locale: AppLocale.zhTw,
+      nativeName: '繁體中文',
+      englishName: 'Traditional Chinese',
+      flag: '🇭🇰',
+    ),
+    _LanguageOption(
+      locale: AppLocale.en,
+      nativeName: 'English',
+      englishName: 'English (US)',
+      flag: '🇺🇸',
+    ),
+    _LanguageOption(
+      locale: AppLocale.ja,
+      nativeName: '日本語',
+      englishName: 'Japanese',
+      flag: '🇯🇵',
+    ),
+    _LanguageOption(
+      locale: AppLocale.ko,
+      nativeName: '한국어',
+      englishName: 'Korean',
+      flag: '🇰🇷',
+    ),
+    _LanguageOption(
+      locale: AppLocale.ru,
+      nativeName: 'Русский',
+      englishName: 'Russian',
+      flag: '🇷🇺',
+    ),
+    _LanguageOption(
+      locale: AppLocale.es,
+      nativeName: 'Español',
+      englishName: 'Spanish',
+      flag: '🇪🇸',
+    ),
+    _LanguageOption(
+      locale: AppLocale.fa,
+      nativeName: 'فارسی',
+      englishName: 'Persian',
+      flag: '🇮🇷',
+    ),
+    _LanguageOption(
+      locale: AppLocale.ar,
+      nativeName: 'العربية',
+      englishName: 'Arabic',
+      flag: '🇸🇦',
+    ),
+  ];
 
   @override
   void dispose() {
     _focusNodeNext.dispose();
-    _searchController.dispose();
     super.dispose();
     SettingManager.save();
   }
@@ -97,27 +122,28 @@ class _LanguageSettingsScreenState
           skipTraversal: true,
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         widget.canGoBack == true
                             ? InkWell(
+                                borderRadius: BorderRadius.circular(8),
                                 onTap: () => Navigator.pop(context),
                                 child: const SizedBox(
-                                  width: 50,
-                                  height: 30,
+                                  width: 40,
+                                  height: 36,
                                   child: Icon(
                                     Icons.arrow_back_ios_outlined,
-                                    size: 26,
+                                    size: 20,
                                   ),
                                 ),
                               )
-                            : const SizedBox(width: 50, height: 30),
+                            : const SizedBox(width: 40, height: 36),
                         Expanded(
                           child: Text(
                             tcontext.meta.language,
@@ -131,61 +157,31 @@ class _LanguageSettingsScreenState
                         ),
                         widget.nextText != null
                             ? SizedBox(
-                                width: 65,
-                                height: 30,
+                                height: 36,
                                 child: InkWell(
                                   autofocus: setting.ui.tvMode,
                                   focusNode: _focusNodeNext,
                                   onTap: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    widget.nextText!.call(),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontWeight:
-                                          ThemeConfig.kFontWeightListItem,
-                                      fontSize: ThemeConfig.kFontSizeListItem,
+                                  child: Center(
+                                    child: Text(
+                                      widget.nextText!.call(),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontWeight:
+                                            ThemeConfig.kFontWeightListItem,
+                                        fontSize: ThemeConfig.kFontSizeListItem,
+                                      ),
                                     ),
                                   ),
                                 ),
                               )
-                            : const SizedBox(width: 50),
+                            : const SizedBox(width: 40),
                       ],
                     ),
                   ),
-                  /*Container(
-                        margin: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                        padding: const EdgeInsets.only(left: 15, right: 15),
-                        height: 44,
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                          borderRadius: ThemeDefine.kBorderRadius,
-                        ),
-                        child: TextFieldEx(
-                          controller: _searchController,
-                          textInputAction: TextInputAction.done,
-                          onChanged: _loadSearch,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            icon: Icon(
-                              Icons.search_outlined,
-                            ),
-                            hintText: tcontext.search,
-                            suffixIcon: _searchController.text.isNotEmpty
-                                ? IconButton(
-                                    icon: const Icon(Icons.clear_outlined),
-                                    onPressed: _clearSearch,
-                                  )
-                                : null,
-                          ),
-                        ),
-                      ),*/
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   Expanded(child: _loadListView()),
                 ],
               ),
@@ -210,59 +206,78 @@ class _LanguageSettingsScreenState
   }
 
   Widget _loadListView() {
-    return Scrollbar(
-      thumbVisibility: true,
-      child: ListView.separated(
-        itemCount: _searchedData.length,
-        itemBuilder: (BuildContext context, int index) {
-          var current = _searchedData[index];
-          return createWidget(current);
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const Divider(height: 1, thickness: 0.3);
-        },
-      ),
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      itemCount: _languages.length,
+      itemBuilder: (BuildContext context, int index) {
+        return createWidget(_languages[index]);
+      },
     );
   }
 
-  Widget createWidget(dynamic current) {
+  Widget createWidget(_LanguageOption item) {
+    final isSelected = LocaleSettings.currentLocale == item.locale;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 2),
+      margin: const EdgeInsets.only(bottom: 8),
       child: Material(
-        color: LocaleSettings.currentLocale == current
-            ? ThemeDefine.kColorBlue
-            : null,
-        borderRadius: ThemeDefine.kBorderRadius,
+        color: isSelected
+            ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.2 : 0.1)
+            : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC)),
+        borderRadius: BorderRadius.circular(12),
         child: InkWell(
-          onTap: () {
-            onTapItem(current);
-          },
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => onTapItem(item),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            width: double.infinity,
-            height: ThemeConfig.kListItemHeight2,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isSelected
+                    ? ThemeDefine.kColorBlue
+                    : theme.dividerColor.withValues(alpha: 0.2),
+                width: isSelected ? 1.5 : 0.8,
+              ),
+            ),
             child: Row(
               children: [
-                Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              t.locales[current.languageTag]!,
-                              style: TextStyle(
-                                fontSize: ThemeConfig.kFontSizeGroupItem,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                Text(
+                  item.flag,
+                  style: const TextStyle(fontSize: 22),
                 ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        item.nativeName,
+                        style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                          color: isSelected ? ThemeDefine.kColorBlue : null,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        item.englishName,
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (isSelected)
+                  const Icon(
+                    Icons.check_circle_rounded,
+                    color: ThemeDefine.kColorBlue,
+                    size: 20,
+                  ),
               ],
             ),
           ),
@@ -271,9 +286,11 @@ class _LanguageSettingsScreenState
     );
   }
 
-  Future<void> onTapItem(dynamic current) async {
-    SettingManager.getConfig().languageTag = current.languageTag;
-    await LocaleSettings.setLocale(current);
+  Future<void> onTapItem(_LanguageOption item) async {
+    setState(() {});
+    SettingManager.getConfig().languageTag = item.locale.languageTag;
+    SettingManager.save();
+    await LocaleSettings.setLocale(item.locale);
     if (widget.nextText == null) {
       if (!mounted) {
         return;

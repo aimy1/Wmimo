@@ -560,7 +560,10 @@ class GroupHelper {
           pushOptions: GroupItemPushOptions(
             name: tcontext.meta.language,
             icon: Icons.language_outlined,
-            text: tcontext.locales[setting.languageTag],
+            text: tcontext.locales[setting.languageTag.isNotEmpty
+                    ? setting.languageTag
+                    : LocaleSettings.currentLocale.languageTag] ??
+                tcontext.meta.language,
             textWidthPercent: 0.5,
             onPush: () async {
               await Navigator.push(

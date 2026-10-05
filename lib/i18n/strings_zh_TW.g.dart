@@ -63,7 +63,7 @@ class TranslationsZhTw with BaseTranslations<AppLocale, Translations> implements
 		'zh-TW': '繁體中文',
 		'ja': '日本語',
 		'ko': '한국어',
-		'ar': 'عربي',
+		'ar': 'العربية',
 		'ru': 'Русский',
 		'fa': 'فارسی',
 		'es': 'Español',
@@ -437,8 +437,8 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get runtimeProfile => '運行時配置';
 	@override String get willCompleteAfterRebootInstall => '請重啟設備,以便完成系統擴展安裝';
 	@override String get willCompleteAfterRebootUninstall => '請重啟設備,以便完成系統擴展卸載';
-	@override String get requestNeedsUserApproval => '1. 請在[系統設置]-[隱私與安全性]裏[允許] Wmimo安裝系統擴展\n2. :[系統設置]-[通用]-[登錄項與擴展-網絡擴展]啟用[wmimoServiceSE]\n完成後重新連接';
-	@override String get FullDiskAccessPermissionRequired => '請在[系統設置]-[隱私與安全性]-[完全磁盤訪問權限]裏開啟wmimoServiceSE權限後,重新連接';
+	@override String get requestNeedsUserApproval => '1. 請在[系統設定]-[隱私權與安全性]裡[允許] Wmimo安裝系統擴充功能\n2. 在[系統設定]-[一般]-[登入項目與擴充功能-網路擴充功能]啟用[wmimoServiceSE]\n完成後重新連線';
+	@override String get FullDiskAccessPermissionRequired => '請在[系統設定]-[隱私權與安全性]-[完全磁碟取用權限]裡開啟wmimoServiceSE權限後，重新連線';
 	@override String get proxy => '代理';
 	@override String get theme => '主題';
 	@override String get tvMode => 'TV模式';
@@ -479,7 +479,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get filePathCannotEmpty => '文件路徑不能為空';
 	@override String fileNotExist({required Object p}) => '文件不存在:${p}';
 	@override String fileTypeInvalid({required Object p}) => '無效的文件類型:${p}';
-	@override String get uwpExemption => 'UWP網絡隔離豁免';
+	@override String get uwpExemption => 'UWP網路隔離豁免';
 	@override String get getProfile => '獲取訂閱';
 	@override String get buyProfile => '購買訂閱';
 	@override String get addProfile => '新增訂閱';
@@ -644,9 +644,9 @@ class Translations$permission$zh_TW implements Translations$permission$en {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get camera => '攝像頭';
-	@override String get screen => '屏幕錄製';
-	@override String get appQuery => '獲取應用列表';
+	@override String get camera => '相機';
+	@override String get screen => '螢幕錄製';
+	@override String get appQuery => '取得應用程式列表';
 	@override String request({required Object p}) => '開啟[${p}]權限';
 	@override String requestNeed({required Object p}) => '請開啟[${p}]權限';
 }
@@ -658,10 +658,10 @@ class Translations$tls$zh_TW implements Translations$tls$en {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get insecure => '跳過證書驗證';
-	@override String get certificate => '證書';
+	@override String get insecure => '略過憑證驗證';
+	@override String get certificate => '憑證';
 	@override String get privateKey => '私鑰';
-	@override String get customTrustCert => '自定義證書';
+	@override String get customTrustCert => '自訂信任憑證';
 }
 
 // Path: tun
@@ -671,7 +671,7 @@ class Translations$tun$zh_TW implements Translations$tun$en {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get stack => '網絡棧';
+	@override String get stack => '網路堆疊';
 	@override String get inet4Address => 'IPv4位址段';
 	@override String get inet6Address => 'IPv6位址段';
 	@override String get dnsHijack => 'DNS劫持';
@@ -1057,8 +1057,8 @@ extension on TranslationsZhTw {
 			'meta.runtimeProfile' => '運行時配置',
 			'meta.willCompleteAfterRebootInstall' => '請重啟設備,以便完成系統擴展安裝',
 			'meta.willCompleteAfterRebootUninstall' => '請重啟設備,以便完成系統擴展卸載',
-			'meta.requestNeedsUserApproval' => '1. 請在[系統設置]-[隱私與安全性]裏[允許] Wmimo安裝系統擴展\n2. :[系統設置]-[通用]-[登錄項與擴展-網絡擴展]啟用[wmimoServiceSE]\n完成後重新連接',
-			'meta.FullDiskAccessPermissionRequired' => '請在[系統設置]-[隱私與安全性]-[完全磁盤訪問權限]裏開啟wmimoServiceSE權限後,重新連接',
+			'meta.requestNeedsUserApproval' => '1. 請在[系統設定]-[隱私權與安全性]裡[允許] Wmimo安裝系統擴充功能\n2. 在[系統設定]-[一般]-[登入項目與擴充功能-網路擴充功能]啟用[wmimoServiceSE]\n完成後重新連線',
+			'meta.FullDiskAccessPermissionRequired' => '請在[系統設定]-[隱私權與安全性]-[完全磁碟取用權限]裡開啟wmimoServiceSE權限後，重新連線',
 			'meta.proxy' => '代理',
 			'meta.theme' => '主題',
 			'meta.tvMode' => 'TV模式',
@@ -1099,7 +1099,7 @@ extension on TranslationsZhTw {
 			'meta.filePathCannotEmpty' => '文件路徑不能為空',
 			'meta.fileNotExist' => ({required Object p}) => '文件不存在:${p}',
 			'meta.fileTypeInvalid' => ({required Object p}) => '無效的文件類型:${p}',
-			'meta.uwpExemption' => 'UWP網絡隔離豁免',
+			'meta.uwpExemption' => 'UWP網路隔離豁免',
 			'meta.getProfile' => '獲取訂閱',
 			'meta.buyProfile' => '購買訂閱',
 			'meta.addProfile' => '新增訂閱',
@@ -1255,16 +1255,16 @@ extension on TranslationsZhTw {
 			'meta.cannotBeEmpty' => ({required Object item}) => '${item}不能為空',
 			'meta.alreadyExists' => ({required Object item}) => '${item}已存在',
 			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => '安裝 ${installer} 失敗，錯誤碼: ${code}',
-			'permission.camera' => '攝像頭',
-			'permission.screen' => '屏幕錄製',
-			'permission.appQuery' => '獲取應用列表',
+			'permission.camera' => '相機',
+			'permission.screen' => '螢幕錄製',
+			'permission.appQuery' => '取得應用程式列表',
 			'permission.request' => ({required Object p}) => '開啟[${p}]權限',
 			'permission.requestNeed' => ({required Object p}) => '請開啟[${p}]權限',
-			'tls.insecure' => '跳過證書驗證',
-			'tls.certificate' => '證書',
+			'tls.insecure' => '略過憑證驗證',
+			'tls.certificate' => '憑證',
 			'tls.privateKey' => '私鑰',
-			'tls.customTrustCert' => '自定義證書',
-			'tun.stack' => '網絡棧',
+			'tls.customTrustCert' => '自訂信任憑證',
+			'tun.stack' => '網路堆疊',
 			'tun.inet4Address' => 'IPv4位址段',
 			'tun.inet6Address' => 'IPv6位址段',
 			'tun.dnsHijack' => 'DNS劫持',
@@ -1305,7 +1305,7 @@ extension on TranslationsZhTw {
 			'locales.zh-TW' => '繁體中文',
 			'locales.ja' => '日本語',
 			'locales.ko' => '한국어',
-			'locales.ar' => 'عربي',
+			'locales.ar' => 'العربية',
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',

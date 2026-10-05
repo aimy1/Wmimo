@@ -311,8 +311,8 @@
     "runtimeProfile": "運行時配置",
     "willCompleteAfterRebootInstall": "請重啟設備,以便完成系統擴展安裝",
     "willCompleteAfterRebootUninstall": "請重啟設備,以便完成系統擴展卸載",
-    "requestNeedsUserApproval": "1. 請在[系統設置]-[隱私與安全性]裏[允許] Wmimo安裝系統擴展\n2. :[系統設置]-[通用]-[登錄項與擴展-網絡擴展]啟用[wmimoServiceSE]\n完成後重新連接",
-    "FullDiskAccessPermissionRequired": "請在[系統設置]-[隱私與安全性]-[完全磁盤訪問權限]裏開啟wmimoServiceSE權限後,重新連接",
+    "requestNeedsUserApproval": "1. 請在[系統設定]-[隱私權與安全性]裡[允許] Wmimo安裝系統擴充功能\n2. 在[系統設定]-[一般]-[登入項目與擴充功能-網路擴充功能]啟用[wmimoServiceSE]\n完成後重新連線",
+    "FullDiskAccessPermissionRequired": "請在[系統設定]-[隱私權與安全性]-[完全磁碟取用權限]裡開啟wmimoServiceSE權限後，重新連線",
     "proxy": "代理",
     "theme": "主題",
     "tvMode": "TV模式",
@@ -353,7 +353,7 @@
     "filePathCannotEmpty": "文件路徑不能為空",
     "fileNotExist": "文件不存在:$p",
     "fileTypeInvalid": "無效的文件類型:$p",
-    "uwpExemption": "UWP網絡隔離豁免",
+    "uwpExemption": "UWP網路隔離豁免",
     "getProfile": "獲取訂閱",
     "buyProfile": "購買訂閱",
     "addProfile": "新增訂閱",
@@ -511,20 +511,20 @@
     "installFailedWithCode": "安裝 $installer 失敗，錯誤碼: $code"
   },
   "permission": {
-    "camera": "攝像頭",
-    "screen": "屏幕錄製",
-    "appQuery": "獲取應用列表",
+    "camera": "相機",
+    "screen": "螢幕錄製",
+    "appQuery": "取得應用程式列表",
     "request": "開啟[$p]權限",
     "requestNeed": "請開啟[$p]權限"
   },
   "tls": {
-    "insecure": "跳過證書驗證",
-    "certificate": "證書",
+    "insecure": "略過憑證驗證",
+    "certificate": "憑證",
     "privateKey": "私鑰",
-    "customTrustCert": "自定義證書"
+    "customTrustCert": "自訂信任憑證"
   },
   "tun": {
-    "stack": "網絡棧",
+    "stack": "網路堆疊",
     "inet4Address": "IPv4位址段",
     "inet6Address": "IPv6位址段",
     "dnsHijack": "DNS劫持",
@@ -571,7 +571,7 @@
     "zh-TW": "繁體中文",
     "ja": "日本語",
     "ko": "한국어",
-    "ar": "عربي",
+    "ar": "العربية",
     "ru": "Русский",
     "fa": "فارسی",
     "es": "Español"
