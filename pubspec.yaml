@@ -127,7 +127,7 @@ flutter:
       platforms: [windows, linux, macos, android]
 
   fonts:
-    - family: Emoji # from hiddify
+    - family: Emoji # HD Vector Twemoji Color Font (COLR/CPAL)
       fonts:
         - asset: assets/fonts/Emoji.ttf
 
