@@ -1,5 +1,6 @@
 // ignore_for_file: unused_catch_stack, empty_catches
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -37,6 +38,7 @@ class VPNService {
   static const localhost = "127.0.0.1";
   static bool _runAsAdmin = false;
   static bool _isOperating = false;
+  static bool _cancelRequested = false;
   static bool get isOperating => _isOperating;
   static final bool _systemExtension = true;
   static List<String> _abis = [];
@@ -401,6 +403,7 @@ class VPNService {
       return null;
     }
     _isOperating = true;
+    _cancelRequested = false;
     try {
       final profile = ProfileManager.getCurrent();
       if (profile == null) {
@@ -410,6 +413,10 @@ class VPNService {
       if (prepareResult != null) {
         return prepareResult;
       }
+      if (_cancelRequested) {
+        await FlutterVpnService.stop();
+        return null;
+      }
       try {
         bool reinstall = await _prepareConfig(profile);
         if (reinstall) {
@@ -418,15 +425,26 @@ class VPNService {
       } catch (err, stacktrace) {
         return ReturnResultError(err.toString());
       }
+      if (_cancelRequested) {
+        await FlutterVpnService.stop();
+        return null;
+      }
       var setting = SettingManager.getConfig();
       if (Platform.isWindows) {
         final controlPort = ClashSettingManager.getControlPort();
         final mixedPort = ClashSettingManager.getMixedPort();
         var ports = [controlPort, mixedPort];
 
-        FlutterVpnService.firewallAddPorts(ports, PathUtils.serviceExeName());
+        unawaited(
+          FlutterVpnService.firewallAddPorts(ports, PathUtils.serviceExeName()),
+        );
       }
       VpnServiceWaitResult result = await FlutterVpnService.start(timeout);
+      if (_cancelRequested) {
+        await FlutterVpnService.stop();
+        await setSystemProxy(false);
+        return null;
+      }
       if (result.type == VpnServiceWaitType.timeout) {
         await stop();
         final msg = result.err?.message.isNotEmpty == true
@@ -436,6 +454,9 @@ class VPNService {
       }
 
       if (result.err != null) {
+        if (result.err!.code == 499) {
+          return null; // user cancelled
+        }
         Log.w("VPNService.start err ${result.err!.message.toString()}");
         await stop();
         return convertErr(result.err);
@@ -453,7 +474,9 @@ class VPNService {
       }
 
       if (SettingManager.getConfig().autoSetSystemProxy) {
-        await setSystemProxy(true);
+        if (!_cancelRequested) {
+          await setSystemProxy(true);
+        }
       }
 
       return null;
@@ -463,10 +486,7 @@ class VPNService {
   }
 
   static Future<void> stop() async {
-    if (_isOperating) {
-      return;
-    }
-    _isOperating = true;
+    _cancelRequested = true;
     try {
       if (Platform.isIOS || Platform.isMacOS) {
         await FlutterVpnService.setAlwaysOn(false);
@@ -478,7 +498,9 @@ class VPNService {
         await uninstall();
       }
     } finally {
-      _isOperating = false;
+      if (!_isOperating) {
+        _isOperating = false;
+      }
     }
   }
 

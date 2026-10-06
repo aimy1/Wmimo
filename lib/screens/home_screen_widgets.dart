@@ -67,12 +67,31 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   static final String _kNoTrafficTotal = "↑ 0 B   ↓ 0 B";
   final FocusNode _focusNodeConnect = FocusNode();
   FlutterVpnServiceState _state = FlutterVpnServiceState.disconnected;
+  bool? _desiredConnected;
+  Timer? _debounceToggleTimer;
   Timer? _timerStateChecker;
   Timer? _timerConnectToCore;
   QuickActions? _quickActions;
   bool _quickActionWorking = false;
   bool _isSwitchOperating = false;
-  DateTime _lastActionTime = DateTime(0);
+
+  bool get _isEffectiveConnected {
+    if (_desiredConnected != null) {
+      return _desiredConnected!;
+    }
+    return _state == FlutterVpnServiceState.connected ||
+        _state == FlutterVpnServiceState.connecting;
+  }
+
+  bool get _isTransitioning {
+    if (_desiredConnected != null) {
+      final actualConnected = _state == FlutterVpnServiceState.connected;
+      if (_desiredConnected != actualConnected) return true;
+    }
+    return _state == FlutterVpnServiceState.connecting ||
+        _state == FlutterVpnServiceState.disconnecting ||
+        _state == FlutterVpnServiceState.reasserting;
+  }
 
   final ValueNotifier<int> _chartTick = ValueNotifier<int>(0);
   final List<TrafficDataRecord> _trafficHistory = [];
@@ -147,6 +166,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     ProfileManager.onEventUpdate.remove(_onUpdate);
     BoardProviderNoticeManager.onEventCheck.remove(_onNoticeUpdate);
     BoardProviderNoticeManager.onEventReaded.remove(_onNoticeReaded);
+    _debounceToggleTimer?.cancel();
     _focusNodeConnect.dispose();
     super.dispose();
   }
@@ -208,12 +228,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
-    bool connected = _state == FlutterVpnServiceState.connected;
-    final isTransitioning = _state == FlutterVpnServiceState.connecting ||
-        _state == FlutterVpnServiceState.disconnecting ||
-        _state == FlutterVpnServiceState.reasserting ||
-        VPNService.isOperating ||
-        _isSwitchOperating;
+    final connected = _isEffectiveConnected;
+    final isTransitioning = _isTransitioning;
     final currentProfile = ProfileManager.getCurrent();
     final settings = SettingManager.getConfig();
     Tuple2<bool, String>? tranfficExpire;
@@ -239,7 +255,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                             decoration: BoxDecoration(
                               color: connected
                                   ? ThemeDefine.kColorGreenBright
-                                  : const Color(0xFF94A3B8),
+                                  : (isTransitioning
+                                      ? ThemeDefine.kColorBlue
+                                      : const Color(0xFF94A3B8)),
                               shape: BoxShape.circle,
                               boxShadow: connected
                                   ? [
@@ -255,15 +273,28 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            connected
-                                ? tcontext.meta.connected
-                                : tcontext.meta.disconnected,
+                            isTransitioning
+                                ? tcontext.meta.connecting
+                                : (connected
+                                    ? tcontext.meta.connected
+                                    : tcontext.meta.disconnected),
                             style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0.2,
                             ),
                           ),
+                          if (isTransitioning) ...[
+                            const SizedBox(width: 6),
+                            const SizedBox(
+                              width: 12,
+                              height: 12,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1.8,
+                                color: ThemeDefine.kColorBlue,
+                              ),
+                            ),
+                          ],
                           const SizedBox(width: 8),
                           Flexible(
                             child: ValueListenableBuilder<String>(
@@ -343,40 +374,17 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Transform.scale(
-                          scale: 0.88,
-                          child: Switch.adaptive(
-                            value: _state == FlutterVpnServiceState.connected,
-                            activeThumbColor: Colors.white,
-                            activeTrackColor: ThemeDefine.kColorGreenBright,
-                            focusNode: _focusNodeConnect,
-                            onChanged: isTransitioning
-                                ? null
-                                : (bool value) async {
-                                    if (value) {
-                                      await start("switch");
-                                    } else {
-                                      await stop();
-                                    }
-                                  },
-                          ),
-                        ),
-                        if (isTransitioning)
-                          const Positioned(
-                            left: 6,
-                            child: SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                color: ThemeDefine.kColorGreenBright,
-                                strokeWidth: 2.2,
-                              ),
-                            ),
-                          ),
-                      ],
+                    Transform.scale(
+                      scale: 0.88,
+                      child: Switch.adaptive(
+                        value: connected,
+                        activeThumbColor: Colors.white,
+                        activeTrackColor: ThemeDefine.kColorGreenBright,
+                        focusNode: _focusNodeConnect,
+                        onChanged: (bool value) {
+                          _requestToggle(value, from: "switch");
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -831,9 +839,80 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     }
   }
 
-  Future<void> stop() async {
-    if (_isSwitchOperating || VPNService.isOperating) return;
+  void _requestToggle(
+    bool targetConnected, {
+    required String from,
+    bool background = false,
+  }) {
+    if (_desiredConnected != targetConnected) {
+      setState(() {
+        _desiredConnected = targetConnected;
+      });
+    }
+
+    _debounceToggleTimer?.cancel();
+    _debounceToggleTimer = Timer(const Duration(milliseconds: 140), () {
+      _executeToggle(from: from, background: background);
+    });
+  }
+
+  Future<void> _executeToggle({
+    required String from,
+    bool background = false,
+  }) async {
+    if (!mounted) return;
+    final target = _desiredConnected;
+    if (target == null) return;
+
+    if (_isSwitchOperating) {
+      return;
+    }
+
+    final isConnected = _state == FlutterVpnServiceState.connected;
+    if (target == isConnected &&
+        _state != FlutterVpnServiceState.connecting &&
+        _state != FlutterVpnServiceState.disconnecting) {
+      if (_desiredConnected != null) {
+        setState(() {
+          _desiredConnected = null;
+        });
+      }
+      return;
+    }
+
     _isSwitchOperating = true;
+    try {
+      if (target) {
+        bool ok = await start(from);
+        if (ok && background) {
+          MoveToBackgroundUtils.moveToBackground(
+            duration: const Duration(milliseconds: 300),
+          );
+        }
+      } else {
+        await stop();
+        if (background) {
+          MoveToBackgroundUtils.moveToBackground(
+            duration: const Duration(milliseconds: 300),
+          );
+        }
+      }
+    } finally {
+      _isSwitchOperating = false;
+      if (mounted) {
+        if (_desiredConnected != null &&
+            _desiredConnected != (_state == FlutterVpnServiceState.connected)) {
+          _executeToggle(from: from, background: background);
+        } else {
+          setState(() {
+            _desiredConnected = null;
+          });
+        }
+      }
+    }
+  }
+
+  Future<void> stop() async {
     if (mounted) {
       setState(() {
         _state = FlutterVpnServiceState.disconnecting;
@@ -842,14 +921,11 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     try {
       await VPNService.stop();
     } finally {
-      _isSwitchOperating = false;
       if (mounted) setState(() {});
     }
   }
 
   Future<bool> start(String from) async {
-    if (_isSwitchOperating || VPNService.isOperating) return false;
-    _isSwitchOperating = true;
     if (mounted) {
       setState(() {
         _state = FlutterVpnServiceState.connecting;
@@ -939,49 +1015,25 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       }
       return true;
     } finally {
-      _isSwitchOperating = false;
       if (mounted) setState(() {});
     }
   }
 
-  Future<void> _vpnConnect(String from, bool background) async {
-    final now = DateTime.now();
-    if (now.difference(_lastActionTime).inMilliseconds < 600) return;
-    _lastActionTime = now;
-    if (_isSwitchOperating || VPNService.isOperating) return;
-    bool ok = await start(from);
-    if (ok && background) {
-      MoveToBackgroundUtils.moveToBackground(
-        duration: const Duration(milliseconds: 300),
-      );
-    }
+  void _vpnConnect(String from, bool background) {
+    _requestToggle(true, from: from, background: background);
   }
 
-  Future<void> _vpnDisconnect(String from, bool background) async {
-    final now = DateTime.now();
-    if (now.difference(_lastActionTime).inMilliseconds < 600) return;
-    _lastActionTime = now;
-    if (_isSwitchOperating || VPNService.isOperating) return;
-    await stop();
-    if (background) {
-      MoveToBackgroundUtils.moveToBackground(
-        duration: const Duration(milliseconds: 300),
-      );
-    }
+  void _vpnDisconnect(String from, bool background) {
+    _requestToggle(false, from: from, background: background);
   }
 
-  Future<void> _vpnReconnect(String from, bool background) async {
-    final now = DateTime.now();
-    if (now.difference(_lastActionTime).inMilliseconds < 600) return;
-    _lastActionTime = now;
-    if (_isSwitchOperating || VPNService.isOperating) return;
-    await stop();
-    bool ok = await start(from);
-    if (ok && background) {
-      MoveToBackgroundUtils.moveToBackground(
-        duration: const Duration(milliseconds: 300),
-      );
-    }
+  void _vpnReconnect(String from, bool background) {
+    _requestToggle(false, from: from, background: background);
+    Future.delayed(const Duration(milliseconds: 180), () {
+      if (mounted) {
+        _requestToggle(true, from: from, background: background);
+      }
+    });
   }
 
   Future<void> _onStateChanged(
@@ -995,12 +1047,18 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     if (state == FlutterVpnServiceState.disconnected) {
       _disconnectToCore();
       Biz.vpnStateChanged(false);
+      if (_desiredConnected == false) {
+        _desiredConnected = null;
+      }
     } else if (state == FlutterVpnServiceState.connecting) {
     } else if (state == FlutterVpnServiceState.connected) {
       if (!AppLifecycleStateNofity.isPaused()) {
         _connectToCore();
       }
       Biz.vpnStateChanged(true);
+      if (_desiredConnected == true) {
+        _desiredConnected = null;
+      }
     } else if (state == FlutterVpnServiceState.reasserting) {
       _disconnectToCore();
     } else if (state == FlutterVpnServiceState.disconnecting) {

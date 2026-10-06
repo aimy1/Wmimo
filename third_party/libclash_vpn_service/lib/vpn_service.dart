@@ -951,6 +951,7 @@ rules:
   }
 
   static bool _isOperating = false;
+  static bool _cancelRequested = false;
 
   static void _notifyState(FlutterVpnServiceState newState) {
     _state = newState;
@@ -991,6 +992,7 @@ rules:
       );
     }
     _isOperating = true;
+    _cancelRequested = false;
     _notifyState(FlutterVpnServiceState.connecting);
 
     try {
@@ -1109,7 +1111,7 @@ rules:
       final stopwatch = Stopwatch()..start();
 
       while (stopwatch.elapsed < timeout) {
-        if (_coreProcess == null) {
+        if (_coreProcess == null || _cancelRequested) {
           break;
         }
         try {
@@ -1129,6 +1131,15 @@ rules:
           client.close();
         } catch (_) {}
         await Future.delayed(const Duration(milliseconds: 100));
+      }
+
+      if (_cancelRequested) {
+        await _stopInternal();
+        _notifyState(FlutterVpnServiceState.disconnected);
+        return VpnServiceWaitResult(
+          type: VpnServiceWaitType.error,
+          err: VpnServiceResultError(499, "操作已取消"),
+        );
       }
 
       if (!ready) {
@@ -1181,6 +1192,7 @@ rules:
   }
 
   static Future<void> stop() async {
+    _cancelRequested = true;
     if (_isOperating) {
       await _stopInternal();
       _notifyState(FlutterVpnServiceState.disconnected);

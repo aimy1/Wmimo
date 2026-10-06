@@ -60,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen>
   String _initUrl = "";
   int _currentNavIndex = 0;
   FlutterVpnServiceState _vpnState = FlutterVpnServiceState.disconnected;
-  DateTime _lastSidebarTapTime = DateTime(0);
   final List<GlobalKey<NavigatorState>> _navigatorKeys = List.generate(
     5,
     (_) => GlobalKey<NavigatorState>(),
@@ -447,20 +446,13 @@ class _HomeScreenState extends State<HomeScreen>
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: connecting
-              ? null
-              : () {
-                  final now = DateTime.now();
-                  if (now.difference(_lastSidebarTapTime).inMilliseconds < 800) {
-                    return;
-                  }
-                  _lastSidebarTapTime = now;
-                  if (connected) {
-                    VpnActionHandler.vpnDisconnect?.call("sidebar", false);
-                  } else {
-                    VpnActionHandler.vpnConnect?.call("sidebar", false);
-                  }
-                },
+          onTap: () {
+            if (connected || _vpnState == FlutterVpnServiceState.connecting) {
+              VpnActionHandler.vpnDisconnect?.call("sidebar", false);
+            } else {
+              VpnActionHandler.vpnConnect?.call("sidebar", false);
+            }
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
