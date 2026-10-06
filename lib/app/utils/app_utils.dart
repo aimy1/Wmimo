@@ -53,7 +53,7 @@ abstract final class AppUtils {
     return _cachedPackageVersion ?? kDefaultFallbackVersion;
   }
 
-  /// Unified display version with 4-part dot notation, e.g. "v1.1.13.1437" or "1.1.13.1437"
+  /// Unified display version with 4-part dot notation, e.g. "v1.1.14.1501" or "1.1.14.1501"
   static String getFormattedVersion({bool withV = true}) {
     String v = getBuildinVersion().trim();
     if (v.startsWith('v') || v.startsWith('V')) {
