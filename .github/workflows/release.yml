@@ -382,6 +382,7 @@ jobs:
           CODE_SIGNING_REQUIRED: "NO"
           CODE_SIGNING_ALLOWED: "NO"
           CODE_SIGN_IDENTITY: "-"
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: "NO"
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')

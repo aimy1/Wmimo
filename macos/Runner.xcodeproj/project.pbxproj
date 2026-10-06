@@ -27,10 +27,6 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
-		CE3CC8F32E5EE72500EA3770 /* libswift_Concurrency.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE3CC8F12E5EE72500EA3770 /* libswift_Concurrency.dylib */; };
-		CE3CC8F42E5EE72500EA3770 /* libswiftCore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE3CC8F22E5EE72500EA3770 /* libswiftCore.dylib */; };
-		CE3CC8F52E5EE72C00EA3770 /* libswift_Concurrency.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE3CC8F12E5EE72500EA3770 /* libswift_Concurrency.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		CE3CC8F62E5EE72E00EA3770 /* libswiftCore.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE3CC8F22E5EE72500EA3770 /* libswiftCore.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		CE6C8AC82E26585000B6ACEA /* LibVpnCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEC19F82B142FA90076CA70 /* LibVpnCore.framework */; };
 		CE6C8AC92E26585000B6ACEA /* LibVpnCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CEEC19F82B142FA90076CA70 /* LibVpnCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CECF3FC82E24E9AF0029BC7E /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEBE65DB2A22EAE0004691A4 /* NetworkExtension.framework */; };
@@ -85,8 +81,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				CE3CC8F52E5EE72C00EA3770 /* libswift_Concurrency.dylib in Embed Frameworks */,
-				CE3CC8F62E5EE72E00EA3770 /* libswiftCore.dylib in Embed Frameworks */,
 				CE6C8AC92E26585000B6ACEA /* LibVpnCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -134,8 +128,6 @@
 		8A4FBC6D9CAAB254EC3732DA /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B5EC3A85ADBD29579C7DF776 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE3CC8F12E5EE72500EA3770 /* libswift_Concurrency.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswift_Concurrency.dylib; path = ../bind/apple/libswift_Concurrency.dylib; sourceTree = "<group>"; };
-		CE3CC8F22E5EE72500EA3770 /* libswiftCore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCore.dylib; path = ../bind/apple/libswiftCore.dylib; sourceTree = "<group>"; };
 		CE8B929F2A5C07360071C495 /* wmimoService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wmimoService.entitlements; sourceTree = "<group>"; };
 		CEBE65DB2A22EAE0004691A4 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		CEBE65DE2A22EAE1004691A4 /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
@@ -192,8 +184,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE3CC8F32E5EE72500EA3770 /* libswift_Concurrency.dylib in Frameworks */,
-				CE3CC8F42E5EE72500EA3770 /* libswiftCore.dylib in Frameworks */,
 				CE6C8AC82E26585000B6ACEA /* LibVpnCore.framework in Frameworks */,
 				CECF3FC82E24E9AF0029BC7E /* NetworkExtension.framework in Frameworks */,
 			);
@@ -317,8 +307,6 @@
 		D73912EC22F37F3D000D13A0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CE3CC8F12E5EE72500EA3770 /* libswift_Concurrency.dylib */,
-				CE3CC8F22E5EE72500EA3770 /* libswiftCore.dylib */,
 				CEEC1A232B1436050076CA70 /* libresolv.tbd */,
 				CEFF66B12AF0A49700242498 /* Libclash.xcframework */,
 				B5EC3A85ADBD29579C7DF776 /* Pods_Runner.framework */,
@@ -705,6 +693,7 @@
 				MY_BUNDLE_DISPLAY_NAME = "Wmimo";
 				PRODUCT_NAME = "${MY_BUNDLE_DISPLAY_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Profile;
@@ -844,6 +833,7 @@
 				PRODUCT_NAME = "${MY_BUNDLE_DISPLAY_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -876,6 +866,7 @@
 				MY_BUNDLE_DISPLAY_NAME = "Wmimo";
 				PRODUCT_NAME = "${MY_BUNDLE_DISPLAY_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -943,6 +934,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -991,6 +983,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -1039,6 +1032,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Profile;
@@ -1098,6 +1092,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1156,6 +1151,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1214,6 +1210,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
