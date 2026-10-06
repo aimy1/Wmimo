@@ -79,7 +79,7 @@ class WmimoVpnService : VpnService() {
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Wmimo")
             .setContentText("VPN 代理已连接")
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_statusbar)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .addAction(0, "断开连接", stopPendingIntent)

@@ -296,9 +296,9 @@ void main(List<String> args) async {
 </adaptive-icon>
 ''');
 
-  // Status Bar Monochrome notification icon (white silhouette, transparent background)
+  // Status Bar Monochrome notification icon & Quick Settings Tile icon (white silhouette, transparent background)
   saveSilhouettePng('android/app/src/main/res/drawable/ic_statusbar.png', 24);
-  saveSilhouettePng('android/app/src/main/res/drawable/ic_tile.png', 80);
+  saveSilhouettePng('android/app/src/main/res/drawable/ic_tile.png', 96);
 
   // TV Banner & Background
   final tvBanner = createTvBanner(srcImage, 320, 180);

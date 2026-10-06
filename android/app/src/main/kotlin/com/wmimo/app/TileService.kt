@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
@@ -134,6 +135,7 @@ class TileService : TileService() {
                         false -> Tile.STATE_INACTIVE
                         else -> Tile.STATE_UNAVAILABLE
                     }
+            icon = Icon.createWithResource(this@TileService, R.drawable.ic_tile)
             updateTile()
         }
     }
