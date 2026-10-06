@@ -103,7 +103,12 @@ if command -v codesign >/dev/null 2>&1; then
   if [ -f "$CORE_TARGET" ]; then
     codesign --force --sign - "$CORE_TARGET" 2>/dev/null || true
   fi
-  codesign --force --deep --sign - "$APP_PATH" 2>/dev/null || true
+  ENTITLEMENTS="${ROOT_DIR}/macos/Runner/Runner.entitlements"
+  if [ -f "$ENTITLEMENTS" ]; then
+    codesign --force --deep --sign - --entitlements "$ENTITLEMENTS" "$APP_PATH" 2>/dev/null || codesign --force --deep --sign - "$APP_PATH" 2>/dev/null || true
+  else
+    codesign --force --deep --sign - "$APP_PATH" 2>/dev/null || true
+  fi
 fi
 
 # Detect Architecture of the built app (Universal, arm64, or x86_64)

@@ -369,6 +369,10 @@ jobs:
         run: dart run tool/download_all_cores.dart
 
       - name: Build macOS Application
+        env:
+          CODE_SIGNING_REQUIRED: "NO"
+          CODE_SIGNING_ALLOWED: "NO"
+          CODE_SIGN_IDENTITY: "-"
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
