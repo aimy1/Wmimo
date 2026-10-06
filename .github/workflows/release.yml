@@ -379,17 +379,8 @@ jobs:
 
       - name: Patch dependencies for macOS / Xcode 16 compatibility
         run: |
-          find ~/.pub-cache -name "WebAuthenticationSession.swift" 2>/dev/null | while read -r f; do
-            echo "Patching pub cache file $f"
-            python3 -c "
-with open('$f', 'r') as fp:
-    c = fp.read()
-if 'class WebAuthenticationSession: NSObject, ASWebAuthenticationPresentationContextProviding' in c:
-    c = c.replace('class WebAuthenticationSession: NSObject, ASWebAuthenticationPresentationContextProviding', 'class WebAuthenticationSession: NSObject')
-    with open('$f', 'w') as fp:
-        fp.write(c)
-" || true
-          done
+          chmod +x tool/patch_macos_deps.sh
+          bash tool/patch_macos_deps.sh
 
       - name: Build macOS Application
         env:
