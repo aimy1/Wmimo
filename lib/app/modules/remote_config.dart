@@ -75,7 +75,7 @@ class RemoteConfigDonate {
 }
 
 class RemoteConfig {
-  static const String kDefaultHost = "wmimo-website.pages.dev";
+  static const String kDefaultHost = "wmimo.buzz";
   static const String kDefaultConfig = "https://$kDefaultHost/mconfig.json";
   static const String kDefaultAutoUpdate =
       "https://$kDefaultHost/mautoupdate.json";

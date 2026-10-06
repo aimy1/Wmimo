@@ -15,6 +15,7 @@
   <p>Flutter 및 Mihomo 코어를 기반으로 제작되어 초고속, 우아함, 강력한 전체 프로토콜 프록시 경험을 제공합니다.</p>
 
   <p>
+    <a href="https://wmimo.buzz"><img src="https://img.shields.io/badge/공식웹사이트-wmimo.buzz-00BCDF?style=flat-square&logo=googlechrome&logoColor=white" alt="공식 웹사이트" /></a>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
@@ -58,6 +59,7 @@
 
 버그나 오류가 발생하거나 기능 제안이 있으신 경우 언제든지 개발자에게 문의해 주세요:
 
+- 🌐 **공식 웹사이트**: [https://wmimo.buzz](https://wmimo.buzz/)
 - 📧 **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [이슈 등록](https://github.com/aimy1/Wmimo/issues)
 

@@ -173,9 +173,9 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
       GroupItemOptions(
         pushOptions: GroupItemPushOptions(
           name: tcontext.meta.website,
-          text: "wmimo-website.pages.dev",
+          text: "wmimo.buzz",
           onPush: () async {
-            await UrlLauncherUtils.loadUrl("https://wmimo-website.pages.dev/");
+            await UrlLauncherUtils.loadUrl("https://wmimo.buzz/");
           },
         ),
       ),

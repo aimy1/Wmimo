@@ -430,7 +430,7 @@ class GroupHelper {
             name: tcontext.meta.website,
             onPush: () async {
               await UrlLauncherUtils.loadUrl(
-                "https://wmimo-website.pages.dev/",
+                "https://wmimo.buzz/",
                 mode: LaunchMode.externalApplication,
               );
             },
