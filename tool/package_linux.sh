@@ -6,9 +6,14 @@ TAG="${1:-$TAG}"
 if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
   if [ -f "pubspec.yaml" ]; then
     PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
-    TAG="v${PUBSPEC_VER}"
+    PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+    if [ -n "$PUBSPEC_BUILD" ]; then
+      TAG="v${PUBSPEC_VER}.${PUBSPEC_BUILD}"
+    else
+      TAG="v${PUBSPEC_VER}"
+    fi
   else
-    TAG="v1.0.35"
+    TAG="v1.1.13.1437"
   fi
 fi
 
@@ -19,8 +24,8 @@ fi
 
 RAW_VERSION="${TAG#v}"
 if [ -z "$RAW_VERSION" ] || [ "$RAW_VERSION" = "v" ]; then
-  RAW_VERSION="1.1.13"
-  TAG="v1.1.13"
+  RAW_VERSION="1.1.13.1437"
+  TAG="v1.1.13.1437"
 fi
 VERSION="$RAW_VERSION"
 BUNDLE_DIR="build/linux/x64/release/bundle"

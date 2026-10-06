@@ -1,5 +1,5 @@
 param (
-    [string]$Tag = "v1.1.13"
+    [string]$Tag = "v1.1.13.1437"
 )
 
 $ErrorActionPreference = "Stop"
@@ -7,9 +7,14 @@ $ErrorActionPreference = "Stop"
 if (-not $Tag -or $Tag -eq "" -or $Tag -eq "main") {
     if (Test-Path "pubspec.yaml") {
         $pubVer = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[0]
-        $Tag = "v$pubVer"
+        $pubBuild = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[1]
+        if ($pubBuild) {
+            $Tag = "v$pubVer.$pubBuild"
+        } else {
+            $Tag = "v$pubVer"
+        }
     } else {
-        $Tag = "v1.1.13"
+        $Tag = "v1.1.13.1437"
     }
 }
 
