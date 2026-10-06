@@ -71,6 +71,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   Timer? _timerConnectToCore;
   QuickActions? _quickActions;
   bool _quickActionWorking = false;
+  bool _isSwitchOperating = false;
+  DateTime _lastActionTime = DateTime(0);
 
   final ValueNotifier<int> _chartTick = ValueNotifier<int>(0);
   final List<TrafficDataRecord> _trafficHistory = [];
@@ -207,6 +209,11 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     bool connected = _state == FlutterVpnServiceState.connected;
+    final isTransitioning = _state == FlutterVpnServiceState.connecting ||
+        _state == FlutterVpnServiceState.disconnecting ||
+        _state == FlutterVpnServiceState.reasserting ||
+        VPNService.isOperating ||
+        _isSwitchOperating;
     final currentProfile = ProfileManager.getCurrent();
     final settings = SettingManager.getConfig();
     Tuple2<bool, String>? tranfficExpire;
@@ -346,18 +353,18 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                             activeThumbColor: Colors.white,
                             activeTrackColor: ThemeDefine.kColorGreenBright,
                             focusNode: _focusNodeConnect,
-                            onChanged: (bool value) async {
-                              if (value) {
-                                await start("switch");
-                              } else {
-                                await stop();
-                              }
-                            },
+                            onChanged: isTransitioning
+                                ? null
+                                : (bool value) async {
+                                    if (value) {
+                                      await start("switch");
+                                    } else {
+                                      await stop();
+                                    }
+                                  },
                           ),
                         ),
-                        if (_state == FlutterVpnServiceState.connecting ||
-                            _state == FlutterVpnServiceState.disconnecting ||
-                            _state == FlutterVpnServiceState.reasserting)
+                        if (isTransitioning)
                           const Positioned(
                             left: 6,
                             child: SizedBox(
@@ -825,137 +832,156 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }
 
   Future<void> stop() async {
-    await VPNService.stop();
+    if (_isSwitchOperating || VPNService.isOperating) return;
+    _isSwitchOperating = true;
+    if (mounted) {
+      setState(() {
+        _state = FlutterVpnServiceState.disconnecting;
+      });
+    }
+    try {
+      await VPNService.stop();
+    } finally {
+      _isSwitchOperating = false;
+      if (mounted) setState(() {});
+    }
   }
 
   Future<bool> start(String from) async {
-    final currentProfile = ProfileManager.getCurrent();
-    if (currentProfile == null) {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          settings: ProfilesBoardScreen.routSettings(),
-          builder: (context) => ProfilesBoardScreen(),
-        ),
-      );
-      setState(() {});
-      return false;
+    if (_isSwitchOperating || VPNService.isOperating) return false;
+    _isSwitchOperating = true;
+    if (mounted) {
+      setState(() {
+        _state = FlutterVpnServiceState.connecting;
+      });
     }
-    final clashSetting = ClashSettingManager.getConfig();
-    final isTunEnabled = clashSetting.Tun?.Enable == true;
-    if ((Platform.isLinux || Platform.isMacOS) && isTunEnabled) {
-      String? installer = await AutoUpdateManager.checkReplace();
-      if (installer != null) {
-        return true;
-      }
-      final servicePath = PathUtils.serviceExePath();
-      if (!await FlutterVpnService.isServiceAuthorized(servicePath)) {
-        if (!mounted) {
-          return false;
-        }
-        String? password = await DialogUtils.showPasswordInputDialog(context);
-        if (Platform.isLinux && (password == null || password.isEmpty)) {
-          setState(() {});
-          return true;
-        }
-        final result = await FlutterVpnService.authorizeService(
-          servicePath,
-          password ?? "",
+
+    try {
+      final currentProfile = ProfileManager.getCurrent();
+      if (currentProfile == null) {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            settings: ProfilesBoardScreen.routSettings(),
+            builder: (context) => ProfilesBoardScreen(),
+          ),
         );
-        if (result != null) {
-          if (!mounted) {
-            return false;
-          }
-          bool? ok = await DialogUtils.showConfirmDialog(
-            context,
-            "${result.message}\n\n${t.meta.continueConnectConfirm}",
-          );
-          if (!mounted) {
-            return false;
-          }
-          setState(() {});
-          if (ok != true) {
-            return false;
-          }
-        }
-      }
-    }
-    if (Platform.isAndroid || Platform.isIOS) {
-      bool vpnGranted = await MobilePermissionHelper.requestVpnPermission();
-      if (!vpnGranted) {
-        if (mounted) setState(() {});
+        setState(() {});
         return false;
       }
-    }
-
-    var state = await VPNService.getState();
-    if (state == FlutterVpnServiceState.connecting ||
-        state == FlutterVpnServiceState.disconnecting ||
-        state == FlutterVpnServiceState.reasserting) {
-      setState(() {});
-      return false;
-    }
-
-    var err = await VPNService.start(const Duration(seconds: 60));
-    if (!mounted) {
-      return false;
-    }
-    setState(() {});
-    if (err != null) {
-      if (err.message == "willCompleteAfterRebootInstall") {
-        err.message = t.meta.willCompleteAfterRebootInstall;
-      } else if (err.message == "requestNeedsUserApproval") {
-        err.message = t.meta.requestNeedsUserApproval;
-      } else if (err.message.contains("FullDiskAccessPermissionRequired")) {
-        err.message = t.meta.FullDiskAccessPermissionRequired;
-      } else if (err.message.contains(
-        "configure tun interface: Access is denied",
-      )) {
-        err.message += "\n${t.meta.tunModeRunAsAdmin}";
+      final clashSetting = ClashSettingManager.getConfig();
+      final isTunEnabled = clashSetting.Tun?.Enable == true;
+      if ((Platform.isLinux || Platform.isMacOS) && isTunEnabled) {
+        String? installer = await AutoUpdateManager.checkReplace();
+        if (installer != null) {
+          return true;
+        }
+        final servicePath = PathUtils.serviceExePath();
+        if (!await FlutterVpnService.isServiceAuthorized(servicePath)) {
+          if (!mounted) {
+            return false;
+          }
+          String? password = await DialogUtils.showPasswordInputDialog(context);
+          if (Platform.isLinux && (password == null || password.isEmpty)) {
+            setState(() {});
+            return true;
+          }
+          final result = await FlutterVpnService.authorizeService(
+            servicePath,
+            password ?? "",
+          );
+          if (result != null) {
+            if (!mounted) {
+              return false;
+            }
+            bool? ok = await DialogUtils.showConfirmDialog(
+              context,
+              "${result.message}\n\n${t.meta.continueConnectConfirm}",
+            );
+            if (!mounted) {
+              return false;
+            }
+            setState(() {});
+            if (ok != true) {
+              return false;
+            }
+          }
+        }
+      }
+      if (Platform.isAndroid || Platform.isIOS) {
+        bool vpnGranted = await MobilePermissionHelper.requestVpnPermission();
+        if (!vpnGranted) {
+          if (mounted) setState(() {});
+          return false;
+        }
       }
 
-      DialogUtils.showAlertDialog(context, err.message, withVersion: true);
-      return false;
+      var err = await VPNService.start(const Duration(seconds: 60));
+      if (!mounted) {
+        return false;
+      }
+      setState(() {});
+      if (err != null) {
+        if (err.message == "willCompleteAfterRebootInstall") {
+          err.message = t.meta.willCompleteAfterRebootInstall;
+        } else if (err.message == "requestNeedsUserApproval") {
+          err.message = t.meta.requestNeedsUserApproval;
+        } else if (err.message.contains("FullDiskAccessPermissionRequired")) {
+          err.message = t.meta.FullDiskAccessPermissionRequired;
+        } else if (err.message.contains(
+          "configure tun interface: Access is denied",
+        )) {
+          err.message += "\n${t.meta.tunModeRunAsAdmin}";
+        }
+
+        DialogUtils.showAlertDialog(context, err.message, withVersion: true);
+        return false;
+      }
+      return true;
+    } finally {
+      _isSwitchOperating = false;
+      if (mounted) setState(() {});
     }
-    return true;
   }
 
   Future<void> _vpnConnect(String from, bool background) async {
-    Future.delayed(const Duration(seconds: 0), () async {
-      bool ok = await start(from);
-      if (ok) {
-        if (background) {
-          MoveToBackgroundUtils.moveToBackground(
-            duration: const Duration(milliseconds: 300),
-          );
-        }
-      }
-    });
+    final now = DateTime.now();
+    if (now.difference(_lastActionTime).inMilliseconds < 600) return;
+    _lastActionTime = now;
+    if (_isSwitchOperating || VPNService.isOperating) return;
+    bool ok = await start(from);
+    if (ok && background) {
+      MoveToBackgroundUtils.moveToBackground(
+        duration: const Duration(milliseconds: 300),
+      );
+    }
   }
 
   Future<void> _vpnDisconnect(String from, bool background) async {
-    Future.delayed(const Duration(seconds: 0), () async {
-      await stop();
-      if (background) {
-        MoveToBackgroundUtils.moveToBackground(
-          duration: const Duration(milliseconds: 300),
-        );
-      }
-    });
+    final now = DateTime.now();
+    if (now.difference(_lastActionTime).inMilliseconds < 600) return;
+    _lastActionTime = now;
+    if (_isSwitchOperating || VPNService.isOperating) return;
+    await stop();
+    if (background) {
+      MoveToBackgroundUtils.moveToBackground(
+        duration: const Duration(milliseconds: 300),
+      );
+    }
   }
 
   Future<void> _vpnReconnect(String from, bool background) async {
-    Future.delayed(const Duration(seconds: 0), () async {
-      await stop();
-      bool ok = await start(from);
-      if (ok) {
-        if (background) {
-          MoveToBackgroundUtils.moveToBackground(
-            duration: const Duration(milliseconds: 300),
-          );
-        }
-      }
-    });
+    final now = DateTime.now();
+    if (now.difference(_lastActionTime).inMilliseconds < 600) return;
+    _lastActionTime = now;
+    if (_isSwitchOperating || VPNService.isOperating) return;
+    await stop();
+    bool ok = await start(from);
+    if (ok && background) {
+      MoveToBackgroundUtils.moveToBackground(
+        duration: const Duration(milliseconds: 300),
+      );
+    }
   }
 
   Future<void> _onStateChanged(

@@ -950,85 +950,128 @@ rules:
     _lastDown = 0;
   }
 
-  static Future<VpnServiceWaitResult> start(Duration timeout) async {
-    final coreExe = await _resolveCorePath();
-    final configFile = await _resolveConfigFile();
+  static bool _isOperating = false;
 
-    if (!Platform.isIOS && !File(coreExe).existsSync()) {
-      return VpnServiceWaitResult(
-        type: VpnServiceWaitType.error,
-        err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe"),
-      );
-    }
-
-    if (configFile.isEmpty || !File(configFile).existsSync()) {
-      return VpnServiceWaitResult(
-        type: VpnServiceWaitType.error,
-        err: VpnServiceResultError(404, "配置文件未找到: $configFile"),
-      );
-    }
-
-    await stop();
-
-    if (Platform.isIOS) {
+  static void _notifyState(FlutterVpnServiceState newState) {
+    _state = newState;
+    for (var l in _listeners) {
       try {
-        final mixedPort = _savedConfig?.mixed_port ?? 7890;
-        final controlPort = _savedConfig?.control_port ?? 9090;
-        final secret = _savedConfig?.secret ?? "";
+        l(_state, {});
+      } catch (_) {}
+    }
+  }
 
-        // Sync config file to App Group shared container if accessible
-        try {
-          final groupDir = await getAppGroupDirectory("group.com.wmimo.app");
-          if (groupDir != null) {
-            final targetConfig = File("${groupDir.path}/config.json");
-            await File(configFile).copy(targetConfig.path);
-          }
-        } catch (_) {}
-
+  static Future<void> _stopInternal() async {
+    _stopTrafficMonitor();
+    if (Platform.isAndroid || Platform.isIOS) {
+      try {
         const platform = MethodChannel('com.wmimo.app/native_helper');
-        final dynamic success = await platform.invokeMethod('startVpnService', {
-          'mixedPort': mixedPort,
-          'configPath': configFile,
-        });
-
-        if (success == true) {
-          _startTrafficMonitor(controlPort, secret);
-          _state = FlutterVpnServiceState.connected;
-          for (var l in _listeners) {
-            l(_state, {});
-          }
-          return VpnServiceWaitResult(type: VpnServiceWaitType.done);
-        } else {
-          return VpnServiceWaitResult(
-            type: VpnServiceWaitType.error,
-            err: VpnServiceResultError(500, "iOS NetworkExtension VPN 启动失败"),
-          );
-        }
-      } catch (e) {
-        return VpnServiceWaitResult(
-          type: VpnServiceWaitType.error,
-          err: VpnServiceResultError(500, "iOS NetworkExtension VPN 启动异常: $e"),
-        );
-      }
+        await platform.invokeMethod('stopVpnService');
+      } catch (_) {}
     }
-
-    String workDir = "";
-    if (_savedConfig?.base_dir.isNotEmpty == true && Directory(_savedConfig!.base_dir).existsSync()) {
-      workDir = _savedConfig!.base_dir;
-    } else if (_savedConfig?.work_dir.isNotEmpty == true && Directory(_savedConfig!.work_dir).existsSync()) {
-      workDir = _savedConfig!.work_dir;
-    } else {
+    if (_coreProcess != null) {
       try {
-        final appSupport = await getApplicationSupportDirectory();
-        workDir = appSupport.path;
+        _coreProcess?.kill(ProcessSignal.sigterm);
       } catch (_) {
-        workDir = File(coreExe).parent.path;
+        _coreProcess?.kill();
       }
+      _coreProcess = null;
     }
+    await cleanSystemProxy();
+  }
 
-    _ensureWintunAvailable(workDir, coreExe);
+  static Future<VpnServiceWaitResult> start(Duration timeout) async {
+    if (_isOperating) {
+      if (_state == FlutterVpnServiceState.connected) {
+        return VpnServiceWaitResult(type: VpnServiceWaitType.done);
+      }
+      return VpnServiceWaitResult(
+        type: VpnServiceWaitType.error,
+        err: VpnServiceResultError(409, "操作进行中，请稍候"),
+      );
+    }
+    _isOperating = true;
+    _notifyState(FlutterVpnServiceState.connecting);
 
     try {
+      final coreExe = await _resolveCorePath();
+      final configFile = await _resolveConfigFile();
+
+      if (!Platform.isIOS && !File(coreExe).existsSync()) {
+        _notifyState(FlutterVpnServiceState.disconnected);
+        return VpnServiceWaitResult(
+          type: VpnServiceWaitType.error,
+          err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe"),
+        );
+      }
+
+      if (configFile.isEmpty || !File(configFile).existsSync()) {
+        _notifyState(FlutterVpnServiceState.disconnected);
+        return VpnServiceWaitResult(
+          type: VpnServiceWaitType.error,
+          err: VpnServiceResultError(404, "配置文件未找到: $configFile"),
+        );
+      }
+
+      await _stopInternal();
+
+      if (Platform.isIOS) {
+        try {
+          final mixedPort = _savedConfig?.mixed_port ?? 7890;
+          final controlPort = _savedConfig?.control_port ?? 9090;
+          final secret = _savedConfig?.secret ?? "";
+
+          // Sync config file to App Group shared container if accessible
+          try {
+            final groupDir = await getAppGroupDirectory("group.com.wmimo.app");
+            if (groupDir != null) {
+              final targetConfig = File("${groupDir.path}/config.json");
+              await File(configFile).copy(targetConfig.path);
+            }
+          } catch (_) {}
+
+          const platform = MethodChannel('com.wmimo.app/native_helper');
+          final dynamic success = await platform.invokeMethod('startVpnService', {
+            'mixedPort': mixedPort,
+            'configPath': configFile,
+          });
+
+          if (success == true) {
+            _startTrafficMonitor(controlPort, secret);
+            _notifyState(FlutterVpnServiceState.connected);
+            return VpnServiceWaitResult(type: VpnServiceWaitType.done);
+          } else {
+            _notifyState(FlutterVpnServiceState.disconnected);
+            return VpnServiceWaitResult(
+              type: VpnServiceWaitType.error,
+              err: VpnServiceResultError(500, "iOS NetworkExtension VPN 启动失败"),
+            );
+          }
+        } catch (e) {
+          _notifyState(FlutterVpnServiceState.disconnected);
+          return VpnServiceWaitResult(
+            type: VpnServiceWaitType.error,
+            err: VpnServiceResultError(500, "iOS NetworkExtension VPN 启动异常: $e"),
+          );
+        }
+      }
+
+      String workDir = "";
+      if (_savedConfig?.base_dir.isNotEmpty == true && Directory(_savedConfig!.base_dir).existsSync()) {
+        workDir = _savedConfig!.base_dir;
+      } else if (_savedConfig?.work_dir.isNotEmpty == true && Directory(_savedConfig!.work_dir).existsSync()) {
+        workDir = _savedConfig!.work_dir;
+      } else {
+        try {
+          final appSupport = await getApplicationSupportDirectory();
+          workDir = appSupport.path;
+        } catch (_) {
+          workDir = File(coreExe).parent.path;
+        }
+      }
+
+      _ensureWintunAvailable(workDir, coreExe);
+
       final args = ['-d', workDir, '-f', configFile];
       _coreProcess = await Process.start(coreExe, args, mode: ProcessStartMode.normal);
 
@@ -1057,10 +1100,7 @@ rules:
       _coreProcess!.exitCode.then((code) {
         _coreProcess = null;
         _stopTrafficMonitor();
-        _state = FlutterVpnServiceState.disconnected;
-        for (var l in _listeners) {
-          l(_state, {});
-        }
+        _notifyState(FlutterVpnServiceState.disconnected);
       });
 
       final port = _savedConfig?.control_port ?? 9090;
@@ -1095,7 +1135,8 @@ rules:
         final errorDetail = errBuffer.toString().trim().isNotEmpty
             ? errBuffer.toString().trim()
             : outBuffer.toString().trim();
-        await stop();
+        await _stopInternal();
+        _notifyState(FlutterVpnServiceState.disconnected);
         return VpnServiceWaitResult(
           type: VpnServiceWaitType.error,
           err: VpnServiceResultError(
@@ -1120,16 +1161,17 @@ rules:
         } catch (_) {}
       }
 
-      _state = FlutterVpnServiceState.connected;
-      for (var l in _listeners) {
-        l(_state, {});
-      }
+      _notifyState(FlutterVpnServiceState.connected);
       return VpnServiceWaitResult(type: VpnServiceWaitType.done);
     } catch (e) {
+      await _stopInternal();
+      _notifyState(FlutterVpnServiceState.disconnected);
       return VpnServiceWaitResult(
         type: VpnServiceWaitType.error,
         err: VpnServiceResultError(500, "启动核心异常: $e"),
       );
+    } finally {
+      _isOperating = false;
     }
   }
 
@@ -1139,25 +1181,18 @@ rules:
   }
 
   static Future<void> stop() async {
-    _stopTrafficMonitor();
-    if (Platform.isAndroid || Platform.isIOS) {
-      try {
-        const platform = MethodChannel('com.wmimo.app/native_helper');
-        await platform.invokeMethod('stopVpnService');
-      } catch (_) {}
+    if (_isOperating) {
+      await _stopInternal();
+      _notifyState(FlutterVpnServiceState.disconnected);
+      return;
     }
-    if (_coreProcess != null) {
-      try {
-        _coreProcess?.kill(ProcessSignal.sigterm);
-      } catch (_) {
-        _coreProcess?.kill();
-      }
-      _coreProcess = null;
-    }
-    await cleanSystemProxy();
-    _state = FlutterVpnServiceState.disconnected;
-    for (var l in _listeners) {
-      l(_state, {});
+    _isOperating = true;
+    _notifyState(FlutterVpnServiceState.disconnecting);
+    try {
+      await _stopInternal();
+      _notifyState(FlutterVpnServiceState.disconnected);
+    } finally {
+      _isOperating = false;
     }
   }
 

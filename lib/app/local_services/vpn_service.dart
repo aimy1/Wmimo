@@ -36,6 +36,8 @@ class VPNServiceSetServerOptions {
 class VPNService {
   static const localhost = "127.0.0.1";
   static bool _runAsAdmin = false;
+  static bool _isOperating = false;
+  static bool get isOperating => _isOperating;
   static final bool _systemExtension = true;
   static List<String> _abis = [];
   static final List<
@@ -320,139 +322,163 @@ class VPNService {
   }
 
   static Future<ReturnResultError?> restart(Duration timeout) async {
-    final profile = ProfileManager.getCurrent();
-    if (profile == null) {
-      return ReturnResultError("current profile is empty");
-    }
-    final prepareResult = await ProfileManager.prepare(profile);
-    if (prepareResult != null) {
-      return prepareResult;
-    }
-    var started = await getStarted();
-    if (!started) {
+    if (_isOperating) {
       return null;
     }
+    _isOperating = true;
     try {
-      bool reinstall = await _prepareConfig(profile);
-      if (reinstall) {
-        await uninstall();
+      final profile = ProfileManager.getCurrent();
+      if (profile == null) {
+        return ReturnResultError("current profile is empty");
       }
-    } catch (err, stacktrace) {
-      return ReturnResultError(err.toString());
-    }
-    var setting = SettingManager.getConfig();
-    if (Platform.isWindows) {
-      final controlPort = ClashSettingManager.getControlPort();
-      final mixedPort = ClashSettingManager.getMixedPort();
-      var ports = [controlPort, mixedPort];
-
-      FlutterVpnService.firewallAddPorts(ports, PathUtils.serviceExeName());
-    }
-    if (Platform.isIOS || Platform.isMacOS) {
-      await FlutterVpnService.setAlwaysOn(false);
-    }
-    final enable = await getSystemProxyEnable();
-    VpnServiceWaitResult result = await FlutterVpnService.restart(timeout);
-    if (result.type == VpnServiceWaitType.timeout) {
-      await stop();
-      final msg = result.err?.message.isNotEmpty == true
-          ? result.err!.message
-          : "服务重启超时";
-      return ReturnResultError(msg);
-    }
-    if (result.type != VpnServiceWaitType.done) {
-      Log.w(
-        "VPNService.restart err ${result.type}:${result.err!.message.toString()}",
-      );
-
-      await stop();
-      return convertErr(result.err);
-    }
-    String errorPath = await PathUtils.serviceStdErrorFilePath();
-    String? content = await FileUtils.readAndDelete(errorPath);
-    if (content != null && content.isNotEmpty) {
-      await stop();
-      return ReturnResultError(content);
-    }
-    if (Platform.isIOS || Platform.isMacOS) {
-      if (setting.alwayOn) {
-        await FlutterVpnService.setAlwaysOn(setting.alwayOn);
+      final prepareResult = await ProfileManager.prepare(profile);
+      if (prepareResult != null) {
+        return prepareResult;
       }
-    }
+      var started = await getStarted();
+      if (!started) {
+        return null;
+      }
+      try {
+        bool reinstall = await _prepareConfig(profile);
+        if (reinstall) {
+          await uninstall();
+        }
+      } catch (err, stacktrace) {
+        return ReturnResultError(err.toString());
+      }
+      var setting = SettingManager.getConfig();
+      if (Platform.isWindows) {
+        final controlPort = ClashSettingManager.getControlPort();
+        final mixedPort = ClashSettingManager.getMixedPort();
+        var ports = [controlPort, mixedPort];
 
-    if (enable) {
-      await setSystemProxy(true);
+        FlutterVpnService.firewallAddPorts(ports, PathUtils.serviceExeName());
+      }
+      if (Platform.isIOS || Platform.isMacOS) {
+        await FlutterVpnService.setAlwaysOn(false);
+      }
+      final enable = await getSystemProxyEnable();
+      VpnServiceWaitResult result = await FlutterVpnService.restart(timeout);
+      if (result.type == VpnServiceWaitType.timeout) {
+        await stop();
+        final msg = result.err?.message.isNotEmpty == true
+            ? result.err!.message
+            : "服务重启超时";
+        return ReturnResultError(msg);
+      }
+      if (result.type != VpnServiceWaitType.done) {
+        Log.w(
+          "VPNService.restart err ${result.type}:${result.err!.message.toString()}",
+        );
+
+        await stop();
+        return convertErr(result.err);
+      }
+      String errorPath = await PathUtils.serviceStdErrorFilePath();
+      String? content = await FileUtils.readAndDelete(errorPath);
+      if (content != null && content.isNotEmpty) {
+        await stop();
+        return ReturnResultError(content);
+      }
+      if (Platform.isIOS || Platform.isMacOS) {
+        if (setting.alwayOn) {
+          await FlutterVpnService.setAlwaysOn(setting.alwayOn);
+        }
+      }
+
+      if (enable) {
+        await setSystemProxy(true);
+      }
+      return null;
+    } finally {
+      _isOperating = false;
     }
-    return null;
   }
 
   static Future<ReturnResultError?> start(Duration timeout) async {
-    final profile = ProfileManager.getCurrent();
-    if (profile == null) {
-      return ReturnResultError("current profile is empty");
+    if (_isOperating) {
+      return null;
     }
-    final prepareResult = await ProfileManager.prepare(profile);
-    if (prepareResult != null) {
-      return prepareResult;
-    }
+    _isOperating = true;
     try {
-      bool reinstall = await _prepareConfig(profile);
-      if (reinstall) {
-        await uninstall();
+      final profile = ProfileManager.getCurrent();
+      if (profile == null) {
+        return ReturnResultError("current profile is empty");
       }
-    } catch (err, stacktrace) {
-      return ReturnResultError(err.toString());
-    }
-    var setting = SettingManager.getConfig();
-    if (Platform.isWindows) {
-      final controlPort = ClashSettingManager.getControlPort();
-      final mixedPort = ClashSettingManager.getMixedPort();
-      var ports = [controlPort, mixedPort];
-
-      FlutterVpnService.firewallAddPorts(ports, PathUtils.serviceExeName());
-    }
-    VpnServiceWaitResult result = await FlutterVpnService.start(timeout);
-    if (result.type == VpnServiceWaitType.timeout) {
-      await stop();
-      final msg = result.err?.message.isNotEmpty == true
-          ? result.err!.message
-          : "服务启动超时";
-      return ReturnResultError(msg);
-    }
-
-    if (result.err != null) {
-      Log.w("VPNService.start err ${result.err!.message.toString()}");
-      await stop();
-      return convertErr(result.err);
-    }
-    String errorPath = await PathUtils.serviceStdErrorFilePath();
-    String? content = await FileUtils.readAndDelete(errorPath);
-    if (content != null && content.isNotEmpty) {
-      await stop();
-      return ReturnResultError(content);
-    }
-    if (Platform.isIOS || Platform.isMacOS) {
-      if (setting.alwayOn) {
-        await FlutterVpnService.setAlwaysOn(setting.alwayOn);
+      final prepareResult = await ProfileManager.prepare(profile);
+      if (prepareResult != null) {
+        return prepareResult;
       }
-    }
+      try {
+        bool reinstall = await _prepareConfig(profile);
+        if (reinstall) {
+          await uninstall();
+        }
+      } catch (err, stacktrace) {
+        return ReturnResultError(err.toString());
+      }
+      var setting = SettingManager.getConfig();
+      if (Platform.isWindows) {
+        final controlPort = ClashSettingManager.getControlPort();
+        final mixedPort = ClashSettingManager.getMixedPort();
+        var ports = [controlPort, mixedPort];
 
-    if (SettingManager.getConfig().autoSetSystemProxy) {
-      await setSystemProxy(true);
-    }
+        FlutterVpnService.firewallAddPorts(ports, PathUtils.serviceExeName());
+      }
+      VpnServiceWaitResult result = await FlutterVpnService.start(timeout);
+      if (result.type == VpnServiceWaitType.timeout) {
+        await stop();
+        final msg = result.err?.message.isNotEmpty == true
+            ? result.err!.message
+            : "服务启动超时";
+        return ReturnResultError(msg);
+      }
 
-    return null;
+      if (result.err != null) {
+        Log.w("VPNService.start err ${result.err!.message.toString()}");
+        await stop();
+        return convertErr(result.err);
+      }
+      String errorPath = await PathUtils.serviceStdErrorFilePath();
+      String? content = await FileUtils.readAndDelete(errorPath);
+      if (content != null && content.isNotEmpty) {
+        await stop();
+        return ReturnResultError(content);
+      }
+      if (Platform.isIOS || Platform.isMacOS) {
+        if (setting.alwayOn) {
+          await FlutterVpnService.setAlwaysOn(setting.alwayOn);
+        }
+      }
+
+      if (SettingManager.getConfig().autoSetSystemProxy) {
+        await setSystemProxy(true);
+      }
+
+      return null;
+    } finally {
+      _isOperating = false;
+    }
   }
 
   static Future<void> stop() async {
-    if (Platform.isIOS || Platform.isMacOS) {
-      await FlutterVpnService.setAlwaysOn(false);
+    if (_isOperating) {
+      return;
     }
-    await setSystemProxy(false);
-    await FlutterVpnService.stop();
+    _isOperating = true;
+    try {
+      if (Platform.isIOS || Platform.isMacOS) {
+        await FlutterVpnService.setAlwaysOn(false);
+      }
+      await setSystemProxy(false);
+      await FlutterVpnService.stop();
 
-    if (Platform.isWindows) {
-      await uninstall();
+      if (Platform.isWindows) {
+        await uninstall();
+      }
+    } finally {
+      _isOperating = false;
     }
   }
 

@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
   String _initUrl = "";
   int _currentNavIndex = 0;
   FlutterVpnServiceState _vpnState = FlutterVpnServiceState.disconnected;
+  DateTime _lastSidebarTapTime = DateTime(0);
   final List<GlobalKey<NavigatorState>> _navigatorKeys = List.generate(
     5,
     (_) => GlobalKey<NavigatorState>(),
@@ -434,7 +435,8 @@ class _HomeScreenState extends State<HomeScreen>
     final connected = _vpnState == FlutterVpnServiceState.connected;
     final connecting = _vpnState == FlutterVpnServiceState.connecting ||
         _vpnState == FlutterVpnServiceState.disconnecting ||
-        _vpnState == FlutterVpnServiceState.reasserting;
+        _vpnState == FlutterVpnServiceState.reasserting ||
+        VPNService.isOperating;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
@@ -445,14 +447,20 @@ class _HomeScreenState extends State<HomeScreen>
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () {
-            if (connecting) return;
-            if (connected) {
-              VpnActionHandler.vpnDisconnect?.call("sidebar", false);
-            } else {
-              VpnActionHandler.vpnConnect?.call("sidebar", false);
-            }
-          },
+          onTap: connecting
+              ? null
+              : () {
+                  final now = DateTime.now();
+                  if (now.difference(_lastSidebarTapTime).inMilliseconds < 800) {
+                    return;
+                  }
+                  _lastSidebarTapTime = now;
+                  if (connected) {
+                    VpnActionHandler.vpnDisconnect?.call("sidebar", false);
+                  } else {
+                    VpnActionHandler.vpnConnect?.call("sidebar", false);
+                  }
+                },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
@@ -470,7 +478,9 @@ class _HomeScreenState extends State<HomeScreen>
                   decoration: BoxDecoration(
                     color: connected
                         ? ThemeDefine.kColorGreenBright
-                        : const Color(0xFF94A3B8),
+                        : (connecting
+                            ? ThemeDefine.kColorBlue
+                            : const Color(0xFF94A3B8)),
                     shape: BoxShape.circle,
                     boxShadow: connected
                         ? [
@@ -500,15 +510,25 @@ class _HomeScreenState extends State<HomeScreen>
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Icon(
-                  connected
-                      ? Icons.power_settings_new_rounded
-                      : Icons.play_arrow_rounded,
-                  size: 16,
-                  color: connected
-                      ? ThemeDefine.kColorGreenBright
-                      : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                ),
+                if (connecting)
+                  const SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      color: ThemeDefine.kColorGreenBright,
+                    ),
+                  )
+                else
+                  Icon(
+                    connected
+                        ? Icons.power_settings_new_rounded
+                        : Icons.play_arrow_rounded,
+                    size: 16,
+                    color: connected
+                        ? ThemeDefine.kColorGreenBright
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
               ],
             ),
           ),
