@@ -39,13 +39,13 @@
 | 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **已就绪** | RedHat 安装包 (`.rpm`) | 标准 RPM 格式封装，自动配置运行时依赖与桌面集成。 |
 | 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **已就绪** | Pacman 二进制包 (`.pkg.tar.zst`) 与 `PKGBUILD` | 支持 pacman 一键安装与 AUR 脚本直接构建。 |
 | 📱 **Android** | ✅ **已就绪** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、固定 Release 签名（支持无缝覆盖升级）、紧凑移动端 UI、后台保活。 |
-| 🍎 **macOS** | 🛠️ **源码已就绪** | DMG / 本地构建 | 系统代理与 TUN 模式底层均已实现，支持用户本地编译运行 (`flutter run -d macos`)；官方 Release 暂未提供预编译包。 |
+| 🍎 **macOS** | ✅ **已就绪** | 安装镜像 (`.dmg`) 与 绿色便携包 (`.zip`) | 完整桌面适配、菜单栏动态网速与系统托盘、系统代理与 TUN 模式（Touch ID / 管理员授权 SUID 4755）、自动更新。支持 GitHub Actions 自动化预编译与本地脚本一键打包。 |
 | 🍏 **iOS** | 📦 **架构已打通** | IPA / 源码 | NetworkExtension 架构与通信通道已搭建。因受限于 Apple 开发者证书签名，官方暂不提供预编译 IPA 分发，建议使用第三方成熟客户端导入订阅。 |
 
 > 💡 **平台发布策略说明**：
-> 本项目专注于 **Windows**、**Linux** 与 **Android** 平台的官方自动化预编译与发布。
-> - **macOS**：代码层已完整支持系统代理与 TUN 提权，如需使用可克隆源码在本地通过 `flutter build macos` 自行编译。
-> - **iOS**：工程框架与系统扩展接口已就绪，因受限于 Apple 开发者证书与签名体系，官方暂不提供官方打包分发，建议 iOS 用户使用同生态客户端导入订阅。
+> 本项目原生支持 **Windows**、**macOS**、**Linux** 与 **Android** 全平台的官方自动化预编译与发布。
+> - **macOS**：提供全自动化 GitHub Actions 编译发布与本地一键打包脚本，开箱即用支持 `.dmg` 与 `.zip`。
+> - **iOS**：工程框架与系统扩展接口已就绪，因受限于 Apple 开发者证书与签名体系，官方暂不提供预编译 IPA，建议 iOS 用户使用同生态客户端导入订阅。
 
 ---
 
@@ -108,6 +108,10 @@ flutter run
 # Windows Release (生成 x64 安装程序与便携包)
 flutter build windows --release
 
+# macOS Release (生成 Universal DMG 镜像与便携包)
+flutter build macos --release
+bash tool/package_macos.sh v1.1.14.1501
+
 # Linux Release (一键打包 Deb, RPM, AppImage, Arch 与 Tarball)
 flutter build linux --release
 bash tool/package_linux.sh v1.1.14.1501
@@ -123,6 +127,7 @@ flutter build apk --release
 本项目配置了完整的 GitHub Actions 自动化工作流（`.github/workflows/release.yml`）：
 
 - **Windows x64 / ARM64**：Inno Setup 安装包 (`.exe`) + 绿色便携包 (`.zip`)
+- **macOS Universal (Apple Silicon & Intel)**：DMG 拖拽安装镜像 (`.dmg`) + 便携绿色包 (`.zip`)
 - **Linux 全发行版支持**：Debian (`.deb`) + RedHat (`.rpm`) + AppImage (`.AppImage`) + Arch (`.pkg.tar.zst`) + 绿色包 (`.tar.gz`)
 - **Android**：分架构 APK (`arm64-v8a`, `armeabi-v7a`, `x86_64`) + 通用版 APK
 - **完整性验证**：自动生成包含所有产物的 `SHA256SUMS.txt` 校验和。

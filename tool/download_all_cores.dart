@@ -34,7 +34,6 @@ final Map<String, List<String>> targets = {
   ],
   '$kBaseUrl/mihomo-darwin-amd64-$kVersion.gz': [
     'bind/macos/core/wmimoService_amd64',
-    'bind/macos/core/wmimoService',
   ],
 };
 
@@ -203,6 +202,53 @@ Future<void> main(List<String> args) async {
     }
   } else {
     print('\n[Skipping] Wintun DLL already installed.');
+  }
+
+  // macOS Universal Binary creation via lipo
+  final macosArm64 = File('bind/macos/core/wmimoService_arm64');
+  final macosAmd64 = File('bind/macos/core/wmimoService_amd64');
+  final macosUniversal = File('bind/macos/core/wmimoService');
+
+  if (macosArm64.existsSync() && macosAmd64.existsSync()) {
+    bool lipoSuccess = false;
+    try {
+      final lipoRes = await Process.run('lipo', [
+        '-create',
+        '-output',
+        macosUniversal.path,
+        macosArm64.path,
+        macosAmd64.path,
+      ]);
+      if (lipoRes.exitCode == 0) {
+        print('\n[macOS] Successfully created Universal Binary via lipo: ${macosUniversal.path}');
+        lipoSuccess = true;
+      }
+    } catch (_) {}
+
+    if (!lipoSuccess && !macosUniversal.existsSync()) {
+      final src = (Platform.isMacOS && Platform.version.contains('x64')) ? macosAmd64 : macosArm64;
+      src.copySync(macosUniversal.path);
+      print('\n[macOS] Copied ${src.path} to ${macosUniversal.path}');
+    }
+  } else if (macosArm64.existsSync() && !macosUniversal.existsSync()) {
+    macosArm64.copySync(macosUniversal.path);
+  } else if (macosAmd64.existsSync() && !macosUniversal.existsSync()) {
+    macosAmd64.copySync(macosUniversal.path);
+  }
+
+  // Ensure execute permissions on all Unix binaries
+  for (final path in [
+    'bind/macos/core/wmimoService',
+    'bind/macos/core/wmimoService_arm64',
+    'bind/macos/core/wmimoService_amd64',
+    'bind/linux/core/wmimoService',
+  ]) {
+    final f = File(path);
+    if (f.existsSync()) {
+      try {
+        await Process.run('chmod', ['755', f.path]);
+      } catch (_) {}
+    }
   }
 
   client.close();

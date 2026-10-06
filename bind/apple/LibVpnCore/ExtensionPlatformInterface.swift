@@ -5,6 +5,7 @@ public protocol ExtensionPlatformInterface {
     func setupTunnelNetworkSettings(tunnelRemoteAddress: String, mtu: Int) -> NEPacketTunnelNetworkSettings
     func configureRoutes(settings: NEPacketTunnelNetworkSettings, routes: [String])
     func configureDns(settings: NEPacketTunnelNetworkSettings, servers: [String])
+    func configureProxy(settings: NEPacketTunnelNetworkSettings, host: String, port: Int)
 }
 
 public class DefaultExtensionPlatform: ExtensionPlatformInterface {
@@ -42,6 +43,23 @@ public class DefaultExtensionPlatform: ExtensionPlatformInterface {
         let dns = NEDNSSettings(servers: servers.isEmpty ? ["198.18.0.2", "1.1.1.1", "8.8.8.8"] : servers)
         dns.matchDomains = [""]
         settings.dnsSettings = dns
+    }
+    
+    public func configureProxy(settings: NEPacketTunnelNetworkSettings, host: String = "127.0.0.1", port: Int = 7890) {
+        let proxySettings = NEProxySettings()
+        proxySettings.httpServer = NEProxyServer(address: host, port: port)
+        proxySettings.httpsServer = NEProxyServer(address: host, port: port)
+        proxySettings.autoProxyConfigurationEnabled = false
+        proxySettings.matchDomains = [""]
+        proxySettings.exceptionList = [
+            "localhost",
+            "127.0.0.1",
+            "192.168.0.0/16",
+            "10.0.0.0/8",
+            "172.16.0.0/12",
+            "*.local"
+        ]
+        settings.proxySettings = proxySettings
     }
     
     private func prefixLengthToSubnetMask(prefix: Int) -> String {

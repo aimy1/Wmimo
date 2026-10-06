@@ -1,6 +1,6 @@
 import Foundation
 
-public func runBlocking<T>(_ operation: @escaping () async throws -> T) rethrows -> T {
+public func runBlocking<T>(_ operation: @escaping () async throws -> T) throws -> T {
     let semaphore = DispatchSemaphore(value: 0)
     var result: Result<T, Error>?
     

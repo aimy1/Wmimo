@@ -100,7 +100,11 @@ Future<void> run(List<String> args) async {
       const inProduction = bool.fromEnvironment("dart.vm.product");
       if (inProduction) {
         if (Platform.isMacOS) {
-          if (!path.isWithin("/Applications", exePath)) {
+          final home = Platform.environment['HOME'] ?? "";
+          final homeApps = home.isNotEmpty ? path.join(home, "Applications") : "";
+          final inSystemApps = path.isWithin("/Applications", exePath);
+          final inUserApps = homeApps.isNotEmpty && path.isWithin(homeApps, exePath);
+          if (!inSystemApps && !inUserApps) {
             startFailedReason = StartFailedReason.invalidInstallPath;
             break;
           }

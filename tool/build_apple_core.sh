@@ -41,6 +41,10 @@ fi
 
 cd "${BUILD_TMP_DIR}/mihomo"
 
+# Copy Apple Go Bridge package into Mihomo module
+mkdir -p "${BUILD_TMP_DIR}/mihomo/libclash"
+cp "${ROOT_DIR}/tool/apple_bridge/libclash.go" "${BUILD_TMP_DIR}/mihomo/libclash/libclash.go"
+
 echo "=== [4/5] Building Libclash.xcframework via gomobile bind ==="
 # Target iOS devices (arm64), iOS Simulator (arm64, x86_64), and macOS (arm64, x86_64)
 gomobile bind \
@@ -48,7 +52,7 @@ gomobile bind \
     -bundleid=com.wmimo.app.libclash \
     -ldflags="-s -w" \
     -o "${OUTPUT_DIR}/Libclash.xcframework" \
-    .
+    ./libclash
 
 echo "=== [5/5] Build Completed Successfully ==="
 echo "Artifact generated at: ${OUTPUT_DIR}/Libclash.xcframework"

@@ -21,12 +21,23 @@
 
 ### 2. 构建与打包
 ```bash
-# 生成 macOS 运行构建
+# 1. 下载全平台核心并由 lipo 自动构建 macOS Universal Binary
+dart run tool/download_all_cores.dart
+
+# 2. 生成 macOS 生产构建
 flutter build macos --release
 
-# 打包 DMG 安装镜像
-dart run appdmg:make macos/packaging/dmg/appdmg_make_config.json dist/Wmimo-macOS.dmg
+# 3. 执行原生一键打包脚本（自动嵌入核心、执行 ad-hoc 签名并生成 DMG 与 Portable Zip）
+bash tool/package_macos.sh v1.1.14.1501
 ```
+
+产物将输出在 `dist/` 目录：
+- `dist/Wmimo-macOS-universal-v1.1.14.1501.dmg`（带 Applications 软链接的原生拖拽安装镜像）
+- `dist/Wmimo-macOS-universal-v1.1.14.1501.zip`（绿色便携包，完整保留可执行权限与 SUID 标志）
+
+### 3. CI/CD 自动化持续集成
+GitHub Actions 工作流（`.github/workflows/release.yml`）已包含 `build-macos` Job，任何 Release 标签推送或手动触发均会自动在 `macos-latest` 虚拟机中编译生成 Universal DMG 与 Zip，并自动聚合计算 SHA-256 校验和上传发布。
+
 
 ---
 
@@ -40,24 +51,29 @@ iOS 系统严格禁止子进程派生（`fork` / `exec` / `Process.start`），�
 - **通信桥梁 (`com.wmimo.app/native_helper`)**：
   - Flutter 通过 MethodChannel 调用 iOS 原生 `AppDelegate.swift`。
   - 原生层通过 `NETunnelProviderManager` 管理扩展的安装、授权弹窗、启动与停止。
+- **控制中心与桌面小组件 (`wmimoWidgetExtension`)**：
+  - 基于 iOS 18+ `ControlWidget` 与 iOS 16+ `AppIntent`，支持在控制中心和锁屏一键启停代理。
+  - 通过 `VpnServiceHandler` 原生直接控制 `NETunnelProviderManager`。
 
 ### 2. 编译 Go 核心 (`Libclash.xcframework`)
 在具有 Xcode 与 Go 环境的 macOS 设备上执行：
 ```bash
 bash tool/build_apple_core.sh
 ```
-该脚本将通过 `gomobile bind` 产出包含真机 (arm64) 与模拟器架构的 `bind/apple/Libclash.xcframework`。
+该脚本将复制 `tool/apple_bridge/libclash.go` 桥接包并使用 `gomobile bind` 编译产出包含真机 (arm64) 与模拟器架构 (arm64, x86_64) 的 `bind/apple/Libclash.xcframework`。
+已预置包含全架构静态库的 XCFramework，Xcode 编译与依赖校验开箱即过。
 
 ### 3. Apple 开发者证书配置要求
 在真机部署与分发前，必须在 Apple Developer 门户配置：
 1. **App IDs**：
    - 主应用：`com.wmimo.app`
    - 扩展：`com.wmimo.app.wmimoService`
+   - 小组件：`com.wmimo.app.wmimoWidget`
 2. **Entitlements 权限**：
-   - 主应用与扩展需同时启用 **App Groups**（`group.com.wmimo.app`）。
-   - 必须勾选 **Network Extensions** -> **Packet Tunnel Provider**。
+   - 主应用、网络扩展与小组件需同时启用 **App Groups**（`group.com.wmimo.app`）。
+   - 网络扩展必须勾选 **Network Extensions** -> **Packet Tunnel Provider**。
 3. **Provisioning Profiles**：
-   - 分别为主应用和扩展生成并下载对应的描述文件。
+   - 分别为主应用、扩展和小组件生成并配置对应的描述文件。
 
 ---
 
@@ -66,8 +82,12 @@ bash tool/build_apple_core.sh
 | 路径 | 作用说明 |
 | :--- | :--- |
 | `bind/apple/LibVpnCore/` | iOS / macOS 网络扩展核心 Swift 接口层（`LibVpnCore`, `ExtensionProvider` 等） |
+| `bind/apple/Libclash.xcframework` | iOS / macOS 代理核心 XCFramework 跨架构二进制库 |
 | `ios/Runner/AppDelegate.swift` | iOS 原生 MethodChannel 通道与 `NETunnelProviderManager` 控制器 |
-| `ios/wmimoService/` | iOS Packet Tunnel Provider 原生工程 |
+| `ios/wmimoService/` | iOS Packet Tunnel Provider 原生网络扩展工程 |
+| `ios/wmimoWidget/` | iOS 控制中心快捷开关与桌面微件工程（含 `VpnServiceHandler` 控制器） |
 | `macos/Runner/AppDelegate.swift` | macOS 原生窗口控制与 MethodChannel 桥接 |
 | `third_party/libclash_vpn_service/` | Dart 跨平台 VPN 服务调度（包含 macOS SUID 授权与 iOS 扩展调用） |
+| `tool/apple_bridge/libclash.go` | Go 语言 Mihomo 原生桥接代码 |
 | `tool/build_apple_core.sh` | 自动化编译 `Libclash.xcframework` 脚本 |
+| `tool/package_macos.sh` | macOS 原生一键 DMG / Zip 打包与内核嵌入脚本 |

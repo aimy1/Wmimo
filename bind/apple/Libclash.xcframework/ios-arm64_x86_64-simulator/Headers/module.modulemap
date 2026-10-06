@@ -1,0 +1,5 @@
+framework module Libclash {
+    umbrella header "Libclash.h"
+    export *
+    module * { export * }
+}

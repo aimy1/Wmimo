@@ -342,9 +342,73 @@ jobs:
           name: android-release
           path: dist/*
 
+  build-macos:
+    name: Build macOS Release (Universal DMG & Portable Zip)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Generate Translations
+        run: dart run slang
+
+      - name: Download Multiplatform Mihomo Cores
+        run: dart run tool/download_all_cores.dart
+
+      - name: Build macOS Application
+        run: |
+          PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+          PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1501"
+          echo "Building macOS application version $PUBSPEC_VER+$PUBSPEC_BUILD..."
+          flutter build macos --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
+
+      - name: Package macOS Artifacts (DMG & Zip)
+        run: |
+          TAG="${{ github.event.inputs.tag_name }}"
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+              TAG="${{ github.ref_name }}"
+            fi
+          fi
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [ -f "pubspec.yaml" ]; then
+              PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+              PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+              if [ -n "$PUBSPEC_BUILD" ]; then
+                TAG="v${PUBSPEC_VER}.${PUBSPEC_BUILD}"
+              else
+                TAG="v${PUBSPEC_VER}"
+              fi
+            else
+              TAG="v1.1.14.1501"
+            fi
+          fi
+          chmod +x tool/package_macos.sh
+          bash tool/package_macos.sh "$TAG"
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-release
+          path: dist/*macOS*
+
   publish-release:
     name: Publish GitHub Release
-    needs: [build-windows, build-linux, build-android]
+    needs: [build-windows, build-linux, build-android, build-macos]
     runs-on: ubuntu-latest
 
     steps:

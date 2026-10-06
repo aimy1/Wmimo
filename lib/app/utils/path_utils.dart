@@ -202,10 +202,21 @@ class PathUtils {
       String filePath = exeDir();
       return path.join(filePath, serviceExeName());
     } else if (Platform.isMacOS) {
-      String filePath = macosDir();
-      String p = path.join(filePath, serviceExeName());
-      if (File(p).existsSync()) return p;
-      return path.join(exeDir(), serviceExeName());
+      final candidates = [
+        path.join(macosDir(), serviceExeName()),
+        path.join(exeDir(), serviceExeName()),
+        path.join(frameworkDir(), serviceExeName()),
+        path.join(Directory.current.path, "bind", "macos", "core", serviceExeName()),
+        path.join(Directory.current.path, "bind", "macos", "core", "wmimoService_arm64"),
+        path.join(Directory.current.path, "bind", "macos", "core", "wmimoService_amd64"),
+        path.join(Directory.current.path, serviceExeName()),
+      ];
+      for (final candidate in candidates) {
+        if (File(candidate).existsSync()) {
+          return candidate;
+        }
+      }
+      return path.join(macosDir(), serviceExeName());
     }
     return "";
   }
