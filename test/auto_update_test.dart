@@ -31,7 +31,7 @@ void main() {
       expect(VersionCompareUtils.compareVersion('1.1.6', '1.1.6+1429'), -1);
       expect(VersionCompareUtils.compareVersion('1.1.6+1429', '1.1.6'), 1);
 
-      // 4-part dot notation build numbers (e.g. 1.1.13.1436 vs 1.1.13.1437 vs 1.1.14.1501)
+      // 4-part dot notation build numbers (e.g. 1.1.13.1436 vs 1.1.13.1437 vs 1.1.14.1501 vs 1.2.0.1501)
       expect(VersionCompareUtils.compareVersion('1.1.13.1436', '1.1.13.1437'), -1);
       expect(VersionCompareUtils.compareVersion('1.1.13.1437', '1.1.13.1436'), 1);
       expect(VersionCompareUtils.compareVersion('v1.1.13.1436', 'v1.1.13.1437'), -1);
@@ -40,6 +40,9 @@ void main() {
       expect(VersionCompareUtils.compareVersion('1.1.13.1437', '1.1.14.1501'), -1);
       expect(VersionCompareUtils.compareVersion('v1.1.14.1501', '1.1.13.1437'), 1);
       expect(VersionCompareUtils.compareVersion('1.1.14.1501', '1.1.14.1501'), 0);
+      expect(VersionCompareUtils.compareVersion('1.1.14.1501', '1.2.0.1501'), -1);
+      expect(VersionCompareUtils.compareVersion('v1.2.0.1501', '1.1.14.1501'), 1);
+      expect(VersionCompareUtils.compareVersion('1.2.0.1501', '1.2.0.1501'), 0);
     });
 
     test('Semantic version changes take precedence over build numbers', () {
