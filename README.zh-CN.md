@@ -15,7 +15,6 @@
   <p>基于 Flutter 与 Mihomo 核心打造，提供极速、优雅、强大的全协议网络代理体验。</p>
 
   <p>
-    <a href="https://wmimo.buzz"><img src="https://img.shields.io/badge/官网-wmimo.buzz-00BCDF?style=flat-square&logo=googlechrome&logoColor=white" alt="官方网站" /></a>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
@@ -111,7 +110,7 @@ flutter build windows --release
 
 # Linux Release (一键打包 Deb, RPM, AppImage, Arch 与 Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.1.13.1437
+bash tool/package_linux.sh v1.1.14.1501
 
 # Android Release (生成 APK 安装包)
 flutter build apk --release
@@ -142,7 +141,6 @@ flutter build apk --release
 
 如果您在使用过程中遇到任何 Bug、异常崩溃或有功能改进建议，欢迎联系作者进行反馈：
 
-- 🌐 **官方网站**: [https://wmimo.buzz](https://wmimo.buzz/)
 - 📧 **联系邮箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [提交 Issue 反馈](https://github.com/aimy1/Wmimo/issues)
 

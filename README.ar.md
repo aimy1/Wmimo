@@ -15,7 +15,6 @@
   <p>تم بناؤه باستخدام Flutter ونواة Mihomo لتقديم تجربة وكيل سريعة وأنيقة وقوية.</p>
 
   <p>
-    <a href="https://wmimo.buzz"><img src="https://img.shields.io/badge/الموقع_الرسمي-wmimo.buzz-00BCDF?style=flat-square&logo=googlechrome&logoColor=white" alt="الموقع الرسمي" /></a>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
@@ -48,7 +47,6 @@
 
 إذا واجهت أي أخطاء أو أعطال أو كان لديك اقتراحات للتحسين، فلا تتردد في التواصل مع المطور:
 
-- 🌐 **الموقع الرسمي**: [https://wmimo.buzz](https://wmimo.buzz/)
 - 📧 **بريد المطور**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [إرسال مشكلة](https://github.com/aimy1/Wmimo/issues)
 

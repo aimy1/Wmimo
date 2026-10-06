@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.1.13.1437)'
+        description: 'Release Tag (e.g. v1.1.14.1501)'
         required: false
-        default: 'v1.1.13.1437'
+        default: 'v1.1.14.1501'
 
 permissions:
   contents: write
@@ -68,7 +68,7 @@ jobs:
                 $tag = "v$pubVer"
               }
             } else {
-              $tag = "v1.1.13.1437"
+              $tag = "v1.1.14.1501"
             }
           }
           if (-not $tag.StartsWith("v")) {
@@ -223,7 +223,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.1.13.1437"
+              TAG="v1.1.14.1501"
             fi
           fi
           chmod +x tool/package_linux.sh
@@ -318,7 +318,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.1.13.1437"
+              TAG="v1.1.14.1501"
             fi
           fi
           
@@ -370,7 +370,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.1.13.1437"
+              TAG="v1.1.14.1501"
             fi
           fi
 
@@ -384,7 +384,7 @@ jobs:
             BUILD_NUM=$(echo "$RAW_VER" | awk -F'.' '{if (NF>3) print $4}')
           fi
           if [ -z "$BUILD_NUM" ]; then
-            BUILD_NUM="1437"
+            BUILD_NUM="1501"
           fi
 
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT

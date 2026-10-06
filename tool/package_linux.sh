@@ -13,7 +13,7 @@ if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
       TAG="v${PUBSPEC_VER}"
     fi
   else
-    TAG="v1.1.13.1437"
+    TAG="v1.1.14.1501"
   fi
 fi
 
@@ -24,8 +24,8 @@ fi
 
 RAW_VERSION="${TAG#v}"
 if [ -z "$RAW_VERSION" ] || [ "$RAW_VERSION" = "v" ]; then
-  RAW_VERSION="1.1.13.1437"
-  TAG="v1.1.13.1437"
+  RAW_VERSION="1.1.14.1501"
+  TAG="v1.1.14.1501"
 fi
 VERSION="$RAW_VERSION"
 BUNDLE_DIR="build/linux/x64/release/bundle"
