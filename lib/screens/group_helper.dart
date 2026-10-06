@@ -647,7 +647,7 @@ class GroupHelper {
                   ? tcontext.meta.hasNewVersion(
                       p: AutoUpdateManager.getVersionCheck().version,
                     )
-                  : 'v${AppUtils.getBuildinVersion()}',
+                  : AppUtils.getFormattedVersion(),
               textColor: AutoUpdateManager.getVersionCheck().newVersion
                   ? ThemeDefine.kColorAmber
                   : null,
@@ -675,7 +675,7 @@ class GroupHelper {
                     DialogUtils.showAlertDialog(
                       context,
                       tcontext.meta.alreadyLatestVersion(
-                        version: AppUtils.getBuildinVersion(),
+                        version: AppUtils.getFormattedVersion(withV: false),
                       ),
                     );
                   } else if (result.status == AutoUpdateCheckStatus.error) {

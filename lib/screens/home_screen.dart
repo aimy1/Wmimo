@@ -788,7 +788,7 @@ class _HomeScreenState extends State<HomeScreen>
                                       ),
                                       const SizedBox(height: 1),
                                       Text(
-                                        'v${AppUtils.getBuildinVersion().split('+')[0]}',
+                                        AppUtils.getFormattedVersion(),
                                         style: TextStyle(
                                           fontSize: 11,
                                           color: Theme.of(context)

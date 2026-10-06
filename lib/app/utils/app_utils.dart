@@ -15,11 +15,18 @@ abstract final class AppUtils {
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       if (packageInfo.version.isNotEmpty) {
-        if (packageInfo.buildNumber.isNotEmpty) {
-          _cachedPackageVersion =
-              "${packageInfo.version}.${packageInfo.buildNumber}";
+        String ver = packageInfo.version.trim();
+        if (ver.startsWith('v') || ver.startsWith('V')) {
+          ver = ver.substring(1);
+        }
+        if (ver.contains('+')) {
+          ver = ver.replaceAll('+', '.');
+        }
+        if (packageInfo.buildNumber.isNotEmpty &&
+            !ver.endsWith('.${packageInfo.buildNumber}')) {
+          _cachedPackageVersion = "$ver.${packageInfo.buildNumber}";
         } else {
-          _cachedPackageVersion = packageInfo.version;
+          _cachedPackageVersion = ver;
         }
         return _cachedPackageVersion!;
       }
@@ -44,6 +51,18 @@ abstract final class AppUtils {
 
   static String getBuildinVersion() {
     return _cachedPackageVersion ?? kDefaultFallbackVersion;
+  }
+
+  /// Unified display version with 4-part dot notation, e.g. "v1.1.13.1437" or "1.1.13.1437"
+  static String getFormattedVersion({bool withV = true}) {
+    String v = getBuildinVersion().trim();
+    if (v.startsWith('v') || v.startsWith('V')) {
+      v = v.substring(1);
+    }
+    if (v.contains('+')) {
+      v = v.replaceAll('+', '.');
+    }
+    return withV ? 'v$v' : v;
   }
 
   static DateTime getBuildinVersionDate() {
