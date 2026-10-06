@@ -97,17 +97,39 @@ else
   echo "[WARNING] bind/macos/core/wmimoService not found! Embedded core will rely on runtime fallback."
 fi
 
-# 4. Ad-hoc sign embedded binaries & app bundle
+# 4. Clean ad-hoc code signature for bundle components
 if command -v codesign >/dev/null 2>&1; then
-  echo "Applying ad-hoc code signature to bundle components..."
-  if [ -f "$CORE_TARGET" ]; then
-    codesign --force --sign - "$CORE_TARGET" 2>/dev/null || true
-  fi
+  echo "Applying clean ad-hoc code signature to bundle components..."
   ENTITLEMENTS="${ROOT_DIR}/macos/Runner/Runner.entitlements"
+
+  # Clean quarantine attributes
+  if command -v xattr >/dev/null 2>&1; then
+    xattr -cr "$APP_PATH" 2>/dev/null || true
+  fi
+
+  # Sign all Frameworks and dylibs first
+  if [ -d "${APP_PATH}/Contents/Frameworks" ]; then
+    find "${APP_PATH}/Contents/Frameworks" -type f -perm +111 2>/dev/null | while read -r fw; do
+      codesign --force --sign - "$fw" 2>/dev/null || true
+    done
+  fi
+
+  # Sign helper binaries in MacOS directory
+  if [ -d "${APP_PATH}/Contents/MacOS" ]; then
+    find "${APP_PATH}/Contents/MacOS" -type f -perm +111 2>/dev/null | while read -r bin; do
+      if [ -f "$ENTITLEMENTS" ]; then
+        codesign --force --sign - --entitlements "$ENTITLEMENTS" "$bin" 2>/dev/null || codesign --force --sign - "$bin" 2>/dev/null || true
+      else
+        codesign --force --sign - "$bin" 2>/dev/null || true
+      fi
+    done
+  fi
+
+  # Sign App Bundle
   if [ -f "$ENTITLEMENTS" ]; then
-    codesign --force --deep --sign - --entitlements "$ENTITLEMENTS" "$APP_PATH" 2>/dev/null || codesign --force --deep --sign - "$APP_PATH" 2>/dev/null || true
+    codesign --force --sign - --entitlements "$ENTITLEMENTS" "$APP_PATH" 2>/dev/null || true
   else
-    codesign --force --deep --sign - "$APP_PATH" 2>/dev/null || true
+    codesign --force --sign - "$APP_PATH" 2>/dev/null || true
   fi
 fi
 
