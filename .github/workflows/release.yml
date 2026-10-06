@@ -354,6 +354,15 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Flutter
+        id: flutter_setup
+        uses: subosito/flutter-action@v2
+        continue-on-error: true
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Retry Setup Flutter on network failure
+        if: steps.flutter_setup.outcome == 'failure'
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
