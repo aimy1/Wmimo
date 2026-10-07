@@ -92,6 +92,7 @@ import os.log
             }
 
             manager.loadFromPreferences { _ in
+              do {
                 var startOptions: [String: NSObject] = [
                   "mixedPort": "\(mixedPort)" as NSString
                 ]
