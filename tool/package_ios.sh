@@ -34,10 +34,13 @@ echo "======================================================================"
 
 mkdir -p "${DIST_DIR}"
 
-# 2. Locate built Runner.app
+# 2. Locate built application bundle (.app)
 CANDIDATE_APP_DIRS=(
+  "${ROOT_DIR}/build/ios/iphoneos/Wmimo.app"
   "${ROOT_DIR}/build/ios/iphoneos/Runner.app"
+  "${ROOT_DIR}/build/ios/Release-iphoneos/Wmimo.app"
   "${ROOT_DIR}/build/ios/Release-iphoneos/Runner.app"
+  "${ROOT_DIR}/build/ios/archive/Runner.xcarchive/Products/Applications/Wmimo.app"
   "${ROOT_DIR}/build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
 )
 
@@ -50,11 +53,22 @@ for p in "${CANDIDATE_APP_DIRS[@]}"; do
 done
 
 if [ -z "$APP_PATH" ]; then
-  echo "[ERROR] Could not find built iOS application bundle (Runner.app)."
+  # Dynamic fallback: find any .app bundle inside build/ios
+  APP_PATH=$(find "${ROOT_DIR}/build/ios" -type d -name "*.app" -not -path "*/PlugIns/*" -not -path "*/Frameworks/*" 2>/dev/null | grep -E "Release|iphoneos" | head -n 1 || true)
+fi
+
+if [ -z "$APP_PATH" ]; then
+  APP_PATH=$(find "${ROOT_DIR}/build" -type d -name "*.app" -not -path "*/PlugIns/*" -not -path "*/Frameworks/*" 2>/dev/null | head -n 1 || true)
+fi
+
+if [ -z "$APP_PATH" ]; then
+  echo "[ERROR] Could not find built iOS application bundle (.app)."
   echo "Checked locations:"
   for p in "${CANDIDATE_APP_DIRS[@]}"; do
     echo "  - $p"
   done
+  echo "Available directories under build/ios:"
+  ls -la "${ROOT_DIR}/build/ios" 2>/dev/null || true
   echo "Please run 'flutter build ios --release --no-codesign' before running this script."
   exit 1
 fi
@@ -65,7 +79,7 @@ echo "Using iOS app bundle: $APP_PATH"
 if [ -d "${APP_PATH}/PlugIns/wmimoService.appex" ]; then
   echo "  [OK] Found embedded VPN extension: PlugIns/wmimoService.appex"
 else
-  echo "  [WARNING] PlugIns/wmimoService.appex not found in Runner.app. VPN may require manual configuration."
+  echo "  [WARNING] PlugIns/wmimoService.appex not found in ${APP_PATH}. VPN may require manual configuration."
 fi
 
 if [ -d "${APP_PATH}/PlugIns/wmimoWidgetExtension.appex" ]; then
