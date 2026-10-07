@@ -460,6 +460,11 @@ jobs:
       - name: Download Multiplatform Mihomo Cores
         run: dart run tool/download_all_cores.dart
 
+      - name: Patch dependencies for Apple / Xcode 16 compatibility
+        run: |
+          chmod +x tool/patch_macos_deps.sh
+          bash tool/patch_macos_deps.sh
+
       - name: Build iOS Application (No Codesign)
         env:
           CODE_SIGNING_REQUIRED: "NO"

@@ -109,6 +109,8 @@ dependency_overrides:
     path: third_party/flutter_inappwebview_linux_stub
   flutter_inappwebview_macos:
     path: third_party/flutter_inappwebview_macos
+  flutter_inappwebview_ios:
+    path: third_party/flutter_inappwebview_ios
   window_manager: #0.5.0
     #path: ../window_manager/packages/
     git:
