@@ -854,22 +854,32 @@ class GroupHelper {
           GroupItemOptions(
             pushOptions: GroupItemPushOptions(
               name: tcontext.meta.bypassSystemProxy,
-              onPush: !setting.autoSetSystemProxy
-                  ? null
-                  : () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          settings: ListAddScreen.routSettings(
-                            "systemProxyBypassDomain",
-                          ),
-                          builder: (context) => ListAddScreen(
-                            title: tcontext.meta.bypassSystemProxy,
-                            data: setting.systemProxyBypassDomain,
-                          ),
-                        ),
-                      );
-                    },
+              onPush: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    settings: ListAddScreen.routSettings(
+                      "systemProxyBypassDomain",
+                    ),
+                    builder: (context) => ListAddScreen(
+                      title: tcontext.meta.bypassSystemProxy,
+                      data: setting.systemProxyBypassDomain,
+                      onChanged: (data) async {
+                        await SettingManager.save();
+                        if (PlatformUtils.isPC() &&
+                            await VPNService.getSystemProxyEnable()) {
+                          await VPNService.setSystemProxy(true);
+                        }
+                      },
+                    ),
+                  ),
+                );
+                await SettingManager.save();
+                if (PlatformUtils.isPC() &&
+                    await VPNService.getSystemProxyEnable()) {
+                  await VPNService.setSystemProxy(true);
+                }
+              },
             ),
           ),
         ],
