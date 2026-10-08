@@ -40,15 +40,10 @@
 | 🐧 **Fedora / RHEL / openSUSE** | ✅ **Ready** | RedHat Package (`.rpm`) | Standard RPM package with system dependencies and desktop shortcuts. |
 | 🐧 **Arch Linux / Manjaro** | ✅ **Ready** | Arch Package (`.pkg.tar.zst`) & `PKGBUILD` | Native pacman binary package and AUR build script. |
 | 📱 **Android** | ✅ **Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, persistent release keystore, compact mobile UI, background keep-alive. |
-| 🍎 **macOS** | ✅ **Ready** | DMG Image (`.dmg`) & Portable (`.zip`) | Full desktop UI, menu bar dynamic traffic & system tray, system proxy & TUN mode (Touch ID / admin SUID 4755), auto-update. Automated CI/CD prebuilds and local package script included. |
-| 🍏 **iOS** | ✅ **Ready** | Universal IPA (`.ipa`) & Source | Full app, `NetworkExtension` VPN extension, and widgets. Provides unsigned Universal `.ipa` packages perfectly compatible with **TrollStore** (permanent, no Apple ID/certificate required, full system VPN) and sideloading tools (AltStore / Sideloadly / enterprise certs). |
+| 🍎 **macOS** | 🛠️ **Source Ready** | DMG / Local Build | System proxy and TUN mode are fully implemented in code. Supports local build (`flutter run -d macos`); prebuilt DMG is not distributed in official Releases. |
+| 🍏 **iOS** | 📦 **Framework Ready** | IPA / Source | NetworkExtension architecture and MethodChannel are fully wired. Not officially distributed due to Apple signing requirements; use third-party clients for subscriptions. |
 
-> 💡 **Distribution Policy**: Official CI/CD automated releases provide prebuilt binaries for **Windows**, **macOS**, **Linux**, **Android**, and **iOS**.
-> - **macOS**: Fully automated GitHub Actions workflow and local one-click packaging script for `.dmg` and `.zip`.
-> - **iOS**: Provides a standalone `.ipa` containing `PlugIns/wmimoService.appex`.
->   - **TrollStore (Recommended)**: For iOS 14.0 - 17.0 (excluding 17.0.1+), install directly with zero Apple ID/certificate requirements, permanent validity, and native NetworkExtension VPN permissions.
->   - **Sideloading Tools (AltStore / SideStore / Sideloadly / Enterprise)**: For iOS 17.0.1+ devices using custom or personal developer certificates.
->   - **Local Xcode Deployment**: Connect iPhone to Mac and run via `ios/Runner.xcworkspace` with a personal Apple ID.
+> 💡 **Distribution Policy**: Official CI/CD automated releases provide prebuilt binaries for **Windows**, **Linux**, and **Android**. macOS and iOS source code is fully aligned with platform standards, but prebuilt Apple packages are not distributed in GitHub Releases.
 
 ---
 
@@ -111,41 +106,15 @@ flutter build windows --release
 
 # macOS Release (Universal DMG and Portable Zip)
 flutter build macos --release
-bash tool/package_macos.sh v1.2.1.1503
+bash tool/package_macos.sh v1.2.2.1504
 
 # Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.2.1.1503
+bash tool/package_linux.sh v1.2.2.1504
 
 # Android APK
 flutter build apk --release
-
-# iOS Release (Build unsigned IPA for TrollStore & Sideloading)
-flutter build ios --release --no-codesign
-bash tool/package_ios.sh v1.2.1.1503
 ```
-
-### 🍏 iOS Installation & Sideloading Guide
-
-Wmimo provides an all-in-one unsigned `.ipa` package (`Wmimo-iOS-universal-*.ipa`) containing the main app and the embedded `PlugIns/wmimoService.appex` (PacketTunnel NetworkExtension).
-
-#### 1. TrollStore (Highly Recommended ⭐⭐⭐⭐⭐)
-- **Supported iOS Versions**: iOS 14.0 – 17.0 (excluding 17.0.1+).
-- **Key Advantages**:
-  - **100% Free, No Apple ID, No 7-day expiration, Never revoked**.
-  - Grants native `NetworkExtension` entitlements automatically via CoreTrust exploit for full system-wide VPN proxy functionality.
-- **How to Install**:
-  1. Download `Wmimo-iOS-universal-*.ipa` from [Releases](https://github.com/aimy1/Wmimo/releases);
-  2. Open the file in Safari or share via AirDrop to your iPhone;
-  3. Tap Share -> **"Open with TrollStore"** -> **"Install"**;
-  4. Launch Wmimo and allow the VPN configuration when prompted.
-
-#### 2. Sideloading Utilities (AltStore / SideStore / Sideloadly / Enterprise Certs)
-- **Supported Versions**: iOS 17.0.1 and newer.
-- **Notes**: Free personal Apple IDs may have restrictions on NetworkExtension profiles; using paid developer accounts or enterprise certificates is advised for system VPN support.
-
-#### 3. Local Xcode Deployment
-- Connect your iPhone to your Mac, open `ios/Runner.xcworkspace` in Xcode, sign with your Apple ID, and deploy directly to your device.
 
 ---
 
@@ -154,10 +123,8 @@ Wmimo provides an all-in-one unsigned `.ipa` package (`Wmimo-iOS-universal-*.ipa
 Automated multi-platform packaging is handled seamlessly via GitHub Actions (`.github/workflows/release.yml`):
 
 - **Windows x64 / ARM64**: Inno Setup Installer (`.exe`) + Portable Zip (`.zip`)
-- **macOS Universal (Apple Silicon & Intel)**: DMG Drag-and-Drop (`.dmg`) + Portable Zip (`.zip`)
 - **Linux (All Distros)**: Debian (`.deb`) + RedHat (`.rpm`) + Universal (`.AppImage`) + Arch (`.pkg.tar.zst`) + Portable (`.tar.gz`)
 - **Android**: Split ABIs (`arm64-v8a`, `armeabi-v7a`, `x86_64`) + Universal APK
-- **iOS**: Universal IPA (`.ipa`) tailored for TrollStore permanent installation and sideloading tools
 - **Checksums**: Auto-generated `SHA256SUMS.txt` for security verification.
 
 ---

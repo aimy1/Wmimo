@@ -6,7 +6,7 @@ import 'package:wmimo/generated/build_time.dart' as build_time;
 abstract final class AppUtils {
   static String? _cachedPackageVersion;
 
-  static const String kDefaultFallbackVersion = "1.2.1.1503";
+  static const String kDefaultFallbackVersion = "1.2.2.1504";
 
   static Future<String> getPackgetVersion() async {
     if (_cachedPackageVersion != null && _cachedPackageVersion!.isNotEmpty) {
@@ -53,7 +53,7 @@ abstract final class AppUtils {
     return _cachedPackageVersion ?? kDefaultFallbackVersion;
   }
 
-  /// Unified display version with 4-part dot notation, e.g. "v1.2.1.1503" or "1.2.1.1503"
+  /// Unified display version with 4-part dot notation, e.g. "v1.2.2.1504" or "1.2.2.1504"
   static String getFormattedVersion({bool withV = true}) {
     String v = getBuildinVersion().trim();
     if (v.startsWith('v') || v.startsWith('V')) {
