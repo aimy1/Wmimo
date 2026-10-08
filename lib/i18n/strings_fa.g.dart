@@ -449,6 +449,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String hasNewVersion({required Object p}) => 'به‌روزرسانی نسخه ${p} ';
 	@override String get autoDownloadPkg => 'دانلود خودکار بسته‌های به‌روزرسانی';
 	@override String get devOptions => 'تنظیمات توسعه‌دهندگان';
+	@override String get joinUs => 'به ما بپیوندید';
 	@override String get about => 'درباره';
 	@override String get name => 'نام';
 	@override String get version => 'نسخه';
@@ -1069,6 +1070,7 @@ extension on TranslationsFa {
 			'meta.hasNewVersion' => ({required Object p}) => 'به‌روزرسانی نسخه ${p} ',
 			'meta.autoDownloadPkg' => 'دانلود خودکار بسته‌های به‌روزرسانی',
 			'meta.devOptions' => 'تنظیمات توسعه‌دهندگان',
+			'meta.joinUs' => 'به ما بپیوندید',
 			'meta.about' => 'درباره',
 			'meta.name' => 'نام',
 			'meta.version' => 'نسخه',
@@ -1279,9 +1281,9 @@ extension on TranslationsFa {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'اولویت DoH H3',
 			'dns.useHosts' => 'استفاده از هاست ها',
-			'dns.useSystemHosts' => 'استفاده از هاست های سیستم',
 			_ => null,
 		} ?? switch (path) {
+			'dns.useSystemHosts' => 'استفاده از هاست های سیستم',
 			'dns.enhancedMode' => 'حالت پیشرفته',
 			'dns.fakeIPFilterMode' => 'حالت فیلتر ${_root.dns.fakeIp}',
 			'dns.fakeIPFilter' => 'فیلتر ${_root.dns.fakeIp}',

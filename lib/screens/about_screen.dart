@@ -11,6 +11,7 @@ import 'package:wmimo/screens/donate_screen.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
 import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/group_screen.dart';
+import 'package:wmimo/screens/qrcode_screen.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -185,6 +186,24 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
           text: "aimy1/Wmimo",
           onPush: () async {
             await UrlLauncherUtils.loadUrl("https://github.com/aimy1/Wmimo");
+          },
+        ),
+      ),
+      GroupItemOptions(
+        pushOptions: GroupItemPushOptions(
+          name: tcontext.meta.joinUs,
+          text: "t.me/wmimoapp",
+          onPush: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                settings: QrcodeScreen.routSettings(),
+                builder: (context) => QrcodeScreen(
+                  title: tcontext.meta.joinUs,
+                  content: "https://t.me/wmimoapp",
+                ),
+              ),
+            );
           },
         ),
       ),

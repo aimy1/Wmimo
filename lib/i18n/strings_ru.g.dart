@@ -449,6 +449,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String hasNewVersion({required Object p}) => 'Обновить версию ${p}';
 	@override String get autoDownloadPkg => 'Автоматически загружать пакеты обновлений';
 	@override String get devOptions => 'Параметры разработчика';
+	@override String get joinUs => 'Присоединиться к нам';
 	@override String get about => 'О приложении';
 	@override String get name => 'Название';
 	@override String get version => 'Версия';
@@ -1069,6 +1070,7 @@ extension on TranslationsRu {
 			'meta.hasNewVersion' => ({required Object p}) => 'Обновить версию ${p}',
 			'meta.autoDownloadPkg' => 'Автоматически загружать пакеты обновлений',
 			'meta.devOptions' => 'Параметры разработчика',
+			'meta.joinUs' => 'Присоединиться к нам',
 			'meta.about' => 'О приложении',
 			'meta.name' => 'Название',
 			'meta.version' => 'Версия',
@@ -1279,9 +1281,9 @@ extension on TranslationsRu {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'Приоритет DoH H3',
 			'dns.useHosts' => 'Использование хостов',
-			'dns.useSystemHosts' => 'Использование системных хостов',
 			_ => null,
 		} ?? switch (path) {
+			'dns.useSystemHosts' => 'Использование системных хостов',
 			'dns.enhancedMode' => 'Расширенный режим',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} режим фильтра',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} фильтрация',
