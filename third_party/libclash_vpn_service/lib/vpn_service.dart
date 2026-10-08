@@ -1214,21 +1214,105 @@ rules:
   static Future<void> setSystemProxy(dynamic options) async {
     String host = "127.0.0.1";
     int port = 7890;
-    String bypass = "<local>;localhost;127.*;10.*;172.16.*;172.17.*;172.18.*;172.19.*;172.20.*;172.21.*;172.22.*;172.23.*;172.24.*;172.25.*;172.26.*;172.27.*;172.28.*;172.29.*;172.30.*;172.31.*;192.168.*";
+    final List<String> extraBypass = [];
 
     try {
       if (options != null) {
-        host = options.host?.toString() ?? host;
-        port = options.port is int
-            ? options.port
-            : (int.tryParse(options.port.toString()) ?? port);
-        if (options.bypassDomain != null && options.bypassDomain.toString().isNotEmpty) {
-          bypass = "$bypass;${options.bypassDomain}";
+        if (options is Map) {
+          host = options['host']?.toString() ?? host;
+          final p = options['port'];
+          if (p is int) {
+            port = p;
+          } else if (p != null) {
+            port = int.tryParse(p.toString()) ?? port;
+          }
+          final rawBypass = options['bypassDomains'] ?? options['bypassDomain'];
+          if (rawBypass is Iterable) {
+            for (var item in rawBypass) {
+              if (item != null) {
+                final s = item.toString().trim();
+                if (s.isNotEmpty) extraBypass.add(s);
+              }
+            }
+          } else if (rawBypass is String && rawBypass.trim().isNotEmpty) {
+            for (var item in rawBypass.split(RegExp(r'[;,]'))) {
+              final s = item.trim();
+              if (s.isNotEmpty) extraBypass.add(s);
+            }
+          }
+        } else {
+          try {
+            host = options.host?.toString() ?? host;
+          } catch (_) {}
+          try {
+            final p = options.port;
+            if (p is int) {
+              port = p;
+            } else if (p != null) {
+              port = int.tryParse(p.toString()) ?? port;
+            }
+          } catch (_) {}
+
+          dynamic rawBypass;
+          try {
+            rawBypass = options.bypassDomains;
+          } catch (_) {}
+          if (rawBypass == null) {
+            try {
+              rawBypass = options.bypassDomain;
+            } catch (_) {}
+          }
+
+          if (rawBypass is Iterable) {
+            for (var item in rawBypass) {
+              if (item != null) {
+                final s = item.toString().trim();
+                if (s.isNotEmpty) extraBypass.add(s);
+              }
+            }
+          } else if (rawBypass is String && rawBypass.trim().isNotEmpty) {
+            for (var item in rawBypass.split(RegExp(r'[;,]'))) {
+              final s = item.trim();
+              if (s.isNotEmpty) extraBypass.add(s);
+            }
+          }
         }
       }
     } catch (_) {}
 
     if (Platform.isWindows) {
+      final defaultWindowsBypass = [
+        "<local>",
+        "localhost",
+        "127.*",
+        "10.*",
+        "172.16.*",
+        "172.17.*",
+        "172.18.*",
+        "172.19.*",
+        "172.20.*",
+        "172.21.*",
+        "172.22.*",
+        "172.23.*",
+        "172.24.*",
+        "172.25.*",
+        "172.26.*",
+        "172.27.*",
+        "172.28.*",
+        "172.29.*",
+        "172.30.*",
+        "172.31.*",
+        "192.168.*",
+      ];
+      final allWindowsBypass = <String>{};
+      allWindowsBypass.addAll(defaultWindowsBypass);
+      for (var item in extraBypass) {
+        if (item.isNotEmpty) {
+          allWindowsBypass.add(item);
+        }
+      }
+      final bypass = allWindowsBypass.join(";");
+
       try {
         await Process.run('reg', [
           'add',
@@ -1268,18 +1352,36 @@ rules:
     } else if (Platform.isMacOS) {
       try {
         final services = await _getMacNetworkServices();
+        final defaultMacBypass = [
+          "localhost",
+          "127.0.0.1",
+          "192.168.0.0/16",
+          "10.0.0.0/8",
+          "172.16.0.0/12",
+          "*.local",
+        ];
+        final allMacBypass = <String>{...defaultMacBypass, ...extraBypass}.toList();
         for (final service in services) {
           await Process.run('networksetup', ['-setwebproxy', service, host, '$port']);
           await Process.run('networksetup', ['-setsecurewebproxy', service, host, '$port']);
           await Process.run('networksetup', ['-setsocksfirewallproxy', service, host, '$port']);
-          final macBypass = ["localhost", "127.0.0.1", "192.168.0.0/16", "10.0.0.0/8", "172.16.0.0/12"];
-          await Process.run('networksetup', ['-setproxybypassdomains', service, ...macBypass]);
+          await Process.run('networksetup', ['-setproxybypassdomains', service, ...allMacBypass]);
           await Process.run('networksetup', ['-setwebproxystate', service, 'on']);
           await Process.run('networksetup', ['-setsecurewebproxystate', service, 'on']);
           await Process.run('networksetup', ['-setsocksfirewallproxystate', service, 'on']);
         }
       } catch (_) {}
     } else if (Platform.isLinux) {
+      final defaultLinuxBypass = [
+        'localhost',
+        '127.0.0.0/8',
+        '::1',
+        '10.0.0.0/8',
+        '192.168.0.0/16',
+        '172.16.0.0/12',
+      ];
+      final allLinuxBypass = <String>{...defaultLinuxBypass, ...extraBypass}.toList();
+      final linuxBypassGSettings = "[${allLinuxBypass.map((e) => "'${e.replaceAll("'", r"\'")}'").join(', ')}]";
       try {
         await Process.run('gsettings', ['set', 'org.gnome.system.proxy', 'mode', 'manual']);
         await Process.run('gsettings', ['set', 'org.gnome.system.proxy.http', 'host', host]);
@@ -1292,7 +1394,7 @@ rules:
           'set',
           'org.gnome.system.proxy',
           'ignore-hosts',
-          "['localhost', '127.0.0.0/8', '::1', '10.0.0.0/8', '192.168.0.0/16', '172.16.0.0/12']"
+          linuxBypassGSettings,
         ]);
       } catch (_) {}
 
@@ -1303,6 +1405,7 @@ rules:
         await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'httpProxy', 'http://$host:$port']);
         await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'httpsProxy', 'http://$host:$port']);
         await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'socksProxy', 'socks5://$host:$port']);
+        await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'NoProxyFor', allLinuxBypass.join(',')]);
       } catch (_) {}
     }
   }

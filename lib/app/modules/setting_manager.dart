@@ -48,7 +48,7 @@ class SettingConfigItemUI {
     if (map == null) {
       return;
     }
-    theme = map["theme"] ?? "";
+    theme = (map["theme"] as String?)?.trim().toLowerCase() ?? "";
     autoOrientation = map["auto_orientation"] ?? maybeTv();
     disableFontScaler = map["disable_font_scaler"] ?? false;
     hideAfterLaunch = map["hide_after_launch"] ?? false;
@@ -247,12 +247,13 @@ class SettingConfig {
 
 class SettingManager {
   static bool _saving = false;
+  static bool _hasPendingSave = false;
   static SettingConfig _config = SettingConfig();
   static Future<void> init({bool fromBackupRestore = false}) async {
     await load();
     bool needSave = await parseConfig();
     if (needSave) {
-      save();
+      await save();
     }
   }
 
@@ -331,20 +332,25 @@ class SettingManager {
     }
   }
 
-  static void save() async {
+  static Future<void> save() async {
     if (_saving) {
+      _hasPendingSave = true;
       return;
     }
     _saving = true;
-    String filePath = await PathUtils.settingFilePath();
-    const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-    String content = encoder.convert(_config.toJson());
     try {
-      await File(filePath).writeAsString(content, flush: true);
+      do {
+        _hasPendingSave = false;
+        String filePath = await PathUtils.settingFilePath();
+        const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+        String content = encoder.convert(_config.toJson());
+        await File(filePath).writeAsString(content, flush: true);
+      } while (_hasPendingSave);
     } catch (err) {
-      Log.w("SettingManager.save exception  $filePath ${err.toString()}");
+      Log.w("SettingManager.save exception: ${err.toString()}");
+    } finally {
+      _saving = false;
     }
-    _saving = false;
   }
 
   static void reset() {

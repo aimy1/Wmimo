@@ -3,6 +3,8 @@ class ProxyOption {
   final int port;
   final List<String> bypassDomains;
   ProxyOption(this.host, this.port, this.bypassDomains);
+
+  List<String> get bypassDomain => bypassDomains;
 }
 
 class ClashProxyManager {

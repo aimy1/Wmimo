@@ -18,6 +18,7 @@ class ListAddScreen extends LasyRenderingStatefulWidget {
   final String dialogTitle;
   final String dialogTextHit;
   final Future<String?> Function()? onTapAdd;
+  final void Function(List<String>)? onChanged;
   ListAddScreen({
     super.key,
     required this.title,
@@ -26,6 +27,7 @@ class ListAddScreen extends LasyRenderingStatefulWidget {
     this.dialogTitle = "",
     this.dialogTextHit = "",
     this.onTapAdd,
+    this.onChanged,
   });
 
   @override
@@ -207,16 +209,34 @@ class _ListAddScreenState extends LasyRenderingState<ListAddScreen> {
     if (text == null) {
       return;
     }
-    if (widget.data.contains(text)) {
+    text = text.trim();
+    if (text.isEmpty) {
       return;
     }
-    widget.data.add(text);
-    setState(() {});
+    final parts = text.contains(';') || text.contains(',')
+        ? text
+            .split(RegExp(r'[;,]'))
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toList()
+        : [text];
+    bool changed = false;
+    for (final part in parts) {
+      if (!widget.data.contains(part)) {
+        widget.data.add(part);
+        changed = true;
+      }
+    }
+    if (changed) {
+      widget.onChanged?.call(widget.data);
+      setState(() {});
+    }
   }
 
   void onTapDelete(String text) {
-    widget.data.remove(text);
-
-    setState(() {});
+    if (widget.data.remove(text)) {
+      widget.onChanged?.call(widget.data);
+      setState(() {});
+    }
   }
 }
