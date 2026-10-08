@@ -53,6 +53,7 @@
 
 如果您在使用過程中遇到任何 Bug、異常崩潰或有功能改進建議，歡迎聯繫作者進行反饋：
 
+- 💬 **Telegram 頻道/討論群**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **聯繫信箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [提交 Issue 反饋](https://github.com/aimy1/Wmimo/issues)
 

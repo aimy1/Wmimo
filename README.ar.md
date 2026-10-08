@@ -47,6 +47,7 @@
 
 إذا واجهت أي أخطاء أو أعطال أو كان لديك اقتراحات للتحسين، فلا تتردد في التواصل مع المطور:
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **بريد المطور**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [إرسال مشكلة](https://github.com/aimy1/Wmimo/issues)
 

@@ -58,6 +58,7 @@
 
 バグの発生や不具合、または改善のご提案がございましたら、作者までお気軽にご連絡ください：
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **作者メール**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [Issue を作成](https://github.com/aimy1/Wmimo/issues)
 

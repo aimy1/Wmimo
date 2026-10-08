@@ -47,6 +47,7 @@
 
 Si encuentra algún error, fallo o tiene sugerencias de mejora, póngase en contacto con el autor:
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **Correo del autor**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [Enviar un Issue](https://github.com/aimy1/Wmimo/issues)
 
