@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.1.14.1501)'
+        description: 'Release Tag (e.g. v1.2.0.1501)'
         required: false
-        default: 'v1.1.14.1501'
+        default: 'v1.2.0.1501'
 
 permissions:
   contents: write
@@ -68,7 +68,7 @@ jobs:
                 $tag = "v$pubVer"
               }
             } else {
-              $tag = "v1.1.14.1501"
+              $tag = "v1.2.0.1501"
             }
           }
           if (-not $tag.StartsWith("v")) {
@@ -223,7 +223,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.1.14.1501"
+              TAG="v1.2.0.1501"
             fi
           fi
           chmod +x tool/package_linux.sh
@@ -318,7 +318,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.1.14.1501"
+              TAG="v1.2.0.1501"
             fi
           fi
           
@@ -342,9 +342,174 @@ jobs:
           name: android-release
           path: dist/*
 
+  build-macos:
+    name: Build macOS Release (Universal DMG & Portable Zip)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        id: flutter_setup
+        uses: subosito/flutter-action@v2
+        continue-on-error: true
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Retry Setup Flutter on network failure
+        if: steps.flutter_setup.outcome == 'failure'
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Generate Translations
+        run: dart run slang
+
+      - name: Download Multiplatform Mihomo Cores
+        run: dart run tool/download_all_cores.dart
+
+      - name: Patch dependencies for macOS / Xcode 16 compatibility
+        run: |
+          chmod +x tool/patch_macos_deps.sh
+          bash tool/patch_macos_deps.sh
+
+      - name: Build macOS Application
+        env:
+          CODE_SIGNING_REQUIRED: "NO"
+          CODE_SIGNING_ALLOWED: "NO"
+          CODE_SIGN_IDENTITY: "-"
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: "NO"
+        run: |
+          PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+          PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1501"
+          echo "Building macOS application version $PUBSPEC_VER+$PUBSPEC_BUILD..."
+          flutter build macos --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
+
+      - name: Package macOS Artifacts (DMG & Zip)
+        run: |
+          TAG="${{ github.event.inputs.tag_name }}"
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+              TAG="${{ github.ref_name }}"
+            fi
+          fi
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [ -f "pubspec.yaml" ]; then
+              PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+              PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+              if [ -n "$PUBSPEC_BUILD" ]; then
+                TAG="v${PUBSPEC_VER}.${PUBSPEC_BUILD}"
+              else
+                TAG="v${PUBSPEC_VER}"
+              fi
+            else
+              TAG="v1.2.0.1501"
+            fi
+          fi
+          chmod +x tool/package_macos.sh
+          bash tool/package_macos.sh "$TAG"
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-release
+          path: dist/*macOS*
+
+  build-ios:
+    name: Build iOS Release (TrollStore & Sideload IPA)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        id: flutter_setup
+        uses: subosito/flutter-action@v2
+        continue-on-error: true
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Retry Setup Flutter on network failure
+        if: steps.flutter_setup.outcome == 'failure'
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Generate Translations
+        run: dart run slang
+
+      - name: Download Multiplatform Mihomo Cores
+        run: dart run tool/download_all_cores.dart
+
+      - name: Patch dependencies for Apple / Xcode 16 compatibility
+        run: |
+          chmod +x tool/patch_macos_deps.sh
+          bash tool/patch_macos_deps.sh
+
+      - name: Build iOS Application (No Codesign)
+        env:
+          CODE_SIGNING_REQUIRED: "NO"
+          CODE_SIGNING_ALLOWED: "NO"
+          CODE_SIGN_IDENTITY: ""
+        run: |
+          PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+          PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1501"
+          echo "Building iOS application version $PUBSPEC_VER+$PUBSPEC_BUILD..."
+          flutter build ios --release --no-codesign --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
+
+      - name: Package iOS Artifacts (.ipa)
+        run: |
+          TAG="${{ github.event.inputs.tag_name }}"
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+              TAG="${{ github.ref_name }}"
+            fi
+          fi
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [ -f "pubspec.yaml" ]; then
+              PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+              PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+              if [ -n "$PUBSPEC_BUILD" ]; then
+                TAG="v${PUBSPEC_VER}.${PUBSPEC_BUILD}"
+              else
+                TAG="v${PUBSPEC_VER}"
+              fi
+            else
+              TAG="v1.2.0.1501"
+            fi
+          fi
+          chmod +x tool/package_ios.sh
+          bash tool/package_ios.sh "$TAG"
+
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release
+          path: dist/*iOS*
+
   publish-release:
     name: Publish GitHub Release
-    needs: [build-windows, build-linux, build-android]
+    needs: [build-windows, build-linux, build-android, build-macos, build-ios]
     runs-on: ubuntu-latest
 
     steps:
@@ -370,7 +535,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.1.14.1501"
+              TAG="v1.2.0.1501"
             fi
           fi
 

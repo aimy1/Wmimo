@@ -5,7 +5,7 @@ repository: https://github.com/aimy1/Wmimo.git
 issue_tracker: https://github.com/aimy1/Wmimo/issues
 
 publish_to: none 
-version: 1.1.14+1501
+version: 1.2.0+1501
 environment:
   sdk: ">=3.12.2 <4.0.0"
   flutter: ">=3.35.0"
@@ -107,6 +107,10 @@ dependency_overrides:
   path_provider_foundation: 2.3.2
   flutter_inappwebview_linux:
     path: third_party/flutter_inappwebview_linux_stub
+  flutter_inappwebview_macos:
+    path: third_party/flutter_inappwebview_macos
+  flutter_inappwebview_ios:
+    path: third_party/flutter_inappwebview_ios
   window_manager: #0.5.0
     #path: ../window_manager/packages/
     git:

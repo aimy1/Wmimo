@@ -100,8 +100,9 @@ Future<void> run(List<String> args) async {
       const inProduction = bool.fromEnvironment("dart.vm.product");
       if (inProduction) {
         if (Platform.isMacOS) {
-          if (!path.isWithin("/Applications", exePath)) {
+          if (exePath.startsWith("/Volumes/")) {
             startFailedReason = StartFailedReason.invalidInstallPath;
+            startFailedReasonDesc = "请先将 Wmimo 拖入【应用程序】(Applications) 文件夹后再打开运行";
             break;
           }
         }

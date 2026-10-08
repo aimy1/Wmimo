@@ -93,9 +93,13 @@ import os.log
 
             manager.loadFromPreferences { _ in
               do {
-                try manager.connection.startVPNTunnel(options: [
+                var startOptions: [String: NSObject] = [
                   "mixedPort": "\(mixedPort)" as NSString
-                ])
+                ]
+                if let path = providerConfig["sharedConfigPath"] as? String {
+                  startOptions["sharedConfigPath"] = path as NSString
+                }
+                try manager.connection.startVPNTunnel(options: startOptions)
                 result(true)
               } catch {
                 result(FlutterError(code: "START_FAILED", message: error.localizedDescription, details: nil))
