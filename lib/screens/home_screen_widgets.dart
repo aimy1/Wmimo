@@ -390,7 +390,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 ),
                 const SizedBox(height: 8),
                 SizedBox(
-                  height: 38,
+                  height: 40,
                   child: SegmentedElevatedButton(
                     segments: [
                       SegemntedElevatedButtonItem(
@@ -407,7 +407,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                       ),
                     ],
                     selected: ClashSettingManager.getConfigsMode().index,
-                    padding: const EdgeInsets.symmetric(vertical: 1),
+                    padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                     onPressed: (int value) async {
                       ClashConfigsMode type = ClashConfigsMode.values[value];
                       var error = await ClashSettingManager.setConfigsMode(type);
