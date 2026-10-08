@@ -1022,6 +1022,9 @@ class Translations$meta$en {
 	/// en: 'Developer Options'
 	String get devOptions => 'Developer Options';
 
+	/// en: 'Join Us'
+	String get joinUs => 'Join Us';
+
 	/// en: 'About'
 	String get about => 'About';
 
@@ -2133,6 +2136,7 @@ extension on Translations {
 			'meta.hasNewVersion' => ({required Object p}) => 'Update Version ${p}',
 			'meta.autoDownloadPkg' => 'Auto Download Update Packages',
 			'meta.devOptions' => 'Developer Options',
+			'meta.joinUs' => 'Join Us',
 			'meta.about' => 'About',
 			'meta.name' => 'Name',
 			'meta.version' => 'Version',
@@ -2343,9 +2347,9 @@ extension on Translations {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'Prefer DoH H3',
 			'dns.useHosts' => 'Use Hosts',
-			'dns.useSystemHosts' => 'Use System Hosts',
 			_ => null,
 		} ?? switch (path) {
+			'dns.useSystemHosts' => 'Use System Hosts',
 			'dns.enhancedMode' => 'Enhanced Mode',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} Filter Mode',
 			'dns.fakeIPFilter' => 'fake-ip Filter',

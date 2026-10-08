@@ -47,6 +47,7 @@
 
 اگر با هرگونه باگ، کرش یا مشکلی مواجه شدید یا پیشنهادی برای بهبود دارید، با نویسنده در ارتباط باشید:
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **ایمیل نویسنده**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [ثبت Issue](https://github.com/aimy1/Wmimo/issues)
 

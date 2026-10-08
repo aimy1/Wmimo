@@ -26,6 +26,7 @@ $langBar
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
   </p>
 
   <br/>
@@ -112,11 +113,11 @@ flutter build windows --release
 
 # macOS Release (Universal DMG and Portable Zip)
 flutter build macos --release
-bash tool/package_macos.sh v1.2.0.1501
+bash tool/package_macos.sh v1.2.0.1502
 
 # Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.2.0.1501
+bash tool/package_linux.sh v1.2.0.1502
 
 # Android APK
 flutter build apk --release
@@ -149,6 +150,7 @@ We express our heartfelt gratitude to the open-source community:
 
 If you encounter any bugs, crashes, or have feature requests, please contact the author or open an issue:
 
+- 💬 **Telegram Channel**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **Author Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [Submit an Issue](https://github.com/aimy1/Wmimo/issues)
 
@@ -174,6 +176,7 @@ $langBar
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
   </p>
 
   <br/>
@@ -265,11 +268,11 @@ flutter build windows --release
 
 # macOS Release (生成 Universal DMG 镜像与便携包)
 flutter build macos --release
-bash tool/package_macos.sh v1.2.0.1501
+bash tool/package_macos.sh v1.2.0.1502
 
 # Linux Release (一键打包 Deb, RPM, AppImage, Arch 与 Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.2.0.1501
+bash tool/package_linux.sh v1.2.0.1502
 
 # Android Release (生成 APK 安装包)
 flutter build apk --release
@@ -300,6 +303,7 @@ flutter build apk --release
 
 如果您在使用过程中遇到任何 Bug、异常崩溃或有功能改进建议，欢迎联系作者进行反馈：
 
+- 💬 **Telegram 频道/讨论群**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **联系邮箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [提交 Issue 反馈](https://github.com/aimy1/Wmimo/issues)
 
@@ -325,6 +329,7 @@ $langBar
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
   </p>
 
   <br/>
@@ -359,6 +364,7 @@ $langBar
 
 如果您在使用過程中遇到任何 Bug、異常崩潰或有功能改進建議，歡迎聯繫作者進行反饋：
 
+- 💬 **Telegram 頻道/討論群**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **聯繫信箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [提交 Issue 反饋](https://github.com/aimy1/Wmimo/issues)
 
@@ -384,6 +390,7 @@ $langBar
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
   </p>
 
   <br/>
@@ -423,6 +430,7 @@ $langBar
 
 バグの発生や不具合、または改善のご提案がございましたら、作者までお気軽にご連絡ください：
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **作者メール**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [Issue を作成](https://github.com/aimy1/Wmimo/issues)
 
@@ -448,6 +456,7 @@ $langBar
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
   </p>
 
   <br/>
@@ -487,6 +496,7 @@ $langBar
 
 버그나 오류가 발생하거나 기능 제안이 있으신 경우 언제든지 개발자에게 문의해 주세요:
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [이슈 등록](https://github.com/aimy1/Wmimo/issues)
 
@@ -512,6 +522,7 @@ $langBar
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
   </p>
 
   <br/>
@@ -540,6 +551,7 @@ $langBar
 
 Если вы столкнулись с ошибками или у вас есть предложения по улучшению, свяжитесь с автором:
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **Электронная почта автора**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [Создать Issue](https://github.com/aimy1/Wmimo/issues)
 
@@ -565,6 +577,7 @@ $langBar
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
   </p>
 
   <br/>
@@ -593,6 +606,7 @@ $langBar
 
 Si encuentra algún error, fallo o tiene sugerencias de mejora, póngase en contacto con el autor:
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **Correo del autor**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [Enviar un Issue](https://github.com/aimy1/Wmimo/issues)
 
@@ -618,6 +632,7 @@ $langBar
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
   </p>
 
   <br/>
@@ -646,6 +661,7 @@ $langBar
 
 إذا واجهت أي أخطاء أو أعطال أو كان لديك اقتراحات للتحسين، فلا تتردد في التواصل مع المطور:
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **بريد المطور**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [إرسال مشكلة](https://github.com/aimy1/Wmimo/issues)
 
@@ -671,6 +687,7 @@ $langBar
     <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
     <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
   </p>
 
   <br/>
@@ -699,6 +716,7 @@ $langBar
 
 اگر با هرگونه باگ، کرش یا مشکلی مواجه شدید یا پیشنهادی برای بهبود دارید، با نویسنده در ارتباط باشید:
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **ایمیل نویسنده**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [ثبت Issue](https://github.com/aimy1/Wmimo/issues)
 

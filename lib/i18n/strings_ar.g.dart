@@ -449,6 +449,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String hasNewVersion({required Object p}) => 'تحديث الإصدار ${p}';
 	@override String get autoDownloadPkg => 'تنزيل حزم التحديث تلقائيًا';
 	@override String get devOptions => 'خيارات للمطور';
+	@override String get joinUs => 'انضم إلينا';
 	@override String get about => 'عن';
 	@override String get name => 'اسم';
 	@override String get version => 'إصدار';
@@ -1069,6 +1070,7 @@ extension on TranslationsAr {
 			'meta.hasNewVersion' => ({required Object p}) => 'تحديث الإصدار ${p}',
 			'meta.autoDownloadPkg' => 'تنزيل حزم التحديث تلقائيًا',
 			'meta.devOptions' => 'خيارات للمطور',
+			'meta.joinUs' => 'انضم إلينا',
 			'meta.about' => 'عن',
 			'meta.name' => 'اسم',
 			'meta.version' => 'إصدار',
@@ -1279,9 +1281,9 @@ extension on TranslationsAr {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'أولوية DoH H3',
 			'dns.useHosts' => 'استخدام المضيفين',
-			'dns.useSystemHosts' => 'استخدام مضيفات النظام',
 			_ => null,
 		} ?? switch (path) {
+			'dns.useSystemHosts' => 'استخدام مضيفات النظام',
 			'dns.enhancedMode' => 'الوضع المحسّن',
 			'dns.fakeIPFilterMode' => 'وضع التصفية ${_root.dns.fakeIp}',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} التصفية',

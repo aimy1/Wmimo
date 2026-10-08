@@ -449,6 +449,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String hasNewVersion({required Object p}) => '버전 ${p}로 업데이트';
 	@override String get autoDownloadPkg => '업데이트 패키지 자동 다운로드';
 	@override String get devOptions => '개발자 옵션';
+	@override String get joinUs => '커뮤니티 참여';
 	@override String get about => '정보';
 	@override String get name => '이름';
 	@override String get version => '버전';
@@ -1069,6 +1070,7 @@ extension on TranslationsKo {
 			'meta.hasNewVersion' => ({required Object p}) => '버전 ${p}로 업데이트',
 			'meta.autoDownloadPkg' => '업데이트 패키지 자동 다운로드',
 			'meta.devOptions' => '개발자 옵션',
+			'meta.joinUs' => '커뮤니티 참여',
 			'meta.about' => '정보',
 			'meta.name' => '이름',
 			'meta.version' => '버전',
@@ -1279,9 +1281,9 @@ extension on TranslationsKo {
 			'dns.fallback' => '폴백(Fallback)',
 			'dns.preferH3' => 'DoH H3 우선',
 			'dns.useHosts' => 'Hosts 사용',
-			'dns.useSystemHosts' => '시스템 Hosts 사용',
 			_ => null,
 		} ?? switch (path) {
+			'dns.useSystemHosts' => '시스템 Hosts 사용',
 			'dns.enhancedMode' => '향상된 모드',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} 필터 모드',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} 필터',

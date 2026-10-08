@@ -449,6 +449,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String hasNewVersion({required Object p}) => 'バージョン ${p} に更新';
 	@override String get autoDownloadPkg => '更新パッケージを自動ダウンロード';
 	@override String get devOptions => '開発者オプション';
+	@override String get joinUs => 'コミュニティに参加';
 	@override String get about => 'このアプリについて';
 	@override String get name => '名前';
 	@override String get version => 'バージョン';
@@ -1069,6 +1070,7 @@ extension on TranslationsJa {
 			'meta.hasNewVersion' => ({required Object p}) => 'バージョン ${p} に更新',
 			'meta.autoDownloadPkg' => '更新パッケージを自動ダウンロード',
 			'meta.devOptions' => '開発者オプション',
+			'meta.joinUs' => 'コミュニティに参加',
 			'meta.about' => 'このアプリについて',
 			'meta.name' => '名前',
 			'meta.version' => 'バージョン',
@@ -1279,9 +1281,9 @@ extension on TranslationsJa {
 			'dns.fallback' => 'フォールバック',
 			'dns.preferH3' => 'DoH H3を優先',
 			'dns.useHosts' => 'Hostsを使用',
-			'dns.useSystemHosts' => 'システムHostsを使用',
 			_ => null,
 		} ?? switch (path) {
+			'dns.useSystemHosts' => 'システムHostsを使用',
 			'dns.enhancedMode' => '拡張モード',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} フィルターモード',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} フィルター',

@@ -449,6 +449,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String hasNewVersion({required Object p}) => 'Actualizar Versión ${p}';
 	@override String get autoDownloadPkg => 'Descargar Paquetes de Actualización Automáticamente';
 	@override String get devOptions => 'Opciones de Desarrollador';
+	@override String get joinUs => 'Únete a nosotros';
 	@override String get about => 'Acerca de';
 	@override String get name => 'Nombre';
 	@override String get version => 'Versión';
@@ -1069,6 +1070,7 @@ extension on TranslationsEs {
 			'meta.hasNewVersion' => ({required Object p}) => 'Actualizar Versión ${p}',
 			'meta.autoDownloadPkg' => 'Descargar Paquetes de Actualización Automáticamente',
 			'meta.devOptions' => 'Opciones de Desarrollador',
+			'meta.joinUs' => 'Únete a nosotros',
 			'meta.about' => 'Acerca de',
 			'meta.name' => 'Nombre',
 			'meta.version' => 'Versión',
@@ -1279,9 +1281,9 @@ extension on TranslationsEs {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'Preferir DoH H3',
 			'dns.useHosts' => 'Usar Hosts',
-			'dns.useSystemHosts' => 'Usar Hosts del Sistema',
 			_ => null,
 		} ?? switch (path) {
+			'dns.useSystemHosts' => 'Usar Hosts del Sistema',
 			'dns.enhancedMode' => 'Modo Mejorado',
 			'dns.fakeIPFilterMode' => 'Modo de Filtro ${_root.dns.fakeIp}',
 			'dns.fakeIPFilter' => 'Filtro fake-ip',

@@ -33,6 +33,14 @@ class SegmentedElevatedButton extends StatefulWidget {
 
 class _SegmentedElevatedButtonState extends State<SegmentedElevatedButton> {
   @override
+  void didUpdateWidget(covariant SegmentedElevatedButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selected != widget.selected) {
+      setState(() {});
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
@@ -85,11 +93,15 @@ class _SegmentedElevatedButtonState extends State<SegmentedElevatedButton> {
                       : null,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: widget.padding ?? const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                   child: Text(
                     widget.segments[index].text,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 13.5,
+                      fontSize: 13,
+                      height: 1.2,
                       fontWeight: isSelected
                           ? FontWeight.w600
                           : FontWeight.w500,

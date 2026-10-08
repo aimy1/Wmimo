@@ -58,6 +58,7 @@
 
 버그나 오류가 발생하거나 기능 제안이 있으신 경우 언제든지 개발자에게 문의해 주세요:
 
+- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - 🐛 **GitHub Issues**: [이슈 등록](https://github.com/aimy1/Wmimo/issues)
 

@@ -31,6 +31,7 @@ import 'package:wmimo/screens/net_check_screen.dart';
 import 'package:wmimo/screens/speed_test_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen.dart';
 import 'package:wmimo/screens/proxy_board_screen.dart';
+import 'package:wmimo/screens/qrcode_screen.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/ip_info_card.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
@@ -390,7 +391,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 ),
                 const SizedBox(height: 8),
                 SizedBox(
-                  height: 38,
+                  height: 40,
                   child: SegmentedElevatedButton(
                     segments: [
                       SegemntedElevatedButtonItem(
@@ -407,7 +408,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                       ),
                     ],
                     selected: ClashSettingManager.getConfigsMode().index,
-                    padding: const EdgeInsets.symmetric(vertical: 1),
+                    padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                     onPressed: (int value) async {
                       ClashConfigsMode type = ClashConfigsMode.values[value];
                       var error = await ClashSettingManager.setConfigsMode(type);
@@ -1641,6 +1642,32 @@ class _HomeScreenWidgetPart2State extends State<HomeScreenWidgetPart2> {
                   minVerticalPadding: 16,
                   onTap: () async {
                     await GroupHelper.showHelp(context);
+                  },
+                ),
+                const Divider(height: 1, thickness: 0.8),
+                ListTile(
+                  title: Text(
+                    tcontext.meta.joinUs,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  leading: Icon(
+                    Icons.groups_outlined,
+                    size: 22,
+                    color: primaryColor,
+                  ),
+                  trailing: const Icon(Icons.keyboard_arrow_right, size: 20),
+                  minVerticalPadding: 16,
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        settings: QrcodeScreen.routSettings(),
+                        builder: (context) => QrcodeScreen(
+                          title: tcontext.meta.joinUs,
+                          content: "https://t.me/wmimoapp",
+                        ),
+                      ),
+                    );
                   },
                 ),
                 const Divider(height: 1, thickness: 0.8),

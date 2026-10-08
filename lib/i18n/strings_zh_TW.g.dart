@@ -449,6 +449,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String hasNewVersion({required Object p}) => '更新版本 ${p}';
 	@override String get autoDownloadPkg => '自動下載更新包';
 	@override String get devOptions => '開發者選項';
+	@override String get joinUs => '加入我們';
 	@override String get about => '關於';
 	@override String get name => '名稱';
 	@override String get version => '版本';
@@ -1069,6 +1070,7 @@ extension on TranslationsZhTw {
 			'meta.hasNewVersion' => ({required Object p}) => '更新版本 ${p}',
 			'meta.autoDownloadPkg' => '自動下載更新包',
 			'meta.devOptions' => '開發者選項',
+			'meta.joinUs' => '加入我們',
 			'meta.about' => '關於',
 			'meta.name' => '名稱',
 			'meta.version' => '版本',
@@ -1279,9 +1281,9 @@ extension on TranslationsZhTw {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'DoH H3優先',
 			'dns.useHosts' => '使用Hosts',
-			'dns.useSystemHosts' => '使用系統Hosts',
 			_ => null,
 		} ?? switch (path) {
+			'dns.useSystemHosts' => '使用系統Hosts',
 			'dns.enhancedMode' => '增強模式',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} 過濾模式',
 			'dns.fakeIPFilter' => '${_root.dns.fakeIp} 過濾',
