@@ -56,7 +56,7 @@ class TranslationsZhTw with BaseTranslations<AppLocale, Translations> implements
 	@override late final Translations$profilePatchMode$zh_TW profilePatchMode = Translations$profilePatchMode$zh_TW.internal(_root);
 	@override String get protocolSniff => '協議探測';
 	@override String get protocolSniffOverrideDestination => '探測的域名覆蓋連接目標地址';
-	@override String get edgeRuntimeNotInstalled => '當前設備尚未安裝Edge WebView2運行時,無法展示頁面,請下載安裝Edge WebView2運行時(x64)後,重啟App再試';
+	@override String get edgeRuntimeNotInstalled => '目前裝置尚未安裝 Edge WebView2 執行階段，無法顯示頁面，請下載安裝 Edge WebView2 執行階段 (x64) 後，重新啟動 App 再試';
 	@override Map<String, String> get locales => {
 		'en': 'English',
 		'zh-CN': '简体中文',
@@ -92,8 +92,8 @@ class Translations$BackupAndSyncWebdavScreen$zh_TW implements Translations$Backu
 	// Translations
 	@override String get webdavServerUrl => '伺服器地址';
 	@override String get webdavRequired => '不能為空';
-	@override String get webdavLoginFailed => '登錄失敗:';
-	@override String get webdavListFailed => '獲取文件列表失敗:';
+	@override String get webdavLoginFailed => '登入失敗:';
+	@override String get webdavListFailed => '取得檔案清單失敗:';
 }
 
 // Path: LaunchFailedScreen
@@ -103,7 +103,7 @@ class Translations$LaunchFailedScreen$zh_TW implements Translations$LaunchFailed
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get invalidProcess => '應用啟動失敗[無效的進程名稱],請重新安裝應用到獨立目錄';
+	@override String get invalidProcess => '應用程式啟動失敗 [無效的處理程序名稱]，請重新安裝應用程式至獨立目錄';
 	@override String get invalidProfile => '應用啟動失敗[訪問設定檔失敗],請重新安裝應用';
 	@override String get invalidVersion => '應用啟動失敗[無效版本],請重新安裝應用';
 	@override String get systemVersionLow => '應用啟動失敗[系統版本過低]';
@@ -196,7 +196,7 @@ class Translations$VersionUpdateScreen$zh_TW implements Translations$VersionUpda
 
 	// Translations
 	@override String versionReady({required Object p}) => '新版本[${p}]已就緒';
-	@override String get update => '重啟更新';
+	@override String get update => '重新啟動更新';
 	@override String get cancel => '暫不更新';
 }
 
@@ -207,7 +207,7 @@ class Translations$loginScreen$zh_TW implements Translations$loginScreen$en {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get login => '登錄';
+	@override String get login => '登入';
 	@override String get register => '註冊賬號';
 	@override String get forgotPassword => '忘記密碼';
 	@override String get provider => '服務商';
@@ -221,8 +221,8 @@ class Translations$loginScreen$zh_TW implements Translations$loginScreen$en {
 	@override String get passwordRequired => '請輸入密碼';
 	@override String get validEmailRequired => '請輸入有效的郵箱地址';
 	@override String passwordMinLength({required Object minLength}) => '密碼長度至少${minLength}位';
-	@override String get unsupportedProvider => '不支持的${_root.loginScreen.provider}';
-	@override String get unsupportedProviderType => '不支持的${_root.loginScreen.provider}類型';
+	@override String get unsupportedProvider => '不支援的${_root.loginScreen.provider}';
+	@override String get unsupportedProviderType => '不支援的${_root.loginScreen.provider}類型';
 	@override String get unActivedProvider => '登入功能未啟用';
 	@override String providerLoginSupportRequired({required Object p}) => '編碼/別名請向${_root.loginScreen.provider}索取\n${_root.loginScreen.provider}接入請參考:${p}';
 	@override String get providerDisclaimer => '免責聲明:${_root.loginScreen.provider}為第三方服務,與本App無關';
@@ -271,7 +271,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get ok => '確定';
 	@override String get cancel => '取消';
 	@override String get faq => '常見問題';
-	@override String get doc => '文檔';
+	@override String get doc => '說明文件';
 	@override String get htmlTools => 'HTML工具集';
 	@override String get download => '下載';
 	@override String get loading => '載入中...';
@@ -282,7 +282,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get milliseconds => '毫秒';
 	@override String get protocol => '協議';
 	@override String get search => '搜索';
-	@override String get custom => '自定義';
+	@override String get custom => '自訂';
 	@override String get connect => '連接';
 	@override String get disconnect => '斷開';
 	@override String get connected => '已連接';
@@ -299,7 +299,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get next => '下一步';
 	@override String get done => '完成';
 	@override String get apply => '應用';
-	@override String get refresh => '刷新';
+	@override String get refresh => '重新整理';
 	@override String get retry => '是否重試?';
 	@override String get update => '更新';
 	@override String get updateInterval => '更新時間間隔';
@@ -326,13 +326,13 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get copyUrl => '複製連結';
 	@override String get openUrl => '打開連結';
 	@override String get shareUrl => '分享連結';
-	@override String get coreSettingTips => '注意:修改配置後,需要重新連接才會生效';
+	@override String get coreSettingTips => '注意：修改設定後，需要重新連線才會生效';
 	@override String get overwrite => '覆寫';
-	@override String get overwriteCustom => '自定義覆寫';
+	@override String get overwriteCustom => '自訂覆寫';
 	@override String get overwriteAppend => '追加覆寫';
-	@override String get overwriteTips => '原始配置<-自定義覆寫<-App覆寫';
+	@override String get overwriteTips => '原始設定<-自訂覆寫<-App覆寫';
 	@override String get noOverwrite => '不覆寫';
-	@override String get overwriteSettings => '覆寫設置';
+	@override String get overwriteSettings => '覆寫設定';
 	@override String get diversionTemplates => '分流模板';
 	@override String get ruleProviders => '規則集 (RuleSet)';
 	@override String get ruleTemplates => '規則模板';
@@ -343,11 +343,11 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get externalController => '外部控制';
 	@override String get secret => '金鑰';
 	@override String get tcpConcurrent => 'TCP併發握手';
-	@override String get globalClientFingerprint => 'TLS全局指紋';
-	@override String get allowLanAccess => '局域網設備接入';
-	@override String get mixedPort => '混合代理端口';
+	@override String get globalClientFingerprint => 'TLS 全域指紋';
+	@override String get allowLanAccess => '允許區域網路裝置連入';
+	@override String get mixedPort => '混合代理連接埠';
 	@override String get logLevel => '日誌等級';
-	@override String get findProcessMode => '進程匹配模式';
+	@override String get findProcessMode => '處理程序比對模式';
 	@override String get tcpkeepAliveInterval => 'TCP保活時間間隔';
 	@override String get delayTestUrl => '延遲測試URL';
 	@override String get delayTestTimeout => '延遲測試超時(ms)';
@@ -357,51 +357,51 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get geo => 'GEO';
 	@override String get geoDownloadByProxy => '使用代理下載Geo RuleSet';
 	@override String get geoRulesetTips => 'Geosite/Geoip 會被轉換成 對應的RuleSet';
-	@override String get asnNotSupportInIosTips => '由於iOS系統內存限制,IP-ASN及SRC-IP-ASN規則在iOS上將被忽略';
+	@override String get asnNotSupportInIosTips => '由於 iOS 系統記憶體限制，IP-ASN 及 SRC-IP-ASN 規則在 iOS 上將被略過';
 	@override String get sniffer => '嗅探';
 	@override String get userAgent => 'UserAgent';
 	@override String get launchAtStartup => '開機啟動';
 	@override String get launchAtStartupRunAsAdmin => '請以管理員身份重新啟動Wmimo';
 	@override String get tunModeRunAsAdmin => 'TUN模式需要系統管理員權限,請以管理員身份重新啟動應用';
 	@override String get portableMode => '便攜模式';
-	@override String get portableModeDisableTips => '如需退出便攜模式,請退出[Wmimo]後,手動刪除[wmimo.exe]同目錄下的[portable]文件夾即可';
+	@override String get portableModeDisableTips => '如需結束免安裝便攜模式，請結束 [Wmimo] 後，手動刪除 [wmimo.exe] 同目錄下的 [portable] 資料夾即可';
 	@override String get systemProxy => '系統代理';
 	@override String get autoConnectAfterLaunch => '啟動後自動連接';
 	@override String get autoConnectAtBoot => '系統啟動後自動連接';
-	@override String get autoConnectAtBootTips => '需要系統支持,部分系統可能還需要開啟[自啟動]';
-	@override String get hideAfterLaunch => '啟動後隱藏窗口';
-	@override String get autoSetSystemProxy => '連接後自動設置系統代理';
-	@override String get bypassSystemProxy => '允許繞過系統代理的域名';
+	@override String get autoConnectAtBootTips => '需要系統支援，部分系統可能還需要開啟 [開機自動啟動]';
+	@override String get hideAfterLaunch => '啟動後隱藏視窗';
+	@override String get autoSetSystemProxy => '連線後自動設定系統代理';
+	@override String get bypassSystemProxy => '允許略過系統代理的網域名稱';
 	@override String get excludeFromRecent => '從[最近任務]中隱藏';
 	@override String get wakeLock => '喚醒鎖';
-	@override String get hideVpn => '隱藏VPN圖標';
+	@override String get hideVpn => '隱藏 VPN 圖示';
 	@override String get hideVpnTips => '開啟IPv6會導致此功能失效';
-	@override String get hideDockIcon => '隱藏Dock圖標';
-	@override String get showTrayTraffic => '托盤上顯示流量資訊';
+	@override String get hideDockIcon => '隱藏 Dock 圖示';
+	@override String get showTrayTraffic => '系統匣顯示流量資訊';
 	@override String get website => '官網';
 	@override String get homePage => '主頁';
 	@override String get rule => '規則';
-	@override String get global => '全局';
+	@override String get global => '全域';
 	@override String get direct => '直連';
 	@override String get block => '攔截';
-	@override String get qrcode => '二維碼';
+	@override String get qrcode => 'QR Code';
 	@override String get qrcodeTooLong => '文本過長,無法展示';
-	@override String get qrcodeShare => '分享二維碼';
-	@override String get textToQrcode => '文本轉二維碼';
-	@override String get qrcodeScan => '掃描二維碼';
+	@override String get qrcodeShare => '分享 QR Code';
+	@override String get textToQrcode => '文字轉 QR Code';
+	@override String get qrcodeScan => '掃描 QR Code';
 	@override String get qrcodeScanResult => '掃描結果';
-	@override String get qrcodeScanFromImage => '打開二維碼圖片';
+	@override String get qrcodeScanFromImage => '開啟 QR Code 圖片';
 	@override String get qrcodeScanFromClipboard => '剪貼簿識別';
-	@override String get qrcodeRecognized => '二維碼識別成功';
+	@override String get qrcodeRecognized => 'QR Code 辨識成功';
 	@override String get qrcodeDropHint => '點擊上方按鈕擷取螢幕或選取圖片';
 	@override String get confirmImport => '確認匯入';
 	@override String get reScan => '重新掃描';
-	@override String get qrcodeScanResultFailed => '解析圖片失敗,請確保截圖為有效的二維碼';
+	@override String get qrcodeScanResultFailed => '解析圖片失敗，請確認截圖為有效的 QR Code';
 	@override String get qrcodeScanResultEmpty => '掃描結果為空';
 	@override String get screenshot => '截圖';
 	@override String get backupAndSync => '備份與同步';
 	@override String get importSuccess => '匯入成功';
-	@override String get rewriteConfirm => '該文件將覆蓋本地已有配置,是否繼續?';
+	@override String get rewriteConfirm => '該檔案將覆寫本機現有設定，是否繼續？';
 	@override String get importAndExport => '匯入/匯出';
 	@override String get import => '匯入';
 	@override String get importFromUrl => '從URL匯入';
@@ -418,25 +418,25 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get help => '幫助';
 	@override String get tutorial => '使用教程';
 	@override String get board => '面板';
-	@override String get boardOnline => '使用在線面板';
-	@override String get boardOnlineUrl => '在線面板URL';
-	@override String get boardLocalPort => '本地面板端口';
+	@override String get boardOnline => '使用線上儀表板';
+	@override String get boardOnlineUrl => '線上儀表板網址';
+	@override String get boardLocalPort => '本機儀表板連接埠';
 	@override String get connections => '活動連接';
 	@override String get closeAllConnections => '關閉全部連接';
-	@override String get searchConnections => '搜尋連接 (網域名稱/IP/規則/進程)';
+	@override String get searchConnections => '搜尋連線 (網域名稱/IP/規則/處理程序)';
 	@override String get noFilterResults => '沒有相符的連接';
 	@override String get searchRules => '搜尋規則 (類型/特徵/目標代理)';
 	@override String get rules => '分流規則';
 	@override String get clear => '清除';
 	@override String get copySuccess => '複製成功';
 	@override String get alwayOnVPN => '始終開啟連線';
-	@override String get disableFontScaler => '禁用字體縮放';
+	@override String get disableFontScaler => '停用字型縮放';
 	@override String get autoOrientation => '跟隨螢幕旋轉';
-	@override String get restartTakesEffect => '重啟生效';
+	@override String get restartTakesEffect => '重新啟動後生效';
 	@override String get reconnectTakesEffect => '重新連接後生效';
-	@override String get runtimeProfile => '運行時配置';
-	@override String get willCompleteAfterRebootInstall => '請重啟設備,以便完成系統擴展安裝';
-	@override String get willCompleteAfterRebootUninstall => '請重啟設備,以便完成系統擴展卸載';
+	@override String get runtimeProfile => '執行階段設定';
+	@override String get willCompleteAfterRebootInstall => '請重新啟動裝置，以便完成系統擴充功能安裝';
+	@override String get willCompleteAfterRebootUninstall => '請重新啟動裝置，以便完成系統擴充功能解除安裝';
 	@override String get requestNeedsUserApproval => '1. 請在[系統設定]-[隱私權與安全性]裡[允許] Wmimo安裝系統擴充功能\n2. 在[系統設定]-[一般]-[登入項目與擴充功能-網路擴充功能]啟用[wmimoServiceSE]\n完成後重新連線';
 	@override String get FullDiskAccessPermissionRequired => '請在[系統設定]-[隱私權與安全性]-[完全磁碟取用權限]裡開啟wmimoServiceSE權限後，重新連線';
 	@override String get proxy => '代理';
@@ -458,10 +458,10 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get recommended => '推薦';
 	@override String innerError({required Object p}) => '內部錯誤:${p}';
 	@override String get share => '分享';
-	@override String get importFromClipboard => '從剪貼簿導入';
+	@override String get importFromClipboard => '從剪貼簿匯入';
 	@override String get exportToClipboard => '匯出到剪貼簿';
 	@override String get server => '伺服器';
-	@override String get port => '端口';
+	@override String get port => '連接埠';
 	@override String get donate => '捐助';
 	@override String get setting => '設定';
 	@override String get settingCore => '核心設定';
@@ -469,19 +469,19 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get coreOverwrite => '核心覆寫';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
-	@override String get lanSync => '局域網同步';
-	@override String get lanSyncNotQuitTips => '同步完成前請勿退出此界面';
+	@override String get lanSync => '區域網路同步';
+	@override String get lanSyncNotQuitTips => '同步完成前請勿離開此介面';
 	@override String get deviceNoSpace => '磁盤空間不足';
 	@override String get hideSystemApp => '隱藏系統應用';
-	@override String get hideAppIcon => '隱藏應用圖標';
-	@override String get openDir => '打開文件目錄';
+	@override String get hideAppIcon => '隱藏應用程式圖示';
+	@override String get openDir => '開啟檔案目錄';
 	@override String get type => '類型';
-	@override String get fileChoose => '選擇文件';
-	@override String get filePathCannotEmpty => '文件路徑不能為空';
-	@override String fileNotExist({required Object p}) => '文件不存在:${p}';
-	@override String fileTypeInvalid({required Object p}) => '無效的文件類型:${p}';
+	@override String get fileChoose => '選擇檔案';
+	@override String get filePathCannotEmpty => '檔案路徑不能為空';
+	@override String fileNotExist({required Object p}) => '檔案不存在:${p}';
+	@override String fileTypeInvalid({required Object p}) => '無效的檔案類型:${p}';
 	@override String get uwpExemption => 'UWP網路隔離豁免';
-	@override String get getProfile => '獲取訂閱';
+	@override String get getProfile => '取得訂閱';
 	@override String get buyProfile => '購買訂閱';
 	@override String get addProfile => '新增訂閱';
 	@override String get myProfiles => '訂閱設定';
@@ -535,8 +535,8 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get openSourceLicense => '開源許可證';
 	@override String get submitFeedback => '提交反饋與建議';
 	@override String get copiedToClipboard => '已複製到剪貼簿';
-	@override String get autoScrollEnabled => '已開啟自動滾動';
-	@override String get autoScrollDisabled => '已關閉自動滾動';
+	@override String get autoScrollEnabled => '已開啟自動捲動';
+	@override String get autoScrollDisabled => '已關閉自動捲動';
 	@override String get pauseLogs => '暫停即時日誌';
 	@override String get resumeLogs => '恢復即時日誌';
 	@override String get scrollToLatest => '滾至最新';
@@ -549,17 +549,17 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get offlinePreviewPrompt => '離線設定預覽中，開啟代理後可進行分流與節點測速';
 	@override String get manualSelect => '手動選擇';
 	@override String get autoSelect => '自動優選';
-	@override String get speedTestGroup => '策略組測速';
+	@override String get speedTestGroup => '策略群組測速';
 	@override String get pause => '暫停';
 	@override String get resume => '恢復';
 	@override String get ipInfo => 'IP 資訊';
-	@override String get ipFetching => '正在獲取 IP 資訊...';
+	@override String get ipFetching => '正在取得 IP 資訊...';
 	@override String get ipCopied => 'IP 位址已複製到剪貼簿';
 	@override String get ipLocation => '位置';
 	@override String get ipIsp => '服務商';
-	@override String get ipTapToFetch => '點擊獲取 IP 資訊';
-	@override String get collapseAll => '摺疊所有代理組';
-	@override String get expandAll => '展開所有代理組';
+	@override String get ipTapToFetch => '點擊取得 IP 資訊';
+	@override String get collapseAll => '收合所有代理群組';
+	@override String get expandAll => '展開所有代理群組';
 	@override String get donateTitle => '💖 請作者喝杯咖啡';
 	@override String get donateThankYou => 'ฅ^•ﻌ•^ฅ 你的每一份投餵，都是 Wmimo 不斷打磨與更新的最大動力呀 ~ ☕✨';
 	@override String get tokenCurrency => '幣種';
@@ -570,9 +570,9 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get donateAddressCopied => '( ੭ ˙ᗜ˙ )੭ 位址已複製！非常感謝你的投餵與陪伴~ 💖';
 	@override String get donateTip => '💡 提示：支援 Bybit 或任意 Aptos 相容錢包掃碼轉帳';
 	@override String get qrcodeParsing => '正在解析...';
-	@override String get qrcodeNotFound => '未識別到二維碼';
-	@override String get qrcodeSupportHint => '支援解析各類訂閱、節點及設定二維碼圖片';
-	@override String get qrcodeCameraHint => '將二維碼放入框內即可自動掃描';
+	@override String get qrcodeNotFound => '未偵測到 QR Code';
+	@override String get qrcodeSupportHint => '支援解析各類訂閱、節點及設定 QR Code 圖片';
+	@override String get qrcodeCameraHint => '將 QR Code 放入框內即可自動掃描';
 	@override String get flashlight => '手電筒';
 	@override String get screenshotDesc => '擷取螢幕';
 	@override String get fromImageDesc => '本機圖片';
@@ -586,7 +586,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get sortName => '按名稱 A-Z';
 	@override String get sortRegion => '按地區分組';
 	@override String get filterOptions => '篩選選項';
-	@override String portableUpdateTip({required Object version}) => '偵測到目前為免安裝便攜模式：\n便攜版本暫不支援應用程式內覆蓋更新，請前往官網或倉庫下載最新免安裝壓縮包覆蓋解壓。\n\n最新版本: v${version}';
+	@override String portableUpdateTip({required Object version}) => '偵測到目前為免安裝便攜模式：\n便攜版本暫不支援應用程式內覆寫更新，請前往官網或儲存庫下載最新免安裝壓縮檔覆蓋解壓縮。\n\n最新版本: v${version}';
 	@override String get portableModeTipTitle => '便攜模式提示';
 	@override String get noNodesToSpeedTest => '無可用節點，無需測速';
 	@override String alreadyLatestVersion({required Object version}) => '已是最新版本 (v${version})';
@@ -613,20 +613,20 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get allNodesNormal => '所有節點均正常可用，無需重測';
 	@override String get customUrlPrompt => '自訂 URL (如 http://...)';
 	@override String get customTarget => '自訂目標';
-	@override String get downloadFailedTip => '下載更新安裝包失敗，請檢查網路或點擊下方前往網頁下載。';
+	@override String get downloadFailedTip => '下載更新安裝檔失敗，請檢查網路或點擊下方前往網頁下載。';
 	@override String discoveredNewVersion({required Object version}) => '發現新版本: v${version}';
 	@override String get preparingUpdate => '正在準備啟動更新...';
-	@override String get downloadingPackage => '安裝包正在下載中，請稍候...';
+	@override String get downloadingPackage => '安裝檔正在下載中，請稍候...';
 	@override String get downloadUpdateNow => '立即下載更新';
-	@override String get downloadFromWeb => '前往網頁下載安裝包';
+	@override String get downloadFromWeb => '前往網頁下載安裝檔';
 	@override String get switchSource => '切換源';
 	@override String get serverSwitch => '測速伺服器切換';
 	@override String get autoDetectBest => '自動探測最優';
 	@override String get serverSwitchDesc => '選擇不同的測速 CDN 源或自訂節點進行多鏈路測速';
 	@override String autoSelectedBest({required Object server, required Object ping}) => '已自動選擇最優測速源: ${server} (${ping} ms)';
 	@override String get networkGradeTitle => '網路體質綜合評分';
-	@override String get copyReport => '複製戰報';
-	@override String get reportCopied => '戰報已複製到剪貼簿，可直接貼上分享';
+	@override String get copyReport => '複製測速報告';
+	@override String get reportCopied => '測速報告已複製到剪貼簿，可直接貼上分享';
 	@override String get gamingExperience => '電競體驗';
 	@override String get streamingExperience => '超清串流媒體';
 	@override String get meetingExperience => '遠端視訊';
@@ -679,9 +679,9 @@ class Translations$tun$zh_TW implements Translations$tun$en {
 	@override String get strictRoute => '嚴格路由';
 	@override String get tunDefaultRoute => '預設路由';
 	@override String get icmpForward => 'ICMP 轉發';
-	@override String get allowBypass => '允許應用繞過VPN';
+	@override String get allowBypass => '允許應用程式略過 VPN';
 	@override String get appendHttpProxy => '附加HTTP代理到VPN';
-	@override String get bypassHttpProxyDomain => '允許繞過HTTP代理的域名';
+	@override String get bypassHttpProxyDomain => '允許略過 HTTP 代理的網域名稱';
 }
 
 // Path: dns
@@ -745,12 +745,12 @@ class Translations$main$tray$zh_TW implements Translations$main$tray$en {
 	@override String get coreRunning => '已連線';
 	@override String get startProxy => '啟動連線';
 	@override String get stopProxy => '中斷連線';
-	@override String get restartCore => '重啟核心';
+	@override String get restartCore => '重新啟動核心';
 	@override String get systemProxyItem => '系統代理';
 	@override String get tunModeItem => 'TUN 模式';
 	@override String get outboundMode => '代理模式';
 	@override String get modeRule => '規則模式';
-	@override String get modeGlobal => '全局模式';
+	@override String get modeGlobal => '全域模式';
 	@override String get modeDirect => '直連模式';
 	@override String get profilesMenu => '訂閱設定';
 	@override String get updateAllProfiles => '更新全部訂閱';
@@ -758,7 +758,7 @@ class Translations$main$tray$zh_TW implements Translations$main$tray$en {
 	@override String get tools => '實用工具';
 	@override String get copyProxyCmd => '複製代理指令';
 	@override String get delayTestAll => '全節點測速';
-	@override String get openDashboard => '開啟控制面板';
+	@override String get openDashboard => '開啟儀表板';
 }
 
 /// The flat map containing all translations for locale <zh-TW>.
@@ -775,9 +775,9 @@ extension on TranslationsZhTw {
 			'WelcomeLanguageScreen.start' => '進入應用',
 			'BackupAndSyncWebdavScreen.webdavServerUrl' => '伺服器地址',
 			'BackupAndSyncWebdavScreen.webdavRequired' => '不能為空',
-			'BackupAndSyncWebdavScreen.webdavLoginFailed' => '登錄失敗:',
-			'BackupAndSyncWebdavScreen.webdavListFailed' => '獲取文件列表失敗:',
-			'LaunchFailedScreen.invalidProcess' => '應用啟動失敗[無效的進程名稱],請重新安裝應用到獨立目錄',
+			'BackupAndSyncWebdavScreen.webdavLoginFailed' => '登入失敗:',
+			'BackupAndSyncWebdavScreen.webdavListFailed' => '取得檔案清單失敗:',
+			'LaunchFailedScreen.invalidProcess' => '應用程式啟動失敗 [無效的處理程序名稱]，請重新安裝應用程式至獨立目錄',
 			'LaunchFailedScreen.invalidProfile' => '應用啟動失敗[訪問設定檔失敗],請重新安裝應用',
 			'LaunchFailedScreen.invalidVersion' => '應用啟動失敗[無效版本],請重新安裝應用',
 			'LaunchFailedScreen.systemVersionLow' => '應用啟動失敗[系統版本過低]',
@@ -825,9 +825,9 @@ extension on TranslationsZhTw {
 			'SpeedTestScreen.testHistory' => '測速歷史',
 			'SpeedTestScreen.clearHistory' => '清空歷史',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '新版本[${p}]已就緒',
-			'VersionUpdateScreen.update' => '重啟更新',
+			'VersionUpdateScreen.update' => '重新啟動更新',
 			'VersionUpdateScreen.cancel' => '暫不更新',
-			'loginScreen.login' => '登錄',
+			'loginScreen.login' => '登入',
 			'loginScreen.register' => '註冊賬號',
 			'loginScreen.forgotPassword' => '忘記密碼',
 			'loginScreen.provider' => '服務商',
@@ -841,8 +841,8 @@ extension on TranslationsZhTw {
 			'loginScreen.passwordRequired' => '請輸入密碼',
 			'loginScreen.validEmailRequired' => '請輸入有效的郵箱地址',
 			'loginScreen.passwordMinLength' => ({required Object minLength}) => '密碼長度至少${minLength}位',
-			'loginScreen.unsupportedProvider' => '不支持的${_root.loginScreen.provider}',
-			'loginScreen.unsupportedProviderType' => '不支持的${_root.loginScreen.provider}類型',
+			'loginScreen.unsupportedProvider' => '不支援的${_root.loginScreen.provider}',
+			'loginScreen.unsupportedProviderType' => '不支援的${_root.loginScreen.provider}類型',
 			'loginScreen.unActivedProvider' => '登入功能未啟用',
 			'loginScreen.providerLoginSupportRequired' => ({required Object p}) => '編碼/別名請向${_root.loginScreen.provider}索取\n${_root.loginScreen.provider}接入請參考:${p}',
 			'loginScreen.providerDisclaimer' => '免責聲明:${_root.loginScreen.provider}為第三方服務,與本App無關',
@@ -853,12 +853,12 @@ extension on TranslationsZhTw {
 			'main.tray.coreRunning' => '已連線',
 			'main.tray.startProxy' => '啟動連線',
 			'main.tray.stopProxy' => '中斷連線',
-			'main.tray.restartCore' => '重啟核心',
+			'main.tray.restartCore' => '重新啟動核心',
 			'main.tray.systemProxyItem' => '系統代理',
 			'main.tray.tunModeItem' => 'TUN 模式',
 			'main.tray.outboundMode' => '代理模式',
 			'main.tray.modeRule' => '規則模式',
-			'main.tray.modeGlobal' => '全局模式',
+			'main.tray.modeGlobal' => '全域模式',
 			'main.tray.modeDirect' => '直連模式',
 			'main.tray.profilesMenu' => '訂閱設定',
 			'main.tray.updateAllProfiles' => '更新全部訂閱',
@@ -866,7 +866,7 @@ extension on TranslationsZhTw {
 			'main.tray.tools' => '實用工具',
 			'main.tray.copyProxyCmd' => '複製代理指令',
 			'main.tray.delayTestAll' => '全節點測速',
-			'main.tray.openDashboard' => '開啟控制面板',
+			'main.tray.openDashboard' => '開啟儀表板',
 			'meta.enable' => '啟用',
 			'meta.disable' => '禁用',
 			'meta.open' => '打開',
@@ -892,7 +892,7 @@ extension on TranslationsZhTw {
 			'meta.ok' => '確定',
 			'meta.cancel' => '取消',
 			'meta.faq' => '常見問題',
-			'meta.doc' => '文檔',
+			'meta.doc' => '說明文件',
 			'meta.htmlTools' => 'HTML工具集',
 			'meta.download' => '下載',
 			'meta.loading' => '載入中...',
@@ -903,7 +903,7 @@ extension on TranslationsZhTw {
 			'meta.milliseconds' => '毫秒',
 			'meta.protocol' => '協議',
 			'meta.search' => '搜索',
-			'meta.custom' => '自定義',
+			'meta.custom' => '自訂',
 			'meta.connect' => '連接',
 			'meta.disconnect' => '斷開',
 			'meta.connected' => '已連接',
@@ -920,7 +920,7 @@ extension on TranslationsZhTw {
 			'meta.next' => '下一步',
 			'meta.done' => '完成',
 			'meta.apply' => '應用',
-			'meta.refresh' => '刷新',
+			'meta.refresh' => '重新整理',
 			'meta.retry' => '是否重試?',
 			'meta.update' => '更新',
 			'meta.updateInterval' => '更新時間間隔',
@@ -947,13 +947,13 @@ extension on TranslationsZhTw {
 			'meta.copyUrl' => '複製連結',
 			'meta.openUrl' => '打開連結',
 			'meta.shareUrl' => '分享連結',
-			'meta.coreSettingTips' => '注意:修改配置後,需要重新連接才會生效',
+			'meta.coreSettingTips' => '注意：修改設定後，需要重新連線才會生效',
 			'meta.overwrite' => '覆寫',
-			'meta.overwriteCustom' => '自定義覆寫',
+			'meta.overwriteCustom' => '自訂覆寫',
 			'meta.overwriteAppend' => '追加覆寫',
-			'meta.overwriteTips' => '原始配置<-自定義覆寫<-App覆寫',
+			'meta.overwriteTips' => '原始設定<-自訂覆寫<-App覆寫',
 			'meta.noOverwrite' => '不覆寫',
-			'meta.overwriteSettings' => '覆寫設置',
+			'meta.overwriteSettings' => '覆寫設定',
 			'meta.diversionTemplates' => '分流模板',
 			'meta.ruleProviders' => '規則集 (RuleSet)',
 			'meta.ruleTemplates' => '規則模板',
@@ -964,11 +964,11 @@ extension on TranslationsZhTw {
 			'meta.externalController' => '外部控制',
 			'meta.secret' => '金鑰',
 			'meta.tcpConcurrent' => 'TCP併發握手',
-			'meta.globalClientFingerprint' => 'TLS全局指紋',
-			'meta.allowLanAccess' => '局域網設備接入',
-			'meta.mixedPort' => '混合代理端口',
+			'meta.globalClientFingerprint' => 'TLS 全域指紋',
+			'meta.allowLanAccess' => '允許區域網路裝置連入',
+			'meta.mixedPort' => '混合代理連接埠',
 			'meta.logLevel' => '日誌等級',
-			'meta.findProcessMode' => '進程匹配模式',
+			'meta.findProcessMode' => '處理程序比對模式',
 			'meta.tcpkeepAliveInterval' => 'TCP保活時間間隔',
 			'meta.delayTestUrl' => '延遲測試URL',
 			'meta.delayTestTimeout' => '延遲測試超時(ms)',
@@ -978,51 +978,51 @@ extension on TranslationsZhTw {
 			'meta.geo' => 'GEO',
 			'meta.geoDownloadByProxy' => '使用代理下載Geo RuleSet',
 			'meta.geoRulesetTips' => 'Geosite/Geoip 會被轉換成 對應的RuleSet',
-			'meta.asnNotSupportInIosTips' => '由於iOS系統內存限制,IP-ASN及SRC-IP-ASN規則在iOS上將被忽略',
+			'meta.asnNotSupportInIosTips' => '由於 iOS 系統記憶體限制，IP-ASN 及 SRC-IP-ASN 規則在 iOS 上將被略過',
 			'meta.sniffer' => '嗅探',
 			'meta.userAgent' => 'UserAgent',
 			'meta.launchAtStartup' => '開機啟動',
 			'meta.launchAtStartupRunAsAdmin' => '請以管理員身份重新啟動Wmimo',
 			'meta.tunModeRunAsAdmin' => 'TUN模式需要系統管理員權限,請以管理員身份重新啟動應用',
 			'meta.portableMode' => '便攜模式',
-			'meta.portableModeDisableTips' => '如需退出便攜模式,請退出[Wmimo]後,手動刪除[wmimo.exe]同目錄下的[portable]文件夾即可',
+			'meta.portableModeDisableTips' => '如需結束免安裝便攜模式，請結束 [Wmimo] 後，手動刪除 [wmimo.exe] 同目錄下的 [portable] 資料夾即可',
 			'meta.systemProxy' => '系統代理',
 			'meta.autoConnectAfterLaunch' => '啟動後自動連接',
 			'meta.autoConnectAtBoot' => '系統啟動後自動連接',
-			'meta.autoConnectAtBootTips' => '需要系統支持,部分系統可能還需要開啟[自啟動]',
-			'meta.hideAfterLaunch' => '啟動後隱藏窗口',
-			'meta.autoSetSystemProxy' => '連接後自動設置系統代理',
-			'meta.bypassSystemProxy' => '允許繞過系統代理的域名',
+			'meta.autoConnectAtBootTips' => '需要系統支援，部分系統可能還需要開啟 [開機自動啟動]',
+			'meta.hideAfterLaunch' => '啟動後隱藏視窗',
+			'meta.autoSetSystemProxy' => '連線後自動設定系統代理',
+			'meta.bypassSystemProxy' => '允許略過系統代理的網域名稱',
 			'meta.excludeFromRecent' => '從[最近任務]中隱藏',
 			'meta.wakeLock' => '喚醒鎖',
-			'meta.hideVpn' => '隱藏VPN圖標',
+			'meta.hideVpn' => '隱藏 VPN 圖示',
 			'meta.hideVpnTips' => '開啟IPv6會導致此功能失效',
-			'meta.hideDockIcon' => '隱藏Dock圖標',
-			'meta.showTrayTraffic' => '托盤上顯示流量資訊',
+			'meta.hideDockIcon' => '隱藏 Dock 圖示',
+			'meta.showTrayTraffic' => '系統匣顯示流量資訊',
 			'meta.website' => '官網',
 			'meta.homePage' => '主頁',
 			'meta.rule' => '規則',
-			'meta.global' => '全局',
+			'meta.global' => '全域',
 			'meta.direct' => '直連',
 			'meta.block' => '攔截',
-			'meta.qrcode' => '二維碼',
+			'meta.qrcode' => 'QR Code',
 			'meta.qrcodeTooLong' => '文本過長,無法展示',
-			'meta.qrcodeShare' => '分享二維碼',
-			'meta.textToQrcode' => '文本轉二維碼',
-			'meta.qrcodeScan' => '掃描二維碼',
+			'meta.qrcodeShare' => '分享 QR Code',
+			'meta.textToQrcode' => '文字轉 QR Code',
+			'meta.qrcodeScan' => '掃描 QR Code',
 			'meta.qrcodeScanResult' => '掃描結果',
-			'meta.qrcodeScanFromImage' => '打開二維碼圖片',
+			'meta.qrcodeScanFromImage' => '開啟 QR Code 圖片',
 			'meta.qrcodeScanFromClipboard' => '剪貼簿識別',
-			'meta.qrcodeRecognized' => '二維碼識別成功',
+			'meta.qrcodeRecognized' => 'QR Code 辨識成功',
 			'meta.qrcodeDropHint' => '點擊上方按鈕擷取螢幕或選取圖片',
 			'meta.confirmImport' => '確認匯入',
 			'meta.reScan' => '重新掃描',
-			'meta.qrcodeScanResultFailed' => '解析圖片失敗,請確保截圖為有效的二維碼',
+			'meta.qrcodeScanResultFailed' => '解析圖片失敗，請確認截圖為有效的 QR Code',
 			'meta.qrcodeScanResultEmpty' => '掃描結果為空',
 			'meta.screenshot' => '截圖',
 			'meta.backupAndSync' => '備份與同步',
 			'meta.importSuccess' => '匯入成功',
-			'meta.rewriteConfirm' => '該文件將覆蓋本地已有配置,是否繼續?',
+			'meta.rewriteConfirm' => '該檔案將覆寫本機現有設定，是否繼續？',
 			'meta.importAndExport' => '匯入/匯出',
 			'meta.import' => '匯入',
 			'meta.importFromUrl' => '從URL匯入',
@@ -1039,25 +1039,25 @@ extension on TranslationsZhTw {
 			'meta.help' => '幫助',
 			'meta.tutorial' => '使用教程',
 			'meta.board' => '面板',
-			'meta.boardOnline' => '使用在線面板',
-			'meta.boardOnlineUrl' => '在線面板URL',
-			'meta.boardLocalPort' => '本地面板端口',
+			'meta.boardOnline' => '使用線上儀表板',
+			'meta.boardOnlineUrl' => '線上儀表板網址',
+			'meta.boardLocalPort' => '本機儀表板連接埠',
 			'meta.connections' => '活動連接',
 			'meta.closeAllConnections' => '關閉全部連接',
-			'meta.searchConnections' => '搜尋連接 (網域名稱/IP/規則/進程)',
+			'meta.searchConnections' => '搜尋連線 (網域名稱/IP/規則/處理程序)',
 			'meta.noFilterResults' => '沒有相符的連接',
 			'meta.searchRules' => '搜尋規則 (類型/特徵/目標代理)',
 			'meta.rules' => '分流規則',
 			'meta.clear' => '清除',
 			'meta.copySuccess' => '複製成功',
 			'meta.alwayOnVPN' => '始終開啟連線',
-			'meta.disableFontScaler' => '禁用字體縮放',
+			'meta.disableFontScaler' => '停用字型縮放',
 			'meta.autoOrientation' => '跟隨螢幕旋轉',
-			'meta.restartTakesEffect' => '重啟生效',
+			'meta.restartTakesEffect' => '重新啟動後生效',
 			'meta.reconnectTakesEffect' => '重新連接後生效',
-			'meta.runtimeProfile' => '運行時配置',
-			'meta.willCompleteAfterRebootInstall' => '請重啟設備,以便完成系統擴展安裝',
-			'meta.willCompleteAfterRebootUninstall' => '請重啟設備,以便完成系統擴展卸載',
+			'meta.runtimeProfile' => '執行階段設定',
+			'meta.willCompleteAfterRebootInstall' => '請重新啟動裝置，以便完成系統擴充功能安裝',
+			'meta.willCompleteAfterRebootUninstall' => '請重新啟動裝置，以便完成系統擴充功能解除安裝',
 			'meta.requestNeedsUserApproval' => '1. 請在[系統設定]-[隱私權與安全性]裡[允許] Wmimo安裝系統擴充功能\n2. 在[系統設定]-[一般]-[登入項目與擴充功能-網路擴充功能]啟用[wmimoServiceSE]\n完成後重新連線',
 			'meta.FullDiskAccessPermissionRequired' => '請在[系統設定]-[隱私權與安全性]-[完全磁碟取用權限]裡開啟wmimoServiceSE權限後，重新連線',
 			'meta.proxy' => '代理',
@@ -1079,10 +1079,10 @@ extension on TranslationsZhTw {
 			'meta.recommended' => '推薦',
 			'meta.innerError' => ({required Object p}) => '內部錯誤:${p}',
 			'meta.share' => '分享',
-			'meta.importFromClipboard' => '從剪貼簿導入',
+			'meta.importFromClipboard' => '從剪貼簿匯入',
 			'meta.exportToClipboard' => '匯出到剪貼簿',
 			'meta.server' => '伺服器',
-			'meta.port' => '端口',
+			'meta.port' => '連接埠',
 			'meta.donate' => '捐助',
 			'meta.setting' => '設定',
 			'meta.settingCore' => '核心設定',
@@ -1090,19 +1090,19 @@ extension on TranslationsZhTw {
 			'meta.coreOverwrite' => '核心覆寫',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
-			'meta.lanSync' => '局域網同步',
-			'meta.lanSyncNotQuitTips' => '同步完成前請勿退出此界面',
+			'meta.lanSync' => '區域網路同步',
+			'meta.lanSyncNotQuitTips' => '同步完成前請勿離開此介面',
 			'meta.deviceNoSpace' => '磁盤空間不足',
 			'meta.hideSystemApp' => '隱藏系統應用',
-			'meta.hideAppIcon' => '隱藏應用圖標',
-			'meta.openDir' => '打開文件目錄',
+			'meta.hideAppIcon' => '隱藏應用程式圖示',
+			'meta.openDir' => '開啟檔案目錄',
 			'meta.type' => '類型',
-			'meta.fileChoose' => '選擇文件',
-			'meta.filePathCannotEmpty' => '文件路徑不能為空',
-			'meta.fileNotExist' => ({required Object p}) => '文件不存在:${p}',
-			'meta.fileTypeInvalid' => ({required Object p}) => '無效的文件類型:${p}',
+			'meta.fileChoose' => '選擇檔案',
+			'meta.filePathCannotEmpty' => '檔案路徑不能為空',
+			'meta.fileNotExist' => ({required Object p}) => '檔案不存在:${p}',
+			'meta.fileTypeInvalid' => ({required Object p}) => '無效的檔案類型:${p}',
 			'meta.uwpExemption' => 'UWP網路隔離豁免',
-			'meta.getProfile' => '獲取訂閱',
+			'meta.getProfile' => '取得訂閱',
 			'meta.buyProfile' => '購買訂閱',
 			'meta.addProfile' => '新增訂閱',
 			'meta.myProfiles' => '訂閱設定',
@@ -1156,8 +1156,8 @@ extension on TranslationsZhTw {
 			'meta.openSourceLicense' => '開源許可證',
 			'meta.submitFeedback' => '提交反饋與建議',
 			'meta.copiedToClipboard' => '已複製到剪貼簿',
-			'meta.autoScrollEnabled' => '已開啟自動滾動',
-			'meta.autoScrollDisabled' => '已關閉自動滾動',
+			'meta.autoScrollEnabled' => '已開啟自動捲動',
+			'meta.autoScrollDisabled' => '已關閉自動捲動',
 			'meta.pauseLogs' => '暫停即時日誌',
 			'meta.resumeLogs' => '恢復即時日誌',
 			'meta.scrollToLatest' => '滾至最新',
@@ -1170,17 +1170,17 @@ extension on TranslationsZhTw {
 			'meta.offlinePreviewPrompt' => '離線設定預覽中，開啟代理後可進行分流與節點測速',
 			'meta.manualSelect' => '手動選擇',
 			'meta.autoSelect' => '自動優選',
-			'meta.speedTestGroup' => '策略組測速',
+			'meta.speedTestGroup' => '策略群組測速',
 			'meta.pause' => '暫停',
 			'meta.resume' => '恢復',
 			'meta.ipInfo' => 'IP 資訊',
-			'meta.ipFetching' => '正在獲取 IP 資訊...',
+			'meta.ipFetching' => '正在取得 IP 資訊...',
 			'meta.ipCopied' => 'IP 位址已複製到剪貼簿',
 			'meta.ipLocation' => '位置',
 			'meta.ipIsp' => '服務商',
-			'meta.ipTapToFetch' => '點擊獲取 IP 資訊',
-			'meta.collapseAll' => '摺疊所有代理組',
-			'meta.expandAll' => '展開所有代理組',
+			'meta.ipTapToFetch' => '點擊取得 IP 資訊',
+			'meta.collapseAll' => '收合所有代理群組',
+			'meta.expandAll' => '展開所有代理群組',
 			'meta.donateTitle' => '💖 請作者喝杯咖啡',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 你的每一份投餵，都是 Wmimo 不斷打磨與更新的最大動力呀 ~ ☕✨',
 			'meta.tokenCurrency' => '幣種',
@@ -1191,9 +1191,9 @@ extension on TranslationsZhTw {
 			'meta.donateAddressCopied' => '( ੭ ˙ᗜ˙ )੭ 位址已複製！非常感謝你的投餵與陪伴~ 💖',
 			'meta.donateTip' => '💡 提示：支援 Bybit 或任意 Aptos 相容錢包掃碼轉帳',
 			'meta.qrcodeParsing' => '正在解析...',
-			'meta.qrcodeNotFound' => '未識別到二維碼',
-			'meta.qrcodeSupportHint' => '支援解析各類訂閱、節點及設定二維碼圖片',
-			'meta.qrcodeCameraHint' => '將二維碼放入框內即可自動掃描',
+			'meta.qrcodeNotFound' => '未偵測到 QR Code',
+			'meta.qrcodeSupportHint' => '支援解析各類訂閱、節點及設定 QR Code 圖片',
+			'meta.qrcodeCameraHint' => '將 QR Code 放入框內即可自動掃描',
 			'meta.flashlight' => '手電筒',
 			'meta.screenshotDesc' => '擷取螢幕',
 			'meta.fromImageDesc' => '本機圖片',
@@ -1207,7 +1207,7 @@ extension on TranslationsZhTw {
 			'meta.sortName' => '按名稱 A-Z',
 			'meta.sortRegion' => '按地區分組',
 			'meta.filterOptions' => '篩選選項',
-			'meta.portableUpdateTip' => ({required Object version}) => '偵測到目前為免安裝便攜模式：\n便攜版本暫不支援應用程式內覆蓋更新，請前往官網或倉庫下載最新免安裝壓縮包覆蓋解壓。\n\n最新版本: v${version}',
+			'meta.portableUpdateTip' => ({required Object version}) => '偵測到目前為免安裝便攜模式：\n便攜版本暫不支援應用程式內覆寫更新，請前往官網或儲存庫下載最新免安裝壓縮檔覆蓋解壓縮。\n\n最新版本: v${version}',
 			'meta.portableModeTipTitle' => '便攜模式提示',
 			'meta.noNodesToSpeedTest' => '無可用節點，無需測速',
 			'meta.alreadyLatestVersion' => ({required Object version}) => '已是最新版本 (v${version})',
@@ -1234,20 +1234,20 @@ extension on TranslationsZhTw {
 			'meta.allNodesNormal' => '所有節點均正常可用，無需重測',
 			'meta.customUrlPrompt' => '自訂 URL (如 http://...)',
 			'meta.customTarget' => '自訂目標',
-			'meta.downloadFailedTip' => '下載更新安裝包失敗，請檢查網路或點擊下方前往網頁下載。',
+			'meta.downloadFailedTip' => '下載更新安裝檔失敗，請檢查網路或點擊下方前往網頁下載。',
 			'meta.discoveredNewVersion' => ({required Object version}) => '發現新版本: v${version}',
 			'meta.preparingUpdate' => '正在準備啟動更新...',
-			'meta.downloadingPackage' => '安裝包正在下載中，請稍候...',
+			'meta.downloadingPackage' => '安裝檔正在下載中，請稍候...',
 			'meta.downloadUpdateNow' => '立即下載更新',
-			'meta.downloadFromWeb' => '前往網頁下載安裝包',
+			'meta.downloadFromWeb' => '前往網頁下載安裝檔',
 			'meta.switchSource' => '切換源',
 			'meta.serverSwitch' => '測速伺服器切換',
 			'meta.autoDetectBest' => '自動探測最優',
 			'meta.serverSwitchDesc' => '選擇不同的測速 CDN 源或自訂節點進行多鏈路測速',
 			'meta.autoSelectedBest' => ({required Object server, required Object ping}) => '已自動選擇最優測速源: ${server} (${ping} ms)',
 			'meta.networkGradeTitle' => '網路體質綜合評分',
-			'meta.copyReport' => '複製戰報',
-			'meta.reportCopied' => '戰報已複製到剪貼簿，可直接貼上分享',
+			'meta.copyReport' => '複製測速報告',
+			'meta.reportCopied' => '測速報告已複製到剪貼簿，可直接貼上分享',
 			'meta.gamingExperience' => '電競體驗',
 			'meta.streamingExperience' => '超清串流媒體',
 			'meta.meetingExperience' => '遠端視訊',
@@ -1273,9 +1273,9 @@ extension on TranslationsZhTw {
 			'tun.strictRoute' => '嚴格路由',
 			'tun.tunDefaultRoute' => '預設路由',
 			'tun.icmpForward' => 'ICMP 轉發',
-			'tun.allowBypass' => '允許應用繞過VPN',
+			'tun.allowBypass' => '允許應用程式略過 VPN',
 			'tun.appendHttpProxy' => '附加HTTP代理到VPN',
-			'tun.bypassHttpProxyDomain' => '允許繞過HTTP代理的域名',
+			'tun.bypassHttpProxyDomain' => '允許略過 HTTP 代理的網域名稱',
 			'dns.listen' => '監聽地址',
 			'dns.fakeIp' => 'fake-ip',
 			'dns.fallback' => 'Fallback',
@@ -1301,7 +1301,7 @@ extension on TranslationsZhTw {
 			'profilePatchMode.noOverwrite' => '內置-不覆寫',
 			'protocolSniff' => '協議探測',
 			'protocolSniffOverrideDestination' => '探測的域名覆蓋連接目標地址',
-			'edgeRuntimeNotInstalled' => '當前設備尚未安裝Edge WebView2運行時,無法展示頁面,請下載安裝Edge WebView2運行時(x64)後,重啟App再試',
+			'edgeRuntimeNotInstalled' => '目前裝置尚未安裝 Edge WebView2 執行階段，無法顯示頁面，請下載安裝 Edge WebView2 執行階段 (x64) 後，重新啟動 App 再試',
 			'locales.en' => 'English',
 			'locales.zh-CN' => '简体中文',
 			'locales.zh-TW' => '繁體中文',

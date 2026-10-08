@@ -45,7 +45,7 @@ class _WelcomeLanguageScreenState
       locale: AppLocale.zhTw,
       nativeName: '繁體中文',
       englishName: 'Traditional Chinese',
-      flag: '🇭🇰',
+      flag: '🇹🇼',
     ),
     _LanguageOption(
       locale: AppLocale.en,
