@@ -110,18 +110,18 @@ flutter build windows --release
 
 # macOS Release (Universal DMG and Portable Zip)
 flutter build macos --release
-bash tool/package_macos.sh v1.2.0.1501
+bash tool/package_macos.sh v1.2.0.1502
 
 # Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.2.0.1501
+bash tool/package_linux.sh v1.2.0.1502
 
 # Android APK
 flutter build apk --release
 
 # iOS Release (Build unsigned IPA for TrollStore & Sideloading)
 flutter build ios --release --no-codesign
-bash tool/package_ios.sh v1.2.0.1501
+bash tool/package_ios.sh v1.2.0.1502
 ```
 
 ### 🍏 iOS Installation & Sideloading Guide

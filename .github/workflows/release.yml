@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.2.0.1501)'
+        description: 'Release Tag (e.g. v1.2.0.1502)'
         required: false
-        default: 'v1.2.0.1501'
+        default: 'v1.2.0.1502'
 
 permissions:
   contents: write
@@ -68,7 +68,7 @@ jobs:
                 $tag = "v$pubVer"
               }
             } else {
-              $tag = "v1.2.0.1501"
+              $tag = "v1.2.0.1502"
             }
           }
           if (-not $tag.StartsWith("v")) {
@@ -223,7 +223,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.0.1501"
+              TAG="v1.2.0.1502"
             fi
           fi
           chmod +x tool/package_linux.sh
@@ -318,7 +318,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.0.1501"
+              TAG="v1.2.0.1502"
             fi
           fi
           
@@ -391,7 +391,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1501"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1502"
           echo "Building macOS application version $PUBSPEC_VER+$PUBSPEC_BUILD..."
           flutter build macos --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
@@ -413,7 +413,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.0.1501"
+              TAG="v1.2.0.1502"
             fi
           fi
           chmod +x tool/package_macos.sh
@@ -473,7 +473,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1501"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1502"
           echo "Building iOS application version $PUBSPEC_VER+$PUBSPEC_BUILD..."
           flutter build ios --release --no-codesign --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
@@ -495,7 +495,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.0.1501"
+              TAG="v1.2.0.1502"
             fi
           fi
           chmod +x tool/package_ios.sh
@@ -535,7 +535,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.0.1501"
+              TAG="v1.2.0.1502"
             fi
           fi
 
@@ -549,7 +549,7 @@ jobs:
             BUILD_NUM=$(echo "$RAW_VER" | awk -F'.' '{if (NF>3) print $4}')
           fi
           if [ -z "$BUILD_NUM" ]; then
-            BUILD_NUM="1501"
+            BUILD_NUM="1502"
           fi
 
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT

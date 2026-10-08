@@ -112,11 +112,11 @@ flutter build windows --release
 
 # macOS Release (Universal DMG and Portable Zip)
 flutter build macos --release
-bash tool/package_macos.sh v1.2.0.1501
+bash tool/package_macos.sh v1.2.0.1502
 
 # Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.2.0.1501
+bash tool/package_linux.sh v1.2.0.1502
 
 # Android APK
 flutter build apk --release
@@ -265,11 +265,11 @@ flutter build windows --release
 
 # macOS Release (生成 Universal DMG 镜像与便携包)
 flutter build macos --release
-bash tool/package_macos.sh v1.2.0.1501
+bash tool/package_macos.sh v1.2.0.1502
 
 # Linux Release (一键打包 Deb, RPM, AppImage, Arch 与 Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.2.0.1501
+bash tool/package_linux.sh v1.2.0.1502
 
 # Android Release (生成 APK 安装包)
 flutter build apk --release
