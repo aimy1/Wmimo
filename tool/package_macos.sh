@@ -161,11 +161,21 @@ echo "  -> Created ${DIST_DIR}/${ZIP_NAME}"
 
 # 6. Package DMG Installer
 echo "[2/2] Creating DMG Installer ($DMG_NAME)..."
-STAGE_DIR=$(mktemp -d /tmp/wmimo_dmg_stage_XXXXXX)
+
+# Ensure no lingering hdiutil processes or mounted Wmimo volumes
+killall hdiutil 2>/dev/null || true
+hdiutil detach "/Volumes/Wmimo" -force 2>/dev/null || true
+
+mkdir -p "${ROOT_DIR}/build"
+STAGE_DIR=$(mktemp -d "${ROOT_DIR}/build/dmg_stage_XXXXXX" 2>/dev/null || mktemp -d /tmp/wmimo_dmg_stage_XXXXXX)
 cleanup() {
+  hdiutil detach "/Volumes/Wmimo" -force 2>/dev/null || true
   rm -rf "${STAGE_DIR}"
 }
 trap cleanup EXIT
+
+# Prevent Spotlight / mdworker from indexing the stage directory
+touch "${STAGE_DIR}/.metadata_never_index"
 
 # Copy app bundle into stage directory
 cp -R "$APP_PATH" "${STAGE_DIR}/Wmimo.app"
@@ -181,13 +191,33 @@ fi
 # Remove previous DMG if exists
 rm -f "${DIST_DIR}/${DMG_NAME}"
 
-# Build DMG using hdiutil
-hdiutil create \
-  -volname "Wmimo" \
-  -srcfolder "${STAGE_DIR}" \
-  -ov \
-  -format UDZO \
-  "${DIST_DIR}/${DMG_NAME}"
+# Build DMG using hdiutil with retry logic and buffer sync
+sync
+sleep 1
+
+DMG_CREATED=false
+for attempt in 1 2 3 4 5; do
+  echo "Attempt $attempt of 5 to create DMG..."
+  sync
+  hdiutil detach "/Volumes/Wmimo" -force 2>/dev/null || true
+  if hdiutil create \
+    -volname "Wmimo" \
+    -srcfolder "${STAGE_DIR}" \
+    -ov \
+    -format UDZO \
+    -fs HFS+ \
+    "${DIST_DIR}/${DMG_NAME}"; then
+    DMG_CREATED=true
+    break
+  fi
+  echo "hdiutil failed (attempt $attempt), waiting 3 seconds before retry..."
+  sleep 3
+done
+
+if [ "$DMG_CREATED" != "true" ]; then
+  echo "[ERROR] Failed to create DMG after 5 attempts."
+  exit 1
+fi
 
 echo "  -> Created ${DIST_DIR}/${DMG_NAME}"
 
