@@ -254,9 +254,11 @@ class MyAppState extends State<MyApp>
   Menu? _menu;
   String _trafficOld = "";
   String _speedOld = "";
+  final Themes _themes = Themes();
   @override
   void initState() {
     super.initState();
+    _themes.setTheme(SettingManager.getConfig().ui.theme, false);
     WidgetsBinding.instance.addObserver(this);
     if (PlatformUtils.isPC()) {
       windowManager.addListener(this);
@@ -358,12 +360,12 @@ class MyAppState extends State<MyApp>
     observers.add(AppRouteObserver.instance);
 
     return MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: Themes())],
+      providers: [ChangeNotifierProvider.value(value: _themes)],
       child: Consumer<Themes>(
         builder: (context, appTheme, _) {
-          Provider.of<Themes>(
-            context,
-          ).setTheme(SettingManager.getConfig().ui.theme, false);
+          if (appTheme.theme().isEmpty) {
+            appTheme.setTheme(SettingManager.getConfig().ui.theme, false);
+          }
           Widget app = Shortcuts(
             shortcuts: const {
               SingleActivator(LogicalKeyboardKey.select): ActivateIntent(),
@@ -411,6 +413,7 @@ class MyAppState extends State<MyApp>
   @override
   void onWindowClose() async {
     Log.d("onWindowClose");
+    await SettingManager.save();
     await windowManager.hide();
     _windowVisibleForMac = false;
     AppLifecycleStateNofity.statePaused("close");
@@ -522,6 +525,7 @@ class MyAppState extends State<MyApp>
 
   Future<void> _quit() async {
     print(">>> _QUIT CALLED STACKTRACE:\n${StackTrace.current}");
+    await SettingManager.save();
     await _uninit();
     Future.delayed(const Duration(seconds: 0), () async {
       await Log.uninit();

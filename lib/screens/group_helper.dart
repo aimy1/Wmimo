@@ -551,6 +551,7 @@ class GroupHelper {
                 listen: false,
               ).setTheme(setting.ui.theme, true);
               TextFieldEx.popupEdit = setting.ui.tvMode;
+              await SettingManager.save();
             },
           ),
         ),
@@ -598,6 +599,7 @@ class GroupHelper {
                 context,
                 listen: false,
               ).setTheme(selected, true);
+              await SettingManager.save();
             },
           ),
         ),
@@ -609,6 +611,7 @@ class GroupHelper {
               onSwitch: (bool value) async {
                 setting.ui.tvMode = value;
                 TextFieldEx.popupEdit = setting.ui.tvMode;
+                await SettingManager.save();
               },
             ),
           ),
@@ -632,6 +635,7 @@ class GroupHelper {
                     DeviceOrientation.portraitUp,
                   ]);
                 }
+                await SettingManager.save();
               },
             ),
           ),
@@ -702,6 +706,7 @@ class GroupHelper {
                 }
                 setting.autoUpdateChannel = selected;
                 AutoUpdateManager.updateChannelChanged();
+                await SettingManager.save();
               },
             ),
           ),
@@ -713,6 +718,7 @@ class GroupHelper {
               switchValue: SettingManager.getConfig().autoDownloadUpdatePkg,
               onSwitch: (bool value) async {
                 setting.autoDownloadUpdatePkg = value;
+                await SettingManager.save();
               },
             ),
           ),
@@ -731,6 +737,7 @@ class GroupHelper {
               Log.setLevel(setting.logLevel);
               Log.i('itest:${setting.logLevel}');
               Log.w('wtest:${setting.logLevel}');
+              await SettingManager.save();
             },
           ),
         ),
@@ -743,6 +750,7 @@ class GroupHelper {
             textWidthPercent: 0.6,
             onChanged: (String value) {
               setting.setUserAgent(value);
+              SettingManager.save();
             },
           ),
         ),
@@ -756,6 +764,7 @@ class GroupHelper {
             textWidthPercent: 0.5,
             onChanged: (String value) {
               setting.delayTestUrl = value;
+              SettingManager.save();
             },
           ),
         ),
@@ -767,6 +776,7 @@ class GroupHelper {
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             onChanged: (String value) {
               setting.delayTestTimeout = int.tryParse(value) ?? 5000;
+              SettingManager.save();
             },
           ),
         ),
@@ -815,6 +825,7 @@ class GroupHelper {
               switchValue: setting.ui.hideAfterLaunch,
               onSwitch: (bool value) async {
                 setting.ui.hideAfterLaunch = value;
+                await SettingManager.save();
               },
             ),
           ),
@@ -825,6 +836,7 @@ class GroupHelper {
             switchValue: setting.autoConnectAfterLaunch,
             onSwitch: (bool value) async {
               setting.autoConnectAfterLaunch = value;
+              await SettingManager.save();
             },
           ),
         ),
@@ -834,6 +846,7 @@ class GroupHelper {
             switchValue: setting.autoSetSystemProxy,
             onSwitch: (bool value) async {
               setting.autoSetSystemProxy = value;
+              await SettingManager.save();
             },
           ),
         ),
@@ -885,6 +898,7 @@ class GroupHelper {
             onSwitch: (bool value) async {
               setting.excludeFromRecent = value;
               final err = await FlutterVpnService.setExcludeFromRecents(value);
+              await SettingManager.save();
               if (err != null) {
                 if (!context.mounted) {
                   return;
@@ -906,6 +920,7 @@ class GroupHelper {
             switchValue: setting.wakeLock,
             onSwitch: (bool value) async {
               setting.wakeLock = value;
+              await SettingManager.save();
             },
           ),
         ),
@@ -917,6 +932,7 @@ class GroupHelper {
                 "${tcontext.meta.reconnectTakesEffect};${tcontext.meta.autoConnectAtBootTips}",
             onSwitch: (bool value) async {
               setting.autoConnectAtBoot = value;
+              await SettingManager.save();
             },
           ),
         ),
@@ -928,6 +944,7 @@ class GroupHelper {
             switchValue: setting.alwayOn,
             onSwitch: (bool value) async {
               setting.alwayOn = value;
+              await SettingManager.save();
             },
           ),
         ),
@@ -940,6 +957,7 @@ class GroupHelper {
             switchValue: setting.hideDockIcon,
             onSwitch: (bool value) async {
               setting.hideDockIcon = value;
+              await SettingManager.save();
             },
           ),
         ),
@@ -949,6 +967,7 @@ class GroupHelper {
             switchValue: setting.showTrayTraffic,
             onSwitch: (bool value) async {
               setting.showTrayTraffic = value;
+              await SettingManager.save();
             },
           ),
         ),
