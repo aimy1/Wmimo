@@ -116,6 +116,17 @@ class VPNService {
     if (Platform.isWindows) {
       await stop();
     }
+
+    if (PlatformUtils.isPC()) {
+      final isRunning = await getStarted();
+      if (!isRunning) {
+        final enabled = await getSystemProxyEnable();
+        if (enabled) {
+          Log.i("Proxy Guard: Lingering system proxy detected on startup, cleaning...");
+          await FlutterVpnService.cleanSystemProxy();
+        }
+      }
+    }
   }
 
   static Future<void> uninit() async {
@@ -525,6 +536,28 @@ class VPNService {
       } catch (err) {
         Log.w("VPNService setSystemProxy exception:${err.toString()}");
       }
+    }
+  }
+
+  static Future<bool> resetAndCleanSystemProxy() async {
+    if (!getSupportSystemProxy()) {
+      return false;
+    }
+    try {
+      await FlutterVpnService.cleanSystemProxy();
+      if (Platform.isWindows) {
+        try {
+          await Process.run('ipconfig', ['/flushdns']);
+        } catch (_) {}
+      }
+      final cfg = SettingManager.getConfig();
+      cfg.autoSetSystemProxy = false;
+      await SettingManager.save();
+      Log.i("VPNService: System proxy reset and cleaned successfully");
+      return true;
+    } catch (err) {
+      Log.w("VPNService resetAndCleanSystemProxy exception: $err");
+      return false;
     }
   }
 

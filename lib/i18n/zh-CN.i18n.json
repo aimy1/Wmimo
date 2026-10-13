@@ -116,7 +116,11 @@
       "tools": "实用工具",
       "copyProxyCmd": "复制代理命令",
       "delayTestAll": "全节点测速",
-      "openDashboard": "打开控制面板"
+      "openDashboard": "打开控制面板",
+      "resetSystemProxy": "修复网络/重置系统代理",
+      "copyCmdPowerShell": "PowerShell 代理命令",
+      "copyCmdCmd": "CMD 代理命令",
+      "copyCmdBash": "Bash/Zsh 代理命令"
     }
   },
   "meta": {
@@ -509,7 +513,13 @@
     "userSpecifiedUrl": "用户指定 URL",
     "cannotBeEmpty": "$item不能为空",
     "alreadyExists": "$item已存在",
-    "installFailedWithCode": "安装 $installer 失败，错误码: $code"
+    "installFailedWithCode": "安装 $installer 失败，错误码: $code",
+    "resetSystemProxy": "修复网络 / 重置系统代理",
+    "resetSystemProxyDesc": "清理残留系统代理设置并刷新网络，解决异常退出后无法上网问题",
+    "resetSystemProxySuccess": "系统代理已清理并重置，网络已恢复正常",
+    "sortLatencyDesc": "延迟由高到低",
+    "sortNameDesc": "名称 Z-A",
+    "sortMultiplier": "倍率由低到高"
   },
   "permission": {
     "camera": "摄像头",

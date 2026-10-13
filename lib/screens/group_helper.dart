@@ -882,6 +882,30 @@ class GroupHelper {
               },
             ),
           ),
+          GroupItemOptions(
+            pushOptions: GroupItemPushOptions(
+              name: tcontext.meta.resetSystemProxy,
+              text: tcontext.meta.resetSystemProxyDesc,
+              onPush: () async {
+                final success = await VPNService.resetAndCleanSystemProxy();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        success
+                            ? tcontext.meta.resetSystemProxySuccess
+                            : tcontext.meta.errorPrompt,
+                      ),
+                      backgroundColor: success
+                          ? ThemeDefine.kColorGreenBright
+                          : ThemeDefine.kColorRed,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
         ],
       ];
       List<GroupItemOptions> options6 = [

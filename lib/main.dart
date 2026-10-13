@@ -22,6 +22,7 @@ import 'package:wmimo/app/utils/device_utils.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
+import 'package:wmimo/app/utils/node_region_helper.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/windows_version_helper.dart';
@@ -243,6 +244,10 @@ class MyAppState extends State<MyApp>
   static const kMenuModeDirect = "mode_direct";
   static const kMenuUpdateAllProfiles = "update_all_profiles";
   static const kMenuCopyProxyCmd = "copy_proxy_cmd";
+  static const kMenuCopyProxyCmdPs = "copy_proxy_cmd_ps";
+  static const kMenuCopyProxyCmdCmd = "copy_proxy_cmd_cmd";
+  static const kMenuCopyProxyCmdBash = "copy_proxy_cmd_bash";
+  static const kMenuResetSystemProxy = "reset_system_proxy";
   static const kMenuDelayTest = "delay_test_all";
   static const kMenuOpenConfigDir = "open_config_dir";
   static const kMenuOpenLogs = "open_logs";
@@ -625,6 +630,69 @@ class MyAppState extends State<MyApp>
     final tunEnable = ClashSettingManager.getConfig().Tun?.Enable ?? false;
     final profiles = ProfileManager.getProfiles();
     final currentProfile = ProfileManager.getCurrent();
+    final mixedPort = ClashSettingManager.getMixedPort();
+
+    // Proxy Nodes Submenu
+    List<MenuItem> nodeItems = [];
+    try {
+      List<ClashProxiesNode> allNodes = [];
+      if (!grey) {
+        final res = await ClashHttpApi.getProxies();
+        if (res.data != null && res.data!.isNotEmpty) {
+          allNodes = res.data!;
+        }
+      }
+      if (allNodes.isEmpty) {
+        allNodes = await ProxyNodeLoader.loadCurrentProfileNodes();
+      }
+
+      final groups = allNodes.where((n) => ClashProtocolType.isGroupType(n.type)).toList();
+      ClashProxiesNode? selectorGroup;
+      for (var g in groups) {
+        final upper = g.name.toUpperCase();
+        if (upper == "PROXY" || upper == "PROXIES" || g.name == "节点选择" || g.name == "節點選擇") {
+          selectorGroup = g;
+          break;
+        }
+      }
+      selectorGroup ??= groups.isNotEmpty ? groups.first : null;
+
+      if (selectorGroup != null) {
+        final groupName = selectorGroup.name;
+        final currentSelected = selectorGroup.now;
+        final groupNodeNames = selectorGroup.all;
+
+        final leafNodes = allNodes
+            .where((n) => groupNodeNames.contains(n.name) && !ClashProtocolType.isGroupType(n.type))
+            .toList();
+
+        final displayNodes = leafNodes.take(30).toList();
+        for (var n in displayNodes) {
+          final isCurrent = n.name == currentSelected;
+          final flag = NodeRegionHelper.getFlag(n.name);
+          String label = "$flag ${n.name}";
+          if (n.delay != null && n.delay! > 0) {
+            label += " (${n.delay}ms)";
+          }
+          nodeItems.add(
+            MenuItem.checkbox(
+              key: "node_${groupName}___${n.name}",
+              checked: isCurrent,
+              label: label,
+            ),
+          );
+        }
+        if (leafNodes.length > 30) {
+          nodeItems.add(MenuItem.separator());
+          nodeItems.add(MenuItem(
+            key: kMenuOpen,
+            label: "${t.meta.more}... (${leafNodes.length})",
+          ));
+        }
+      }
+    } catch (e) {
+      Log.w("Error populating tray node items: $e");
+    }
 
     List<MenuItem> items = [
       MenuItem(key: kMenuOpen, label: t.main.tray.menuOpen),
@@ -675,6 +743,13 @@ class MyAppState extends State<MyApp>
         ),
       ),
 
+      // Proxy Nodes Submenu
+      if (nodeItems.isNotEmpty)
+        MenuItem.submenu(
+          label: t.main.tray.proxyNodes,
+          submenu: Menu(items: nodeItems),
+        ),
+
       // Profiles Submenu
       MenuItem.submenu(
         label: t.main.tray.profilesMenu,
@@ -698,7 +773,36 @@ class MyAppState extends State<MyApp>
       ),
       MenuItem.separator(),
 
-      MenuItem(key: kMenuCopyProxyCmd, label: t.main.tray.copyProxyCmd),
+      // Copy Proxy Command Submenu
+      MenuItem.submenu(
+        label: t.main.tray.copyProxyCmd,
+        submenu: Menu(
+          items: [
+            MenuItem(
+              key: kMenuCopyProxyCmd,
+              label: Platform.isWindows
+                  ? "${t.main.tray.copyCmdPowerShell} (127.0.0.1:$mixedPort)"
+                  : "${t.main.tray.copyCmdBash} (127.0.0.1:$mixedPort)",
+            ),
+            if (Platform.isWindows) ...[
+              MenuItem(
+                key: kMenuCopyProxyCmdCmd,
+                label: "${t.main.tray.copyCmdCmd} (127.0.0.1:$mixedPort)",
+              ),
+            ],
+            MenuItem(
+              key: kMenuCopyProxyCmdBash,
+              label: "${t.main.tray.copyCmdBash} (127.0.0.1:$mixedPort)",
+            ),
+          ],
+        ),
+      ),
+
+      // Reset System Proxy / Repair Network
+      MenuItem(
+        key: kMenuResetSystemProxy,
+        label: t.main.tray.resetSystemProxy,
+      ),
       MenuItem.separator(),
 
       MenuItem(key: kMenuExit, label: t.main.tray.menuExit),
@@ -773,12 +877,42 @@ class MyAppState extends State<MyApp>
           ProfileManager.update(p.id);
         }
       }
-    } else if (key == kMenuCopyProxyCmd) {
+    } else if (key.startsWith("node_")) {
+      final parts = key.substring("node_".length).split("___");
+      if (parts.length == 2) {
+        final groupName = parts[0];
+        final nodeName = parts[1];
+        await ClashHttpApi.setProxiesNode(groupName, nodeName);
+        if (groupName != "GLOBAL") {
+          ClashHttpApi.setProxiesNode("GLOBAL", nodeName).catchError((_) => null);
+        }
+        Biz.proxySelected(nodeName);
+        await _setTrayMenu(_trayGrey);
+      }
+    } else if (key == kMenuCopyProxyCmd || key == kMenuCopyProxyCmdPs) {
       final port = ClashSettingManager.getMixedPort();
       final cmd = Platform.isWindows
-          ? 'set http_proxy=http://127.0.0.1:$port\nset https_proxy=http://127.0.0.1:$port\nset all_proxy=socks5://127.0.0.1:$port'
-          : 'export http_proxy=http://127.0.0.1:$port\nexport https_proxy=http://127.0.0.1:$port\nexport all_proxy=socks5://127.0.0.1:$port';
+          ? '\$env:http_proxy="http://127.0.0.1:$port"; \$env:https_proxy="http://127.0.0.1:$port"; \$env:all_proxy="socks5://127.0.0.1:$port"'
+          : 'export http_proxy=http://127.0.0.1:$port; export https_proxy=http://127.0.0.1:$port; export all_proxy=socks5://127.0.0.1:$port';
       await Clipboard.setData(ClipboardData(text: cmd));
+    } else if (key == kMenuCopyProxyCmdCmd) {
+      final port = ClashSettingManager.getMixedPort();
+      final cmd =
+          'set http_proxy=http://127.0.0.1:$port & set https_proxy=http://127.0.0.1:$port & set all_proxy=socks5://127.0.0.1:$port';
+      await Clipboard.setData(ClipboardData(text: cmd));
+    } else if (key == kMenuCopyProxyCmdBash) {
+      final port = ClashSettingManager.getMixedPort();
+      final cmd =
+          'export http_proxy=http://127.0.0.1:$port; export https_proxy=http://127.0.0.1:$port; export all_proxy=socks5://127.0.0.1:$port';
+      await Clipboard.setData(ClipboardData(text: cmd));
+    } else if (key == kMenuResetSystemProxy) {
+      await VPNService.resetAndCleanSystemProxy();
+      await _setTrayMenu(_trayGrey);
+      if (!Platform.isLinux) {
+        await trayManager.setToolTip(
+          "${AppUtils.getName()} - ${t.meta.resetSystemProxySuccess}",
+        );
+      }
     } else if (key == kMenuDelayTest) {
       final setting = SettingManager.getConfig();
       final testUrl = setting.delayTestUrl.isNotEmpty

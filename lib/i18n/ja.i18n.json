@@ -116,7 +116,11 @@
       "tools": "ツール",
       "copyProxyCmd": "ターミナルプロキシコマンドをコピー (CMD / Bash)",
       "delayTestAll": "全ノードの遅延速度を測定",
-      "openDashboard": "ダッシュボードを開く"
+      "openDashboard": "ダッシュボードを開く",
+      "resetSystemProxy": "ネットワーク修復/プロキシをリセット",
+      "copyCmdPowerShell": "PowerShell コマンド",
+      "copyCmdCmd": "CMD コマンド",
+      "copyCmdBash": "Bash/Zsh コマンド"
     }
   },
   "meta": {
@@ -509,7 +513,13 @@
     "userSpecifiedUrl": "ユーザー指定URL",
     "cannotBeEmpty": "$itemを入力してください",
     "alreadyExists": "$itemは既に存在します",
-    "installFailedWithCode": "$installerのインストールに失敗しました (コード: $code)"
+    "installFailedWithCode": "$installerのインストールに失敗しました (コード: $code)",
+    "resetSystemProxy": "ネットワーク修復 / プロキシをリセット",
+    "resetSystemProxyDesc": "残留したプロキシ設定をクリアし、異常終了後の接続問題を解決します",
+    "resetSystemProxySuccess": "システムプロキシがリセットされ、ネットワークが復旧しました",
+    "sortLatencyDesc": "レイテンシ降順",
+    "sortNameDesc": "名前 Z-A",
+    "sortMultiplier": "倍率昇順"
   },
   "permission": {
     "camera": "カメラ",

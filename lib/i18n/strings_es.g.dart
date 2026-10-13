@@ -636,6 +636,12 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String cannotBeEmpty({required Object item}) => '${item} no puede estar vacío';
 	@override String alreadyExists({required Object item}) => '${item} ya existe';
 	@override String installFailedWithCode({required Object installer, required Object code}) => 'Error al instalar ${installer}, código: ${code}';
+	@override String get resetSystemProxy => 'Reparar red / Restablecer proxy del sistema';
+	@override String get resetSystemProxyDesc => 'Limpiar la configuración residual del proxy del sistema y actualizar la red';
+	@override String get resetSystemProxySuccess => 'Proxy del sistema restablecido y red recuperada';
+	@override String get sortLatencyDesc => 'Mayor latencia';
+	@override String get sortNameDesc => 'Nombre Z-A';
+	@override String get sortMultiplier => 'Menor multiplicador';
 }
 
 // Path: permission
@@ -759,6 +765,10 @@ class _Translations$main$tray$es implements Translations$main$tray$en {
 	@override String get copyProxyCmd => 'Copiar comando de proxy de terminal (CMD / Bash)';
 	@override String get delayTestAll => 'Probar latencia de todos los nodos';
 	@override String get openDashboard => 'Abrir panel de control';
+	@override String get resetSystemProxy => 'Reparar Red / Restablecer Proxy del Sistema';
+	@override String get copyCmdPowerShell => 'Comando PowerShell';
+	@override String get copyCmdCmd => 'Comando CMD';
+	@override String get copyCmdBash => 'Comando Bash/Zsh';
 }
 
 /// The flat map containing all translations for locale <es>.
@@ -867,6 +877,10 @@ extension on TranslationsEs {
 			'main.tray.copyProxyCmd' => 'Copiar comando de proxy de terminal (CMD / Bash)',
 			'main.tray.delayTestAll' => 'Probar latencia de todos los nodos',
 			'main.tray.openDashboard' => 'Abrir panel de control',
+			'main.tray.resetSystemProxy' => 'Reparar Red / Restablecer Proxy del Sistema',
+			'main.tray.copyCmdPowerShell' => 'Comando PowerShell',
+			'main.tray.copyCmdCmd' => 'Comando CMD',
+			'main.tray.copyCmdBash' => 'Comando Bash/Zsh',
 			'meta.enable' => 'Habilitar',
 			'meta.disable' => 'Deshabilitar',
 			'meta.open' => 'Abrir',
@@ -1257,6 +1271,12 @@ extension on TranslationsEs {
 			'meta.cannotBeEmpty' => ({required Object item}) => '${item} no puede estar vacío',
 			'meta.alreadyExists' => ({required Object item}) => '${item} ya existe',
 			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'Error al instalar ${installer}, código: ${code}',
+			'meta.resetSystemProxy' => 'Reparar red / Restablecer proxy del sistema',
+			'meta.resetSystemProxyDesc' => 'Limpiar la configuración residual del proxy del sistema y actualizar la red',
+			'meta.resetSystemProxySuccess' => 'Proxy del sistema restablecido y red recuperada',
+			'meta.sortLatencyDesc' => 'Mayor latencia',
+			'meta.sortNameDesc' => 'Nombre Z-A',
+			'meta.sortMultiplier' => 'Menor multiplicador',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',
@@ -1271,6 +1291,8 @@ extension on TranslationsEs {
 			'tun.inet6Address' => 'Dirección de Puerta de Enlace IPv6',
 			'tun.dnsHijack' => 'Secuestro de DNS',
 			'tun.strictRoute' => 'Ruta Estricta',
+			_ => null,
+		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'Ruta predeterminada',
 			'tun.icmpForward' => 'Reenvío ICMP',
 			'tun.allowBypass' => 'Permitir aplicaciones para omitir VPN',
@@ -1281,8 +1303,6 @@ extension on TranslationsEs {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'Preferir DoH H3',
 			'dns.useHosts' => 'Usar Hosts',
-			_ => null,
-		} ?? switch (path) {
 			'dns.useSystemHosts' => 'Usar Hosts del Sistema',
 			'dns.enhancedMode' => 'Modo Mejorado',
 			'dns.fakeIPFilterMode' => 'Modo de Filtro ${_root.dns.fakeIp}',

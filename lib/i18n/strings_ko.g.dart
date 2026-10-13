@@ -636,6 +636,12 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String cannotBeEmpty({required Object item}) => '${item}은(는) 비워둘 수 없습니다';
 	@override String alreadyExists({required Object item}) => '${item}이(가) 이미 존재합니다';
 	@override String installFailedWithCode({required Object installer, required Object code}) => '${installer} 설치 실패, 코드: ${code}';
+	@override String get resetSystemProxy => '네트워크 복구 / 시스템 프록시 초기화';
+	@override String get resetSystemProxyDesc => '잔여 시스템 프록시 설정을 제거하고 네트워크를 새로고침하여 비정상 종료 후 인터넷 불가 문제를 해결합니다';
+	@override String get resetSystemProxySuccess => '시스템 프록시가 초기화되었으며 네트워크가 정상 복구되었습니다';
+	@override String get sortLatencyDesc => '지연 시간 높은 순';
+	@override String get sortNameDesc => '이름 Z-A';
+	@override String get sortMultiplier => '배율 낮은 순';
 }
 
 // Path: permission
@@ -759,6 +765,10 @@ class _Translations$main$tray$ko implements Translations$main$tray$en {
 	@override String get copyProxyCmd => '터미널 프록시 명령 복사 (CMD / Bash)';
 	@override String get delayTestAll => '모든 노드 지연 속도 측정';
 	@override String get openDashboard => '제어판 열기';
+	@override String get resetSystemProxy => '네트워크 복구 / 시스템 프록시 초기화';
+	@override String get copyCmdPowerShell => 'PowerShell 명령어';
+	@override String get copyCmdCmd => 'CMD 명령어';
+	@override String get copyCmdBash => 'Bash/Zsh 명령어';
 }
 
 /// The flat map containing all translations for locale <ko>.
@@ -867,6 +877,10 @@ extension on TranslationsKo {
 			'main.tray.copyProxyCmd' => '터미널 프록시 명령 복사 (CMD / Bash)',
 			'main.tray.delayTestAll' => '모든 노드 지연 속도 측정',
 			'main.tray.openDashboard' => '제어판 열기',
+			'main.tray.resetSystemProxy' => '네트워크 복구 / 시스템 프록시 초기화',
+			'main.tray.copyCmdPowerShell' => 'PowerShell 명령어',
+			'main.tray.copyCmdCmd' => 'CMD 명령어',
+			'main.tray.copyCmdBash' => 'Bash/Zsh 명령어',
 			'meta.enable' => '활성화',
 			'meta.disable' => '비활성화',
 			'meta.open' => '열기',
@@ -1257,6 +1271,12 @@ extension on TranslationsKo {
 			'meta.cannotBeEmpty' => ({required Object item}) => '${item}은(는) 비워둘 수 없습니다',
 			'meta.alreadyExists' => ({required Object item}) => '${item}이(가) 이미 존재합니다',
 			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => '${installer} 설치 실패, 코드: ${code}',
+			'meta.resetSystemProxy' => '네트워크 복구 / 시스템 프록시 초기화',
+			'meta.resetSystemProxyDesc' => '잔여 시스템 프록시 설정을 제거하고 네트워크를 새로고침하여 비정상 종료 후 인터넷 불가 문제를 해결합니다',
+			'meta.resetSystemProxySuccess' => '시스템 프록시가 초기화되었으며 네트워크가 정상 복구되었습니다',
+			'meta.sortLatencyDesc' => '지연 시간 높은 순',
+			'meta.sortNameDesc' => '이름 Z-A',
+			'meta.sortMultiplier' => '배율 낮은 순',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',
@@ -1271,6 +1291,8 @@ extension on TranslationsKo {
 			'tun.inet6Address' => 'IPv6 주소 범위',
 			'tun.dnsHijack' => 'DNS 하이제킹',
 			'tun.strictRoute' => '엄격한 경로',
+			_ => null,
+		} ?? switch (path) {
 			'tun.tunDefaultRoute' => '기본 경로',
 			'tun.icmpForward' => 'ICMP 전달',
 			'tun.allowBypass' => '앱이 VPN을 우회하도록 허용',
@@ -1281,8 +1303,6 @@ extension on TranslationsKo {
 			'dns.fallback' => '폴백(Fallback)',
 			'dns.preferH3' => 'DoH H3 우선',
 			'dns.useHosts' => 'Hosts 사용',
-			_ => null,
-		} ?? switch (path) {
 			'dns.useSystemHosts' => '시스템 Hosts 사용',
 			'dns.enhancedMode' => '향상된 모드',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} 필터 모드',

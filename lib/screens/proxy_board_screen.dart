@@ -27,6 +27,15 @@ class ProxyBoardScreen extends StatefulWidget {
     return const RouteSettings(name: "ProxyBoardScreen");
   }
 
+  static double extractMultiplier(String name) {
+    final reg = RegExp(r'(\d+(?:\.\d+)?)\s*[xX倍]');
+    final match = reg.firstMatch(name);
+    if (match != null) {
+      return double.tryParse(match.group(1)!) ?? 1.0;
+    }
+    return 1.0;
+  }
+
   const ProxyBoardScreen({super.key});
 
   @override
@@ -797,10 +806,32 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       }).toList();
     }
 
-    // 3. Search keyword filter
+    // 3. Search keyword & regex filter
     if (_searchKeyword.isNotEmpty) {
+      RegExp? regex;
+      try {
+        if (_searchKeyword.contains('|') ||
+            _searchKeyword.contains('.*') ||
+            _searchKeyword.contains('^') ||
+            _searchKeyword.contains(r'$') ||
+            _searchKeyword.contains(r'\d') ||
+            _searchKeyword.contains('[') ||
+            _searchKeyword.contains('(')) {
+          regex = RegExp(_searchKeyword, caseSensitive: false);
+        }
+      } catch (_) {
+        regex = null;
+      }
+
       list = list.where((n) {
         final region = NodeRegionHelper.getRegion(n.name);
+        if (regex != null) {
+          return regex.hasMatch(n.name) ||
+              regex.hasMatch(region.name) ||
+              regex.hasMatch(region.nameEn) ||
+              regex.hasMatch(region.code) ||
+              regex.hasMatch(n.type);
+        }
         return n.name.toLowerCase().contains(_searchKeyword) ||
             region.name.toLowerCase().contains(_searchKeyword) ||
             region.nameEn.toLowerCase().contains(_searchKeyword) ||
@@ -820,8 +851,18 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         if (cmp != 0) return cmp;
         return a.name.compareTo(b.name);
       });
+    } else if (_sortMode == "delay_desc") {
+      list.sort((a, b) {
+        final aDelay = a.delay ?? -1;
+        final bDelay = b.delay ?? -1;
+        final cmp = bDelay.compareTo(aDelay);
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
     } else if (_sortMode == "name_asc") {
       list.sort((a, b) => a.name.compareTo(b.name));
+    } else if (_sortMode == "name_desc") {
+      list.sort((a, b) => b.name.compareTo(a.name));
     } else if (_sortMode == "region") {
       list.sort((a, b) {
         final regA = NodeRegionHelper.getRegion(a.name).name;
@@ -830,10 +871,20 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         if (cmp != 0) return cmp;
         return a.name.compareTo(b.name);
       });
+    } else if (_sortMode == "multiplier") {
+      list.sort((a, b) {
+        final multA = extractMultiplier(a.name);
+        final multB = extractMultiplier(b.name);
+        final cmp = multA.compareTo(multB);
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
     }
 
     return list;
   }
+
+  static double extractMultiplier(String name) => ProxyBoardScreen.extractMultiplier(name);
 
   static String getFlagEmoji(String name) => NodeRegionHelper.getFlag(name);
 
@@ -921,15 +972,33 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                           setSheetState: setSheetState,
                         ),
                         _buildSortOptionChip(
+                          title: tcontext.meta.sortLatencyDesc,
+                          icon: Icons.speed_rounded,
+                          mode: "delay_desc",
+                          setSheetState: setSheetState,
+                        ),
+                        _buildSortOptionChip(
                           title: tcontext.meta.sortName,
                           icon: Icons.sort_by_alpha_rounded,
                           mode: "name_asc",
                           setSheetState: setSheetState,
                         ),
                         _buildSortOptionChip(
+                          title: tcontext.meta.sortNameDesc,
+                          icon: Icons.sort_by_alpha_rounded,
+                          mode: "name_desc",
+                          setSheetState: setSheetState,
+                        ),
+                        _buildSortOptionChip(
                           title: tcontext.meta.sortRegion,
                           icon: Icons.public_rounded,
                           mode: "region",
+                          setSheetState: setSheetState,
+                        ),
+                        _buildSortOptionChip(
+                          title: tcontext.meta.sortMultiplier,
+                          icon: Icons.percent_rounded,
+                          mode: "multiplier",
                           setSheetState: setSheetState,
                         ),
                       ],
@@ -1797,7 +1866,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         child: TextField(
                           controller: _searchController,
                           decoration: InputDecoration(
-                            hintText: "${tcontext.meta.search} (${tcontext.meta.server}/${tcontext.meta.identifiedRegion}/${tcontext.meta.nodeProtocol})",
+                            hintText: "${tcontext.meta.search} (${tcontext.meta.server}/${tcontext.meta.identifiedRegion}/Regex)",
                             hintStyle: TextStyle(
                               fontSize: 12.5,
                               color: theme.colorScheme.onSurface.withValues(alpha: 0.4),

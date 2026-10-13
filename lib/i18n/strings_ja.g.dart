@@ -636,6 +636,12 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String cannotBeEmpty({required Object item}) => '${item}を入力してください';
 	@override String alreadyExists({required Object item}) => '${item}は既に存在します';
 	@override String installFailedWithCode({required Object installer, required Object code}) => '${installer}のインストールに失敗しました (コード: ${code})';
+	@override String get resetSystemProxy => 'ネットワーク修復 / プロキシをリセット';
+	@override String get resetSystemProxyDesc => '残留したプロキシ設定をクリアし、異常終了後の接続問題を解決します';
+	@override String get resetSystemProxySuccess => 'システムプロキシがリセットされ、ネットワークが復旧しました';
+	@override String get sortLatencyDesc => 'レイテンシ降順';
+	@override String get sortNameDesc => '名前 Z-A';
+	@override String get sortMultiplier => '倍率昇順';
 }
 
 // Path: permission
@@ -759,6 +765,10 @@ class _Translations$main$tray$ja implements Translations$main$tray$en {
 	@override String get copyProxyCmd => 'ターミナルプロキシコマンドをコピー (CMD / Bash)';
 	@override String get delayTestAll => '全ノードの遅延速度を測定';
 	@override String get openDashboard => 'ダッシュボードを開く';
+	@override String get resetSystemProxy => 'ネットワーク修復/プロキシをリセット';
+	@override String get copyCmdPowerShell => 'PowerShell コマンド';
+	@override String get copyCmdCmd => 'CMD コマンド';
+	@override String get copyCmdBash => 'Bash/Zsh コマンド';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -867,6 +877,10 @@ extension on TranslationsJa {
 			'main.tray.copyProxyCmd' => 'ターミナルプロキシコマンドをコピー (CMD / Bash)',
 			'main.tray.delayTestAll' => '全ノードの遅延速度を測定',
 			'main.tray.openDashboard' => 'ダッシュボードを開く',
+			'main.tray.resetSystemProxy' => 'ネットワーク修復/プロキシをリセット',
+			'main.tray.copyCmdPowerShell' => 'PowerShell コマンド',
+			'main.tray.copyCmdCmd' => 'CMD コマンド',
+			'main.tray.copyCmdBash' => 'Bash/Zsh コマンド',
 			'meta.enable' => '有効',
 			'meta.disable' => '無効',
 			'meta.open' => '開く',
@@ -1257,6 +1271,12 @@ extension on TranslationsJa {
 			'meta.cannotBeEmpty' => ({required Object item}) => '${item}を入力してください',
 			'meta.alreadyExists' => ({required Object item}) => '${item}は既に存在します',
 			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => '${installer}のインストールに失敗しました (コード: ${code})',
+			'meta.resetSystemProxy' => 'ネットワーク修復 / プロキシをリセット',
+			'meta.resetSystemProxyDesc' => '残留したプロキシ設定をクリアし、異常終了後の接続問題を解決します',
+			'meta.resetSystemProxySuccess' => 'システムプロキシがリセットされ、ネットワークが復旧しました',
+			'meta.sortLatencyDesc' => 'レイテンシ降順',
+			'meta.sortNameDesc' => '名前 Z-A',
+			'meta.sortMultiplier' => '倍率昇順',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',
@@ -1271,6 +1291,8 @@ extension on TranslationsJa {
 			'tun.inet6Address' => 'IPv6アドレス範囲',
 			'tun.dnsHijack' => 'DNSハイジャック',
 			'tun.strictRoute' => '厳格なルート',
+			_ => null,
+		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'デフォルトルート',
 			'tun.icmpForward' => 'ICMP転送',
 			'tun.allowBypass' => 'アプリがVPNをバイパスすることを許可する',
@@ -1281,8 +1303,6 @@ extension on TranslationsJa {
 			'dns.fallback' => 'フォールバック',
 			'dns.preferH3' => 'DoH H3を優先',
 			'dns.useHosts' => 'Hostsを使用',
-			_ => null,
-		} ?? switch (path) {
 			'dns.useSystemHosts' => 'システムHostsを使用',
 			'dns.enhancedMode' => '拡張モード',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} フィルターモード',

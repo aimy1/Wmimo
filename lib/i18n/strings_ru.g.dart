@@ -636,6 +636,12 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String cannotBeEmpty({required Object item}) => 'Поле ${item} не может быть пустым';
 	@override String alreadyExists({required Object item}) => '${item} уже существует';
 	@override String installFailedWithCode({required Object installer, required Object code}) => 'Не удалось установить ${installer}, код: ${code}';
+	@override String get resetSystemProxy => 'Восстановление сети / Сброс системного прокси';
+	@override String get resetSystemProxyDesc => 'Очистить остаточные настройки системного прокси и восстановить сеть';
+	@override String get resetSystemProxySuccess => 'Системный прокси сброшен, сеть восстановлена';
+	@override String get sortLatencyDesc => 'По убыванию задержки';
+	@override String get sortNameDesc => 'По имени (Z-A)';
+	@override String get sortMultiplier => 'По возрастанию множителя';
 }
 
 // Path: permission
@@ -759,6 +765,10 @@ class _Translations$main$tray$ru implements Translations$main$tray$en {
 	@override String get copyProxyCmd => 'Копировать команду терминала (CMD / Bash)';
 	@override String get delayTestAll => 'Проверить скорость всех узлов';
 	@override String get openDashboard => 'Панель управления';
+	@override String get resetSystemProxy => 'Восстановление сети / Сброс системного прокси';
+	@override String get copyCmdPowerShell => 'Команда PowerShell';
+	@override String get copyCmdCmd => 'Команда CMD';
+	@override String get copyCmdBash => 'Команда Bash/Zsh';
 }
 
 /// The flat map containing all translations for locale <ru>.
@@ -867,6 +877,10 @@ extension on TranslationsRu {
 			'main.tray.copyProxyCmd' => 'Копировать команду терминала (CMD / Bash)',
 			'main.tray.delayTestAll' => 'Проверить скорость всех узлов',
 			'main.tray.openDashboard' => 'Панель управления',
+			'main.tray.resetSystemProxy' => 'Восстановление сети / Сброс системного прокси',
+			'main.tray.copyCmdPowerShell' => 'Команда PowerShell',
+			'main.tray.copyCmdCmd' => 'Команда CMD',
+			'main.tray.copyCmdBash' => 'Команда Bash/Zsh',
 			'meta.enable' => 'Включить',
 			'meta.disable' => 'Запретить',
 			'meta.open' => 'Открыть',
@@ -1257,6 +1271,12 @@ extension on TranslationsRu {
 			'meta.cannotBeEmpty' => ({required Object item}) => 'Поле ${item} не может быть пустым',
 			'meta.alreadyExists' => ({required Object item}) => '${item} уже существует',
 			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'Не удалось установить ${installer}, код: ${code}',
+			'meta.resetSystemProxy' => 'Восстановление сети / Сброс системного прокси',
+			'meta.resetSystemProxyDesc' => 'Очистить остаточные настройки системного прокси и восстановить сеть',
+			'meta.resetSystemProxySuccess' => 'Системный прокси сброшен, сеть восстановлена',
+			'meta.sortLatencyDesc' => 'По убыванию задержки',
+			'meta.sortNameDesc' => 'По имени (Z-A)',
+			'meta.sortMultiplier' => 'По возрастанию множителя',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',
@@ -1271,6 +1291,8 @@ extension on TranslationsRu {
 			'tun.inet6Address' => 'Диапазон IPv6-адресов',
 			'tun.dnsHijack' => 'Перехват DNS',
 			'tun.strictRoute' => 'Строгая маршрутизация',
+			_ => null,
+		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'Маршрут по умолчанию',
 			'tun.icmpForward' => 'Пересылка ICMP',
 			'tun.allowBypass' => 'Разрешить приложениям обходить VPN',
@@ -1281,8 +1303,6 @@ extension on TranslationsRu {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'Приоритет DoH H3',
 			'dns.useHosts' => 'Использование хостов',
-			_ => null,
-		} ?? switch (path) {
 			'dns.useSystemHosts' => 'Использование системных хостов',
 			'dns.enhancedMode' => 'Расширенный режим',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} режим фильтра',

@@ -116,7 +116,11 @@
       "tools": "도구",
       "copyProxyCmd": "터미널 프록시 명령 복사 (CMD / Bash)",
       "delayTestAll": "모든 노드 지연 속도 측정",
-      "openDashboard": "제어판 열기"
+      "openDashboard": "제어판 열기",
+      "resetSystemProxy": "네트워크 복구 / 시스템 프록시 초기화",
+      "copyCmdPowerShell": "PowerShell 명령어",
+      "copyCmdCmd": "CMD 명령어",
+      "copyCmdBash": "Bash/Zsh 명령어"
     }
   },
   "meta": {
@@ -509,7 +513,13 @@
     "userSpecifiedUrl": "사용자 지정 URL",
     "cannotBeEmpty": "$item은(는) 비워둘 수 없습니다",
     "alreadyExists": "$item이(가) 이미 존재합니다",
-    "installFailedWithCode": "$installer 설치 실패, 코드: $code"
+    "installFailedWithCode": "$installer 설치 실패, 코드: $code",
+    "resetSystemProxy": "네트워크 복구 / 시스템 프록시 초기화",
+    "resetSystemProxyDesc": "잔여 시스템 프록시 설정을 제거하고 네트워크를 새로고침하여 비정상 종료 후 인터넷 불가 문제를 해결합니다",
+    "resetSystemProxySuccess": "시스템 프록시가 초기화되었으며 네트워크가 정상 복구되었습니다",
+    "sortLatencyDesc": "지연 시간 높은 순",
+    "sortNameDesc": "이름 Z-A",
+    "sortMultiplier": "배율 낮은 순"
   },
   "permission": {
     "camera": "카메라",

@@ -116,7 +116,11 @@
       "tools": "Herramientas",
       "copyProxyCmd": "Copiar comando de proxy de terminal (CMD / Bash)",
       "delayTestAll": "Probar latencia de todos los nodos",
-      "openDashboard": "Abrir panel de control"
+      "openDashboard": "Abrir panel de control",
+      "resetSystemProxy": "Reparar Red / Restablecer Proxy del Sistema",
+      "copyCmdPowerShell": "Comando PowerShell",
+      "copyCmdCmd": "Comando CMD",
+      "copyCmdBash": "Comando Bash/Zsh"
     }
   },
   "meta": {
@@ -509,7 +513,13 @@
     "userSpecifiedUrl": "URL especificada por el usuario",
     "cannotBeEmpty": "$item no puede estar vacío",
     "alreadyExists": "$item ya existe",
-    "installFailedWithCode": "Error al instalar $installer, código: $code"
+    "installFailedWithCode": "Error al instalar $installer, código: $code",
+    "resetSystemProxy": "Reparar red / Restablecer proxy del sistema",
+    "resetSystemProxyDesc": "Limpiar la configuración residual del proxy del sistema y actualizar la red",
+    "resetSystemProxySuccess": "Proxy del sistema restablecido y red recuperada",
+    "sortLatencyDesc": "Mayor latencia",
+    "sortNameDesc": "Nombre Z-A",
+    "sortMultiplier": "Menor multiplicador"
   },
   "permission": {
     "camera": "Cámara",

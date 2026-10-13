@@ -116,7 +116,11 @@
       "tools": "實用工具",
       "copyProxyCmd": "複製代理指令",
       "delayTestAll": "全節點測速",
-      "openDashboard": "開啟儀表板"
+      "openDashboard": "開啟儀表板",
+      "resetSystemProxy": "修復網路/重設系統代理",
+      "copyCmdPowerShell": "PowerShell 代理指令",
+      "copyCmdCmd": "CMD 代理指令",
+      "copyCmdBash": "Bash/Zsh 代理指令"
     }
   },
   "meta": {
@@ -509,7 +513,13 @@
     "userSpecifiedUrl": "使用者指定 URL",
     "cannotBeEmpty": "$item不能為空",
     "alreadyExists": "$item已存在",
-    "installFailedWithCode": "安裝 $installer 失敗，錯誤碼: $code"
+    "installFailedWithCode": "安裝 $installer 失敗，錯誤碼: $code",
+    "resetSystemProxy": "修復網路 / 重設系統代理",
+    "resetSystemProxyDesc": "清理殘留系統代理設定並重新整理網路，解決異常結束後無法上網問題",
+    "resetSystemProxySuccess": "系統代理已清理並重設，網路已恢復正常",
+    "sortLatencyDesc": "延遲由高到低",
+    "sortNameDesc": "名稱 Z-A",
+    "sortMultiplier": "倍率由低到高"
   },
   "permission": {
     "camera": "相機",

@@ -1582,6 +1582,24 @@ class Translations$meta$en {
 
 	/// en: 'Failed to install $installer, exit code: $code'
 	String installFailedWithCode({required Object installer, required Object code}) => 'Failed to install ${installer}, exit code: ${code}';
+
+	/// en: 'Repair Network / Reset System Proxy'
+	String get resetSystemProxy => 'Repair Network / Reset System Proxy';
+
+	/// en: 'Clear residual system proxy settings and refresh network to fix offline issues after abnormal exits'
+	String get resetSystemProxyDesc => 'Clear residual system proxy settings and refresh network to fix offline issues after abnormal exits';
+
+	/// en: 'System proxy cleared and reset, network restored'
+	String get resetSystemProxySuccess => 'System proxy cleared and reset, network restored';
+
+	/// en: 'Highest Latency'
+	String get sortLatencyDesc => 'Highest Latency';
+
+	/// en: 'Name Z-A'
+	String get sortNameDesc => 'Name Z-A';
+
+	/// en: 'Lowest Multiplier'
+	String get sortMultiplier => 'Lowest Multiplier';
 }
 
 // Path: permission
@@ -1825,6 +1843,18 @@ class Translations$main$tray$en {
 
 	/// en: 'Open Dashboard'
 	String get openDashboard => 'Open Dashboard';
+
+	/// en: 'Repair Network / Reset System Proxy'
+	String get resetSystemProxy => 'Repair Network / Reset System Proxy';
+
+	/// en: 'PowerShell Command'
+	String get copyCmdPowerShell => 'PowerShell Command';
+
+	/// en: 'CMD Command'
+	String get copyCmdCmd => 'CMD Command';
+
+	/// en: 'Bash/Zsh Command'
+	String get copyCmdBash => 'Bash/Zsh Command';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1933,6 +1963,10 @@ extension on Translations {
 			'main.tray.copyProxyCmd' => 'Copy Proxy Command',
 			'main.tray.delayTestAll' => 'Speed Test All Nodes',
 			'main.tray.openDashboard' => 'Open Dashboard',
+			'main.tray.resetSystemProxy' => 'Repair Network / Reset System Proxy',
+			'main.tray.copyCmdPowerShell' => 'PowerShell Command',
+			'main.tray.copyCmdCmd' => 'CMD Command',
+			'main.tray.copyCmdBash' => 'Bash/Zsh Command',
 			'meta.enable' => 'Enable',
 			'meta.disable' => 'Disable',
 			'meta.open' => 'Open',
@@ -2323,6 +2357,12 @@ extension on Translations {
 			'meta.cannotBeEmpty' => ({required Object item}) => '${item} cannot be empty',
 			'meta.alreadyExists' => ({required Object item}) => '${item} already exists',
 			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'Failed to install ${installer}, exit code: ${code}',
+			'meta.resetSystemProxy' => 'Repair Network / Reset System Proxy',
+			'meta.resetSystemProxyDesc' => 'Clear residual system proxy settings and refresh network to fix offline issues after abnormal exits',
+			'meta.resetSystemProxySuccess' => 'System proxy cleared and reset, network restored',
+			'meta.sortLatencyDesc' => 'Highest Latency',
+			'meta.sortNameDesc' => 'Name Z-A',
+			'meta.sortMultiplier' => 'Lowest Multiplier',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',
@@ -2337,6 +2377,8 @@ extension on Translations {
 			'tun.inet6Address' => 'IPv6 Gateway Address',
 			'tun.dnsHijack' => 'DNS Hijack',
 			'tun.strictRoute' => 'Strict Route',
+			_ => null,
+		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'Default Route',
 			'tun.icmpForward' => 'ICMP Forwarding',
 			'tun.allowBypass' => 'Allow Apps to Bypass VPN',
@@ -2347,8 +2389,6 @@ extension on Translations {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'Prefer DoH H3',
 			'dns.useHosts' => 'Use Hosts',
-			_ => null,
-		} ?? switch (path) {
 			'dns.useSystemHosts' => 'Use System Hosts',
 			'dns.enhancedMode' => 'Enhanced Mode',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} Filter Mode',

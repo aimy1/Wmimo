@@ -116,7 +116,11 @@
       "tools": "الأدوات",
       "copyProxyCmd": "نسخ أمر وكيل الطرفية (CMD / Bash)",
       "delayTestAll": "اختبار سرعة جميع العقد",
-      "openDashboard": "فتح لوحة التحكم"
+      "openDashboard": "فتح لوحة التحكم",
+      "resetSystemProxy": "إصلاح الشبكة / إعادة تعيين وكيل النظام",
+      "copyCmdPowerShell": "أمر PowerShell",
+      "copyCmdCmd": "أمر CMD",
+      "copyCmdBash": "أمر Bash/Zsh"
     }
   },
   "meta": {
@@ -509,7 +513,13 @@
     "userSpecifiedUrl": "عنوان URL محدد من المستخدم",
     "cannotBeEmpty": "لا يمكن أن يكون $item فارغًا",
     "alreadyExists": "$item موجود بالفعل",
-    "installFailedWithCode": "فشل تثبيت $installer، الرمز: $code"
+    "installFailedWithCode": "فشل تثبيت $installer، الرمز: $code",
+    "resetSystemProxy": "إصلاح الشبكة / إعادة تعيين وكيل النظام",
+    "resetSystemProxyDesc": "مسح إعدادات وكيل النظام المتبقية وتحديث الشبكة لحل مشاكل انقطاع الاتصال",
+    "resetSystemProxySuccess": "تمت استعادة إعدادات الوكيل وعادت الشبكة للعمل",
+    "sortLatencyDesc": "أعلى زمن انتقال",
+    "sortNameDesc": "الاسم Z-A",
+    "sortMultiplier": "أقل مضاعف"
   },
   "permission": {
     "camera": "الكاميرا",

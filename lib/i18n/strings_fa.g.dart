@@ -636,6 +636,12 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String cannotBeEmpty({required Object item}) => '${item} نمی‌تواند خالی باشد';
 	@override String alreadyExists({required Object item}) => '${item} از قبل وجود دارد';
 	@override String installFailedWithCode({required Object installer, required Object code}) => 'نصب ${installer} با خطا مواجه شد، کد: ${code}';
+	@override String get resetSystemProxy => 'تعمیر شبکه / بازنشانی پروکسی سیستم';
+	@override String get resetSystemProxyDesc => 'پاکسازی تنظیمات باقیمانده پروکسی سیستم و تازه‌سازی شبکه برای رفع مشکلات قطعی اینترنت';
+	@override String get resetSystemProxySuccess => 'پروکسی سیستم پاکسازی شد و شبکه به حالت عادی بازگشت';
+	@override String get sortLatencyDesc => 'بیشترین تأخیر';
+	@override String get sortNameDesc => 'نام Z-A';
+	@override String get sortMultiplier => 'کمترین ضریب';
 }
 
 // Path: permission
@@ -759,6 +765,10 @@ class _Translations$main$tray$fa implements Translations$main$tray$en {
 	@override String get copyProxyCmd => 'کپی دستور پروکسی ترمینال (CMD / Bash)';
 	@override String get delayTestAll => 'تست سرعت همه سرورها';
 	@override String get openDashboard => 'باز کردن کنترل پنل';
+	@override String get resetSystemProxy => 'تعمیر شبکه / بازنشانی پروکسی سیستم';
+	@override String get copyCmdPowerShell => 'دستور PowerShell';
+	@override String get copyCmdCmd => 'دستور CMD';
+	@override String get copyCmdBash => 'دستور Bash/Zsh';
 }
 
 /// The flat map containing all translations for locale <fa>.
@@ -867,6 +877,10 @@ extension on TranslationsFa {
 			'main.tray.copyProxyCmd' => 'کپی دستور پروکسی ترمینال (CMD / Bash)',
 			'main.tray.delayTestAll' => 'تست سرعت همه سرورها',
 			'main.tray.openDashboard' => 'باز کردن کنترل پنل',
+			'main.tray.resetSystemProxy' => 'تعمیر شبکه / بازنشانی پروکسی سیستم',
+			'main.tray.copyCmdPowerShell' => 'دستور PowerShell',
+			'main.tray.copyCmdCmd' => 'دستور CMD',
+			'main.tray.copyCmdBash' => 'دستور Bash/Zsh',
 			'meta.enable' => 'فعال‌سازی',
 			'meta.disable' => 'غیرفعال',
 			'meta.open' => 'باز کن',
@@ -1257,6 +1271,12 @@ extension on TranslationsFa {
 			'meta.cannotBeEmpty' => ({required Object item}) => '${item} نمی‌تواند خالی باشد',
 			'meta.alreadyExists' => ({required Object item}) => '${item} از قبل وجود دارد',
 			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'نصب ${installer} با خطا مواجه شد، کد: ${code}',
+			'meta.resetSystemProxy' => 'تعمیر شبکه / بازنشانی پروکسی سیستم',
+			'meta.resetSystemProxyDesc' => 'پاکسازی تنظیمات باقیمانده پروکسی سیستم و تازه‌سازی شبکه برای رفع مشکلات قطعی اینترنت',
+			'meta.resetSystemProxySuccess' => 'پروکسی سیستم پاکسازی شد و شبکه به حالت عادی بازگشت',
+			'meta.sortLatencyDesc' => 'بیشترین تأخیر',
+			'meta.sortNameDesc' => 'نام Z-A',
+			'meta.sortMultiplier' => 'کمترین ضریب',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',
@@ -1271,6 +1291,8 @@ extension on TranslationsFa {
 			'tun.inet6Address' => 'محدوده آدرس IPv6',
 			'tun.dnsHijack' => 'ربودن DNS',
 			'tun.strictRoute' => 'مسیریابی دقیق',
+			_ => null,
+		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'مسیر پیش‌فرض',
 			'tun.icmpForward' => 'ارسال ICMP',
 			'tun.allowBypass' => 'به برنامه‌ها اجازه دهید VPN را دور بزنند',
@@ -1281,8 +1303,6 @@ extension on TranslationsFa {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'اولویت DoH H3',
 			'dns.useHosts' => 'استفاده از هاست ها',
-			_ => null,
-		} ?? switch (path) {
 			'dns.useSystemHosts' => 'استفاده از هاست های سیستم',
 			'dns.enhancedMode' => 'حالت پیشرفته',
 			'dns.fakeIPFilterMode' => 'حالت فیلتر ${_root.dns.fakeIp}',

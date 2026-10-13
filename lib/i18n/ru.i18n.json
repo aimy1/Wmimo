@@ -116,7 +116,11 @@
       "tools": "Инструменты",
       "copyProxyCmd": "Копировать команду терминала (CMD / Bash)",
       "delayTestAll": "Проверить скорость всех узлов",
-      "openDashboard": "Панель управления"
+      "openDashboard": "Панель управления",
+      "resetSystemProxy": "Восстановление сети / Сброс системного прокси",
+      "copyCmdPowerShell": "Команда PowerShell",
+      "copyCmdCmd": "Команда CMD",
+      "copyCmdBash": "Команда Bash/Zsh"
     }
   },
   "meta": {
@@ -509,7 +513,13 @@
     "userSpecifiedUrl": "URL, указанный пользователем",
     "cannotBeEmpty": "Поле $item не может быть пустым",
     "alreadyExists": "$item уже существует",
-    "installFailedWithCode": "Не удалось установить $installer, код: $code"
+    "installFailedWithCode": "Не удалось установить $installer, код: $code",
+    "resetSystemProxy": "Восстановление сети / Сброс системного прокси",
+    "resetSystemProxyDesc": "Очистить остаточные настройки системного прокси и восстановить сеть",
+    "resetSystemProxySuccess": "Системный прокси сброшен, сеть восстановлена",
+    "sortLatencyDesc": "По убыванию задержки",
+    "sortNameDesc": "По имени (Z-A)",
+    "sortMultiplier": "По возрастанию множителя"
   },
   "permission": {
     "camera": "Камера",

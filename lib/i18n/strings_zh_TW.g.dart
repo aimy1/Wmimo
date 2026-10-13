@@ -636,6 +636,12 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String cannotBeEmpty({required Object item}) => '${item}不能為空';
 	@override String alreadyExists({required Object item}) => '${item}已存在';
 	@override String installFailedWithCode({required Object installer, required Object code}) => '安裝 ${installer} 失敗，錯誤碼: ${code}';
+	@override String get resetSystemProxy => '修復網路 / 重設系統代理';
+	@override String get resetSystemProxyDesc => '清理殘留系統代理設定並重新整理網路，解決異常結束後無法上網問題';
+	@override String get resetSystemProxySuccess => '系統代理已清理並重設，網路已恢復正常';
+	@override String get sortLatencyDesc => '延遲由高到低';
+	@override String get sortNameDesc => '名稱 Z-A';
+	@override String get sortMultiplier => '倍率由低到高';
 }
 
 // Path: permission
@@ -759,6 +765,10 @@ class Translations$main$tray$zh_TW implements Translations$main$tray$en {
 	@override String get copyProxyCmd => '複製代理指令';
 	@override String get delayTestAll => '全節點測速';
 	@override String get openDashboard => '開啟儀表板';
+	@override String get resetSystemProxy => '修復網路/重設系統代理';
+	@override String get copyCmdPowerShell => 'PowerShell 代理指令';
+	@override String get copyCmdCmd => 'CMD 代理指令';
+	@override String get copyCmdBash => 'Bash/Zsh 代理指令';
 }
 
 /// The flat map containing all translations for locale <zh-TW>.
@@ -867,6 +877,10 @@ extension on TranslationsZhTw {
 			'main.tray.copyProxyCmd' => '複製代理指令',
 			'main.tray.delayTestAll' => '全節點測速',
 			'main.tray.openDashboard' => '開啟儀表板',
+			'main.tray.resetSystemProxy' => '修復網路/重設系統代理',
+			'main.tray.copyCmdPowerShell' => 'PowerShell 代理指令',
+			'main.tray.copyCmdCmd' => 'CMD 代理指令',
+			'main.tray.copyCmdBash' => 'Bash/Zsh 代理指令',
 			'meta.enable' => '啟用',
 			'meta.disable' => '禁用',
 			'meta.open' => '打開',
@@ -1257,6 +1271,12 @@ extension on TranslationsZhTw {
 			'meta.cannotBeEmpty' => ({required Object item}) => '${item}不能為空',
 			'meta.alreadyExists' => ({required Object item}) => '${item}已存在',
 			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => '安裝 ${installer} 失敗，錯誤碼: ${code}',
+			'meta.resetSystemProxy' => '修復網路 / 重設系統代理',
+			'meta.resetSystemProxyDesc' => '清理殘留系統代理設定並重新整理網路，解決異常結束後無法上網問題',
+			'meta.resetSystemProxySuccess' => '系統代理已清理並重設，網路已恢復正常',
+			'meta.sortLatencyDesc' => '延遲由高到低',
+			'meta.sortNameDesc' => '名稱 Z-A',
+			'meta.sortMultiplier' => '倍率由低到高',
 			'permission.camera' => '相機',
 			'permission.screen' => '螢幕錄製',
 			'permission.appQuery' => '取得應用程式列表',
@@ -1271,6 +1291,8 @@ extension on TranslationsZhTw {
 			'tun.inet6Address' => 'IPv6位址段',
 			'tun.dnsHijack' => 'DNS劫持',
 			'tun.strictRoute' => '嚴格路由',
+			_ => null,
+		} ?? switch (path) {
 			'tun.tunDefaultRoute' => '預設路由',
 			'tun.icmpForward' => 'ICMP 轉發',
 			'tun.allowBypass' => '允許應用程式略過 VPN',
@@ -1281,8 +1303,6 @@ extension on TranslationsZhTw {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'DoH H3優先',
 			'dns.useHosts' => '使用Hosts',
-			_ => null,
-		} ?? switch (path) {
 			'dns.useSystemHosts' => '使用系統Hosts',
 			'dns.enhancedMode' => '增強模式',
 			'dns.fakeIPFilterMode' => '${_root.dns.fakeIp} 過濾模式',

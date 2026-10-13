@@ -636,6 +636,12 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String cannotBeEmpty({required Object item}) => 'لا يمكن أن يكون ${item} فارغًا';
 	@override String alreadyExists({required Object item}) => '${item} موجود بالفعل';
 	@override String installFailedWithCode({required Object installer, required Object code}) => 'فشل تثبيت ${installer}، الرمز: ${code}';
+	@override String get resetSystemProxy => 'إصلاح الشبكة / إعادة تعيين وكيل النظام';
+	@override String get resetSystemProxyDesc => 'مسح إعدادات وكيل النظام المتبقية وتحديث الشبكة لحل مشاكل انقطاع الاتصال';
+	@override String get resetSystemProxySuccess => 'تمت استعادة إعدادات الوكيل وعادت الشبكة للعمل';
+	@override String get sortLatencyDesc => 'أعلى زمن انتقال';
+	@override String get sortNameDesc => 'الاسم Z-A';
+	@override String get sortMultiplier => 'أقل مضاعف';
 }
 
 // Path: permission
@@ -759,6 +765,10 @@ class _Translations$main$tray$ar implements Translations$main$tray$en {
 	@override String get copyProxyCmd => 'نسخ أمر وكيل الطرفية (CMD / Bash)';
 	@override String get delayTestAll => 'اختبار سرعة جميع العقد';
 	@override String get openDashboard => 'فتح لوحة التحكم';
+	@override String get resetSystemProxy => 'إصلاح الشبكة / إعادة تعيين وكيل النظام';
+	@override String get copyCmdPowerShell => 'أمر PowerShell';
+	@override String get copyCmdCmd => 'أمر CMD';
+	@override String get copyCmdBash => 'أمر Bash/Zsh';
 }
 
 /// The flat map containing all translations for locale <ar>.
@@ -867,6 +877,10 @@ extension on TranslationsAr {
 			'main.tray.copyProxyCmd' => 'نسخ أمر وكيل الطرفية (CMD / Bash)',
 			'main.tray.delayTestAll' => 'اختبار سرعة جميع العقد',
 			'main.tray.openDashboard' => 'فتح لوحة التحكم',
+			'main.tray.resetSystemProxy' => 'إصلاح الشبكة / إعادة تعيين وكيل النظام',
+			'main.tray.copyCmdPowerShell' => 'أمر PowerShell',
+			'main.tray.copyCmdCmd' => 'أمر CMD',
+			'main.tray.copyCmdBash' => 'أمر Bash/Zsh',
 			'meta.enable' => 'يُمكَِن',
 			'meta.disable' => 'إبطال',
 			'meta.open' => 'يفتح',
@@ -1257,6 +1271,12 @@ extension on TranslationsAr {
 			'meta.cannotBeEmpty' => ({required Object item}) => 'لا يمكن أن يكون ${item} فارغًا',
 			'meta.alreadyExists' => ({required Object item}) => '${item} موجود بالفعل',
 			'meta.installFailedWithCode' => ({required Object installer, required Object code}) => 'فشل تثبيت ${installer}، الرمز: ${code}',
+			'meta.resetSystemProxy' => 'إصلاح الشبكة / إعادة تعيين وكيل النظام',
+			'meta.resetSystemProxyDesc' => 'مسح إعدادات وكيل النظام المتبقية وتحديث الشبكة لحل مشاكل انقطاع الاتصال',
+			'meta.resetSystemProxySuccess' => 'تمت استعادة إعدادات الوكيل وعادت الشبكة للعمل',
+			'meta.sortLatencyDesc' => 'أعلى زمن انتقال',
+			'meta.sortNameDesc' => 'الاسم Z-A',
+			'meta.sortMultiplier' => 'أقل مضاعف',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',
@@ -1271,6 +1291,8 @@ extension on TranslationsAr {
 			'tun.inet6Address' => 'نطاق عناوين IPv6',
 			'tun.dnsHijack' => 'اختطاف DNS',
 			'tun.strictRoute' => 'التوجيه الصارم',
+			_ => null,
+		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'المسار الافتراضي',
 			'tun.icmpForward' => 'توجيه رسائل ICMP',
 			'tun.allowBypass' => 'السماح للتطبيقات بتجاوز VPN',
@@ -1281,8 +1303,6 @@ extension on TranslationsAr {
 			'dns.fallback' => 'Fallback',
 			'dns.preferH3' => 'أولوية DoH H3',
 			'dns.useHosts' => 'استخدام المضيفين',
-			_ => null,
-		} ?? switch (path) {
 			'dns.useSystemHosts' => 'استخدام مضيفات النظام',
 			'dns.enhancedMode' => 'الوضع المحسّن',
 			'dns.fakeIPFilterMode' => 'وضع التصفية ${_root.dns.fakeIp}',

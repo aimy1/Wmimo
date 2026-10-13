@@ -116,7 +116,11 @@
       "tools": "ابزارها",
       "copyProxyCmd": "کپی دستور پروکسی ترمینال (CMD / Bash)",
       "delayTestAll": "تست سرعت همه سرورها",
-      "openDashboard": "باز کردن کنترل پنل"
+      "openDashboard": "باز کردن کنترل پنل",
+      "resetSystemProxy": "تعمیر شبکه / بازنشانی پروکسی سیستم",
+      "copyCmdPowerShell": "دستور PowerShell",
+      "copyCmdCmd": "دستور CMD",
+      "copyCmdBash": "دستور Bash/Zsh"
     }
   },
   "meta": {
@@ -509,7 +513,13 @@
     "userSpecifiedUrl": "آدرس مشخص‌شده توسط کاربر",
     "cannotBeEmpty": "$item نمی‌تواند خالی باشد",
     "alreadyExists": "$item از قبل وجود دارد",
-    "installFailedWithCode": "نصب $installer با خطا مواجه شد، کد: $code"
+    "installFailedWithCode": "نصب $installer با خطا مواجه شد، کد: $code",
+    "resetSystemProxy": "تعمیر شبکه / بازنشانی پروکسی سیستم",
+    "resetSystemProxyDesc": "پاکسازی تنظیمات باقیمانده پروکسی سیستم و تازه‌سازی شبکه برای رفع مشکلات قطعی اینترنت",
+    "resetSystemProxySuccess": "پروکسی سیستم پاکسازی شد و شبکه به حالت عادی بازگشت",
+    "sortLatencyDesc": "بیشترین تأخیر",
+    "sortNameDesc": "نام Z-A",
+    "sortMultiplier": "کمترین ضریب"
   },
   "permission": {
     "camera": "دوربین",

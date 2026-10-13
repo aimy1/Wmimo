@@ -116,7 +116,11 @@
       "tools": "Tools",
       "copyProxyCmd": "Copy Proxy Command",
       "delayTestAll": "Speed Test All Nodes",
-      "openDashboard": "Open Dashboard"
+      "openDashboard": "Open Dashboard",
+      "resetSystemProxy": "Repair Network / Reset System Proxy",
+      "copyCmdPowerShell": "PowerShell Command",
+      "copyCmdCmd": "CMD Command",
+      "copyCmdBash": "Bash/Zsh Command"
     }
   },
   "meta": {
@@ -509,7 +513,13 @@
     "userSpecifiedUrl": "User Specified URL",
     "cannotBeEmpty": "$item cannot be empty",
     "alreadyExists": "$item already exists",
-    "installFailedWithCode": "Failed to install $installer, exit code: $code"
+    "installFailedWithCode": "Failed to install $installer, exit code: $code",
+    "resetSystemProxy": "Repair Network / Reset System Proxy",
+    "resetSystemProxyDesc": "Clear residual system proxy settings and refresh network to fix offline issues after abnormal exits",
+    "resetSystemProxySuccess": "System proxy cleared and reset, network restored",
+    "sortLatencyDesc": "Highest Latency",
+    "sortNameDesc": "Name Z-A",
+    "sortMultiplier": "Lowest Multiplier"
   },
   "permission": {
     "camera": "Camera",
