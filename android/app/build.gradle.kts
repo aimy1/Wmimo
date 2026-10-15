@@ -1,3 +1,4 @@
+import java.io.File
 import java.util.Base64
 import java.util.Properties
 
@@ -23,15 +24,7 @@ android {
     namespace = "com.wmimo.app"
     compileSdkVersion = "android-35"
     buildToolsVersion = "36.0.0"
-
-    val envSdk = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
-    val ndkDir = if (envSdk != null) java.io.File(envSdk, "ndk") else java.io.File("/usr/local/lib/android/sdk/ndk")
-    val installedNdks = if (ndkDir.exists()) ndkDir.listFiles()?.filter { it.isDirectory }?.map { it.name } else null
-    if (!installedNdks.isNullOrEmpty()) {
-        ndkVersion = installedNdks.sorted().last()
-    } else {
-        ndkVersion = flutter.ndkVersion
-    }
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
