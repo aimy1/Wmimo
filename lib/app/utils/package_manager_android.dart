@@ -13,13 +13,13 @@ class PackageInfoImpl extends PackageInfo {
 }
 
 class ApplicationInfoImpl extends ApplicationInfo {
-  ApplicationInfoImpl(String packageName)
+  ApplicationInfoImpl(String packageName, {int flags = 0})
     : super(
         compatibleWidthLimitDp: 0,
         dataDir: null,
         descriptionRes: 0,
         enabled: true,
-        flags: 0,
+        flags: flags,
         largestWidthLimitDp: 0,
         processName: packageName,
         publicSourceDir: null,

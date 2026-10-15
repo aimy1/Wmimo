@@ -642,6 +642,24 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get sortLatencyDesc => 'أعلى زمن انتقال';
 	@override String get sortNameDesc => 'الاسم Z-A';
 	@override String get sortMultiplier => 'أقل مضاعف';
+	@override String get uwpLoopback => 'أداة إعفاء الاسترجاع الداخلي UWP';
+	@override String get uwpLoopbackDesc => 'السماح لتطبيقات UWP باستخدام الوكيل المحلي';
+	@override String get uwpExemptAllCommon => 'إعفاء التطبيقات الموصى بها';
+	@override String get uwpApplySuccess => 'تم تطبيق قواعد إعفاء UWP بنجاح';
+	@override String get common => 'شائع';
+	@override String get exempted => 'معفى';
+	@override String get notExempted => 'غير معفى';
+	@override String get deselectAll => 'إلغاء تحديد الكل';
+	@override String get userApps => 'تطبيقات المستخدم';
+	@override String get systemApps => 'تطبيقات النظام';
+	@override String get selectedOnly => 'المحدد';
+	@override String get proxySelectedMode => 'توكيل التطبيقات المحددة فقط';
+	@override String get proxySelectedModeDesc => 'تمر التطبيقات المحددة عبر الوكيل، والباقي يتصل مباشرة';
+	@override String get bypassSelectedMode => 'تجاوز التطبيقات المحددة';
+	@override String get bypassSelectedModeDesc => 'تتصل التطبيقات المحددة مباشرة، والباقي يمر عبر الوكيل';
+	@override String get invertSelection => 'عكس التحديد';
+	@override String get all => 'الكل';
+	@override String get showAppIcon => 'إظهار أيقونة التطبيق';
 }
 
 // Path: permission
@@ -1277,6 +1295,26 @@ extension on TranslationsAr {
 			'meta.sortLatencyDesc' => 'أعلى زمن انتقال',
 			'meta.sortNameDesc' => 'الاسم Z-A',
 			'meta.sortMultiplier' => 'أقل مضاعف',
+			'meta.uwpLoopback' => 'أداة إعفاء الاسترجاع الداخلي UWP',
+			'meta.uwpLoopbackDesc' => 'السماح لتطبيقات UWP باستخدام الوكيل المحلي',
+			'meta.uwpExemptAllCommon' => 'إعفاء التطبيقات الموصى بها',
+			'meta.uwpApplySuccess' => 'تم تطبيق قواعد إعفاء UWP بنجاح',
+			'meta.common' => 'شائع',
+			'meta.exempted' => 'معفى',
+			'meta.notExempted' => 'غير معفى',
+			'meta.deselectAll' => 'إلغاء تحديد الكل',
+			'meta.userApps' => 'تطبيقات المستخدم',
+			'meta.systemApps' => 'تطبيقات النظام',
+			'meta.selectedOnly' => 'المحدد',
+			'meta.proxySelectedMode' => 'توكيل التطبيقات المحددة فقط',
+			'meta.proxySelectedModeDesc' => 'تمر التطبيقات المحددة عبر الوكيل، والباقي يتصل مباشرة',
+			'meta.bypassSelectedMode' => 'تجاوز التطبيقات المحددة',
+			_ => null,
+		} ?? switch (path) {
+			'meta.bypassSelectedModeDesc' => 'تتصل التطبيقات المحددة مباشرة، والباقي يمر عبر الوكيل',
+			'meta.invertSelection' => 'عكس التحديد',
+			'meta.all' => 'الكل',
+			'meta.showAppIcon' => 'إظهار أيقونة التطبيق',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',
@@ -1291,8 +1329,6 @@ extension on TranslationsAr {
 			'tun.inet6Address' => 'نطاق عناوين IPv6',
 			'tun.dnsHijack' => 'اختطاف DNS',
 			'tun.strictRoute' => 'التوجيه الصارم',
-			_ => null,
-		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'المسار الافتراضي',
 			'tun.icmpForward' => 'توجيه رسائل ICMP',
 			'tun.allowBypass' => 'السماح للتطبيقات بتجاوز VPN',

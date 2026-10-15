@@ -642,6 +642,24 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get sortLatencyDesc => 'По убыванию задержки';
 	@override String get sortNameDesc => 'По имени (Z-A)';
 	@override String get sortMultiplier => 'По возрастанию множителя';
+	@override String get uwpLoopback => 'Утилита исключений UWP Loopback';
+	@override String get uwpLoopbackDesc => 'Разрешить приложениям UWP (Microsoft Store, Xbox) использовать локальный прокси';
+	@override String get uwpExemptAllCommon => 'Исключить рекомендуемые';
+	@override String get uwpApplySuccess => 'Правила исключений UWP Loopback успешно применены';
+	@override String get common => 'Частые';
+	@override String get exempted => 'Исключено';
+	@override String get notExempted => 'Не исключено';
+	@override String get deselectAll => 'Снять выбор';
+	@override String get userApps => 'Пользовательские';
+	@override String get systemApps => 'Системные';
+	@override String get selectedOnly => 'Выбрано';
+	@override String get proxySelectedMode => 'Проксировать только выбранные';
+	@override String get proxySelectedModeDesc => 'Выбранные приложения идут через прокси, остальные напрямую';
+	@override String get bypassSelectedMode => 'Обходить выбранные приложения';
+	@override String get bypassSelectedModeDesc => 'Выбранные приложения подключаются напрямую, остальные через прокси';
+	@override String get invertSelection => 'Инвертировать';
+	@override String get all => 'Все';
+	@override String get showAppIcon => 'Показывать значки приложений';
 }
 
 // Path: permission
@@ -1277,6 +1295,26 @@ extension on TranslationsRu {
 			'meta.sortLatencyDesc' => 'По убыванию задержки',
 			'meta.sortNameDesc' => 'По имени (Z-A)',
 			'meta.sortMultiplier' => 'По возрастанию множителя',
+			'meta.uwpLoopback' => 'Утилита исключений UWP Loopback',
+			'meta.uwpLoopbackDesc' => 'Разрешить приложениям UWP (Microsoft Store, Xbox) использовать локальный прокси',
+			'meta.uwpExemptAllCommon' => 'Исключить рекомендуемые',
+			'meta.uwpApplySuccess' => 'Правила исключений UWP Loopback успешно применены',
+			'meta.common' => 'Частые',
+			'meta.exempted' => 'Исключено',
+			'meta.notExempted' => 'Не исключено',
+			'meta.deselectAll' => 'Снять выбор',
+			'meta.userApps' => 'Пользовательские',
+			'meta.systemApps' => 'Системные',
+			'meta.selectedOnly' => 'Выбрано',
+			'meta.proxySelectedMode' => 'Проксировать только выбранные',
+			'meta.proxySelectedModeDesc' => 'Выбранные приложения идут через прокси, остальные напрямую',
+			'meta.bypassSelectedMode' => 'Обходить выбранные приложения',
+			_ => null,
+		} ?? switch (path) {
+			'meta.bypassSelectedModeDesc' => 'Выбранные приложения подключаются напрямую, остальные через прокси',
+			'meta.invertSelection' => 'Инвертировать',
+			'meta.all' => 'Все',
+			'meta.showAppIcon' => 'Показывать значки приложений',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',
@@ -1291,8 +1329,6 @@ extension on TranslationsRu {
 			'tun.inet6Address' => 'Диапазон IPv6-адресов',
 			'tun.dnsHijack' => 'Перехват DNS',
 			'tun.strictRoute' => 'Строгая маршрутизация',
-			_ => null,
-		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'Маршрут по умолчанию',
 			'tun.icmpForward' => 'Пересылка ICMP',
 			'tun.allowBypass' => 'Разрешить приложениям обходить VPN',

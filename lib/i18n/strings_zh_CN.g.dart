@@ -642,6 +642,24 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get sortLatencyDesc => '延迟由高到低';
 	@override String get sortNameDesc => '名称 Z-A';
 	@override String get sortMultiplier => '倍率由低到高';
+	@override String get uwpLoopback => 'UWP 回环代理免除工具';
+	@override String get uwpLoopbackDesc => '一键放行应用商店、Xbox、Minecraft 等 UWP 应用走本地代理';
+	@override String get uwpExemptAllCommon => '一键放行常用应用';
+	@override String get uwpApplySuccess => 'UWP 回环代理免除规则已生效';
+	@override String get common => '常用';
+	@override String get exempted => '已放行';
+	@override String get notExempted => '未放行';
+	@override String get deselectAll => '全不选';
+	@override String get userApps => '用户应用';
+	@override String get systemApps => '系统应用';
+	@override String get selectedOnly => '已选中';
+	@override String get proxySelectedMode => '仅代理选中的应用';
+	@override String get proxySelectedModeDesc => '已选应用走代理，其余应用直连';
+	@override String get bypassSelectedMode => '绕过选中的应用';
+	@override String get bypassSelectedModeDesc => '已选应用直连，其余应用走代理';
+	@override String get invertSelection => '反选';
+	@override String get all => '全部';
+	@override String get showAppIcon => '显示应用图标';
 }
 
 // Path: permission
@@ -1277,6 +1295,26 @@ extension on TranslationsZhCn {
 			'meta.sortLatencyDesc' => '延迟由高到低',
 			'meta.sortNameDesc' => '名称 Z-A',
 			'meta.sortMultiplier' => '倍率由低到高',
+			'meta.uwpLoopback' => 'UWP 回环代理免除工具',
+			'meta.uwpLoopbackDesc' => '一键放行应用商店、Xbox、Minecraft 等 UWP 应用走本地代理',
+			'meta.uwpExemptAllCommon' => '一键放行常用应用',
+			'meta.uwpApplySuccess' => 'UWP 回环代理免除规则已生效',
+			'meta.common' => '常用',
+			'meta.exempted' => '已放行',
+			'meta.notExempted' => '未放行',
+			'meta.deselectAll' => '全不选',
+			'meta.userApps' => '用户应用',
+			'meta.systemApps' => '系统应用',
+			'meta.selectedOnly' => '已选中',
+			'meta.proxySelectedMode' => '仅代理选中的应用',
+			'meta.proxySelectedModeDesc' => '已选应用走代理，其余应用直连',
+			'meta.bypassSelectedMode' => '绕过选中的应用',
+			_ => null,
+		} ?? switch (path) {
+			'meta.bypassSelectedModeDesc' => '已选应用直连，其余应用走代理',
+			'meta.invertSelection' => '反选',
+			'meta.all' => '全部',
+			'meta.showAppIcon' => '显示应用图标',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',
@@ -1291,8 +1329,6 @@ extension on TranslationsZhCn {
 			'tun.inet6Address' => 'IPv6地址段',
 			'tun.dnsHijack' => 'DNS劫持',
 			'tun.strictRoute' => '严格路由',
-			_ => null,
-		} ?? switch (path) {
 			'tun.tunDefaultRoute' => '默认路由',
 			'tun.icmpForward' => 'ICMP 转发',
 			'tun.allowBypass' => '允许应用绕过VPN',

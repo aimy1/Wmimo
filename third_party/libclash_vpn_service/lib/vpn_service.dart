@@ -270,7 +270,14 @@ class FlutterVpnService {
 
   static Future<VpnServiceResultError?> installService() async => null;
   static Future<VpnServiceResultError?> uninstallService() async => null;
-  static Future<void> hideDockIcon(bool hide) async {}
+  static Future<void> hideDockIcon(bool hide) async {
+    if (Platform.isMacOS) {
+      try {
+        const platform = MethodChannel('com.wmimo.app/native_helper');
+        await platform.invokeMethod('hideDockIcon', {'hide': hide});
+      } catch (_) {}
+    }
+  }
   static Future<Directory?> getAppGroupDirectory(String identifier) async {
     if (Platform.isIOS || Platform.isMacOS) {
       try {

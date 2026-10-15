@@ -642,6 +642,24 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get sortLatencyDesc => '延遲由高到低';
 	@override String get sortNameDesc => '名稱 Z-A';
 	@override String get sortMultiplier => '倍率由低到高';
+	@override String get uwpLoopback => 'UWP 迴環代理豁免工具';
+	@override String get uwpLoopbackDesc => '一鍵豁免應用程式市集、Xbox、Minecraft 等 UWP 應用程式走本機代理';
+	@override String get uwpExemptAllCommon => '一鍵豁免常用應用';
+	@override String get uwpApplySuccess => 'UWP 迴環代理豁免規則已生效';
+	@override String get common => '常用';
+	@override String get exempted => '已豁免';
+	@override String get notExempted => '未豁免';
+	@override String get deselectAll => '全不選';
+	@override String get userApps => '使用者應用';
+	@override String get systemApps => '系統應用';
+	@override String get selectedOnly => '已選取';
+	@override String get proxySelectedMode => '僅代理選取的應用';
+	@override String get proxySelectedModeDesc => '已選應用走代理，其餘應用直連';
+	@override String get bypassSelectedMode => '繞過選取的應用';
+	@override String get bypassSelectedModeDesc => '已選應用直連，其餘應用走代理';
+	@override String get invertSelection => '反選';
+	@override String get all => '全部';
+	@override String get showAppIcon => '顯示應用程式圖示';
 }
 
 // Path: permission
@@ -1277,6 +1295,26 @@ extension on TranslationsZhTw {
 			'meta.sortLatencyDesc' => '延遲由高到低',
 			'meta.sortNameDesc' => '名稱 Z-A',
 			'meta.sortMultiplier' => '倍率由低到高',
+			'meta.uwpLoopback' => 'UWP 迴環代理豁免工具',
+			'meta.uwpLoopbackDesc' => '一鍵豁免應用程式市集、Xbox、Minecraft 等 UWP 應用程式走本機代理',
+			'meta.uwpExemptAllCommon' => '一鍵豁免常用應用',
+			'meta.uwpApplySuccess' => 'UWP 迴環代理豁免規則已生效',
+			'meta.common' => '常用',
+			'meta.exempted' => '已豁免',
+			'meta.notExempted' => '未豁免',
+			'meta.deselectAll' => '全不選',
+			'meta.userApps' => '使用者應用',
+			'meta.systemApps' => '系統應用',
+			'meta.selectedOnly' => '已選取',
+			'meta.proxySelectedMode' => '僅代理選取的應用',
+			'meta.proxySelectedModeDesc' => '已選應用走代理，其餘應用直連',
+			'meta.bypassSelectedMode' => '繞過選取的應用',
+			_ => null,
+		} ?? switch (path) {
+			'meta.bypassSelectedModeDesc' => '已選應用直連，其餘應用走代理',
+			'meta.invertSelection' => '反選',
+			'meta.all' => '全部',
+			'meta.showAppIcon' => '顯示應用程式圖示',
 			'permission.camera' => '相機',
 			'permission.screen' => '螢幕錄製',
 			'permission.appQuery' => '取得應用程式列表',
@@ -1291,8 +1329,6 @@ extension on TranslationsZhTw {
 			'tun.inet6Address' => 'IPv6位址段',
 			'tun.dnsHijack' => 'DNS劫持',
 			'tun.strictRoute' => '嚴格路由',
-			_ => null,
-		} ?? switch (path) {
 			'tun.tunDefaultRoute' => '預設路由',
 			'tun.icmpForward' => 'ICMP 轉發',
 			'tun.allowBypass' => '允許應用程式略過 VPN',

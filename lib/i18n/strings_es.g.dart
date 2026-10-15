@@ -642,6 +642,24 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get sortLatencyDesc => 'Mayor latencia';
 	@override String get sortNameDesc => 'Nombre Z-A';
 	@override String get sortMultiplier => 'Menor multiplicador';
+	@override String get uwpLoopback => 'Utilidad de exención de bucle invertido UWP';
+	@override String get uwpLoopbackDesc => 'Permitir que las aplicaciones UWP (Store, Xbox) usen el proxy local';
+	@override String get uwpExemptAllCommon => 'Eximir recomendadas';
+	@override String get uwpApplySuccess => 'Reglas de exención de UWP aplicadas con éxito';
+	@override String get common => 'Comunes';
+	@override String get exempted => 'Eximidas';
+	@override String get notExempted => 'No eximidas';
+	@override String get deselectAll => 'Deseleccionar todo';
+	@override String get userApps => 'Aplicaciones de usuario';
+	@override String get systemApps => 'Aplicaciones del sistema';
+	@override String get selectedOnly => 'Seleccionadas';
+	@override String get proxySelectedMode => 'Solo proxy para seleccionadas';
+	@override String get proxySelectedModeDesc => 'Las apps seleccionadas usan proxy, las demás van directas';
+	@override String get bypassSelectedMode => 'Omitir aplicaciones seleccionadas';
+	@override String get bypassSelectedModeDesc => 'Las apps seleccionadas van directas, las demás usan proxy';
+	@override String get invertSelection => 'Invertir selección';
+	@override String get all => 'Todo';
+	@override String get showAppIcon => 'Mostrar icono de aplicación';
 }
 
 // Path: permission
@@ -1277,6 +1295,26 @@ extension on TranslationsEs {
 			'meta.sortLatencyDesc' => 'Mayor latencia',
 			'meta.sortNameDesc' => 'Nombre Z-A',
 			'meta.sortMultiplier' => 'Menor multiplicador',
+			'meta.uwpLoopback' => 'Utilidad de exención de bucle invertido UWP',
+			'meta.uwpLoopbackDesc' => 'Permitir que las aplicaciones UWP (Store, Xbox) usen el proxy local',
+			'meta.uwpExemptAllCommon' => 'Eximir recomendadas',
+			'meta.uwpApplySuccess' => 'Reglas de exención de UWP aplicadas con éxito',
+			'meta.common' => 'Comunes',
+			'meta.exempted' => 'Eximidas',
+			'meta.notExempted' => 'No eximidas',
+			'meta.deselectAll' => 'Deseleccionar todo',
+			'meta.userApps' => 'Aplicaciones de usuario',
+			'meta.systemApps' => 'Aplicaciones del sistema',
+			'meta.selectedOnly' => 'Seleccionadas',
+			'meta.proxySelectedMode' => 'Solo proxy para seleccionadas',
+			'meta.proxySelectedModeDesc' => 'Las apps seleccionadas usan proxy, las demás van directas',
+			'meta.bypassSelectedMode' => 'Omitir aplicaciones seleccionadas',
+			_ => null,
+		} ?? switch (path) {
+			'meta.bypassSelectedModeDesc' => 'Las apps seleccionadas van directas, las demás usan proxy',
+			'meta.invertSelection' => 'Invertir selección',
+			'meta.all' => 'Todo',
+			'meta.showAppIcon' => 'Mostrar icono de aplicación',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',
@@ -1291,8 +1329,6 @@ extension on TranslationsEs {
 			'tun.inet6Address' => 'Dirección de Puerta de Enlace IPv6',
 			'tun.dnsHijack' => 'Secuestro de DNS',
 			'tun.strictRoute' => 'Ruta Estricta',
-			_ => null,
-		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'Ruta predeterminada',
 			'tun.icmpForward' => 'Reenvío ICMP',
 			'tun.allowBypass' => 'Permitir aplicaciones para omitir VPN',

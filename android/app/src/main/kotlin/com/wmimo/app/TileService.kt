@@ -135,6 +135,13 @@ class TileService : TileService() {
                         false -> Tile.STATE_INACTIVE
                         else -> Tile.STATE_UNAVAILABLE
                     }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                subtitle = when (active) {
+                    true -> getString(R.string.tile_connected)
+                    false -> getString(R.string.tile_disconnected)
+                    else -> getString(R.string.tile_unavailable)
+                }
+            }
             icon = Icon.createWithResource(this@TileService, R.drawable.ic_tile)
             updateTile()
         }

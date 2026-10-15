@@ -642,6 +642,24 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get sortLatencyDesc => 'بیشترین تأخیر';
 	@override String get sortNameDesc => 'نام Z-A';
 	@override String get sortMultiplier => 'کمترین ضریب';
+	@override String get uwpLoopback => 'ابزار معافیت لوپ‌بک UWP';
+	@override String get uwpLoopbackDesc => 'اجازه به برنامه‌های UWP برای استفاده از پروکسی محلی';
+	@override String get uwpExemptAllCommon => 'معافیت برنامه‌های پیشنهادی';
+	@override String get uwpApplySuccess => 'قوانین معافیت لوپ‌بک UWP با موفقیت اعمال شد';
+	@override String get common => 'رایج';
+	@override String get exempted => 'معاف شده';
+	@override String get notExempted => 'معاف نشده';
+	@override String get deselectAll => 'لغو انتخاب همه';
+	@override String get userApps => 'برنامه‌های کاربر';
+	@override String get systemApps => 'برنامه‌های سیستم';
+	@override String get selectedOnly => 'انتخاب شده';
+	@override String get proxySelectedMode => 'فقط پروکسی برنامه‌های انتخاب شده';
+	@override String get proxySelectedModeDesc => 'برنامه‌های انتخاب شده از پروکسی عبور می‌کنند و بقیه مستقیم متصل می‌شوند';
+	@override String get bypassSelectedMode => 'دور زدن برنامه‌های انتخاب شده';
+	@override String get bypassSelectedModeDesc => 'برنامه‌های انتخاب شده مستقیم متصل می‌شوند و بقیه از پروکسی عبور می‌کنند';
+	@override String get invertSelection => 'معکوس کردن انتخاب';
+	@override String get all => 'همه';
+	@override String get showAppIcon => 'نمایش آیکون برنامه';
 }
 
 // Path: permission
@@ -1277,6 +1295,26 @@ extension on TranslationsFa {
 			'meta.sortLatencyDesc' => 'بیشترین تأخیر',
 			'meta.sortNameDesc' => 'نام Z-A',
 			'meta.sortMultiplier' => 'کمترین ضریب',
+			'meta.uwpLoopback' => 'ابزار معافیت لوپ‌بک UWP',
+			'meta.uwpLoopbackDesc' => 'اجازه به برنامه‌های UWP برای استفاده از پروکسی محلی',
+			'meta.uwpExemptAllCommon' => 'معافیت برنامه‌های پیشنهادی',
+			'meta.uwpApplySuccess' => 'قوانین معافیت لوپ‌بک UWP با موفقیت اعمال شد',
+			'meta.common' => 'رایج',
+			'meta.exempted' => 'معاف شده',
+			'meta.notExempted' => 'معاف نشده',
+			'meta.deselectAll' => 'لغو انتخاب همه',
+			'meta.userApps' => 'برنامه‌های کاربر',
+			'meta.systemApps' => 'برنامه‌های سیستم',
+			'meta.selectedOnly' => 'انتخاب شده',
+			'meta.proxySelectedMode' => 'فقط پروکسی برنامه‌های انتخاب شده',
+			'meta.proxySelectedModeDesc' => 'برنامه‌های انتخاب شده از پروکسی عبور می‌کنند و بقیه مستقیم متصل می‌شوند',
+			'meta.bypassSelectedMode' => 'دور زدن برنامه‌های انتخاب شده',
+			_ => null,
+		} ?? switch (path) {
+			'meta.bypassSelectedModeDesc' => 'برنامه‌های انتخاب شده مستقیم متصل می‌شوند و بقیه از پروکسی عبور می‌کنند',
+			'meta.invertSelection' => 'معکوس کردن انتخاب',
+			'meta.all' => 'همه',
+			'meta.showAppIcon' => 'نمایش آیکون برنامه',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',
@@ -1291,8 +1329,6 @@ extension on TranslationsFa {
 			'tun.inet6Address' => 'محدوده آدرس IPv6',
 			'tun.dnsHijack' => 'ربودن DNS',
 			'tun.strictRoute' => 'مسیریابی دقیق',
-			_ => null,
-		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'مسیر پیش‌فرض',
 			'tun.icmpForward' => 'ارسال ICMP',
 			'tun.allowBypass' => 'به برنامه‌ها اجازه دهید VPN را دور بزنند',

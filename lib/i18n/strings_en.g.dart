@@ -1600,6 +1600,60 @@ class Translations$meta$en {
 
 	/// en: 'Lowest Multiplier'
 	String get sortMultiplier => 'Lowest Multiplier';
+
+	/// en: 'UWP Loopback Exemption Utility'
+	String get uwpLoopback => 'UWP Loopback Exemption Utility';
+
+	/// en: 'Exempt Microsoft Store, Xbox, Minecraft, and UWP apps to use local proxy'
+	String get uwpLoopbackDesc => 'Exempt Microsoft Store, Xbox, Minecraft, and UWP apps to use local proxy';
+
+	/// en: 'Exempt Recommended'
+	String get uwpExemptAllCommon => 'Exempt Recommended';
+
+	/// en: 'UWP loopback exemptions applied successfully'
+	String get uwpApplySuccess => 'UWP loopback exemptions applied successfully';
+
+	/// en: 'Common'
+	String get common => 'Common';
+
+	/// en: 'Exempted'
+	String get exempted => 'Exempted';
+
+	/// en: 'Not Exempted'
+	String get notExempted => 'Not Exempted';
+
+	/// en: 'Deselect All'
+	String get deselectAll => 'Deselect All';
+
+	/// en: 'User Apps'
+	String get userApps => 'User Apps';
+
+	/// en: 'System Apps'
+	String get systemApps => 'System Apps';
+
+	/// en: 'Selected'
+	String get selectedOnly => 'Selected';
+
+	/// en: 'Proxy Selected Apps Only'
+	String get proxySelectedMode => 'Proxy Selected Apps Only';
+
+	/// en: 'Selected apps route through proxy, others connect directly'
+	String get proxySelectedModeDesc => 'Selected apps route through proxy, others connect directly';
+
+	/// en: 'Bypass Selected Apps'
+	String get bypassSelectedMode => 'Bypass Selected Apps';
+
+	/// en: 'Selected apps connect directly, others route through proxy'
+	String get bypassSelectedModeDesc => 'Selected apps connect directly, others route through proxy';
+
+	/// en: 'Invert Selection'
+	String get invertSelection => 'Invert Selection';
+
+	/// en: 'All'
+	String get all => 'All';
+
+	/// en: 'Show App Icon'
+	String get showAppIcon => 'Show App Icon';
 }
 
 // Path: permission
@@ -2363,6 +2417,26 @@ extension on Translations {
 			'meta.sortLatencyDesc' => 'Highest Latency',
 			'meta.sortNameDesc' => 'Name Z-A',
 			'meta.sortMultiplier' => 'Lowest Multiplier',
+			'meta.uwpLoopback' => 'UWP Loopback Exemption Utility',
+			'meta.uwpLoopbackDesc' => 'Exempt Microsoft Store, Xbox, Minecraft, and UWP apps to use local proxy',
+			'meta.uwpExemptAllCommon' => 'Exempt Recommended',
+			'meta.uwpApplySuccess' => 'UWP loopback exemptions applied successfully',
+			'meta.common' => 'Common',
+			'meta.exempted' => 'Exempted',
+			'meta.notExempted' => 'Not Exempted',
+			'meta.deselectAll' => 'Deselect All',
+			'meta.userApps' => 'User Apps',
+			'meta.systemApps' => 'System Apps',
+			'meta.selectedOnly' => 'Selected',
+			'meta.proxySelectedMode' => 'Proxy Selected Apps Only',
+			'meta.proxySelectedModeDesc' => 'Selected apps route through proxy, others connect directly',
+			'meta.bypassSelectedMode' => 'Bypass Selected Apps',
+			_ => null,
+		} ?? switch (path) {
+			'meta.bypassSelectedModeDesc' => 'Selected apps connect directly, others route through proxy',
+			'meta.invertSelection' => 'Invert Selection',
+			'meta.all' => 'All',
+			'meta.showAppIcon' => 'Show App Icon',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',
@@ -2377,8 +2451,6 @@ extension on Translations {
 			'tun.inet6Address' => 'IPv6 Gateway Address',
 			'tun.dnsHijack' => 'DNS Hijack',
 			'tun.strictRoute' => 'Strict Route',
-			_ => null,
-		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'Default Route',
 			'tun.icmpForward' => 'ICMP Forwarding',
 			'tun.allowBypass' => 'Allow Apps to Bypass VPN',

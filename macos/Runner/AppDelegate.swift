@@ -29,6 +29,17 @@ class AppDelegate: FlutterAppDelegate {
                 case "getAppGroupDirectory":
                     let groupUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.wmimo.app")
                     result(groupUrl?.path)
+                case "hideDockIcon":
+                    if let args = call.arguments as? [String: Any], let hide = args["hide"] as? Bool {
+                        if hide {
+                            NSApp.setActivationPolicy(.accessory)
+                        } else {
+                            NSApp.setActivationPolicy(.regular)
+                        }
+                        result(nil)
+                    } else {
+                        result(FlutterError(code: "INVALID_ARGUMENTS", message: nil, details: nil))
+                    }
                 default:
                     result(FlutterMethodNotImplemented)
                 }

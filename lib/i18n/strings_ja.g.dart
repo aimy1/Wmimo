@@ -642,6 +642,24 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get sortLatencyDesc => 'レイテンシ降順';
 	@override String get sortNameDesc => '名前 Z-A';
 	@override String get sortMultiplier => '倍率昇順';
+	@override String get uwpLoopback => 'UWP ループバック免除ツール';
+	@override String get uwpLoopbackDesc => 'Microsoft Store、Xbox、MinecraftなどのUWPアプリにローカルプロキシを許可';
+	@override String get uwpExemptAllCommon => '推奨アプリを一括免除';
+	@override String get uwpApplySuccess => 'UWPループバック免除ルールが適用されました';
+	@override String get common => '常用';
+	@override String get exempted => '免除済み';
+	@override String get notExempted => '未免除';
+	@override String get deselectAll => '全選択解除';
+	@override String get userApps => 'ユーザーアプリ';
+	@override String get systemApps => 'システムアプリ';
+	@override String get selectedOnly => '選択済み';
+	@override String get proxySelectedMode => '選択アプリのみプロキシ';
+	@override String get proxySelectedModeDesc => '選択したアプリのみプロキシを経由し、その他は直接接続します';
+	@override String get bypassSelectedMode => '選択アプリをバイパス';
+	@override String get bypassSelectedModeDesc => '選択したアプリは直接接続し、その他はプロキシを経由します';
+	@override String get invertSelection => '選択反転';
+	@override String get all => 'すべて';
+	@override String get showAppIcon => 'アプリアイコンを表示';
 }
 
 // Path: permission
@@ -1277,6 +1295,26 @@ extension on TranslationsJa {
 			'meta.sortLatencyDesc' => 'レイテンシ降順',
 			'meta.sortNameDesc' => '名前 Z-A',
 			'meta.sortMultiplier' => '倍率昇順',
+			'meta.uwpLoopback' => 'UWP ループバック免除ツール',
+			'meta.uwpLoopbackDesc' => 'Microsoft Store、Xbox、MinecraftなどのUWPアプリにローカルプロキシを許可',
+			'meta.uwpExemptAllCommon' => '推奨アプリを一括免除',
+			'meta.uwpApplySuccess' => 'UWPループバック免除ルールが適用されました',
+			'meta.common' => '常用',
+			'meta.exempted' => '免除済み',
+			'meta.notExempted' => '未免除',
+			'meta.deselectAll' => '全選択解除',
+			'meta.userApps' => 'ユーザーアプリ',
+			'meta.systemApps' => 'システムアプリ',
+			'meta.selectedOnly' => '選択済み',
+			'meta.proxySelectedMode' => '選択アプリのみプロキシ',
+			'meta.proxySelectedModeDesc' => '選択したアプリのみプロキシを経由し、その他は直接接続します',
+			'meta.bypassSelectedMode' => '選択アプリをバイパス',
+			_ => null,
+		} ?? switch (path) {
+			'meta.bypassSelectedModeDesc' => '選択したアプリは直接接続し、その他はプロキシを経由します',
+			'meta.invertSelection' => '選択反転',
+			'meta.all' => 'すべて',
+			'meta.showAppIcon' => 'アプリアイコンを表示',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',
@@ -1291,8 +1329,6 @@ extension on TranslationsJa {
 			'tun.inet6Address' => 'IPv6アドレス範囲',
 			'tun.dnsHijack' => 'DNSハイジャック',
 			'tun.strictRoute' => '厳格なルート',
-			_ => null,
-		} ?? switch (path) {
 			'tun.tunDefaultRoute' => 'デフォルトルート',
 			'tun.icmpForward' => 'ICMP転送',
 			'tun.allowBypass' => 'アプリがVPNをバイパスすることを許可する',

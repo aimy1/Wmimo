@@ -198,7 +198,25 @@ class PathUtils {
   }
 
   static String serviceExePath() {
-    if (Platform.isLinux || Platform.isWindows) {
+    if (Platform.isWindows) {
+      final exe = serviceExeName();
+      final isArm64 = Platform.version.toLowerCase().contains("arm64") ||
+          Platform.version.toLowerCase().contains("aarch64") ||
+          (Platform.environment['PROCESSOR_ARCHITECTURE']?.toLowerCase() == 'arm64');
+      final candidates = [
+        path.join(exeDir(), exe),
+        if (isArm64)
+          path.join(Directory.current.path, "bind", "windows", "core_arm64", exe),
+        path.join(Directory.current.path, "bind", "windows", "core", exe),
+        path.join(Directory.current.path, exe),
+      ];
+      for (final candidate in candidates) {
+        if (File(candidate).existsSync()) {
+          return candidate;
+        }
+      }
+      return path.join(exeDir(), exe);
+    } else if (Platform.isLinux) {
       String filePath = exeDir();
       return path.join(filePath, serviceExeName());
     } else if (Platform.isMacOS) {

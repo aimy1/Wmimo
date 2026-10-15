@@ -47,6 +47,7 @@ import 'package:wmimo/screens/rule_templates_screen.dart';
 import 'package:wmimo/screens/proxygroup_templates_screen.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/themes.dart';
+import 'package:wmimo/screens/uwp_loopback_screen.dart';
 import 'package:wmimo/screens/version_update_screen.dart';
 import 'package:wmimo/screens/webview_helper.dart';
 import 'package:wmimo/screens/widgets/sheet.dart';
@@ -906,6 +907,23 @@ class GroupHelper {
               },
             ),
           ),
+          if (Platform.isWindows) ...[
+            GroupItemOptions(
+              pushOptions: GroupItemPushOptions(
+                name: tcontext.meta.uwpLoopback,
+                text: tcontext.meta.uwpLoopbackDesc,
+                onPush: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      settings: UwpLoopbackScreen.routSettings(),
+                      builder: (context) => const UwpLoopbackScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ],
       ];
       List<GroupItemOptions> options6 = [
@@ -992,6 +1010,9 @@ class GroupHelper {
             onSwitch: (bool value) async {
               setting.hideDockIcon = value;
               await SettingManager.save();
+              if (Platform.isMacOS) {
+                await FlutterVpnService.hideDockIcon(value);
+              }
             },
           ),
         ),

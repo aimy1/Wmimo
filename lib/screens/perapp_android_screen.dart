@@ -2,21 +2,20 @@
 
 import 'package:android_package_manager/android_package_manager.dart';
 import 'package:app_settings/app_settings.dart';
-import 'package:wmimo/app/modules/clash_setting_manager.dart';
-import 'package:wmimo/app/utils/package_manager_android.dart';
-import 'package:wmimo/screens/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
+import 'package:wmimo/app/utils/package_manager_android.dart';
 import 'package:wmimo/i18n/strings.g.dart';
-
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
 import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
+import 'package:wmimo/screens/widgets/text_field.dart';
 
 class PerAppAndroidScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -31,13 +30,12 @@ class PerAppAndroidScreen extends LasyRenderingStatefulWidget {
 
 class _PerAppAndroidScreenState
     extends LasyRenderingState<PerAppAndroidScreen> {
-  //https://github.com/ekoputrapratama/flutter_android_native/blob/6dacb8a0bcc9c8c05159eb916b2f0bea9db60826/lib/content/pm/ApplicationInfo.dart#L14
-
   bool _loading = true;
   final List<PackageInfoEx> _applicationInfoList = [];
   final _searchController = TextEditingController();
   List<PackageInfoEx> _searchedData = [];
   bool _needPermission = false;
+  String _selectedCategory = 'all'; // 'all', 'user', 'system', 'selected'
 
   @override
   void initState() {
@@ -53,32 +51,100 @@ class _PerAppAndroidScreenState
     SettingManager.save();
   }
 
-  void _loadSearch(String? textVal) {
-    if ((textVal != null) && textVal.isNotEmpty) {
-      String search = textVal.toLowerCase();
-      final data = _applicationInfoList.where((app) {
+  bool _isSystemApp(PackageInfoEx app) {
+    return app.info.applicationInfo != null &&
+        (app.info.applicationInfo!.flags &
+                PackageManagerAndroid.kAndroidFlagSystem !=
+            0);
+  }
+
+  int _getSelectedCount() {
+    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    return perapp.PackageIds?.length ?? 0;
+  }
+
+  void _applyFilter() {
+    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final search = _searchController.text.trim().toLowerCase();
+    final selectedSet = perapp.PackageIds?.toSet() ?? {};
+
+    _searchedData = _applicationInfoList.where((app) {
+      if (_selectedCategory == 'user' && _isSystemApp(app)) {
+        return false;
+      }
+      if (_selectedCategory == 'system' && !_isSystemApp(app)) {
+        return false;
+      }
+      if (_selectedCategory == 'selected' &&
+          !selectedSet.contains(app.info.packageName)) {
+        return false;
+      }
+
+      if (search.isNotEmpty) {
         String name = app.name.toLowerCase();
-        String pkgName = app.info.packageName!.toLowerCase();
-        return name.contains(search) || pkgName.contains(search);
-      }).toList();
-      _searchedData = data;
-      setState(() {});
-    } else {
-      _searchedData = _applicationInfoList;
-      setState(() {});
-    }
+        String pkgName = (app.info.packageName ?? "").toLowerCase();
+        if (!name.contains(search) && !pkgName.contains(search)) {
+          return false;
+        }
+      }
+      return true;
+    }).toList();
+
+    setState(() {});
+  }
+
+  void _loadSearch(String? textVal) {
+    _applyFilter();
   }
 
   void _clearSearch() {
     _searchController.clear();
-    _searchedData = _applicationInfoList;
-    setState(() {});
+    _applyFilter();
+  }
+
+  void _selectAllCurrent() {
+    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    perapp.PackageIds ??= [];
+    for (var app in _searchedData) {
+      final pkg = app.info.packageName;
+      if (pkg != null && !perapp.PackageIds!.contains(pkg)) {
+        perapp.PackageIds!.add(pkg);
+      }
+    }
+    _applyFilter();
+  }
+
+  void _deselectAllCurrent() {
+    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    perapp.PackageIds ??= [];
+    final toRemove = _searchedData
+        .map((e) => e.info.packageName)
+        .whereType<String>()
+        .toSet();
+    perapp.PackageIds!.removeWhere((pkg) => toRemove.contains(pkg));
+    _applyFilter();
+  }
+
+  void _invertSelectionCurrent() {
+    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    perapp.PackageIds ??= [];
+    final currentSelected = perapp.PackageIds!.toSet();
+    for (var app in _searchedData) {
+      final pkg = app.info.packageName;
+      if (pkg != null) {
+        if (currentSelected.contains(pkg)) {
+          perapp.PackageIds!.remove(pkg);
+        } else {
+          perapp.PackageIds!.add(pkg);
+        }
+      }
+    }
+    _applyFilter();
   }
 
   Future<void> getInstalledPackages() async {
     _applicationInfoList.clear();
     _searchedData.clear();
-    final settings = SettingManager.getConfig();
     var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     _loading = true;
     setState(() {});
@@ -103,19 +169,8 @@ class _PerAppAndroidScreenState
     List<PackageInfoEx> added = [];
     List<PackageInfoEx> notAdded = [];
     Set<String> exists = {};
-    Set<String> existsSystem = {};
 
     for (var app in packages) {
-      if (settings.ui.perAppHideSystemApp) {
-        if ((app.info.applicationInfo != null) &&
-            (app.info.applicationInfo!.flags &
-                    PackageManagerAndroid.kAndroidFlagSystem !=
-                0)) {
-          existsSystem.add(app.info.packageName!);
-          continue;
-        }
-      }
-
       exists.add(app.info.packageName!);
       if (perapp.PackageIds != null &&
           perapp.PackageIds!.contains(app.info.packageName!)) {
@@ -126,7 +181,7 @@ class _PerAppAndroidScreenState
     }
     if (perapp.PackageIds != null) {
       for (var papp in perapp.PackageIds!) {
-        if (!exists.contains(papp) && !existsSystem.contains(papp)) {
+        if (!exists.contains(papp)) {
           PackageInfoEx info = PackageInfoEx();
           info.info = PackageInfoImpl(papp);
           info.name = PackageManagerAndroid.kRemoved;
@@ -144,12 +199,11 @@ class _PerAppAndroidScreenState
     _applicationInfoList.addAll(added);
     _applicationInfoList.addAll(notAdded);
 
-    _searchedData = _applicationInfoList;
-
-    if (!mounted) {
-      return;
+    if (SettingManager.getConfig().ui.perAppHideSystemApp) {
+      _selectedCategory = 'user';
     }
-    setState(() {});
+
+    _applyFilter();
   }
 
   Future<Image?> getInstalledPackageIcon(String packageName) async {
@@ -165,24 +219,34 @@ class _PerAppAndroidScreenState
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
+    final theme = Theme.of(context);
+    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+
+    final allCount = _applicationInfoList.length;
+    final userCount = _applicationInfoList.where((a) => !_isSystemApp(a)).length;
+    final systemCount = _applicationInfoList.where((a) => _isSystemApp(a)).length;
+    final selectedCount = _getSelectedCount();
+
     return Scaffold(
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
           child: Column(
             children: [
+              // Top Navigation Bar
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
+                      borderRadius: BorderRadius.circular(20),
                       onTap: () => Navigator.pop(context),
                       child: const SizedBox(
-                        width: 50,
-                        height: 30,
-                        child: Icon(Icons.arrow_back_ios_outlined, size: 26),
+                        width: 44,
+                        height: 36,
+                        child: Icon(Icons.arrow_back_ios_outlined, size: 22),
                       ),
                     ),
                     Expanded(
@@ -197,44 +261,48 @@ class _PerAppAndroidScreenState
                       ),
                     ),
                     InkWell(
-                      onTap: () async {
-                        onTapMore();
-                      },
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: onTapMore,
                       child: Tooltip(
                         message: tcontext.meta.more,
                         child: const SizedBox(
-                          width: 50,
-                          height: 30,
-                          child: Icon(Icons.more_vert_outlined, size: 30),
+                          width: 44,
+                          height: 36,
+                          child: Icon(Icons.more_vert_outlined, size: 26),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+
+              // Enable switch options
               FutureBuilder(
                 future: getGroupOptions(),
-                builder:
-                    (
-                      BuildContext context,
-                      AsyncSnapshot<List<GroupItem>> snapshot,
-                    ) {
-                      List<GroupItem> data = snapshot.hasData
-                          ? snapshot.data!
-                          : [];
-                      return Column(
-                        children: GroupItemCreator.createGroups(context, data),
-                      );
-                    },
+                builder: (BuildContext context, AsyncSnapshot<List<GroupItem>> snapshot) {
+                  List<GroupItem> data = snapshot.hasData ? snapshot.data! : [];
+                  return Column(
+                    children: GroupItemCreator.createGroups(context, data),
+                  );
+                },
               ),
+
+              // Dual-mode selector card (Whitelist / Blacklist)
+              if (perapp.Enable == true) _buildModeSelector(context),
+
+              // Search Bar
               Container(
-                margin: const EdgeInsets.only(top: 10),
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                height: 44,
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                height: 42,
                 width: double.infinity,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
                   borderRadius: ThemeDefine.kBorderRadius,
+                  border: Border.all(
+                    color: theme.dividerColor.withValues(alpha: 0.15),
+                    width: 0.8,
+                  ),
                 ),
                 child: TextFieldEx(
                   controller: _searchController,
@@ -242,18 +310,52 @@ class _PerAppAndroidScreenState
                   onChanged: _loadSearch,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    icon: Icon(Icons.search_outlined),
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                    icon: Icon(
+                      Icons.search_outlined,
+                      size: 20,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                    ),
                     hintText: tcontext.meta.search,
+                    hintStyle: TextStyle(
+                      fontSize: 13,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                    ),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
-                            icon: const Icon(Icons.clear_outlined),
+                            padding: EdgeInsets.zero,
+                            icon: const Icon(Icons.clear_outlined, size: 18),
                             onPressed: _clearSearch,
                           )
                         : null,
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+
+              // Category Filter Chips
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Row(
+                  children: [
+                    _buildFilterChip("all", "${tcontext.meta.all} ($allCount)"),
+                    const SizedBox(width: 8),
+                    _buildFilterChip("user", "${tcontext.meta.userApps} ($userCount)"),
+                    const SizedBox(width: 8),
+                    _buildFilterChip("system", "${tcontext.meta.systemApps} ($systemCount)"),
+                    const SizedBox(width: 8),
+                    _buildFilterChip("selected", "${tcontext.meta.selectedOnly} ($selectedCount)"),
+                  ],
+                ),
+              ),
+
+              // Batch Action Shortcuts Row
+              _buildActionShortcuts(context),
+
+              const SizedBox(height: 4),
+
+              // Application list view
               Expanded(
                 child: _needPermission
                     ? createNeedPermission(
@@ -280,26 +382,293 @@ class _PerAppAndroidScreenState
     );
   }
 
-  Widget _loadListView() {
-    if (_loading) {
-      return const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildModeSelector(BuildContext context) {
+    final tcontext = Translations.of(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final isWhitelist = perapp.WhiteList ?? false;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: 0.15),
+          width: 1,
+        ),
+      ),
+      child: Row(
         children: [
-          SizedBox(
-            width: 26,
-            height: 26,
-            child: RepaintBoundary(child: CircularProgressIndicator()),
+          // Whitelist: Only Proxy Selected
+          Expanded(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: () {
+                setState(() {
+                  perapp.WhiteList = true;
+                });
+                ClashSettingManager.save();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                decoration: BoxDecoration(
+                  color: isWhitelist
+                      ? ThemeDefine.kColorBlue.withValues(alpha: 0.12)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: isWhitelist
+                        ? ThemeDefine.kColorBlue
+                        : theme.dividerColor.withValues(alpha: 0.2),
+                    width: isWhitelist ? 1.5 : 1,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.playlist_add_check_circle_rounded,
+                          size: 16,
+                          color: isWhitelist
+                              ? ThemeDefine.kColorBlue
+                              : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            tcontext.meta.proxySelectedMode,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: isWhitelist ? FontWeight.bold : FontWeight.w500,
+                              color: isWhitelist
+                                  ? ThemeDefine.kColorBlue
+                                  : theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      tcontext.meta.proxySelectedModeDesc,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Blacklist: Bypass Selected
+          Expanded(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: () {
+                setState(() {
+                  perapp.WhiteList = false;
+                });
+                ClashSettingManager.save();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                decoration: BoxDecoration(
+                  color: !isWhitelist
+                      ? ThemeDefine.kColorGreenBright.withValues(alpha: 0.12)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: !isWhitelist
+                        ? ThemeDefine.kColorGreenBright
+                        : theme.dividerColor.withValues(alpha: 0.2),
+                    width: !isWhitelist ? 1.5 : 1,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.remove_circle_outline_rounded,
+                          size: 16,
+                          color: !isWhitelist
+                              ? ThemeDefine.kColorGreenBright
+                              : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            tcontext.meta.bypassSelectedMode,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: !isWhitelist ? FontWeight.bold : FontWeight.w500,
+                              color: !isWhitelist
+                                  ? ThemeDefine.kColorGreenBright
+                                  : theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      tcontext.meta.bypassSelectedModeDesc,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(String category, String label) {
+    final theme = Theme.of(context);
+    final isSelected = _selectedCategory == category;
+    return ChoiceChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: isSelected
+              ? ThemeDefine.kColorBlue
+              : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+        ),
+      ),
+      selected: isSelected,
+      selectedColor: ThemeDefine.kColorBlue.withValues(alpha: 0.15),
+      backgroundColor: theme.colorScheme.surface,
+      side: BorderSide(
+        color: isSelected
+            ? ThemeDefine.kColorBlue
+            : theme.dividerColor.withValues(alpha: 0.25),
+        width: isSelected ? 1.2 : 0.8,
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      onSelected: (val) {
+        if (val) {
+          setState(() {
+            _selectedCategory = category;
+            _applyFilter();
+          });
+        }
+      },
+    );
+  }
+
+  Widget _buildActionShortcuts(BuildContext context) {
+    final tcontext = Translations.of(context);
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      child: Row(
+        children: [
+          Text(
+            "${tcontext.meta.selectedOnly}: ${_getSelectedCount()}",
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+          const Spacer(),
+          TextButton(
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: _searchedData.isEmpty ? null : _selectAllCurrent,
+            child: Text(tcontext.meta.selectAll, style: const TextStyle(fontSize: 12)),
+          ),
+          const SizedBox(width: 4),
+          TextButton(
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: _searchedData.isEmpty ? null : _deselectAllCurrent,
+            child: Text(tcontext.meta.deselectAll, style: const TextStyle(fontSize: 12)),
+          ),
+          const SizedBox(width: 4),
+          TextButton(
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: _searchedData.isEmpty ? null : _invertSelectionCurrent,
+            child: Text(tcontext.meta.invertSelection, style: const TextStyle(fontSize: 12)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _loadListView() {
+    if (_loading) {
+      return const Center(
+        child: SizedBox(
+          width: 28,
+          height: 28,
+          child: RepaintBoundary(child: CircularProgressIndicator(strokeWidth: 2.5)),
+        ),
       );
     }
-    Size windowSize = MediaQuery.of(context).size;
+    if (_searchedData.isEmpty) {
+      final theme = Theme.of(context);
+      final tcontext = Translations.of(context);
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.search_off_rounded,
+              size: 48,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              tcontext.meta.search,
+              style: TextStyle(
+                fontSize: 14,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return ListView.separated(
       itemCount: _searchedData.length,
       itemBuilder: (BuildContext context, int index) {
         PackageInfoEx current = _searchedData[index];
-        return createWidget(current, windowSize);
+        return createWidget(current);
       },
       separatorBuilder: (BuildContext context, int index) {
         return const Divider(height: 1, thickness: 0.3);
@@ -307,115 +676,113 @@ class _PerAppAndroidScreenState
     );
   }
 
-  Widget createWidget(PackageInfoEx current, Size windowSize) {
+  Widget createWidget(PackageInfoEx current) {
     var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 2),
-      child: Material(
-        borderRadius: ThemeDefine.kBorderRadius,
-        child: InkWell(
-          onTap: () {
-            bool value =
-                perapp.PackageIds != null &&
-                perapp.PackageIds!.contains(current.info.packageName!);
-            if (value != true) {
-              perapp.PackageIds!.add(current.info.packageName!);
-            } else {
-              perapp.PackageIds!.remove(current.info.packageName!);
-            }
+    final isSelected = perapp.PackageIds != null &&
+        perapp.PackageIds!.contains(current.info.packageName);
+    final isSystem = _isSystemApp(current);
+    final theme = Theme.of(context);
 
-            setState(() {});
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            width: double.infinity,
-            height: 66,
-            child: Row(
-              children: [
-                Row(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          perapp.PackageIds ??= [];
+          if (!isSelected) {
+            perapp.PackageIds!.add(current.info.packageName!);
+          } else {
+            perapp.PackageIds!.remove(current.info.packageName!);
+          }
+          setState(() {});
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          width: double.infinity,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 44,
+                height: 44,
+                child: FutureBuilder(
+                  future: getInstalledPackageIcon(current.info.packageName!),
+                  builder: (BuildContext context, AsyncSnapshot<Image?> snapshot) {
+                    if (!snapshot.hasData || snapshot.data == null) {
+                      return Icon(
+                        isSystem ? Icons.settings_applications_rounded : Icons.android_rounded,
+                        size: 36,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                      );
+                    }
+                    return snapshot.data!;
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 48,
-                              height: 48,
-                              child: FutureBuilder(
-                                future: getInstalledPackageIcon(
-                                  current.info.packageName!,
-                                ),
-                                builder:
-                                    (
-                                      BuildContext context,
-                                      AsyncSnapshot<Image?> snapshot,
-                                    ) {
-                                      if (!snapshot.hasData ||
-                                          snapshot.data == null) {
-                                        return const SizedBox.shrink();
-                                      }
-                                      return SizedBox(
-                                        width: 48,
-                                        height: 48,
-                                        child: snapshot.data,
-                                      );
-                                    },
-                              ),
+                        Flexible(
+                          child: Text(
+                            current.name,
+                            style: TextStyle(
+                              fontSize: ThemeConfig.kFontSizeGroupItem,
+                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                             ),
-                            const SizedBox(width: 10),
-                            SizedBox(
-                              width: windowSize.width - 140,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    current.name,
-                                    style: TextStyle(
-                                      fontSize: ThemeConfig.kFontSizeGroupItem,
-                                    ),
-                                  ),
-                                  current.name == current.info.packageName
-                                      ? const SizedBox.shrink()
-                                      : Text(
-                                          current.info.packageName!,
-                                          style: const TextStyle(fontSize: 12),
-                                        ),
-                                ],
-                              ),
-                            ),
-                            Checkbox(
-                              tristate: true,
-                              value:
-                                  perapp.PackageIds != null &&
-                                  perapp.PackageIds!.contains(
-                                    current.info.packageName!,
-                                  ),
-                              onChanged: (bool? value) {
-                                perapp.PackageIds ??= [];
-                                if (value == true) {
-                                  perapp.PackageIds!.add(
-                                    current.info.packageName!,
-                                  );
-                                } else {
-                                  perapp.PackageIds!.remove(
-                                    current.info.packageName!,
-                                  );
-                                }
-
-                                setState(() {});
-                              },
-                            ),
-                          ],
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
+                        if (isSystem) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              "SYS",
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
+                    if (current.name != current.info.packageName && current.info.packageName != null)
+                      Text(
+                        current.info.packageName!,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Checkbox(
+                value: isSelected,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                onChanged: (bool? value) {
+                  perapp.PackageIds ??= [];
+                  if (value == true) {
+                    perapp.PackageIds!.add(current.info.packageName!);
+                  } else {
+                    perapp.PackageIds!.remove(current.info.packageName!);
+                  }
+                  setState(() {});
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -433,41 +800,6 @@ class _PerAppAndroidScreenState
           switchValue: perapp.Enable,
           onSwitch: (bool value) async {
             perapp.Enable = value;
-
-            setState(() {});
-          },
-        ),
-      ),
-      GroupItemOptions(
-        switchOptions: GroupItemSwitchOptions(
-          name: tcontext.PerAppAndroidScreen.whiteListMode,
-          switchValue: perapp.WhiteList,
-          tips: tcontext.PerAppAndroidScreen.whiteListModeTip,
-          onSwitch: (bool value) async {
-            perapp.WhiteList = value;
-
-            setState(() {});
-          },
-        ),
-      ),
-      GroupItemOptions(
-        switchOptions: GroupItemSwitchOptions(
-          name: tcontext.meta.hideSystemApp,
-          switchValue: SettingManager.getConfig().ui.perAppHideSystemApp,
-          onSwitch: (bool value) async {
-            SettingManager.getConfig().ui.perAppHideSystemApp = value;
-            _loading = true;
-            getInstalledPackages();
-            setState(() {});
-          },
-        ),
-      ),
-      GroupItemOptions(
-        switchOptions: GroupItemSwitchOptions(
-          name: tcontext.meta.hideAppIcon,
-          switchValue: SettingManager.getConfig().ui.perAppHideAppIcon,
-          onSwitch: (bool value) async {
-            SettingManager.getConfig().ui.perAppHideAppIcon = value;
             setState(() {});
           },
         ),
@@ -482,20 +814,11 @@ class _PerAppAndroidScreenState
     final tcontext = Translations.of(context);
     showMenu(
       context: context,
-      position: const RelativeRect.fromLTRB(0.1, 0, 0, 0),
+      position: const RelativeRect.fromLTRB(1, 40, 10, 0),
       items: [
         PopupMenuItem(
           value: 1,
-          child: SizedBox(
-            height: 30,
-            child: Text(
-              tcontext.meta.importFromClipboard,
-              style: const TextStyle(
-                fontWeight: ThemeConfig.kFontWeightTitle,
-                fontSize: ThemeConfig.kFontSizeTitle,
-              ),
-            ),
-          ),
+          child: Text(tcontext.meta.importFromClipboard),
           onTap: () async {
             perapp.PackageIds ??= [];
             try {
@@ -509,13 +832,11 @@ class _PerAppAndroidScreenState
               }
               for (var app in list) {
                 app = app.trim();
-                if (perapp.PackageIds!.contains(app)) {
-                  continue;
+                if (app.isNotEmpty && !perapp.PackageIds!.contains(app)) {
+                  perapp.PackageIds!.add(app);
                 }
-
-                perapp.PackageIds!.add(app);
               }
-              setState(() {});
+              _applyFilter();
             } catch (err) {
               if (!mounted) {
                 return;
@@ -531,17 +852,8 @@ class _PerAppAndroidScreenState
           },
         ),
         PopupMenuItem(
-          value: 1,
-          child: SizedBox(
-            height: 30,
-            child: Text(
-              tcontext.meta.exportToClipboard,
-              style: const TextStyle(
-                fontWeight: ThemeConfig.kFontWeightTitle,
-                fontSize: ThemeConfig.kFontSizeTitle,
-              ),
-            ),
-          ),
+          value: 2,
+          child: Text(tcontext.meta.exportToClipboard),
           onTap: () async {
             perapp.PackageIds ??= [];
             try {
@@ -550,9 +862,6 @@ class _PerAppAndroidScreenState
               }
               String content = perapp.PackageIds!.join("\n");
               await Clipboard.setData(ClipboardData(text: content));
-              if (!mounted) {
-                return;
-              }
             } catch (err) {
               if (!mounted) {
                 return;
@@ -565,6 +874,20 @@ class _PerAppAndroidScreenState
                 withVersion: true,
               );
             }
+          },
+        ),
+        PopupMenuItem(
+          value: 3,
+          child: Text(
+            SettingManager.getConfig().ui.perAppHideAppIcon
+                ? tcontext.meta.showAppIcon
+                : tcontext.meta.hideAppIcon,
+          ),
+          onTap: () {
+            final ui = SettingManager.getConfig().ui;
+            ui.perAppHideAppIcon = !ui.perAppHideAppIcon;
+            SettingManager.save();
+            setState(() {});
           },
         ),
       ],

@@ -642,6 +642,24 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get sortLatencyDesc => '지연 시간 높은 순';
 	@override String get sortNameDesc => '이름 Z-A';
 	@override String get sortMultiplier => '배율 낮은 순';
+	@override String get uwpLoopback => 'UWP 루프백 예외 도구';
+	@override String get uwpLoopbackDesc => '마이크로소프트 스토어, Xbox 등 UWP 앱이 로컬 프록시를 사용하도록 예외 처리';
+	@override String get uwpExemptAllCommon => '추천 앱 일괄 예외 처리';
+	@override String get uwpApplySuccess => 'UWP 루프백 예외 규칙이 적용되었습니다';
+	@override String get common => '주요';
+	@override String get exempted => '예외 처리됨';
+	@override String get notExempted => '미처리';
+	@override String get deselectAll => '선택 해제';
+	@override String get userApps => '사용자 앱';
+	@override String get systemApps => '시스템 앱';
+	@override String get selectedOnly => '선택됨';
+	@override String get proxySelectedMode => '선택 앱만 프록시 적용';
+	@override String get proxySelectedModeDesc => '선택한 앱만 프록시를 거치고 다른 앱은 직접 연결합니다';
+	@override String get bypassSelectedMode => '선택 앱 우회';
+	@override String get bypassSelectedModeDesc => '선택한 앱은 직접 연결하고 다른 앱은 프록시를 거칩니다';
+	@override String get invertSelection => '반전 선택';
+	@override String get all => '전체';
+	@override String get showAppIcon => '앱 아이콘 표시';
 }
 
 // Path: permission
@@ -1277,6 +1295,26 @@ extension on TranslationsKo {
 			'meta.sortLatencyDesc' => '지연 시간 높은 순',
 			'meta.sortNameDesc' => '이름 Z-A',
 			'meta.sortMultiplier' => '배율 낮은 순',
+			'meta.uwpLoopback' => 'UWP 루프백 예외 도구',
+			'meta.uwpLoopbackDesc' => '마이크로소프트 스토어, Xbox 등 UWP 앱이 로컬 프록시를 사용하도록 예외 처리',
+			'meta.uwpExemptAllCommon' => '추천 앱 일괄 예외 처리',
+			'meta.uwpApplySuccess' => 'UWP 루프백 예외 규칙이 적용되었습니다',
+			'meta.common' => '주요',
+			'meta.exempted' => '예외 처리됨',
+			'meta.notExempted' => '미처리',
+			'meta.deselectAll' => '선택 해제',
+			'meta.userApps' => '사용자 앱',
+			'meta.systemApps' => '시스템 앱',
+			'meta.selectedOnly' => '선택됨',
+			'meta.proxySelectedMode' => '선택 앱만 프록시 적용',
+			'meta.proxySelectedModeDesc' => '선택한 앱만 프록시를 거치고 다른 앱은 직접 연결합니다',
+			'meta.bypassSelectedMode' => '선택 앱 우회',
+			_ => null,
+		} ?? switch (path) {
+			'meta.bypassSelectedModeDesc' => '선택한 앱은 직접 연결하고 다른 앱은 프록시를 거칩니다',
+			'meta.invertSelection' => '반전 선택',
+			'meta.all' => '전체',
+			'meta.showAppIcon' => '앱 아이콘 표시',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',
@@ -1291,8 +1329,6 @@ extension on TranslationsKo {
 			'tun.inet6Address' => 'IPv6 주소 범위',
 			'tun.dnsHijack' => 'DNS 하이제킹',
 			'tun.strictRoute' => '엄격한 경로',
-			_ => null,
-		} ?? switch (path) {
 			'tun.tunDefaultRoute' => '기본 경로',
 			'tun.icmpForward' => 'ICMP 전달',
 			'tun.allowBypass' => '앱이 VPN을 우회하도록 허용',

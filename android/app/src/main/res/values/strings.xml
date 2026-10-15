@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wmimo</string>
+    <string name="tile_connected">Connected</string>
+    <string name="tile_disconnected">Disconnected</string>
+    <string name="tile_unavailable">Not Configured</string>
+</resources>
