@@ -243,7 +243,6 @@ jobs:
       - name: Free Disk Space
         run: |
           sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android/sdk/ndk/* 2>/dev/null || true
           sudo rm -rf /opt/ghc
           sudo rm -rf /opt/hostedtoolcache/CodeQL 2>/dev/null || true
           sudo rm -rf /usr/local/share/boost
@@ -296,8 +295,8 @@ jobs:
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
           [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1428"
-          flutter build apk --release --split-per-abi --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
-          flutter build apk --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
+          flutter build apk --release --split-per-abi --android-skip-build-dependency-validation --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
+          flutter build apk --release --android-skip-build-dependency-validation --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
       - name: Package Android Artifacts
         run: |
