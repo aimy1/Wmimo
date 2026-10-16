@@ -548,7 +548,7 @@ jobs:
             BUILD_NUM=$(echo "$RAW_VER" | awk -F'.' '{if (NF>3) print $4}')
           fi
           if [ -z "$BUILD_NUM" ]; then
-            BUILD_NUM="1504"
+            BUILD_NUM="1506"
           fi
 
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT
