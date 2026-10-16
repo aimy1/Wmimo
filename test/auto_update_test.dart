@@ -52,6 +52,9 @@ void main() {
       expect(VersionCompareUtils.compareVersion('1.2.2.1504', '1.2.3.1505'), -1);
       expect(VersionCompareUtils.compareVersion('v1.2.3.1505', '1.2.2.1504'), 1);
       expect(VersionCompareUtils.compareVersion('1.2.3.1505', '1.2.3.1505'), 0);
+      expect(VersionCompareUtils.compareVersion('1.2.3.1505', '1.2.4.1506'), -1);
+      expect(VersionCompareUtils.compareVersion('v1.2.4.1506', '1.2.3.1505'), 1);
+      expect(VersionCompareUtils.compareVersion('1.2.4.1506', '1.2.4.1506'), 0);
     });
 
     test('Semantic version changes take precedence over build numbers', () {

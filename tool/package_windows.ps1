@@ -1,5 +1,5 @@
 param (
-    [string]$Tag = "v1.2.3.1505"
+    [string]$Tag = "v1.2.4.1506"
 )
 
 $ErrorActionPreference = "Stop"
@@ -14,7 +14,7 @@ if (-not $Tag -or $Tag -eq "" -or $Tag -eq "main") {
             $Tag = "v$pubVer"
         }
     } else {
-        $Tag = "v1.2.3.1505"
+        $Tag = "v1.2.4.1506"
     }
 }
 
