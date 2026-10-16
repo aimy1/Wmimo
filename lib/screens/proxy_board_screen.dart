@@ -21,6 +21,7 @@ import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/add_profile_by_url_screen.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
+import 'package:wmimo/screens/widgets/brand_vector_icon.dart';
 
 class ProxyBoardScreen extends StatefulWidget {
   static RouteSettings routSettings() {
@@ -1061,7 +1062,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.radar_rounded, size: 18, color: ThemeDefine.kColorBlue),
+                            BrandVectorIcon(
+                              id: _activeLatencyTarget.id,
+                              size: 26,
+                              borderRadius: 6,
+                            ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Column(
@@ -1073,7 +1078,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    "${_activeLatencyTarget.icon} ${_activeLatencyTarget.getDisplayName(isZh)} • ${_activeLatencyTarget.url}",
+                                    "${_activeLatencyTarget.getDisplayName(isZh)} • ${_activeLatencyTarget.url}",
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -1313,21 +1318,11 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               ),
                               child: Row(
                                 children: [
-                                  Container(
-                                    width: 32,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? ThemeDefine.kColorBlue
-                                          : theme.colorScheme.onSurface.withValues(alpha: 0.08),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        target.icon,
-                                        style: const TextStyle(fontSize: 16),
-                                      ),
-                                    ),
+                                  BrandVectorIcon(
+                                    id: target.id,
+                                    size: 32,
+                                    borderRadius: 8,
+                                    isSelected: isSelected,
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
@@ -1378,7 +1373,12 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.link_rounded, size: 18, color: Colors.grey),
+                          BrandVectorIcon(
+                            id: 'custom',
+                            size: 26,
+                            borderRadius: 6,
+                            isSelected: _activeLatencyTarget.id == "custom",
+                          ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: TextField(
@@ -1499,7 +1499,32 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               _buildDetailRow(tcontext.meta.identifiedRegion, "${region.flag} ${region.getDisplayName(isZh)} (${region.code})"),
               _buildDetailRow(tcontext.meta.nodeProtocol, node.type.isEmpty ? "Unknown" : node.type.toUpperCase()),
               _buildDetailRow(tcontext.meta.currentLatency, delayInfo, valueColor: delayColor, isBold: true),
-              _buildDetailRow(tcontext.meta.testScenario, "${_activeLatencyTarget.icon} ${_activeLatencyTarget.getDisplayName(isZh)}"),
+              _buildDetailRow(
+                tcontext.meta.testScenario,
+                _activeLatencyTarget.getDisplayName(isZh),
+                customValue: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BrandVectorIcon(
+                      id: _activeLatencyTarget.id,
+                      size: 16,
+                      borderRadius: 4,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        _activeLatencyTarget.getDisplayName(isZh),
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w500,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               _buildDetailRow(tcontext.meta.belongsToGroup, group.name),
               const Divider(height: 16),
             ],
@@ -1546,7 +1571,13 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     );
   }
 
-  Widget _buildDetailRow(String label, String value, {Color? valueColor, bool isBold = false}) {
+  Widget _buildDetailRow(
+    String label,
+    String value, {
+    Color? valueColor,
+    bool isBold = false,
+    Widget? customValue,
+  }) {
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -1562,17 +1593,18 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           ),
           const SizedBox(width: 10),
           Flexible(
-            child: Text(
-              value,
-              style: TextStyle(
-                fontSize: 12.5,
-                fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
-                color: valueColor ?? theme.colorScheme.onSurface,
-                fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
-              ),
-              textAlign: TextAlign.right,
-              overflow: TextOverflow.ellipsis,
-            ),
+            child: customValue ??
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
+                    color: valueColor ?? theme.colorScheme.onSurface,
+                    fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                  ),
+                  textAlign: TextAlign.right,
+                  overflow: TextOverflow.ellipsis,
+                ),
           ),
         ],
       ),

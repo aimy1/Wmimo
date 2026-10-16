@@ -14,6 +14,7 @@ import 'package:wmimo/app/utils/local_storage.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
+import 'package:wmimo/screens/widgets/brand_vector_icon.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 
 enum SpeedTestPhase {
@@ -1236,13 +1237,35 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(height: 2),
-                                  Text(
-                                    '${tcontext.SpeedTestScreen.server}: ${_currentServer.icon} ${_currentServer.name} (${_currentServer.getDisplayRegion(isZh)})',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: (isDark ? Colors.white : Colors.black)
-                                          .withValues(alpha: 0.55),
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${tcontext.SpeedTestScreen.server}: ',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: (isDark ? Colors.white : Colors.black)
+                                              .withValues(alpha: 0.55),
+                                        ),
+                                      ),
+                                      BrandVectorIcon(
+                                        id: _currentServer.id,
+                                        size: 14,
+                                        borderRadius: 3,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Flexible(
+                                        child: Text(
+                                          '${_currentServer.name} (${_currentServer.getDisplayRegion(isZh)})',
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: (isDark ? Colors.white : Colors.black)
+                                                .withValues(alpha: 0.55),
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -1636,21 +1659,11 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                               ),
                               child: Row(
                                 children: [
-                                  Container(
-                                    width: 32,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? ThemeDefine.kColorBlue
-                                          : theme.colorScheme.onSurface.withValues(alpha: 0.08),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        server.icon,
-                                        style: const TextStyle(fontSize: 16),
-                                      ),
-                                    ),
+                                  BrandVectorIcon(
+                                    id: server.id,
+                                    size: 32,
+                                    borderRadius: 8,
+                                    isSelected: isSelected,
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
@@ -1699,7 +1712,12 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.link_rounded, size: 18, color: Colors.grey),
+                          BrandVectorIcon(
+                            id: 'custom',
+                            size: 26,
+                            borderRadius: 6,
+                            isSelected: _currentServer.id == 'custom',
+                          ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: TextField(
