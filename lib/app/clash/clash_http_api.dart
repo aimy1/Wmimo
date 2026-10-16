@@ -933,6 +933,42 @@ class ClashHttpApi {
     return result.error;
   }
 
+  static Future<ReturnResultError?> flushDnsCache() async {
+    String secret = getSecret?.call() ?? "";
+    Map<String, String> headers = getHeaders(secret);
+    final port = getControlPort?.call();
+    if (port == null || port == 0) return ReturnResultError("Core controller not ready");
+
+    var res1 = await HttpUtils.httpPostRequest(
+      "$host:$port/cache/dns/flush",
+      null,
+      headers,
+      "",
+      const Duration(seconds: 3),
+      null,
+      null,
+      null,
+      checkStatuscode: false,
+    );
+
+    await HttpUtils.httpPostRequest(
+      "$host:$port/cache/fakeip/flush",
+      null,
+      headers,
+      "",
+      const Duration(seconds: 3),
+      null,
+      null,
+      null,
+      checkStatuscode: false,
+    );
+
+    if (res1.data != null && res1.data!.item1 >= 200 && res1.data!.item1 < 300) {
+      return null;
+    }
+    return res1.error;
+  }
+
   static String convertTrafficToStringDouble(num? value, {num kb = 1024}) {
     if (value == null || value < 0) {
       return "";
@@ -960,3 +996,4 @@ class ClashHttpApi {
     return "$value B";
   }
 }
+

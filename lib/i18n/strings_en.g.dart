@@ -1798,6 +1798,78 @@ class Translations$dns$en {
 
 	/// en: 'Fallback GeoIpCode'
 	String get fallbackGeoIpCode => '${_root.dns.fallback} GeoIpCode';
+
+	/// en: 'Flush DNS Cache'
+	String get flushCache => 'Flush DNS Cache';
+
+	/// en: 'DNS and Fake-IP cache flushed successfully'
+	String get flushCacheSuccess => 'DNS and Fake-IP cache flushed successfully';
+
+	/// en: 'Quick DNS Presets'
+	String get presets => 'Quick DNS Presets';
+
+	/// en: 'High-Speed Dual Stack'
+	String get presetSpeed => 'High-Speed Dual Stack';
+
+	/// en: 'AliDNS DoH3 + DNSPod DoH: Instant domestic connection, smart split routing'
+	String get presetSpeedDesc => 'AliDNS DoH3 + DNSPod DoH: Instant domestic connection, smart split routing';
+
+	/// en: 'Anti-Pollution & Privacy'
+	String get presetSecure => 'Anti-Pollution & Privacy';
+
+	/// en: 'Cloudflare DoH3 + Google DoH: Eliminate DNS hijacking and censorship'
+	String get presetSecureDesc => 'Cloudflare DoH3 + Google DoH: Eliminate DNS hijacking and censorship';
+
+	/// en: 'AdGuard Ad-Blocking & Clean'
+	String get presetAdGuard => 'AdGuard Ad-Blocking & Clean';
+
+	/// en: 'AdGuard DoQ + AliDNS DoH: Deep request filtering and privacy protection'
+	String get presetAdGuardDesc => 'AdGuard DoQ + AliDNS DoH: Deep request filtering and privacy protection';
+
+	/// en: 'Override DNS configuration from subscription profiles'
+	String get overwriteDesc => 'Override DNS configuration from subscription profiles';
+
+	/// en: 'Enable custom DNS resolver'
+	String get enableDesc => 'Enable custom DNS resolver';
+
+	/// en: 'Restore Defaults'
+	String get resetFakeIpFilter => 'Restore Defaults';
+
+	/// en: 'Are you sure you want to restore the recommended Fake-IP filter list?'
+	String get resetFakeIpFilterConfirm => 'Are you sure you want to restore the recommended Fake-IP filter list?';
+
+	/// en: 'Live DNS Query Diagnostic'
+	String get dnsTester => 'Live DNS Query Diagnostic';
+
+	/// en: 'Test'
+	String get testQuery => 'Test';
+
+	/// en: 'Fake-IP Matched'
+	String get fakeIpDetected => 'Fake-IP Matched';
+
+	/// en: 'Real Public IP'
+	String get realIpDetected => 'Real Public IP';
+
+	/// en: 'Add DNS Server'
+	String get addServer => 'Add DNS Server';
+
+	/// en: 'GEO Offline Databases'
+	String get geoAssetsTitle => 'GEO Offline Databases';
+
+	/// en: 'Manage GeoSite domain ruleset, GeoIP and ASN databases'
+	String get geoAssetsDesc => 'Manage GeoSite domain ruleset, GeoIP and ASN databases';
+
+	/// en: 'Download CDN Mirror'
+	String get cdnSource => 'Download CDN Mirror';
+
+	/// en: 'Update All'
+	String get updateAll => 'Update All';
+
+	/// en: 'Update succeeded'
+	String get updateSuccess => 'Update succeeded';
+
+	/// en: 'Update failed'
+	String get updateFailed => 'Update failed';
 }
 
 // Path: sniffer
@@ -2473,6 +2545,30 @@ extension on Translations {
 			'dns.fallbackNameServer' => '${_root.dns.fallback} ${_root.dns.nameServer}',
 			'dns.fallbackGeoIp' => '${_root.dns.fallback} GeoIp',
 			'dns.fallbackGeoIpCode' => '${_root.dns.fallback} GeoIpCode',
+			'dns.flushCache' => 'Flush DNS Cache',
+			'dns.flushCacheSuccess' => 'DNS and Fake-IP cache flushed successfully',
+			'dns.presets' => 'Quick DNS Presets',
+			'dns.presetSpeed' => 'High-Speed Dual Stack',
+			'dns.presetSpeedDesc' => 'AliDNS DoH3 + DNSPod DoH: Instant domestic connection, smart split routing',
+			'dns.presetSecure' => 'Anti-Pollution & Privacy',
+			'dns.presetSecureDesc' => 'Cloudflare DoH3 + Google DoH: Eliminate DNS hijacking and censorship',
+			'dns.presetAdGuard' => 'AdGuard Ad-Blocking & Clean',
+			'dns.presetAdGuardDesc' => 'AdGuard DoQ + AliDNS DoH: Deep request filtering and privacy protection',
+			'dns.overwriteDesc' => 'Override DNS configuration from subscription profiles',
+			'dns.enableDesc' => 'Enable custom DNS resolver',
+			'dns.resetFakeIpFilter' => 'Restore Defaults',
+			'dns.resetFakeIpFilterConfirm' => 'Are you sure you want to restore the recommended Fake-IP filter list?',
+			'dns.dnsTester' => 'Live DNS Query Diagnostic',
+			'dns.testQuery' => 'Test',
+			'dns.fakeIpDetected' => 'Fake-IP Matched',
+			'dns.realIpDetected' => 'Real Public IP',
+			'dns.addServer' => 'Add DNS Server',
+			'dns.geoAssetsTitle' => 'GEO Offline Databases',
+			'dns.geoAssetsDesc' => 'Manage GeoSite domain ruleset, GeoIP and ASN databases',
+			'dns.cdnSource' => 'Download CDN Mirror',
+			'dns.updateAll' => 'Update All',
+			'dns.updateSuccess' => 'Update succeeded',
+			'dns.updateFailed' => 'Update failed',
 			'sniffer.overrideDest' => 'Override',
 			'profilePatchMode.currentSelected' => 'Current Selected',
 			'profilePatchMode.overwrite' => 'Built-in Overwrite',

@@ -32,7 +32,9 @@ import 'package:wmimo/screens/backup_and_sync_icloud_screen.dart';
 import 'package:wmimo/screens/backup_and_sync_webdav_screen.dart';
 import 'package:wmimo/screens/backup_helper.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
+import 'package:wmimo/screens/dns_settings_screen.dart';
 import 'package:wmimo/screens/file_view_screen.dart';
+import 'package:wmimo/screens/geo_assets_screen.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
 import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/group_screen.dart';
@@ -1838,343 +1840,11 @@ class GroupHelper {
   }
 
   static Future<void> showClashSettingsDNS(BuildContext context) async {
-    final tcontext = Translations.of(context);
-    Future<List<GroupItem>> getOptions(
-      BuildContext context,
-      SetStateCallback? setstate,
-    ) async {
-      var setting = ClashSettingManager.getConfig();
-      var dns = setting.DNS!;
-
-      final enhancedModes = ClashDnsEnhancedMode.toList();
-      final enhancedModesTuple = ClashDnsEnhancedMode.toTupleList();
-      final fakeIPFilterModes = ClashFakeIPFilterMode.toList();
-      List<GroupItemOptions> options = [
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.meta.overwrite,
-            switchValue: dns.OverWrite,
-            onSwitch: (bool value) async {
-              dns.OverWrite = value;
-            },
-          ),
-        ),
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.meta.enable,
-            tips: "enable",
-            switchValue: dns.Enable,
-            onSwitch: dns.OverWrite != true
-                ? null
-                : (bool value) async {
-                    dns.Enable = value;
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          textFormFieldOptions: GroupItemTextFieldOptions(
-            name: tcontext.dns.listen,
-            text: dns.Listen,
-            textWidthPercent: 0.5,
-            hint: "0.0.0.0:53",
-            readOnly: dns.OverWrite != true || dns.Enable != true,
-            tips: "listen",
-            onChanged: (String value) {
-              dns.Listen = value;
-            },
-          ),
-        ),
-
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.dns.preferH3,
-            tips: "prefer-h3",
-            switchValue: dns.PreferH3,
-            onSwitch: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : (bool value) async {
-                    dns.PreferH3 = value;
-                  },
-          ),
-        ),
-
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.dns.useSystemHosts,
-            tips: "use-system-hosts",
-            switchValue: dns.UseSystemHosts,
-            onSwitch: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : (bool value) async {
-                    dns.UseSystemHosts = value;
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.dns.useHosts,
-            tips: "use-hosts",
-            switchValue: dns.UseHosts,
-            onSwitch: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : (bool value) async {
-                    dns.UseHosts = value;
-                  },
-          ),
-        ),
-        /*   GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-              name: "RespectRules",
-              switchValue: dns.RespectRules,
-              onSwitch: dns.OverWrite != true || dns.Enable != true
-                    ? null
-                    : (bool value) async {
-                dns.RespectRules = value;
-              }))  ,
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-              name: "DirectNameServerFollowPolicy",
-              switchValue: dns.DirectNameServerFollowPolicy,
-              onSwitch:dns.OverWrite != true || dns.Enable != true
-                    ? null
-                    :  (bool value) async {
-                dns.DirectNameServerFollowPolicy = value;
-              }))  ,*/
-      ];
-
-      List<GroupItemOptions> options0 = [
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
-            name: "hosts",
-            tips: "hosts",
-            onPush: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : () async {
-                    showClashSettingsHosts(context);
-                  },
-          ),
-        ),
-      ];
-
-      List<GroupItemOptions> options1 = [
-        GroupItemOptions(
-          stringPickerOptions: GroupItemStringPickerOptions(
-            name: tcontext.dns.enhancedMode,
-            tips: "enhanced-mode",
-            selected: enhancedModes.contains(dns.EnhancedMode)
-                ? dns.EnhancedMode
-                : enhancedModes.last,
-            tupleStrings: enhancedModesTuple,
-            onPicker: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : (String? selected) async {
-                    dns.EnhancedMode = selected;
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          stringPickerOptions: GroupItemStringPickerOptions(
-            name: tcontext.dns.fakeIPFilterMode,
-            tips: "fake-ip-filter-mode",
-            selected: fakeIPFilterModes.contains(dns.FakeIPFilterMode)
-                ? dns.FakeIPFilterMode
-                : fakeIPFilterModes.last,
-            strings: fakeIPFilterModes,
-            onPicker: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : (String? selected) async {
-                    dns.FakeIPFilterMode = selected;
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
-            name: tcontext.dns.fakeIPFilter,
-            tips: "fake-ip-filter",
-            onPush: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : () async {
-                    dns.FakeIPFilter ??= [];
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        settings: ListAddScreen.routSettings("FakeIPFilter"),
-                        builder: (context) => ListAddScreen(
-                          title: tcontext.dns.fakeIPFilter,
-                          data: dns.FakeIPFilter!,
-                        ),
-                      ),
-                    );
-                  },
-          ),
-        ),
-      ];
-      List<GroupItemOptions> options2 = [
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.dns.respectRules,
-            tips: "respect-rules",
-            switchValue: dns.RespectRules,
-            onSwitch: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : (bool value) async {
-                    dns.RespectRules = value;
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
-            name: tcontext.dns.defaultNameServer,
-            tips: "default-nameserver",
-            onPush: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : () async {
-                    dns.DefaultNameserver ??= [];
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        settings: ListAddScreen.routSettings(
-                          "DefaultNameserver",
-                        ),
-                        builder: (context) => ListAddScreen(
-                          title: tcontext.dns.defaultNameServer,
-                          data: dns.DefaultNameserver!,
-                        ),
-                      ),
-                    );
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
-            name: tcontext.dns.nameServer,
-            tips: "nameserver",
-            onPush: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : () async {
-                    dns.NameServer ??= [];
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        settings: ListAddScreen.routSettings("NameServer"),
-                        builder: (context) => ListAddScreen(
-                          title: tcontext.dns.nameServer,
-                          data: dns.NameServer!,
-                        ),
-                      ),
-                    );
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
-            name: tcontext.dns.proxyNameServer,
-            tips: "proxy-server-nameserver",
-            onPush: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : () async {
-                    dns.ProxyServerNameserver ??= [];
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        settings: ListAddScreen.routSettings(
-                          "ProxyServerNameserver",
-                        ),
-                        builder: (context) => ListAddScreen(
-                          title: tcontext.dns.proxyNameServer,
-                          data: dns.ProxyServerNameserver!,
-                        ),
-                      ),
-                    );
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
-            name: tcontext.dns.directNameServer,
-            tips: "direct-nameserver",
-            onPush: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : () async {
-                    dns.DirectNameServer ??= [];
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        settings: ListAddScreen.routSettings(
-                          "DirectNameServer",
-                        ),
-                        builder: (context) => ListAddScreen(
-                          title: tcontext.dns.directNameServer,
-                          data: dns.DirectNameServer!,
-                        ),
-                      ),
-                    );
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
-            name: tcontext.dns.fallbackNameServer,
-            tips: "fallback",
-            onPush: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : () async {
-                    dns.Fallback ??= [];
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        settings: ListAddScreen.routSettings("Fallback"),
-                        builder: (context) => ListAddScreen(
-                          title: tcontext.dns.fallbackNameServer,
-                          data: dns.Fallback!,
-                        ),
-                      ),
-                    );
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.dns.fallbackGeoIp,
-            tips: "geoip",
-            switchValue: dns.FallbackFilter?.GeoIP,
-            onSwitch: dns.OverWrite != true || dns.Enable != true
-                ? null
-                : (bool value) async {
-                    dns.FallbackFilter ??= RawFallbackFilter.by();
-                    dns.FallbackFilter?.GeoIP = value;
-                  },
-          ),
-        ),
-        GroupItemOptions(
-          textFormFieldOptions: GroupItemTextFieldOptions(
-            name: tcontext.dns.fallbackGeoIpCode,
-            text: dns.FallbackFilter?.GeoIPCode,
-            textWidthPercent: 0.5,
-            readOnly: dns.OverWrite != true || dns.Enable != true,
-            tips: "geoip-code",
-            onChanged: (String value) {
-              dns.FallbackFilter ??= RawFallbackFilter.by();
-              dns.FallbackFilter?.GeoIPCode = value;
-            },
-          ),
-        ),
-      ];
-
-      return [
-        GroupItem(options: options),
-        GroupItem(options: options0),
-        GroupItem(options: options1),
-        GroupItem(options: options2),
-      ];
-    }
-
     await Navigator.push(
       context,
       MaterialPageRoute(
-        settings: GroupScreen.routSettings("dns"),
-        builder: (context) =>
-            GroupScreen(title: tcontext.meta.dns, getOptions: getOptions),
+        settings: DnsSettingsScreen.routSettings(),
+        builder: (context) => const DnsSettingsScreen(),
       ),
     );
   }
@@ -2467,6 +2137,21 @@ class GroupHelper {
                 MaterialPageRoute(
                   settings: RuleProvidersScreen.routSettings(),
                   builder: (context) => RuleProvidersScreen(),
+                ),
+              );
+            },
+          ),
+        ),
+        GroupItemOptions(
+          pushOptions: GroupItemPushOptions(
+            name: tcontext.dns.geoAssetsTitle,
+            tips: "geoip/geosite",
+            onPush: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: GeoAssetsScreen.routSettings(),
+                  builder: (context) => const GeoAssetsScreen(),
                 ),
               );
             },

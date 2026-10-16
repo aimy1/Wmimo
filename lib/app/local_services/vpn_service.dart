@@ -4,7 +4,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
+import 'package:wmimo/app/modules/core_watchdog.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
@@ -127,9 +129,12 @@ class VPNService {
         }
       }
     }
+
+    CoreWatchdog.init();
   }
 
   static Future<void> uninit() async {
+    CoreWatchdog.destroy();
     if (PlatformUtils.isPC()) {
       await stop();
     }
@@ -490,6 +495,7 @@ class VPNService {
         }
       }
 
+      CoreWatchdog.setUserConnected(true);
       return null;
     } finally {
       _isOperating = false;
@@ -498,6 +504,7 @@ class VPNService {
 
   static Future<void> stop() async {
     _cancelRequested = true;
+    CoreWatchdog.setUserConnected(false);
     try {
       if (Platform.isIOS || Platform.isMacOS) {
         await FlutterVpnService.setAlwaysOn(false);
@@ -614,7 +621,30 @@ class VPNService {
     return started ? mixedPort : null;
   }
 
-  static Future<ReturnResultError?> reload(Duration timeout) async {
+  static Future<ReturnResultError?> reload(Duration timeout, {bool smooth = true}) async {
+    if (smooth && await getStarted()) {
+      try {
+        final profile = ProfileManager.getCurrent();
+        if (profile != null) {
+          final prepareResult = await ProfileManager.prepare(profile);
+          if (prepareResult == null) {
+            await _prepareConfig(profile);
+            final configPath = await PathUtils.serviceCorePatchFinalPath();
+            final reloadErr = await ClashHttpApi.reloadConfigs(
+              force: false,
+              path: configPath,
+            );
+            if (reloadErr == null) {
+              Log.i("VPNService: Smooth hot-reload succeeded without restarting core");
+              return null;
+            }
+            Log.w("VPNService: Smooth hot-reload failed (${reloadErr.message}), falling back to restart");
+          }
+        }
+      } catch (e) {
+        Log.w("VPNService: Smooth hot-reload exception: $e, falling back to restart");
+      }
+    }
     return restart(timeout);
   }
 

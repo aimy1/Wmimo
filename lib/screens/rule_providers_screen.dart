@@ -1,5 +1,7 @@
+import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/modules/diversion_template_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
+import 'package:wmimo/screens/geo_assets_screen.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
@@ -65,10 +67,26 @@ class _RuleProvidersScreenState
                     ),
                     InkWell(
                       onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            settings: GeoAssetsScreen.routSettings(),
+                            builder: (context) => const GeoAssetsScreen(),
+                          ),
+                        );
+                      },
+                      child: const SizedBox(
+                        width: 44,
+                        height: 30,
+                        child: Icon(Icons.public, size: 24),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
                         onTapAdd();
                       },
                       child: const SizedBox(
-                        width: 50,
+                        width: 44,
                         height: 30,
                         child: Icon(Icons.add_outlined, size: 26),
                       ),
@@ -116,8 +134,9 @@ class _RuleProvidersScreenState
   }
 
   Widget createWidget(int index, RuleProvider current, Size windowSize) {
-    const double rightWidth = 30.0;
-    double centerWidth = windowSize.width - rightWidth - 20 - 20 * 2;
+    const double rightWidth = 32.0;
+    double centerWidth = windowSize.width - rightWidth * 2 - 20 - 20 * 2;
+    final tcontext = Translations.of(context);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 2),
@@ -141,12 +160,39 @@ class _RuleProvidersScreenState
                         Row(
                           children: [
                             SizedBox(
-                              width: centerWidth,
+                              width: centerWidth > 60 ? centerWidth : 60,
                               child: Text(
                                 current.name,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: ThemeConfig.kFontSizeGroupItem,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: rightWidth,
+                              height: ThemeConfig.kListItemHeight2 - 2,
+                              child: InkWell(
+                                onTap: () async {
+                                  final err = await ClashHttpApi.updateRuleProvider(current.name);
+                                  if (!context.mounted) return;
+                                  final ok = err == null;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(ok
+                                          ? "${current.name}: ${tcontext.dns.updateSuccess}"
+                                          : "${current.name}: ${err.message}"),
+                                      backgroundColor: ok
+                                          ? ThemeDefine.kColorGreenBright
+                                          : ThemeDefine.kColorRed,
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  );
+                                },
+                                child: const Icon(
+                                  Icons.sync,
+                                  size: 22,
+                                  color: Colors.blueAccent,
                                 ),
                               ),
                             ),
