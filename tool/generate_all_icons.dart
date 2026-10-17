@@ -306,8 +306,6 @@ void main(List<String> args) async {
   savePng('assets/images/app_icon_512.png', 512, 512);
   savePng('assets/images/app_icon_256.png', 256, 256);
   savePng('assets/images/app_icon_128.png', 128, 128);
-  savePng('assets/images/app_icon_64.png', 64, 64);
-  savePng('assets/images/app_icon_32.png', 32, 32);
   savePng('assets/demo/icon_256.png', 256, 256);
   savePng('assets/images/tray.png', 32, 32);
   savePng('assets/images/grey_tray.png', 32, 32, grayscale: true);
