@@ -307,13 +307,13 @@ void main(List<String> args) async {
   savePng('assets/images/app_icon_256.png', 256, 256);
   savePng('assets/images/app_icon_128.png', 128, 128);
   savePng('assets/demo/icon_256.png', 256, 256);
-  savePng('assets/images/tray.png', 32, 32);
-  savePng('assets/images/grey_tray.png', 32, 32, grayscale: true);
-  saveIco('assets/images/tray.ico', [16, 24, 32, 48, 64]);
-  saveIco('assets/images/grey_tray.ico', [16, 24, 32, 48, 64], grayscale: true);
+  savePng('assets/images/tray.png', 128, 128);
+  savePng('assets/images/grey_tray.png', 128, 128, grayscale: true);
+  saveIco('assets/images/tray.ico', [48, 64, 128, 256]);
+  saveIco('assets/images/grey_tray.ico', [48, 64, 128, 256], grayscale: true);
 
-  // 2. Windows Runner Icon (Multi-layer ICO supporting all standard Windows display modes)
-  saveIco('windows/runner/resources/app_icon.ico', [16, 24, 32, 48, 64, 128, 256]);
+  // 2. Windows Runner Icon (High-definition multi-layer ICO)
+  saveIco('windows/runner/resources/app_icon.ico', [48, 64, 128, 256]);
 
   // 3. Android Mipmaps & Drawables
   // Standard launcher icons (squircle with transparent background)
@@ -356,8 +356,8 @@ void main(List<String> args) async {
 ''');
 
   // Status Bar Monochrome notification icon & Quick Settings Tile icon (pure white silhouette)
-  saveSilhouettePng('android/app/src/main/res/drawable/ic_statusbar.png', 24);
-  saveSilhouettePng('android/app/src/main/res/drawable/ic_tile.png', 96);
+  saveSilhouettePng('android/app/src/main/res/drawable/ic_statusbar.png', 48);
+  saveSilhouettePng('android/app/src/main/res/drawable/ic_tile.png', 192);
 
   // TV Banner & Background
   final tvBanner = createTvBanner(masterMatted, 320, 180);
@@ -396,10 +396,7 @@ void main(List<String> args) async {
   savePng('ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png', 384, 384, source: masterMatted);
   print('Generated iOS LaunchImage set');
 
-  // 5. macOS AppIcon (Squircle icons with transparent rounded corners)
-  savePng('macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png', 16, 16, source: masterMatted);
-  savePng('macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png', 32, 32, source: masterMatted);
-  savePng('macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png', 64, 64, source: masterMatted);
+  // 5. macOS AppIcon (High-definition squircle icons, min 128x128)
   savePng('macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png', 128, 128, source: masterMatted);
   savePng('macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png', 256, 256, source: masterMatted);
   savePng('macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png', 512, 512, source: masterMatted);
