@@ -568,17 +568,16 @@ jobs:
           sha256sum * > SHA256SUMS.txt || true
           ls -la
 
+      - name: Generate Advanced Release Notes
+        run: |
+          python3 tool/generate_release_notes.py "${{ steps.tag_info.outputs.release_tag }}" "${{ github.repository }}" "release-assets" "RELEASE_NOTES.md" "${{ steps.tag_info.outputs.build_number }}"
+
       - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag_info.outputs.release_tag }}
           name: "Wmimo ${{ steps.tag_info.outputs.release_tag }}"
-          body: |
-            ### 📌 版本信息 / Version Info
-            - **版本发布标签 (Release Tag)**: `${{ steps.tag_info.outputs.release_tag }}`
-            - **基础版本 (Base Version)**: `v${{ steps.tag_info.outputs.version_name }}`
-            - **内部构建号 (Build Number)**: `${{ steps.tag_info.outputs.build_number }}`
-            - **完整版本 (Full Version)**: `${{ steps.tag_info.outputs.version_name }}.${{ steps.tag_info.outputs.build_number }}` (`${{ steps.tag_info.outputs.version_name }}+${{ steps.tag_info.outputs.build_number }}`)
+          body_path: RELEASE_NOTES.md
           files: release-assets/*
           draft: false
           prerelease: false
