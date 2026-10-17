@@ -140,6 +140,33 @@ class _Translations$NetCheckScreen$ru implements Translations$NetCheckScreen$en 
 	final TranslationsRu _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'Диагностика сети';
+	@override String get fullDiagnosticsTab => 'Полная диагностика';
+	@override String get advancedCheckTab => 'Расширенная проверка домена';
+	@override String get startDiagnostics => 'Начать диагностику';
+	@override String get reDiagnostics => 'Повторить';
+	@override String get diagnosing => 'Диагностика сетевого контура...';
+	@override String get healthScore => 'Оценка состояния';
+	@override String get scorePerfect => 'Отлично';
+	@override String get scoreGood => 'Хорошо';
+	@override String get scoreWarning => 'Предупреждение';
+	@override String get scoreCritical => 'Заблокировано';
+	@override String get oneClickRepair => 'Умное автовосстановление';
+	@override String get repairSuccess => 'Восстановление успешно завершено, сеть работает нормально';
+	@override String get repairFailed => 'Применено, может потребоваться ручная проверка';
+	@override String get repairing => 'Выполняется автовосстановление...';
+	@override String issueFound({required Object count}) => 'Обнаружено проблем: ${count}';
+	@override String get noIssue => 'Все проверки пройдены';
+	@override String get details => 'Технические детали';
+	@override String get copyDetails => 'Копировать журнал';
+	@override String get detailsCopied => 'Журнал диагностики скопирован в буфер обмена';
+	@override String get stepPhysical => 'Сетевой адаптер и шлюз';
+	@override String get stepDns => 'DNS и механизм Fake-IP';
+	@override String get stepCore => 'Процесс ядра и порты';
+	@override String get stepProxy => 'Конфигурация системного прокси';
+	@override String get stepHandshake => 'Сквозное рукопожатие с Интернетом';
+	@override String get suggestedAction => 'Рекомендация';
+	@override String get autoRepairAction => 'Исправить';
 	@override String get enterDomain => 'Введите доменное имя';
 	@override String get checking => 'Проверка...';
 	@override String aQueryFailed({required Object p}) => 'Ошибка запроса A-записи: ${p}';
@@ -639,6 +666,8 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get resetSystemProxy => 'Восстановление сети / Сброс системного прокси';
 	@override String get resetSystemProxyDesc => 'Очистить остаточные настройки системного прокси и восстановить сеть';
 	@override String get resetSystemProxySuccess => 'Системный прокси сброшен, сеть восстановлена';
+	@override String get networkDiagnostics => 'Диагностика сети и автовосстановление';
+	@override String get networkDiagnosticsDesc => 'Диагностика сетевых адаптеров, DNS, портов ядра и прокси с восстановлением в один клик';
 	@override String get sortLatencyDesc => 'По убыванию задержки';
 	@override String get sortNameDesc => 'По имени (Z-A)';
 	@override String get sortMultiplier => 'По возрастанию множителя';
@@ -839,6 +868,33 @@ extension on TranslationsRu {
 			'PerAppAndroidScreen.whiteListModeTip' => 'Если включено: перенаправляются через прокси-сервер только те приложения, которые были отмечены. Если выключено: перенаправляются через прокси-сервер только те приложения, которые не были отмечены.',
 			'UserAgreementScreen.privacyFirst' => 'Ваша конфиденциальность превыше всего',
 			'UserAgreementScreen.agreeAndContinue' => 'Принять и продолжить',
+			'NetCheckScreen.title' => 'Диагностика сети',
+			'NetCheckScreen.fullDiagnosticsTab' => 'Полная диагностика',
+			'NetCheckScreen.advancedCheckTab' => 'Расширенная проверка домена',
+			'NetCheckScreen.startDiagnostics' => 'Начать диагностику',
+			'NetCheckScreen.reDiagnostics' => 'Повторить',
+			'NetCheckScreen.diagnosing' => 'Диагностика сетевого контура...',
+			'NetCheckScreen.healthScore' => 'Оценка состояния',
+			'NetCheckScreen.scorePerfect' => 'Отлично',
+			'NetCheckScreen.scoreGood' => 'Хорошо',
+			'NetCheckScreen.scoreWarning' => 'Предупреждение',
+			'NetCheckScreen.scoreCritical' => 'Заблокировано',
+			'NetCheckScreen.oneClickRepair' => 'Умное автовосстановление',
+			'NetCheckScreen.repairSuccess' => 'Восстановление успешно завершено, сеть работает нормально',
+			'NetCheckScreen.repairFailed' => 'Применено, может потребоваться ручная проверка',
+			'NetCheckScreen.repairing' => 'Выполняется автовосстановление...',
+			'NetCheckScreen.issueFound' => ({required Object count}) => 'Обнаружено проблем: ${count}',
+			'NetCheckScreen.noIssue' => 'Все проверки пройдены',
+			'NetCheckScreen.details' => 'Технические детали',
+			'NetCheckScreen.copyDetails' => 'Копировать журнал',
+			'NetCheckScreen.detailsCopied' => 'Журнал диагностики скопирован в буфер обмена',
+			'NetCheckScreen.stepPhysical' => 'Сетевой адаптер и шлюз',
+			'NetCheckScreen.stepDns' => 'DNS и механизм Fake-IP',
+			'NetCheckScreen.stepCore' => 'Процесс ядра и порты',
+			'NetCheckScreen.stepProxy' => 'Конфигурация системного прокси',
+			'NetCheckScreen.stepHandshake' => 'Сквозное рукопожатие с Интернетом',
+			'NetCheckScreen.suggestedAction' => 'Рекомендация',
+			'NetCheckScreen.autoRepairAction' => 'Исправить',
 			'NetCheckScreen.enterDomain' => 'Введите доменное имя',
 			'NetCheckScreen.checking' => 'Проверка...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'Ошибка запроса A-записи: ${p}',
@@ -1306,6 +1362,8 @@ extension on TranslationsRu {
 			'meta.reportCopied' => 'Отчёт скопирован в буфер обмена',
 			'meta.gamingExperience' => 'Онлайн-игры',
 			'meta.streamingExperience' => 'Стриминг',
+			_ => null,
+		} ?? switch (path) {
 			'meta.meetingExperience' => 'Видеоконференции',
 			'meta.customSpeedtestUrl' => 'Пользовательский URL загрузки (https://...)',
 			'meta.customSpeedtestSource' => 'Пользовательский сервер',
@@ -1316,6 +1374,8 @@ extension on TranslationsRu {
 			'meta.resetSystemProxy' => 'Восстановление сети / Сброс системного прокси',
 			'meta.resetSystemProxyDesc' => 'Очистить остаточные настройки системного прокси и восстановить сеть',
 			'meta.resetSystemProxySuccess' => 'Системный прокси сброшен, сеть восстановлена',
+			'meta.networkDiagnostics' => 'Диагностика сети и автовосстановление',
+			'meta.networkDiagnosticsDesc' => 'Диагностика сетевых адаптеров, DNS, портов ядра и прокси с восстановлением в один клик',
 			'meta.sortLatencyDesc' => 'По убыванию задержки',
 			'meta.sortNameDesc' => 'По имени (Z-A)',
 			'meta.sortMultiplier' => 'По возрастанию множителя',
@@ -1333,8 +1393,6 @@ extension on TranslationsRu {
 			'meta.proxySelectedMode' => 'Проксировать только выбранные',
 			'meta.proxySelectedModeDesc' => 'Выбранные приложения идут через прокси, остальные напрямую',
 			'meta.bypassSelectedMode' => 'Обходить выбранные приложения',
-			_ => null,
-		} ?? switch (path) {
 			'meta.bypassSelectedModeDesc' => 'Выбранные приложения подключаются напрямую, остальные через прокси',
 			'meta.invertSelection' => 'Инвертировать',
 			'meta.all' => 'Все',

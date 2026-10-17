@@ -152,6 +152,33 @@ class _Translations$NetCheckScreen$es implements Translations$NetCheckScreen$en 
 	final TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'Diagnóstico de red';
+	@override String get fullDiagnosticsTab => 'Diagnóstico completo';
+	@override String get advancedCheckTab => 'Consulta avanzada de dominio';
+	@override String get startDiagnostics => 'Iniciar diagnóstico';
+	@override String get reDiagnostics => 'Repetir diagnóstico';
+	@override String get diagnosing => 'Diagnosticando enlace de red...';
+	@override String get healthScore => 'Puntuación de salud';
+	@override String get scorePerfect => 'Excelente';
+	@override String get scoreGood => 'Bueno';
+	@override String get scoreWarning => 'Advertencia';
+	@override String get scoreCritical => 'Bloqueado';
+	@override String get oneClickRepair => 'Autorreparación inteligente';
+	@override String get repairSuccess => 'Autorreparación exitosa, red restaurada';
+	@override String get repairFailed => 'Reparación aplicada, puede requerir verificación manual';
+	@override String get repairing => 'Ejecutando autorreparación...';
+	@override String issueFound({required Object count}) => '${count} problema(s) detectado(s)';
+	@override String get noIssue => 'Todas las comprobaciones superadas';
+	@override String get details => 'Detalles técnicos';
+	@override String get copyDetails => 'Copiar registro';
+	@override String get detailsCopied => 'Registro de diagnóstico copiado al portapapeles';
+	@override String get stepPhysical => 'Adaptador de red y puerta de enlace';
+	@override String get stepDns => 'DNS y motor Fake-IP';
+	@override String get stepCore => 'Proceso del núcleo y puertos';
+	@override String get stepProxy => 'Configuración del proxy del sistema';
+	@override String get stepHandshake => 'Apretón de manos de extremo a extremo';
+	@override String get suggestedAction => 'Sugerencia';
+	@override String get autoRepairAction => 'Reparar ahora';
 	@override String get enterDomain => 'Por favor, introduzca un dominio';
 	@override String get checking => 'Comprobando...';
 	@override String aQueryFailed({required Object p}) => 'Fallo en consulta A: ${p}';
@@ -639,6 +666,8 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get resetSystemProxy => 'Reparar red / Restablecer proxy del sistema';
 	@override String get resetSystemProxyDesc => 'Limpiar la configuración residual del proxy del sistema y actualizar la red';
 	@override String get resetSystemProxySuccess => 'Proxy del sistema restablecido y red recuperada';
+	@override String get networkDiagnostics => 'Diagnóstico de red y autorreparación';
+	@override String get networkDiagnosticsDesc => 'Diagnostica adaptador de red, DNS, puertos del núcleo y proxy con reparación en un clic';
 	@override String get sortLatencyDesc => 'Mayor latencia';
 	@override String get sortNameDesc => 'Nombre Z-A';
 	@override String get sortMultiplier => 'Menor multiplicador';
@@ -842,6 +871,33 @@ extension on TranslationsEs {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'La nueva versión [${p}] está lista',
 			'VersionUpdateScreen.update' => 'Reiniciar para Actualizar',
 			'VersionUpdateScreen.cancel' => 'Ahora no',
+			'NetCheckScreen.title' => 'Diagnóstico de red',
+			'NetCheckScreen.fullDiagnosticsTab' => 'Diagnóstico completo',
+			'NetCheckScreen.advancedCheckTab' => 'Consulta avanzada de dominio',
+			'NetCheckScreen.startDiagnostics' => 'Iniciar diagnóstico',
+			'NetCheckScreen.reDiagnostics' => 'Repetir diagnóstico',
+			'NetCheckScreen.diagnosing' => 'Diagnosticando enlace de red...',
+			'NetCheckScreen.healthScore' => 'Puntuación de salud',
+			'NetCheckScreen.scorePerfect' => 'Excelente',
+			'NetCheckScreen.scoreGood' => 'Bueno',
+			'NetCheckScreen.scoreWarning' => 'Advertencia',
+			'NetCheckScreen.scoreCritical' => 'Bloqueado',
+			'NetCheckScreen.oneClickRepair' => 'Autorreparación inteligente',
+			'NetCheckScreen.repairSuccess' => 'Autorreparación exitosa, red restaurada',
+			'NetCheckScreen.repairFailed' => 'Reparación aplicada, puede requerir verificación manual',
+			'NetCheckScreen.repairing' => 'Ejecutando autorreparación...',
+			'NetCheckScreen.issueFound' => ({required Object count}) => '${count} problema(s) detectado(s)',
+			'NetCheckScreen.noIssue' => 'Todas las comprobaciones superadas',
+			'NetCheckScreen.details' => 'Detalles técnicos',
+			'NetCheckScreen.copyDetails' => 'Copiar registro',
+			'NetCheckScreen.detailsCopied' => 'Registro de diagnóstico copiado al portapapeles',
+			'NetCheckScreen.stepPhysical' => 'Adaptador de red y puerta de enlace',
+			'NetCheckScreen.stepDns' => 'DNS y motor Fake-IP',
+			'NetCheckScreen.stepCore' => 'Proceso del núcleo y puertos',
+			'NetCheckScreen.stepProxy' => 'Configuración del proxy del sistema',
+			'NetCheckScreen.stepHandshake' => 'Apretón de manos de extremo a extremo',
+			'NetCheckScreen.suggestedAction' => 'Sugerencia',
+			'NetCheckScreen.autoRepairAction' => 'Reparar ahora',
 			'NetCheckScreen.enterDomain' => 'Por favor, introduzca un dominio',
 			'NetCheckScreen.checking' => 'Comprobando...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'Fallo en consulta A: ${p}',
@@ -1306,6 +1362,8 @@ extension on TranslationsEs {
 			'meta.reportCopied' => 'Informe copiado al portapapeles, listo para compartir',
 			'meta.gamingExperience' => 'Juegos online',
 			'meta.streamingExperience' => 'Streaming',
+			_ => null,
+		} ?? switch (path) {
 			'meta.meetingExperience' => 'Videoconferencias',
 			'meta.customSpeedtestUrl' => 'URL de descarga personalizada (https://...)',
 			'meta.customSpeedtestSource' => 'Servidor personalizado',
@@ -1316,6 +1374,8 @@ extension on TranslationsEs {
 			'meta.resetSystemProxy' => 'Reparar red / Restablecer proxy del sistema',
 			'meta.resetSystemProxyDesc' => 'Limpiar la configuración residual del proxy del sistema y actualizar la red',
 			'meta.resetSystemProxySuccess' => 'Proxy del sistema restablecido y red recuperada',
+			'meta.networkDiagnostics' => 'Diagnóstico de red y autorreparación',
+			'meta.networkDiagnosticsDesc' => 'Diagnostica adaptador de red, DNS, puertos del núcleo y proxy con reparación en un clic',
 			'meta.sortLatencyDesc' => 'Mayor latencia',
 			'meta.sortNameDesc' => 'Nombre Z-A',
 			'meta.sortMultiplier' => 'Menor multiplicador',
@@ -1333,8 +1393,6 @@ extension on TranslationsEs {
 			'meta.proxySelectedMode' => 'Solo proxy para seleccionadas',
 			'meta.proxySelectedModeDesc' => 'Las apps seleccionadas usan proxy, las demás van directas',
 			'meta.bypassSelectedMode' => 'Omitir aplicaciones seleccionadas',
-			_ => null,
-		} ?? switch (path) {
 			'meta.bypassSelectedModeDesc' => 'Las apps seleccionadas van directas, las demás usan proxy',
 			'meta.invertSelection' => 'Invertir selección',
 			'meta.all' => 'Todo',

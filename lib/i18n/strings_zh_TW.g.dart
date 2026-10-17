@@ -140,6 +140,33 @@ class Translations$NetCheckScreen$zh_TW implements Translations$NetCheckScreen$e
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => '網路鏈路體檢與診斷';
+	@override String get fullDiagnosticsTab => '一鍵鏈路體檢';
+	@override String get advancedCheckTab => '進階單網域排查';
+	@override String get startDiagnostics => '開始全鏈路體檢';
+	@override String get reDiagnostics => '重新體檢';
+	@override String get diagnosing => '正在全面診斷鏈路...';
+	@override String get healthScore => '健康評分';
+	@override String get scorePerfect => '鏈路極佳';
+	@override String get scoreGood => '基本良好';
+	@override String get scoreWarning => '存在警告';
+	@override String get scoreCritical => '鏈路受阻';
+	@override String get oneClickRepair => '一鍵智慧自愈';
+	@override String get repairSuccess => '自愈修復成功，網路已恢復正常';
+	@override String get repairFailed => '部分項目可能需手動確認';
+	@override String get repairing => '正在執行自愈修復...';
+	@override String issueFound({required Object count}) => '發現 ${count} 處異常';
+	@override String get noIssue => '全項檢測正常';
+	@override String get details => '技術詳情';
+	@override String get copyDetails => '複製日誌';
+	@override String get detailsCopied => '診斷日誌已複製到剪貼簿';
+	@override String get stepPhysical => '實體網卡與閘道';
+	@override String get stepDns => 'DNS 解析與 Fake-IP';
+	@override String get stepCore => '核心服務與連接埠';
+	@override String get stepProxy => '系統代理設定';
+	@override String get stepHandshake => '公網端到端交握';
+	@override String get suggestedAction => '排障建議';
+	@override String get autoRepairAction => '立即修復';
 	@override String get enterDomain => '請輸入網域名稱';
 	@override String get checking => '檢測中...';
 	@override String aQueryFailed({required Object p}) => 'A 查詢失敗: ${p}';
@@ -639,6 +666,8 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get resetSystemProxy => '修復網路 / 重設系統代理';
 	@override String get resetSystemProxyDesc => '清理殘留系統代理設定並重新整理網路，解決異常結束後無法上網問題';
 	@override String get resetSystemProxySuccess => '系統代理已清理並重設，網路已恢復正常';
+	@override String get networkDiagnostics => '網路鏈路體檢與智慧診斷';
+	@override String get networkDiagnosticsDesc => '一鍵逐步診斷網卡、DNS、核心連接埠與代理健康狀態並智慧自愈';
 	@override String get sortLatencyDesc => '延遲由高到低';
 	@override String get sortNameDesc => '名稱 Z-A';
 	@override String get sortMultiplier => '倍率由低到高';
@@ -839,6 +868,33 @@ extension on TranslationsZhTw {
 			'PerAppAndroidScreen.whiteListModeTip' => '啟用後:僅代理已勾選的App;未啟用:僅代理未勾選的App',
 			'UserAgreementScreen.privacyFirst' => '您的隱私很重要',
 			'UserAgreementScreen.agreeAndContinue' => '接受並繼續',
+			'NetCheckScreen.title' => '網路鏈路體檢與診斷',
+			'NetCheckScreen.fullDiagnosticsTab' => '一鍵鏈路體檢',
+			'NetCheckScreen.advancedCheckTab' => '進階單網域排查',
+			'NetCheckScreen.startDiagnostics' => '開始全鏈路體檢',
+			'NetCheckScreen.reDiagnostics' => '重新體檢',
+			'NetCheckScreen.diagnosing' => '正在全面診斷鏈路...',
+			'NetCheckScreen.healthScore' => '健康評分',
+			'NetCheckScreen.scorePerfect' => '鏈路極佳',
+			'NetCheckScreen.scoreGood' => '基本良好',
+			'NetCheckScreen.scoreWarning' => '存在警告',
+			'NetCheckScreen.scoreCritical' => '鏈路受阻',
+			'NetCheckScreen.oneClickRepair' => '一鍵智慧自愈',
+			'NetCheckScreen.repairSuccess' => '自愈修復成功，網路已恢復正常',
+			'NetCheckScreen.repairFailed' => '部分項目可能需手動確認',
+			'NetCheckScreen.repairing' => '正在執行自愈修復...',
+			'NetCheckScreen.issueFound' => ({required Object count}) => '發現 ${count} 處異常',
+			'NetCheckScreen.noIssue' => '全項檢測正常',
+			'NetCheckScreen.details' => '技術詳情',
+			'NetCheckScreen.copyDetails' => '複製日誌',
+			'NetCheckScreen.detailsCopied' => '診斷日誌已複製到剪貼簿',
+			'NetCheckScreen.stepPhysical' => '實體網卡與閘道',
+			'NetCheckScreen.stepDns' => 'DNS 解析與 Fake-IP',
+			'NetCheckScreen.stepCore' => '核心服務與連接埠',
+			'NetCheckScreen.stepProxy' => '系統代理設定',
+			'NetCheckScreen.stepHandshake' => '公網端到端交握',
+			'NetCheckScreen.suggestedAction' => '排障建議',
+			'NetCheckScreen.autoRepairAction' => '立即修復',
 			'NetCheckScreen.enterDomain' => '請輸入網域名稱',
 			'NetCheckScreen.checking' => '檢測中...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'A 查詢失敗: ${p}',
@@ -1306,6 +1362,8 @@ extension on TranslationsZhTw {
 			'meta.reportCopied' => '測速報告已複製到剪貼簿，可直接貼上分享',
 			'meta.gamingExperience' => '電競體驗',
 			'meta.streamingExperience' => '超清串流媒體',
+			_ => null,
+		} ?? switch (path) {
 			'meta.meetingExperience' => '遠端視訊',
 			'meta.customSpeedtestUrl' => '自訂測速下載 URL (https://...)',
 			'meta.customSpeedtestSource' => '自訂測速源',
@@ -1316,6 +1374,8 @@ extension on TranslationsZhTw {
 			'meta.resetSystemProxy' => '修復網路 / 重設系統代理',
 			'meta.resetSystemProxyDesc' => '清理殘留系統代理設定並重新整理網路，解決異常結束後無法上網問題',
 			'meta.resetSystemProxySuccess' => '系統代理已清理並重設，網路已恢復正常',
+			'meta.networkDiagnostics' => '網路鏈路體檢與智慧診斷',
+			'meta.networkDiagnosticsDesc' => '一鍵逐步診斷網卡、DNS、核心連接埠與代理健康狀態並智慧自愈',
 			'meta.sortLatencyDesc' => '延遲由高到低',
 			'meta.sortNameDesc' => '名稱 Z-A',
 			'meta.sortMultiplier' => '倍率由低到高',
@@ -1333,8 +1393,6 @@ extension on TranslationsZhTw {
 			'meta.proxySelectedMode' => '僅代理選取的應用',
 			'meta.proxySelectedModeDesc' => '已選應用走代理，其餘應用直連',
 			'meta.bypassSelectedMode' => '繞過選取的應用',
-			_ => null,
-		} ?? switch (path) {
 			'meta.bypassSelectedModeDesc' => '已選應用直連，其餘應用走代理',
 			'meta.invertSelection' => '反選',
 			'meta.all' => '全部',

@@ -140,6 +140,33 @@ class _Translations$NetCheckScreen$ja implements Translations$NetCheckScreen$en 
 	final TranslationsJa _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'ネットワーク診断と修復';
+	@override String get fullDiagnosticsTab => 'パイプライン診断';
+	@override String get advancedCheckTab => 'ドメイン詳細クエリ';
+	@override String get startDiagnostics => '診断を開始';
+	@override String get reDiagnostics => '再診断';
+	@override String get diagnosing => 'ネットワーク経路を診断中...';
+	@override String get healthScore => '健全性スコア';
+	@override String get scorePerfect => '非常に良好';
+	@override String get scoreGood => '良好';
+	@override String get scoreWarning => '警告あり';
+	@override String get scoreCritical => '接続障害';
+	@override String get oneClickRepair => 'ワンクリック自動修復';
+	@override String get repairSuccess => '修復が完了し、ネットワークが復旧しました';
+	@override String get repairFailed => '修復を実行しました。一部項目を手動で確認してください';
+	@override String get repairing => '自動修復を実行中...';
+	@override String issueFound({required Object count}) => '${count} 件の異常を検出';
+	@override String get noIssue => 'すべての項目が正常です';
+	@override String get details => '詳細ログ';
+	@override String get copyDetails => 'ログをコピー';
+	@override String get detailsCopied => '診断ログをクリップボードにコピーしました';
+	@override String get stepPhysical => '物理NICとゲートウェイ';
+	@override String get stepDns => 'DNS解決とFake-IP';
+	@override String get stepCore => 'コアプロセスとポート';
+	@override String get stepProxy => 'システムプロキシ設定';
+	@override String get stepHandshake => 'インターネットハンドシェイク';
+	@override String get suggestedAction => 'トラブルシューティング';
+	@override String get autoRepairAction => '今すぐ修復';
 	@override String get enterDomain => 'ドメインを入力してください';
 	@override String get checking => '診断中...';
 	@override String aQueryFailed({required Object p}) => 'A クエリ失敗: ${p}';
@@ -639,6 +666,8 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get resetSystemProxy => 'ネットワーク修復 / プロキシをリセット';
 	@override String get resetSystemProxyDesc => '残留したプロキシ設定をクリアし、異常終了後の接続問題を解決します';
 	@override String get resetSystemProxySuccess => 'システムプロキシがリセットされ、ネットワークが復旧しました';
+	@override String get networkDiagnostics => 'ネットワーク診断とスマート修復';
+	@override String get networkDiagnosticsDesc => 'NIC、DNS、コアポート、プロキシの正常性をワンクリックで診断・自動修復';
 	@override String get sortLatencyDesc => 'レイテンシ降順';
 	@override String get sortNameDesc => '名前 Z-A';
 	@override String get sortMultiplier => '倍率昇順';
@@ -839,6 +868,33 @@ extension on TranslationsJa {
 			'PerAppAndroidScreen.whiteListModeTip' => '有効な場合：チェックされたアプリのみがプロキシされます。無効な場合：チェックされていないアプリのみがプロキシされます',
 			'UserAgreementScreen.privacyFirst' => 'プライバシーを第一に',
 			'UserAgreementScreen.agreeAndContinue' => '同意して続行',
+			'NetCheckScreen.title' => 'ネットワーク診断と修復',
+			'NetCheckScreen.fullDiagnosticsTab' => 'パイプライン診断',
+			'NetCheckScreen.advancedCheckTab' => 'ドメイン詳細クエリ',
+			'NetCheckScreen.startDiagnostics' => '診断を開始',
+			'NetCheckScreen.reDiagnostics' => '再診断',
+			'NetCheckScreen.diagnosing' => 'ネットワーク経路を診断中...',
+			'NetCheckScreen.healthScore' => '健全性スコア',
+			'NetCheckScreen.scorePerfect' => '非常に良好',
+			'NetCheckScreen.scoreGood' => '良好',
+			'NetCheckScreen.scoreWarning' => '警告あり',
+			'NetCheckScreen.scoreCritical' => '接続障害',
+			'NetCheckScreen.oneClickRepair' => 'ワンクリック自動修復',
+			'NetCheckScreen.repairSuccess' => '修復が完了し、ネットワークが復旧しました',
+			'NetCheckScreen.repairFailed' => '修復を実行しました。一部項目を手動で確認してください',
+			'NetCheckScreen.repairing' => '自動修復を実行中...',
+			'NetCheckScreen.issueFound' => ({required Object count}) => '${count} 件の異常を検出',
+			'NetCheckScreen.noIssue' => 'すべての項目が正常です',
+			'NetCheckScreen.details' => '詳細ログ',
+			'NetCheckScreen.copyDetails' => 'ログをコピー',
+			'NetCheckScreen.detailsCopied' => '診断ログをクリップボードにコピーしました',
+			'NetCheckScreen.stepPhysical' => '物理NICとゲートウェイ',
+			'NetCheckScreen.stepDns' => 'DNS解決とFake-IP',
+			'NetCheckScreen.stepCore' => 'コアプロセスとポート',
+			'NetCheckScreen.stepProxy' => 'システムプロキシ設定',
+			'NetCheckScreen.stepHandshake' => 'インターネットハンドシェイク',
+			'NetCheckScreen.suggestedAction' => 'トラブルシューティング',
+			'NetCheckScreen.autoRepairAction' => '今すぐ修復',
 			'NetCheckScreen.enterDomain' => 'ドメインを入力してください',
 			'NetCheckScreen.checking' => '診断中...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'A クエリ失敗: ${p}',
@@ -1306,6 +1362,8 @@ extension on TranslationsJa {
 			'meta.reportCopied' => 'レポートをコピーしました。共有できます',
 			'meta.gamingExperience' => 'オンラインゲーム',
 			'meta.streamingExperience' => '動画ストリーミング',
+			_ => null,
+		} ?? switch (path) {
 			'meta.meetingExperience' => 'ビデオ会議',
 			'meta.customSpeedtestUrl' => 'カスタム測定URL (https://...)',
 			'meta.customSpeedtestSource' => 'カスタム測定サーバー',
@@ -1316,6 +1374,8 @@ extension on TranslationsJa {
 			'meta.resetSystemProxy' => 'ネットワーク修復 / プロキシをリセット',
 			'meta.resetSystemProxyDesc' => '残留したプロキシ設定をクリアし、異常終了後の接続問題を解決します',
 			'meta.resetSystemProxySuccess' => 'システムプロキシがリセットされ、ネットワークが復旧しました',
+			'meta.networkDiagnostics' => 'ネットワーク診断とスマート修復',
+			'meta.networkDiagnosticsDesc' => 'NIC、DNS、コアポート、プロキシの正常性をワンクリックで診断・自動修復',
 			'meta.sortLatencyDesc' => 'レイテンシ降順',
 			'meta.sortNameDesc' => '名前 Z-A',
 			'meta.sortMultiplier' => '倍率昇順',
@@ -1333,8 +1393,6 @@ extension on TranslationsJa {
 			'meta.proxySelectedMode' => '選択アプリのみプロキシ',
 			'meta.proxySelectedModeDesc' => '選択したアプリのみプロキシを経由し、その他は直接接続します',
 			'meta.bypassSelectedMode' => '選択アプリをバイパス',
-			_ => null,
-		} ?? switch (path) {
 			'meta.bypassSelectedModeDesc' => '選択したアプリは直接接続し、その他はプロキシを経由します',
 			'meta.invertSelection' => '選択反転',
 			'meta.all' => 'すべて',

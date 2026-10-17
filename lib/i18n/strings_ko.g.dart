@@ -140,6 +140,33 @@ class _Translations$NetCheckScreen$ko implements Translations$NetCheckScreen$en 
 	final TranslationsKo _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => '네트워크 진단 및 복구';
+	@override String get fullDiagnosticsTab => '파이프라인 진단';
+	@override String get advancedCheckTab => '고급 도메인 쿼리';
+	@override String get startDiagnostics => '진단 시작';
+	@override String get reDiagnostics => '재진단';
+	@override String get diagnosing => '네트워크 경로 진단 중...';
+	@override String get healthScore => '상태 점수';
+	@override String get scorePerfect => '매우 우수';
+	@override String get scoreGood => '양호';
+	@override String get scoreWarning => '경고 발생';
+	@override String get scoreCritical => '연결 차단';
+	@override String get oneClickRepair => '원클릭 스마트 자동 복구';
+	@override String get repairSuccess => '자동 복구가 완료되었으며 네트워크가 정상 복원되었습니다';
+	@override String get repairFailed => '복구가 적용되었습니다. 일부 항목을 수동 확인하세요';
+	@override String get repairing => '자동 복구 실행 중...';
+	@override String issueFound({required Object count}) => '${count} 개 이상 감지';
+	@override String get noIssue => '모든 검사 통과';
+	@override String get details => '상세 로그';
+	@override String get copyDetails => '로그 복사';
+	@override String get detailsCopied => '진단 로그가 클립보드에 복사되었습니다';
+	@override String get stepPhysical => '물리 랜카드 및 게이트웨이';
+	@override String get stepDns => 'DNS 확인 및 Fake-IP';
+	@override String get stepCore => '코어 프로세스 및 포트';
+	@override String get stepProxy => '시스템 프록시 설정';
+	@override String get stepHandshake => '인터넷 엔드투엔드 핸드셰이크';
+	@override String get suggestedAction => '해결 제안';
+	@override String get autoRepairAction => '지금 복구';
 	@override String get enterDomain => '도메인 이름을 입력하세요';
 	@override String get checking => '확인 중...';
 	@override String aQueryFailed({required Object p}) => 'A 레코드 조회 실패: ${p}';
@@ -639,6 +666,8 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get resetSystemProxy => '네트워크 복구 / 시스템 프록시 초기화';
 	@override String get resetSystemProxyDesc => '잔여 시스템 프록시 설정을 제거하고 네트워크를 새로고침하여 비정상 종료 후 인터넷 불가 문제를 해결합니다';
 	@override String get resetSystemProxySuccess => '시스템 프록시가 초기화되었으며 네트워크가 정상 복구되었습니다';
+	@override String get networkDiagnostics => '네트워크 진단 및 스마트 복구';
+	@override String get networkDiagnosticsDesc => 'NIC, DNS, 코어 포트, 프록시 상태를 원클릭으로 종합 진단하고 자동 복구';
 	@override String get sortLatencyDesc => '지연 시간 높은 순';
 	@override String get sortNameDesc => '이름 Z-A';
 	@override String get sortMultiplier => '배율 낮은 순';
@@ -839,6 +868,33 @@ extension on TranslationsKo {
 			'PerAppAndroidScreen.whiteListModeTip' => '활성화 시: 체크된 앱만 프록시됩니다. 비활성화 시: 체크되지 않은 앱만 프록시됩니다',
 			'UserAgreementScreen.privacyFirst' => '개인 정보 보호 우선',
 			'UserAgreementScreen.agreeAndContinue' => '동의 및 계속',
+			'NetCheckScreen.title' => '네트워크 진단 및 복구',
+			'NetCheckScreen.fullDiagnosticsTab' => '파이프라인 진단',
+			'NetCheckScreen.advancedCheckTab' => '고급 도메인 쿼리',
+			'NetCheckScreen.startDiagnostics' => '진단 시작',
+			'NetCheckScreen.reDiagnostics' => '재진단',
+			'NetCheckScreen.diagnosing' => '네트워크 경로 진단 중...',
+			'NetCheckScreen.healthScore' => '상태 점수',
+			'NetCheckScreen.scorePerfect' => '매우 우수',
+			'NetCheckScreen.scoreGood' => '양호',
+			'NetCheckScreen.scoreWarning' => '경고 발생',
+			'NetCheckScreen.scoreCritical' => '연결 차단',
+			'NetCheckScreen.oneClickRepair' => '원클릭 스마트 자동 복구',
+			'NetCheckScreen.repairSuccess' => '자동 복구가 완료되었으며 네트워크가 정상 복원되었습니다',
+			'NetCheckScreen.repairFailed' => '복구가 적용되었습니다. 일부 항목을 수동 확인하세요',
+			'NetCheckScreen.repairing' => '자동 복구 실행 중...',
+			'NetCheckScreen.issueFound' => ({required Object count}) => '${count} 개 이상 감지',
+			'NetCheckScreen.noIssue' => '모든 검사 통과',
+			'NetCheckScreen.details' => '상세 로그',
+			'NetCheckScreen.copyDetails' => '로그 복사',
+			'NetCheckScreen.detailsCopied' => '진단 로그가 클립보드에 복사되었습니다',
+			'NetCheckScreen.stepPhysical' => '물리 랜카드 및 게이트웨이',
+			'NetCheckScreen.stepDns' => 'DNS 확인 및 Fake-IP',
+			'NetCheckScreen.stepCore' => '코어 프로세스 및 포트',
+			'NetCheckScreen.stepProxy' => '시스템 프록시 설정',
+			'NetCheckScreen.stepHandshake' => '인터넷 엔드투엔드 핸드셰이크',
+			'NetCheckScreen.suggestedAction' => '해결 제안',
+			'NetCheckScreen.autoRepairAction' => '지금 복구',
 			'NetCheckScreen.enterDomain' => '도메인 이름을 입력하세요',
 			'NetCheckScreen.checking' => '확인 중...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'A 레코드 조회 실패: ${p}',
@@ -1306,6 +1362,8 @@ extension on TranslationsKo {
 			'meta.reportCopied' => '리포트가 복사되었습니다. 바로 공유할 수 있습니다',
 			'meta.gamingExperience' => '게이밍 경험',
 			'meta.streamingExperience' => '스트리밍',
+			_ => null,
+		} ?? switch (path) {
 			'meta.meetingExperience' => '화상 회의',
 			'meta.customSpeedtestUrl' => '사용자 지정 다운로드 URL (https://...)',
 			'meta.customSpeedtestSource' => '사용자 지정 측정 서버',
@@ -1316,6 +1374,8 @@ extension on TranslationsKo {
 			'meta.resetSystemProxy' => '네트워크 복구 / 시스템 프록시 초기화',
 			'meta.resetSystemProxyDesc' => '잔여 시스템 프록시 설정을 제거하고 네트워크를 새로고침하여 비정상 종료 후 인터넷 불가 문제를 해결합니다',
 			'meta.resetSystemProxySuccess' => '시스템 프록시가 초기화되었으며 네트워크가 정상 복구되었습니다',
+			'meta.networkDiagnostics' => '네트워크 진단 및 스마트 복구',
+			'meta.networkDiagnosticsDesc' => 'NIC, DNS, 코어 포트, 프록시 상태를 원클릭으로 종합 진단하고 자동 복구',
 			'meta.sortLatencyDesc' => '지연 시간 높은 순',
 			'meta.sortNameDesc' => '이름 Z-A',
 			'meta.sortMultiplier' => '배율 낮은 순',
@@ -1333,8 +1393,6 @@ extension on TranslationsKo {
 			'meta.proxySelectedMode' => '선택 앱만 프록시 적용',
 			'meta.proxySelectedModeDesc' => '선택한 앱만 프록시를 거치고 다른 앱은 직접 연결합니다',
 			'meta.bypassSelectedMode' => '선택 앱 우회',
-			_ => null,
-		} ?? switch (path) {
 			'meta.bypassSelectedModeDesc' => '선택한 앱은 직접 연결하고 다른 앱은 프록시를 거칩니다',
 			'meta.invertSelection' => '반전 선택',
 			'meta.all' => '전체',

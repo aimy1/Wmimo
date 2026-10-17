@@ -41,6 +41,7 @@ import 'package:wmimo/screens/group_screen.dart';
 import 'package:wmimo/screens/language_settings_screen.dart';
 import 'package:wmimo/screens/list_add_screen.dart';
 import 'package:wmimo/screens/map_string_and_string_add_screen.dart';
+import 'package:wmimo/screens/net_check_screen.dart';
 import 'package:wmimo/screens/perapp_android_screen.dart';
 import 'package:wmimo/screens/profiles_patch_board_screen.dart';
 import 'package:wmimo/screens/richtext_viewer.screen.dart';
@@ -882,6 +883,21 @@ class GroupHelper {
                     await VPNService.getSystemProxyEnable()) {
                   await VPNService.setSystemProxy(true);
                 }
+              },
+            ),
+          ),
+          GroupItemOptions(
+            pushOptions: GroupItemPushOptions(
+              name: tcontext.meta.networkDiagnostics,
+              text: tcontext.meta.networkDiagnosticsDesc,
+              onPush: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    settings: NetCheckScreen.routSettings(),
+                    builder: (context) => const NetCheckScreen(),
+                  ),
+                );
               },
             ),
           ),

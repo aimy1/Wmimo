@@ -205,6 +205,87 @@ class Translations$NetCheckScreen$en {
 
 	// Translations
 
+	/// en: 'Network Diagnostics'
+	String get title => 'Network Diagnostics';
+
+	/// en: 'Full Diagnostics'
+	String get fullDiagnosticsTab => 'Full Diagnostics';
+
+	/// en: 'Advanced Domain Query'
+	String get advancedCheckTab => 'Advanced Domain Query';
+
+	/// en: 'Start Diagnostics'
+	String get startDiagnostics => 'Start Diagnostics';
+
+	/// en: 'Retest'
+	String get reDiagnostics => 'Retest';
+
+	/// en: 'Diagnosing network pipeline...'
+	String get diagnosing => 'Diagnosing network pipeline...';
+
+	/// en: 'Health Score'
+	String get healthScore => 'Health Score';
+
+	/// en: 'Excellent'
+	String get scorePerfect => 'Excellent';
+
+	/// en: 'Good'
+	String get scoreGood => 'Good';
+
+	/// en: 'Warning'
+	String get scoreWarning => 'Warning';
+
+	/// en: 'Blocked'
+	String get scoreCritical => 'Blocked';
+
+	/// en: 'One-Click Auto Repair'
+	String get oneClickRepair => 'One-Click Auto Repair';
+
+	/// en: 'Auto-repair succeeded, network restored'
+	String get repairSuccess => 'Auto-repair succeeded, network restored';
+
+	/// en: 'Repair applied, manual verification may be needed'
+	String get repairFailed => 'Repair applied, manual verification may be needed';
+
+	/// en: 'Executing auto-repair...'
+	String get repairing => 'Executing auto-repair...';
+
+	/// en: '$count issue(s) found'
+	String issueFound({required Object count}) => '${count} issue(s) found';
+
+	/// en: 'All checks passed'
+	String get noIssue => 'All checks passed';
+
+	/// en: 'Technical Details'
+	String get details => 'Technical Details';
+
+	/// en: 'Copy Details'
+	String get copyDetails => 'Copy Details';
+
+	/// en: 'Diagnostic log copied to clipboard'
+	String get detailsCopied => 'Diagnostic log copied to clipboard';
+
+	/// en: 'Physical Network & Gateway'
+	String get stepPhysical => 'Physical Network & Gateway';
+
+	/// en: 'DNS & Fake-IP Engine'
+	String get stepDns => 'DNS & Fake-IP Engine';
+
+	/// en: 'Core Process & Ports'
+	String get stepCore => 'Core Process & Ports';
+
+	/// en: 'System Proxy Configuration'
+	String get stepProxy => 'System Proxy Configuration';
+
+	/// en: 'Internet End-to-End Handshake'
+	String get stepHandshake => 'Internet End-to-End Handshake';
+
+	/// en: 'Suggestion'
+	String get suggestedAction => 'Suggestion';
+
+	/// en: 'Repair Now'
+	String get autoRepairAction => 'Repair Now';
+
 	/// en: 'Please enter a domain'
 	String get enterDomain => 'Please enter a domain';
 
@@ -1592,6 +1673,12 @@ class Translations$meta$en {
 	/// en: 'System proxy cleared and reset, network restored'
 	String get resetSystemProxySuccess => 'System proxy cleared and reset, network restored';
 
+	/// en: 'Network Diagnostics & Auto-Repair'
+	String get networkDiagnostics => 'Network Diagnostics & Auto-Repair';
+
+	/// en: 'Diagnose network interface, DNS, core ports, and proxy health with one-click repair'
+	String get networkDiagnosticsDesc => 'Diagnose network interface, DNS, core ports, and proxy health with one-click repair';
+
 	/// en: 'Highest Latency'
 	String get sortLatencyDesc => 'Highest Latency';
 
@@ -2012,6 +2099,33 @@ extension on Translations {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'The new version[${p}] is ready',
 			'VersionUpdateScreen.update' => 'Restart To Update',
 			'VersionUpdateScreen.cancel' => 'Not Now',
+			'NetCheckScreen.title' => 'Network Diagnostics',
+			'NetCheckScreen.fullDiagnosticsTab' => 'Full Diagnostics',
+			'NetCheckScreen.advancedCheckTab' => 'Advanced Domain Query',
+			'NetCheckScreen.startDiagnostics' => 'Start Diagnostics',
+			'NetCheckScreen.reDiagnostics' => 'Retest',
+			'NetCheckScreen.diagnosing' => 'Diagnosing network pipeline...',
+			'NetCheckScreen.healthScore' => 'Health Score',
+			'NetCheckScreen.scorePerfect' => 'Excellent',
+			'NetCheckScreen.scoreGood' => 'Good',
+			'NetCheckScreen.scoreWarning' => 'Warning',
+			'NetCheckScreen.scoreCritical' => 'Blocked',
+			'NetCheckScreen.oneClickRepair' => 'One-Click Auto Repair',
+			'NetCheckScreen.repairSuccess' => 'Auto-repair succeeded, network restored',
+			'NetCheckScreen.repairFailed' => 'Repair applied, manual verification may be needed',
+			'NetCheckScreen.repairing' => 'Executing auto-repair...',
+			'NetCheckScreen.issueFound' => ({required Object count}) => '${count} issue(s) found',
+			'NetCheckScreen.noIssue' => 'All checks passed',
+			'NetCheckScreen.details' => 'Technical Details',
+			'NetCheckScreen.copyDetails' => 'Copy Details',
+			'NetCheckScreen.detailsCopied' => 'Diagnostic log copied to clipboard',
+			'NetCheckScreen.stepPhysical' => 'Physical Network & Gateway',
+			'NetCheckScreen.stepDns' => 'DNS & Fake-IP Engine',
+			'NetCheckScreen.stepCore' => 'Core Process & Ports',
+			'NetCheckScreen.stepProxy' => 'System Proxy Configuration',
+			'NetCheckScreen.stepHandshake' => 'Internet End-to-End Handshake',
+			'NetCheckScreen.suggestedAction' => 'Suggestion',
+			'NetCheckScreen.autoRepairAction' => 'Repair Now',
 			'NetCheckScreen.enterDomain' => 'Please enter a domain',
 			'NetCheckScreen.checking' => 'Checking...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'A query failed: ${p}',
@@ -2476,6 +2590,8 @@ extension on Translations {
 			'meta.reportCopied' => 'Report copied to clipboard, ready to share',
 			'meta.gamingExperience' => 'Gaming',
 			'meta.streamingExperience' => 'Streaming',
+			_ => null,
+		} ?? switch (path) {
 			'meta.meetingExperience' => 'Conferencing',
 			'meta.customSpeedtestUrl' => 'Custom download URL (https://...)',
 			'meta.customSpeedtestSource' => 'Custom Server',
@@ -2486,6 +2602,8 @@ extension on Translations {
 			'meta.resetSystemProxy' => 'Repair Network / Reset System Proxy',
 			'meta.resetSystemProxyDesc' => 'Clear residual system proxy settings and refresh network to fix offline issues after abnormal exits',
 			'meta.resetSystemProxySuccess' => 'System proxy cleared and reset, network restored',
+			'meta.networkDiagnostics' => 'Network Diagnostics & Auto-Repair',
+			'meta.networkDiagnosticsDesc' => 'Diagnose network interface, DNS, core ports, and proxy health with one-click repair',
 			'meta.sortLatencyDesc' => 'Highest Latency',
 			'meta.sortNameDesc' => 'Name Z-A',
 			'meta.sortMultiplier' => 'Lowest Multiplier',
@@ -2503,8 +2621,6 @@ extension on Translations {
 			'meta.proxySelectedMode' => 'Proxy Selected Apps Only',
 			'meta.proxySelectedModeDesc' => 'Selected apps route through proxy, others connect directly',
 			'meta.bypassSelectedMode' => 'Bypass Selected Apps',
-			_ => null,
-		} ?? switch (path) {
 			'meta.bypassSelectedModeDesc' => 'Selected apps connect directly, others route through proxy',
 			'meta.invertSelection' => 'Invert Selection',
 			'meta.all' => 'All',

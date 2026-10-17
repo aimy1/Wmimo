@@ -140,6 +140,33 @@ class _Translations$NetCheckScreen$ar implements Translations$NetCheckScreen$en 
 	final TranslationsAr _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'فحص وتشخيص الشبكة';
+	@override String get fullDiagnosticsTab => 'تشخيص كامل للمسار';
+	@override String get advancedCheckTab => 'فحص متقدم للنطاق';
+	@override String get startDiagnostics => 'بدء التشخيص الكامل';
+	@override String get reDiagnostics => 'إعادة الفحص';
+	@override String get diagnosing => 'جاري تشخيص مسار الشبكة بالكامل...';
+	@override String get healthScore => 'مؤشر الصحة';
+	@override String get scorePerfect => 'ممتاز';
+	@override String get scoreGood => 'جيد';
+	@override String get scoreWarning => 'تحذير';
+	@override String get scoreCritical => 'محظور / معطل';
+	@override String get oneClickRepair => 'إصلاح ذكي بنقرة واحدة';
+	@override String get repairSuccess => 'نجح الإصلاح التلقائي، واستقرت الشبكة';
+	@override String get repairFailed => 'تم تطبيق الإصلاح، قد يلزم التحقق اليدوي';
+	@override String get repairing => 'جاري تنفيذ الإصلاح الذاتي...';
+	@override String issueFound({required Object count}) => 'تم العثور على ${count} مشكلة';
+	@override String get noIssue => 'جميع الفحوصات سليمة';
+	@override String get details => 'التفاصيل التقنية';
+	@override String get copyDetails => 'نسخ السجل';
+	@override String get detailsCopied => 'تم نسخ سجل التشخيص إلى الحافظة';
+	@override String get stepPhysical => 'محول الشبكة والبوابة';
+	@override String get stepDns => 'DNS ومحرك Fake-IP';
+	@override String get stepCore => 'عملية النواة والمنافذ';
+	@override String get stepProxy => 'تكوين وكيل النظام';
+	@override String get stepHandshake => 'المصافحة الشاملة مع الإنترنت';
+	@override String get suggestedAction => 'اقتراح الحل';
+	@override String get autoRepairAction => 'إصلاح الآن';
 	@override String get enterDomain => 'يرجى إدخال اسم النطاق';
 	@override String get checking => 'جاري الفحص...';
 	@override String aQueryFailed({required Object p}) => 'فشل استعلام A: ${p}';
@@ -639,6 +666,8 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get resetSystemProxy => 'إصلاح الشبكة / إعادة تعيين وكيل النظام';
 	@override String get resetSystemProxyDesc => 'مسح إعدادات وكيل النظام المتبقية وتحديث الشبكة لحل مشاكل انقطاع الاتصال';
 	@override String get resetSystemProxySuccess => 'تمت استعادة إعدادات الوكيل وعادت الشبكة للعمل';
+	@override String get networkDiagnostics => 'فحص الشبكة والإصلاح الذاتي';
+	@override String get networkDiagnosticsDesc => 'فحص محول الشبكة، DNS، منافذ النواة وحالة الوكيل بنقرة واحدة';
 	@override String get sortLatencyDesc => 'أعلى زمن انتقال';
 	@override String get sortNameDesc => 'الاسم Z-A';
 	@override String get sortMultiplier => 'أقل مضاعف';
@@ -839,6 +868,33 @@ extension on TranslationsAr {
 			'PerAppAndroidScreen.whiteListModeTip' => 'عند التمكين: فقط التطبيقات التي تم فحصها هي وكلاء ؛عندما لا يتم تمكينها: فقط التطبيقات التي لم يتم فحصها هي وكلاء',
 			'UserAgreementScreen.privacyFirst' => 'خصوصيتك تأتي أولا',
 			'UserAgreementScreen.agreeAndContinue' => 'قبول ومتابعة',
+			'NetCheckScreen.title' => 'فحص وتشخيص الشبكة',
+			'NetCheckScreen.fullDiagnosticsTab' => 'تشخيص كامل للمسار',
+			'NetCheckScreen.advancedCheckTab' => 'فحص متقدم للنطاق',
+			'NetCheckScreen.startDiagnostics' => 'بدء التشخيص الكامل',
+			'NetCheckScreen.reDiagnostics' => 'إعادة الفحص',
+			'NetCheckScreen.diagnosing' => 'جاري تشخيص مسار الشبكة بالكامل...',
+			'NetCheckScreen.healthScore' => 'مؤشر الصحة',
+			'NetCheckScreen.scorePerfect' => 'ممتاز',
+			'NetCheckScreen.scoreGood' => 'جيد',
+			'NetCheckScreen.scoreWarning' => 'تحذير',
+			'NetCheckScreen.scoreCritical' => 'محظور / معطل',
+			'NetCheckScreen.oneClickRepair' => 'إصلاح ذكي بنقرة واحدة',
+			'NetCheckScreen.repairSuccess' => 'نجح الإصلاح التلقائي، واستقرت الشبكة',
+			'NetCheckScreen.repairFailed' => 'تم تطبيق الإصلاح، قد يلزم التحقق اليدوي',
+			'NetCheckScreen.repairing' => 'جاري تنفيذ الإصلاح الذاتي...',
+			'NetCheckScreen.issueFound' => ({required Object count}) => 'تم العثور على ${count} مشكلة',
+			'NetCheckScreen.noIssue' => 'جميع الفحوصات سليمة',
+			'NetCheckScreen.details' => 'التفاصيل التقنية',
+			'NetCheckScreen.copyDetails' => 'نسخ السجل',
+			'NetCheckScreen.detailsCopied' => 'تم نسخ سجل التشخيص إلى الحافظة',
+			'NetCheckScreen.stepPhysical' => 'محول الشبكة والبوابة',
+			'NetCheckScreen.stepDns' => 'DNS ومحرك Fake-IP',
+			'NetCheckScreen.stepCore' => 'عملية النواة والمنافذ',
+			'NetCheckScreen.stepProxy' => 'تكوين وكيل النظام',
+			'NetCheckScreen.stepHandshake' => 'المصافحة الشاملة مع الإنترنت',
+			'NetCheckScreen.suggestedAction' => 'اقتراح الحل',
+			'NetCheckScreen.autoRepairAction' => 'إصلاح الآن',
 			'NetCheckScreen.enterDomain' => 'يرجى إدخال اسم النطاق',
 			'NetCheckScreen.checking' => 'جاري الفحص...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'فشل استعلام A: ${p}',
@@ -1306,6 +1362,8 @@ extension on TranslationsAr {
 			'meta.reportCopied' => 'تم نسخ التقرير إلى الحافظة، جاهز للمشاركة',
 			'meta.gamingExperience' => 'ألعاب الفيديو',
 			'meta.streamingExperience' => 'البث المرئي',
+			_ => null,
+		} ?? switch (path) {
 			'meta.meetingExperience' => 'مكالمات الفيديو',
 			'meta.customSpeedtestUrl' => 'عنوان URL مخصص للتنزيل (https://...)',
 			'meta.customSpeedtestSource' => 'مصدر اختبار مخصص',
@@ -1316,6 +1374,8 @@ extension on TranslationsAr {
 			'meta.resetSystemProxy' => 'إصلاح الشبكة / إعادة تعيين وكيل النظام',
 			'meta.resetSystemProxyDesc' => 'مسح إعدادات وكيل النظام المتبقية وتحديث الشبكة لحل مشاكل انقطاع الاتصال',
 			'meta.resetSystemProxySuccess' => 'تمت استعادة إعدادات الوكيل وعادت الشبكة للعمل',
+			'meta.networkDiagnostics' => 'فحص الشبكة والإصلاح الذاتي',
+			'meta.networkDiagnosticsDesc' => 'فحص محول الشبكة، DNS، منافذ النواة وحالة الوكيل بنقرة واحدة',
 			'meta.sortLatencyDesc' => 'أعلى زمن انتقال',
 			'meta.sortNameDesc' => 'الاسم Z-A',
 			'meta.sortMultiplier' => 'أقل مضاعف',
@@ -1333,8 +1393,6 @@ extension on TranslationsAr {
 			'meta.proxySelectedMode' => 'توكيل التطبيقات المحددة فقط',
 			'meta.proxySelectedModeDesc' => 'تمر التطبيقات المحددة عبر الوكيل، والباقي يتصل مباشرة',
 			'meta.bypassSelectedMode' => 'تجاوز التطبيقات المحددة',
-			_ => null,
-		} ?? switch (path) {
 			'meta.bypassSelectedModeDesc' => 'تتصل التطبيقات المحددة مباشرة، والباقي يمر عبر الوكيل',
 			'meta.invertSelection' => 'عكس التحديد',
 			'meta.all' => 'الكل',

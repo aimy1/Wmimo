@@ -140,6 +140,33 @@ class Translations$NetCheckScreen$zh_CN implements Translations$NetCheckScreen$e
 	final TranslationsZhCn _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => '网络链路体检与诊断';
+	@override String get fullDiagnosticsTab => '一键链路体检';
+	@override String get advancedCheckTab => '高级单域名排查';
+	@override String get startDiagnostics => '开始全链路体检';
+	@override String get reDiagnostics => '重新体检';
+	@override String get diagnosing => '正在全面诊断链路...';
+	@override String get healthScore => '健康评分';
+	@override String get scorePerfect => '链路极佳';
+	@override String get scoreGood => '基本良好';
+	@override String get scoreWarning => '存在警告';
+	@override String get scoreCritical => '链路受阻';
+	@override String get oneClickRepair => '一键智能自愈';
+	@override String get repairSuccess => '自愈修复成功，网络已恢复正常';
+	@override String get repairFailed => '部分项可能需手动确认';
+	@override String get repairing => '正在执行自愈修复...';
+	@override String issueFound({required Object count}) => '发现 ${count} 处异常';
+	@override String get noIssue => '全项检测正常';
+	@override String get details => '技术详情';
+	@override String get copyDetails => '复制日志';
+	@override String get detailsCopied => '诊断日志已复制到剪贴板';
+	@override String get stepPhysical => '物理网卡与网关';
+	@override String get stepDns => 'DNS 解析与 Fake-IP';
+	@override String get stepCore => '核心服务与端口';
+	@override String get stepProxy => '系统代理配置';
+	@override String get stepHandshake => '公网端到端握手';
+	@override String get suggestedAction => '排障建议';
+	@override String get autoRepairAction => '立即修复';
 	@override String get enterDomain => '请输入域名';
 	@override String get checking => '检测中...';
 	@override String aQueryFailed({required Object p}) => 'A 查询失败: ${p}';
@@ -639,6 +666,8 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get resetSystemProxy => '修复网络 / 重置系统代理';
 	@override String get resetSystemProxyDesc => '清理残留系统代理设置并刷新网络，解决异常退出后无法上网问题';
 	@override String get resetSystemProxySuccess => '系统代理已清理并重置，网络已恢复正常';
+	@override String get networkDiagnostics => '网络链路体检与智能诊断';
+	@override String get networkDiagnosticsDesc => '一键逐步诊断网卡、DNS、内核端口与代理健康状态并智能自愈';
 	@override String get sortLatencyDesc => '延迟由高到低';
 	@override String get sortNameDesc => '名称 Z-A';
 	@override String get sortMultiplier => '倍率由低到高';
@@ -839,6 +868,33 @@ extension on TranslationsZhCn {
 			'PerAppAndroidScreen.whiteListModeTip' => '启用后:仅代理已勾选的App;未启用:仅代理未勾选的App',
 			'UserAgreementScreen.privacyFirst' => '您的隐私很重要',
 			'UserAgreementScreen.agreeAndContinue' => '接受并继续',
+			'NetCheckScreen.title' => '网络链路体检与诊断',
+			'NetCheckScreen.fullDiagnosticsTab' => '一键链路体检',
+			'NetCheckScreen.advancedCheckTab' => '高级单域名排查',
+			'NetCheckScreen.startDiagnostics' => '开始全链路体检',
+			'NetCheckScreen.reDiagnostics' => '重新体检',
+			'NetCheckScreen.diagnosing' => '正在全面诊断链路...',
+			'NetCheckScreen.healthScore' => '健康评分',
+			'NetCheckScreen.scorePerfect' => '链路极佳',
+			'NetCheckScreen.scoreGood' => '基本良好',
+			'NetCheckScreen.scoreWarning' => '存在警告',
+			'NetCheckScreen.scoreCritical' => '链路受阻',
+			'NetCheckScreen.oneClickRepair' => '一键智能自愈',
+			'NetCheckScreen.repairSuccess' => '自愈修复成功，网络已恢复正常',
+			'NetCheckScreen.repairFailed' => '部分项可能需手动确认',
+			'NetCheckScreen.repairing' => '正在执行自愈修复...',
+			'NetCheckScreen.issueFound' => ({required Object count}) => '发现 ${count} 处异常',
+			'NetCheckScreen.noIssue' => '全项检测正常',
+			'NetCheckScreen.details' => '技术详情',
+			'NetCheckScreen.copyDetails' => '复制日志',
+			'NetCheckScreen.detailsCopied' => '诊断日志已复制到剪贴板',
+			'NetCheckScreen.stepPhysical' => '物理网卡与网关',
+			'NetCheckScreen.stepDns' => 'DNS 解析与 Fake-IP',
+			'NetCheckScreen.stepCore' => '核心服务与端口',
+			'NetCheckScreen.stepProxy' => '系统代理配置',
+			'NetCheckScreen.stepHandshake' => '公网端到端握手',
+			'NetCheckScreen.suggestedAction' => '排障建议',
+			'NetCheckScreen.autoRepairAction' => '立即修复',
 			'NetCheckScreen.enterDomain' => '请输入域名',
 			'NetCheckScreen.checking' => '检测中...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'A 查询失败: ${p}',
@@ -1306,6 +1362,8 @@ extension on TranslationsZhCn {
 			'meta.reportCopied' => '战报已复制到剪贴板，可直接粘贴分享',
 			'meta.gamingExperience' => '电竞体验',
 			'meta.streamingExperience' => '超清流媒体',
+			_ => null,
+		} ?? switch (path) {
 			'meta.meetingExperience' => '远程视讯',
 			'meta.customSpeedtestUrl' => '自定义测速下载 URL (https://...)',
 			'meta.customSpeedtestSource' => '自定义测速源',
@@ -1316,6 +1374,8 @@ extension on TranslationsZhCn {
 			'meta.resetSystemProxy' => '修复网络 / 重置系统代理',
 			'meta.resetSystemProxyDesc' => '清理残留系统代理设置并刷新网络，解决异常退出后无法上网问题',
 			'meta.resetSystemProxySuccess' => '系统代理已清理并重置，网络已恢复正常',
+			'meta.networkDiagnostics' => '网络链路体检与智能诊断',
+			'meta.networkDiagnosticsDesc' => '一键逐步诊断网卡、DNS、内核端口与代理健康状态并智能自愈',
 			'meta.sortLatencyDesc' => '延迟由高到低',
 			'meta.sortNameDesc' => '名称 Z-A',
 			'meta.sortMultiplier' => '倍率由低到高',
@@ -1333,8 +1393,6 @@ extension on TranslationsZhCn {
 			'meta.proxySelectedMode' => '仅代理选中的应用',
 			'meta.proxySelectedModeDesc' => '已选应用走代理，其余应用直连',
 			'meta.bypassSelectedMode' => '绕过选中的应用',
-			_ => null,
-		} ?? switch (path) {
 			'meta.bypassSelectedModeDesc' => '已选应用直连，其余应用走代理',
 			'meta.invertSelection' => '反选',
 			'meta.all' => '全部',

@@ -140,6 +140,33 @@ class _Translations$NetCheckScreen$fa implements Translations$NetCheckScreen$en 
 	final TranslationsFa _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'عیب‌یابی و تشخیص شبکه';
+	@override String get fullDiagnosticsTab => 'عیب‌یابی کامل لینک';
+	@override String get advancedCheckTab => 'بررسی پیشرفته دامنه';
+	@override String get startDiagnostics => 'شروع عیب‌یابی کامل';
+	@override String get reDiagnostics => 'تست مجدد';
+	@override String get diagnosing => 'در حال بررسی و عیب‌یابی شبکه...';
+	@override String get healthScore => 'امتیاز سلامت';
+	@override String get scorePerfect => 'عالی';
+	@override String get scoreGood => 'خوب';
+	@override String get scoreWarning => 'هشدار';
+	@override String get scoreCritical => 'مسدود شده';
+	@override String get oneClickRepair => 'خودترمیم هوشمند';
+	@override String get repairSuccess => 'ترمیم خودکار موفقیت‌آمیز بود، اتصال بازیابی شد';
+	@override String get repairFailed => 'ترمیم انجام شد، ممکن است نیاز به بررسی دستی باشد';
+	@override String get repairing => 'در حال اجرای خودترمیم...';
+	@override String issueFound({required Object count}) => '${count} مشکل پیدا شد';
+	@override String get noIssue => 'تمام بررسی‌ها با موفقیت انجام شد';
+	@override String get details => 'جزئیات فنی';
+	@override String get copyDetails => 'کپی لاگ';
+	@override String get detailsCopied => 'گزارش عیب‌یابی در کلیپ‌بورد کپی شد';
+	@override String get stepPhysical => 'کارت شبکه و درگاه ارتباطی';
+	@override String get stepDns => 'DNS و موتور Fake-IP';
+	@override String get stepCore => 'فرایند هسته و پورت‌ها';
+	@override String get stepProxy => 'پیکربندی پروکسی سیستم';
+	@override String get stepHandshake => 'دست‌تکانی سرتاسری اینترنت';
+	@override String get suggestedAction => 'پیشنهاد رفع مشکل';
+	@override String get autoRepairAction => 'ترمیم فوری';
 	@override String get enterDomain => 'لطفا یک دامنه وارد کنید';
 	@override String get checking => 'در حال بررسی...';
 	@override String aQueryFailed({required Object p}) => 'خطای استعلام رکورد A: ${p}';
@@ -639,6 +666,8 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get resetSystemProxy => 'تعمیر شبکه / بازنشانی پروکسی سیستم';
 	@override String get resetSystemProxyDesc => 'پاکسازی تنظیمات باقیمانده پروکسی سیستم و تازه‌سازی شبکه برای رفع مشکلات قطعی اینترنت';
 	@override String get resetSystemProxySuccess => 'پروکسی سیستم پاکسازی شد و شبکه به حالت عادی بازگشت';
+	@override String get networkDiagnostics => 'عیب‌یابی شبکه و خودترمیم هوشمند';
+	@override String get networkDiagnosticsDesc => 'عیب‌یابی کارت شبکه، DNS، پورت‌های هسته و وضعیت پروکسی با ترمیم با یک کلیک';
 	@override String get sortLatencyDesc => 'بیشترین تأخیر';
 	@override String get sortNameDesc => 'نام Z-A';
 	@override String get sortMultiplier => 'کمترین ضریب';
@@ -839,6 +868,33 @@ extension on TranslationsFa {
 			'PerAppAndroidScreen.whiteListModeTip' => 'وقتی فعال باشد: فقط برنامه‌هایی که انتخاب شده‌اند پروکسی می‌شوند؛ وقتی فعال نباشد: فقط برنامه‌هایی که انتخاب نشده‌اند پروکسی می‌شوند',
 			'UserAgreementScreen.privacyFirst' => 'حریم‌خصوصی شما اولویت دارد',
 			'UserAgreementScreen.agreeAndContinue' => 'پذیرفتن و ادامه',
+			'NetCheckScreen.title' => 'عیب‌یابی و تشخیص شبکه',
+			'NetCheckScreen.fullDiagnosticsTab' => 'عیب‌یابی کامل لینک',
+			'NetCheckScreen.advancedCheckTab' => 'بررسی پیشرفته دامنه',
+			'NetCheckScreen.startDiagnostics' => 'شروع عیب‌یابی کامل',
+			'NetCheckScreen.reDiagnostics' => 'تست مجدد',
+			'NetCheckScreen.diagnosing' => 'در حال بررسی و عیب‌یابی شبکه...',
+			'NetCheckScreen.healthScore' => 'امتیاز سلامت',
+			'NetCheckScreen.scorePerfect' => 'عالی',
+			'NetCheckScreen.scoreGood' => 'خوب',
+			'NetCheckScreen.scoreWarning' => 'هشدار',
+			'NetCheckScreen.scoreCritical' => 'مسدود شده',
+			'NetCheckScreen.oneClickRepair' => 'خودترمیم هوشمند',
+			'NetCheckScreen.repairSuccess' => 'ترمیم خودکار موفقیت‌آمیز بود، اتصال بازیابی شد',
+			'NetCheckScreen.repairFailed' => 'ترمیم انجام شد، ممکن است نیاز به بررسی دستی باشد',
+			'NetCheckScreen.repairing' => 'در حال اجرای خودترمیم...',
+			'NetCheckScreen.issueFound' => ({required Object count}) => '${count} مشکل پیدا شد',
+			'NetCheckScreen.noIssue' => 'تمام بررسی‌ها با موفقیت انجام شد',
+			'NetCheckScreen.details' => 'جزئیات فنی',
+			'NetCheckScreen.copyDetails' => 'کپی لاگ',
+			'NetCheckScreen.detailsCopied' => 'گزارش عیب‌یابی در کلیپ‌بورد کپی شد',
+			'NetCheckScreen.stepPhysical' => 'کارت شبکه و درگاه ارتباطی',
+			'NetCheckScreen.stepDns' => 'DNS و موتور Fake-IP',
+			'NetCheckScreen.stepCore' => 'فرایند هسته و پورت‌ها',
+			'NetCheckScreen.stepProxy' => 'پیکربندی پروکسی سیستم',
+			'NetCheckScreen.stepHandshake' => 'دست‌تکانی سرتاسری اینترنت',
+			'NetCheckScreen.suggestedAction' => 'پیشنهاد رفع مشکل',
+			'NetCheckScreen.autoRepairAction' => 'ترمیم فوری',
 			'NetCheckScreen.enterDomain' => 'لطفا یک دامنه وارد کنید',
 			'NetCheckScreen.checking' => 'در حال بررسی...',
 			'NetCheckScreen.aQueryFailed' => ({required Object p}) => 'خطای استعلام رکورد A: ${p}',
@@ -1306,6 +1362,8 @@ extension on TranslationsFa {
 			'meta.reportCopied' => 'گزارش در کلیپ‌بورد کپی شد، آماده برای اشتراک‌گذاری',
 			'meta.gamingExperience' => 'بازی آنلاین',
 			'meta.streamingExperience' => 'استریم ویدیو',
+			_ => null,
+		} ?? switch (path) {
 			'meta.meetingExperience' => 'ویدیو کنفرانس',
 			'meta.customSpeedtestUrl' => 'آدرس سفارشی دانلود (https://...)',
 			'meta.customSpeedtestSource' => 'منبع تست سفارشی',
@@ -1316,6 +1374,8 @@ extension on TranslationsFa {
 			'meta.resetSystemProxy' => 'تعمیر شبکه / بازنشانی پروکسی سیستم',
 			'meta.resetSystemProxyDesc' => 'پاکسازی تنظیمات باقیمانده پروکسی سیستم و تازه‌سازی شبکه برای رفع مشکلات قطعی اینترنت',
 			'meta.resetSystemProxySuccess' => 'پروکسی سیستم پاکسازی شد و شبکه به حالت عادی بازگشت',
+			'meta.networkDiagnostics' => 'عیب‌یابی شبکه و خودترمیم هوشمند',
+			'meta.networkDiagnosticsDesc' => 'عیب‌یابی کارت شبکه، DNS، پورت‌های هسته و وضعیت پروکسی با ترمیم با یک کلیک',
 			'meta.sortLatencyDesc' => 'بیشترین تأخیر',
 			'meta.sortNameDesc' => 'نام Z-A',
 			'meta.sortMultiplier' => 'کمترین ضریب',
@@ -1333,8 +1393,6 @@ extension on TranslationsFa {
 			'meta.proxySelectedMode' => 'فقط پروکسی برنامه‌های انتخاب شده',
 			'meta.proxySelectedModeDesc' => 'برنامه‌های انتخاب شده از پروکسی عبور می‌کنند و بقیه مستقیم متصل می‌شوند',
 			'meta.bypassSelectedMode' => 'دور زدن برنامه‌های انتخاب شده',
-			_ => null,
-		} ?? switch (path) {
 			'meta.bypassSelectedModeDesc' => 'برنامه‌های انتخاب شده مستقیم متصل می‌شوند و بقیه از پروکسی عبور می‌کنند',
 			'meta.invertSelection' => 'معکوس کردن انتخاب',
 			'meta.all' => 'همه',
