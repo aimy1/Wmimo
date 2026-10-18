@@ -43,6 +43,12 @@ class ProxyBoardScreen extends StatefulWidget {
   State<ProxyBoardScreen> createState() => _ProxyBoardScreenState();
 }
 
+class NodeLatencyState {
+  final int? delay;
+  final bool isTesting;
+  const NodeLatencyState(this.delay, this.isTesting);
+}
+
 class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     with WidgetsBindingObserver, AfterLayoutMixin {
   final TextEditingController _searchController = TextEditingController();
@@ -50,9 +56,43 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   Map<String, ClashProxiesNode> _nodeMap = {};
   bool _loading = false;
 
+  final Map<String, ValueNotifier<NodeLatencyState>> _nodeLatencyNotifiers = {};
+
+  ValueNotifier<NodeLatencyState> _getLatencyNotifier(
+    String nodeName,
+    int? initialDelay,
+    bool initialTesting,
+  ) {
+    var notifier = _nodeLatencyNotifiers[nodeName];
+    if (notifier == null) {
+      notifier = ValueNotifier(NodeLatencyState(initialDelay, initialTesting));
+      _nodeLatencyNotifiers[nodeName] = notifier;
+    } else {
+      if (notifier.value.isTesting != initialTesting || notifier.value.delay != initialDelay) {
+        notifier.value = NodeLatencyState(initialDelay, initialTesting);
+      }
+    }
+    return notifier;
+  }
+
+  void _updateNodeLatency(String nodeName, {int? delay, bool? isTesting}) {
+    final notifier = _nodeLatencyNotifiers[nodeName];
+    if (notifier != null) {
+      final nextDelay = delay ?? notifier.value.delay;
+      final nextTesting = isTesting ?? notifier.value.isTesting;
+      notifier.value = NodeLatencyState(nextDelay, nextTesting);
+    }
+  }
+
   void _updateAllNodes(List<ClashProxiesNode> nodes) {
     _allNodes = nodes;
     _nodeMap = {for (var n in nodes) n.name: n};
+    for (var n in nodes) {
+      if (_nodeLatencyNotifiers.containsKey(n.name)) {
+        _nodeLatencyNotifiers[n.name]!.value =
+            NodeLatencyState(n.delay, _nodesTesting.contains(n.name));
+      }
+    }
   }
   bool _isVpnStarted = false;
   String _searchKeyword = "";
@@ -99,6 +139,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     ProfileManager.onEventUpdate.remove(_onProfileUpdate);
     ProfileManager.onEventRemove.remove(_onProfileChanged);
     _searchController.dispose();
+    for (final notifier in _nodeLatencyNotifiers.values) {
+      notifier.dispose();
+    }
+    _nodeLatencyNotifiers.clear();
     super.dispose();
   }
 
@@ -310,9 +354,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
 
     if (_nodesTesting.contains(node.name)) return;
-    setState(() {
-      _nodesTesting.add(node.name);
-    });
+    _nodesTesting.add(node.name);
+    _updateNodeLatency(node.name, isTesting: true);
     final setting = SettingManager.getConfig();
     final testUrl = _activeLatencyTarget.url.isNotEmpty
         ? _activeLatencyTarget.url
@@ -325,25 +368,16 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         timeout: Duration(milliseconds: setting.delayTestTimeout),
       );
       final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
-      if (mounted) {
-        setState(() {
-          _nodeMap[node.name]?.delay = testDelay;
-          node.delay = testDelay;
-        });
-      }
+      _nodeMap[node.name]?.delay = testDelay;
+      node.delay = testDelay;
+      _updateNodeLatency(node.name, delay: testDelay, isTesting: false);
     } catch (_) {
-      if (mounted) {
-        setState(() {
-          _nodeMap[node.name]?.delay = -1;
-          node.delay = -1;
-        });
-      }
+      _nodeMap[node.name]?.delay = -1;
+      node.delay = -1;
+      _updateNodeLatency(node.name, delay: -1, isTesting: false);
     } finally {
-      if (mounted) {
-        setState(() {
-          _nodesTesting.remove(node.name);
-        });
-      }
+      _nodesTesting.remove(node.name);
+      _updateNodeLatency(node.name, isTesting: false);
     }
   }
 
@@ -399,6 +433,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     for (var name in nodesToTest) {
       _nodesTesting.add(name);
+      _updateNodeLatency(name, isTesting: true);
     }
     setState(() {});
 
@@ -427,6 +462,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
             } else {
               n.delay = -1;
             }
+            _updateNodeLatency(name, delay: n.delay, isTesting: false);
           }
         }
         _nodesTesting.removeAll(nodesToTest);
@@ -438,14 +474,6 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
 
     if (!groupDelaySucceeded) {
-      Timer? updateDebounce;
-      void scheduleUiUpdate() {
-        if (updateDebounce?.isActive == true) return;
-        updateDebounce = Timer(const Duration(milliseconds: 150), () {
-          if (mounted) setState(() {});
-        });
-      }
-
       int nextIndex = 0;
       Future<void> worker() async {
         while (true) {
@@ -459,11 +487,12 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
             );
             final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
             _nodeMap[nodeName]?.delay = testDelay;
+            _updateNodeLatency(nodeName, delay: testDelay, isTesting: false);
           } catch (_) {
             _nodeMap[nodeName]?.delay = -1;
+            _updateNodeLatency(nodeName, delay: -1, isTesting: false);
           } finally {
             _nodesTesting.remove(nodeName);
-            scheduleUiUpdate();
           }
         }
       }
@@ -472,7 +501,6 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       final workers = List.generate(workerCount, (_) => worker());
       await Future.wait(workers);
 
-      updateDebounce?.cancel();
       if (mounted) {
         setState(() {});
       }
@@ -527,6 +555,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     for (var name in allLeafNodeNames) {
       _nodesTesting.add(name);
+      _updateNodeLatency(name, isTesting: true);
     }
     setState(() {});
 
@@ -534,14 +563,6 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final testUrl = _activeLatencyTarget.url.isNotEmpty
         ? _activeLatencyTarget.url
         : setting.delayTestUrl;
-
-    Timer? updateDebounce;
-    void scheduleUiUpdate() {
-      if (updateDebounce?.isActive == true) return;
-      updateDebounce = Timer(const Duration(milliseconds: 150), () {
-        if (mounted) setState(() {});
-      });
-    }
 
     int nextIndex = 0;
     Future<void> worker() async {
@@ -556,11 +577,12 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           );
           final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
           _nodeMap[nodeName]?.delay = testDelay;
+          _updateNodeLatency(nodeName, delay: testDelay, isTesting: false);
         } catch (_) {
           _nodeMap[nodeName]?.delay = -1;
+          _updateNodeLatency(nodeName, delay: -1, isTesting: false);
         } finally {
           _nodesTesting.remove(nodeName);
-          scheduleUiUpdate();
         }
       }
     }
@@ -569,7 +591,6 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final workers = List.generate(workerCount, (_) => worker());
     await Future.wait(workers);
 
-    updateDebounce?.cancel();
     if (mounted) {
       setState(() {});
     }
@@ -621,6 +642,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     for (var name in targetNodes) {
       _nodesTesting.add(name);
+      _updateNodeLatency(name, isTesting: true);
     }
     setState(() {});
 
@@ -629,14 +651,6 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         ? _activeLatencyTarget.url
         : setting.delayTestUrl;
     final timeout = Duration(milliseconds: setting.delayTestTimeout);
-
-    Timer? updateDebounce;
-    void scheduleUiUpdate() {
-      if (updateDebounce?.isActive == true) return;
-      updateDebounce = Timer(const Duration(milliseconds: 150), () {
-        if (mounted) setState(() {});
-      });
-    }
 
     int nextIndex = 0;
     Future<void> worker() async {
@@ -651,11 +665,12 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           );
           final testDelay = (res.data != null && res.data! > 0) ? res.data : -1;
           _nodeMap[nodeName]?.delay = testDelay;
+          _updateNodeLatency(nodeName, delay: testDelay, isTesting: false);
         } catch (_) {
           _nodeMap[nodeName]?.delay = -1;
+          _updateNodeLatency(nodeName, delay: -1, isTesting: false);
         } finally {
           _nodesTesting.remove(nodeName);
-          scheduleUiUpdate();
         }
       }
     }
@@ -664,7 +679,6 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final workers = List.generate(workerCount, (_) => worker());
     await Future.wait(workers);
 
-    updateDebounce?.cancel();
     if (mounted) {
       setState(() {});
     }
@@ -2350,36 +2364,74 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   );
   }
 
+  Widget _buildNodeLatencyBadge(BuildContext context, ClashProxiesNode node) {
+    final theme = Theme.of(context);
+    final notifier = _getLatencyNotifier(
+      node.name,
+      node.delay,
+      _nodesTesting.contains(node.name),
+    );
+
+    return ValueListenableBuilder<NodeLatencyState>(
+      valueListenable: notifier,
+      builder: (context, state, _) {
+        final isTesting = state.isTesting;
+        final delay = state.delay;
+
+        Color delayColor = ThemeDefine.kColorGreenBright;
+        String delayText = "";
+
+        if (isTesting) {
+          delayText = "...";
+          delayColor = theme.colorScheme.onSurface.withValues(alpha: 0.4);
+        } else if (delay == null || delay == 0) {
+          delayText = "";
+        } else if (delay < 0) {
+          delayText = "Error";
+          delayColor = Colors.redAccent;
+        } else {
+          delayText = "$delay";
+          if (delay < 300) {
+            delayColor = ThemeDefine.kColorGreenBright;
+          } else if (delay < 800) {
+            delayColor = Colors.lightGreen;
+          } else if (delay < 1200) {
+            delayColor = Colors.amber;
+          } else {
+            delayColor = Colors.orange;
+          }
+        }
+
+        return InkWell(
+          borderRadius: BorderRadius.circular(4),
+          onTap: () => _testNodeDelay(node),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            child: isTesting
+                ? const SizedBox(
+                    width: 10,
+                    height: 10,
+                    child: CircularProgressIndicator(strokeWidth: 1.5),
+                  )
+                : Text(
+                    delayText,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'monospace',
+                      color: delayColor,
+                    ),
+                  ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildNodeCard(ClashProxiesNode group, ClashProxiesNode node, bool isSelected) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final isTesting = _nodesTesting.contains(node.name);
     final flag = getFlagEmoji(node.name);
-
-    // Latency text and color (Clash Verge style with enhanced color tiers)
-    Color delayColor = ThemeDefine.kColorGreenBright;
-    String delayText = "";
-
-    if (isTesting) {
-      delayText = "...";
-      delayColor = theme.colorScheme.onSurface.withValues(alpha: 0.4);
-    } else if (node.delay == null || node.delay == 0) {
-      delayText = "";
-    } else if (node.delay! < 0) {
-      delayText = "Error";
-      delayColor = Colors.redAccent;
-    } else {
-      delayText = "${node.delay}";
-      if (node.delay! < 300) {
-        delayColor = ThemeDefine.kColorGreenBright;
-      } else if (node.delay! < 800) {
-        delayColor = Colors.lightGreen;
-      } else if (node.delay! < 1200) {
-        delayColor = Colors.amber;
-      } else {
-        delayColor = Colors.orange;
-      }
-    }
 
     return RepaintBoundary(
       child: Material(
@@ -2477,28 +2529,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               const SizedBox(width: 4),
 
               // Latency Badge / Test Trigger
-              InkWell(
-                borderRadius: BorderRadius.circular(4),
-                onTap: () => _testNodeDelay(node),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  child: isTesting
-                      ? const SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: CircularProgressIndicator(strokeWidth: 1.5),
-                        )
-                      : Text(
-                          delayText,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'monospace',
-                            color: delayColor,
-                          ),
-                        ),
-                ),
-              ),
+              _buildNodeLatencyBadge(context, node),
             ],
           ),
         ),

@@ -116,7 +116,11 @@ class VPNService {
     }
 
     if (Platform.isWindows) {
-      await stop();
+      final isRunning = await getStarted();
+      if (isRunning) {
+        Log.i("VPNService: Orphaned running core detected on startup, stopping...");
+        await stop();
+      }
     }
 
     if (PlatformUtils.isPC()) {

@@ -50,11 +50,19 @@ class ProxyNodeLoader {
       var content = await file.readAsString();
       if (content.trim().isEmpty) return;
 
+      // Preserve raw original subscription content in companion backup if not already present
+      final origFile = File("$filePath.orig");
+      if (!await origFile.exists()) {
+        try {
+          await file.copy(origFile.path);
+        } catch (_) {}
+      }
+
       // Automatically convert Base64 subscription or node URIs into valid Clash YAML
       final convertedYaml = SubscriptionConverter.convertToClashYaml(content);
       if (convertedYaml != content && SubscriptionConverter.isClashYaml(convertedYaml)) {
         content = convertedYaml;
-        await file.writeAsString(content, flush: true);
+        await _atomicWrite(file, content);
       }
 
       content = content.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
@@ -176,10 +184,42 @@ class ProxyNodeLoader {
       final yamlWriter = YamlWriter();
       String groupsYaml = yamlWriter.write({'proxy-groups': synthesizedGroups});
 
-      // Append cleanly
+      // Append cleanly using atomic write
       String newContent = content.trimRight() + "\n\n" + groupsYaml + "\n";
-      await file.writeAsString(newContent, flush: true);
+      await _atomicWrite(file, newContent);
     } catch (_) {}
+  }
+
+  /// Safely writes content to target file atomically using a temporary file
+  static Future<void> _atomicWrite(File targetFile, String content) async {
+    final tempPath = "${targetFile.path}.tmp_${DateTime.now().microsecondsSinceEpoch}";
+    final tempFile = File(tempPath);
+    await tempFile.writeAsString(content, flush: true);
+    try {
+      if (await targetFile.exists()) {
+        if (Platform.isWindows) {
+          final oldBackup = "${targetFile.path}.old_${DateTime.now().microsecondsSinceEpoch}";
+          final oldFile = File(oldBackup);
+          await targetFile.rename(oldBackup);
+          await tempFile.rename(targetFile.path);
+          if (await oldFile.exists()) {
+            await oldFile.delete();
+          }
+        } else {
+          await tempFile.rename(targetFile.path);
+        }
+      } else {
+        await tempFile.rename(targetFile.path);
+      }
+    } catch (_) {
+      // Direct write fallback
+      await targetFile.writeAsString(content, flush: true);
+      if (await tempFile.exists()) {
+        try {
+          await tempFile.delete();
+        } catch (_) {}
+      }
+    }
   }
 
   static List<String> _filterNodes(List<String> allNodes, List<String> keywords) {
