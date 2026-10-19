@@ -106,11 +106,11 @@ flutter build windows --release
 
 # macOS Release (Universal DMG and Portable Zip)
 flutter build macos --release
-bash tool/package_macos.sh v1.2.6.1508
+bash tool/package_macos.sh v1.2.7.1509
 
 # Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
 flutter build linux --release
-bash tool/package_linux.sh v1.2.6.1508
+bash tool/package_linux.sh v1.2.7.1509
 
 # Android APK
 flutter build apk --release
