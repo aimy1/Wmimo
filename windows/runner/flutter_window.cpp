@@ -27,6 +27,31 @@ bool FlutterWindow::OnCreate() {
   RegisterPlugins(flutter_controller_->engine());
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
+  // Setup theme channel to dynamically synchronize theme changes from Flutter
+  theme_channel_ = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+      flutter_controller_->engine()->messenger(), "wmimo/native_theme",
+      &flutter::StandardMethodCodec::GetInstance());
+
+  theme_channel_->SetMethodCallHandler(
+      [this](const flutter::MethodCall<flutter::EncodableValue>& call,
+             std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+        if (call.method_name() == "setAppTheme") {
+          const auto* args = std::get_if<flutter::EncodableMap>(call.arguments());
+          if (args) {
+            auto it = args->find(flutter::EncodableValue("theme"));
+            if (it != args->end() && std::holds_alternative<std::string>(it->second)) {
+              std::string theme = std::get<std::string>(it->second);
+              this->SetAppTheme(theme);
+              result->Success(flutter::EncodableValue(true));
+              return;
+            }
+          }
+          result->Error("INVALID_ARGUMENTS", "Expected 'theme' string argument");
+        } else {
+          result->NotImplemented();
+        }
+      });
+
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
     this->Show();
   });
@@ -39,6 +64,7 @@ bool FlutterWindow::OnCreate() {
 }
 
 void FlutterWindow::OnDestroy() {
+  theme_channel_ = nullptr;
   if (flutter_controller_) {
     flutter_controller_ = nullptr;
   }

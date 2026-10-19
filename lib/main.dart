@@ -260,9 +260,17 @@ class MyAppState extends State<MyApp>
   String _trafficOld = "";
   String _speedOld = "";
   final Themes _themes = Themes();
+
+  void _onThemeChanged() {
+    if (PlatformUtils.isPC()) {
+      _setTrayMenu(_trayGrey);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _themes.addListener(_onThemeChanged);
     _themes.setTheme(SettingManager.getConfig().ui.theme, false);
     WidgetsBinding.instance.addObserver(this);
     if (PlatformUtils.isPC()) {
@@ -308,6 +316,7 @@ class MyAppState extends State<MyApp>
 
   @override
   void dispose() {
+    _themes.removeListener(_onThemeChanged);
     AppLifecycleStateNofity.uninit();
     WidgetsBinding.instance.removeObserver(this);
     if (PlatformUtils.isPC()) {

@@ -1,7 +1,8 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'package:wmimo/app/utils/native_theme_helper.dart';
 import 'package:wmimo/screens/theme_data_dark.dart';
 import 'package:wmimo/screens/theme_data_light.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -17,6 +18,7 @@ class Themes with ChangeNotifier {
       default:
         return;
     }
+    NativeThemeHelper.syncTheme(_theme);
     if (!notify) {
       return;
     }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/screens/theme_define.dart';
+import 'package:wmimo/screens/themes.dart';
 import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 void main() {
@@ -60,5 +61,22 @@ void main() {
     expect(find.text('Test Navigation'), findsOneWidget);
     expect(find.text('Beta'), findsOneWidget);
     expect(find.byIcon(Icons.refresh), findsOneWidget);
+  });
+
+  test('Themes notifies listeners and triggers syncTheme', () {
+    final themes = Themes();
+    bool listenerCalled = false;
+    themes.addListener(() {
+      listenerCalled = true;
+    });
+
+    themes.setTheme(ThemeDefine.kThemeDark, true);
+    expect(themes.theme(), ThemeDefine.kThemeDark);
+    expect(listenerCalled, isTrue);
+
+    listenerCalled = false;
+    themes.setTheme(ThemeDefine.kThemeLight, false);
+    expect(themes.theme(), ThemeDefine.kThemeLight);
+    expect(listenerCalled, isFalse);
   });
 }
