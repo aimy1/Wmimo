@@ -704,19 +704,29 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     if (!hasLeafNodesInGroups && leafNodes.isNotEmpty) {
       final List<ClashProxiesNode> synthesizedGroups = [];
 
-      // 1. 节点选择
+      final isZh = LocaleSettings.currentLocale.languageCode.startsWith('zh');
+      final selName = isZh ? "节点选择" : "Proxy Selection";
+      final autoName = isZh ? "自动选择" : "Auto Select";
+      final hkName = isZh ? "🇭🇰 香港节点" : "🇭🇰 Hong Kong";
+      final jpName = isZh ? "🇯🇵 日本节点" : "🇯🇵 Japan";
+      final sgName = isZh ? "🇸🇬 新加坡节点" : "🇸🇬 Singapore";
+      final twName = isZh ? "🇹🇼 台湾节点" : "🇹🇼 Taiwan";
+      final usName = isZh ? "🇺🇸 美国节点" : "🇺🇸 United States";
+      final krName = isZh ? "🇰🇷 韩国节点" : "🇰🇷 South Korea";
+
+      // 1. Selector Group
       synthesizedGroups.add(
         ClashProxiesNode()
-          ..name = "节点选择"
+          ..name = selName
           ..type = "Selector"
           ..all = leafNodes.map((n) => n.name).toList()
           ..now = leafNodes.first.name,
       );
 
-      // 2. 自动选择
+      // 2. URLTest Group
       synthesizedGroups.add(
         ClashProxiesNode()
-          ..name = "自动选择"
+          ..name = autoName
           ..type = "URLTest"
           ..all = leafNodes.map((n) => n.name).toList()
           ..now = leafNodes.first.name,
@@ -724,28 +734,28 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
       // 3. Regional groups (using NodeRegionHelper)
       final regions = <String, List<String>>{
-        "🇭🇰 香港节点": [],
-        "🇯🇵 日本节点": [],
-        "🇸🇬 新加坡节点": [],
-        "🇹🇼 台湾节点": [],
-        "🇺🇸 美国节点": [],
-        "🇰🇷 韩国节点": [],
+        hkName: [],
+        jpName: [],
+        sgName: [],
+        twName: [],
+        usName: [],
+        krName: [],
       };
 
       for (var node in leafNodes) {
         final reg = NodeRegionHelper.getRegion(node.name);
         if (reg.code == "HK") {
-          regions["🇭🇰 香港节点"]!.add(node.name);
+          regions[hkName]!.add(node.name);
         } else if (reg.code == "JP") {
-          regions["🇯🇵 日本节点"]!.add(node.name);
+          regions[jpName]!.add(node.name);
         } else if (reg.code == "SG") {
-          regions["🇸🇬 新加坡节点"]!.add(node.name);
+          regions[sgName]!.add(node.name);
         } else if (reg.code == "TW") {
-          regions["🇹🇼 台湾节点"]!.add(node.name);
+          regions[twName]!.add(node.name);
         } else if (reg.code == "US") {
-          regions["🇺🇸 美国节点"]!.add(node.name);
+          regions[usName]!.add(node.name);
         } else if (reg.code == "KR") {
-          regions["🇰🇷 韩国节点"]!.add(node.name);
+          regions[krName]!.add(node.name);
         }
       }
 

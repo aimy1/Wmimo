@@ -450,17 +450,18 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
   }
 
   String _getShortStepName(DiagnosticStepId id) {
+    final isZh = LocaleSettings.currentLocale.languageCode.startsWith('zh');
     switch (id) {
       case DiagnosticStepId.physicalNetwork:
-        return "网卡";
+        return isZh ? "网卡" : "NIC";
       case DiagnosticStepId.dnsResolution:
         return "DNS";
       case DiagnosticStepId.coreAndPort:
-        return "内核";
+        return isZh ? "内核" : "Core";
       case DiagnosticStepId.systemProxy:
-        return "代理";
+        return isZh ? "代理" : "Proxy";
       case DiagnosticStepId.internetHandshake:
-        return "公网";
+        return isZh ? "公网" : "WAN";
     }
   }
 
