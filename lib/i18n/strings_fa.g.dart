@@ -181,6 +181,72 @@ class _Translations$NetCheckScreen$fa implements Translations$NetCheckScreen$en 
 	@override String proxyHttpSection({required Object p}) => '۳. HTTP (از طریق پروکسی، پورت: ${p})';
 	@override String get tunNotEnabled => 'TUN فعال نیست';
 	@override String get routeTableSection => '۴. جدول مسیریابی';
+	@override String get stepPhysicalDesc => 'بررسی وضعیت آداپتور شبکه فیزیکی، IP محلی و اتصال گیت‌وی';
+	@override String get stepDnsDesc => 'بررسی تأخیر وضوح DNS محلی و وضعیت پاسخ DNS هسته';
+	@override String get stepCoreDesc => 'بررسی وضعیت فرآیند Mihomo و پورت‌های شنود Mixed-Port/API';
+	@override String get stepProxyDesc => 'بررسی تنظیمات پروکسی سیستم و عیب‌یابی پروکسی‌های باقیمانده قطعی شبکه';
+	@override String get stepHandshakeDesc => 'سنجش تأخیر سرتاسری و دردسترس‌بودن CDN جهانی از طریق نود فعال';
+	@override String get shortStepPhysical => 'کارت شبکه';
+	@override String get shortStepDns => 'DNS';
+	@override String get shortStepCore => 'هسته';
+	@override String get shortStepProxy => 'پروکسی';
+	@override String get shortStepHandshake => 'اینترنت';
+	@override String valNicNormal({required Object p}) => 'شبکه متصل است (${p})';
+	@override String get valNicNone => 'هیچ رابط شبکه فعالی یافت نشد';
+	@override String get valNicGatewayTimeout => 'IP محلی دریافت شد اما اتصال به گیت‌وی خارجی منقضی شد';
+	@override String get valNicError => 'خطا در بررسی رابط شبکه';
+	@override String valDnsNormal({required Object p}) => 'پاسخ DNS نرمال (${p})';
+	@override String get valDnsEmpty => 'درخواست DNS لیست خالی برگرداند';
+	@override String get valDnsTimeout => 'درخواست DNS منقضی شد یا با خطا مواجه شد';
+	@override String valCoreNormal({required Object port, required Object mode}) => 'هسته سالم است (پورت ترکیبی: ${port}، حالت: ${mode})';
+	@override String get valCoreNotRunning => 'سرویس هسته در حال اجرا نیست';
+	@override String valCorePortConflict({required Object p}) => 'پورت ${p} توسط برنامه دیگری اشغال شده است';
+	@override String get valCoreApiFailed => 'هسته پاسخگو نیست (خطای ارتباط با API)';
+	@override String get valCoreError => 'خطا در بررسی هسته';
+	@override String valProxyActive({required Object port}) => 'پروکسی سیستم فعال است (127.0.0.1:${port})';
+	@override String get valProxyDisabled => 'پروکسی سیستم غیرفعال است (حالت مستقیم / TUN / دستی)';
+	@override String get valProxyZombie => 'پروکسی باقیمانده سیستم شناسایی شد (باعث قطعی اینترنت)';
+	@override String get valProxyFailed => 'فعال‌سازی پروکسی سیستم ناموفق بود';
+	@override String get valProxyWarning => 'هشدار وضعیت پروکسی سیستم';
+	@override String valHandshakeNormal({required Object node, required Object delay}) => 'اتصال به اینترنت نرمال (${node} • ${delay} ms)';
+	@override String valHandshakeFailed({required Object node, required Object err}) => 'خطای اتصال نود فعلی [${node}] (${err})';
+	@override String get valHandshakeSkipped => 'هسته شروع نشده، تست اتصال انجام نشد';
+	@override String get valHandshakeError => 'خطا در اتصال به اینترنت';
+	@override String get issueNicDisconnected => 'کارت شبکه به هیچ شبکه‌ای متصل نیست (کابل جدا شده، وای‌فای خاموش یا حالت هواپیما)';
+	@override String get suggestNicCheck => 'لطفاً کابل شبکه، اتصال وای‌فای یا وضعیت آداپتور شبکه را بررسی کنید';
+	@override String get suggestNicReset => 'غیرفعال کردن و فعال‌سازی مجدد آداپتور شبکه را در تنظیمات سیستم امتحان کنید';
+	@override String get issueNicGatewayUnreachable => 'به شبکه محلی متصل است، اما گیت‌وی خارجی دردسترس نیست (پرتال ورود یا قطعی روتر)';
+	@override String get suggestNicGateway => 'چراغ‌های روتر را بررسی کنید یا مرورگر را برای ورود به سیستم باز کنید';
+	@override String get issueDnsPollution => 'سرویس DNS محلی پاسخ نمی‌دهد؛ احتمال آلودگی DNS یا ربایش گیت‌وی وجود دارد';
+	@override String get suggestDnsReset => 'DNS سیستم را بازنشانی کنید یا DNS رمزگذاری‌شده هوشمند (DoH/DoT) را در Wmimo فعال نمایید';
+	@override String get actionFlushDns => 'پاکسازی کش DNS سیستم';
+	@override String get suggestDnsSlow => 'تأخیر DNS طولانی است، پیشنهاد می‌شود DNS رمزگذاری‌شده فعال گردد';
+	@override String get issueDnsFailed => 'تجزیه DNS محلی با شکست مواجه شد؛ تبدیل دامنه به IP امکان‌پذیر نیست';
+	@override String get suggestDnsFlush => 'برای پاکسازی کش DNS کلیک کنید یا در تنظیمات Wmimo دی‌ان‌اس رمزگذاری‌شده را فعال کنید';
+	@override String get issueCorePortConflict => 'تداخل پورت شناسایی شد! نرم‌افزار پروکسی یا سرویس دیگری پورت را اشغال کرده است';
+	@override String get suggestCoreChangePort => 'سایر برنامه‌های پروکسی را ببندید یا در تنظیمات Wmimo شماره پورت را تغییر دهید';
+	@override String get actionRestartCore => 'راه‌اندازی مجدد هسته';
+	@override String get issueCoreStopped => 'فرآیند هسته Wmimo در حال حاضر متوقف است';
+	@override String get suggestCoreStart => 'کلید اتصال در صفحه اصلی یا دکمه [شروع هسته] در زیر را بزنید';
+	@override String get actionStartCore => 'شروع فرآیند هسته';
+	@override String get issueCoreFrozen => 'فرآیند هسته متوقف شده یا رمز عبور API همخوانی ندارد';
+	@override String get suggestCoreRestart => 'پیشنهاد می‌شود دکمه [راه‌اندازی مجدد هسته] را برای بازیابی سرویس بزنید';
+	@override String get suggestCoreReinstall => 'راه‌اندازی مجدد هسته یا نصب مجدد درایور را امتحان کنید';
+	@override String get issueProxyZombie => 'پروکسی باقیمانده ترافیک را به پورت غیرفعال هدایت می‌کند و باعث قطعی شبکه می‌شود';
+	@override String get suggestProxyReset => 'روی [پاکسازی و بازنشانی پروکسی سیستم] در زیر کلیک کنید تا اینترنت فوراً وصل شود';
+	@override String get actionResetProxy => 'پاکسازی و بازنشانی پروکسی';
+	@override String get issueProxyBlocked => 'پروکسی سیستم اعمال نشد؛ ممکن است توسط آنتی‌ویروس مسدود شده باشد';
+	@override String get suggestProxyReapply => 'برای ثبت مجدد و اعمال اجباری پروکسی روی دکمه زیر کلیک کنید';
+	@override String get actionReapplyProxy => 'اعمال مجدد پروکسی سیستم';
+	@override String get issueProxyRead => 'خطای غیربحرانی در خواندن تنظیمات پروکسی سیستم رخ داد';
+	@override String get issueHandshakeBlocked => 'نود پروکسی انتخابی نمی‌تواند به اینترنت متصل شود؛ ارتباط مسدود شده است';
+	@override String get suggestHandshakeSwitch => 'نود ممکن است در دست تعمیر یا غیرقابل دسترس باشد؛ لطفاً نود دیگری را انتخاب کنید';
+	@override String suggestHandshakeSlow({required Object delay}) => 'تأخیر نود بالاست (${delay} ms)، پیشنهاد می‌شود نود نزدیک‌تری را انتخاب نمایید';
+	@override String get suggestHandshakeCheck => 'تنظیمات نود را بررسی کرده یا هدف تست را تغییر دهید';
+	@override String get conclusionPerfect => 'مسیر شبکه عالی است! تمامی نودها و تنظیمات پروکسی کاملاً فعال و روان هستند.';
+	@override String get conclusionGood => 'مسیر نسبتاً طبیعی است، تأخیرهای جزئی یا هشدارهایی شناسایی شده است.';
+	@override String get conclusionWarning => 'اشکالاتی در مسیر شبکه یا پروکسی شناسایی شد؛ لطفاً از دکمه [تعمیر هوشمند] زیر استفاده کنید.';
+	@override String get conclusionCritical => 'انسداد شدید شبکه! شبکه محلی متصل نیست یا هسته پروکسی مسدود شده است.';
 }
 
 // Path: SpeedTestScreen
@@ -927,6 +993,72 @@ extension on TranslationsFa {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '۳. HTTP (از طریق پروکسی، پورت: ${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN فعال نیست',
 			'NetCheckScreen.routeTableSection' => '۴. جدول مسیریابی',
+			'NetCheckScreen.stepPhysicalDesc' => 'بررسی وضعیت آداپتور شبکه فیزیکی، IP محلی و اتصال گیت‌وی',
+			'NetCheckScreen.stepDnsDesc' => 'بررسی تأخیر وضوح DNS محلی و وضعیت پاسخ DNS هسته',
+			'NetCheckScreen.stepCoreDesc' => 'بررسی وضعیت فرآیند Mihomo و پورت‌های شنود Mixed-Port/API',
+			'NetCheckScreen.stepProxyDesc' => 'بررسی تنظیمات پروکسی سیستم و عیب‌یابی پروکسی‌های باقیمانده قطعی شبکه',
+			'NetCheckScreen.stepHandshakeDesc' => 'سنجش تأخیر سرتاسری و دردسترس‌بودن CDN جهانی از طریق نود فعال',
+			'NetCheckScreen.shortStepPhysical' => 'کارت شبکه',
+			'NetCheckScreen.shortStepDns' => 'DNS',
+			'NetCheckScreen.shortStepCore' => 'هسته',
+			'NetCheckScreen.shortStepProxy' => 'پروکسی',
+			'NetCheckScreen.shortStepHandshake' => 'اینترنت',
+			'NetCheckScreen.valNicNormal' => ({required Object p}) => 'شبکه متصل است (${p})',
+			'NetCheckScreen.valNicNone' => 'هیچ رابط شبکه فعالی یافت نشد',
+			'NetCheckScreen.valNicGatewayTimeout' => 'IP محلی دریافت شد اما اتصال به گیت‌وی خارجی منقضی شد',
+			'NetCheckScreen.valNicError' => 'خطا در بررسی رابط شبکه',
+			'NetCheckScreen.valDnsNormal' => ({required Object p}) => 'پاسخ DNS نرمال (${p})',
+			'NetCheckScreen.valDnsEmpty' => 'درخواست DNS لیست خالی برگرداند',
+			'NetCheckScreen.valDnsTimeout' => 'درخواست DNS منقضی شد یا با خطا مواجه شد',
+			'NetCheckScreen.valCoreNormal' => ({required Object port, required Object mode}) => 'هسته سالم است (پورت ترکیبی: ${port}، حالت: ${mode})',
+			'NetCheckScreen.valCoreNotRunning' => 'سرویس هسته در حال اجرا نیست',
+			'NetCheckScreen.valCorePortConflict' => ({required Object p}) => 'پورت ${p} توسط برنامه دیگری اشغال شده است',
+			'NetCheckScreen.valCoreApiFailed' => 'هسته پاسخگو نیست (خطای ارتباط با API)',
+			'NetCheckScreen.valCoreError' => 'خطا در بررسی هسته',
+			'NetCheckScreen.valProxyActive' => ({required Object port}) => 'پروکسی سیستم فعال است (127.0.0.1:${port})',
+			'NetCheckScreen.valProxyDisabled' => 'پروکسی سیستم غیرفعال است (حالت مستقیم / TUN / دستی)',
+			'NetCheckScreen.valProxyZombie' => 'پروکسی باقیمانده سیستم شناسایی شد (باعث قطعی اینترنت)',
+			'NetCheckScreen.valProxyFailed' => 'فعال‌سازی پروکسی سیستم ناموفق بود',
+			'NetCheckScreen.valProxyWarning' => 'هشدار وضعیت پروکسی سیستم',
+			'NetCheckScreen.valHandshakeNormal' => ({required Object node, required Object delay}) => 'اتصال به اینترنت نرمال (${node} • ${delay} ms)',
+			'NetCheckScreen.valHandshakeFailed' => ({required Object node, required Object err}) => 'خطای اتصال نود فعلی [${node}] (${err})',
+			'NetCheckScreen.valHandshakeSkipped' => 'هسته شروع نشده، تست اتصال انجام نشد',
+			'NetCheckScreen.valHandshakeError' => 'خطا در اتصال به اینترنت',
+			'NetCheckScreen.issueNicDisconnected' => 'کارت شبکه به هیچ شبکه‌ای متصل نیست (کابل جدا شده، وای‌فای خاموش یا حالت هواپیما)',
+			'NetCheckScreen.suggestNicCheck' => 'لطفاً کابل شبکه، اتصال وای‌فای یا وضعیت آداپتور شبکه را بررسی کنید',
+			'NetCheckScreen.suggestNicReset' => 'غیرفعال کردن و فعال‌سازی مجدد آداپتور شبکه را در تنظیمات سیستم امتحان کنید',
+			'NetCheckScreen.issueNicGatewayUnreachable' => 'به شبکه محلی متصل است، اما گیت‌وی خارجی دردسترس نیست (پرتال ورود یا قطعی روتر)',
+			'NetCheckScreen.suggestNicGateway' => 'چراغ‌های روتر را بررسی کنید یا مرورگر را برای ورود به سیستم باز کنید',
+			'NetCheckScreen.issueDnsPollution' => 'سرویس DNS محلی پاسخ نمی‌دهد؛ احتمال آلودگی DNS یا ربایش گیت‌وی وجود دارد',
+			'NetCheckScreen.suggestDnsReset' => 'DNS سیستم را بازنشانی کنید یا DNS رمزگذاری‌شده هوشمند (DoH/DoT) را در Wmimo فعال نمایید',
+			'NetCheckScreen.actionFlushDns' => 'پاکسازی کش DNS سیستم',
+			'NetCheckScreen.suggestDnsSlow' => 'تأخیر DNS طولانی است، پیشنهاد می‌شود DNS رمزگذاری‌شده فعال گردد',
+			'NetCheckScreen.issueDnsFailed' => 'تجزیه DNS محلی با شکست مواجه شد؛ تبدیل دامنه به IP امکان‌پذیر نیست',
+			'NetCheckScreen.suggestDnsFlush' => 'برای پاکسازی کش DNS کلیک کنید یا در تنظیمات Wmimo دی‌ان‌اس رمزگذاری‌شده را فعال کنید',
+			'NetCheckScreen.issueCorePortConflict' => 'تداخل پورت شناسایی شد! نرم‌افزار پروکسی یا سرویس دیگری پورت را اشغال کرده است',
+			'NetCheckScreen.suggestCoreChangePort' => 'سایر برنامه‌های پروکسی را ببندید یا در تنظیمات Wmimo شماره پورت را تغییر دهید',
+			'NetCheckScreen.actionRestartCore' => 'راه‌اندازی مجدد هسته',
+			'NetCheckScreen.issueCoreStopped' => 'فرآیند هسته Wmimo در حال حاضر متوقف است',
+			'NetCheckScreen.suggestCoreStart' => 'کلید اتصال در صفحه اصلی یا دکمه [شروع هسته] در زیر را بزنید',
+			'NetCheckScreen.actionStartCore' => 'شروع فرآیند هسته',
+			'NetCheckScreen.issueCoreFrozen' => 'فرآیند هسته متوقف شده یا رمز عبور API همخوانی ندارد',
+			'NetCheckScreen.suggestCoreRestart' => 'پیشنهاد می‌شود دکمه [راه‌اندازی مجدد هسته] را برای بازیابی سرویس بزنید',
+			'NetCheckScreen.suggestCoreReinstall' => 'راه‌اندازی مجدد هسته یا نصب مجدد درایور را امتحان کنید',
+			'NetCheckScreen.issueProxyZombie' => 'پروکسی باقیمانده ترافیک را به پورت غیرفعال هدایت می‌کند و باعث قطعی شبکه می‌شود',
+			'NetCheckScreen.suggestProxyReset' => 'روی [پاکسازی و بازنشانی پروکسی سیستم] در زیر کلیک کنید تا اینترنت فوراً وصل شود',
+			'NetCheckScreen.actionResetProxy' => 'پاکسازی و بازنشانی پروکسی',
+			'NetCheckScreen.issueProxyBlocked' => 'پروکسی سیستم اعمال نشد؛ ممکن است توسط آنتی‌ویروس مسدود شده باشد',
+			'NetCheckScreen.suggestProxyReapply' => 'برای ثبت مجدد و اعمال اجباری پروکسی روی دکمه زیر کلیک کنید',
+			'NetCheckScreen.actionReapplyProxy' => 'اعمال مجدد پروکسی سیستم',
+			'NetCheckScreen.issueProxyRead' => 'خطای غیربحرانی در خواندن تنظیمات پروکسی سیستم رخ داد',
+			'NetCheckScreen.issueHandshakeBlocked' => 'نود پروکسی انتخابی نمی‌تواند به اینترنت متصل شود؛ ارتباط مسدود شده است',
+			'NetCheckScreen.suggestHandshakeSwitch' => 'نود ممکن است در دست تعمیر یا غیرقابل دسترس باشد؛ لطفاً نود دیگری را انتخاب کنید',
+			'NetCheckScreen.suggestHandshakeSlow' => ({required Object delay}) => 'تأخیر نود بالاست (${delay} ms)، پیشنهاد می‌شود نود نزدیک‌تری را انتخاب نمایید',
+			'NetCheckScreen.suggestHandshakeCheck' => 'تنظیمات نود را بررسی کرده یا هدف تست را تغییر دهید',
+			'NetCheckScreen.conclusionPerfect' => 'مسیر شبکه عالی است! تمامی نودها و تنظیمات پروکسی کاملاً فعال و روان هستند.',
+			'NetCheckScreen.conclusionGood' => 'مسیر نسبتاً طبیعی است، تأخیرهای جزئی یا هشدارهایی شناسایی شده است.',
+			'NetCheckScreen.conclusionWarning' => 'اشکالاتی در مسیر شبکه یا پروکسی شناسایی شد؛ لطفاً از دکمه [تعمیر هوشمند] زیر استفاده کنید.',
+			'NetCheckScreen.conclusionCritical' => 'انسداد شدید شبکه! شبکه محلی متصل نیست یا هسته پروکسی مسدود شده است.',
 			'SpeedTestScreen.title' => 'تست سرعت',
 			'SpeedTestScreen.startTest' => 'شروع تست',
 			'SpeedTestScreen.stopTest' => 'توقف',
@@ -1314,6 +1446,8 @@ extension on TranslationsFa {
 			'meta.donateTitle' => '💖 خرید یک قهوه برای نویسنده',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ حمایت شما بزرگترین انگیزه برای بهبود مداوم Wmimo است ~ ☕✨',
 			'meta.tokenCurrency' => 'ارز',
+			_ => null,
+		} ?? switch (path) {
 			'meta.networkChain' => 'شبکه',
 			'meta.depositAddress' => 'آدرس واریز APTOS',
 			'meta.clickToCopy' => 'کلیک برای کپی',
@@ -1380,8 +1514,6 @@ extension on TranslationsFa {
 			'meta.reportCopied' => 'گزارش در کلیپ‌بورد کپی شد، آماده برای اشتراک‌گذاری',
 			'meta.gamingExperience' => 'بازی آنلاین',
 			'meta.streamingExperience' => 'استریم ویدیو',
-			_ => null,
-		} ?? switch (path) {
 			'meta.meetingExperience' => 'ویدیو کنفرانس',
 			'meta.customSpeedtestUrl' => 'آدرس سفارشی دانلود (https://...)',
 			'meta.customSpeedtestSource' => 'منبع تست سفارشی',

@@ -181,6 +181,72 @@ class _Translations$NetCheckScreen$ja implements Translations$NetCheckScreen$en 
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (プロキシ経由,ポート:${p})';
 	@override String get tunNotEnabled => 'TUN が無効です';
 	@override String get routeTableSection => '4. ルーティングテーブル';
+	@override String get stepPhysicalDesc => '物理ネットワークカード、ローカルIP、ゲートウェイの接続性を検出';
+	@override String get stepDnsDesc => 'ローカルDNS解決の遅延とコアDNS応答ステータスを検証';
+	@override String get stepCoreDesc => 'Mihomoプロセスの稼働状態とMixed-Port/APIポートのリッスンを検出';
+	@override String get stepProxyDesc => 'システムプロキシ設定の一貫性を検証し残留プロキシをチェック';
+	@override String get stepHandshakeDesc => 'アクティブなノードを経由してグローバルCDNへの実効遅延と到達性を測定';
+	@override String get shortStepPhysical => 'NIC';
+	@override String get shortStepDns => 'DNS';
+	@override String get shortStepCore => 'コア';
+	@override String get shortStepProxy => 'プロキシ';
+	@override String get shortStepHandshake => 'WAN';
+	@override String valNicNormal({required Object p}) => 'ネットワーク接続正常 (${p})';
+	@override String get valNicNone => '利用可能なネットワークインターフェースが見つかりません';
+	@override String get valNicGatewayTimeout => 'ローカルIPは取得されましたが、外部ゲートウェイがタイムアウトしました';
+	@override String get valNicError => 'ネットワークインターフェース検査エラー';
+	@override String valDnsNormal({required Object p}) => 'DNS応答正常 (${p})';
+	@override String get valDnsEmpty => 'DNSクエリが空のリストを返しました';
+	@override String get valDnsTimeout => 'DNSクエリがタイムアウトまたは失敗しました';
+	@override String valCoreNormal({required Object port, required Object mode}) => 'コア正常稼働中 (Mixed Port: ${port}, モード: ${mode})';
+	@override String get valCoreNotRunning => 'コアサービスが停止しています';
+	@override String valCorePortConflict({required Object p}) => 'ポート ${p} は外部プログラムによって占有されています';
+	@override String get valCoreApiFailed => 'コアプロセスが無応答 (API通信失敗)';
+	@override String get valCoreError => 'コア検査エラー';
+	@override String valProxyActive({required Object port}) => 'システムプロキシ有効 (127.0.0.1:${port})';
+	@override String get valProxyDisabled => 'システムプロキシ無効 (直連/TUN/手動モード)';
+	@override String get valProxyZombie => '残留システムプロキシを検出 (ネット不通の原因)';
+	@override String get valProxyFailed => 'システムプロキシの有効化に失敗しました';
+	@override String get valProxyWarning => 'システムプロキシ状態の読み取り警告';
+	@override String valHandshakeNormal({required Object node, required Object delay}) => '公衆回線ハンドシェイク良好 (${node} • ${delay} ms)';
+	@override String valHandshakeFailed({required Object node, required Object err}) => '現在のノード [${node}] ハンドシェイク失敗 (${err})';
+	@override String get valHandshakeSkipped => 'コア未起動のため、公衆回線テストをスキップ';
+	@override String get valHandshakeError => '公衆回線ハンドシェイク異常';
+	@override String get issueNicDisconnected => 'ネットワークカードが未接続です (LANケーブル未接続、Wi-Fi切断、機内モード)';
+	@override String get suggestNicCheck => 'LANケーブル、Wi-Fi接続、またはネットワークアダプターの状態を確認してください';
+	@override String get suggestNicReset => 'システム設定でネットワークアダプターを無効化してから再度有効にしてみてください';
+	@override String get issueNicGatewayUnreachable => 'LANには接続されていますが、外部ルーターにアクセスできません (認証ポータルまたはルーター切断)';
+	@override String get suggestNicGateway => 'ルーターのインジケーターを確認するか、ブラウザを開いてWeb認証が必要か確認してください';
+	@override String get issueDnsPollution => 'ローカルDNSサービスが無応答です。DNS汚染またはハイジャックの可能性があります';
+	@override String get suggestDnsReset => 'システムDNSをリセットするか、Wmimoで暗号化DNS (DoH/DoT) を有効にしてください';
+	@override String get actionFlushDns => 'システムDNSキャッシュをフラッシュ';
+	@override String get suggestDnsSlow => 'DNS解決の遅延が大きいため、暗号化DNSの有効化をおすすめします';
+	@override String get issueDnsFailed => 'ローカルDNS解決に失敗しました。ドメインをIPアドレスに変換できません';
+	@override String get suggestDnsFlush => 'DNSキャッシュをフラッシュするか、Wmimo設定で暗号化DNSを有効にしてください';
+	@override String get issueCorePortConflict => 'ポート競合が検出されました！他のプロキシソフトまたはサービスが占有しています';
+	@override String get suggestCoreChangePort => '他のプロキシソフトを終了するか、Wmimo設定でポート番号を変更してください';
+	@override String get actionRestartCore => 'コアを再起動';
+	@override String get issueCoreStopped => 'Wmimoコアプロセスが停止しています';
+	@override String get suggestCoreStart => 'ホーム画面の接続スイッチを入れるか、下の【コア起動】をクリックしてください';
+	@override String get actionStartCore => 'コアプロセスを起動';
+	@override String get issueCoreFrozen => 'コアプロセスが応答しないか、API認証が一致しません';
+	@override String get suggestCoreRestart => '【コア再起動】をクリックしてサービスを復旧してください';
+	@override String get suggestCoreReinstall => 'コアの再起動またはドライバの再インストールをお試しください';
+	@override String get issueProxyZombie => '停止したポートに残留プロキシが転送しており、通信が遮断されています';
+	@override String get suggestProxyReset => '下の【システムプロキシのクリーンとリセット】をクリックして復旧してください';
+	@override String get actionResetProxy => 'プロキシをクリーン＆リセット';
+	@override String get issueProxyBlocked => 'システムプロキシが反映されません。セキュリティソフトや権限を確認してください';
+	@override String get suggestProxyReapply => '下のボタンをクリックしてシステムプロキシの強制適用をお試しください';
+	@override String get actionReapplyProxy => 'システムプロキシを再適用';
+	@override String get issueProxyRead => 'システムプロキシ設定の読み取り中に非致命的なエラーが発生しました';
+	@override String get issueHandshakeBlocked => '選択中のプロキシノードがインターネットに接続できません。通信が遮断されています';
+	@override String get suggestHandshakeSwitch => 'ノードがメンテナンス中または到達不能です。別のノードに切り替えてください';
+	@override String suggestHandshakeSlow({required Object delay}) => 'ノード遅延が高めです (${delay} ms)。速度測定を行い近いノードを選択してください';
+	@override String get suggestHandshakeCheck => 'ノード設定を確認するか、測定先を変更してください';
+	@override String get conclusionPerfect => '全ルート良好！すべてのネットワークノードとプロキシ設定が正常です。';
+	@override String get conclusionGood => '全ルート概ね正常です。軽微な遅延や警告が検出されました。詳細をご確認ください。';
+	@override String get conclusionWarning => '一部のネットワークまたはプロキシに異常が検出されました。下の【一括修復】をお試しください。';
+	@override String get conclusionCritical => '重大なネットワーク遮断！ローカル回線が切断されているか、コアが阻害されています。';
 }
 
 // Path: SpeedTestScreen
@@ -927,6 +993,72 @@ extension on TranslationsJa {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (プロキシ経由,ポート:${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN が無効です',
 			'NetCheckScreen.routeTableSection' => '4. ルーティングテーブル',
+			'NetCheckScreen.stepPhysicalDesc' => '物理ネットワークカード、ローカルIP、ゲートウェイの接続性を検出',
+			'NetCheckScreen.stepDnsDesc' => 'ローカルDNS解決の遅延とコアDNS応答ステータスを検証',
+			'NetCheckScreen.stepCoreDesc' => 'Mihomoプロセスの稼働状態とMixed-Port/APIポートのリッスンを検出',
+			'NetCheckScreen.stepProxyDesc' => 'システムプロキシ設定の一貫性を検証し残留プロキシをチェック',
+			'NetCheckScreen.stepHandshakeDesc' => 'アクティブなノードを経由してグローバルCDNへの実効遅延と到達性を測定',
+			'NetCheckScreen.shortStepPhysical' => 'NIC',
+			'NetCheckScreen.shortStepDns' => 'DNS',
+			'NetCheckScreen.shortStepCore' => 'コア',
+			'NetCheckScreen.shortStepProxy' => 'プロキシ',
+			'NetCheckScreen.shortStepHandshake' => 'WAN',
+			'NetCheckScreen.valNicNormal' => ({required Object p}) => 'ネットワーク接続正常 (${p})',
+			'NetCheckScreen.valNicNone' => '利用可能なネットワークインターフェースが見つかりません',
+			'NetCheckScreen.valNicGatewayTimeout' => 'ローカルIPは取得されましたが、外部ゲートウェイがタイムアウトしました',
+			'NetCheckScreen.valNicError' => 'ネットワークインターフェース検査エラー',
+			'NetCheckScreen.valDnsNormal' => ({required Object p}) => 'DNS応答正常 (${p})',
+			'NetCheckScreen.valDnsEmpty' => 'DNSクエリが空のリストを返しました',
+			'NetCheckScreen.valDnsTimeout' => 'DNSクエリがタイムアウトまたは失敗しました',
+			'NetCheckScreen.valCoreNormal' => ({required Object port, required Object mode}) => 'コア正常稼働中 (Mixed Port: ${port}, モード: ${mode})',
+			'NetCheckScreen.valCoreNotRunning' => 'コアサービスが停止しています',
+			'NetCheckScreen.valCorePortConflict' => ({required Object p}) => 'ポート ${p} は外部プログラムによって占有されています',
+			'NetCheckScreen.valCoreApiFailed' => 'コアプロセスが無応答 (API通信失敗)',
+			'NetCheckScreen.valCoreError' => 'コア検査エラー',
+			'NetCheckScreen.valProxyActive' => ({required Object port}) => 'システムプロキシ有効 (127.0.0.1:${port})',
+			'NetCheckScreen.valProxyDisabled' => 'システムプロキシ無効 (直連/TUN/手動モード)',
+			'NetCheckScreen.valProxyZombie' => '残留システムプロキシを検出 (ネット不通の原因)',
+			'NetCheckScreen.valProxyFailed' => 'システムプロキシの有効化に失敗しました',
+			'NetCheckScreen.valProxyWarning' => 'システムプロキシ状態の読み取り警告',
+			'NetCheckScreen.valHandshakeNormal' => ({required Object node, required Object delay}) => '公衆回線ハンドシェイク良好 (${node} • ${delay} ms)',
+			'NetCheckScreen.valHandshakeFailed' => ({required Object node, required Object err}) => '現在のノード [${node}] ハンドシェイク失敗 (${err})',
+			'NetCheckScreen.valHandshakeSkipped' => 'コア未起動のため、公衆回線テストをスキップ',
+			'NetCheckScreen.valHandshakeError' => '公衆回線ハンドシェイク異常',
+			'NetCheckScreen.issueNicDisconnected' => 'ネットワークカードが未接続です (LANケーブル未接続、Wi-Fi切断、機内モード)',
+			'NetCheckScreen.suggestNicCheck' => 'LANケーブル、Wi-Fi接続、またはネットワークアダプターの状態を確認してください',
+			'NetCheckScreen.suggestNicReset' => 'システム設定でネットワークアダプターを無効化してから再度有効にしてみてください',
+			'NetCheckScreen.issueNicGatewayUnreachable' => 'LANには接続されていますが、外部ルーターにアクセスできません (認証ポータルまたはルーター切断)',
+			'NetCheckScreen.suggestNicGateway' => 'ルーターのインジケーターを確認するか、ブラウザを開いてWeb認証が必要か確認してください',
+			'NetCheckScreen.issueDnsPollution' => 'ローカルDNSサービスが無応答です。DNS汚染またはハイジャックの可能性があります',
+			'NetCheckScreen.suggestDnsReset' => 'システムDNSをリセットするか、Wmimoで暗号化DNS (DoH/DoT) を有効にしてください',
+			'NetCheckScreen.actionFlushDns' => 'システムDNSキャッシュをフラッシュ',
+			'NetCheckScreen.suggestDnsSlow' => 'DNS解決の遅延が大きいため、暗号化DNSの有効化をおすすめします',
+			'NetCheckScreen.issueDnsFailed' => 'ローカルDNS解決に失敗しました。ドメインをIPアドレスに変換できません',
+			'NetCheckScreen.suggestDnsFlush' => 'DNSキャッシュをフラッシュするか、Wmimo設定で暗号化DNSを有効にしてください',
+			'NetCheckScreen.issueCorePortConflict' => 'ポート競合が検出されました！他のプロキシソフトまたはサービスが占有しています',
+			'NetCheckScreen.suggestCoreChangePort' => '他のプロキシソフトを終了するか、Wmimo設定でポート番号を変更してください',
+			'NetCheckScreen.actionRestartCore' => 'コアを再起動',
+			'NetCheckScreen.issueCoreStopped' => 'Wmimoコアプロセスが停止しています',
+			'NetCheckScreen.suggestCoreStart' => 'ホーム画面の接続スイッチを入れるか、下の【コア起動】をクリックしてください',
+			'NetCheckScreen.actionStartCore' => 'コアプロセスを起動',
+			'NetCheckScreen.issueCoreFrozen' => 'コアプロセスが応答しないか、API認証が一致しません',
+			'NetCheckScreen.suggestCoreRestart' => '【コア再起動】をクリックしてサービスを復旧してください',
+			'NetCheckScreen.suggestCoreReinstall' => 'コアの再起動またはドライバの再インストールをお試しください',
+			'NetCheckScreen.issueProxyZombie' => '停止したポートに残留プロキシが転送しており、通信が遮断されています',
+			'NetCheckScreen.suggestProxyReset' => '下の【システムプロキシのクリーンとリセット】をクリックして復旧してください',
+			'NetCheckScreen.actionResetProxy' => 'プロキシをクリーン＆リセット',
+			'NetCheckScreen.issueProxyBlocked' => 'システムプロキシが反映されません。セキュリティソフトや権限を確認してください',
+			'NetCheckScreen.suggestProxyReapply' => '下のボタンをクリックしてシステムプロキシの強制適用をお試しください',
+			'NetCheckScreen.actionReapplyProxy' => 'システムプロキシを再適用',
+			'NetCheckScreen.issueProxyRead' => 'システムプロキシ設定の読み取り中に非致命的なエラーが発生しました',
+			'NetCheckScreen.issueHandshakeBlocked' => '選択中のプロキシノードがインターネットに接続できません。通信が遮断されています',
+			'NetCheckScreen.suggestHandshakeSwitch' => 'ノードがメンテナンス中または到達不能です。別のノードに切り替えてください',
+			'NetCheckScreen.suggestHandshakeSlow' => ({required Object delay}) => 'ノード遅延が高めです (${delay} ms)。速度測定を行い近いノードを選択してください',
+			'NetCheckScreen.suggestHandshakeCheck' => 'ノード設定を確認するか、測定先を変更してください',
+			'NetCheckScreen.conclusionPerfect' => '全ルート良好！すべてのネットワークノードとプロキシ設定が正常です。',
+			'NetCheckScreen.conclusionGood' => '全ルート概ね正常です。軽微な遅延や警告が検出されました。詳細をご確認ください。',
+			'NetCheckScreen.conclusionWarning' => '一部のネットワークまたはプロキシに異常が検出されました。下の【一括修復】をお試しください。',
+			'NetCheckScreen.conclusionCritical' => '重大なネットワーク遮断！ローカル回線が切断されているか、コアが阻害されています。',
 			'SpeedTestScreen.title' => 'スピードテスト',
 			'SpeedTestScreen.startTest' => 'テスト開始',
 			'SpeedTestScreen.stopTest' => '停止',
@@ -1314,6 +1446,8 @@ extension on TranslationsJa {
 			'meta.donateTitle' => '💖 開発者にコーヒーをおごる',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 皆様のご支援が、Wmimoを磨き続ける最大の力になります ~ ☕✨',
 			'meta.tokenCurrency' => '通貨',
+			_ => null,
+		} ?? switch (path) {
 			'meta.networkChain' => 'ネットワーク',
 			'meta.depositAddress' => 'APTOS 受取先アドレス',
 			'meta.clickToCopy' => 'クリックしてコピー',
@@ -1380,8 +1514,6 @@ extension on TranslationsJa {
 			'meta.reportCopied' => 'レポートをコピーしました。共有できます',
 			'meta.gamingExperience' => 'オンラインゲーム',
 			'meta.streamingExperience' => '動画ストリーミング',
-			_ => null,
-		} ?? switch (path) {
 			'meta.meetingExperience' => 'ビデオ会議',
 			'meta.customSpeedtestUrl' => 'カスタム測定URL (https://...)',
 			'meta.customSpeedtestSource' => 'カスタム測定サーバー',

@@ -68,13 +68,15 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
 
   Future<void> _runDiagnostics() async {
     if (_diagnosing) return;
+    final tcontext = Translations.of(context);
     setState(() {
       _diagnosing = true;
-      _diagnosticSteps = NetworkDiagnostics.initialSteps();
+      _diagnosticSteps = NetworkDiagnostics.initialSteps(tcontext);
     });
 
     try {
       final report = await NetworkDiagnostics.runDiagnostics(
+        translations: tcontext,
         onStepUpdate: (updatedStep) {
           if (!mounted) return;
           setState(() {
@@ -85,6 +87,7 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
           });
         },
       );
+
 
       if (!mounted) return;
       setState(() {
@@ -449,19 +452,33 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
     }
   }
 
-  String _getShortStepName(DiagnosticStepId id) {
-    final isZh = LocaleSettings.currentLocale.languageCode.startsWith('zh');
+  String _getShortStepName(DiagnosticStepId id, Translations tcontext) {
     switch (id) {
       case DiagnosticStepId.physicalNetwork:
-        return isZh ? "网卡" : "NIC";
+        return tcontext.NetCheckScreen.shortStepPhysical;
       case DiagnosticStepId.dnsResolution:
-        return "DNS";
+        return tcontext.NetCheckScreen.shortStepDns;
       case DiagnosticStepId.coreAndPort:
-        return isZh ? "内核" : "Core";
+        return tcontext.NetCheckScreen.shortStepCore;
       case DiagnosticStepId.systemProxy:
-        return isZh ? "代理" : "Proxy";
+        return tcontext.NetCheckScreen.shortStepProxy;
       case DiagnosticStepId.internetHandshake:
-        return isZh ? "公网" : "WAN";
+        return tcontext.NetCheckScreen.shortStepHandshake;
+    }
+  }
+
+  String _getStepDescription(DiagnosticStepId id, Translations tcontext) {
+    switch (id) {
+      case DiagnosticStepId.physicalNetwork:
+        return tcontext.NetCheckScreen.stepPhysicalDesc;
+      case DiagnosticStepId.dnsResolution:
+        return tcontext.NetCheckScreen.stepDnsDesc;
+      case DiagnosticStepId.coreAndPort:
+        return tcontext.NetCheckScreen.stepCoreDesc;
+      case DiagnosticStepId.systemProxy:
+        return tcontext.NetCheckScreen.stepProxyDesc;
+      case DiagnosticStepId.internetHandshake:
+        return tcontext.NetCheckScreen.stepHandshakeDesc;
     }
   }
 
@@ -578,7 +595,7 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
       children: [
         _buildScoreCard(tcontext, isDark),
         const SizedBox(height: 16),
-        _buildTopologyStrip(isDark),
+        _buildTopologyStrip(isDark, tcontext),
         const SizedBox(height: 16),
         ..._diagnosticSteps.map((step) => _buildStepCard(step, tcontext, isDark)),
       ],
@@ -764,7 +781,7 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
     );
   }
 
-  Widget _buildTopologyStrip(bool isDark) {
+  Widget _buildTopologyStrip(bool isDark, Translations tcontext) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
@@ -820,7 +837,7 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
               ),
               const SizedBox(height: 4),
               Text(
-                _getShortStepName(step.id),
+                _getShortStepName(step.id, tcontext),
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
@@ -891,7 +908,7 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        step.description,
+                        _getStepDescription(step.id, tcontext),
                         style: TextStyle(
                           fontSize: 12,
                           color: ThemeDefine.kColorGrey,

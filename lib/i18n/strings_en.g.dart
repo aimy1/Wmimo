@@ -327,6 +327,204 @@ class Translations$NetCheckScreen$en {
 
 	/// en: '4. Route Table'
 	String get routeTableSection => '4. Route Table';
+
+	/// en: 'Checks physical network adapter, local IP, and gateway connectivity'
+	String get stepPhysicalDesc => 'Checks physical network adapter, local IP, and gateway connectivity';
+
+	/// en: 'Verifies local DNS resolution latency and core DNS engine status'
+	String get stepDnsDesc => 'Verifies local DNS resolution latency and core DNS engine status';
+
+	/// en: 'Checks Mihomo process status and Mixed-Port / API listening ports'
+	String get stepCoreDesc => 'Checks Mihomo process status and Mixed-Port / API listening ports';
+
+	/// en: 'Verifies system proxy settings and checks for residual zombie proxy settings'
+	String get stepProxyDesc => 'Verifies system proxy settings and checks for residual zombie proxy settings';
+
+	/// en: 'Tests end-to-end latency and reachability to global CDN via active node'
+	String get stepHandshakeDesc => 'Tests end-to-end latency and reachability to global CDN via active node';
+
+	/// en: 'NIC'
+	String get shortStepPhysical => 'NIC';
+
+	/// en: 'DNS'
+	String get shortStepDns => 'DNS';
+
+	/// en: 'Core'
+	String get shortStepCore => 'Core';
+
+	/// en: 'Proxy'
+	String get shortStepProxy => 'Proxy';
+
+	/// en: 'WAN'
+	String get shortStepHandshake => 'WAN';
+
+	/// en: 'Network connected ($p)'
+	String valNicNormal({required Object p}) => 'Network connected (${p})';
+
+	/// en: 'No available network interfaces found'
+	String get valNicNone => 'No available network interfaces found';
+
+	/// en: 'Local IP acquired, but external gateway timed out'
+	String get valNicGatewayTimeout => 'Local IP acquired, but external gateway timed out';
+
+	/// en: 'Network interface check error'
+	String get valNicError => 'Network interface check error';
+
+	/// en: 'DNS response normal ($p)'
+	String valDnsNormal({required Object p}) => 'DNS response normal (${p})';
+
+	/// en: 'DNS query returned empty list'
+	String get valDnsEmpty => 'DNS query returned empty list';
+
+	/// en: 'DNS query timed out or failed'
+	String get valDnsTimeout => 'DNS query timed out or failed';
+
+	/// en: 'Core healthy (Mixed Port: $port, Mode: $mode)'
+	String valCoreNormal({required Object port, required Object mode}) => 'Core healthy (Mixed Port: ${port}, Mode: ${mode})';
+
+	/// en: 'Core service is not running'
+	String get valCoreNotRunning => 'Core service is not running';
+
+	/// en: 'Port $p is occupied by another program'
+	String valCorePortConflict({required Object p}) => 'Port ${p} is occupied by another program';
+
+	/// en: 'Core unresponsive (API communication failed)'
+	String get valCoreApiFailed => 'Core unresponsive (API communication failed)';
+
+	/// en: 'Core check error'
+	String get valCoreError => 'Core check error';
+
+	/// en: 'System proxy active (127.0.0.1:$port)'
+	String valProxyActive({required Object port}) => 'System proxy active (127.0.0.1:${port})';
+
+	/// en: 'System proxy disabled (Direct / TUN / Manual mode)'
+	String get valProxyDisabled => 'System proxy disabled (Direct / TUN / Manual mode)';
+
+	/// en: 'Residual system proxy detected (blocking internet)'
+	String get valProxyZombie => 'Residual system proxy detected (blocking internet)';
+
+	/// en: 'System proxy failed to enable'
+	String get valProxyFailed => 'System proxy failed to enable';
+
+	/// en: 'System proxy status warning'
+	String get valProxyWarning => 'System proxy status warning';
+
+	/// en: 'Internet handshake normal ($node • $delay ms)'
+	String valHandshakeNormal({required Object node, required Object delay}) => 'Internet handshake normal (${node} • ${delay} ms)';
+
+	/// en: 'Current node [$node] handshake failed ($err)'
+	String valHandshakeFailed({required Object node, required Object err}) => 'Current node [${node}] handshake failed (${err})';
+
+	/// en: 'Core not started, skipped internet handshake test'
+	String get valHandshakeSkipped => 'Core not started, skipped internet handshake test';
+
+	/// en: 'Internet handshake error'
+	String get valHandshakeError => 'Internet handshake error';
+
+	/// en: 'Network card not connected to any network (cable unplugged, Wi-Fi off, or airplane mode)'
+	String get issueNicDisconnected => 'Network card not connected to any network (cable unplugged, Wi-Fi off, or airplane mode)';
+
+	/// en: 'Please check your Ethernet cable, Wi-Fi connection, or network adapter status'
+	String get suggestNicCheck => 'Please check your Ethernet cable, Wi-Fi connection, or network adapter status';
+
+	/// en: 'Try disabling and re-enabling the network adapter in system settings'
+	String get suggestNicReset => 'Try disabling and re-enabling the network adapter in system settings';
+
+	/// en: 'Connected to LAN, but external gateway unreachable (captive portal, login required, or router offline)'
+	String get issueNicGatewayUnreachable => 'Connected to LAN, but external gateway unreachable (captive portal, login required, or router offline)';
+
+	/// en: 'Check router status or open browser to complete captive portal / Web authentication'
+	String get suggestNicGateway => 'Check router status or open browser to complete captive portal / Web authentication';
+
+	/// en: 'Local DNS service not responding; possible DNS pollution or gateway hijacking'
+	String get issueDnsPollution => 'Local DNS service not responding; possible DNS pollution or gateway hijacking';
+
+	/// en: 'Reset system DNS or enable Smart Encrypted DNS (DoH/DoT) in Wmimo'
+	String get suggestDnsReset => 'Reset system DNS or enable Smart Encrypted DNS (DoH/DoT) in Wmimo';
+
+	/// en: 'Flush System DNS Cache'
+	String get actionFlushDns => 'Flush System DNS Cache';
+
+	/// en: 'DNS latency is high; consider enabling Smart Encrypted DNS'
+	String get suggestDnsSlow => 'DNS latency is high; consider enabling Smart Encrypted DNS';
+
+	/// en: 'Local DNS resolution failed; unable to resolve domain names to IP addresses'
+	String get issueDnsFailed => 'Local DNS resolution failed; unable to resolve domain names to IP addresses';
+
+	/// en: 'Click to flush DNS cache, or enable encrypted DNS in Wmimo settings'
+	String get suggestDnsFlush => 'Click to flush DNS cache, or enable encrypted DNS in Wmimo settings';
+
+	/// en: 'Port conflict detected! Another proxy app or service is occupying the port'
+	String get issueCorePortConflict => 'Port conflict detected! Another proxy app or service is occupying the port';
+
+	/// en: 'Close other proxy clients completely, or change the port in Wmimo settings'
+	String get suggestCoreChangePort => 'Close other proxy clients completely, or change the port in Wmimo settings';
+
+	/// en: 'Restart Core'
+	String get actionRestartCore => 'Restart Core';
+
+	/// en: 'Wmimo core process is currently stopped'
+	String get issueCoreStopped => 'Wmimo core process is currently stopped';
+
+	/// en: 'Click the connect switch on the home screen or click Start Core below'
+	String get suggestCoreStart => 'Click the connect switch on the home screen or click Start Core below';
+
+	/// en: 'Start Core Process'
+	String get actionStartCore => 'Start Core Process';
+
+	/// en: 'Core process is unresponsive or API authentication mismatched'
+	String get issueCoreFrozen => 'Core process is unresponsive or API authentication mismatched';
+
+	/// en: 'Restart the core to recover service'
+	String get suggestCoreRestart => 'Restart the core to recover service';
+
+	/// en: 'Try restarting the core or reinstalling service drivers'
+	String get suggestCoreReinstall => 'Try restarting the core or reinstalling service drivers';
+
+	/// en: 'Residual system proxy forwards traffic to an inactive port, causing internet loss'
+	String get issueProxyZombie => 'Residual system proxy forwards traffic to an inactive port, causing internet loss';
+
+	/// en: 'Click Clean & Reset System Proxy below to immediately restore internet access'
+	String get suggestProxyReset => 'Click Clean & Reset System Proxy below to immediately restore internet access';
+
+	/// en: 'Clean & Reset System Proxy'
+	String get actionResetProxy => 'Clean & Reset System Proxy';
+
+	/// en: 'System proxy not applied, possibly blocked by antivirus or permission limits'
+	String get issueProxyBlocked => 'System proxy not applied, possibly blocked by antivirus or permission limits';
+
+	/// en: 'Click below to re-register and force apply system proxy'
+	String get suggestProxyReapply => 'Click below to re-register and force apply system proxy';
+
+	/// en: 'Re-apply System Proxy'
+	String get actionReapplyProxy => 'Re-apply System Proxy';
+
+	/// en: 'Non-fatal exception reading system proxy settings'
+	String get issueProxyRead => 'Non-fatal exception reading system proxy settings';
+
+	/// en: 'Current proxy node cannot connect to internet; handshake failed or blocked'
+	String get issueHandshakeBlocked => 'Current proxy node cannot connect to internet; handshake failed or blocked';
+
+	/// en: 'Node may be down or unreachable; please switch to another node'
+	String get suggestHandshakeSwitch => 'Node may be down or unreachable; please switch to another node';
+
+	/// en: 'High node latency ($delay ms); consider testing and selecting a closer node'
+	String suggestHandshakeSlow({required Object delay}) => 'High node latency (${delay} ms); consider testing and selecting a closer node';
+
+	/// en: 'Check node configuration or change latency test target'
+	String get suggestHandshakeCheck => 'Check node configuration or change latency test target';
+
+	/// en: 'Pipeline excellent! All network nodes and proxy configs are fully operational.'
+	String get conclusionPerfect => 'Pipeline excellent! All network nodes and proxy configs are fully operational.';
+
+	/// en: 'Pipeline generally normal, minor non-critical latency or warnings detected.'
+	String get conclusionGood => 'Pipeline generally normal, minor non-critical latency or warnings detected.';
+
+	/// en: 'Issues detected in network or proxy pipeline; please use One-Click Repair below.'
+	String get conclusionWarning => 'Issues detected in network or proxy pipeline; please use One-Click Repair below.';
+
+	/// en: 'Severe network blockage! Local network disconnected or proxy core blocked.'
+	String get conclusionCritical => 'Severe network blockage! Local network disconnected or proxy core blocked.';
 }
 
 // Path: SpeedTestScreen
@@ -2194,6 +2392,72 @@ extension on Translations {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (via Proxy, port: ${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN is not enabled',
 			'NetCheckScreen.routeTableSection' => '4. Route Table',
+			'NetCheckScreen.stepPhysicalDesc' => 'Checks physical network adapter, local IP, and gateway connectivity',
+			'NetCheckScreen.stepDnsDesc' => 'Verifies local DNS resolution latency and core DNS engine status',
+			'NetCheckScreen.stepCoreDesc' => 'Checks Mihomo process status and Mixed-Port / API listening ports',
+			'NetCheckScreen.stepProxyDesc' => 'Verifies system proxy settings and checks for residual zombie proxy settings',
+			'NetCheckScreen.stepHandshakeDesc' => 'Tests end-to-end latency and reachability to global CDN via active node',
+			'NetCheckScreen.shortStepPhysical' => 'NIC',
+			'NetCheckScreen.shortStepDns' => 'DNS',
+			'NetCheckScreen.shortStepCore' => 'Core',
+			'NetCheckScreen.shortStepProxy' => 'Proxy',
+			'NetCheckScreen.shortStepHandshake' => 'WAN',
+			'NetCheckScreen.valNicNormal' => ({required Object p}) => 'Network connected (${p})',
+			'NetCheckScreen.valNicNone' => 'No available network interfaces found',
+			'NetCheckScreen.valNicGatewayTimeout' => 'Local IP acquired, but external gateway timed out',
+			'NetCheckScreen.valNicError' => 'Network interface check error',
+			'NetCheckScreen.valDnsNormal' => ({required Object p}) => 'DNS response normal (${p})',
+			'NetCheckScreen.valDnsEmpty' => 'DNS query returned empty list',
+			'NetCheckScreen.valDnsTimeout' => 'DNS query timed out or failed',
+			'NetCheckScreen.valCoreNormal' => ({required Object port, required Object mode}) => 'Core healthy (Mixed Port: ${port}, Mode: ${mode})',
+			'NetCheckScreen.valCoreNotRunning' => 'Core service is not running',
+			'NetCheckScreen.valCorePortConflict' => ({required Object p}) => 'Port ${p} is occupied by another program',
+			'NetCheckScreen.valCoreApiFailed' => 'Core unresponsive (API communication failed)',
+			'NetCheckScreen.valCoreError' => 'Core check error',
+			'NetCheckScreen.valProxyActive' => ({required Object port}) => 'System proxy active (127.0.0.1:${port})',
+			'NetCheckScreen.valProxyDisabled' => 'System proxy disabled (Direct / TUN / Manual mode)',
+			'NetCheckScreen.valProxyZombie' => 'Residual system proxy detected (blocking internet)',
+			'NetCheckScreen.valProxyFailed' => 'System proxy failed to enable',
+			'NetCheckScreen.valProxyWarning' => 'System proxy status warning',
+			'NetCheckScreen.valHandshakeNormal' => ({required Object node, required Object delay}) => 'Internet handshake normal (${node} • ${delay} ms)',
+			'NetCheckScreen.valHandshakeFailed' => ({required Object node, required Object err}) => 'Current node [${node}] handshake failed (${err})',
+			'NetCheckScreen.valHandshakeSkipped' => 'Core not started, skipped internet handshake test',
+			'NetCheckScreen.valHandshakeError' => 'Internet handshake error',
+			'NetCheckScreen.issueNicDisconnected' => 'Network card not connected to any network (cable unplugged, Wi-Fi off, or airplane mode)',
+			'NetCheckScreen.suggestNicCheck' => 'Please check your Ethernet cable, Wi-Fi connection, or network adapter status',
+			'NetCheckScreen.suggestNicReset' => 'Try disabling and re-enabling the network adapter in system settings',
+			'NetCheckScreen.issueNicGatewayUnreachable' => 'Connected to LAN, but external gateway unreachable (captive portal, login required, or router offline)',
+			'NetCheckScreen.suggestNicGateway' => 'Check router status or open browser to complete captive portal / Web authentication',
+			'NetCheckScreen.issueDnsPollution' => 'Local DNS service not responding; possible DNS pollution or gateway hijacking',
+			'NetCheckScreen.suggestDnsReset' => 'Reset system DNS or enable Smart Encrypted DNS (DoH/DoT) in Wmimo',
+			'NetCheckScreen.actionFlushDns' => 'Flush System DNS Cache',
+			'NetCheckScreen.suggestDnsSlow' => 'DNS latency is high; consider enabling Smart Encrypted DNS',
+			'NetCheckScreen.issueDnsFailed' => 'Local DNS resolution failed; unable to resolve domain names to IP addresses',
+			'NetCheckScreen.suggestDnsFlush' => 'Click to flush DNS cache, or enable encrypted DNS in Wmimo settings',
+			'NetCheckScreen.issueCorePortConflict' => 'Port conflict detected! Another proxy app or service is occupying the port',
+			'NetCheckScreen.suggestCoreChangePort' => 'Close other proxy clients completely, or change the port in Wmimo settings',
+			'NetCheckScreen.actionRestartCore' => 'Restart Core',
+			'NetCheckScreen.issueCoreStopped' => 'Wmimo core process is currently stopped',
+			'NetCheckScreen.suggestCoreStart' => 'Click the connect switch on the home screen or click Start Core below',
+			'NetCheckScreen.actionStartCore' => 'Start Core Process',
+			'NetCheckScreen.issueCoreFrozen' => 'Core process is unresponsive or API authentication mismatched',
+			'NetCheckScreen.suggestCoreRestart' => 'Restart the core to recover service',
+			'NetCheckScreen.suggestCoreReinstall' => 'Try restarting the core or reinstalling service drivers',
+			'NetCheckScreen.issueProxyZombie' => 'Residual system proxy forwards traffic to an inactive port, causing internet loss',
+			'NetCheckScreen.suggestProxyReset' => 'Click Clean & Reset System Proxy below to immediately restore internet access',
+			'NetCheckScreen.actionResetProxy' => 'Clean & Reset System Proxy',
+			'NetCheckScreen.issueProxyBlocked' => 'System proxy not applied, possibly blocked by antivirus or permission limits',
+			'NetCheckScreen.suggestProxyReapply' => 'Click below to re-register and force apply system proxy',
+			'NetCheckScreen.actionReapplyProxy' => 'Re-apply System Proxy',
+			'NetCheckScreen.issueProxyRead' => 'Non-fatal exception reading system proxy settings',
+			'NetCheckScreen.issueHandshakeBlocked' => 'Current proxy node cannot connect to internet; handshake failed or blocked',
+			'NetCheckScreen.suggestHandshakeSwitch' => 'Node may be down or unreachable; please switch to another node',
+			'NetCheckScreen.suggestHandshakeSlow' => ({required Object delay}) => 'High node latency (${delay} ms); consider testing and selecting a closer node',
+			'NetCheckScreen.suggestHandshakeCheck' => 'Check node configuration or change latency test target',
+			'NetCheckScreen.conclusionPerfect' => 'Pipeline excellent! All network nodes and proxy configs are fully operational.',
+			'NetCheckScreen.conclusionGood' => 'Pipeline generally normal, minor non-critical latency or warnings detected.',
+			'NetCheckScreen.conclusionWarning' => 'Issues detected in network or proxy pipeline; please use One-Click Repair below.',
+			'NetCheckScreen.conclusionCritical' => 'Severe network blockage! Local network disconnected or proxy core blocked.',
 			'SpeedTestScreen.title' => 'Speed Test',
 			'SpeedTestScreen.startTest' => 'Start Test',
 			'SpeedTestScreen.stopTest' => 'Stop Test',
@@ -2578,6 +2842,8 @@ extension on Translations {
 			'meta.donateTitle' => '💖 Buy Author a Coffee',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Every donation is our greatest motivation to keep polishing Wmimo ~ ☕✨',
 			'meta.tokenCurrency' => 'Token',
+			_ => null,
+		} ?? switch (path) {
 			'meta.networkChain' => 'Network',
 			'meta.depositAddress' => 'APTOS Deposit Address',
 			'meta.clickToCopy' => 'Click to copy',
@@ -2644,8 +2910,6 @@ extension on Translations {
 			'meta.reportCopied' => 'Report copied to clipboard, ready to share',
 			'meta.gamingExperience' => 'Gaming',
 			'meta.streamingExperience' => 'Streaming',
-			_ => null,
-		} ?? switch (path) {
 			'meta.meetingExperience' => 'Conferencing',
 			'meta.customSpeedtestUrl' => 'Custom download URL (https://...)',
 			'meta.customSpeedtestSource' => 'Custom Server',

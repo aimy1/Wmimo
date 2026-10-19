@@ -181,6 +181,72 @@ class _Translations$NetCheckScreen$ar implements Translations$NetCheckScreen$en 
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (عبر الوكيل، المنفذ: ${p})';
 	@override String get tunNotEnabled => 'TUN غير مفعل';
 	@override String get routeTableSection => '4. جدول التوجيه';
+	@override String get stepPhysicalDesc => 'فحص بطاقة الشبكة الفعلية وعنوان IP المحلي والاتصال بالبوابة';
+	@override String get stepDnsDesc => 'التحقق من وقت استجابة DNS المحلي وحالة محرك DNS في النواة';
+	@override String get stepCoreDesc => 'فحص حالة عملية Mihomo ومنافذ الاستماع Mixed-Port/API';
+	@override String get stepProxyDesc => 'التحقق من إعدادات بروكسي النظام والبحث عن أي بقايا مسببة لانقطاع الشبكة';
+	@override String get stepHandshakeDesc => 'قياس زمن الاستجابة والوصول الفعلي إلى CDN العالمي عبر العقدة النشطة';
+	@override String get shortStepPhysical => 'الشبكة';
+	@override String get shortStepDns => 'DNS';
+	@override String get shortStepCore => 'النواة';
+	@override String get shortStepProxy => 'الوكيل';
+	@override String get shortStepHandshake => 'الإنترنت';
+	@override String valNicNormal({required Object p}) => 'الشبكة متصلة (${p})';
+	@override String get valNicNone => 'لم يتم العثور على واجهات شبكة متاحة';
+	@override String get valNicGatewayTimeout => 'تم الحصول على IP المحلي ولكن انتهت مهلة البوابة الخارجية';
+	@override String get valNicError => 'خطأ في فحص واجهة الشبكة';
+	@override String valDnsNormal({required Object p}) => 'استجابة DNS طبيعية (${p})';
+	@override String get valDnsEmpty => 'استعلام DNS أرجع قائمة فارغة';
+	@override String get valDnsTimeout => 'انتهت مهلة استعلام DNS أو فشل';
+	@override String valCoreNormal({required Object port, required Object mode}) => 'النواة تعمل بشكل ممتاز (المنفذ المختلط: ${port}، الوضع: ${mode})';
+	@override String get valCoreNotRunning => 'خدمة النواة لا تعمل';
+	@override String valCorePortConflict({required Object p}) => 'المنفذ ${p} مشغول بواسطة برنامج آخر';
+	@override String get valCoreApiFailed => 'النواة لا تستجيب (فشل الاتصال بـ API)';
+	@override String get valCoreError => 'خطأ في فحص النواة';
+	@override String valProxyActive({required Object port}) => 'بروكسي النظام مفعّل (127.0.0.1:${port})';
+	@override String get valProxyDisabled => 'بروكسي النظام غير مفعّل (وضع مباشر / TUN / يدوي)';
+	@override String get valProxyZombie => 'تم اكتشاف بقايا بروكسي النظام (مما يقطع الإنترنت)';
+	@override String get valProxyFailed => 'فشل تفعيل بروكسي النظام';
+	@override String get valProxyWarning => 'تحذير بشأن قراءة حالة بروكسي النظام';
+	@override String valHandshakeNormal({required Object node, required Object delay}) => 'الاتصال بالإنترنت سليم (${node} • ${delay} مللي ثانية)';
+	@override String valHandshakeFailed({required Object node, required Object err}) => 'فشل اتصال العقدة الحالية [${node}] (${err})';
+	@override String get valHandshakeSkipped => 'النواة لم تبدأ، تم تخطي اختبار الاتصال';
+	@override String get valHandshakeError => 'خطأ في اتصال الإنترنت';
+	@override String get issueNicDisconnected => 'بطاقة الشبكة غير متصلة بأي شبكة (السلك مفصول، الواي فاي مغلق، أو وضع الطيران)';
+	@override String get suggestNicCheck => 'يرجى التحقق من كابل الشبكة أو اتصال Wi-Fi أو حالة محول الشبكة';
+	@override String get suggestNicReset => 'جرب تعطيل محول الشبكة ثم إعادة تمكينه في إعدادات النظام';
+	@override String get issueNicGatewayUnreachable => 'متصل بالشبكة المحلية ولكن لا يمكن الوصول للبوابة الخارجية (صفحة تسجيل دخول أو المودم غير متصل)';
+	@override String get suggestNicGateway => 'يرجى التحقق من أضواء الراوتر أو فتح المتصفح للتأكد من الحاجة لتسجيل الدخول';
+	@override String get issueDnsPollution => 'خدمة DNS المحلية لا تستجيب؛ قد يكون هناك تلوث في DNS أو اختطاف للبوابة';
+	@override String get suggestDnsReset => 'يوصى بإعادة تعيين DNS النظام أو تمكين DNS المشفر الذكي (DoH/DoT) في Wmimo';
+	@override String get actionFlushDns => 'تفريغ ذاكرة التخزين المؤقت لـ DNS';
+	@override String get suggestDnsSlow => 'زمن استجابة DNS طويل، يوصى بتمكين DNS المشفر الذكي';
+	@override String get issueDnsFailed => 'فشل تحليل DNS المحلي، يتعذر تحويل اسم النطاق إلى عنوان IP';
+	@override String get suggestDnsFlush => 'انقر لتفريغ كاش DNS، أو قم بتمكين DNS المشفر في إعدادات Wmimo';
+	@override String get issueCorePortConflict => 'تم اكتشاف تعارض في المنافذ! برنامج بروكسي آخر أو خدمة تشغل المنفذ';
+	@override String get suggestCoreChangePort => 'يرجى إغلاق برامج البروكسي الأخرى بالكامل، أو تغيير المنفذ في إعدادات Wmimo';
+	@override String get actionRestartCore => 'إعادة تشغيل النواة';
+	@override String get issueCoreStopped => 'عملية نواة Wmimo متوقفة حاليًا';
+	@override String get suggestCoreStart => 'انقر على زر الاتصال في الشاشة الرئيسية أو انقر على [بدء النواة] بالأسفل';
+	@override String get actionStartCore => 'بدء عملية النواة';
+	@override String get issueCoreFrozen => 'عملية النواة متجمدة أو تعذر التحقق من سر API';
+	@override String get suggestCoreRestart => 'يوصى بالنقر على [إعادة تشغيل النواة] لاستعادة الخدمة';
+	@override String get suggestCoreReinstall => 'حاول إعادة تشغيل النواة أو إعادة تثبيت برامج تشغيل الخدمة';
+	@override String get issueProxyZombie => 'يقوم البروكسي المتبقي بإعادة توجيه البيانات لمنفذ غير نشط مما يقطع الإنترنت';
+	@override String get suggestProxyReset => 'انقر على [تنظيف وإعادة تعيين بروكسي النظام] بالأسفل لاستعادة الإنترنت فوراً';
+	@override String get actionResetProxy => 'تنظيف وإعادة تعيين البروكسي';
+	@override String get issueProxyBlocked => 'لم يتم تطبيق بروكسي النظام، قد يكون محظوراً بواسطة برامج الحماية أو نقص الصلاحيات';
+	@override String get suggestProxyReapply => 'انقر على الزر بالأسفل لمحاولة إعادة تسجيل وتطبيق بروكسي النظام بالقوة';
+	@override String get actionReapplyProxy => 'إعادة تطبيق بروكسي النظام';
+	@override String get issueProxyRead => 'حدث استثناء غير حرج أثناء قراءة إعدادات بروكسي النظام';
+	@override String get issueHandshakeBlocked => 'عقدة البروكسي الحالية لا تستطيع الاتصال بالإنترنت، فشلت المصافحة أو حُظرت';
+	@override String get suggestHandshakeSwitch => 'قد تكون العقدة تحت الصيانة أو غير متاحة، يرجى التبديل لعقدة أخرى';
+	@override String suggestHandshakeSlow({required Object delay}) => 'زمن استجابة العقدة مرتفع (${delay} مللي ثانية)، يفضل اختيار عقدة أقرب';
+	@override String get suggestHandshakeCheck => 'تحقق من إعدادات العقدة أو غيّر هدف الاختبار';
+	@override String get conclusionPerfect => 'حالة الشبكة ممتازة! جميع العقد وإعدادات البروكسي تعمل بانسيابية تامة.';
+	@override String get conclusionGood => 'الشبكة جيدة بشكل عام، تم اكتشاف بعض التأخير البسيط، يرجى مراجعة التفاصيل.';
+	@override String get conclusionWarning => 'تم اكتشاف خلل في أجزاء من الشبكة أو البروكسي، يرجى استخدام [الإصلاح التلقائي] أدناه.';
+	@override String get conclusionCritical => 'انقطاع حاد في الشبكة! الشبكة المحلية غير متصلة أو تم حظر نواة البروكسي.';
 }
 
 // Path: SpeedTestScreen
@@ -927,6 +993,72 @@ extension on TranslationsAr {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (عبر الوكيل، المنفذ: ${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN غير مفعل',
 			'NetCheckScreen.routeTableSection' => '4. جدول التوجيه',
+			'NetCheckScreen.stepPhysicalDesc' => 'فحص بطاقة الشبكة الفعلية وعنوان IP المحلي والاتصال بالبوابة',
+			'NetCheckScreen.stepDnsDesc' => 'التحقق من وقت استجابة DNS المحلي وحالة محرك DNS في النواة',
+			'NetCheckScreen.stepCoreDesc' => 'فحص حالة عملية Mihomo ومنافذ الاستماع Mixed-Port/API',
+			'NetCheckScreen.stepProxyDesc' => 'التحقق من إعدادات بروكسي النظام والبحث عن أي بقايا مسببة لانقطاع الشبكة',
+			'NetCheckScreen.stepHandshakeDesc' => 'قياس زمن الاستجابة والوصول الفعلي إلى CDN العالمي عبر العقدة النشطة',
+			'NetCheckScreen.shortStepPhysical' => 'الشبكة',
+			'NetCheckScreen.shortStepDns' => 'DNS',
+			'NetCheckScreen.shortStepCore' => 'النواة',
+			'NetCheckScreen.shortStepProxy' => 'الوكيل',
+			'NetCheckScreen.shortStepHandshake' => 'الإنترنت',
+			'NetCheckScreen.valNicNormal' => ({required Object p}) => 'الشبكة متصلة (${p})',
+			'NetCheckScreen.valNicNone' => 'لم يتم العثور على واجهات شبكة متاحة',
+			'NetCheckScreen.valNicGatewayTimeout' => 'تم الحصول على IP المحلي ولكن انتهت مهلة البوابة الخارجية',
+			'NetCheckScreen.valNicError' => 'خطأ في فحص واجهة الشبكة',
+			'NetCheckScreen.valDnsNormal' => ({required Object p}) => 'استجابة DNS طبيعية (${p})',
+			'NetCheckScreen.valDnsEmpty' => 'استعلام DNS أرجع قائمة فارغة',
+			'NetCheckScreen.valDnsTimeout' => 'انتهت مهلة استعلام DNS أو فشل',
+			'NetCheckScreen.valCoreNormal' => ({required Object port, required Object mode}) => 'النواة تعمل بشكل ممتاز (المنفذ المختلط: ${port}، الوضع: ${mode})',
+			'NetCheckScreen.valCoreNotRunning' => 'خدمة النواة لا تعمل',
+			'NetCheckScreen.valCorePortConflict' => ({required Object p}) => 'المنفذ ${p} مشغول بواسطة برنامج آخر',
+			'NetCheckScreen.valCoreApiFailed' => 'النواة لا تستجيب (فشل الاتصال بـ API)',
+			'NetCheckScreen.valCoreError' => 'خطأ في فحص النواة',
+			'NetCheckScreen.valProxyActive' => ({required Object port}) => 'بروكسي النظام مفعّل (127.0.0.1:${port})',
+			'NetCheckScreen.valProxyDisabled' => 'بروكسي النظام غير مفعّل (وضع مباشر / TUN / يدوي)',
+			'NetCheckScreen.valProxyZombie' => 'تم اكتشاف بقايا بروكسي النظام (مما يقطع الإنترنت)',
+			'NetCheckScreen.valProxyFailed' => 'فشل تفعيل بروكسي النظام',
+			'NetCheckScreen.valProxyWarning' => 'تحذير بشأن قراءة حالة بروكسي النظام',
+			'NetCheckScreen.valHandshakeNormal' => ({required Object node, required Object delay}) => 'الاتصال بالإنترنت سليم (${node} • ${delay} مللي ثانية)',
+			'NetCheckScreen.valHandshakeFailed' => ({required Object node, required Object err}) => 'فشل اتصال العقدة الحالية [${node}] (${err})',
+			'NetCheckScreen.valHandshakeSkipped' => 'النواة لم تبدأ، تم تخطي اختبار الاتصال',
+			'NetCheckScreen.valHandshakeError' => 'خطأ في اتصال الإنترنت',
+			'NetCheckScreen.issueNicDisconnected' => 'بطاقة الشبكة غير متصلة بأي شبكة (السلك مفصول، الواي فاي مغلق، أو وضع الطيران)',
+			'NetCheckScreen.suggestNicCheck' => 'يرجى التحقق من كابل الشبكة أو اتصال Wi-Fi أو حالة محول الشبكة',
+			'NetCheckScreen.suggestNicReset' => 'جرب تعطيل محول الشبكة ثم إعادة تمكينه في إعدادات النظام',
+			'NetCheckScreen.issueNicGatewayUnreachable' => 'متصل بالشبكة المحلية ولكن لا يمكن الوصول للبوابة الخارجية (صفحة تسجيل دخول أو المودم غير متصل)',
+			'NetCheckScreen.suggestNicGateway' => 'يرجى التحقق من أضواء الراوتر أو فتح المتصفح للتأكد من الحاجة لتسجيل الدخول',
+			'NetCheckScreen.issueDnsPollution' => 'خدمة DNS المحلية لا تستجيب؛ قد يكون هناك تلوث في DNS أو اختطاف للبوابة',
+			'NetCheckScreen.suggestDnsReset' => 'يوصى بإعادة تعيين DNS النظام أو تمكين DNS المشفر الذكي (DoH/DoT) في Wmimo',
+			'NetCheckScreen.actionFlushDns' => 'تفريغ ذاكرة التخزين المؤقت لـ DNS',
+			'NetCheckScreen.suggestDnsSlow' => 'زمن استجابة DNS طويل، يوصى بتمكين DNS المشفر الذكي',
+			'NetCheckScreen.issueDnsFailed' => 'فشل تحليل DNS المحلي، يتعذر تحويل اسم النطاق إلى عنوان IP',
+			'NetCheckScreen.suggestDnsFlush' => 'انقر لتفريغ كاش DNS، أو قم بتمكين DNS المشفر في إعدادات Wmimo',
+			'NetCheckScreen.issueCorePortConflict' => 'تم اكتشاف تعارض في المنافذ! برنامج بروكسي آخر أو خدمة تشغل المنفذ',
+			'NetCheckScreen.suggestCoreChangePort' => 'يرجى إغلاق برامج البروكسي الأخرى بالكامل، أو تغيير المنفذ في إعدادات Wmimo',
+			'NetCheckScreen.actionRestartCore' => 'إعادة تشغيل النواة',
+			'NetCheckScreen.issueCoreStopped' => 'عملية نواة Wmimo متوقفة حاليًا',
+			'NetCheckScreen.suggestCoreStart' => 'انقر على زر الاتصال في الشاشة الرئيسية أو انقر على [بدء النواة] بالأسفل',
+			'NetCheckScreen.actionStartCore' => 'بدء عملية النواة',
+			'NetCheckScreen.issueCoreFrozen' => 'عملية النواة متجمدة أو تعذر التحقق من سر API',
+			'NetCheckScreen.suggestCoreRestart' => 'يوصى بالنقر على [إعادة تشغيل النواة] لاستعادة الخدمة',
+			'NetCheckScreen.suggestCoreReinstall' => 'حاول إعادة تشغيل النواة أو إعادة تثبيت برامج تشغيل الخدمة',
+			'NetCheckScreen.issueProxyZombie' => 'يقوم البروكسي المتبقي بإعادة توجيه البيانات لمنفذ غير نشط مما يقطع الإنترنت',
+			'NetCheckScreen.suggestProxyReset' => 'انقر على [تنظيف وإعادة تعيين بروكسي النظام] بالأسفل لاستعادة الإنترنت فوراً',
+			'NetCheckScreen.actionResetProxy' => 'تنظيف وإعادة تعيين البروكسي',
+			'NetCheckScreen.issueProxyBlocked' => 'لم يتم تطبيق بروكسي النظام، قد يكون محظوراً بواسطة برامج الحماية أو نقص الصلاحيات',
+			'NetCheckScreen.suggestProxyReapply' => 'انقر على الزر بالأسفل لمحاولة إعادة تسجيل وتطبيق بروكسي النظام بالقوة',
+			'NetCheckScreen.actionReapplyProxy' => 'إعادة تطبيق بروكسي النظام',
+			'NetCheckScreen.issueProxyRead' => 'حدث استثناء غير حرج أثناء قراءة إعدادات بروكسي النظام',
+			'NetCheckScreen.issueHandshakeBlocked' => 'عقدة البروكسي الحالية لا تستطيع الاتصال بالإنترنت، فشلت المصافحة أو حُظرت',
+			'NetCheckScreen.suggestHandshakeSwitch' => 'قد تكون العقدة تحت الصيانة أو غير متاحة، يرجى التبديل لعقدة أخرى',
+			'NetCheckScreen.suggestHandshakeSlow' => ({required Object delay}) => 'زمن استجابة العقدة مرتفع (${delay} مللي ثانية)، يفضل اختيار عقدة أقرب',
+			'NetCheckScreen.suggestHandshakeCheck' => 'تحقق من إعدادات العقدة أو غيّر هدف الاختبار',
+			'NetCheckScreen.conclusionPerfect' => 'حالة الشبكة ممتازة! جميع العقد وإعدادات البروكسي تعمل بانسيابية تامة.',
+			'NetCheckScreen.conclusionGood' => 'الشبكة جيدة بشكل عام، تم اكتشاف بعض التأخير البسيط، يرجى مراجعة التفاصيل.',
+			'NetCheckScreen.conclusionWarning' => 'تم اكتشاف خلل في أجزاء من الشبكة أو البروكسي، يرجى استخدام [الإصلاح التلقائي] أدناه.',
+			'NetCheckScreen.conclusionCritical' => 'انقطاع حاد في الشبكة! الشبكة المحلية غير متصلة أو تم حظر نواة البروكسي.',
 			'SpeedTestScreen.title' => 'اختبار السرعة',
 			'SpeedTestScreen.startTest' => 'بدء الاختبار',
 			'SpeedTestScreen.stopTest' => 'إيقاف',
@@ -1314,6 +1446,8 @@ extension on TranslationsAr {
 			'meta.donateTitle' => '💖 اشترِ قهوة للمطور',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ دعمكم هو أكبر دافع لنا لمواصلة تطوير Wmimo ~ ☕✨',
 			'meta.tokenCurrency' => 'العملة',
+			_ => null,
+		} ?? switch (path) {
 			'meta.networkChain' => 'الشبكة',
 			'meta.depositAddress' => 'عنوان إيداع APTOS',
 			'meta.clickToCopy' => 'انقر للنسخ',
@@ -1380,8 +1514,6 @@ extension on TranslationsAr {
 			'meta.reportCopied' => 'تم نسخ التقرير إلى الحافظة، جاهز للمشاركة',
 			'meta.gamingExperience' => 'ألعاب الفيديو',
 			'meta.streamingExperience' => 'البث المرئي',
-			_ => null,
-		} ?? switch (path) {
 			'meta.meetingExperience' => 'مكالمات الفيديو',
 			'meta.customSpeedtestUrl' => 'عنوان URL مخصص للتنزيل (https://...)',
 			'meta.customSpeedtestSource' => 'مصدر اختبار مخصص',

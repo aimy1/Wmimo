@@ -181,6 +181,72 @@ class _Translations$NetCheckScreen$ru implements Translations$NetCheckScreen$en 
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (через прокси, порт: ${p})';
 	@override String get tunNotEnabled => 'TUN не включен';
 	@override String get routeTableSection => '4. Таблица маршрутизации';
+	@override String get stepPhysicalDesc => 'Проверка физического сетевого адаптера, локального IP и шлюза';
+	@override String get stepDnsDesc => 'Проверка задержки разрешения DNS и состояния ядра DNS';
+	@override String get stepCoreDesc => 'Проверка процесса Mihomo и прослушивания портов Mixed-Port/API';
+	@override String get stepProxyDesc => 'Проверка настроек системного прокси и устранение остаточных сбоев';
+	@override String get stepHandshakeDesc => 'Тестирование сквозной задержки и доступности глобального CDN через узел';
+	@override String get shortStepPhysical => 'Адаптер';
+	@override String get shortStepDns => 'DNS';
+	@override String get shortStepCore => 'Ядро';
+	@override String get shortStepProxy => 'Прокси';
+	@override String get shortStepHandshake => 'WAN';
+	@override String valNicNormal({required Object p}) => 'Сетевой адаптер подключен (${p})';
+	@override String get valNicNone => 'Сетевые интерфейсы не найдены';
+	@override String get valNicGatewayTimeout => 'Локальный IP получен, но шлюз не отвечает';
+	@override String get valNicError => 'Ошибка проверки сетевого интерфейса';
+	@override String valDnsNormal({required Object p}) => 'Ответ DNS в норме (${p})';
+	@override String get valDnsEmpty => 'DNS-запрос вернул пустой список';
+	@override String get valDnsTimeout => 'DNS-запрос превысил время ожидания или завершился ошибкой';
+	@override String valCoreNormal({required Object port, required Object mode}) => 'Ядро работает нормально (Смешанный порт: ${port}, Режим: ${mode})';
+	@override String get valCoreNotRunning => 'Служба ядра не запущена';
+	@override String valCorePortConflict({required Object p}) => 'Порт ${p} занят другой программой';
+	@override String get valCoreApiFailed => 'Ядро не отвечает (Сбой связи с API)';
+	@override String get valCoreError => 'Ошибка проверки ядра';
+	@override String valProxyActive({required Object port}) => 'Системный прокси активен (127.0.0.1:${port})';
+	@override String get valProxyDisabled => 'Системный прокси отключен (Прямой/TUN/Ручной режим)';
+	@override String get valProxyZombie => 'Обнаружен остаточный системный прокси (блокирует интернет)';
+	@override String get valProxyFailed => 'Не удалось включить системный прокси';
+	@override String get valProxyWarning => 'Предупреждение о состоянии системного прокси';
+	@override String valHandshakeNormal({required Object node, required Object delay}) => 'Связь с интернетом в норме (${node} • ${delay} мс)';
+	@override String valHandshakeFailed({required Object node, required Object err}) => 'Сбой связи через узел [${node}] (${err})';
+	@override String get valHandshakeSkipped => 'Ядро не запущено, тест связи пропущен';
+	@override String get valHandshakeError => 'Ошибка при подключении к интернету';
+	@override String get issueNicDisconnected => 'Сетевой адаптер не подключен (кабель отключен, Wi-Fi выключен или режим полета)';
+	@override String get suggestNicCheck => 'Проверьте кабель Ethernet, подключение к Wi-Fi или состояние сетевого адаптера';
+	@override String get suggestNicReset => 'Попробуйте отключить и снова включить сетевой адаптер в настройках системы';
+	@override String get issueNicGatewayUnreachable => 'Подключено к локальной сети, но внешний шлюз недоступен (портал авторизации или роутер отключен)';
+	@override String get suggestNicGateway => 'Проверьте индикаторы роутера или откройте браузер для прохождения веб-авторизации';
+	@override String get issueDnsPollution => 'Локальная служба DNS не отвечает; возможно загрязнение DNS или перехват шлюза';
+	@override String get suggestDnsReset => 'Сбросьте системный DNS или включите умный зашифрованный DNS (DoH/DoT) в Wmimo';
+	@override String get actionFlushDns => 'Сбросить кэш DNS';
+	@override String get suggestDnsSlow => 'Высокая задержка DNS; рекомендуется включить зашифрованный DNS';
+	@override String get issueDnsFailed => 'Сбой локального DNS; невозможно преобразовать имя домена в IP-адрес';
+	@override String get suggestDnsFlush => 'Нажмите для сброса кэша DNS или включите шифрование DNS в настройках Wmimo';
+	@override String get issueCorePortConflict => 'Обнаружен конфликт портов! Другая программа или служба занимает порт';
+	@override String get suggestCoreChangePort => 'Полностью закройте другие прокси-клиенты или измените порт в настройках Wmimo';
+	@override String get actionRestartCore => 'Перезапустить ядро';
+	@override String get issueCoreStopped => 'Процесс ядра Wmimo в настоящее время остановлен';
+	@override String get suggestCoreStart => 'Включите подключение на главном экране или нажмите «Запустить ядро» ниже';
+	@override String get actionStartCore => 'Запустить процесс ядра';
+	@override String get issueCoreFrozen => 'Процесс ядра завис или не совпадает секретный ключ API';
+	@override String get suggestCoreRestart => 'Рекомендуется перезапустить ядро для восстановления службы';
+	@override String get suggestCoreReinstall => 'Попробуйте перезапустить ядро или переустановить драйвер службы';
+	@override String get issueProxyZombie => 'Остаточный прокси перенаправляет трафик на неактивный порт, блокируя сеть';
+	@override String get suggestProxyReset => 'Нажмите «Очистить и сбросить системный прокси» ниже для восстановления доступа';
+	@override String get actionResetProxy => 'Очистить и сбросить прокси';
+	@override String get issueProxyBlocked => 'Системный прокси не применился, возможно заблокирован антивирусом или правами';
+	@override String get suggestProxyReapply => 'Нажмите кнопку ниже, чтобы принудительно применить системный прокси';
+	@override String get actionReapplyProxy => 'Повторно применить прокси';
+	@override String get issueProxyRead => 'Некритическая ошибка при чтении настроек системного прокси';
+	@override String get issueHandshakeBlocked => 'Текущий прокси-узел не может подключиться к интернету; связь заблокирована';
+	@override String get suggestHandshakeSwitch => 'Узел недоступен или на обслуживании; переключитесь на другой узел';
+	@override String suggestHandshakeSlow({required Object delay}) => 'Высокая задержка узла (${delay} мс); выберите более близкий узел';
+	@override String get suggestHandshakeCheck => 'Проверьте конфигурацию узла или смените цель проверки';
+	@override String get conclusionPerfect => 'Сеть в отличном состоянии! Все узлы и настройки прокси работают исправно.';
+	@override String get conclusionGood => 'Сеть в норме, обнаружены незначительные задержки или предупреждения.';
+	@override String get conclusionWarning => 'Обнаружены проблемы в сети или прокси; используйте «Быстрое исправление» ниже.';
+	@override String get conclusionCritical => 'Серьезный сбой сети! Локальная сеть отключена или ядро заблокировано.';
 }
 
 // Path: SpeedTestScreen
@@ -927,6 +993,72 @@ extension on TranslationsRu {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (через прокси, порт: ${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN не включен',
 			'NetCheckScreen.routeTableSection' => '4. Таблица маршрутизации',
+			'NetCheckScreen.stepPhysicalDesc' => 'Проверка физического сетевого адаптера, локального IP и шлюза',
+			'NetCheckScreen.stepDnsDesc' => 'Проверка задержки разрешения DNS и состояния ядра DNS',
+			'NetCheckScreen.stepCoreDesc' => 'Проверка процесса Mihomo и прослушивания портов Mixed-Port/API',
+			'NetCheckScreen.stepProxyDesc' => 'Проверка настроек системного прокси и устранение остаточных сбоев',
+			'NetCheckScreen.stepHandshakeDesc' => 'Тестирование сквозной задержки и доступности глобального CDN через узел',
+			'NetCheckScreen.shortStepPhysical' => 'Адаптер',
+			'NetCheckScreen.shortStepDns' => 'DNS',
+			'NetCheckScreen.shortStepCore' => 'Ядро',
+			'NetCheckScreen.shortStepProxy' => 'Прокси',
+			'NetCheckScreen.shortStepHandshake' => 'WAN',
+			'NetCheckScreen.valNicNormal' => ({required Object p}) => 'Сетевой адаптер подключен (${p})',
+			'NetCheckScreen.valNicNone' => 'Сетевые интерфейсы не найдены',
+			'NetCheckScreen.valNicGatewayTimeout' => 'Локальный IP получен, но шлюз не отвечает',
+			'NetCheckScreen.valNicError' => 'Ошибка проверки сетевого интерфейса',
+			'NetCheckScreen.valDnsNormal' => ({required Object p}) => 'Ответ DNS в норме (${p})',
+			'NetCheckScreen.valDnsEmpty' => 'DNS-запрос вернул пустой список',
+			'NetCheckScreen.valDnsTimeout' => 'DNS-запрос превысил время ожидания или завершился ошибкой',
+			'NetCheckScreen.valCoreNormal' => ({required Object port, required Object mode}) => 'Ядро работает нормально (Смешанный порт: ${port}, Режим: ${mode})',
+			'NetCheckScreen.valCoreNotRunning' => 'Служба ядра не запущена',
+			'NetCheckScreen.valCorePortConflict' => ({required Object p}) => 'Порт ${p} занят другой программой',
+			'NetCheckScreen.valCoreApiFailed' => 'Ядро не отвечает (Сбой связи с API)',
+			'NetCheckScreen.valCoreError' => 'Ошибка проверки ядра',
+			'NetCheckScreen.valProxyActive' => ({required Object port}) => 'Системный прокси активен (127.0.0.1:${port})',
+			'NetCheckScreen.valProxyDisabled' => 'Системный прокси отключен (Прямой/TUN/Ручной режим)',
+			'NetCheckScreen.valProxyZombie' => 'Обнаружен остаточный системный прокси (блокирует интернет)',
+			'NetCheckScreen.valProxyFailed' => 'Не удалось включить системный прокси',
+			'NetCheckScreen.valProxyWarning' => 'Предупреждение о состоянии системного прокси',
+			'NetCheckScreen.valHandshakeNormal' => ({required Object node, required Object delay}) => 'Связь с интернетом в норме (${node} • ${delay} мс)',
+			'NetCheckScreen.valHandshakeFailed' => ({required Object node, required Object err}) => 'Сбой связи через узел [${node}] (${err})',
+			'NetCheckScreen.valHandshakeSkipped' => 'Ядро не запущено, тест связи пропущен',
+			'NetCheckScreen.valHandshakeError' => 'Ошибка при подключении к интернету',
+			'NetCheckScreen.issueNicDisconnected' => 'Сетевой адаптер не подключен (кабель отключен, Wi-Fi выключен или режим полета)',
+			'NetCheckScreen.suggestNicCheck' => 'Проверьте кабель Ethernet, подключение к Wi-Fi или состояние сетевого адаптера',
+			'NetCheckScreen.suggestNicReset' => 'Попробуйте отключить и снова включить сетевой адаптер в настройках системы',
+			'NetCheckScreen.issueNicGatewayUnreachable' => 'Подключено к локальной сети, но внешний шлюз недоступен (портал авторизации или роутер отключен)',
+			'NetCheckScreen.suggestNicGateway' => 'Проверьте индикаторы роутера или откройте браузер для прохождения веб-авторизации',
+			'NetCheckScreen.issueDnsPollution' => 'Локальная служба DNS не отвечает; возможно загрязнение DNS или перехват шлюза',
+			'NetCheckScreen.suggestDnsReset' => 'Сбросьте системный DNS или включите умный зашифрованный DNS (DoH/DoT) в Wmimo',
+			'NetCheckScreen.actionFlushDns' => 'Сбросить кэш DNS',
+			'NetCheckScreen.suggestDnsSlow' => 'Высокая задержка DNS; рекомендуется включить зашифрованный DNS',
+			'NetCheckScreen.issueDnsFailed' => 'Сбой локального DNS; невозможно преобразовать имя домена в IP-адрес',
+			'NetCheckScreen.suggestDnsFlush' => 'Нажмите для сброса кэша DNS или включите шифрование DNS в настройках Wmimo',
+			'NetCheckScreen.issueCorePortConflict' => 'Обнаружен конфликт портов! Другая программа или служба занимает порт',
+			'NetCheckScreen.suggestCoreChangePort' => 'Полностью закройте другие прокси-клиенты или измените порт в настройках Wmimo',
+			'NetCheckScreen.actionRestartCore' => 'Перезапустить ядро',
+			'NetCheckScreen.issueCoreStopped' => 'Процесс ядра Wmimo в настоящее время остановлен',
+			'NetCheckScreen.suggestCoreStart' => 'Включите подключение на главном экране или нажмите «Запустить ядро» ниже',
+			'NetCheckScreen.actionStartCore' => 'Запустить процесс ядра',
+			'NetCheckScreen.issueCoreFrozen' => 'Процесс ядра завис или не совпадает секретный ключ API',
+			'NetCheckScreen.suggestCoreRestart' => 'Рекомендуется перезапустить ядро для восстановления службы',
+			'NetCheckScreen.suggestCoreReinstall' => 'Попробуйте перезапустить ядро или переустановить драйвер службы',
+			'NetCheckScreen.issueProxyZombie' => 'Остаточный прокси перенаправляет трафик на неактивный порт, блокируя сеть',
+			'NetCheckScreen.suggestProxyReset' => 'Нажмите «Очистить и сбросить системный прокси» ниже для восстановления доступа',
+			'NetCheckScreen.actionResetProxy' => 'Очистить и сбросить прокси',
+			'NetCheckScreen.issueProxyBlocked' => 'Системный прокси не применился, возможно заблокирован антивирусом или правами',
+			'NetCheckScreen.suggestProxyReapply' => 'Нажмите кнопку ниже, чтобы принудительно применить системный прокси',
+			'NetCheckScreen.actionReapplyProxy' => 'Повторно применить прокси',
+			'NetCheckScreen.issueProxyRead' => 'Некритическая ошибка при чтении настроек системного прокси',
+			'NetCheckScreen.issueHandshakeBlocked' => 'Текущий прокси-узел не может подключиться к интернету; связь заблокирована',
+			'NetCheckScreen.suggestHandshakeSwitch' => 'Узел недоступен или на обслуживании; переключитесь на другой узел',
+			'NetCheckScreen.suggestHandshakeSlow' => ({required Object delay}) => 'Высокая задержка узла (${delay} мс); выберите более близкий узел',
+			'NetCheckScreen.suggestHandshakeCheck' => 'Проверьте конфигурацию узла или смените цель проверки',
+			'NetCheckScreen.conclusionPerfect' => 'Сеть в отличном состоянии! Все узлы и настройки прокси работают исправно.',
+			'NetCheckScreen.conclusionGood' => 'Сеть в норме, обнаружены незначительные задержки или предупреждения.',
+			'NetCheckScreen.conclusionWarning' => 'Обнаружены проблемы в сети или прокси; используйте «Быстрое исправление» ниже.',
+			'NetCheckScreen.conclusionCritical' => 'Серьезный сбой сети! Локальная сеть отключена или ядро заблокировано.',
 			'SpeedTestScreen.title' => 'Тест скорости',
 			'SpeedTestScreen.startTest' => 'Начать тест',
 			'SpeedTestScreen.stopTest' => 'Остановить',
@@ -1314,6 +1446,8 @@ extension on TranslationsRu {
 			'meta.donateTitle' => '💖 Угостить автора кофе',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Ваша поддержка — главная мотивация делать Wmimo ещё лучше ~ ☕✨',
 			'meta.tokenCurrency' => 'Токен',
+			_ => null,
+		} ?? switch (path) {
 			'meta.networkChain' => 'Сеть',
 			'meta.depositAddress' => 'Адрес для пополнения APTOS',
 			'meta.clickToCopy' => 'Нажмите для копирования',
@@ -1380,8 +1514,6 @@ extension on TranslationsRu {
 			'meta.reportCopied' => 'Отчёт скопирован в буфер обмена',
 			'meta.gamingExperience' => 'Онлайн-игры',
 			'meta.streamingExperience' => 'Стриминг',
-			_ => null,
-		} ?? switch (path) {
 			'meta.meetingExperience' => 'Видеоконференции',
 			'meta.customSpeedtestUrl' => 'Пользовательский URL загрузки (https://...)',
 			'meta.customSpeedtestSource' => 'Пользовательский сервер',

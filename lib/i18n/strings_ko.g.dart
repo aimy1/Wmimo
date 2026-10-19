@@ -181,6 +181,72 @@ class _Translations$NetCheckScreen$ko implements Translations$NetCheckScreen$en 
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (프록시 경유, 포트: ${p})';
 	@override String get tunNotEnabled => 'TUN이 활성화되지 않았습니다';
 	@override String get routeTableSection => '4. 라우팅 테이블';
+	@override String get stepPhysicalDesc => '물리적 네트워크 카드, 로컬 IP 및 게이트웨이 연결 상태를 확인합니다';
+	@override String get stepDnsDesc => '로컬 DNS 확인 지연 시간 및 코어 DNS 응답 상태를 확인합니다';
+	@override String get stepCoreDesc => 'Mihomo 프로세스 상태 및 Mixed-Port/API 포트 수신 대기를 확인합니다';
+	@override String get stepProxyDesc => '시스템 프록시 설정 일치 여부 및 잔류 프록시로 인한 네트워크 차단을 점검합니다';
+	@override String get stepHandshakeDesc => '활성 프록시 노드를 통해 글로벌 CDN으로의 종단 간 지연 시간과 연결성을 측정합니다';
+	@override String get shortStepPhysical => '랜카드';
+	@override String get shortStepDns => 'DNS';
+	@override String get shortStepCore => '코어';
+	@override String get shortStepProxy => '프록시';
+	@override String get shortStepHandshake => '공용망';
+	@override String valNicNormal({required Object p}) => '네트워크 연결 정상 (${p})';
+	@override String get valNicNone => '사용 가능한 네트워크 인터페이스를 찾을 수 없습니다';
+	@override String get valNicGatewayTimeout => '로컬 IP는 할당되었으나 외부 게이트웨이 응답 시간이 초과되었습니다';
+	@override String get valNicError => '네트워크 인터페이스 확인 오류';
+	@override String valDnsNormal({required Object p}) => 'DNS 응답 정상 (${p})';
+	@override String get valDnsEmpty => 'DNS 쿼리가 빈 목록을 반환했습니다';
+	@override String get valDnsTimeout => 'DNS 쿼리 시간 초과 또는 실패';
+	@override String valCoreNormal({required Object port, required Object mode}) => '코어 정상 작동 중 (혼합 포트: ${port}, 모드: ${mode})';
+	@override String get valCoreNotRunning => '코어 서비스가 실행 중이지 않습니다';
+	@override String valCorePortConflict({required Object p}) => '포트 ${p}이(가) 다른 프로그램에 의해 사용 중입니다';
+	@override String get valCoreApiFailed => '코어 프로세스 응답 없음 (API 통신 실패)';
+	@override String get valCoreError => '코어 검사 오류';
+	@override String valProxyActive({required Object port}) => '시스템 프록시 적용됨 (127.0.0.1:${port})';
+	@override String get valProxyDisabled => '시스템 프록시 비활성화됨 (직접 연결 / TUN / 수동 모드)';
+	@override String get valProxyZombie => '잔류 시스템 프록시 감지됨 (인터넷 연결 끊김 원인)';
+	@override String get valProxyFailed => '시스템 프록시를 활성화하지 못했습니다';
+	@override String get valProxyWarning => '시스템 프록시 상태 읽기 경고';
+	@override String valHandshakeNormal({required Object node, required Object delay}) => '공용망 핸드셰이크 정상 (${node} • ${delay} ms)';
+	@override String valHandshakeFailed({required Object node, required Object err}) => '현재 노드 [${node}] 핸드셰이크 실패 (${err})';
+	@override String get valHandshakeSkipped => '코어가 실행되지 않아 공용망 테스트를 건너뜁니다';
+	@override String get valHandshakeError => '공용망 핸드셰이크 오류 발생';
+	@override String get issueNicDisconnected => '네트워크 카드가 연결되지 않았습니다 (랜선 분리, Wi-Fi 미연결 또는 비행기 탑승 모드)';
+	@override String get suggestNicCheck => '이더넷 케이블, Wi-Fi 연결 또는 네트워크 어댑터 상태를 확인하세요';
+	@override String get suggestNicReset => '시스템 설정에서 네트워크 어댑터를 사용 안 함으로 설정한 후 다시 사용해 보세요';
+	@override String get issueNicGatewayUnreachable => 'LAN에 연결되었으나 외부 게이트웨이에 접근할 수 없습니다 (인증 필요 또는 공유기 인터넷 끊김)';
+	@override String get suggestNicGateway => '공유기 상태를 확인하거나 브라우저를 열어 웹 로그인 인증이 필요한지 확인하세요';
+	@override String get issueDnsPollution => '로컬 DNS 서비스가 응답하지 않습니다. DNS 오염 또는 하이재킹 가능성이 있습니다';
+	@override String get suggestDnsReset => '시스템 DNS를 재설정하거나 Wmimo에서 스마트 암호화 DNS(DoH/DoT)를 활성화하세요';
+	@override String get actionFlushDns => '시스템 DNS 캐시 새로고침';
+	@override String get suggestDnsSlow => 'DNS 응답 시간이 지연되고 있습니다. 스마트 암호화 DNS를 활성화하는 것을 권장합니다';
+	@override String get issueDnsFailed => '로컬 DNS 확인 실패, 도메인 이름을 IP 주소로 변환할 수 없습니다';
+	@override String get suggestDnsFlush => 'DNS 캐시를 새로고침하거나 Wmimo 설정에서 암호화 DNS를 활성화하세요';
+	@override String get issueCorePortConflict => '포트 충돌 감지됨! 다른 프록시 소프트웨어나 서비스가 해당 포트를 사용 중입니다';
+	@override String get suggestCoreChangePort => '다른 프록시 프로그램을 완전히 종료하거나 Wmimo 설정에서 포트를 변경하세요';
+	@override String get actionRestartCore => '코어 재시작';
+	@override String get issueCoreStopped => 'Wmimo 코어 프로세스가 현재 중지 상태입니다';
+	@override String get suggestCoreStart => '홈 화면의 연결 스위치를 누르거나 아래의 [코어 시작]을 누르세요';
+	@override String get actionStartCore => '코어 프로세스 시작';
+	@override String get issueCoreFrozen => '코어 프로세스가 응답하지 않거나 API 인증 정보가 일치하지 않습니다';
+	@override String get suggestCoreRestart => '[코어 재시작]을 클릭하여 서비스를 복구하세요';
+	@override String get suggestCoreReinstall => '코어를 재시작하거나 서비스 드라이버를 재설치해 보세요';
+	@override String get issueProxyZombie => '잔류 시스템 프록시가 비활성 포트로 트래픽을 전달하여 인터넷이 차단되었습니다';
+	@override String get suggestProxyReset => '아래의 [시스템 프록시 정리 및 재설정]을 클릭하여 즉시 인터넷을 복구하세요';
+	@override String get actionResetProxy => '프록시 정리 및 재설정';
+	@override String get issueProxyBlocked => '시스템 프록시가 적용되지 않았습니다. 백신 프로그램의 차단이나 권한 제한일 수 있습니다';
+	@override String get suggestProxyReapply => '아래 버튼을 눌러 시스템 프록시를 강제로 다시 적용해 보세요';
+	@override String get actionReapplyProxy => '시스템 프록시 다시 적용';
+	@override String get issueProxyRead => '시스템 프록시 설정을 읽는 중 경미한 예외가 발생했습니다';
+	@override String get issueHandshakeBlocked => '선택된 프록시 노드가 인터넷에 연결할 수 없습니다. 연결이 차단되었을 수 있습니다';
+	@override String get suggestHandshakeSwitch => '해당 노드가 점검 중이거나 연결할 수 없습니다. 다른 노드로 전환해 주세요';
+	@override String suggestHandshakeSlow({required Object delay}) => '노드 지연 시간이 다소 높습니다 (${delay} ms). 속도 측정을 통해 더 가까운 노드를 선택하세요';
+	@override String get suggestHandshakeCheck => '노드 설정을 확인하거나 테스트 대상을 변경하세요';
+	@override String get conclusionPerfect => '전체 네트워크 최상! 모든 노드와 프록시 설정이 원활하게 연결되어 있습니다.';
+	@override String get conclusionGood => '네트워크가 대체로 정상입니다. 경미한 지연이나 경고가 감지되었으니 상세 정보를 확인하세요.';
+	@override String get conclusionWarning => '일부 네트워크 또는 프록시에 이상이 감지되었습니다. 아래의 [원클릭 복구]를 이용해 보세요.';
+	@override String get conclusionCritical => '심각한 네트워크 차단! 로컬 네트워크가 끊겼거나 프록시 코어가 차단되었습니다.';
 }
 
 // Path: SpeedTestScreen
@@ -927,6 +993,72 @@ extension on TranslationsKo {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (프록시 경유, 포트: ${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN이 활성화되지 않았습니다',
 			'NetCheckScreen.routeTableSection' => '4. 라우팅 테이블',
+			'NetCheckScreen.stepPhysicalDesc' => '물리적 네트워크 카드, 로컬 IP 및 게이트웨이 연결 상태를 확인합니다',
+			'NetCheckScreen.stepDnsDesc' => '로컬 DNS 확인 지연 시간 및 코어 DNS 응답 상태를 확인합니다',
+			'NetCheckScreen.stepCoreDesc' => 'Mihomo 프로세스 상태 및 Mixed-Port/API 포트 수신 대기를 확인합니다',
+			'NetCheckScreen.stepProxyDesc' => '시스템 프록시 설정 일치 여부 및 잔류 프록시로 인한 네트워크 차단을 점검합니다',
+			'NetCheckScreen.stepHandshakeDesc' => '활성 프록시 노드를 통해 글로벌 CDN으로의 종단 간 지연 시간과 연결성을 측정합니다',
+			'NetCheckScreen.shortStepPhysical' => '랜카드',
+			'NetCheckScreen.shortStepDns' => 'DNS',
+			'NetCheckScreen.shortStepCore' => '코어',
+			'NetCheckScreen.shortStepProxy' => '프록시',
+			'NetCheckScreen.shortStepHandshake' => '공용망',
+			'NetCheckScreen.valNicNormal' => ({required Object p}) => '네트워크 연결 정상 (${p})',
+			'NetCheckScreen.valNicNone' => '사용 가능한 네트워크 인터페이스를 찾을 수 없습니다',
+			'NetCheckScreen.valNicGatewayTimeout' => '로컬 IP는 할당되었으나 외부 게이트웨이 응답 시간이 초과되었습니다',
+			'NetCheckScreen.valNicError' => '네트워크 인터페이스 확인 오류',
+			'NetCheckScreen.valDnsNormal' => ({required Object p}) => 'DNS 응답 정상 (${p})',
+			'NetCheckScreen.valDnsEmpty' => 'DNS 쿼리가 빈 목록을 반환했습니다',
+			'NetCheckScreen.valDnsTimeout' => 'DNS 쿼리 시간 초과 또는 실패',
+			'NetCheckScreen.valCoreNormal' => ({required Object port, required Object mode}) => '코어 정상 작동 중 (혼합 포트: ${port}, 모드: ${mode})',
+			'NetCheckScreen.valCoreNotRunning' => '코어 서비스가 실행 중이지 않습니다',
+			'NetCheckScreen.valCorePortConflict' => ({required Object p}) => '포트 ${p}이(가) 다른 프로그램에 의해 사용 중입니다',
+			'NetCheckScreen.valCoreApiFailed' => '코어 프로세스 응답 없음 (API 통신 실패)',
+			'NetCheckScreen.valCoreError' => '코어 검사 오류',
+			'NetCheckScreen.valProxyActive' => ({required Object port}) => '시스템 프록시 적용됨 (127.0.0.1:${port})',
+			'NetCheckScreen.valProxyDisabled' => '시스템 프록시 비활성화됨 (직접 연결 / TUN / 수동 모드)',
+			'NetCheckScreen.valProxyZombie' => '잔류 시스템 프록시 감지됨 (인터넷 연결 끊김 원인)',
+			'NetCheckScreen.valProxyFailed' => '시스템 프록시를 활성화하지 못했습니다',
+			'NetCheckScreen.valProxyWarning' => '시스템 프록시 상태 읽기 경고',
+			'NetCheckScreen.valHandshakeNormal' => ({required Object node, required Object delay}) => '공용망 핸드셰이크 정상 (${node} • ${delay} ms)',
+			'NetCheckScreen.valHandshakeFailed' => ({required Object node, required Object err}) => '현재 노드 [${node}] 핸드셰이크 실패 (${err})',
+			'NetCheckScreen.valHandshakeSkipped' => '코어가 실행되지 않아 공용망 테스트를 건너뜁니다',
+			'NetCheckScreen.valHandshakeError' => '공용망 핸드셰이크 오류 발생',
+			'NetCheckScreen.issueNicDisconnected' => '네트워크 카드가 연결되지 않았습니다 (랜선 분리, Wi-Fi 미연결 또는 비행기 탑승 모드)',
+			'NetCheckScreen.suggestNicCheck' => '이더넷 케이블, Wi-Fi 연결 또는 네트워크 어댑터 상태를 확인하세요',
+			'NetCheckScreen.suggestNicReset' => '시스템 설정에서 네트워크 어댑터를 사용 안 함으로 설정한 후 다시 사용해 보세요',
+			'NetCheckScreen.issueNicGatewayUnreachable' => 'LAN에 연결되었으나 외부 게이트웨이에 접근할 수 없습니다 (인증 필요 또는 공유기 인터넷 끊김)',
+			'NetCheckScreen.suggestNicGateway' => '공유기 상태를 확인하거나 브라우저를 열어 웹 로그인 인증이 필요한지 확인하세요',
+			'NetCheckScreen.issueDnsPollution' => '로컬 DNS 서비스가 응답하지 않습니다. DNS 오염 또는 하이재킹 가능성이 있습니다',
+			'NetCheckScreen.suggestDnsReset' => '시스템 DNS를 재설정하거나 Wmimo에서 스마트 암호화 DNS(DoH/DoT)를 활성화하세요',
+			'NetCheckScreen.actionFlushDns' => '시스템 DNS 캐시 새로고침',
+			'NetCheckScreen.suggestDnsSlow' => 'DNS 응답 시간이 지연되고 있습니다. 스마트 암호화 DNS를 활성화하는 것을 권장합니다',
+			'NetCheckScreen.issueDnsFailed' => '로컬 DNS 확인 실패, 도메인 이름을 IP 주소로 변환할 수 없습니다',
+			'NetCheckScreen.suggestDnsFlush' => 'DNS 캐시를 새로고침하거나 Wmimo 설정에서 암호화 DNS를 활성화하세요',
+			'NetCheckScreen.issueCorePortConflict' => '포트 충돌 감지됨! 다른 프록시 소프트웨어나 서비스가 해당 포트를 사용 중입니다',
+			'NetCheckScreen.suggestCoreChangePort' => '다른 프록시 프로그램을 완전히 종료하거나 Wmimo 설정에서 포트를 변경하세요',
+			'NetCheckScreen.actionRestartCore' => '코어 재시작',
+			'NetCheckScreen.issueCoreStopped' => 'Wmimo 코어 프로세스가 현재 중지 상태입니다',
+			'NetCheckScreen.suggestCoreStart' => '홈 화면의 연결 스위치를 누르거나 아래의 [코어 시작]을 누르세요',
+			'NetCheckScreen.actionStartCore' => '코어 프로세스 시작',
+			'NetCheckScreen.issueCoreFrozen' => '코어 프로세스가 응답하지 않거나 API 인증 정보가 일치하지 않습니다',
+			'NetCheckScreen.suggestCoreRestart' => '[코어 재시작]을 클릭하여 서비스를 복구하세요',
+			'NetCheckScreen.suggestCoreReinstall' => '코어를 재시작하거나 서비스 드라이버를 재설치해 보세요',
+			'NetCheckScreen.issueProxyZombie' => '잔류 시스템 프록시가 비활성 포트로 트래픽을 전달하여 인터넷이 차단되었습니다',
+			'NetCheckScreen.suggestProxyReset' => '아래의 [시스템 프록시 정리 및 재설정]을 클릭하여 즉시 인터넷을 복구하세요',
+			'NetCheckScreen.actionResetProxy' => '프록시 정리 및 재설정',
+			'NetCheckScreen.issueProxyBlocked' => '시스템 프록시가 적용되지 않았습니다. 백신 프로그램의 차단이나 권한 제한일 수 있습니다',
+			'NetCheckScreen.suggestProxyReapply' => '아래 버튼을 눌러 시스템 프록시를 강제로 다시 적용해 보세요',
+			'NetCheckScreen.actionReapplyProxy' => '시스템 프록시 다시 적용',
+			'NetCheckScreen.issueProxyRead' => '시스템 프록시 설정을 읽는 중 경미한 예외가 발생했습니다',
+			'NetCheckScreen.issueHandshakeBlocked' => '선택된 프록시 노드가 인터넷에 연결할 수 없습니다. 연결이 차단되었을 수 있습니다',
+			'NetCheckScreen.suggestHandshakeSwitch' => '해당 노드가 점검 중이거나 연결할 수 없습니다. 다른 노드로 전환해 주세요',
+			'NetCheckScreen.suggestHandshakeSlow' => ({required Object delay}) => '노드 지연 시간이 다소 높습니다 (${delay} ms). 속도 측정을 통해 더 가까운 노드를 선택하세요',
+			'NetCheckScreen.suggestHandshakeCheck' => '노드 설정을 확인하거나 테스트 대상을 변경하세요',
+			'NetCheckScreen.conclusionPerfect' => '전체 네트워크 최상! 모든 노드와 프록시 설정이 원활하게 연결되어 있습니다.',
+			'NetCheckScreen.conclusionGood' => '네트워크가 대체로 정상입니다. 경미한 지연이나 경고가 감지되었으니 상세 정보를 확인하세요.',
+			'NetCheckScreen.conclusionWarning' => '일부 네트워크 또는 프록시에 이상이 감지되었습니다. 아래의 [원클릭 복구]를 이용해 보세요.',
+			'NetCheckScreen.conclusionCritical' => '심각한 네트워크 차단! 로컬 네트워크가 끊겼거나 프록시 코어가 차단되었습니다.',
 			'SpeedTestScreen.title' => '속도 측정',
 			'SpeedTestScreen.startTest' => '측정 시작',
 			'SpeedTestScreen.stopTest' => '중지',
@@ -1314,6 +1446,8 @@ extension on TranslationsKo {
 			'meta.donateTitle' => '💖 개발자에게 커피 한 잔 후원하기',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 여러분의 따뜻한 후원은 Wmimo를 발전시키는 가장 큰 원동력입니다 ~ ☕✨',
 			'meta.tokenCurrency' => '토큰',
+			_ => null,
+		} ?? switch (path) {
 			'meta.networkChain' => '네트워크',
 			'meta.depositAddress' => 'APTOS 입금 주소',
 			'meta.clickToCopy' => '클릭하여 복사',
@@ -1380,8 +1514,6 @@ extension on TranslationsKo {
 			'meta.reportCopied' => '리포트가 복사되었습니다. 바로 공유할 수 있습니다',
 			'meta.gamingExperience' => '게이밍 경험',
 			'meta.streamingExperience' => '스트리밍',
-			_ => null,
-		} ?? switch (path) {
 			'meta.meetingExperience' => '화상 회의',
 			'meta.customSpeedtestUrl' => '사용자 지정 다운로드 URL (https://...)',
 			'meta.customSpeedtestSource' => '사용자 지정 측정 서버',

@@ -193,6 +193,72 @@ class _Translations$NetCheckScreen$es implements Translations$NetCheckScreen$en 
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (vía Proxy, puerto: ${p})';
 	@override String get tunNotEnabled => 'TUN no está activado';
 	@override String get routeTableSection => '4. Tabla de rutas';
+	@override String get stepPhysicalDesc => 'Comprueba el adaptador de red físico, la IP local y la conectividad de la puerta de enlace';
+	@override String get stepDnsDesc => 'Verifica la latencia de resolución DNS local y el estado del motor DNS del núcleo';
+	@override String get stepCoreDesc => 'Comprueba el estado del proceso Mihomo y los puertos de escucha Mixed-Port/API';
+	@override String get stepProxyDesc => 'Verifica la configuración del proxy del sistema y busca restos que causen desconexión';
+	@override String get stepHandshakeDesc => 'Prueba la latencia de extremo a extremo y la conectividad a CDN global mediante el nodo activo';
+	@override String get shortStepPhysical => 'Red';
+	@override String get shortStepDns => 'DNS';
+	@override String get shortStepCore => 'Núcleo';
+	@override String get shortStepProxy => 'Proxy';
+	@override String get shortStepHandshake => 'WAN';
+	@override String valNicNormal({required Object p}) => 'Red conectada (${p})';
+	@override String get valNicNone => 'No se encontraron interfaces de red disponibles';
+	@override String get valNicGatewayTimeout => 'IP local obtenida, pero se agotó el tiempo de espera de la puerta de enlace externa';
+	@override String get valNicError => 'Error al verificar la interfaz de red';
+	@override String valDnsNormal({required Object p}) => 'Respuesta DNS normal (${p})';
+	@override String get valDnsEmpty => 'La consulta DNS devolvió una lista vacía';
+	@override String get valDnsTimeout => 'Tiempo de espera de consulta DNS agotado o fallido';
+	@override String valCoreNormal({required Object port, required Object mode}) => 'Núcleo funcionando correctamente (Puerto mixto: ${port}, Modo: ${mode})';
+	@override String get valCoreNotRunning => 'El servicio del núcleo no se está ejecutando';
+	@override String valCorePortConflict({required Object p}) => 'El puerto ${p} está ocupado por otro programa';
+	@override String get valCoreApiFailed => 'Núcleo no responde (Falló la comunicación API)';
+	@override String get valCoreError => 'Error al comprobar el núcleo';
+	@override String valProxyActive({required Object port}) => 'Proxy del sistema activo (127.0.0.1:${port})';
+	@override String get valProxyDisabled => 'Proxy del sistema desactivado (Directo / TUN / Manual)';
+	@override String get valProxyZombie => 'Proxy del sistema residual detectado (bloquea la red)';
+	@override String get valProxyFailed => 'Error al activar el proxy del sistema';
+	@override String get valProxyWarning => 'Advertencia sobre el estado del proxy del sistema';
+	@override String valHandshakeNormal({required Object node, required Object delay}) => 'Conexión a Internet normal (${node} • ${delay} ms)';
+	@override String valHandshakeFailed({required Object node, required Object err}) => 'Falló la conexión del nodo [${node}] (${err})';
+	@override String get valHandshakeSkipped => 'Núcleo no iniciado, prueba de conexión omitida';
+	@override String get valHandshakeError => 'Error en la conexión a Internet';
+	@override String get issueNicDisconnected => 'Adaptador de red desconectado (cable desconectado, Wi-Fi apagado o modo avión)';
+	@override String get suggestNicCheck => 'Compruebe el cable Ethernet, la conexión Wi-Fi o el estado del adaptador de red';
+	@override String get suggestNicReset => 'Intente desactivar y volver a activar el adaptador de red en la configuración del sistema';
+	@override String get issueNicGatewayUnreachable => 'Conectado a la LAN, pero la puerta de enlace externa no es accesible (portal cautivo o router sin conexión)';
+	@override String get suggestNicGateway => 'Compruebe el estado del router o abra el navegador para la autenticación web';
+	@override String get issueDnsPollution => 'El servicio DNS local no responde; posible contaminación de DNS o secuestro de puerta de enlace';
+	@override String get suggestDnsReset => 'Restablezca el DNS del sistema o active DNS cifrado inteligente (DoH/DoT) en Wmimo';
+	@override String get actionFlushDns => 'Vaciar caché DNS del sistema';
+	@override String get suggestDnsSlow => 'La latencia de DNS es alta; se recomienda habilitar DNS cifrado inteligente';
+	@override String get issueDnsFailed => 'Error de resolución DNS local; no se pueden resolver los nombres de dominio a IP';
+	@override String get suggestDnsFlush => 'Haga clic para vaciar la caché DNS o active DNS cifrado en los ajustes de Wmimo';
+	@override String get issueCorePortConflict => '¡Conflicto de puertos! Otra aplicación de proxy o servicio está usando el puerto';
+	@override String get suggestCoreChangePort => 'Cierre otros clientes proxy o cambie el número de puerto en los ajustes de Wmimo';
+	@override String get actionRestartCore => 'Reiniciar núcleo';
+	@override String get issueCoreStopped => 'El proceso del núcleo Wmimo está actualmente detenido';
+	@override String get suggestCoreStart => 'Haga clic en el interruptor de conexión o en Iniciar núcleo abajo';
+	@override String get actionStartCore => 'Iniciar proceso del núcleo';
+	@override String get issueCoreFrozen => 'El proceso del núcleo no responde o la autenticación de la API no coincide';
+	@override String get suggestCoreRestart => 'Se recomienda hacer clic en Reiniciar núcleo para recuperar el servicio';
+	@override String get suggestCoreReinstall => 'Intente reiniciar el núcleo o reinstalar los controladores del servicio';
+	@override String get issueProxyZombie => 'El proxy residual redirige el tráfico a un puerto inactivo, provocando la pérdida de red';
+	@override String get suggestProxyReset => 'Haga clic en Limpiar y restablecer proxy del sistema abajo para restaurar el acceso';
+	@override String get actionResetProxy => 'Limpiar y restablecer proxy';
+	@override String get issueProxyBlocked => 'El proxy del sistema no se aplicó, posiblemente bloqueado por antivirus o permisos';
+	@override String get suggestProxyReapply => 'Haga clic en el botón de abajo para forzar la aplicación del proxy';
+	@override String get actionReapplyProxy => 'Volver a aplicar proxy';
+	@override String get issueProxyRead => 'Excepción no grave al leer la configuración del proxy del sistema';
+	@override String get issueHandshakeBlocked => 'El nodo proxy actual no puede conectarse a Internet; conexión bloqueada';
+	@override String get suggestHandshakeSwitch => 'El nodo puede estar caído o no disponible; cambie a otro nodo';
+	@override String suggestHandshakeSlow({required Object delay}) => 'Latencia alta (${delay} ms); pruebe y elija un nodo más cercano';
+	@override String get suggestHandshakeCheck => 'Compruebe la configuración del nodo o cambie el destino de prueba';
+	@override String get conclusionPerfect => '¡Excelente! Todos los nodos y configuraciones proxy funcionan correctamente.';
+	@override String get conclusionGood => 'Red generalmente normal, se detectaron advertencias o latencia menor no crítica.';
+	@override String get conclusionWarning => 'Problemas detectados en la red o proxy; use la Reparación en un clic abajo.';
+	@override String get conclusionCritical => '¡Bloqueo grave de red! Red local desconectada o núcleo proxy bloqueado.';
 }
 
 // Path: SpeedTestScreen
@@ -930,6 +996,72 @@ extension on TranslationsEs {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (vía Proxy, puerto: ${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN no está activado',
 			'NetCheckScreen.routeTableSection' => '4. Tabla de rutas',
+			'NetCheckScreen.stepPhysicalDesc' => 'Comprueba el adaptador de red físico, la IP local y la conectividad de la puerta de enlace',
+			'NetCheckScreen.stepDnsDesc' => 'Verifica la latencia de resolución DNS local y el estado del motor DNS del núcleo',
+			'NetCheckScreen.stepCoreDesc' => 'Comprueba el estado del proceso Mihomo y los puertos de escucha Mixed-Port/API',
+			'NetCheckScreen.stepProxyDesc' => 'Verifica la configuración del proxy del sistema y busca restos que causen desconexión',
+			'NetCheckScreen.stepHandshakeDesc' => 'Prueba la latencia de extremo a extremo y la conectividad a CDN global mediante el nodo activo',
+			'NetCheckScreen.shortStepPhysical' => 'Red',
+			'NetCheckScreen.shortStepDns' => 'DNS',
+			'NetCheckScreen.shortStepCore' => 'Núcleo',
+			'NetCheckScreen.shortStepProxy' => 'Proxy',
+			'NetCheckScreen.shortStepHandshake' => 'WAN',
+			'NetCheckScreen.valNicNormal' => ({required Object p}) => 'Red conectada (${p})',
+			'NetCheckScreen.valNicNone' => 'No se encontraron interfaces de red disponibles',
+			'NetCheckScreen.valNicGatewayTimeout' => 'IP local obtenida, pero se agotó el tiempo de espera de la puerta de enlace externa',
+			'NetCheckScreen.valNicError' => 'Error al verificar la interfaz de red',
+			'NetCheckScreen.valDnsNormal' => ({required Object p}) => 'Respuesta DNS normal (${p})',
+			'NetCheckScreen.valDnsEmpty' => 'La consulta DNS devolvió una lista vacía',
+			'NetCheckScreen.valDnsTimeout' => 'Tiempo de espera de consulta DNS agotado o fallido',
+			'NetCheckScreen.valCoreNormal' => ({required Object port, required Object mode}) => 'Núcleo funcionando correctamente (Puerto mixto: ${port}, Modo: ${mode})',
+			'NetCheckScreen.valCoreNotRunning' => 'El servicio del núcleo no se está ejecutando',
+			'NetCheckScreen.valCorePortConflict' => ({required Object p}) => 'El puerto ${p} está ocupado por otro programa',
+			'NetCheckScreen.valCoreApiFailed' => 'Núcleo no responde (Falló la comunicación API)',
+			'NetCheckScreen.valCoreError' => 'Error al comprobar el núcleo',
+			'NetCheckScreen.valProxyActive' => ({required Object port}) => 'Proxy del sistema activo (127.0.0.1:${port})',
+			'NetCheckScreen.valProxyDisabled' => 'Proxy del sistema desactivado (Directo / TUN / Manual)',
+			'NetCheckScreen.valProxyZombie' => 'Proxy del sistema residual detectado (bloquea la red)',
+			'NetCheckScreen.valProxyFailed' => 'Error al activar el proxy del sistema',
+			'NetCheckScreen.valProxyWarning' => 'Advertencia sobre el estado del proxy del sistema',
+			'NetCheckScreen.valHandshakeNormal' => ({required Object node, required Object delay}) => 'Conexión a Internet normal (${node} • ${delay} ms)',
+			'NetCheckScreen.valHandshakeFailed' => ({required Object node, required Object err}) => 'Falló la conexión del nodo [${node}] (${err})',
+			'NetCheckScreen.valHandshakeSkipped' => 'Núcleo no iniciado, prueba de conexión omitida',
+			'NetCheckScreen.valHandshakeError' => 'Error en la conexión a Internet',
+			'NetCheckScreen.issueNicDisconnected' => 'Adaptador de red desconectado (cable desconectado, Wi-Fi apagado o modo avión)',
+			'NetCheckScreen.suggestNicCheck' => 'Compruebe el cable Ethernet, la conexión Wi-Fi o el estado del adaptador de red',
+			'NetCheckScreen.suggestNicReset' => 'Intente desactivar y volver a activar el adaptador de red en la configuración del sistema',
+			'NetCheckScreen.issueNicGatewayUnreachable' => 'Conectado a la LAN, pero la puerta de enlace externa no es accesible (portal cautivo o router sin conexión)',
+			'NetCheckScreen.suggestNicGateway' => 'Compruebe el estado del router o abra el navegador para la autenticación web',
+			'NetCheckScreen.issueDnsPollution' => 'El servicio DNS local no responde; posible contaminación de DNS o secuestro de puerta de enlace',
+			'NetCheckScreen.suggestDnsReset' => 'Restablezca el DNS del sistema o active DNS cifrado inteligente (DoH/DoT) en Wmimo',
+			'NetCheckScreen.actionFlushDns' => 'Vaciar caché DNS del sistema',
+			'NetCheckScreen.suggestDnsSlow' => 'La latencia de DNS es alta; se recomienda habilitar DNS cifrado inteligente',
+			'NetCheckScreen.issueDnsFailed' => 'Error de resolución DNS local; no se pueden resolver los nombres de dominio a IP',
+			'NetCheckScreen.suggestDnsFlush' => 'Haga clic para vaciar la caché DNS o active DNS cifrado en los ajustes de Wmimo',
+			'NetCheckScreen.issueCorePortConflict' => '¡Conflicto de puertos! Otra aplicación de proxy o servicio está usando el puerto',
+			'NetCheckScreen.suggestCoreChangePort' => 'Cierre otros clientes proxy o cambie el número de puerto en los ajustes de Wmimo',
+			'NetCheckScreen.actionRestartCore' => 'Reiniciar núcleo',
+			'NetCheckScreen.issueCoreStopped' => 'El proceso del núcleo Wmimo está actualmente detenido',
+			'NetCheckScreen.suggestCoreStart' => 'Haga clic en el interruptor de conexión o en Iniciar núcleo abajo',
+			'NetCheckScreen.actionStartCore' => 'Iniciar proceso del núcleo',
+			'NetCheckScreen.issueCoreFrozen' => 'El proceso del núcleo no responde o la autenticación de la API no coincide',
+			'NetCheckScreen.suggestCoreRestart' => 'Se recomienda hacer clic en Reiniciar núcleo para recuperar el servicio',
+			'NetCheckScreen.suggestCoreReinstall' => 'Intente reiniciar el núcleo o reinstalar los controladores del servicio',
+			'NetCheckScreen.issueProxyZombie' => 'El proxy residual redirige el tráfico a un puerto inactivo, provocando la pérdida de red',
+			'NetCheckScreen.suggestProxyReset' => 'Haga clic en Limpiar y restablecer proxy del sistema abajo para restaurar el acceso',
+			'NetCheckScreen.actionResetProxy' => 'Limpiar y restablecer proxy',
+			'NetCheckScreen.issueProxyBlocked' => 'El proxy del sistema no se aplicó, posiblemente bloqueado por antivirus o permisos',
+			'NetCheckScreen.suggestProxyReapply' => 'Haga clic en el botón de abajo para forzar la aplicación del proxy',
+			'NetCheckScreen.actionReapplyProxy' => 'Volver a aplicar proxy',
+			'NetCheckScreen.issueProxyRead' => 'Excepción no grave al leer la configuración del proxy del sistema',
+			'NetCheckScreen.issueHandshakeBlocked' => 'El nodo proxy actual no puede conectarse a Internet; conexión bloqueada',
+			'NetCheckScreen.suggestHandshakeSwitch' => 'El nodo puede estar caído o no disponible; cambie a otro nodo',
+			'NetCheckScreen.suggestHandshakeSlow' => ({required Object delay}) => 'Latencia alta (${delay} ms); pruebe y elija un nodo más cercano',
+			'NetCheckScreen.suggestHandshakeCheck' => 'Compruebe la configuración del nodo o cambie el destino de prueba',
+			'NetCheckScreen.conclusionPerfect' => '¡Excelente! Todos los nodos y configuraciones proxy funcionan correctamente.',
+			'NetCheckScreen.conclusionGood' => 'Red generalmente normal, se detectaron advertencias o latencia menor no crítica.',
+			'NetCheckScreen.conclusionWarning' => 'Problemas detectados en la red o proxy; use la Reparación en un clic abajo.',
+			'NetCheckScreen.conclusionCritical' => '¡Bloqueo grave de red! Red local desconectada o núcleo proxy bloqueado.',
 			'SpeedTestScreen.title' => 'Test de velocidad',
 			'SpeedTestScreen.startTest' => 'Iniciar prueba',
 			'SpeedTestScreen.stopTest' => 'Detener',
@@ -1314,6 +1446,8 @@ extension on TranslationsEs {
 			'meta.donateTitle' => '💖 Invitar un café al autor',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ ¡Tu apoyo es la mayor motivación para seguir mejorando Wmimo! ~ ☕✨',
 			'meta.tokenCurrency' => 'Token',
+			_ => null,
+		} ?? switch (path) {
 			'meta.networkChain' => 'Red',
 			'meta.depositAddress' => 'Dirección de depósito APTOS',
 			'meta.clickToCopy' => 'Clic para copiar',
@@ -1380,8 +1514,6 @@ extension on TranslationsEs {
 			'meta.reportCopied' => 'Informe copiado al portapapeles, listo para compartir',
 			'meta.gamingExperience' => 'Juegos online',
 			'meta.streamingExperience' => 'Streaming',
-			_ => null,
-		} ?? switch (path) {
 			'meta.meetingExperience' => 'Videoconferencias',
 			'meta.customSpeedtestUrl' => 'URL de descarga personalizada (https://...)',
 			'meta.customSpeedtestSource' => 'Servidor personalizado',

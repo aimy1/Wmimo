@@ -6,6 +6,7 @@ import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/log.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 
 enum DiagnosticStatus {
   idle,
@@ -97,71 +98,74 @@ class DiagnosticReport {
 }
 
 class NetworkDiagnostics {
-  static List<DiagnosticStepResult> initialSteps() {
+  static List<DiagnosticStepResult> initialSteps([Translations? translations]) {
+    final tr = translations ?? t;
     return [
       DiagnosticStepResult(
         id: DiagnosticStepId.physicalNetwork,
-        title: "物理网卡与网关连通",
-        description: "检测物理网卡状态、本机局域网 IP 与本地网关连通性",
+        title: tr.NetCheckScreen.stepPhysical,
+        description: tr.NetCheckScreen.stepPhysicalDesc,
       ),
       DiagnosticStepResult(
         id: DiagnosticStepId.dnsResolution,
-        title: "DNS 解析与 Fake-IP",
-        description: "验证本地域名解析链路耗时与内核 DNS 响应状态",
+        title: tr.NetCheckScreen.stepDns,
+        description: tr.NetCheckScreen.stepDnsDesc,
       ),
       DiagnosticStepResult(
         id: DiagnosticStepId.coreAndPort,
-        title: "核心进程与端口占用",
-        description: "检测 Mihomo 进程存活状态与 Mixed-Port/API 端口监听",
+        title: tr.NetCheckScreen.stepCore,
+        description: tr.NetCheckScreen.stepCoreDesc,
       ),
       DiagnosticStepResult(
         id: DiagnosticStepId.systemProxy,
-        title: "系统代理配置与状态",
-        description: "验证系统底层代理是否正确对齐并排查残留断网隐患",
+        title: tr.NetCheckScreen.stepProxy,
+        description: tr.NetCheckScreen.stepProxyDesc,
       ),
       DiagnosticStepResult(
         id: DiagnosticStepId.internetHandshake,
-        title: "公网代理链路握手",
-        description: "通过激活代理节点向全球 CDN 测定实际端到端延迟与可用性",
+        title: tr.NetCheckScreen.stepHandshake,
+        description: tr.NetCheckScreen.stepHandshakeDesc,
       ),
     ];
   }
 
   /// Runs the full 5-level diagnostics pipeline sequentially
   static Future<DiagnosticReport> runDiagnostics({
+    Translations? translations,
     void Function(DiagnosticStepResult step)? onStepUpdate,
   }) async {
+    final tr = translations ?? t;
     final startTime = DateTime.now();
-    final steps = initialSteps();
+    final steps = initialSteps(tr);
 
     // Step 1: Physical Network & Gateway
     steps[0].status = DiagnosticStatus.checking;
     onStepUpdate?.call(steps[0]);
-    steps[0] = await _checkPhysicalNetwork(steps[0]);
+    steps[0] = await _checkPhysicalNetwork(steps[0], tr);
     onStepUpdate?.call(steps[0]);
 
     // Step 2: DNS Resolution
     steps[1].status = DiagnosticStatus.checking;
     onStepUpdate?.call(steps[1]);
-    steps[1] = await _checkDnsResolution(steps[1]);
+    steps[1] = await _checkDnsResolution(steps[1], tr);
     onStepUpdate?.call(steps[1]);
 
     // Step 3: Core & Port
     steps[2].status = DiagnosticStatus.checking;
     onStepUpdate?.call(steps[2]);
-    steps[2] = await _checkCoreAndPort(steps[2]);
+    steps[2] = await _checkCoreAndPort(steps[2], tr);
     onStepUpdate?.call(steps[2]);
 
     // Step 4: System Proxy
     steps[3].status = DiagnosticStatus.checking;
     onStepUpdate?.call(steps[3]);
-    steps[3] = await _checkSystemProxy(steps[3]);
+    steps[3] = await _checkSystemProxy(steps[3], tr);
     onStepUpdate?.call(steps[3]);
 
     // Step 5: Internet Handshake
     steps[4].status = DiagnosticStatus.checking;
     onStepUpdate?.call(steps[4]);
-    steps[4] = await _checkInternetHandshake(steps[4]);
+    steps[4] = await _checkInternetHandshake(steps[4], tr);
     onStepUpdate?.call(steps[4]);
 
     final duration = DateTime.now().difference(startTime);
@@ -187,13 +191,13 @@ class NetworkDiagnostics {
 
     String conclusion;
     if (score == 100) {
-      conclusion = "全链路极佳！所有网络节点与代理配置均正常畅通。";
+      conclusion = tr.NetCheckScreen.conclusionPerfect;
     } else if (score >= 80) {
-      conclusion = "链路基本正常，检测到部分非致命延迟或警告，建议查看详情。";
+      conclusion = tr.NetCheckScreen.conclusionGood;
     } else if (score >= 50) {
-      conclusion = "检测到部分网络或代理环节异常，请使用下方【一键修复】恢复。";
+      conclusion = tr.NetCheckScreen.conclusionWarning;
     } else {
-      conclusion = "严重网络受阻！本地网络未连通或代理内核遭遇阻断。";
+      conclusion = tr.NetCheckScreen.conclusionCritical;
     }
 
     return DiagnosticReport(
@@ -206,7 +210,10 @@ class NetworkDiagnostics {
   }
 
   /// 1. Physical Network & Gateway
-  static Future<DiagnosticStepResult> _checkPhysicalNetwork(DiagnosticStepResult base) async {
+  static Future<DiagnosticStepResult> _checkPhysicalNetwork(
+    DiagnosticStepResult base,
+    Translations tr,
+  ) async {
     final sw = Stopwatch()..start();
     try {
       final interfaces = await NetworkInterface.list(
@@ -227,10 +234,10 @@ class NetworkDiagnostics {
       if (validIps.isEmpty) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
-          value: "未找到可用网络接口",
-          detail: "NetworkInterface.list() 返回空或仅有未配置的链路本地地址 (169.254.x.x)",
-          issue: "本机网卡未连接到任何网络（网线拔出、Wi-Fi 未连或飞行模式）",
-          suggestion: "请检查电脑物理网线连接、Wi-Fi 无线网络或网络适配器状态",
+          value: tr.NetCheckScreen.valNicNone,
+          detail: "NetworkInterface.list() returned empty or only 169.254.x.x",
+          issue: tr.NetCheckScreen.issueNicDisconnected,
+          suggestion: tr.NetCheckScreen.suggestNicCheck,
         );
       }
 
@@ -255,35 +262,38 @@ class NetworkDiagnostics {
       if (!gatewayReachable) {
         return base.copyWith(
           status: DiagnosticStatus.warning,
-          value: "局域网 IP 已获取，但外部网关握手超时",
-          detail: "已检测到网络接口:\n${validIps.join('\n')}\n向外网公共网关发起握手超时",
-          issue: "电脑已接入局域网，但无法访问外部基础路由（可能受限于校园网/酒店认证或路由器断网）",
-          suggestion: "请检查路由器光纤指示灯，或打开浏览器确认是否需要 Web 登录认证",
+          value: tr.NetCheckScreen.valNicGatewayTimeout,
+          detail: "${validIps.join('\n')}\nGateway probe timed out (${totalMs}ms)",
+          issue: tr.NetCheckScreen.issueNicGatewayUnreachable,
+          suggestion: tr.NetCheckScreen.suggestNicGateway,
           latencyMs: totalMs,
         );
       }
 
       return base.copyWith(
         status: DiagnosticStatus.healthy,
-        value: "网卡连接正常 (${validIps.first})",
-        detail: "已分配网络接口:\n${validIps.join('\n')}\n网关连通性探测耗时: ${latency}ms",
+        value: tr.NetCheckScreen.valNicNormal(p: validIps.first),
+        detail: "${validIps.join('\n')}\nGateway latency: ${latency}ms",
         latencyMs: latency,
       );
     } catch (e) {
       sw.stop();
       return base.copyWith(
         status: DiagnosticStatus.failed,
-        value: "网络接口检查异常",
+        value: tr.NetCheckScreen.valNicError,
         detail: e.toString(),
-        issue: "检测本地物理网卡时发生异常: $e",
-        suggestion: "尝试在系统设置中禁用并重新启用网络适配器",
+        issue: "$e",
+        suggestion: tr.NetCheckScreen.suggestNicReset,
         latencyMs: sw.elapsedMilliseconds,
       );
     }
   }
 
   /// 2. DNS Resolution & Fake-IP Engine
-  static Future<DiagnosticStepResult> _checkDnsResolution(DiagnosticStepResult base) async {
+  static Future<DiagnosticStepResult> _checkDnsResolution(
+    DiagnosticStepResult base,
+    Translations tr,
+  ) async {
     final sw = Stopwatch()..start();
     try {
       final lookupSw = Stopwatch()..start();
@@ -296,11 +306,11 @@ class NetworkDiagnostics {
       if (addresses.isEmpty) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
-          value: "DNS 查询返回空列表",
-          detail: "系统 DNS 无法解析 dns.alidns.com",
-          issue: "本地域名解析服务未响应，可能存在 DNS 污染或网关劫持",
-          suggestion: "建议重置系统 DNS 或在 Wmimo 中启用智能加密 DNS (DoH/DoT)",
-          actionLabel: "刷新系统 DNS 缓存",
+          value: tr.NetCheckScreen.valDnsEmpty,
+          detail: "System DNS failed to resolve dns.alidns.com",
+          issue: tr.NetCheckScreen.issueDnsPollution,
+          suggestion: tr.NetCheckScreen.suggestDnsReset,
+          actionLabel: tr.NetCheckScreen.actionFlushDns,
           repairAction: flushDnsCache,
           latencyMs: dnsLatency,
         );
@@ -312,27 +322,27 @@ class NetworkDiagnostics {
       if (isStarted) {
         final query = await ClashHttpApi.dnsQuery('cp.cloudflare.com', queryType: 'A');
         if (query.error == null && query.data != null && query.data!.isNotEmpty) {
-          coreDnsInfo = "内核 DNS 正常解析: ${query.data!.join(', ')}";
+          coreDnsInfo = "Core DNS: ${query.data!.join(', ')}";
         }
       }
 
       sw.stop();
       return base.copyWith(
         status: dnsLatency > 800 ? DiagnosticStatus.warning : DiagnosticStatus.healthy,
-        value: "DNS 响应正常 (${addresses.first.address})",
-        detail: "系统 DNS 解析耗时: ${dnsLatency}ms\n解析结果: ${addresses.map((a) => a.address).join(', ')}${coreDnsInfo.isNotEmpty ? '\n$coreDnsInfo' : ''}",
+        value: tr.NetCheckScreen.valDnsNormal(p: addresses.first.address),
+        detail: "DNS latency: ${dnsLatency}ms\nAddresses: ${addresses.map((a) => a.address).join(', ')}${coreDnsInfo.isNotEmpty ? '\n$coreDnsInfo' : ''}",
         latencyMs: dnsLatency,
-        suggestion: dnsLatency > 800 ? "DNS 解析耗时偏长，建议开启 Smart Encrypted DNS 加速" : null,
+        suggestion: dnsLatency > 800 ? tr.NetCheckScreen.suggestDnsSlow : null,
       );
     } catch (e) {
       sw.stop();
       return base.copyWith(
         status: DiagnosticStatus.failed,
-        value: "DNS 查询超时或失败",
+        value: tr.NetCheckScreen.valDnsTimeout,
         detail: e.toString(),
-        issue: "本地 DNS 解析失败，系统无法将域名转换为 IP 地址",
-        suggestion: "点击一键刷新系统 DNS 缓存，或在 Wmimo 设置中启用加密 DNS",
-        actionLabel: "一键刷新 DNS 缓存",
+        issue: tr.NetCheckScreen.issueDnsFailed,
+        suggestion: tr.NetCheckScreen.suggestDnsFlush,
+        actionLabel: tr.NetCheckScreen.actionFlushDns,
         repairAction: flushDnsCache,
         latencyMs: sw.elapsedMilliseconds,
       );
@@ -340,7 +350,10 @@ class NetworkDiagnostics {
   }
 
   /// 3. Mihomo Core Process & Port Listening
-  static Future<DiagnosticStepResult> _checkCoreAndPort(DiagnosticStepResult base) async {
+  static Future<DiagnosticStepResult> _checkCoreAndPort(
+    DiagnosticStepResult base,
+    Translations tr,
+  ) async {
     final sw = Stopwatch()..start();
     try {
       final isStarted = await VPNService.getStarted();
@@ -368,11 +381,11 @@ class NetworkDiagnostics {
       if (!isStarted && (mixedPortOpen || apiPortOpen)) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
-          value: "端口 $mixedPort / $apiPort 已被外部程序占用",
-          detail: "Wmimo 核心未启动，但本地端口已被外部进程监听 (混合端口: $mixedPortOpen, API: $apiPortOpen)",
-          issue: "检测到端口冲突！其他代理软件（如 Clash Verge, v2rayN, Sing-box）或系统服务正在占用本应用端口",
-          suggestion: "请完全退出其他代理客户端，或在 Wmimo 设置中修改端口号",
-          actionLabel: "尝试重启并强制接管",
+          value: tr.NetCheckScreen.valCorePortConflict(p: '$mixedPort / $apiPort'),
+          detail: "Core stopped, but port occupied (Mixed: $mixedPortOpen, API: $apiPortOpen)",
+          issue: tr.NetCheckScreen.issueCorePortConflict,
+          suggestion: tr.NetCheckScreen.suggestCoreChangePort,
+          actionLabel: tr.NetCheckScreen.actionRestartCore,
           repairAction: () async {
             final res = await VPNService.restart(const Duration(seconds: 5));
             return res == null;
@@ -385,11 +398,11 @@ class NetworkDiagnostics {
       if (!isStarted) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
-          value: "核心服务未运行",
-          detail: "VPNService.getStarted() 返回 false",
-          issue: "Wmimo 内核进程当前处于停止状态",
-          suggestion: "点击主界面连接开关或点击下方【启动核心】",
-          actionLabel: "启动核心进程",
+          value: tr.NetCheckScreen.valCoreNotRunning,
+          detail: "VPNService.getStarted() == false",
+          issue: tr.NetCheckScreen.issueCoreStopped,
+          suggestion: tr.NetCheckScreen.suggestCoreStart,
+          actionLabel: tr.NetCheckScreen.actionStartCore,
           repairAction: () async {
             final res = await VPNService.start(const Duration(seconds: 10));
             return res == null;
@@ -403,11 +416,11 @@ class NetworkDiagnostics {
       if (configResult.error != null) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
-          value: "内核进程无响应 (API 端口通讯失败)",
-          detail: "REST Controller 报错: ${configResult.error!.message}",
-          issue: "内核进程发生僵死或 API Secret 鉴权失配",
-          suggestion: "建议点击【一键重启内核】恢复服务",
-          actionLabel: "一键重启内核",
+          value: tr.NetCheckScreen.valCoreApiFailed,
+          detail: "REST Controller: ${configResult.error!.message}",
+          issue: tr.NetCheckScreen.issueCoreFrozen,
+          suggestion: tr.NetCheckScreen.suggestCoreRestart,
+          actionLabel: tr.NetCheckScreen.actionRestartCore,
           repairAction: () async {
             final res = await VPNService.restart(const Duration(seconds: 5));
             return res == null;
@@ -419,19 +432,19 @@ class NetworkDiagnostics {
       final cfg = configResult.data!;
       return base.copyWith(
         status: DiagnosticStatus.healthy,
-        value: "核心运行良好 (混合端口: ${cfg.mixed_port}, 模式: ${cfg.mode})",
-        detail: "Mihomo 内核进程正常存活\nMixed-Port: ${cfg.mixed_port}\nController API: $apiPort\nTUN 模式: ${cfg.tun.enable ? '已启用' : '未开启'}",
+        value: tr.NetCheckScreen.valCoreNormal(port: cfg.mixed_port.toString(), mode: cfg.mode),
+        detail: "Mihomo active\nMixed-Port: ${cfg.mixed_port}\nAPI: $apiPort\nTUN: ${cfg.tun.enable}",
         latencyMs: sw.elapsedMilliseconds,
       );
     } catch (e) {
       sw.stop();
       return base.copyWith(
         status: DiagnosticStatus.failed,
-        value: "核心检测异常",
+        value: tr.NetCheckScreen.valCoreError,
         detail: e.toString(),
-        issue: "检测核心与端口发生未知异常: $e",
-        suggestion: "尝试重启核心或重装服务驱动",
-        actionLabel: "重启核心",
+        issue: "$e",
+        suggestion: tr.NetCheckScreen.suggestCoreReinstall,
+        actionLabel: tr.NetCheckScreen.actionRestartCore,
         repairAction: () async {
           final res = await VPNService.restart(const Duration(seconds: 5));
           return res == null;
@@ -442,7 +455,10 @@ class NetworkDiagnostics {
   }
 
   /// 4. System Proxy Alignment & Zombie Proxy Check
-  static Future<DiagnosticStepResult> _checkSystemProxy(DiagnosticStepResult base) async {
+  static Future<DiagnosticStepResult> _checkSystemProxy(
+    DiagnosticStepResult base,
+    Translations tr,
+  ) async {
     final sw = Stopwatch()..start();
     try {
       final isCoreRunning = await VPNService.getStarted();
@@ -456,11 +472,11 @@ class NetworkDiagnostics {
       if (!isCoreRunning && actualEnabled) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
-          value: "检测到残留系统代理（导致断网）",
-          detail: "核心已停止，但系统代理注册表依然处于开启状态 (指向 127.0.0.1:$mixedPort)",
-          issue: "这是导致电脑断网的最常见原因！残留的系统代理将流量转发到未启动的端口",
-          suggestion: "点击下方【一键清理并重置系统代理】，即可立即恢复网络正常上网",
-          actionLabel: "一键清理并重置代理",
+          value: tr.NetCheckScreen.valProxyZombie,
+          detail: "Core stopped, but system proxy enabled (127.0.0.1:$mixedPort)",
+          issue: tr.NetCheckScreen.issueProxyZombie,
+          suggestion: tr.NetCheckScreen.suggestProxyReset,
+          actionLabel: tr.NetCheckScreen.actionResetProxy,
           repairAction: VPNService.resetAndCleanSystemProxy,
           latencyMs: sw.elapsedMilliseconds,
         );
@@ -470,11 +486,11 @@ class NetworkDiagnostics {
       if (isCoreRunning && autoSetExpected && !actualEnabled) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
-          value: "系统代理未能成功启用",
-          detail: "设置中已开启系统代理，但操作系统底层网络设置仍为未启用状态",
-          issue: "系统代理配置未生效，可能被第三方安全软件拦截或权限受限",
-          suggestion: "点击下方按钮尝试重新注册并强制应用系统代理",
-          actionLabel: "重新应用系统代理",
+          value: tr.NetCheckScreen.valProxyFailed,
+          detail: "Expected system proxy ON, but OS reports OFF",
+          issue: tr.NetCheckScreen.issueProxyBlocked,
+          suggestion: tr.NetCheckScreen.suggestProxyReapply,
+          actionLabel: tr.NetCheckScreen.actionReapplyProxy,
           repairAction: () async {
             await VPNService.setSystemProxy(true);
             return await VPNService.getSystemProxyEnable();
@@ -487,15 +503,15 @@ class NetworkDiagnostics {
       if (actualEnabled) {
         return base.copyWith(
           status: DiagnosticStatus.healthy,
-          value: "系统代理已生效 (127.0.0.1:$mixedPort)",
-          detail: "系统代理已准确指向当前 Wmimo 混合端口\n自动设置系统代理: 开启\n底层生效状态: 已激活",
+          value: tr.NetCheckScreen.valProxyActive(port: mixedPort.toString()),
+          detail: "System proxy: 127.0.0.1:$mixedPort\nAuto-set: $autoSetExpected\nActive: true",
           latencyMs: sw.elapsedMilliseconds,
         );
       } else {
         return base.copyWith(
           status: DiagnosticStatus.healthy,
-          value: "系统代理未启用（当前走直连/TUN/手动模式）",
-          detail: "系统代理当前处于关闭状态，网络流量不经过系统代理端口",
+          value: tr.NetCheckScreen.valProxyDisabled,
+          detail: "System proxy disabled (Direct/TUN/Manual)",
           latencyMs: sw.elapsedMilliseconds,
         );
       }
@@ -503,11 +519,11 @@ class NetworkDiagnostics {
       sw.stop();
       return base.copyWith(
         status: DiagnosticStatus.warning,
-        value: "系统代理状态读取警告",
+        value: tr.NetCheckScreen.valProxyWarning,
         detail: e.toString(),
-        issue: "读取系统代理设置时产生非致命异常",
-        suggestion: "如遇浏览器无法上网，可点击一键重置系统代理",
-        actionLabel: "重置系统代理",
+        issue: tr.NetCheckScreen.issueProxyRead,
+        suggestion: tr.NetCheckScreen.suggestProxyReset,
+        actionLabel: tr.NetCheckScreen.actionResetProxy,
         repairAction: VPNService.resetAndCleanSystemProxy,
         latencyMs: sw.elapsedMilliseconds,
       );
@@ -515,7 +531,10 @@ class NetworkDiagnostics {
   }
 
   /// 5. Proxy Node & Internet Handshake (Cloudflare 204)
-  static Future<DiagnosticStepResult> _checkInternetHandshake(DiagnosticStepResult base) async {
+  static Future<DiagnosticStepResult> _checkInternetHandshake(
+    DiagnosticStepResult base,
+    Translations tr,
+  ) async {
     final sw = Stopwatch()..start();
     try {
       final isStarted = await VPNService.getStarted();
@@ -523,8 +542,8 @@ class NetworkDiagnostics {
         sw.stop();
         return base.copyWith(
           status: DiagnosticStatus.warning,
-          value: "核心未启动，跳过公网握手测试",
-          detail: "需先启动核心方可进行代理端到端公网握手",
+          value: tr.NetCheckScreen.valHandshakeSkipped,
+          detail: "Core is not started, handshake skipped",
           latencyMs: sw.elapsedMilliseconds,
         );
       }
@@ -553,13 +572,13 @@ class NetworkDiagnostics {
       sw.stop();
 
       if (delayRes.error != null || delayRes.data == null || delayRes.data! <= 0) {
-        final errMsg = delayRes.error?.message ?? "握手超时";
+        final errMsg = delayRes.error?.message ?? "Timeout";
         return base.copyWith(
           status: DiagnosticStatus.failed,
-          value: "当前节点 [$activeNode] 握手失败 ($errMsg)",
-          detail: "目标: https://cp.cloudflare.com/generate_204\n活跃节点: $activeNode\n错误: $errMsg",
-          issue: "当前选中的代理节点无法连接外部互联网，数据包握手失败或被阻断",
-          suggestion: "该节点可能正在维护或不可达，请切换至其他可用节点",
+          value: tr.NetCheckScreen.valHandshakeFailed(node: activeNode, err: errMsg),
+          detail: "Target: https://cp.cloudflare.com/generate_204\nNode: $activeNode\nError: $errMsg",
+          issue: tr.NetCheckScreen.issueHandshakeBlocked,
+          suggestion: tr.NetCheckScreen.suggestHandshakeSwitch,
           latencyMs: sw.elapsedMilliseconds,
         );
       }
@@ -569,19 +588,19 @@ class NetworkDiagnostics {
 
       return base.copyWith(
         status: isWarning ? DiagnosticStatus.warning : DiagnosticStatus.healthy,
-        value: "公网握手畅通 ($activeNode • ${delay}ms)",
-        detail: "测试目标: Cloudflare Anycast (generate_204)\n当前激活节点: $activeNode\n往返延迟: ${delay}ms",
-        suggestion: isWarning ? "节点延迟稍高 (${delay}ms)，建议测速选择更近的边缘节点" : null,
+        value: tr.NetCheckScreen.valHandshakeNormal(node: activeNode, delay: delay.toString()),
+        detail: "Target: Cloudflare Anycast (generate_204)\nNode: $activeNode\nRoundtrip: ${delay}ms",
+        suggestion: isWarning ? tr.NetCheckScreen.suggestHandshakeSlow(delay: delay.toString()) : null,
         latencyMs: delay,
       );
     } catch (e) {
       sw.stop();
       return base.copyWith(
         status: DiagnosticStatus.failed,
-        value: "公网握手发生异常",
+        value: tr.NetCheckScreen.valHandshakeError,
         detail: e.toString(),
-        issue: "测试公网端到端连通性时发生错误: $e",
-        suggestion: "检查节点配置或更换测速目标",
+        issue: "$e",
+        suggestion: tr.NetCheckScreen.suggestHandshakeCheck,
         latencyMs: sw.elapsedMilliseconds,
       );
     }

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wmimo/app/utils/network_diagnostics.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -115,5 +116,46 @@ void main() {
       final result = await NetworkDiagnostics.flushDnsCache();
       expect(result, isA<bool>());
     });
+
+    test('initialSteps supports localized titles and descriptions', () async {
+      final zhLocale = await AppLocale.zhCn.build();
+      final zhSteps = NetworkDiagnostics.initialSteps(zhLocale);
+      expect(zhSteps[0].title, "物理网卡与网关");
+      expect(zhSteps[0].description, contains("检测物理网卡状态"));
+
+      final enLocale = await AppLocale.en.build();
+      final enSteps = NetworkDiagnostics.initialSteps(enLocale);
+      expect(enSteps[0].title, "Physical Network & Gateway");
+      expect(enSteps[0].description, contains("Checks physical network adapter"));
+    });
+
+    test('All 9 locales contain localized step descriptions and status values', () async {
+      for (final locale in AppLocale.values) {
+        final tr = await locale.build();
+        expect(tr.NetCheckScreen.stepPhysicalDesc.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.stepDnsDesc.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.stepCoreDesc.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.stepProxyDesc.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.stepHandshakeDesc.isNotEmpty, isTrue);
+
+        expect(tr.NetCheckScreen.shortStepPhysical.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.shortStepDns.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.shortStepCore.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.shortStepProxy.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.shortStepHandshake.isNotEmpty, isTrue);
+
+        expect(tr.NetCheckScreen.valNicNormal(p: '192.168.1.1').isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.valDnsNormal(p: '1.1.1.1').isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.valCoreNormal(port: '7890', mode: 'rule').isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.valProxyActive(port: '7890').isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.valHandshakeNormal(node: 'JP', delay: '50').isNotEmpty, isTrue);
+
+        expect(tr.NetCheckScreen.conclusionPerfect.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.conclusionGood.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.conclusionWarning.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.conclusionCritical.isNotEmpty, isTrue);
+      }
+    });
   });
 }
+

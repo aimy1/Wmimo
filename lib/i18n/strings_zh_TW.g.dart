@@ -181,6 +181,72 @@ class Translations$NetCheckScreen$zh_TW implements Translations$NetCheckScreen$e
 	@override String proxyHttpSection({required Object p}) => '3. HTTP (經由代理,連接埠:${p})';
 	@override String get tunNotEnabled => 'TUN 未啟用';
 	@override String get routeTableSection => '4. 路由表';
+	@override String get stepPhysicalDesc => '檢測實體網卡狀態、本機區域網路 IP 與本機閘道連線能力';
+	@override String get stepDnsDesc => '驗證本地域名解析線路耗時與核心 DNS 回應狀態';
+	@override String get stepCoreDesc => '檢測 Mihomo 行程存活狀態與 Mixed-Port/API 連接埠監聽';
+	@override String get stepProxyDesc => '驗證系統底層代理是否正確對齊並排查殘留斷網隱患';
+	@override String get stepHandshakeDesc => '透過啟動代理節點向全球 CDN 測定實際端對端延遲與可用性';
+	@override String get shortStepPhysical => '網卡';
+	@override String get shortStepDns => 'DNS';
+	@override String get shortStepCore => '核心';
+	@override String get shortStepProxy => '代理';
+	@override String get shortStepHandshake => '公網';
+	@override String valNicNormal({required Object p}) => '網卡連線正常 (${p})';
+	@override String get valNicNone => '未找到可用網路介面';
+	@override String get valNicGatewayTimeout => '區域網路 IP 已獲取，但外部閘道連線逾時';
+	@override String get valNicError => '網路介面檢查異常';
+	@override String valDnsNormal({required Object p}) => 'DNS 回應正常 (${p})';
+	@override String get valDnsEmpty => 'DNS 查詢傳回空清單';
+	@override String get valDnsTimeout => 'DNS 查詢逾時或失敗';
+	@override String valCoreNormal({required Object port, required Object mode}) => '核心運作良好 (混合埠: ${port}, 模式: ${mode})';
+	@override String get valCoreNotRunning => '核心服務未執行';
+	@override String valCorePortConflict({required Object p}) => '連接埠 ${p} 已被外部程式占用';
+	@override String get valCoreApiFailed => '核心行程無回應 (API 埠通訊失敗)';
+	@override String get valCoreError => '核心檢測異常';
+	@override String valProxyActive({required Object port}) => '系統代理已生效 (127.0.0.1:${port})';
+	@override String get valProxyDisabled => '系統代理未啟用（目前走直連/TUN/手動模式）';
+	@override String get valProxyZombie => '檢測到殘留系統代理（導致斷網）';
+	@override String get valProxyFailed => '系統代理未能成功啟用';
+	@override String get valProxyWarning => '系統代理狀態讀取警告';
+	@override String valHandshakeNormal({required Object node, required Object delay}) => '公網連線暢通 (${node} • ${delay} ms)';
+	@override String valHandshakeFailed({required Object node, required Object err}) => '目前節點 [${node}] 連線失敗 (${err})';
+	@override String get valHandshakeSkipped => '核心未啟動，略過公網握手測試';
+	@override String get valHandshakeError => '公網握手發生異常';
+	@override String get issueNicDisconnected => '本機網卡未連線到任何網路（網路線拔出、Wi-Fi 未連或飛航模式）';
+	@override String get suggestNicCheck => '請檢查電腦實體網路線連線、Wi-Fi 無線網路或網路介面卡狀態';
+	@override String get suggestNicReset => '嘗試在系統設定中停用並重新啟用網路介面卡';
+	@override String get issueNicGatewayUnreachable => '電腦已接入區域網路，但無法存取外部基礎路由（可能受限於校園網路/飯店認證或路由器斷網）';
+	@override String get suggestNicGateway => '請檢查路由器光纖指示燈，或開啟瀏覽器確認是否需要 Web 登入認證';
+	@override String get issueDnsPollution => '本地域名解析服務未回應，可能存在 DNS 污染或閘道劫持';
+	@override String get suggestDnsReset => '建議重設系統 DNS 或在 Wmimo 中啟用智慧加密 DNS (DoH/DoT)';
+	@override String get actionFlushDns => '重新整理系統 DNS 快取';
+	@override String get suggestDnsSlow => 'DNS 解析耗時偏長，建議開啟 Smart Encrypted DNS 加速';
+	@override String get issueDnsFailed => '本地 DNS 解析失敗，系統無法將網域名稱轉換為 IP 位址';
+	@override String get suggestDnsFlush => '點擊一鍵重新整理系統 DNS 快取，或在 Wmimo 設定中啟用加密 DNS';
+	@override String get issueCorePortConflict => '檢測到連接埠衝突！其他代理軟體或系統服務正在占用本應用程式連接埠';
+	@override String get suggestCoreChangePort => '請完全退出其他代理客戶端，或在 Wmimo 設定中修改連接埠號';
+	@override String get actionRestartCore => '一鍵重啟核心';
+	@override String get issueCoreStopped => 'Wmimo 核心行程目前處於停止狀態';
+	@override String get suggestCoreStart => '點擊主畫面連線開關或點擊下方【啟動核心】';
+	@override String get actionStartCore => '啟動核心行程';
+	@override String get issueCoreFrozen => '核心行程發生停滯或 API Secret 鑑權不符合';
+	@override String get suggestCoreRestart => '建議點擊【一鍵重啟核心】恢復服務';
+	@override String get suggestCoreReinstall => '嘗試重啟核心或重裝服務驅動程式';
+	@override String get issueProxyZombie => '殘留的系統代理將流量轉發到未啟動的連接埠，導致斷網';
+	@override String get suggestProxyReset => '點擊下方【一鍵清理並重設系統代理】，即可立即恢復上網';
+	@override String get actionResetProxy => '一鍵清理並重設代理';
+	@override String get issueProxyBlocked => '系統代理設定未生效，可能被第三方安全軟體攔截或權限受限';
+	@override String get suggestProxyReapply => '點擊下方按鈕嘗試重新註冊並強制套用系統代理';
+	@override String get actionReapplyProxy => '重新套用系統代理';
+	@override String get issueProxyRead => '讀取系統代理設定時產生非致命異常';
+	@override String get issueHandshakeBlocked => '目前選取的代理節點無法連線外部網際網路，握手失敗或被阻斷';
+	@override String get suggestHandshakeSwitch => '該節點可能正在維護或無法連線，請切換至其他可用節點';
+	@override String suggestHandshakeSlow({required Object delay}) => '節點延遲稍高 (${delay} ms)，建議測速選擇更近的邊緣節點';
+	@override String get suggestHandshakeCheck => '檢查節點設定或更換測速目標';
+	@override String get conclusionPerfect => '全線路極佳！所有網路節點與代理設定均正常暢通。';
+	@override String get conclusionGood => '線路基本正常，檢測到部分非致命延遲或警告，建議查看詳情。';
+	@override String get conclusionWarning => '檢測到部分網路或代理環節異常，請使用下方【一鍵修復】恢復。';
+	@override String get conclusionCritical => '嚴重網路受阻！本地網路未連線或代理核心遭遇阻斷。';
 }
 
 // Path: SpeedTestScreen
@@ -927,6 +993,72 @@ extension on TranslationsZhTw {
 			'NetCheckScreen.proxyHttpSection' => ({required Object p}) => '3. HTTP (經由代理,連接埠:${p})',
 			'NetCheckScreen.tunNotEnabled' => 'TUN 未啟用',
 			'NetCheckScreen.routeTableSection' => '4. 路由表',
+			'NetCheckScreen.stepPhysicalDesc' => '檢測實體網卡狀態、本機區域網路 IP 與本機閘道連線能力',
+			'NetCheckScreen.stepDnsDesc' => '驗證本地域名解析線路耗時與核心 DNS 回應狀態',
+			'NetCheckScreen.stepCoreDesc' => '檢測 Mihomo 行程存活狀態與 Mixed-Port/API 連接埠監聽',
+			'NetCheckScreen.stepProxyDesc' => '驗證系統底層代理是否正確對齊並排查殘留斷網隱患',
+			'NetCheckScreen.stepHandshakeDesc' => '透過啟動代理節點向全球 CDN 測定實際端對端延遲與可用性',
+			'NetCheckScreen.shortStepPhysical' => '網卡',
+			'NetCheckScreen.shortStepDns' => 'DNS',
+			'NetCheckScreen.shortStepCore' => '核心',
+			'NetCheckScreen.shortStepProxy' => '代理',
+			'NetCheckScreen.shortStepHandshake' => '公網',
+			'NetCheckScreen.valNicNormal' => ({required Object p}) => '網卡連線正常 (${p})',
+			'NetCheckScreen.valNicNone' => '未找到可用網路介面',
+			'NetCheckScreen.valNicGatewayTimeout' => '區域網路 IP 已獲取，但外部閘道連線逾時',
+			'NetCheckScreen.valNicError' => '網路介面檢查異常',
+			'NetCheckScreen.valDnsNormal' => ({required Object p}) => 'DNS 回應正常 (${p})',
+			'NetCheckScreen.valDnsEmpty' => 'DNS 查詢傳回空清單',
+			'NetCheckScreen.valDnsTimeout' => 'DNS 查詢逾時或失敗',
+			'NetCheckScreen.valCoreNormal' => ({required Object port, required Object mode}) => '核心運作良好 (混合埠: ${port}, 模式: ${mode})',
+			'NetCheckScreen.valCoreNotRunning' => '核心服務未執行',
+			'NetCheckScreen.valCorePortConflict' => ({required Object p}) => '連接埠 ${p} 已被外部程式占用',
+			'NetCheckScreen.valCoreApiFailed' => '核心行程無回應 (API 埠通訊失敗)',
+			'NetCheckScreen.valCoreError' => '核心檢測異常',
+			'NetCheckScreen.valProxyActive' => ({required Object port}) => '系統代理已生效 (127.0.0.1:${port})',
+			'NetCheckScreen.valProxyDisabled' => '系統代理未啟用（目前走直連/TUN/手動模式）',
+			'NetCheckScreen.valProxyZombie' => '檢測到殘留系統代理（導致斷網）',
+			'NetCheckScreen.valProxyFailed' => '系統代理未能成功啟用',
+			'NetCheckScreen.valProxyWarning' => '系統代理狀態讀取警告',
+			'NetCheckScreen.valHandshakeNormal' => ({required Object node, required Object delay}) => '公網連線暢通 (${node} • ${delay} ms)',
+			'NetCheckScreen.valHandshakeFailed' => ({required Object node, required Object err}) => '目前節點 [${node}] 連線失敗 (${err})',
+			'NetCheckScreen.valHandshakeSkipped' => '核心未啟動，略過公網握手測試',
+			'NetCheckScreen.valHandshakeError' => '公網握手發生異常',
+			'NetCheckScreen.issueNicDisconnected' => '本機網卡未連線到任何網路（網路線拔出、Wi-Fi 未連或飛航模式）',
+			'NetCheckScreen.suggestNicCheck' => '請檢查電腦實體網路線連線、Wi-Fi 無線網路或網路介面卡狀態',
+			'NetCheckScreen.suggestNicReset' => '嘗試在系統設定中停用並重新啟用網路介面卡',
+			'NetCheckScreen.issueNicGatewayUnreachable' => '電腦已接入區域網路，但無法存取外部基礎路由（可能受限於校園網路/飯店認證或路由器斷網）',
+			'NetCheckScreen.suggestNicGateway' => '請檢查路由器光纖指示燈，或開啟瀏覽器確認是否需要 Web 登入認證',
+			'NetCheckScreen.issueDnsPollution' => '本地域名解析服務未回應，可能存在 DNS 污染或閘道劫持',
+			'NetCheckScreen.suggestDnsReset' => '建議重設系統 DNS 或在 Wmimo 中啟用智慧加密 DNS (DoH/DoT)',
+			'NetCheckScreen.actionFlushDns' => '重新整理系統 DNS 快取',
+			'NetCheckScreen.suggestDnsSlow' => 'DNS 解析耗時偏長，建議開啟 Smart Encrypted DNS 加速',
+			'NetCheckScreen.issueDnsFailed' => '本地 DNS 解析失敗，系統無法將網域名稱轉換為 IP 位址',
+			'NetCheckScreen.suggestDnsFlush' => '點擊一鍵重新整理系統 DNS 快取，或在 Wmimo 設定中啟用加密 DNS',
+			'NetCheckScreen.issueCorePortConflict' => '檢測到連接埠衝突！其他代理軟體或系統服務正在占用本應用程式連接埠',
+			'NetCheckScreen.suggestCoreChangePort' => '請完全退出其他代理客戶端，或在 Wmimo 設定中修改連接埠號',
+			'NetCheckScreen.actionRestartCore' => '一鍵重啟核心',
+			'NetCheckScreen.issueCoreStopped' => 'Wmimo 核心行程目前處於停止狀態',
+			'NetCheckScreen.suggestCoreStart' => '點擊主畫面連線開關或點擊下方【啟動核心】',
+			'NetCheckScreen.actionStartCore' => '啟動核心行程',
+			'NetCheckScreen.issueCoreFrozen' => '核心行程發生停滯或 API Secret 鑑權不符合',
+			'NetCheckScreen.suggestCoreRestart' => '建議點擊【一鍵重啟核心】恢復服務',
+			'NetCheckScreen.suggestCoreReinstall' => '嘗試重啟核心或重裝服務驅動程式',
+			'NetCheckScreen.issueProxyZombie' => '殘留的系統代理將流量轉發到未啟動的連接埠，導致斷網',
+			'NetCheckScreen.suggestProxyReset' => '點擊下方【一鍵清理並重設系統代理】，即可立即恢復上網',
+			'NetCheckScreen.actionResetProxy' => '一鍵清理並重設代理',
+			'NetCheckScreen.issueProxyBlocked' => '系統代理設定未生效，可能被第三方安全軟體攔截或權限受限',
+			'NetCheckScreen.suggestProxyReapply' => '點擊下方按鈕嘗試重新註冊並強制套用系統代理',
+			'NetCheckScreen.actionReapplyProxy' => '重新套用系統代理',
+			'NetCheckScreen.issueProxyRead' => '讀取系統代理設定時產生非致命異常',
+			'NetCheckScreen.issueHandshakeBlocked' => '目前選取的代理節點無法連線外部網際網路，握手失敗或被阻斷',
+			'NetCheckScreen.suggestHandshakeSwitch' => '該節點可能正在維護或無法連線，請切換至其他可用節點',
+			'NetCheckScreen.suggestHandshakeSlow' => ({required Object delay}) => '節點延遲稍高 (${delay} ms)，建議測速選擇更近的邊緣節點',
+			'NetCheckScreen.suggestHandshakeCheck' => '檢查節點設定或更換測速目標',
+			'NetCheckScreen.conclusionPerfect' => '全線路極佳！所有網路節點與代理設定均正常暢通。',
+			'NetCheckScreen.conclusionGood' => '線路基本正常，檢測到部分非致命延遲或警告，建議查看詳情。',
+			'NetCheckScreen.conclusionWarning' => '檢測到部分網路或代理環節異常，請使用下方【一鍵修復】恢復。',
+			'NetCheckScreen.conclusionCritical' => '嚴重網路受阻！本地網路未連線或代理核心遭遇阻斷。',
 			'SpeedTestScreen.title' => '網路測速',
 			'SpeedTestScreen.startTest' => '開始測速',
 			'SpeedTestScreen.stopTest' => '停止測速',
@@ -1314,6 +1446,8 @@ extension on TranslationsZhTw {
 			'meta.donateTitle' => '💖 請作者喝杯咖啡',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 你的每一份投餵，都是 Wmimo 不斷打磨與更新的最大動力呀 ~ ☕✨',
 			'meta.tokenCurrency' => '幣種',
+			_ => null,
+		} ?? switch (path) {
 			'meta.networkChain' => '網路',
 			'meta.depositAddress' => 'APTOS 收款位址',
 			'meta.clickToCopy' => '點擊複製',
@@ -1380,8 +1514,6 @@ extension on TranslationsZhTw {
 			'meta.reportCopied' => '測速報告已複製到剪貼簿，可直接貼上分享',
 			'meta.gamingExperience' => '電競體驗',
 			'meta.streamingExperience' => '超清串流媒體',
-			_ => null,
-		} ?? switch (path) {
 			'meta.meetingExperience' => '遠端視訊',
 			'meta.customSpeedtestUrl' => '自訂測速下載 URL (https://...)',
 			'meta.customSpeedtestSource' => '自訂測速源',
