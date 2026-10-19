@@ -14,9 +14,9 @@ import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/group_helper.dart';
 import 'package:wmimo/screens/login_step_provider_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen_widgets.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/webview_helper.dart';
 import 'package:wmimo/screens/widgets/sheet.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -73,102 +73,60 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
     final tcontext = Translations.of(context);
 
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: WmimoAppBar(
+        title: tcontext.meta.myProfiles,
+        actions: [
+          Tooltip(
+            message: tcontext.meta.backupAndSync,
+            child: IconButton(
+              onPressed: () {
+                GroupHelper.showBackupAndSync(context);
+              },
+              icon: const Icon(
+                Icons.cloud_sync_outlined,
+                size: 22,
+              ),
+            ),
+          ),
+          ProfileManager.updating.isNotEmpty
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Center(
+                    child: SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+                )
+              : Tooltip(
+                  message: tcontext.meta.update,
+                  child: IconButton(
+                    onPressed: () async {
+                      onTapUpdateAll();
+                    },
+                    icon: const Icon(
+                      Icons.sync_rounded,
+                      size: 22,
+                    ),
+                  ),
+                ),
+          Tooltip(
+            message: tcontext.meta.add,
+            child: IconButton(
+              onPressed: () async {
+                onTapAdd();
+              },
+              icon: const Icon(Icons.add_rounded, size: 24),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    if (ModalRoute.of(context)?.canPop ?? false)
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: const SizedBox(
-                          width: 40,
-                          height: 30,
-                          child: Icon(Icons.arrow_back_ios_outlined, size: 24),
-                        ),
-                      ),
-                    Expanded(
-                      child: Text(
-                        tcontext.meta.myProfiles,
-                        style: const TextStyle(
-                          fontWeight: ThemeConfig.kFontWeightTitle,
-                          fontSize: ThemeConfig.kFontSizeTitle,
-                        ),
-                      ),
-                    ),
-                    Tooltip(
-                      message: tcontext.meta.backupAndSync,
-                      child: SizedBox(
-                        width: 36,
-                        height: 32,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: () {
-                            GroupHelper.showBackupAndSync(context);
-                          },
-                          child: const Icon(
-                            Icons.cloud_sync_outlined,
-                            size: 22,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    ProfileManager.updating.isNotEmpty
-                        ? const Row(
-                            children: [
-                              SizedBox(width: 6),
-                              SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: RepaintBoundary(
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                ),
-                              ),
-                              SizedBox(width: 6),
-                            ],
-                          )
-                        : Tooltip(
-                            message: tcontext.meta.update,
-                            child: SizedBox(
-                              width: 36,
-                              height: 32,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(8),
-                                onTap: () async {
-                                  onTapUpdateAll();
-                                },
-                                child: const Icon(
-                                  Icons.sync_rounded,
-                                  size: 22,
-                                ),
-                              ),
-                            ),
-                          ),
-                    const SizedBox(width: 4),
-                    Tooltip(
-                      message: tcontext.meta.add,
-                      child: SizedBox(
-                        width: 36,
-                        height: 32,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: () async {
-                            onTapAdd();
-                          },
-                          child: const Icon(Icons.add_rounded, size: 24),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
               Expanded(
                 child: ProfilesBoardScreenWidget(
                   settings: ProfileManager.getProfiles(),

@@ -4,12 +4,13 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class ConnectionsScreen extends StatefulWidget {
   static RouteSettings routSettings() {
@@ -183,133 +184,91 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     final isDark = theme.brightness == Brightness.dark;
     final filtered = _filteredConnections;
 
+    final actions = [
+      // Auto-refresh toggle
+      IconButton(
+        tooltip: _isAutoRefresh ? tcontext.meta.pause : tcontext.meta.resume,
+        icon: Icon(
+          _isAutoRefresh
+              ? Icons.pause_circle_outline
+              : Icons.play_circle_outline,
+          color: _isAutoRefresh
+              ? ThemeDefine.kColorBlue
+              : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+        ),
+        onPressed: () {
+          HapticFeedback.selectionClick();
+          setState(() {
+            _isAutoRefresh = !_isAutoRefresh;
+            if (_isAutoRefresh) {
+              _startTimer();
+            } else {
+              _stopTimer();
+            }
+          });
+        },
+      ),
+      // Manual refresh button
+      IconButton(
+        tooltip: tcontext.meta.refresh,
+        icon: _loading
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : const Icon(Icons.refresh),
+        onPressed: () {
+          HapticFeedback.selectionClick();
+          _fetchConnections();
+        },
+      ),
+      // Close all connections button
+      if (_connections.isNotEmpty)
+        IconButton(
+          tooltip: tcontext.meta.closeAllConnections,
+          icon: const Icon(
+            Icons.delete_sweep_outlined,
+            color: Colors.redAccent,
+          ),
+          onPressed: () {
+            HapticFeedback.lightImpact();
+            _closeAllConnections();
+          },
+        ),
+    ];
+
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: WmimoAppBar(
+        title: tcontext.meta.connections,
+        badge: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 2,
+          ),
+          decoration: BoxDecoration(
+            color: ThemeDefine.kColorBlue.withValues(
+              alpha: isDark ? 0.25 : 0.12,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            "${filtered.length}/${_connections.length}",
+            style: const TextStyle(
+              color: ThemeDefine.kColorBlue,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        actions: actions,
+      ),
       body: SafeArea(
+        top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
           child: Column(
             children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    if (ModalRoute.of(context)?.canPop ?? false)
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: const SizedBox(
-                          width: 36,
-                          height: 30,
-                          child: Icon(Icons.arrow_back_ios_outlined, size: 22),
-                        ),
-                      ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Text(
-                            tcontext.meta.connections,
-                            style: const TextStyle(
-                              fontWeight: ThemeConfig.kFontWeightTitle,
-                              fontSize: ThemeConfig.kFontSizeTitle,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: ThemeDefine.kColorBlue.withValues(
-                                alpha: isDark ? 0.25 : 0.12,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              "${filtered.length}/${_connections.length}",
-                              style: const TextStyle(
-                                color: ThemeDefine.kColorBlue,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Auto-refresh toggle
-                    Tooltip(
-                      message: _isAutoRefresh ? tcontext.meta.pause : tcontext.meta.resume,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {
-                          setState(() {
-                            _isAutoRefresh = !_isAutoRefresh;
-                            if (_isAutoRefresh) {
-                              _startTimer();
-                            } else {
-                              _stopTimer();
-                            }
-                          });
-                        },
-                        child: SizedBox(
-                          width: 36,
-                          height: 30,
-                          child: Icon(
-                            _isAutoRefresh
-                                ? Icons.pause_circle_outline
-                                : Icons.play_circle_outline,
-                            size: 22,
-                            color: _isAutoRefresh
-                                ? ThemeDefine.kColorBlue
-                                : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Manual refresh button
-                    Tooltip(
-                      message: tcontext.meta.refresh,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () => _fetchConnections(),
-                        child: SizedBox(
-                          width: 36,
-                          height: 30,
-                          child: _loading
-                              ? const Center(
-                                  child: SizedBox(
-                                    width: 18,
-                                    height: 18,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
-                                  ),
-                                )
-                              : const Icon(Icons.refresh, size: 22),
-                        ),
-                      ),
-                    ),
-                    // Close all connections button
-                    if (_connections.isNotEmpty)
-                      Tooltip(
-                        message: tcontext.meta.closeAllConnections,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: _closeAllConnections,
-                          child: const SizedBox(
-                            width: 36,
-                            height: 30,
-                            child: Icon(
-                              Icons.delete_sweep_outlined,
-                              size: 24,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
               if (_connectionsData != null) ...[
                 const SizedBox(height: 6),
                 Padding(

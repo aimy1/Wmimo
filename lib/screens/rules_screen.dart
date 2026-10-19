@@ -8,8 +8,8 @@ import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/i18n/strings.g.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class RulesScreen extends StatefulWidget {
   static RouteSettings routSettings() {
@@ -135,84 +135,49 @@ class _RulesScreenState extends State<RulesScreen> with AfterLayoutMixin {
     final filtered = _filteredRules;
 
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: WmimoAppBar(
+        title: tcontext.meta.rules,
+        badge: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 2,
+          ),
+          decoration: BoxDecoration(
+            color: ThemeDefine.kColorBlue.withValues(
+              alpha: isDark ? 0.25 : 0.12,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            "${filtered.length}/${_rules.length}",
+            style: const TextStyle(
+              color: ThemeDefine.kColorBlue,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        actions: [
+          Tooltip(
+            message: tcontext.meta.refresh,
+            child: IconButton(
+              onPressed: _loading ? null : _fetchRules,
+              icon: _loading
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.refresh_rounded, size: 22),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
           child: Column(
             children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    if (ModalRoute.of(context)?.canPop ?? false)
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: const SizedBox(
-                          width: 36,
-                          height: 30,
-                          child: Icon(Icons.arrow_back_ios_outlined, size: 22),
-                        ),
-                      ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Text(
-                            tcontext.meta.rules,
-                            style: const TextStyle(
-                              fontWeight: ThemeConfig.kFontWeightTitle,
-                              fontSize: ThemeConfig.kFontSizeTitle,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: ThemeDefine.kColorBlue.withValues(
-                                alpha: isDark ? 0.25 : 0.12,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              "${filtered.length}/${_rules.length}",
-                              style: const TextStyle(
-                                color: ThemeDefine.kColorBlue,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Tooltip(
-                      message: tcontext.meta.refresh,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: _fetchRules,
-                        child: SizedBox(
-                          width: 36,
-                          height: 30,
-                          child: _loading
-                              ? const Center(
-                                  child: SizedBox(
-                                    width: 18,
-                                    height: 18,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
-                                  ),
-                                )
-                              : const Icon(Icons.refresh, size: 22),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
 
               // Search bar and type filters
               Padding(

@@ -2336,7 +2336,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   // Responsive columns: 1 on small width, 2 on medium, 3 or 4 on desktop
                   int crossAxisCount = (constraints.maxWidth / 240).floor().clamp(1, 4);
                   final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-                  final cardExtent = (52.0 * textScale).clamp(50.0, 70.0);
+                  final cardExtent = (56.0 * textScale).clamp(54.0, 74.0);
 
                   return GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
@@ -2442,15 +2442,21 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           : (isDark
               ? const Color(0xFF0F172A).withValues(alpha: 0.6)
               : const Color(0xFFFFFFFF)),
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: () => _selectNode(group, node),
-        onLongPress: () => _showNodeDetailDialog(group, node),
+        borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
+        onTap: () {
+          HapticFeedback.selectionClick();
+          _selectNode(group, node);
+        },
+        onLongPress: () {
+          HapticFeedback.mediumImpact();
+          _showNodeDetailDialog(group, node);
+        },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
             border: Border.all(
               color: isSelected
                   ? ThemeDefine.kColorBlue

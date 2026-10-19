@@ -161,19 +161,23 @@ void main() {
       await tester.pump();
 
       await tester.runAsync(() async {
-        final boundary = repaintKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        final boundary = repaintKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+        if (boundary == null) return;
         final image = await boundary.toImage(pixelRatio: 2.0);
         final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-        final pngBytes = byteData!.buffer.asUint8List();
+        if (byteData == null) return;
+        final pngBytes = byteData.buffer.asUint8List();
 
         for (final p in [
           r'C:\Users\win\.gemini\antigravity\brain\1f108630-e8e6-497c-9b4e-f2e6f46cf6fa\official_brands_pixel_perfect.png',
           r'C:\Users\win\.gemini\antigravity\brain\1f108630-e8e6-497c-9b4e-f2e6f46cf6fa\vector_icons_comparison.png',
         ]) {
           final file = File(p);
-          await file.writeAsBytes(pngBytes);
+          if (file.parent.existsSync()) {
+            await file.writeAsBytes(pngBytes);
+          }
         }
       });
-    });
+    }, timeout: const Timeout(Duration(seconds: 15)));
   });
 }

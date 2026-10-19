@@ -10,8 +10,8 @@ import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class LogsScreen extends StatefulWidget {
   static RouteSettings routSettings() {
@@ -397,172 +397,103 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     final filtered = _filteredLogs;
     final counts = _levelCounts;
 
+    final actions = [
+      // Auto-scroll toggle
+      IconButton(
+        tooltip: _autoScroll
+            ? tcontext.meta.autoScrollEnabled
+            : tcontext.meta.autoScrollDisabled,
+        icon: Icon(
+          Icons.vertical_align_bottom_rounded,
+          color: _autoScroll
+              ? ThemeDefine.kColorBlue
+              : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+        ),
+        onPressed: () {
+          HapticFeedback.selectionClick();
+          setState(() {
+            _autoScroll = !_autoScroll;
+            if (_autoScroll) {
+              _scrollToBottom();
+            }
+          });
+        },
+      ),
+      // Pause/Resume Stream
+      IconButton(
+        tooltip: _isStreaming
+            ? tcontext.meta.pauseLogs
+            : tcontext.meta.resumeLogs,
+        icon: Icon(
+          _isStreaming
+              ? Icons.pause_rounded
+              : Icons.play_arrow_rounded,
+          color: _isStreaming
+              ? theme.colorScheme.onSurface.withValues(alpha: 0.6)
+              : Colors.orange,
+        ),
+        onPressed: () {
+          HapticFeedback.selectionClick();
+          setState(() {
+            _isStreaming = !_isStreaming;
+          });
+        },
+      ),
+      // Copy all logs
+      IconButton(
+        tooltip: tcontext.meta.copy,
+        icon: const Icon(Icons.copy_rounded, size: 20),
+        onPressed: () {
+          HapticFeedback.selectionClick();
+          _copyAllLogs();
+        },
+      ),
+      // Clear logs
+      IconButton(
+        tooltip: tcontext.meta.clear,
+        icon: const Icon(Icons.delete_outline_rounded, size: 22),
+        onPressed: () {
+          HapticFeedback.lightImpact();
+          setState(() {
+            _logs.clear();
+            _pendingLogs.clear();
+            _newLogsWhilePaused = 0;
+          });
+        },
+      ),
+    ];
+
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: WmimoAppBar(
+        title: tcontext.meta.coreLog,
+        badge: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 7,
+            vertical: 2,
+          ),
+          decoration: BoxDecoration(
+            color: ThemeDefine.kColorBlue.withValues(
+              alpha: isDark ? 0.25 : 0.12,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            "${filtered.length}",
+            style: const TextStyle(
+              color: ThemeDefine.kColorBlue,
+              fontSize: 11.5,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        actions: actions,
+      ),
       body: SafeArea(
+        top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
           child: Column(
             children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    if (ModalRoute.of(context)?.canPop ?? false)
-                      InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () => Navigator.pop(context),
-                        child: const SizedBox(
-                          width: 36,
-                          height: 32,
-                          child: Icon(Icons.arrow_back_ios_outlined, size: 20),
-                        ),
-                      ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Text(
-                            tcontext.meta.coreLog,
-                            style: const TextStyle(
-                              fontWeight: ThemeConfig.kFontWeightTitle,
-                              fontSize: ThemeConfig.kFontSizeTitle,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 7,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: ThemeDefine.kColorBlue.withValues(
-                                alpha: isDark ? 0.25 : 0.12,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              "${filtered.length}",
-                              style: const TextStyle(
-                                color: ThemeDefine.kColorBlue,
-                                fontSize: 11.5,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Auto-scroll toggle
-                    Tooltip(
-                      message: _autoScroll
-                          ? tcontext.meta.autoScrollEnabled
-                          : tcontext.meta.autoScrollDisabled,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {
-                          setState(() {
-                            _autoScroll = !_autoScroll;
-                            if (_autoScroll) {
-                              _scrollToBottom();
-                            }
-                          });
-                        },
-                        child: Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: _autoScroll
-                                ? ThemeDefine.kColorBlue.withValues(alpha: 0.15)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Icons.vertical_align_bottom_rounded,
-                            size: 20,
-                            color: _autoScroll
-                                ? ThemeDefine.kColorBlue
-                                : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-
-                    // Pause/Resume Stream
-                    Tooltip(
-                      message: _isStreaming
-                          ? tcontext.meta.pauseLogs
-                          : tcontext.meta.resumeLogs,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {
-                          setState(() {
-                            _isStreaming = !_isStreaming;
-                          });
-                        },
-                        child: Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: !_isStreaming
-                                ? Colors.orange.withValues(alpha: 0.15)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            _isStreaming
-                                ? Icons.pause_rounded
-                                : Icons.play_arrow_rounded,
-                            size: 20,
-                            color: _isStreaming
-                                ? theme.colorScheme.onSurface.withValues(alpha: 0.6)
-                                : Colors.orange,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-
-                    // Copy all logs
-                    Tooltip(
-                      message: tcontext.meta.copy,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: _copyAllLogs,
-                        child: const SizedBox(
-                          width: 32,
-                          height: 32,
-                          child: Icon(Icons.copy_rounded, size: 19),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-
-                    // Clear logs
-                    Tooltip(
-                      message: tcontext.meta.clear,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {
-                          setState(() {
-                            _logs.clear();
-                            _pendingLogs.clear();
-                            _newLogsWhilePaused = 0;
-                          });
-                        },
-                        child: const SizedBox(
-                          width: 32,
-                          height: 32,
-                          child: Icon(Icons.delete_outline_rounded, size: 20),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
 
               // Search bar and level filters
               Padding(

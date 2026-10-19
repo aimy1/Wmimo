@@ -36,6 +36,7 @@ import 'package:wmimo/screens/widgets/ip_info_card.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
 import 'package:wmimo/screens/widgets/traffic_chart_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:libclash_vpn_service/state.dart';
 import 'package:libclash_vpn_service/vpn_service.dart';
 import 'package:quick_actions/quick_actions.dart';
@@ -391,6 +392,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                         activeTrackColor: ThemeDefine.kColorGreenBright,
                         focusNode: _focusNodeConnect,
                         onChanged: (bool value) {
+                          HapticFeedback.lightImpact();
                           _requestToggle(value, from: "switch");
                         },
                       ),
@@ -418,6 +420,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     selected: ClashSettingManager.getConfigsMode().index,
                     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                     onPressed: (int value) async {
+                      HapticFeedback.selectionClick();
                       ClashConfigsMode type = ClashConfigsMode.values[value];
                       var error = await ClashSettingManager.setConfigsMode(type);
                       if (!context.mounted) {
@@ -576,28 +579,31 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     return Expanded(
       child: Material(
         color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
         child: InkWell(
-          borderRadius: BorderRadius.circular(10),
-          onTap: onTap,
+          borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
+          onTap: () {
+            HapticFeedback.selectionClick();
+            onTap();
+          },
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
                   icon,
-                  size: 19,
+                  size: 20,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 5),
                 Text(
                   label,
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 10.5,
+                    fontSize: 11,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -708,7 +714,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 activeThumbColor: iconColor,
                 activeTrackColor: iconColor.withValues(alpha: 0.4),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                onChanged: onChanged,
+                onChanged: (val) {
+                  HapticFeedback.selectionClick();
+                  onChanged(val);
+                },
               ),
             ),
           ),

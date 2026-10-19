@@ -26,13 +26,19 @@ class ThemeDefine {
   static const String kThemeLight = "light";
   static const String kThemeDark = "dark";
 
+  // 4-Tier Radius Hierarchy
+  static const double kRadiusLarge = 16.0;
+  static const double kRadiusMedium = 12.0;
+  static const double kRadiusSmall = 8.0;
+  static const double kRadiusMicro = 4.0;
+
   static const BorderRadius kBorderRadius = BorderRadius.all(
-    Radius.circular(18),
+    Radius.circular(kRadiusLarge),
   );
   static const BorderRadius kCardBorderRadius = BorderRadius.all(
-    Radius.circular(18),
+    Radius.circular(kRadiusLarge),
   );
   static const BorderRadius kButtonBorderRadius = BorderRadius.all(
-    Radius.circular(12),
+    Radius.circular(kRadiusMedium),
   );
 }
