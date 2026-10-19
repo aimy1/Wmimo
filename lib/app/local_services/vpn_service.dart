@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/core_watchdog.dart';
@@ -28,6 +29,7 @@ import 'package:libclash_vpn_service/state.dart';
 import 'package:libclash_vpn_service/vpn_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
+import 'package:flutter/services.dart';
 
 class VPNServiceSetServerOptions {
   String disabledServerError = "";
@@ -132,6 +134,21 @@ class VPNService {
           await FlutterVpnService.cleanSystemProxy();
         }
       }
+    }
+
+    if (Platform.isAndroid) {
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      platform.setMethodCallHandler((call) async {
+        if (call.method == 'onVpnStopRequested') {
+          await stop();
+        }
+      });
+      ClashSettingManager.onEventModeChanged.add(() {
+        unawaited(updateAndroidNotificationInfo());
+      });
+      ProfileManager.onEventCurrentChanged.add((_) {
+        unawaited(updateAndroidNotificationInfo());
+      });
     }
 
     CoreWatchdog.init();
@@ -459,6 +476,41 @@ class VPNService {
           FlutterVpnService.firewallAddPorts(ports, PathUtils.serviceExeName()),
         );
       }
+      if (Platform.isAndroid) {
+        final curProfile = ProfileManager.getCurrent();
+        final pName = (curProfile != null && curProfile.remark.isNotEmpty)
+            ? curProfile.remark
+            : (curProfile?.url.isNotEmpty == true ? curProfile!.url : (curProfile?.id ?? ""));
+        final cfgMode = ClashSettingManager.getConfigsMode();
+        String m = "规则分流";
+        if (cfgMode == ClashConfigsMode.global) {
+          m = "全局代理";
+        } else if (cfgMode == ClashConfigsMode.direct) {
+          m = "直接连接";
+        }
+
+        String n = "";
+        try {
+          final nodes = await ProxyNodeLoader.loadCurrentProfileNodes();
+          final groups = nodes.where((x) => ClashProtocolType.isGroupType(x.type)).toList();
+          ClashProxiesNode? sel;
+          for (var g in groups) {
+            final upper = g.name.toUpperCase();
+            if (upper == "PROXY" || upper == "PROXIES" || g.name == "节点选择" || g.name == "節點選擇") {
+              sel = g;
+              break;
+            }
+          }
+          sel ??= groups.isNotEmpty ? groups.first : null;
+          if (sel != null && sel.now.isNotEmpty) {
+            n = sel.now;
+          }
+        } catch (_) {}
+
+        FlutterVpnService.activeNodeName = n;
+        FlutterVpnService.activeMode = m;
+        FlutterVpnService.activeProfileName = pName;
+      }
       VpnServiceWaitResult result = await FlutterVpnService.start(timeout);
       if (_cancelRequested) {
         await FlutterVpnService.stop();
@@ -499,6 +551,10 @@ class VPNService {
         }
       }
 
+      if (Platform.isAndroid) {
+        unawaited(updateAndroidNotificationInfo());
+      }
+
       CoreWatchdog.setUserConnected(true);
       return null;
     } finally {
@@ -524,6 +580,61 @@ class VPNService {
         _isOperating = false;
       }
     }
+  }
+
+  static Future<void> updateAndroidNotificationInfo({
+    String? nodeName,
+    String? mode,
+    String? profileName,
+  }) async {
+    if (!Platform.isAndroid) return;
+
+    String? n = nodeName;
+    String? m = mode;
+    String? pName = profileName;
+
+    if (pName == null || pName.isEmpty) {
+      final curProfile = ProfileManager.getCurrent();
+      pName = (curProfile != null && curProfile.remark.isNotEmpty)
+          ? curProfile.remark
+          : (curProfile?.url.isNotEmpty == true ? curProfile!.url : (curProfile?.id ?? ""));
+    }
+
+    if (m == null || m.isEmpty) {
+      final cfgMode = ClashSettingManager.getConfigsMode();
+      if (cfgMode == ClashConfigsMode.global) {
+        m = "全局代理";
+      } else if (cfgMode == ClashConfigsMode.direct) {
+        m = "直接连接";
+      } else {
+        m = "规则分流";
+      }
+    }
+
+    if (n == null || n.isEmpty) {
+      try {
+        final nodes = await ProxyNodeLoader.loadCurrentProfileNodes();
+        final groups = nodes.where((x) => ClashProtocolType.isGroupType(x.type)).toList();
+        ClashProxiesNode? sel;
+        for (var g in groups) {
+          final upper = g.name.toUpperCase();
+          if (upper == "PROXY" || upper == "PROXIES" || g.name == "节点选择" || g.name == "節點選擇") {
+            sel = g;
+            break;
+          }
+        }
+        sel ??= groups.isNotEmpty ? groups.first : null;
+        if (sel != null && sel.now.isNotEmpty) {
+          n = sel.now;
+        }
+      } catch (_) {}
+    }
+
+    await FlutterVpnService.updateNotification(
+      nodeName: n,
+      mode: m,
+      profileName: pName,
+    );
   }
 
   static bool getSupportSystemProxy() {

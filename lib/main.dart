@@ -887,6 +887,7 @@ class MyAppState extends State<MyApp>
           ClashHttpApi.setProxiesNode("GLOBAL", nodeName).catchError((_) => null);
         }
         Biz.proxySelected(nodeName);
+        VPNService.updateAndroidNotificationInfo(nodeName: nodeName);
         await _setTrayMenu(_trayGrey);
       }
     } else if (key == kMenuCopyProxyCmd || key == kMenuCopyProxyCmdPs) {

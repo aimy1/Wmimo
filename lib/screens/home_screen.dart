@@ -149,6 +149,26 @@ class _HomeScreenState extends State<HomeScreen>
   FutureOr<void> afterFirstLayout(BuildContext context) async {
     Biz.initHomeFinish();
     MobilePermissionHelper.requestInitialPermissions();
+    if (Platform.isAndroid) {
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      platform.setMethodCallHandler((call) async {
+        if (call.method == 'onNavigateTarget') {
+          final target = call.arguments as String?;
+          if (target == 'proxies' && mounted) {
+            setState(() {
+              _currentNavIndex = 1;
+            });
+          }
+        }
+      });
+      platform.invokeMethod<String>('getLaunchTargetScreen').then((target) {
+        if (target == 'proxies' && mounted) {
+          setState(() {
+            _currentNavIndex = 1;
+          });
+        }
+      }).catchError((_) => null);
+    }
     ErrorReporterUtils.register(() {
       if (!mounted) {
         return;

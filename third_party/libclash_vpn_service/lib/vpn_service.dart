@@ -960,6 +960,33 @@ rules:
   static bool _isOperating = false;
   static bool _cancelRequested = false;
 
+  static String activeNodeName = "";
+  static String activeMode = "";
+  static String activeProfileName = "";
+
+  static Future<void> updateNotification({
+    String? nodeName,
+    String? mode,
+    String? profileName,
+  }) async {
+    if (nodeName != null && nodeName.isNotEmpty) activeNodeName = nodeName;
+    if (mode != null && mode.isNotEmpty) activeMode = mode;
+    if (profileName != null && profileName.isNotEmpty) activeProfileName = profileName;
+
+    if (Platform.isAndroid && _state == FlutterVpnServiceState.connected) {
+      try {
+        final mixedPort = _savedConfig?.mixed_port ?? 7890;
+        const platform = MethodChannel('com.wmimo.app/native_helper');
+        await platform.invokeMethod('updateNotification', {
+          'mixedPort': mixedPort,
+          'nodeName': activeNodeName,
+          'mode': activeMode,
+          'profileName': activeProfileName,
+        });
+      } catch (_) {}
+    }
+  }
+
   static void _notifyState(FlutterVpnServiceState newState) {
     _state = newState;
     for (var l in _listeners) {
@@ -971,6 +998,9 @@ rules:
 
   static Future<void> _stopInternal() async {
     _stopTrafficMonitor();
+    activeNodeName = "";
+    activeMode = "";
+    activeProfileName = "";
     if (Platform.isAndroid || Platform.isIOS) {
       try {
         const platform = MethodChannel('com.wmimo.app/native_helper');
@@ -1175,6 +1205,9 @@ rules:
           const platform = MethodChannel('com.wmimo.app/native_helper');
           await platform.invokeMethod('startVpnService', {
             'mixedPort': mixedPort,
+            'nodeName': activeNodeName,
+            'mode': activeMode,
+            'profileName': activeProfileName,
           });
         } catch (_) {}
       }

@@ -300,6 +300,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     });
 
     Biz.proxySelected(node.name);
+    VPNService.updateAndroidNotificationInfo(nodeName: node.name);
 
     if (_isVpnStarted) {
       ClashHttpApi.setProxiesNode(group.name, node.name).then((err) {
