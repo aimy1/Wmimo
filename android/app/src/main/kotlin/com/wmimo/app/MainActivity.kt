@@ -73,15 +73,52 @@ class MainActivity : FlutterActivity() {
                 }
                 "getNativeLibraryPath" -> {
                     val libName = call.argument<String>("libName") ?: "libwmimoService.so"
-                    val file = File(applicationInfo.nativeLibraryDir, libName)
-                    if (file.exists()) {
-                        result.success(file.absolutePath)
-                    } else {
+                    var file = File(applicationInfo.nativeLibraryDir, libName)
+                    if (!file.exists()) {
                         val dir = File(applicationInfo.nativeLibraryDir)
                         val files = dir.listFiles { _, name -> name.endsWith(".so") }
-                        val found = files?.firstOrNull { it.name.contains("wmimo") || it.name.contains("clash") || it.name.contains("mihomo") }
-                        result.success(found?.absolutePath ?: file.absolutePath)
+                        val found = files?.firstOrNull {
+                            val lower = it.name.lowercase()
+                            lower.contains("wmimo") || lower.contains("clash") || lower.contains("mihomo")
+                        }
+                        if (found != null) {
+                            file = found
+                        }
                     }
+                    if (file.exists()) {
+                        try {
+                            file.setExecutable(true, false)
+                        } catch (_: Exception) {}
+                        result.success(file.absolutePath)
+                    } else {
+                        result.success(null)
+                    }
+                }
+                "killOrphanCores" -> {
+                    try {
+                        val myUid = android.os.Process.myUid()
+                        val myPid = android.os.Process.myPid()
+                        val procDir = File("/proc")
+                        procDir.listFiles()?.forEach { f ->
+                            val pid = f.name.toIntOrNull()
+                            if (pid != null && pid != myPid) {
+                                try {
+                                    val statusFile = File(f, "status")
+                                    if (statusFile.exists()) {
+                                        val uidLine = statusFile.readLines().firstOrNull { it.startsWith("Uid:") }
+                                        val uid = uidLine?.split(Regex("\\s+"))?.getOrNull(1)?.toIntOrNull()
+                                        if (uid == myUid) {
+                                            val cmdline = File(f, "cmdline").readText()
+                                            if (cmdline.contains("wmimo") || cmdline.contains("mihomo") || cmdline.contains("clash")) {
+                                                android.os.Process.killProcess(pid)
+                                            }
+                                        }
+                                    }
+                                } catch (_: Exception) {}
+                            }
+                        }
+                    } catch (_: Exception) {}
+                    result.success(true)
                 }
                 "checkVpnPermission" -> {
                     val vpnIntent = VpnService.prepare(this)

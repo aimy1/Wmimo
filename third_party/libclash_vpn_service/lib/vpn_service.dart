@@ -120,6 +120,7 @@ void _refreshWinINetSettings() {
 String _filterProfileWorker(Map<String, dynamic> args) {
   final String profileContent = args['profileContent'] as String;
   final bool tunMode = args['tunMode'] as bool;
+  final bool isAndroid = args['isAndroid'] as bool? ?? Platform.isAndroid;
 
   // Filter out conflicting top-level keys from raw subscription
   final overriddenTopLevelKeys = [
@@ -139,9 +140,12 @@ String _filterProfileWorker(Map<String, dynamic> args) {
     'tproxy-port',
     'interface-name',
     'routing-mark',
+    'tun',
+    'bind-address',
   ];
 
   bool inOverriddenBlock = false;
+  bool inDnsBlock = false;
   final List<String> resultLines = [];
   final rawLines = profileContent.split('\n');
 
@@ -149,8 +153,25 @@ String _filterProfileWorker(Map<String, dynamic> args) {
     final rawLine = rawLines[i];
     final trimmed = rawLine.trim();
 
+    // Track top-level blocks
+    if (!rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
+      if (trimmed.startsWith('dns:') || trimmed.startsWith('"dns":') || trimmed.startsWith("'dns':")) {
+        inDnsBlock = true;
+      } else if (trimmed.isNotEmpty) {
+        inDnsBlock = false;
+      }
+    }
+
     // Check if entering a root block that we override completely (e.g. tun:)
-    if (tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-') || trimmed.startsWith('"tun":') || trimmed.startsWith("'tun':"))) {
+    // ALWAYS strip subscription tun: block because Wmimo injects its own validated tun block on desktop,
+    // and on Android/iOS native VpnService handles the tunnel. A subscription tun block causes Linux/Android crash.
+    if (trimmed.startsWith('tun:') ||
+        trimmed.startsWith('tun-') ||
+        trimmed.startsWith('"tun":') ||
+        trimmed.startsWith("'tun':") ||
+        trimmed.startsWith('tun :') ||
+        trimmed.startsWith('"tun" :') ||
+        trimmed.startsWith("'tun' :")) {
       inOverriddenBlock = true;
       continue;
     }
@@ -186,11 +207,16 @@ String _filterProfileWorker(Map<String, dynamic> args) {
 
     // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
     String processedLine = rawLine;
-    if (Platform.isAndroid || !tunMode) {
-      if (trimmed.startsWith('listen:') && trimmed.contains(':53')) {
-        processedLine = rawLine.replaceAll(':53', ':1053');
-      } else if (trimmed.startsWith('bind-address:') && trimmed.contains(':53')) {
-        processedLine = rawLine.replaceAll(':53', ':1053');
+    if (isAndroid || !tunMode) {
+      if (inDnsBlock ||
+          trimmed.startsWith('listen:') ||
+          trimmed.startsWith('bind-address:') ||
+          trimmed.startsWith('port:')) {
+        processedLine = rawLine
+            .replaceAll(RegExp(r'(:\s*)53(\b|$)'), r'${1}1053')
+            .replaceAll(RegExp(r':53(["\x27\s]|$)'), r':1053$1')
+            .replaceAll(RegExp(r'(-\s*["\x27]?.*):53(["\x27]?\s*$)'), r'${1}:1053$2')
+            .replaceAll(RegExp(r'(-\s*)53(\b|$)'), r'${1}1053');
       }
     }
 
@@ -617,7 +643,7 @@ class FlutterVpnService {
           final dir = Directory(nativeDir);
           if (dir.existsSync()) {
             for (final f in dir.listSync()) {
-              if (f is File && f.path.endsWith('.so') && (f.path.contains('wmimo') || f.path.contains('clash') || f.path.contains('mihomo'))) {
+              if (f is File && f.path.endsWith('.so') && (f.path.toLowerCase().contains('wmimo') || f.path.toLowerCase().contains('clash') || f.path.toLowerCase().contains('mihomo'))) {
                 return f.path;
               }
             }
@@ -862,7 +888,7 @@ class FlutterVpnService {
     final tunMode = _savedConfig?.tun_mode ?? false;
 
     // Header parameters matching Clash Verge standards
-    final processMode = Platform.isAndroid ? 'off' : 'always';
+    final processMode = (Platform.isAndroid || Platform.isIOS) ? 'off' : 'always';
     var header = '''
 mixed-port: $mixedPort
 allow-lan: true
@@ -876,7 +902,9 @@ tcp-concurrent: true
 find-process-mode: $processMode
 ''';
 
-    if (tunMode && !Platform.isAndroid) {
+    // TUN configuration is only injected directly into Mihomo for desktop (Windows, macOS, Linux).
+    // On Android and iOS, native system VpnService / NetworkExtension manages the network interface.
+    if (tunMode && !Platform.isAndroid && !Platform.isIOS) {
       header += '''
 tun:
   enable: true
@@ -893,11 +921,20 @@ tun:
     final filteredLines = await Isolate.run(() => _filterProfileWorker({
       'profileContent': profileContent,
       'tunMode': tunMode,
+      'isAndroid': Platform.isAndroid,
     }));
 
-    final baseDir = _savedConfig?.base_dir.isNotEmpty == true
+    String baseDir = _savedConfig?.base_dir.isNotEmpty == true
         ? _savedConfig!.base_dir
-        : Directory.current.path;
+        : "";
+    if (baseDir.isEmpty) {
+      try {
+        final appSupport = await getApplicationSupportDirectory();
+        baseDir = "${appSupport.path}/com.wmimo.app";
+      } catch (_) {
+        baseDir = Directory.current.path;
+      }
+    }
     try {
       if (!Directory(baseDir).existsSync()) {
         Directory(baseDir).createSync(recursive: true);
@@ -1042,7 +1079,14 @@ tun:
       } catch (_) {}
     } else if (Platform.isAndroid) {
       try {
+        const platform = MethodChannel('com.wmimo.app/native_helper');
+        await platform.invokeMethod('killOrphanCores');
+      } catch (_) {}
+      try {
         await Process.run('pkill', ['-9', 'libwmimoService.so']);
+      } catch (_) {}
+      try {
+        await Process.run('sh', ['-c', 'killall -9 libwmimoService.so 2>/dev/null || true']);
       } catch (_) {}
     }
 
@@ -1076,9 +1120,12 @@ tun:
 
       if (!Platform.isIOS && !File(coreExe).existsSync()) {
         _notifyState(FlutterVpnServiceState.disconnected);
+        final hint = Platform.isAndroid
+            ? "\n请确认安装包架构与手机 CPU 匹配 (建议使用 arm64-v8a 或 universal 版本)。"
+            : "";
         return VpnServiceWaitResult(
           type: VpnServiceWaitType.error,
-          err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe"),
+          err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe$hint"),
         );
       }
 
@@ -1096,7 +1143,9 @@ tun:
       final port = _savedConfig?.control_port ?? 9090;
       final mixedPort = _savedConfig?.mixed_port ?? 7890;
 
-      if (!Platform.isIOS) {
+      // Port blocking check is strictly for desktop environments (Windows, macOS, Linux)
+      // where external apps like Clash Verge, Sing-box or v2rayN can occupy ports 9090/7890.
+      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
         Future<bool> isPortBlocked(int p) async {
           try {
             final socket = await Socket.connect('127.0.0.1', p, timeout: const Duration(milliseconds: 250));
@@ -1175,14 +1224,24 @@ tun:
         workDir = _savedConfig!.base_dir;
       } else if (_savedConfig?.work_dir.isNotEmpty == true && Directory(_savedConfig!.work_dir).existsSync()) {
         workDir = _savedConfig!.work_dir;
-      } else {
+      }
+      if (workDir.isEmpty || (Platform.isAndroid && workDir == File(coreExe).parent.path)) {
         try {
           final appSupport = await getApplicationSupportDirectory();
-          workDir = appSupport.path;
+          final safeDir = Directory("${appSupport.path}/com.wmimo.app");
+          if (!safeDir.existsSync()) {
+            safeDir.createSync(recursive: true);
+          }
+          workDir = safeDir.path;
         } catch (_) {
           workDir = File(coreExe).parent.path;
         }
       }
+      try {
+        if (!Directory(workDir).existsSync()) {
+          Directory(workDir).createSync(recursive: true);
+        }
+      } catch (_) {}
 
       if (Platform.isAndroid) {
         try {
@@ -1216,7 +1275,9 @@ tun:
         errBuffer.write(data);
         logSink?.write(data);
       });
+      int? coreExitCode;
       _coreProcess!.exitCode.then((code) {
+        coreExitCode = code;
         _coreProcess = null;
         try {
           _coreLogSink?.close();
@@ -1266,19 +1327,25 @@ tun:
       }
 
       if (!ready) {
+        await Future.delayed(const Duration(milliseconds: 120));
         final errorDetail = errBuffer.toString().trim().isNotEmpty
             ? errBuffer.toString().trim()
             : outBuffer.toString().trim();
         await _stopInternal();
         _notifyState(FlutterVpnServiceState.disconnected);
+
+        String errMsg = "";
+        if (errorDetail.isNotEmpty) {
+          errMsg = "核心启动失败: $errorDetail";
+        } else if (coreExitCode != null) {
+          errMsg = "核心异常退出 (exit code $coreExitCode)";
+        } else {
+          errMsg = "等待核心启动超时 (端口 $port 无响应)";
+        }
+
         return VpnServiceWaitResult(
           type: VpnServiceWaitType.error,
-          err: VpnServiceResultError(
-            500,
-            errorDetail.isNotEmpty
-                ? "核心启动失败: $errorDetail"
-                : "等待核心启动超时 (端口 $port 无响应)",
-          ),
+          err: VpnServiceResultError(500, errMsg),
         );
       }
 
