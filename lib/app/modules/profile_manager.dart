@@ -1156,6 +1156,7 @@ class ProfileManager {
 
       await FileUtils.append(savePath, "\n$urlComment${profile.url}\n");
       await ProxyNodeLoader.ensureProfileHasProxyGroups(savePath);
+      ProxyNodeLoader.clearCache(id);
       profile.updateSubscriptionTraffic(result.data);
     }
     await save();
@@ -1260,6 +1261,7 @@ class ProfileManager {
 
     final filePath = path.join(await PathUtils.profilesDir(), id);
     await FileUtils.deletePath(filePath);
+    ProxyNodeLoader.clearCache(id);
     await save();
   }
 
@@ -1269,6 +1271,7 @@ class ProfileManager {
       final filePath = path.join(dir, profile.id);
       await FileUtils.deletePath(filePath);
     }
+    ProxyNodeLoader.clearCache();
     _config.profiles.clear();
     _config._currentId = "";
     for (var event in onEventCurrentChanged) {

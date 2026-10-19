@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:path/path.dart' as path;
 import 'package:yaml/yaml.dart';
@@ -8,7 +9,64 @@ import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/subscription_converter.dart';
 
+class _ProfileCacheEntry {
+  final DateTime modified;
+  final int size;
+  final List<ClashProxiesNode> nodes;
+
+  _ProfileCacheEntry({
+    required this.modified,
+    required this.size,
+    required this.nodes,
+  });
+}
+
 class ProxyNodeLoader {
+  static final Map<String, _ProfileCacheEntry> _nodesCache = {};
+  static final RegExp _proxyGroupsHeader = RegExp(r'(?:^|\n)\s*proxy-groups\s*:', caseSensitive: false);
+
+  /// Clears in-memory profile node cache
+  static void clearCache([String? profileId]) {
+    if (profileId != null) {
+      _nodesCache.remove(profileId);
+    } else {
+      _nodesCache.clear();
+    }
+  }
+
+  /// Fast non-allocating scanner to check if content already has a non-empty proxy-groups block
+  static bool hasProxyGroups(String content) {
+    int idx = content.indexOf('proxy-groups:');
+    int startPos = -1;
+    if (idx != -1) {
+      startPos = idx + 'proxy-groups:'.length;
+    } else {
+      final match = _proxyGroupsHeader.firstMatch(content);
+      if (match != null) {
+        startPos = match.end;
+      }
+    }
+    if (startPos == -1) return false;
+
+    // Scan forward to see if there is at least one YAML list item ('-') under proxy-groups
+    int pos = startPos;
+    final len = content.length;
+    while (pos < len) {
+      final nextNewline = content.indexOf('\n', pos);
+      final lineEnd = nextNewline == -1 ? len : nextNewline;
+      final line = content.substring(pos, lineEnd).trim();
+      pos = lineEnd + 1;
+
+      if (line.isEmpty || line.startsWith('#')) continue;
+      if (line.startsWith('-')) return true;
+      // If we encounter another unindented top-level key without finding any items, then proxy-groups was empty
+      if (!line.startsWith(' ') && !line.startsWith('\t')) {
+        break;
+      }
+    }
+    return false;
+  }
+
   /// Load proxies and proxy groups from the currently active profile
   static Future<List<ClashProxiesNode>> loadCurrentProfileNodes() async {
     final current = ProfileManager.getCurrent();
@@ -29,13 +87,28 @@ class ProxyNodeLoader {
         return [];
       }
 
+      final stat = await file.stat();
+      final cached = _nodesCache[profileId];
+      if (cached != null &&
+          cached.modified == stat.modified &&
+          cached.size == stat.size) {
+        return cached.nodes;
+      }
+
       // Ensure profile has proxy-groups written into the file
       await ensureProfileHasProxyGroups(filePath);
 
+      final freshStat = await file.stat();
       final content = await file.readAsString();
       if (content.trim().isEmpty) return [];
 
-      return parseProfileContent(content);
+      final nodes = await Isolate.run(() => parseProfileContent(content));
+      _nodesCache[profileId] = _ProfileCacheEntry(
+        modified: freshStat.modified,
+        size: freshStat.size,
+        nodes: nodes,
+      );
+      return nodes;
     } catch (_) {
       return [];
     }
@@ -49,6 +122,11 @@ class ProxyNodeLoader {
 
       var content = await file.readAsString();
       if (content.trim().isEmpty) return;
+
+      // Fast-path: if the file already contains non-empty proxy-groups, skip all heavy processing immediately
+      if (hasProxyGroups(content)) {
+        return;
+      }
 
       // Preserve raw original subscription content in companion backup if not already present
       final origFile = File("$filePath.orig");
@@ -248,16 +326,7 @@ class ProxyNodeLoader {
 
   /// Extract proxies section as a List of Maps safely
   static List<Map<String, dynamic>> extractProxiesList(String content) {
-    try {
-      final parsed = loadYaml(content);
-      if (parsed is Map && parsed['proxies'] is List) {
-        return (parsed['proxies'] as List)
-            .whereType<Map>()
-            .map((m) => Map<String, dynamic>.from(m))
-            .toList();
-      }
-    } catch (_) {}
-
+    // 1. Fast block-level parse (skips thousands of lines of rules, rule-providers, etc.)
     final block = extractBlock(content, 'proxies');
     if (block.isNotEmpty) {
       try {
@@ -271,37 +340,50 @@ class ProxyNodeLoader {
       } catch (_) {}
     }
 
-    // Direct node URIs extraction
+    // 2. Direct node URIs extraction
     final nodes = SubscriptionConverter.parseAllNodes(content);
     if (nodes.isNotEmpty) return nodes;
 
-    // Base64 decoded node URIs extraction
+    // 3. Base64 decoded node URIs extraction
     final decoded = SubscriptionConverter.safeBase64Decode(content);
     if (decoded != null && decoded.isNotEmpty) {
       final decodedNodes = SubscriptionConverter.parseAllNodes(decoded);
       if (decodedNodes.isNotEmpty) return decodedNodes;
     }
 
-    return [];
-  }
-
-  /// Extract proxy-groups section as a List of Maps safely
-  static List<Map<String, dynamic>> extractProxyGroupsList(String content) {
+    // 4. Fallback: full document parse
     try {
       final parsed = loadYaml(content);
-      if (parsed is Map && parsed['proxy-groups'] is List) {
-        return (parsed['proxy-groups'] as List)
+      if (parsed is Map && parsed['proxies'] is List) {
+        return (parsed['proxies'] as List)
             .whereType<Map>()
             .map((m) => Map<String, dynamic>.from(m))
             .toList();
       }
     } catch (_) {}
 
-    final block = extractBlock(content, 'proxy-groups');
-    if (block.isEmpty) return [];
+    return [];
+  }
 
+  /// Extract proxy-groups section as a List of Maps safely
+  static List<Map<String, dynamic>> extractProxyGroupsList(String content) {
+    // 1. Fast block-level parse (skips thousands of lines of rules, rule-providers, etc.)
+    final block = extractBlock(content, 'proxy-groups');
+    if (block.isNotEmpty) {
+      try {
+        final parsed = loadYaml('proxy-groups:\n$block');
+        if (parsed is Map && parsed['proxy-groups'] is List) {
+          return (parsed['proxy-groups'] as List)
+              .whereType<Map>()
+              .map((m) => Map<String, dynamic>.from(m))
+              .toList();
+        }
+      } catch (_) {}
+    }
+
+    // 2. Fallback: full document parse
     try {
-      final parsed = loadYaml('proxy-groups:\n$block');
+      final parsed = loadYaml(content);
       if (parsed is Map && parsed['proxy-groups'] is List) {
         return (parsed['proxy-groups'] as List)
             .whereType<Map>()

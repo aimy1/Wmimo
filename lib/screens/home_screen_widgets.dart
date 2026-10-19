@@ -950,6 +950,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       });
     }
 
+    // Yield execution momentarily to allow Flutter UI framework to paint the "connecting" state and switch animation
+    await Future.delayed(const Duration(milliseconds: 25));
+
     try {
       final currentProfile = ProfileManager.getCurrent();
       if (currentProfile == null) {
@@ -1224,9 +1227,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       }
       await _updateConnections();
       if (_proxyNow.value.isEmpty) {
-        Future.delayed(Duration(seconds: 1), () async {
-          _updateProxyNow();
-        });
+        _updateProxyNow();
       }
     });
   }

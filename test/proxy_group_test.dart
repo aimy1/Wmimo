@@ -105,6 +105,19 @@ rules:
       expect(groups[0].all, containsAll(['HK Node 01', 'US Node 01', 'DIRECT']));
       expect(groups[1].name, equals('自动选择'));
     });
+
+    test('hasProxyGroups correctly identifies presence of proxy-groups section', () {
+      expect(ProxyNodeLoader.hasProxyGroups(sampleYaml), isTrue);
+      expect(ProxyNodeLoader.hasProxyGroups('proxies:\n  - name: test\n'), isFalse);
+      expect(ProxyNodeLoader.hasProxyGroups('proxy-groups:\nrules:\n'), isFalse);
+      expect(ProxyNodeLoader.hasProxyGroups('proxy-groups:\n  # comment\n  - name: g1\n'), isTrue);
+    });
+
+    test('ProxyNodeLoader cache operations and fast load', () {
+      ProxyNodeLoader.clearCache();
+      ProxyNodeLoader.clearCache('some_profile');
+      expect(ProxyNodeLoader.hasProxyGroups(''), isFalse);
+    });
   });
 
   group('VpnServiceConfig tests', () {
