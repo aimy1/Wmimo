@@ -377,7 +377,8 @@ class VPNService {
       }
       var started = await getStarted();
       if (!started) {
-        return null;
+        _isOperating = false;
+        return await start(timeout);
       }
       try {
         bool reinstall = await _prepareConfig(profile);

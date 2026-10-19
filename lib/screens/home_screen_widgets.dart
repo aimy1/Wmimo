@@ -969,6 +969,21 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       }
       final clashSetting = ClashSettingManager.getConfig();
       final isTunEnabled = clashSetting.Tun?.Enable == true;
+      if (Platform.isWindows && isTunEnabled && !VPNService.isRunAsAdmin()) {
+        final bool? proceed = await DialogUtils.showConfirmDialog(
+          context,
+          "${t.meta.tunModeRunAsAdmin}\n\n是否临时切换为【系统代理模式】继续连接？",
+        );
+        if (!mounted) return false;
+        if (proceed != true) {
+          return false;
+        }
+        clashSetting.Tun?.Enable = false;
+        await ClashSettingManager.save();
+        SettingManager.getConfig().autoSetSystemProxy = true;
+        await SettingManager.save();
+        setState(() {});
+      }
       if ((Platform.isLinux || Platform.isMacOS) && isTunEnabled) {
         String? installer = await AutoUpdateManager.checkReplace();
         if (installer != null) {

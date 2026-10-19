@@ -186,7 +186,7 @@ String _filterProfileWorker(Map<String, dynamic> args) {
 
     // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
     String processedLine = rawLine;
-    if (!tunMode) {
+    if (Platform.isAndroid || !tunMode) {
       if (trimmed.startsWith('listen:') && trimmed.contains(':53')) {
         processedLine = rawLine.replaceAll(':53', ':1053');
       } else if (trimmed.startsWith('bind-address:') && trimmed.contains(':53')) {
@@ -862,6 +862,7 @@ class FlutterVpnService {
     final tunMode = _savedConfig?.tun_mode ?? false;
 
     // Header parameters matching Clash Verge standards
+    final processMode = Platform.isAndroid ? 'off' : 'always';
     var header = '''
 mixed-port: $mixedPort
 allow-lan: true
@@ -872,7 +873,7 @@ secret: "$secret"
 ipv6: false
 unified-delay: true
 tcp-concurrent: true
-find-process-mode: always
+find-process-mode: $processMode
 ''';
 
     if (tunMode && !Platform.isAndroid) {
@@ -1029,6 +1030,22 @@ tun:
       }
       _coreProcess = null;
     }
+
+    // Forcefully cleanup any orphaned core processes left by previous runs or crashes
+    if (Platform.isWindows) {
+      try {
+        await Process.run('taskkill', ['/F', '/T', '/IM', 'wmimoService.exe']);
+      } catch (_) {}
+    } else if (Platform.isLinux || Platform.isMacOS) {
+      try {
+        await Process.run('killall', ['-9', 'wmimoService', 'wmimoService_arm64', 'wmimoService_amd64']);
+      } catch (_) {}
+    } else if (Platform.isAndroid) {
+      try {
+        await Process.run('pkill', ['-9', 'libwmimoService.so']);
+      } catch (_) {}
+    }
+
     if (_coreLogSink != null) {
       try {
         await _coreLogSink?.flush();
@@ -1074,6 +1091,43 @@ tun:
       }
 
       await _stopInternal();
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      final port = _savedConfig?.control_port ?? 9090;
+      final mixedPort = _savedConfig?.mixed_port ?? 7890;
+
+      if (!Platform.isIOS) {
+        Future<bool> isPortBlocked(int p) async {
+          try {
+            final socket = await Socket.connect('127.0.0.1', p, timeout: const Duration(milliseconds: 250));
+            socket.destroy();
+            return true;
+          } catch (_) {
+            return false;
+          }
+        }
+
+        if (await isPortBlocked(port)) {
+          _notifyState(FlutterVpnServiceState.disconnected);
+          return VpnServiceWaitResult(
+            type: VpnServiceWaitType.error,
+            err: VpnServiceResultError(
+              409,
+              "内核控制端口 $port 已被占用！\n请先退出其他代理客户端 (如 Clash Verge、v2rayN、Sing-box 等) 或在【内核设置】中更改端口。",
+            ),
+          );
+        }
+        if (await isPortBlocked(mixedPort)) {
+          _notifyState(FlutterVpnServiceState.disconnected);
+          return VpnServiceWaitResult(
+            type: VpnServiceWaitType.error,
+            err: VpnServiceResultError(
+              409,
+              "混合代理端口 $mixedPort 已被占用！\n请先退出其他代理客户端或在【内核设置】中更改端口。",
+            ),
+          );
+        }
+      }
 
       if (Platform.isIOS) {
         try {
@@ -1130,6 +1184,12 @@ tun:
         }
       }
 
+      if (Platform.isAndroid) {
+        try {
+          await Process.run('chmod', ['755', coreExe]);
+        } catch (_) {}
+      }
+
       _ensureWintunAvailable(workDir, coreExe);
 
       final args = ['-d', workDir, '-f', configFile];
@@ -1166,7 +1226,6 @@ tun:
         _notifyState(FlutterVpnServiceState.disconnected);
       });
 
-      final port = _savedConfig?.control_port ?? 9090;
       final secret = _savedConfig?.secret ?? "";
       bool ready = false;
       final stopwatch = Stopwatch()..start();
@@ -1221,6 +1280,23 @@ tun:
                 : "等待核心启动超时 (端口 $port 无响应)",
           ),
         );
+      }
+
+      // Verify TUN mode initialization on Windows
+      if (Platform.isWindows && (_savedConfig?.tun_mode ?? false)) {
+        final logs = "${errBuffer.toString()}\n${outBuffer.toString()}";
+        if (logs.contains("configure tun interface: Access is denied") ||
+            logs.contains("Start TUN listening error")) {
+          await _stopInternal();
+          _notifyState(FlutterVpnServiceState.disconnected);
+          return VpnServiceWaitResult(
+            type: VpnServiceWaitType.error,
+            err: VpnServiceResultError(
+              403,
+              "TUN 虚拟网卡创建失败: Access is denied。\nTUN 模式需要管理员权限，请右键选择【以管理员身份运行】应用，或在主界面/内核设置中关闭 TUN 模式并使用系统代理连接。",
+            ),
+          );
+        }
       }
 
       // Start Real-time Traffic Listener
