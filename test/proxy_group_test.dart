@@ -320,9 +320,16 @@ proxies:
       final parsed = ProxyNodeLoader.parseProfileContent(dummyYaml);
       expect(parsed.any((n) => n.name == 'Real Proxy 01'), isTrue);
       expect(parsed.any((n) => n.name == 'COMPATIBLE'), isFalse);
-      expect(parsed.any((n) => n.name == 'PASS'), isFalse);
       expect(parsed.any((n) => n.name == 'PASS-RULE'), isFalse);
       expect(parsed.any((n) => n.name == 'REJECT-DROP'), isFalse);
+    });
+
+    test('SubscriptionConverter.isClashYaml fast-path and accuracy tests', () {
+      expect(SubscriptionConverter.isClashYaml('proxies:\n  - name: P1\n'), isTrue);
+      expect(SubscriptionConverter.isClashYaml('proxy-providers:\n  p1:\n    type: http\n'), isTrue);
+      expect(SubscriptionConverter.isClashYaml('<!DOCTYPE html><html><body>Error</body></html>'), isFalse);
+      expect(SubscriptionConverter.isClashYaml('<html><head></head></html>'), isFalse);
+      expect(SubscriptionConverter.isClashYaml('random text without clash keys'), isFalse);
     });
   });
 

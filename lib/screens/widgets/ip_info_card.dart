@@ -23,6 +23,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
   IpInfoData? _ipInfo;
   bool _loading = false;
   bool _maskIp = false;
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -31,10 +32,25 @@ class _IpInfoCardState extends State<IpInfoCard> {
   }
 
   @override
+  void dispose() {
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant IpInfoCard oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.isConnected != widget.isConnected) {
-      _fetchIpInfo();
+      _debounceTimer?.cancel();
+      // On connect, delay slightly (1.2s) so Mihomo core finishes upstream proxy handshake
+      final delay = widget.isConnected
+          ? const Duration(milliseconds: 1200)
+          : const Duration(milliseconds: 150);
+      _debounceTimer = Timer(delay, () {
+        if (mounted) {
+          _fetchIpInfo();
+        }
+      });
     }
   }
 

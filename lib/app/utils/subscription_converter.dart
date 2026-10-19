@@ -34,7 +34,20 @@ class SubscriptionConverter {
   static bool isClashYaml(String content) {
     final trimmed = content.trim();
     if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html')) return false;
-    
+
+    // Fast-path: quickly verify presence of essential keys without parsing huge YAML tree
+    final hasProxies = trimmed.contains('proxies:') || trimmed.contains('"proxies":') || trimmed.contains("'proxies':");
+    final hasProviders = trimmed.contains('proxy-providers:') || trimmed.contains('"proxy-providers":') || trimmed.contains("'proxy-providers':");
+    if (!hasProxies && !hasProviders) {
+      return false;
+    }
+
+    // Fast regex check for root-level key (99% of Clash configs)
+    final rootKeyRegex = RegExp(r'^(?:proxies|proxy-providers)\s*:', multiLine: true);
+    if (rootKeyRegex.hasMatch(trimmed)) {
+      return true;
+    }
+
     try {
       final parsed = loadYaml(content);
       if (parsed is Map) {
@@ -47,7 +60,7 @@ class SubscriptionConverter {
       }
     } catch (_) {}
 
-    return trimmed.contains('proxies:') || trimmed.contains('proxy-providers:');
+    return hasProxies || hasProviders;
   }
 
   /// Parse a single node URI into a Clash proxy Map

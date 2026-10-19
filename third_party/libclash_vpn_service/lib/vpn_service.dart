@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' as ffi;
 import 'dart:io';
+import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'state.dart';
@@ -116,10 +117,267 @@ void _refreshWinINetSettings() {
   }
 }
 
+String _filterProfileWorker(Map<String, dynamic> args) {
+  final String profileContent = args['profileContent'] as String;
+  final bool tunMode = args['tunMode'] as bool;
+
+  // Filter out conflicting top-level keys from raw subscription
+  final overriddenTopLevelKeys = [
+    'mixed-port',
+    'allow-lan',
+    'mode',
+    'log-level',
+    'external-controller',
+    'secret',
+    'ipv6',
+    'unified-delay',
+    'tcp-concurrent',
+    'find-process-mode',
+    'port',
+    'socks-port',
+    'redir-port',
+    'tproxy-port',
+    'interface-name',
+    'routing-mark',
+  ];
+
+  bool inOverriddenBlock = false;
+  final List<String> resultLines = [];
+  final rawLines = profileContent.split('\n');
+
+  for (int i = 0; i < rawLines.length; i++) {
+    final rawLine = rawLines[i];
+    final trimmed = rawLine.trim();
+
+    // Check if entering a root block that we override completely (e.g. tun:)
+    if (tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-') || trimmed.startsWith('"tun":') || trimmed.startsWith("'tun':"))) {
+      inOverriddenBlock = true;
+      continue;
+    }
+
+    // If we are inside an overridden block and the line is indented, skip it
+    if (inOverriddenBlock) {
+      if (rawLine.startsWith(' ') || rawLine.startsWith('\t') || trimmed.isEmpty) {
+        continue;
+      } else {
+        inOverriddenBlock = false;
+      }
+    }
+
+    // Check if it's a top-level key that we override
+    bool isOverridden = false;
+    if (!rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
+      for (final key in overriddenTopLevelKeys) {
+        if (trimmed.startsWith('$key:') ||
+            trimmed.startsWith('$key :') ||
+            trimmed.startsWith('"$key":') ||
+            trimmed.startsWith("'$key':") ||
+            trimmed.startsWith('"$key" :') ||
+            trimmed.startsWith("'$key' :")) {
+          isOverridden = true;
+          break;
+        }
+      }
+    }
+
+    if (isOverridden) {
+      continue;
+    }
+
+    // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
+    String processedLine = rawLine;
+    if (!tunMode) {
+      if (trimmed.startsWith('listen:') && trimmed.contains(':53')) {
+        processedLine = rawLine.replaceAll(':53', ':1053');
+      } else if (trimmed.startsWith('bind-address:') && trimmed.contains(':53')) {
+        processedLine = rawLine.replaceAll(':53', ':1053');
+      }
+    }
+
+    resultLines.add(processedLine);
+  }
+
+  var filteredLines = resultLines.join('\n');
+
+  // Ensure fallback DNS with Fake-IP if not defined or if TUN is active
+  if (!filteredLines.contains('dns:') && !filteredLines.contains('nameserver:')) {
+    filteredLines += '''\n
+dns:
+  enable: true
+  listen: 127.0.0.1:1053
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 8.8.8.8
+    - 1.1.1.1
+  fallback:
+    - 1.0.0.1
+    - 8.8.4.4
+''';
+  }
+
+  // Ensure fallback proxy-groups if not defined in subscription
+  if (!filteredLines.contains('proxy-groups:') && !filteredLines.contains('"proxy-groups":')) {
+    final List<String> proxyNames = [];
+    final lines = filteredLines.split('\n');
+    final nameRegex = RegExp(r'^\s*-\s*(?:name:\s*["'']?([^"''\n]+)["'']?|{[^}]*name:\s*["'']?([^,"''}\n]+))');
+    for (var l in lines) {
+      final match = nameRegex.firstMatch(l);
+      if (match != null) {
+        final n = (match.group(1) ?? match.group(2) ?? "").trim();
+        final upperN = n.toUpperCase();
+        if (n.isNotEmpty &&
+            upperN != "DIRECT" &&
+            upperN != "REJECT" &&
+            upperN != "REJECT-DROP" &&
+            upperN != "PASS" &&
+            upperN != "PASS-RULE" &&
+            upperN != "COMPATIBLE" &&
+            upperN != "GLOBAL" &&
+            upperN != "PROXY") {
+          if (!proxyNames.contains(n)) {
+            proxyNames.add(n);
+          }
+        }
+      }
+    }
+
+    if (proxyNames.isNotEmpty) {
+      final hkNodes = proxyNames.where((n) {
+        final u = n.toUpperCase();
+        return n.contains("香港") || u.contains("HK") || u.contains("HONG KONG");
+      }).toList();
+      final jpNodes = proxyNames.where((n) {
+        final u = n.toUpperCase();
+        return n.contains("日本") || u.contains("JP") || u.contains("JAPAN") || n.contains("东京") || n.contains("大阪");
+      }).toList();
+      final sgNodes = proxyNames.where((n) {
+        final u = n.toUpperCase();
+        return n.contains("新加坡") || u.contains("SG") || u.contains("SINGAPORE") || n.contains("狮城");
+      }).toList();
+      final twNodes = proxyNames.where((n) {
+        final u = n.toUpperCase();
+        return n.contains("台湾") || u.contains("TW") || u.contains("TAIWAN") || n.contains("台北");
+      }).toList();
+      final usNodes = proxyNames.where((n) {
+        final u = n.toUpperCase();
+        return n.contains("美国") || u.contains("US") || u.contains("USA") || n.contains("美") || u.contains("UNITED STATES");
+      }).toList();
+      final krNodes = proxyNames.where((n) {
+        final u = n.toUpperCase();
+        return n.contains("韩国") || u.contains("KR") || u.contains("KOREA") || n.contains("首尔");
+      }).toList();
+
+      final buf = StringBuffer('\nproxy-groups:\n');
+      buf.writeln('  - name: 节点选择');
+      buf.writeln('    type: select');
+      buf.writeln('    proxies:');
+      buf.writeln('      - 自动选择');
+      buf.writeln('      - 故障转移');
+      for (var p in proxyNames) {
+        buf.writeln('      - "$p"');
+      }
+      buf.writeln('      - DIRECT');
+
+      buf.writeln('  - name: 自动选择');
+      buf.writeln('    type: url-test');
+      buf.writeln('    url: http://www.gstatic.com/generate_204');
+      buf.writeln('    interval: 300');
+      buf.writeln('    proxies:');
+      for (var p in proxyNames) {
+        buf.writeln('      - "$p"');
+      }
+
+      buf.writeln('  - name: 故障转移');
+      buf.writeln('    type: fallback');
+      buf.writeln('    url: http://www.gstatic.com/generate_204');
+      buf.writeln('    interval: 300');
+      buf.writeln('    proxies:');
+      for (var p in proxyNames) {
+        buf.writeln('      - "$p"');
+      }
+
+      if (hkNodes.isNotEmpty) {
+        buf.writeln('  - name: 🇭🇰 香港节点');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        for (var p in hkNodes) {
+          buf.writeln('      - "$p"');
+        }
+      }
+      if (jpNodes.isNotEmpty) {
+        buf.writeln('  - name: 🇯🇵 日本节点');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        for (var p in jpNodes) {
+          buf.writeln('      - "$p"');
+        }
+      }
+      if (sgNodes.isNotEmpty) {
+        buf.writeln('  - name: 🇸🇬 新加坡节点');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        for (var p in sgNodes) {
+          buf.writeln('      - "$p"');
+        }
+      }
+      if (twNodes.isNotEmpty) {
+        buf.writeln('  - name: 🇹🇼 台湾节点');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        for (var p in twNodes) {
+          buf.writeln('      - "$p"');
+        }
+      }
+      if (usNodes.isNotEmpty) {
+        buf.writeln('  - name: 🇺🇸 美国节点');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        for (var p in usNodes) {
+          buf.writeln('      - "$p"');
+        }
+      }
+      if (krNodes.isNotEmpty) {
+        buf.writeln('  - name: 🇰🇷 韩国节点');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        for (var p in krNodes) {
+          buf.writeln('      - "$p"');
+        }
+      }
+
+      buf.writeln('  - name: GLOBAL');
+      buf.writeln('    type: select');
+      buf.writeln('    proxies:');
+      buf.writeln('      - 节点选择');
+      buf.writeln('      - 自动选择');
+      buf.writeln('      - 故障转移');
+      for (var p in proxyNames) {
+        buf.writeln('      - "$p"');
+      }
+      buf.writeln('      - DIRECT');
+
+      filteredLines += buf.toString();
+
+      if (!filteredLines.contains('rules:') && !filteredLines.contains('"rules":')) {
+        filteredLines += '''\n
+rules:
+  - MATCH,节点选择
+''';
+      }
+    }
+  }
+
+  return filteredLines;
+}
+
 class FlutterVpnService {
   static FlutterVpnServiceState _state = FlutterVpnServiceState.disconnected;
   static final List<void Function(FlutterVpnServiceState, Map<String, String>)> _listeners = [];
   static Process? _coreProcess;
+  static IOSink? _coreLogSink;
   static VpnServiceConfig? _savedConfig;
   static String? _savedTunnelServicePath;
   static String? _savedConfigFilePath;
@@ -631,254 +889,10 @@ tun:
 ''';
     }
 
-    // Filter out conflicting top-level keys from raw subscription
-    final overriddenTopLevelKeys = [
-      'mixed-port',
-      'allow-lan',
-      'mode',
-      'log-level',
-      'external-controller',
-      'secret',
-      'ipv6',
-      'unified-delay',
-      'tcp-concurrent',
-      'find-process-mode',
-      'port',
-      'socks-port',
-      'redir-port',
-      'tproxy-port',
-      'interface-name',
-      'routing-mark',
-    ];
-
-    bool inOverriddenBlock = false;
-    final List<String> resultLines = [];
-    final rawLines = profileContent.split('\n');
-
-    for (int i = 0; i < rawLines.length; i++) {
-      final rawLine = rawLines[i];
-      final trimmed = rawLine.trim();
-
-      // Check if entering a root block that we override completely (e.g. tun:)
-      if (tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-') || trimmed.startsWith('"tun":') || trimmed.startsWith("'tun':"))) {
-        inOverriddenBlock = true;
-        continue;
-      }
-
-      // If we are inside an overridden block and the line is indented, skip it
-      if (inOverriddenBlock) {
-        if (rawLine.startsWith(' ') || rawLine.startsWith('\t') || trimmed.isEmpty) {
-          continue;
-        } else {
-          inOverriddenBlock = false;
-        }
-      }
-
-      // Check if it's a top-level key that we override
-      bool isOverridden = false;
-      if (!rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
-        for (final key in overriddenTopLevelKeys) {
-          if (trimmed.startsWith('$key:') ||
-              trimmed.startsWith('$key :') ||
-              trimmed.startsWith('"$key":') ||
-              trimmed.startsWith("'$key':") ||
-              trimmed.startsWith('"$key" :') ||
-              trimmed.startsWith("'$key' :")) {
-            isOverridden = true;
-            break;
-          }
-        }
-      }
-
-      if (isOverridden) {
-        continue;
-      }
-
-      // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
-      String processedLine = rawLine;
-      if (!tunMode) {
-        if (trimmed.startsWith('listen:') && trimmed.contains(':53')) {
-          processedLine = rawLine.replaceAll(':53', ':1053');
-        } else if (trimmed.startsWith('bind-address:') && trimmed.contains(':53')) {
-          processedLine = rawLine.replaceAll(':53', ':1053');
-        }
-      }
-
-      resultLines.add(processedLine);
-    }
-
-    var filteredLines = resultLines.join('\n');
-
-    // Ensure fallback DNS with Fake-IP if not defined or if TUN is active
-    if (!filteredLines.contains('dns:') && !filteredLines.contains('nameserver:')) {
-      filteredLines += '''\n
-dns:
-  enable: true
-  listen: 127.0.0.1:1053
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
-    - 8.8.8.8
-    - 1.1.1.1
-  fallback:
-    - 1.0.0.1
-    - 8.8.4.4
-''';
-    }
-
-    // Ensure fallback proxy-groups if not defined in subscription
-    if (!filteredLines.contains('proxy-groups:') && !filteredLines.contains('"proxy-groups":')) {
-      final List<String> proxyNames = [];
-      final lines = filteredLines.split('\n');
-      final nameRegex = RegExp(r'^\s*-\s*(?:name:\s*["'']?([^"''\n]+)["'']?|{[^}]*name:\s*["'']?([^,"''}\n]+))');
-      for (var l in lines) {
-        final match = nameRegex.firstMatch(l);
-        if (match != null) {
-          final n = (match.group(1) ?? match.group(2) ?? "").trim();
-          final upperN = n.toUpperCase();
-          if (n.isNotEmpty &&
-              upperN != "DIRECT" &&
-              upperN != "REJECT" &&
-              upperN != "REJECT-DROP" &&
-              upperN != "PASS" &&
-              upperN != "PASS-RULE" &&
-              upperN != "COMPATIBLE" &&
-              upperN != "GLOBAL" &&
-              upperN != "PROXY") {
-            if (!proxyNames.contains(n)) {
-              proxyNames.add(n);
-            }
-          }
-        }
-      }
-
-      if (proxyNames.isNotEmpty) {
-        final hkNodes = proxyNames.where((n) {
-          final u = n.toUpperCase();
-          return n.contains("香港") || u.contains("HK") || u.contains("HONG KONG");
-        }).toList();
-        final jpNodes = proxyNames.where((n) {
-          final u = n.toUpperCase();
-          return n.contains("日本") || u.contains("JP") || u.contains("JAPAN") || n.contains("东京") || n.contains("大阪");
-        }).toList();
-        final sgNodes = proxyNames.where((n) {
-          final u = n.toUpperCase();
-          return n.contains("新加坡") || u.contains("SG") || u.contains("SINGAPORE") || n.contains("狮城");
-        }).toList();
-        final twNodes = proxyNames.where((n) {
-          final u = n.toUpperCase();
-          return n.contains("台湾") || u.contains("TW") || u.contains("TAIWAN") || n.contains("台北");
-        }).toList();
-        final usNodes = proxyNames.where((n) {
-          final u = n.toUpperCase();
-          return n.contains("美国") || u.contains("US") || u.contains("USA") || n.contains("美") || u.contains("UNITED STATES");
-        }).toList();
-        final krNodes = proxyNames.where((n) {
-          final u = n.toUpperCase();
-          return n.contains("韩国") || u.contains("KR") || u.contains("KOREA") || n.contains("首尔");
-        }).toList();
-
-        final buf = StringBuffer('\nproxy-groups:\n');
-        buf.writeln('  - name: 节点选择');
-        buf.writeln('    type: select');
-        buf.writeln('    proxies:');
-        buf.writeln('      - 自动选择');
-        buf.writeln('      - 故障转移');
-        for (var p in proxyNames) {
-          buf.writeln('      - "$p"');
-        }
-        buf.writeln('      - DIRECT');
-
-        buf.writeln('  - name: 自动选择');
-        buf.writeln('    type: url-test');
-        buf.writeln('    url: http://www.gstatic.com/generate_204');
-        buf.writeln('    interval: 300');
-        buf.writeln('    proxies:');
-        for (var p in proxyNames) {
-          buf.writeln('      - "$p"');
-        }
-
-        buf.writeln('  - name: 故障转移');
-        buf.writeln('    type: fallback');
-        buf.writeln('    url: http://www.gstatic.com/generate_204');
-        buf.writeln('    interval: 300');
-        buf.writeln('    proxies:');
-        for (var p in proxyNames) {
-          buf.writeln('      - "$p"');
-        }
-
-        if (hkNodes.isNotEmpty) {
-          buf.writeln('  - name: 🇭🇰 香港节点');
-          buf.writeln('    type: select');
-          buf.writeln('    proxies:');
-          for (var p in hkNodes) {
-            buf.writeln('      - "$p"');
-          }
-        }
-        if (jpNodes.isNotEmpty) {
-          buf.writeln('  - name: 🇯🇵 日本节点');
-          buf.writeln('    type: select');
-          buf.writeln('    proxies:');
-          for (var p in jpNodes) {
-            buf.writeln('      - "$p"');
-          }
-        }
-        if (sgNodes.isNotEmpty) {
-          buf.writeln('  - name: 🇸🇬 新加坡节点');
-          buf.writeln('    type: select');
-          buf.writeln('    proxies:');
-          for (var p in sgNodes) {
-            buf.writeln('      - "$p"');
-          }
-        }
-        if (twNodes.isNotEmpty) {
-          buf.writeln('  - name: 🇹🇼 台湾节点');
-          buf.writeln('    type: select');
-          buf.writeln('    proxies:');
-          for (var p in twNodes) {
-            buf.writeln('      - "$p"');
-          }
-        }
-        if (usNodes.isNotEmpty) {
-          buf.writeln('  - name: 🇺🇸 美国节点');
-          buf.writeln('    type: select');
-          buf.writeln('    proxies:');
-          for (var p in usNodes) {
-            buf.writeln('      - "$p"');
-          }
-        }
-        if (krNodes.isNotEmpty) {
-          buf.writeln('  - name: 🇰🇷 韩国节点');
-          buf.writeln('    type: select');
-          buf.writeln('    proxies:');
-          for (var p in krNodes) {
-            buf.writeln('      - "$p"');
-          }
-        }
-
-        buf.writeln('  - name: GLOBAL');
-        buf.writeln('    type: select');
-        buf.writeln('    proxies:');
-        buf.writeln('      - 节点选择');
-        buf.writeln('      - 自动选择');
-        buf.writeln('      - 故障转移');
-        for (var p in proxyNames) {
-          buf.writeln('      - "$p"');
-        }
-        buf.writeln('      - DIRECT');
-
-        filteredLines += buf.toString();
-
-        if (!filteredLines.contains('rules:') && !filteredLines.contains('"rules":')) {
-          filteredLines += '''\n
-rules:
-  - MATCH,节点选择
-''';
-        }
-      }
-    }
+    final filteredLines = await Isolate.run(() => _filterProfileWorker({
+      'profileContent': profileContent,
+      'tunMode': tunMode,
+    }));
 
     final baseDir = _savedConfig?.base_dir.isNotEmpty == true
         ? _savedConfig!.base_dir
@@ -1015,6 +1029,13 @@ rules:
       }
       _coreProcess = null;
     }
+    if (_coreLogSink != null) {
+      try {
+        await _coreLogSink?.flush();
+        await _coreLogSink?.close();
+      } catch (_) {}
+      _coreLogSink = null;
+    }
     await cleanSystemProxy();
   }
 
@@ -1119,25 +1140,28 @@ rules:
       final logFile = (_savedConfig?.log_path.isNotEmpty == true)
           ? File(_savedConfig!.log_path)
           : null;
+      IOSink? logSink;
+      if (logFile != null) {
+        try {
+          logSink = logFile.openWrite(mode: FileMode.append);
+          _coreLogSink = logSink;
+        } catch (_) {}
+      }
 
       _coreProcess!.stdout.transform(utf8.decoder).listen((data) {
         outBuffer.write(data);
-        if (logFile != null) {
-          try {
-            logFile.writeAsStringSync(data, mode: FileMode.append, flush: true);
-          } catch (_) {}
-        }
+        logSink?.write(data);
       });
       _coreProcess!.stderr.transform(utf8.decoder).listen((data) {
         errBuffer.write(data);
-        if (logFile != null) {
-          try {
-            logFile.writeAsStringSync(data, mode: FileMode.append, flush: true);
-          } catch (_) {}
-        }
+        logSink?.write(data);
       });
       _coreProcess!.exitCode.then((code) {
         _coreProcess = null;
+        try {
+          _coreLogSink?.close();
+          _coreLogSink = null;
+        } catch (_) {}
         _stopTrafficMonitor();
         _notifyState(FlutterVpnServiceState.disconnected);
       });
@@ -1147,27 +1171,30 @@ rules:
       bool ready = false;
       final stopwatch = Stopwatch()..start();
 
-      while (stopwatch.elapsed < timeout) {
-        if (_coreProcess == null || _cancelRequested) {
-          break;
-        }
-        try {
-          final client = HttpClient()
-            ..connectionTimeout = const Duration(milliseconds: 200);
-          final req = await client
-              .getUrl(Uri.parse("http://127.0.0.1:$port/version"));
-          if (secret.isNotEmpty) {
-            req.headers.set('Authorization', 'Bearer $secret');
-          }
-          final resp = await req.close();
-          if (resp.statusCode == 200) {
-            ready = true;
-            client.close();
+      final checkClient = HttpClient()
+        ..connectionTimeout = const Duration(milliseconds: 300);
+
+      try {
+        while (stopwatch.elapsed < timeout) {
+          if (_coreProcess == null || _cancelRequested) {
             break;
           }
-          client.close();
-        } catch (_) {}
-        await Future.delayed(const Duration(milliseconds: 100));
+          try {
+            final req = await checkClient
+                .getUrl(Uri.parse("http://127.0.0.1:$port/version"));
+            if (secret.isNotEmpty) {
+              req.headers.set('Authorization', 'Bearer $secret');
+            }
+            final resp = await req.close();
+            if (resp.statusCode == 200) {
+              ready = true;
+              break;
+            }
+          } catch (_) {}
+          await Future.delayed(const Duration(milliseconds: 120));
+        }
+      } finally {
+        checkClient.close(force: true);
       }
 
       if (_cancelRequested) {
@@ -1543,18 +1570,20 @@ rules:
   static Future<String> clashiApiConnections(bool full) async {
     final port = _savedConfig?.control_port ?? 9090;
     final secret = _savedConfig?.secret ?? "";
+    HttpClient? client;
     try {
-      final client = HttpClient()..connectionTimeout = const Duration(milliseconds: 600);
+      client = HttpClient()..connectionTimeout = const Duration(milliseconds: 600);
       final req = await client.getUrl(Uri.parse("http://127.0.0.1:$port/connections"));
       if (secret.isNotEmpty) {
         req.headers.set('Authorization', 'Bearer $secret');
       }
       final resp = await req.close();
       final body = await resp.transform(utf8.decoder).join();
-      client.close();
       return body;
     } catch (_) {
       return "{}";
+    } finally {
+      client?.close(force: true);
     }
   }
 
