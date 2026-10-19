@@ -575,7 +575,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get searchLogsHint => ' (IP, ドメイン, ルール, エラー...)';
 	@override String get offlinePreviewPrompt => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。';
 	@override String get manualSelect => '手動選択';
-	@override String get autoSelect => '自動最適化';
+	@override String get autoSelect => '自動選択';
 	@override String get speedTestGroup => 'グループ速度テスト';
 	@override String get pause => '一時停止';
 	@override String get resume => '再開';
@@ -689,6 +689,21 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get invertSelection => '選択反転';
 	@override String get all => 'すべて';
 	@override String get showAppIcon => 'アプリアイコンを表示';
+	@override String get proxySelection => 'プロキシ選択';
+	@override String get regionHk => '🇭🇰 香港';
+	@override String get regionJp => '🇯🇵 日本';
+	@override String get regionSg => '🇸🇬 シンガポール';
+	@override String get regionTw => '🇹🇼 台湾';
+	@override String get regionUs => '🇺🇸 アメリカ';
+	@override String get regionKr => '🇰🇷 韓国';
+	@override String get macMoveToApplications => 'Wmimoを「アプリケーション」フォルダに移動してから起動してください';
+	@override String get notifCurrentNode => '現在のノード';
+	@override String get notifMode => '動作モード';
+	@override String get notifPort => 'ポート';
+	@override String get notifProfile => 'プロファイル';
+	@override String get notifDisconnect => '切断';
+	@override String get notifSwitchNode => 'ノード切替';
+	@override String get notifVpnConnected => 'VPN プロキシ接続中';
 }
 
 // Path: permission
@@ -785,6 +800,9 @@ class _Translations$dns$ja implements Translations$dns$en {
 	@override String get updateAll => 'すべて更新';
 	@override String get updateSuccess => '更新に成功しました';
 	@override String get updateFailed => '更新に失敗しました';
+	@override String get addPresetServer => 'プリセットDNSを追加';
+	@override String manageFakeIpFilter({required Object p}) => 'フィルターリストを管理 (${p})';
+	@override String fakeIpFilterDesc({required Object p}) => '${p} 個のドメインルールがFake-IP解決をバイパスし、ネットワーク分離問題を回避します。';
 }
 
 // Path: sniffer
@@ -1281,7 +1299,7 @@ extension on TranslationsJa {
 			'meta.searchLogsHint' => ' (IP, ドメイン, ルール, エラー...)',
 			'meta.offlinePreviewPrompt' => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。',
 			'meta.manualSelect' => '手動選択',
-			'meta.autoSelect' => '自動最適化',
+			'meta.autoSelect' => '自動選択',
 			'meta.speedTestGroup' => 'グループ速度テスト',
 			'meta.pause' => '一時停止',
 			'meta.resume' => '再開',
@@ -1397,6 +1415,21 @@ extension on TranslationsJa {
 			'meta.invertSelection' => '選択反転',
 			'meta.all' => 'すべて',
 			'meta.showAppIcon' => 'アプリアイコンを表示',
+			'meta.proxySelection' => 'プロキシ選択',
+			'meta.regionHk' => '🇭🇰 香港',
+			'meta.regionJp' => '🇯🇵 日本',
+			'meta.regionSg' => '🇸🇬 シンガポール',
+			'meta.regionTw' => '🇹🇼 台湾',
+			'meta.regionUs' => '🇺🇸 アメリカ',
+			'meta.regionKr' => '🇰🇷 韓国',
+			'meta.macMoveToApplications' => 'Wmimoを「アプリケーション」フォルダに移動してから起動してください',
+			'meta.notifCurrentNode' => '現在のノード',
+			'meta.notifMode' => '動作モード',
+			'meta.notifPort' => 'ポート',
+			'meta.notifProfile' => 'プロファイル',
+			'meta.notifDisconnect' => '切断',
+			'meta.notifSwitchNode' => 'ノード切替',
+			'meta.notifVpnConnected' => 'VPN プロキシ接続中',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',
@@ -1457,6 +1490,9 @@ extension on TranslationsJa {
 			'dns.updateAll' => 'すべて更新',
 			'dns.updateSuccess' => '更新に成功しました',
 			'dns.updateFailed' => '更新に失敗しました',
+			'dns.addPresetServer' => 'プリセットDNSを追加',
+			'dns.manageFakeIpFilter' => ({required Object p}) => 'フィルターリストを管理 (${p})',
+			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} 個のドメインルールがFake-IP解決をバイパスし、ネットワーク分離問題を回避します。',
 			'sniffer.overrideDest' => '上書き',
 			'profilePatchMode.currentSelected' => '現在選択中',
 			'profilePatchMode.overwrite' => '内蔵 - 上書き',

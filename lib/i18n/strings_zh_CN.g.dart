@@ -575,7 +575,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get searchLogsHint => ' (IP, 域名, 规则, 错误...)';
 	@override String get offlinePreviewPrompt => '离线配置预览中，开启代理后可进行分流与节点测速';
 	@override String get manualSelect => '手动选择';
-	@override String get autoSelect => '自动优选';
+	@override String get autoSelect => '自动选择';
 	@override String get speedTestGroup => '策略组测速';
 	@override String get pause => '暂停';
 	@override String get resume => '恢复';
@@ -689,6 +689,21 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get invertSelection => '反选';
 	@override String get all => '全部';
 	@override String get showAppIcon => '显示应用图标';
+	@override String get proxySelection => '节点选择';
+	@override String get regionHk => '🇭🇰 香港节点';
+	@override String get regionJp => '🇯🇵 日本节点';
+	@override String get regionSg => '🇸🇬 新加坡节点';
+	@override String get regionTw => '🇹🇼 台湾节点';
+	@override String get regionUs => '🇺🇸 美国节点';
+	@override String get regionKr => '🇰🇷 韩国节点';
+	@override String get macMoveToApplications => '请先将 Wmimo 拖入【应用程序】(Applications) 文件夹后再打开运行';
+	@override String get notifCurrentNode => '当前节点';
+	@override String get notifMode => '运行模式';
+	@override String get notifPort => '端口';
+	@override String get notifProfile => '配置订阅';
+	@override String get notifDisconnect => '断开连接';
+	@override String get notifSwitchNode => '切换节点';
+	@override String get notifVpnConnected => 'VPN 代理已连接';
 }
 
 // Path: permission
@@ -785,6 +800,9 @@ class Translations$dns$zh_CN implements Translations$dns$en {
 	@override String get updateAll => '全部更新';
 	@override String get updateSuccess => '更新成功';
 	@override String get updateFailed => '更新失败';
+	@override String get addPresetServer => '添加预设 DNS';
+	@override String manageFakeIpFilter({required Object p}) => '管理过滤列表 (${p})';
+	@override String fakeIpFilterDesc({required Object p}) => '${p} 条域名规则绕过 Fake-IP 解析，以避免网络隔离问题。';
 }
 
 // Path: sniffer
@@ -1281,7 +1299,7 @@ extension on TranslationsZhCn {
 			'meta.searchLogsHint' => ' (IP, 域名, 规则, 错误...)',
 			'meta.offlinePreviewPrompt' => '离线配置预览中，开启代理后可进行分流与节点测速',
 			'meta.manualSelect' => '手动选择',
-			'meta.autoSelect' => '自动优选',
+			'meta.autoSelect' => '自动选择',
 			'meta.speedTestGroup' => '策略组测速',
 			'meta.pause' => '暂停',
 			'meta.resume' => '恢复',
@@ -1397,6 +1415,21 @@ extension on TranslationsZhCn {
 			'meta.invertSelection' => '反选',
 			'meta.all' => '全部',
 			'meta.showAppIcon' => '显示应用图标',
+			'meta.proxySelection' => '节点选择',
+			'meta.regionHk' => '🇭🇰 香港节点',
+			'meta.regionJp' => '🇯🇵 日本节点',
+			'meta.regionSg' => '🇸🇬 新加坡节点',
+			'meta.regionTw' => '🇹🇼 台湾节点',
+			'meta.regionUs' => '🇺🇸 美国节点',
+			'meta.regionKr' => '🇰🇷 韩国节点',
+			'meta.macMoveToApplications' => '请先将 Wmimo 拖入【应用程序】(Applications) 文件夹后再打开运行',
+			'meta.notifCurrentNode' => '当前节点',
+			'meta.notifMode' => '运行模式',
+			'meta.notifPort' => '端口',
+			'meta.notifProfile' => '配置订阅',
+			'meta.notifDisconnect' => '断开连接',
+			'meta.notifSwitchNode' => '切换节点',
+			'meta.notifVpnConnected' => 'VPN 代理已连接',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',
@@ -1457,6 +1490,9 @@ extension on TranslationsZhCn {
 			'dns.updateAll' => '全部更新',
 			'dns.updateSuccess' => '更新成功',
 			'dns.updateFailed' => '更新失败',
+			'dns.addPresetServer' => '添加预设 DNS',
+			'dns.manageFakeIpFilter' => ({required Object p}) => '管理过滤列表 (${p})',
+			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} 条域名规则绕过 Fake-IP 解析，以避免网络隔离问题。',
 			'sniffer.overrideDest' => '覆盖',
 			'profilePatchMode.currentSelected' => '当前选择',
 			'profilePatchMode.overwrite' => '内置-覆写',

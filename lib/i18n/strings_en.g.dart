@@ -1741,6 +1741,51 @@ class Translations$meta$en {
 
 	/// en: 'Show App Icon'
 	String get showAppIcon => 'Show App Icon';
+
+	/// en: 'Proxy Selection'
+	String get proxySelection => 'Proxy Selection';
+
+	/// en: '🇭🇰 Hong Kong'
+	String get regionHk => '🇭🇰 Hong Kong';
+
+	/// en: '🇯🇵 Japan'
+	String get regionJp => '🇯🇵 Japan';
+
+	/// en: '🇸🇬 Singapore'
+	String get regionSg => '🇸🇬 Singapore';
+
+	/// en: '🇹🇼 Taiwan'
+	String get regionTw => '🇹🇼 Taiwan';
+
+	/// en: '🇺🇸 United States'
+	String get regionUs => '🇺🇸 United States';
+
+	/// en: '🇰🇷 South Korea'
+	String get regionKr => '🇰🇷 South Korea';
+
+	/// en: 'Please move Wmimo into Applications folder before launching'
+	String get macMoveToApplications => 'Please move Wmimo into Applications folder before launching';
+
+	/// en: 'Node'
+	String get notifCurrentNode => 'Node';
+
+	/// en: 'Mode'
+	String get notifMode => 'Mode';
+
+	/// en: 'Port'
+	String get notifPort => 'Port';
+
+	/// en: 'Profile'
+	String get notifProfile => 'Profile';
+
+	/// en: 'Disconnect'
+	String get notifDisconnect => 'Disconnect';
+
+	/// en: 'Switch Node'
+	String get notifSwitchNode => 'Switch Node';
+
+	/// en: 'VPN Proxy Connected'
+	String get notifVpnConnected => 'VPN Proxy Connected';
 }
 
 // Path: permission
@@ -1957,6 +2002,15 @@ class Translations$dns$en {
 
 	/// en: 'Update failed'
 	String get updateFailed => 'Update failed';
+
+	/// en: 'Add Preset DNS'
+	String get addPresetServer => 'Add Preset DNS';
+
+	/// en: 'Manage Filter List ($p)'
+	String manageFakeIpFilter({required Object p}) => 'Manage Filter List (${p})';
+
+	/// en: '$p domain rules bypass Fake-IP resolution to avoid network isolation issues.'
+	String fakeIpFilterDesc({required Object p}) => '${p} domain rules bypass Fake-IP resolution to avoid network isolation issues.';
 }
 
 // Path: sniffer
@@ -2625,6 +2679,21 @@ extension on Translations {
 			'meta.invertSelection' => 'Invert Selection',
 			'meta.all' => 'All',
 			'meta.showAppIcon' => 'Show App Icon',
+			'meta.proxySelection' => 'Proxy Selection',
+			'meta.regionHk' => '🇭🇰 Hong Kong',
+			'meta.regionJp' => '🇯🇵 Japan',
+			'meta.regionSg' => '🇸🇬 Singapore',
+			'meta.regionTw' => '🇹🇼 Taiwan',
+			'meta.regionUs' => '🇺🇸 United States',
+			'meta.regionKr' => '🇰🇷 South Korea',
+			'meta.macMoveToApplications' => 'Please move Wmimo into Applications folder before launching',
+			'meta.notifCurrentNode' => 'Node',
+			'meta.notifMode' => 'Mode',
+			'meta.notifPort' => 'Port',
+			'meta.notifProfile' => 'Profile',
+			'meta.notifDisconnect' => 'Disconnect',
+			'meta.notifSwitchNode' => 'Switch Node',
+			'meta.notifVpnConnected' => 'VPN Proxy Connected',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',
@@ -2685,6 +2754,9 @@ extension on Translations {
 			'dns.updateAll' => 'Update All',
 			'dns.updateSuccess' => 'Update succeeded',
 			'dns.updateFailed' => 'Update failed',
+			'dns.addPresetServer' => 'Add Preset DNS',
+			'dns.manageFakeIpFilter' => ({required Object p}) => 'Manage Filter List (${p})',
+			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} domain rules bypass Fake-IP resolution to avoid network isolation issues.',
 			'sniffer.overrideDest' => 'Override',
 			'profilePatchMode.currentSelected' => 'Current Selected',
 			'profilePatchMode.overwrite' => 'Built-in Overwrite',

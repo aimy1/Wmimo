@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wmimo</string>
+    <string name="tile_connected">Conectado</string>
+    <string name="tile_disconnected">Desconectado</string>
+    <string name="tile_unavailable">No configurado</string>
+    <string name="notif_connected">Conectado</string>
+    <string name="notif_vpn_connected">Proxy VPN conectado</string>
+    <string name="notif_action_disconnect">Desconectar</string>
+    <string name="notif_action_switch_node">Cambiar nodo</string>
+    <string name="notif_label_current_node">Nodo actual</string>
+    <string name="notif_label_mode">Modo</string>
+    <string name="notif_label_port">Puerto</string>
+    <string name="notif_label_profile">Perfil</string>
+</resources>

@@ -453,7 +453,7 @@
     "searchLogsHint": " (IP, 網域名稱, 規則, 錯誤...)",
     "offlinePreviewPrompt": "離線設定預覽中，開啟代理後可進行分流與節點測速",
     "manualSelect": "手動選擇",
-    "autoSelect": "自動優選",
+    "autoSelect": "自動選擇",
     "speedTestGroup": "策略群組測速",
     "pause": "暫停",
     "resume": "恢復",
@@ -566,7 +566,22 @@
     "bypassSelectedModeDesc": "已選應用直連，其餘應用走代理",
     "invertSelection": "反選",
     "all": "全部",
-    "showAppIcon": "顯示應用程式圖示"
+    "showAppIcon": "顯示應用程式圖示",
+    "proxySelection": "節點選擇",
+    "regionHk": "🇭🇰 香港節點",
+    "regionJp": "🇯🇵 日本節點",
+    "regionSg": "🇸🇬 新加坡節點",
+    "regionTw": "🇹🇼 台灣節點",
+    "regionUs": "🇺🇸 美國節點",
+    "regionKr": "🇰🇷 韓國節點",
+    "macMoveToApplications": "請先將 Wmimo 拖入【應用程式】(Applications) 資料夾後再開啟執行",
+    "notifCurrentNode": "目前節點",
+    "notifMode": "運行模式",
+    "notifPort": "埠號",
+    "notifProfile": "配置訂閱",
+    "notifDisconnect": "中斷連線",
+    "notifSwitchNode": "切換節點",
+    "notifVpnConnected": "VPN 代理已連線"
   },
   "permission": {
     "camera": "相機",
@@ -634,7 +649,10 @@
     "cdnSource": "下載加速鏡像源",
     "updateAll": "全部更新",
     "updateSuccess": "更新成功",
-    "updateFailed": "更新失敗"
+    "updateFailed": "更新失敗",
+    "addPresetServer": "新增預設 DNS",
+    "manageFakeIpFilter": "管理過濾清單 ($p)",
+    "fakeIpFilterDesc": "$p 條網域規則繞過 Fake-IP 解析，以避免網路隔離問題。"
   },
   "sniffer": {
     "overrideDest": "覆蓋"

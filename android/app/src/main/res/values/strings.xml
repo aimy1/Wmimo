@@ -4,4 +4,12 @@
     <string name="tile_connected">Connected</string>
     <string name="tile_disconnected">Disconnected</string>
     <string name="tile_unavailable">Not Configured</string>
+    <string name="notif_connected">Connected</string>
+    <string name="notif_vpn_connected">VPN Proxy Connected</string>
+    <string name="notif_action_disconnect">Disconnect</string>
+    <string name="notif_action_switch_node">Switch Node</string>
+    <string name="notif_label_current_node">Node</string>
+    <string name="notif_label_mode">Mode</string>
+    <string name="notif_label_port">Port</string>
+    <string name="notif_label_profile">Profile</string>
 </resources>

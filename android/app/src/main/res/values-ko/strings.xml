@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wmimo</string>
+    <string name="tile_connected">연결됨</string>
+    <string name="tile_disconnected">연결 안 됨</string>
+    <string name="tile_unavailable">미설정</string>
+    <string name="notif_connected">연결됨</string>
+    <string name="notif_vpn_connected">VPN 프록시 연결됨</string>
+    <string name="notif_action_disconnect">연결 끊기</string>
+    <string name="notif_action_switch_node">노드 전환</string>
+    <string name="notif_label_current_node">현재 노드</string>
+    <string name="notif_label_mode">동작 모드</string>
+    <string name="notif_label_port">포트</string>
+    <string name="notif_label_profile">구독 프로필</string>
+</resources>

@@ -689,6 +689,21 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get invertSelection => 'معکوس کردن انتخاب';
 	@override String get all => 'همه';
 	@override String get showAppIcon => 'نمایش آیکون برنامه';
+	@override String get proxySelection => 'انتخاب پروکسی';
+	@override String get regionHk => '🇭🇰 هنگ کنگ';
+	@override String get regionJp => '🇯🇵 ژاپن';
+	@override String get regionSg => '🇸🇬 سنگاپور';
+	@override String get regionTw => '🇹🇼 تایوان';
+	@override String get regionUs => '🇺🇸 ایالات متحده';
+	@override String get regionKr => '🇰🇷 کره جنوبی';
+	@override String get macMoveToApplications => 'لطفاً قبل از اجرا، Wmimo را به پوشه Applications منتقل کنید';
+	@override String get notifCurrentNode => 'سرور فعلی';
+	@override String get notifMode => 'حالت';
+	@override String get notifPort => 'پورت';
+	@override String get notifProfile => 'اشتراک';
+	@override String get notifDisconnect => 'قطع اتصال';
+	@override String get notifSwitchNode => 'تغییر سرور';
+	@override String get notifVpnConnected => 'پروکسی VPN متصل است';
 }
 
 // Path: permission
@@ -785,6 +800,9 @@ class _Translations$dns$fa implements Translations$dns$en {
 	@override String get updateAll => 'به‌روزرسانی همه';
 	@override String get updateSuccess => 'به‌روزرسانی با موفقیت انجام شد';
 	@override String get updateFailed => 'به‌روزرسانی ناموفق بود';
+	@override String get addPresetServer => 'افزودن DNS پیش‌فرض';
+	@override String manageFakeIpFilter({required Object p}) => 'مدیریت فهرست فیلترها (${p})';
+	@override String fakeIpFilterDesc({required Object p}) => '${p} قانون دامنه برای جلوگیری از مشکلات انزوای شبکه، تفکیک Fake-IP را دور می‌زنند.';
 }
 
 // Path: sniffer
@@ -1397,6 +1415,21 @@ extension on TranslationsFa {
 			'meta.invertSelection' => 'معکوس کردن انتخاب',
 			'meta.all' => 'همه',
 			'meta.showAppIcon' => 'نمایش آیکون برنامه',
+			'meta.proxySelection' => 'انتخاب پروکسی',
+			'meta.regionHk' => '🇭🇰 هنگ کنگ',
+			'meta.regionJp' => '🇯🇵 ژاپن',
+			'meta.regionSg' => '🇸🇬 سنگاپور',
+			'meta.regionTw' => '🇹🇼 تایوان',
+			'meta.regionUs' => '🇺🇸 ایالات متحده',
+			'meta.regionKr' => '🇰🇷 کره جنوبی',
+			'meta.macMoveToApplications' => 'لطفاً قبل از اجرا، Wmimo را به پوشه Applications منتقل کنید',
+			'meta.notifCurrentNode' => 'سرور فعلی',
+			'meta.notifMode' => 'حالت',
+			'meta.notifPort' => 'پورت',
+			'meta.notifProfile' => 'اشتراک',
+			'meta.notifDisconnect' => 'قطع اتصال',
+			'meta.notifSwitchNode' => 'تغییر سرور',
+			'meta.notifVpnConnected' => 'پروکسی VPN متصل است',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',
@@ -1457,6 +1490,9 @@ extension on TranslationsFa {
 			'dns.updateAll' => 'به‌روزرسانی همه',
 			'dns.updateSuccess' => 'به‌روزرسانی با موفقیت انجام شد',
 			'dns.updateFailed' => 'به‌روزرسانی ناموفق بود',
+			'dns.addPresetServer' => 'افزودن DNS پیش‌فرض',
+			'dns.manageFakeIpFilter' => ({required Object p}) => 'مدیریت فهرست فیلترها (${p})',
+			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} قانون دامنه برای جلوگیری از مشکلات انزوای شبکه، تفکیک Fake-IP را دور می‌زنند.',
 			'sniffer.overrideDest' => 'پوشش',
 			'profilePatchMode.currentSelected' => 'فعلی انتخاب شده',
 			'profilePatchMode.overwrite' => 'Overwrite داخلی',

@@ -453,7 +453,7 @@
     "searchLogsHint": " (IP, ドメイン, ルール, エラー...)",
     "offlinePreviewPrompt": "オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。",
     "manualSelect": "手動選択",
-    "autoSelect": "自動最適化",
+    "autoSelect": "自動選択",
     "speedTestGroup": "グループ速度テスト",
     "pause": "一時停止",
     "resume": "再開",
@@ -566,7 +566,22 @@
     "bypassSelectedModeDesc": "選択したアプリは直接接続し、その他はプロキシを経由します",
     "invertSelection": "選択反転",
     "all": "すべて",
-    "showAppIcon": "アプリアイコンを表示"
+    "showAppIcon": "アプリアイコンを表示",
+    "proxySelection": "プロキシ選択",
+    "regionHk": "🇭🇰 香港",
+    "regionJp": "🇯🇵 日本",
+    "regionSg": "🇸🇬 シンガポール",
+    "regionTw": "🇹🇼 台湾",
+    "regionUs": "🇺🇸 アメリカ",
+    "regionKr": "🇰🇷 韓国",
+    "macMoveToApplications": "Wmimoを「アプリケーション」フォルダに移動してから起動してください",
+    "notifCurrentNode": "現在のノード",
+    "notifMode": "動作モード",
+    "notifPort": "ポート",
+    "notifProfile": "プロファイル",
+    "notifDisconnect": "切断",
+    "notifSwitchNode": "ノード切替",
+    "notifVpnConnected": "VPN プロキシ接続中"
   },
   "permission": {
     "camera": "カメラ",
@@ -634,7 +649,10 @@
     "cdnSource": "ダウンロードCDNミラー",
     "updateAll": "すべて更新",
     "updateSuccess": "更新に成功しました",
-    "updateFailed": "更新に失敗しました"
+    "updateFailed": "更新に失敗しました",
+    "addPresetServer": "プリセットDNSを追加",
+    "manageFakeIpFilter": "フィルターリストを管理 ($p)",
+    "fakeIpFilterDesc": "$p 個のドメインルールがFake-IP解決をバイパスし、ネットワーク分離問題を回避します。"
   },
   "sniffer": {
     "overrideDest": "上書き"

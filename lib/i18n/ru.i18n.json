@@ -566,7 +566,22 @@
     "bypassSelectedModeDesc": "Выбранные приложения подключаются напрямую, остальные через прокси",
     "invertSelection": "Инвертировать",
     "all": "Все",
-    "showAppIcon": "Показывать значки приложений"
+    "showAppIcon": "Показывать значки приложений",
+    "proxySelection": "Выбор узла",
+    "regionHk": "🇭🇰 Гонконг",
+    "regionJp": "🇯🇵 Япония",
+    "regionSg": "🇸🇬 Сингапур",
+    "regionTw": "🇹🇼 Тайвань",
+    "regionUs": "🇺🇸 США",
+    "regionKr": "🇰🇷 Южная Корея",
+    "macMoveToApplications": "Пожалуйста, переместите Wmimo в папку Программы перед запуском",
+    "notifCurrentNode": "Текущий узел",
+    "notifMode": "Режим",
+    "notifPort": "Порт",
+    "notifProfile": "Профиль",
+    "notifDisconnect": "Отключить",
+    "notifSwitchNode": "Сменить узел",
+    "notifVpnConnected": "VPN-прокси подключен"
   },
   "permission": {
     "camera": "Камера",
@@ -634,7 +649,10 @@
     "cdnSource": "Зеркало CDN для загрузки",
     "updateAll": "Обновить все",
     "updateSuccess": "Обновление выполнено",
-    "updateFailed": "Ошибка обновления"
+    "updateFailed": "Ошибка обновления",
+    "addPresetServer": "Добавить предустановленный DNS",
+    "manageFakeIpFilter": "Управление списком фильтров ($p)",
+    "fakeIpFilterDesc": "$p правил доменов обходят разрешение Fake-IP во избежание проблем изоляции сети."
   },
   "sniffer": {
     "overrideDest": "Переназначить"

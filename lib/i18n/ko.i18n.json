@@ -453,7 +453,7 @@
     "searchLogsHint": " (IP, 도메인, 규칙, 오류...)",
     "offlinePreviewPrompt": "오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.",
     "manualSelect": "수동 선택",
-    "autoSelect": "자동 최적화",
+    "autoSelect": "자동 선택",
     "speedTestGroup": "그룹 속도 테스트",
     "pause": "일시 중지",
     "resume": "재개",
@@ -566,7 +566,22 @@
     "bypassSelectedModeDesc": "선택한 앱은 직접 연결하고 다른 앱은 프록시를 거칩니다",
     "invertSelection": "반전 선택",
     "all": "전체",
-    "showAppIcon": "앱 아이콘 표시"
+    "showAppIcon": "앱 아이콘 표시",
+    "proxySelection": "프록시 선택",
+    "regionHk": "🇭🇰 홍콩",
+    "regionJp": "🇯🇵 일본",
+    "regionSg": "🇸🇬 싱가포르",
+    "regionTw": "🇹🇼 대만",
+    "regionUs": "🇺🇸 미국",
+    "regionKr": "🇰🇷 한국",
+    "macMoveToApplications": "Wmimo를 [응용 프로그램] 폴더로 이동한 후 실행해 주세요",
+    "notifCurrentNode": "현재 노드",
+    "notifMode": "동작 모드",
+    "notifPort": "포트",
+    "notifProfile": "구독 프로필",
+    "notifDisconnect": "연결 끊기",
+    "notifSwitchNode": "노드 전환",
+    "notifVpnConnected": "VPN 프록시 연결됨"
   },
   "permission": {
     "camera": "카메라",
@@ -634,7 +649,10 @@
     "cdnSource": "다운로드 CDN 미러",
     "updateAll": "모두 업데이트",
     "updateSuccess": "업데이트 성공",
-    "updateFailed": "업데이트 실패"
+    "updateFailed": "업데이트 실패",
+    "addPresetServer": "프리셋 DNS 추가",
+    "manageFakeIpFilter": "필터 목록 관리 ($p)",
+    "fakeIpFilterDesc": "$p개의 도메인 규칙이 네트워크 격리 문제를 방지하기 위해 Fake-IP 확인을 우회합니다."
   },
   "sniffer": {
     "overrideDest": "덮어쓰기"

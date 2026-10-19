@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wmimo</string>
+    <string name="tile_connected">متصل شد</string>
+    <string name="tile_disconnected">قطع شد</string>
+    <string name="tile_unavailable">پیکربندی نشده</string>
+    <string name="notif_connected">متصل شد</string>
+    <string name="notif_vpn_connected">پروکسی VPN متصل است</string>
+    <string name="notif_action_disconnect">قطع اتصال</string>
+    <string name="notif_action_switch_node">تغییر سرور</string>
+    <string name="notif_label_current_node">سرور فعلی</string>
+    <string name="notif_label_mode">حالت</string>
+    <string name="notif_label_port">پورت</string>
+    <string name="notif_label_profile">اشتراک</string>
+</resources>

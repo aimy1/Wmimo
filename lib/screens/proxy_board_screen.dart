@@ -705,15 +705,15 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     if (!hasLeafNodesInGroups && leafNodes.isNotEmpty) {
       final List<ClashProxiesNode> synthesizedGroups = [];
 
-      final isZh = LocaleSettings.currentLocale.languageCode.startsWith('zh');
-      final selName = isZh ? "节点选择" : "Proxy Selection";
-      final autoName = isZh ? "自动选择" : "Auto Select";
-      final hkName = isZh ? "🇭🇰 香港节点" : "🇭🇰 Hong Kong";
-      final jpName = isZh ? "🇯🇵 日本节点" : "🇯🇵 Japan";
-      final sgName = isZh ? "🇸🇬 新加坡节点" : "🇸🇬 Singapore";
-      final twName = isZh ? "🇹🇼 台湾节点" : "🇹🇼 Taiwan";
-      final usName = isZh ? "🇺🇸 美国节点" : "🇺🇸 United States";
-      final krName = isZh ? "🇰🇷 韩国节点" : "🇰🇷 South Korea";
+      final t = Translations.of(context);
+      final selName = t.meta.proxySelection;
+      final autoName = t.meta.autoSelect;
+      final hkName = t.meta.regionHk;
+      final jpName = t.meta.regionJp;
+      final sgName = t.meta.regionSg;
+      final twName = t.meta.regionTw;
+      final usName = t.meta.regionUs;
+      final krName = t.meta.regionKr;
 
       // 1. Selector Group
       synthesizedGroups.add(

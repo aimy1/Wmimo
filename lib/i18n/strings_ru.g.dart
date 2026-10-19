@@ -689,6 +689,21 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get invertSelection => 'Инвертировать';
 	@override String get all => 'Все';
 	@override String get showAppIcon => 'Показывать значки приложений';
+	@override String get proxySelection => 'Выбор узла';
+	@override String get regionHk => '🇭🇰 Гонконг';
+	@override String get regionJp => '🇯🇵 Япония';
+	@override String get regionSg => '🇸🇬 Сингапур';
+	@override String get regionTw => '🇹🇼 Тайвань';
+	@override String get regionUs => '🇺🇸 США';
+	@override String get regionKr => '🇰🇷 Южная Корея';
+	@override String get macMoveToApplications => 'Пожалуйста, переместите Wmimo в папку Программы перед запуском';
+	@override String get notifCurrentNode => 'Текущий узел';
+	@override String get notifMode => 'Режим';
+	@override String get notifPort => 'Порт';
+	@override String get notifProfile => 'Профиль';
+	@override String get notifDisconnect => 'Отключить';
+	@override String get notifSwitchNode => 'Сменить узел';
+	@override String get notifVpnConnected => 'VPN-прокси подключен';
 }
 
 // Path: permission
@@ -785,6 +800,9 @@ class _Translations$dns$ru implements Translations$dns$en {
 	@override String get updateAll => 'Обновить все';
 	@override String get updateSuccess => 'Обновление выполнено';
 	@override String get updateFailed => 'Ошибка обновления';
+	@override String get addPresetServer => 'Добавить предустановленный DNS';
+	@override String manageFakeIpFilter({required Object p}) => 'Управление списком фильтров (${p})';
+	@override String fakeIpFilterDesc({required Object p}) => '${p} правил доменов обходят разрешение Fake-IP во избежание проблем изоляции сети.';
 }
 
 // Path: sniffer
@@ -1397,6 +1415,21 @@ extension on TranslationsRu {
 			'meta.invertSelection' => 'Инвертировать',
 			'meta.all' => 'Все',
 			'meta.showAppIcon' => 'Показывать значки приложений',
+			'meta.proxySelection' => 'Выбор узла',
+			'meta.regionHk' => '🇭🇰 Гонконг',
+			'meta.regionJp' => '🇯🇵 Япония',
+			'meta.regionSg' => '🇸🇬 Сингапур',
+			'meta.regionTw' => '🇹🇼 Тайвань',
+			'meta.regionUs' => '🇺🇸 США',
+			'meta.regionKr' => '🇰🇷 Южная Корея',
+			'meta.macMoveToApplications' => 'Пожалуйста, переместите Wmimo в папку Программы перед запуском',
+			'meta.notifCurrentNode' => 'Текущий узел',
+			'meta.notifMode' => 'Режим',
+			'meta.notifPort' => 'Порт',
+			'meta.notifProfile' => 'Профиль',
+			'meta.notifDisconnect' => 'Отключить',
+			'meta.notifSwitchNode' => 'Сменить узел',
+			'meta.notifVpnConnected' => 'VPN-прокси подключен',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',
@@ -1457,6 +1490,9 @@ extension on TranslationsRu {
 			'dns.updateAll' => 'Обновить все',
 			'dns.updateSuccess' => 'Обновление выполнено',
 			'dns.updateFailed' => 'Ошибка обновления',
+			'dns.addPresetServer' => 'Добавить предустановленный DNS',
+			'dns.manageFakeIpFilter' => ({required Object p}) => 'Управление списком фильтров (${p})',
+			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} правил доменов обходят разрешение Fake-IP во избежание проблем изоляции сети.',
 			'sniffer.overrideDest' => 'Переназначить',
 			'profilePatchMode.currentSelected' => 'Текущий сервер',
 			'profilePatchMode.overwrite' => 'Встроенная функция переопределения',

@@ -103,7 +103,7 @@ Future<void> run(List<String> args) async {
         if (Platform.isMacOS) {
           if (exePath.startsWith("/Volumes/")) {
             startFailedReason = StartFailedReason.invalidInstallPath;
-            startFailedReasonDesc = "请先将 Wmimo 拖入【应用程序】(Applications) 文件夹后再打开运行";
+            startFailedReasonDesc = t.meta.macMoveToApplications;
             break;
           }
         }

@@ -4,4 +4,12 @@
     <string name="tile_connected">已連線</string>
     <string name="tile_disconnected">未連線</string>
     <string name="tile_unavailable">未設定</string>
+    <string name="notif_connected">已連線</string>
+    <string name="notif_vpn_connected">VPN 代理已連線</string>
+    <string name="notif_action_disconnect">中斷連線</string>
+    <string name="notif_action_switch_node">切換節點</string>
+    <string name="notif_label_current_node">目前節點</string>
+    <string name="notif_label_mode">運行模式</string>
+    <string name="notif_label_port">埠號</string>
+    <string name="notif_label_profile">配置訂閱</string>
 </resources>

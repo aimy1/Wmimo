@@ -613,7 +613,7 @@ class _DnsSettingsScreenState extends LasyRenderingState<DnsSettingsScreen> {
             ),
             IconButton(
               icon: const Icon(Icons.playlist_add, color: Colors.blue),
-              tooltip: "Add Preset Server",
+              tooltip: Translations.of(context).dns.addPresetServer,
               onPressed: () => _showAddPresetServerDialog(servers, title),
             ),
             const Icon(Icons.chevron_right, color: Colors.grey),
@@ -667,7 +667,7 @@ class _DnsSettingsScreenState extends LasyRenderingState<DnsSettingsScreen> {
               ],
             ),
             Text(
-              "${dns.FakeIPFilter!.length} domain rules bypass Fake-IP resolution to avoid network isolation issues.",
+              tcontext.dns.fakeIpFilterDesc(p: dns.FakeIPFilter!.length.toString()),
               style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
             ),
             const SizedBox(height: 10),
@@ -677,7 +677,7 @@ class _DnsSettingsScreenState extends LasyRenderingState<DnsSettingsScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
               icon: const Icon(Icons.edit_note, size: 20),
-              label: Text("Manage Filter List (${dns.FakeIPFilter!.length})"),
+              label: Text(tcontext.dns.manageFakeIpFilter(p: dns.FakeIPFilter!.length.toString())),
               onPressed: () async {
                 await Navigator.push(
                   context,

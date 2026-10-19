@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wmimo</string>
+    <string name="tile_connected">متصل</string>
+    <string name="tile_disconnected">غير متصل</string>
+    <string name="tile_unavailable">غير مهيأ</string>
+    <string name="notif_connected">متصل</string>
+    <string name="notif_vpn_connected">بروكسي VPN متصل</string>
+    <string name="notif_action_disconnect">قطع الاتصال</string>
+    <string name="notif_action_switch_node">تبديل الخادم</string>
+    <string name="notif_label_current_node">الخادم الحالي</string>
+    <string name="notif_label_mode">الوضع</string>
+    <string name="notif_label_port">المنفذ</string>
+    <string name="notif_label_profile">الملف الشخصي</string>
+</resources>

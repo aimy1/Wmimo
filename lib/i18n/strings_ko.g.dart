@@ -575,7 +575,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get searchLogsHint => ' (IP, 도메인, 규칙, 오류...)';
 	@override String get offlinePreviewPrompt => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.';
 	@override String get manualSelect => '수동 선택';
-	@override String get autoSelect => '자동 최적화';
+	@override String get autoSelect => '자동 선택';
 	@override String get speedTestGroup => '그룹 속도 테스트';
 	@override String get pause => '일시 중지';
 	@override String get resume => '재개';
@@ -689,6 +689,21 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get invertSelection => '반전 선택';
 	@override String get all => '전체';
 	@override String get showAppIcon => '앱 아이콘 표시';
+	@override String get proxySelection => '프록시 선택';
+	@override String get regionHk => '🇭🇰 홍콩';
+	@override String get regionJp => '🇯🇵 일본';
+	@override String get regionSg => '🇸🇬 싱가포르';
+	@override String get regionTw => '🇹🇼 대만';
+	@override String get regionUs => '🇺🇸 미국';
+	@override String get regionKr => '🇰🇷 한국';
+	@override String get macMoveToApplications => 'Wmimo를 [응용 프로그램] 폴더로 이동한 후 실행해 주세요';
+	@override String get notifCurrentNode => '현재 노드';
+	@override String get notifMode => '동작 모드';
+	@override String get notifPort => '포트';
+	@override String get notifProfile => '구독 프로필';
+	@override String get notifDisconnect => '연결 끊기';
+	@override String get notifSwitchNode => '노드 전환';
+	@override String get notifVpnConnected => 'VPN 프록시 연결됨';
 }
 
 // Path: permission
@@ -785,6 +800,9 @@ class _Translations$dns$ko implements Translations$dns$en {
 	@override String get updateAll => '모두 업데이트';
 	@override String get updateSuccess => '업데이트 성공';
 	@override String get updateFailed => '업데이트 실패';
+	@override String get addPresetServer => '프리셋 DNS 추가';
+	@override String manageFakeIpFilter({required Object p}) => '필터 목록 관리 (${p})';
+	@override String fakeIpFilterDesc({required Object p}) => '${p}개의 도메인 규칙이 네트워크 격리 문제를 방지하기 위해 Fake-IP 확인을 우회합니다.';
 }
 
 // Path: sniffer
@@ -1281,7 +1299,7 @@ extension on TranslationsKo {
 			'meta.searchLogsHint' => ' (IP, 도메인, 규칙, 오류...)',
 			'meta.offlinePreviewPrompt' => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.',
 			'meta.manualSelect' => '수동 선택',
-			'meta.autoSelect' => '자동 최적화',
+			'meta.autoSelect' => '자동 선택',
 			'meta.speedTestGroup' => '그룹 속도 테스트',
 			'meta.pause' => '일시 중지',
 			'meta.resume' => '재개',
@@ -1397,6 +1415,21 @@ extension on TranslationsKo {
 			'meta.invertSelection' => '반전 선택',
 			'meta.all' => '전체',
 			'meta.showAppIcon' => '앱 아이콘 표시',
+			'meta.proxySelection' => '프록시 선택',
+			'meta.regionHk' => '🇭🇰 홍콩',
+			'meta.regionJp' => '🇯🇵 일본',
+			'meta.regionSg' => '🇸🇬 싱가포르',
+			'meta.regionTw' => '🇹🇼 대만',
+			'meta.regionUs' => '🇺🇸 미국',
+			'meta.regionKr' => '🇰🇷 한국',
+			'meta.macMoveToApplications' => 'Wmimo를 [응용 프로그램] 폴더로 이동한 후 실행해 주세요',
+			'meta.notifCurrentNode' => '현재 노드',
+			'meta.notifMode' => '동작 모드',
+			'meta.notifPort' => '포트',
+			'meta.notifProfile' => '구독 프로필',
+			'meta.notifDisconnect' => '연결 끊기',
+			'meta.notifSwitchNode' => '노드 전환',
+			'meta.notifVpnConnected' => 'VPN 프록시 연결됨',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',
@@ -1457,6 +1490,9 @@ extension on TranslationsKo {
 			'dns.updateAll' => '모두 업데이트',
 			'dns.updateSuccess' => '업데이트 성공',
 			'dns.updateFailed' => '업데이트 실패',
+			'dns.addPresetServer' => '프리셋 DNS 추가',
+			'dns.manageFakeIpFilter' => ({required Object p}) => '필터 목록 관리 (${p})',
+			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p}개의 도메인 규칙이 네트워크 격리 문제를 방지하기 위해 Fake-IP 확인을 우회합니다.',
 			'sniffer.overrideDest' => '덮어쓰기',
 			'profilePatchMode.currentSelected' => '현재 선택됨',
 			'profilePatchMode.overwrite' => '내장 - 덮어쓰기',

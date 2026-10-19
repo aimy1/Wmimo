@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wmimo</string>
+    <string name="tile_connected">接続済み</string>
+    <string name="tile_disconnected">未接続</string>
+    <string name="tile_unavailable">未設定</string>
+    <string name="notif_connected">接続済み</string>
+    <string name="notif_vpn_connected">VPN プロキシ接続中</string>
+    <string name="notif_action_disconnect">切断</string>
+    <string name="notif_action_switch_node">ノード切替</string>
+    <string name="notif_label_current_node">現在のノード</string>
+    <string name="notif_label_mode">動作モード</string>
+    <string name="notif_label_port">ポート</string>
+    <string name="notif_label_profile">プロファイル</string>
+</resources>

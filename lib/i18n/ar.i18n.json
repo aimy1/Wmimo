@@ -566,7 +566,22 @@
     "bypassSelectedModeDesc": "تتصل التطبيقات المحددة مباشرة، والباقي يمر عبر الوكيل",
     "invertSelection": "عكس التحديد",
     "all": "الكل",
-    "showAppIcon": "إظهار أيقونة التطبيق"
+    "showAppIcon": "إظهار أيقونة التطبيق",
+    "proxySelection": "اختيار البروكسي",
+    "regionHk": "🇭🇰 هونغ كونغ",
+    "regionJp": "🇯🇵 اليابان",
+    "regionSg": "🇸🇬 سنغافورة",
+    "regionTw": "🇹🇼 تايوان",
+    "regionUs": "🇺🇸 الولايات المتحدة",
+    "regionKr": "🇰🇷 كوريا الجنوبية",
+    "macMoveToApplications": "يرجى نقل Wmimo إلى مجلد التطبيقات قبل التشغيل",
+    "notifCurrentNode": "الخادم الحالي",
+    "notifMode": "الوضع",
+    "notifPort": "المنفذ",
+    "notifProfile": "الملف الشخصي",
+    "notifDisconnect": "قطع الاتصال",
+    "notifSwitchNode": "تبديل الخادم",
+    "notifVpnConnected": "بروكسي VPN متصل"
   },
   "permission": {
     "camera": "الكاميرا",
@@ -634,7 +649,10 @@
     "cdnSource": "مرآة CDN للتنزيل",
     "updateAll": "تحديث الكل",
     "updateSuccess": "نجح التحديث",
-    "updateFailed": "فشل التحديث"
+    "updateFailed": "فشل التحديث",
+    "addPresetServer": "إضافة DNS محدد مسبقًا",
+    "manageFakeIpFilter": "إدارة قائمة التصفية ($p)",
+    "fakeIpFilterDesc": "$p قواعد نطاق تتجاوز تحليل Fake-IP لتجنب مشكلات العزل في الشبكة."
   },
   "sniffer": {
     "overrideDest": "غطاء"

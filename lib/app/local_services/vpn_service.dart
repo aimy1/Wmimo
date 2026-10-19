@@ -30,6 +30,7 @@ import 'package:libclash_vpn_service/vpn_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/services.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 
 class VPNServiceSetServerOptions {
   String disabledServerError = "";
@@ -482,12 +483,7 @@ class VPNService {
             ? curProfile.remark
             : (curProfile?.url.isNotEmpty == true ? curProfile!.url : (curProfile?.id ?? ""));
         final cfgMode = ClashSettingManager.getConfigsMode();
-        String m = "规则分流";
-        if (cfgMode == ClashConfigsMode.global) {
-          m = "全局代理";
-        } else if (cfgMode == ClashConfigsMode.direct) {
-          m = "直接连接";
-        }
+        final m = getLocalizedModeName(cfgMode);
 
         String n = "";
         try {
@@ -496,7 +492,11 @@ class VPNService {
           ClashProxiesNode? sel;
           for (var g in groups) {
             final upper = g.name.toUpperCase();
-            if (upper == "PROXY" || upper == "PROXIES" || g.name == "节点选择" || g.name == "節點選擇") {
+            if (upper == "PROXY" ||
+                upper == "PROXIES" ||
+                g.name == "节点选择" ||
+                g.name == "節點選擇" ||
+                g.name == t.meta.proxySelection) {
               sel = g;
               break;
             }
@@ -521,7 +521,7 @@ class VPNService {
         await stop();
         final msg = result.err?.message.isNotEmpty == true
             ? result.err!.message
-            : "服务启动超时";
+            : t.meta.connectTimeout;
         return ReturnResultError(msg);
       }
 
@@ -602,13 +602,7 @@ class VPNService {
 
     if (m == null || m.isEmpty) {
       final cfgMode = ClashSettingManager.getConfigsMode();
-      if (cfgMode == ClashConfigsMode.global) {
-        m = "全局代理";
-      } else if (cfgMode == ClashConfigsMode.direct) {
-        m = "直接连接";
-      } else {
-        m = "规则分流";
-      }
+      m = getLocalizedModeName(cfgMode);
     }
 
     if (n == null || n.isEmpty) {
@@ -618,7 +612,11 @@ class VPNService {
         ClashProxiesNode? sel;
         for (var g in groups) {
           final upper = g.name.toUpperCase();
-          if (upper == "PROXY" || upper == "PROXIES" || g.name == "节点选择" || g.name == "節點選擇") {
+          if (upper == "PROXY" ||
+              upper == "PROXIES" ||
+              g.name == "节点选择" ||
+              g.name == "節點選擇" ||
+              g.name == t.meta.proxySelection) {
             sel = g;
             break;
           }
@@ -635,6 +633,17 @@ class VPNService {
       mode: m,
       profileName: pName,
     );
+  }
+
+  static String getLocalizedModeName(ClashConfigsMode mode) {
+    switch (mode) {
+      case ClashConfigsMode.global:
+        return t.main.tray.modeGlobal;
+      case ClashConfigsMode.direct:
+        return t.main.tray.modeDirect;
+      case ClashConfigsMode.rule:
+        return t.main.tray.modeRule;
+    }
   }
 
   static bool getSupportSystemProxy() {

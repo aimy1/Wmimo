@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wmimo</string>
+    <string name="tile_connected">Подключено</string>
+    <string name="tile_disconnected">Отключено</string>
+    <string name="tile_unavailable">Не настроено</string>
+    <string name="notif_connected">Подключено</string>
+    <string name="notif_vpn_connected">VPN-прокси подключен</string>
+    <string name="notif_action_disconnect">Отключить</string>
+    <string name="notif_action_switch_node">Сменить узел</string>
+    <string name="notif_label_current_node">Текущий узел</string>
+    <string name="notif_label_mode">Режим</string>
+    <string name="notif_label_port">Порт</string>
+    <string name="notif_label_profile">Профиль</string>
+</resources>

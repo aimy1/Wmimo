@@ -689,6 +689,21 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get invertSelection => 'Invertir selección';
 	@override String get all => 'Todo';
 	@override String get showAppIcon => 'Mostrar icono de aplicación';
+	@override String get proxySelection => 'Selección de proxy';
+	@override String get regionHk => '🇭🇰 Hong Kong';
+	@override String get regionJp => '🇯🇵 Japón';
+	@override String get regionSg => '🇸🇬 Singapur';
+	@override String get regionTw => '🇹🇼 Taiwán';
+	@override String get regionUs => '🇺🇸 Estados Unidos';
+	@override String get regionKr => '🇰🇷 Corea del Sur';
+	@override String get macMoveToApplications => 'Por favor mueva Wmimo a la carpeta Aplicaciones antes de iniciar';
+	@override String get notifCurrentNode => 'Nodo actual';
+	@override String get notifMode => 'Modo';
+	@override String get notifPort => 'Puerto';
+	@override String get notifProfile => 'Perfil';
+	@override String get notifDisconnect => 'Desconectar';
+	@override String get notifSwitchNode => 'Cambiar nodo';
+	@override String get notifVpnConnected => 'Proxy VPN conectado';
 }
 
 // Path: permission
@@ -785,6 +800,9 @@ class _Translations$dns$es implements Translations$dns$en {
 	@override String get updateAll => 'Actualizar todo';
 	@override String get updateSuccess => 'Actualización exitosa';
 	@override String get updateFailed => 'Error al actualizar';
+	@override String get addPresetServer => 'Añadir DNS preestablecido';
+	@override String manageFakeIpFilter({required Object p}) => 'Gestionar lista de filtros (${p})';
+	@override String fakeIpFilterDesc({required Object p}) => '${p} reglas de dominio omiten la resolución Fake-IP para evitar problemas de aislamiento de red.';
 }
 
 // Path: sniffer
@@ -1397,6 +1415,21 @@ extension on TranslationsEs {
 			'meta.invertSelection' => 'Invertir selección',
 			'meta.all' => 'Todo',
 			'meta.showAppIcon' => 'Mostrar icono de aplicación',
+			'meta.proxySelection' => 'Selección de proxy',
+			'meta.regionHk' => '🇭🇰 Hong Kong',
+			'meta.regionJp' => '🇯🇵 Japón',
+			'meta.regionSg' => '🇸🇬 Singapur',
+			'meta.regionTw' => '🇹🇼 Taiwán',
+			'meta.regionUs' => '🇺🇸 Estados Unidos',
+			'meta.regionKr' => '🇰🇷 Corea del Sur',
+			'meta.macMoveToApplications' => 'Por favor mueva Wmimo a la carpeta Aplicaciones antes de iniciar',
+			'meta.notifCurrentNode' => 'Nodo actual',
+			'meta.notifMode' => 'Modo',
+			'meta.notifPort' => 'Puerto',
+			'meta.notifProfile' => 'Perfil',
+			'meta.notifDisconnect' => 'Desconectar',
+			'meta.notifSwitchNode' => 'Cambiar nodo',
+			'meta.notifVpnConnected' => 'Proxy VPN conectado',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',
@@ -1457,6 +1490,9 @@ extension on TranslationsEs {
 			'dns.updateAll' => 'Actualizar todo',
 			'dns.updateSuccess' => 'Actualización exitosa',
 			'dns.updateFailed' => 'Error al actualizar',
+			'dns.addPresetServer' => 'Añadir DNS preestablecido',
+			'dns.manageFakeIpFilter' => ({required Object p}) => 'Gestionar lista de filtros (${p})',
+			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} reglas de dominio omiten la resolución Fake-IP para evitar problemas de aislamiento de red.',
 			'sniffer.overrideDest' => 'Sobrescribir',
 			'profilePatchMode.currentSelected' => 'Seleccionado Actual',
 			'profilePatchMode.overwrite' => 'Sobrescritura Integrada',

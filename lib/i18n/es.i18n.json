@@ -566,7 +566,22 @@
     "bypassSelectedModeDesc": "Las apps seleccionadas van directas, las demás usan proxy",
     "invertSelection": "Invertir selección",
     "all": "Todo",
-    "showAppIcon": "Mostrar icono de aplicación"
+    "showAppIcon": "Mostrar icono de aplicación",
+    "proxySelection": "Selección de proxy",
+    "regionHk": "🇭🇰 Hong Kong",
+    "regionJp": "🇯🇵 Japón",
+    "regionSg": "🇸🇬 Singapur",
+    "regionTw": "🇹🇼 Taiwán",
+    "regionUs": "🇺🇸 Estados Unidos",
+    "regionKr": "🇰🇷 Corea del Sur",
+    "macMoveToApplications": "Por favor mueva Wmimo a la carpeta Aplicaciones antes de iniciar",
+    "notifCurrentNode": "Nodo actual",
+    "notifMode": "Modo",
+    "notifPort": "Puerto",
+    "notifProfile": "Perfil",
+    "notifDisconnect": "Desconectar",
+    "notifSwitchNode": "Cambiar nodo",
+    "notifVpnConnected": "Proxy VPN conectado"
   },
   "permission": {
     "camera": "Cámara",
@@ -634,7 +649,10 @@
     "cdnSource": "Espejo CDN de descarga",
     "updateAll": "Actualizar todo",
     "updateSuccess": "Actualización exitosa",
-    "updateFailed": "Error al actualizar"
+    "updateFailed": "Error al actualizar",
+    "addPresetServer": "Añadir DNS preestablecido",
+    "manageFakeIpFilter": "Gestionar lista de filtros ($p)",
+    "fakeIpFilterDesc": "$p reglas de dominio omiten la resolución Fake-IP para evitar problemas de aislamiento de red."
   },
   "sniffer": {
     "overrideDest": "Sobrescribir"

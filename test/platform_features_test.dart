@@ -124,6 +124,20 @@ void main() {
         expect(t.meta.selectAll.isNotEmpty, isTrue);
         expect(t.meta.deselectAll.isNotEmpty, isTrue);
         expect(t.meta.invertSelection.isNotEmpty, isTrue);
+        expect(t.dns.addPresetServer.isNotEmpty, isTrue);
+        expect(t.dns.manageFakeIpFilter(p: '10').isNotEmpty, isTrue);
+        expect(t.dns.fakeIpFilterDesc(p: '10').isNotEmpty, isTrue);
+        expect(t.meta.proxySelection.isNotEmpty, isTrue);
+        expect(t.meta.autoSelect.isNotEmpty, isTrue);
+        expect(t.meta.regionHk.isNotEmpty, isTrue);
+        expect(t.meta.macMoveToApplications.isNotEmpty, isTrue);
+        expect(t.meta.notifCurrentNode.isNotEmpty, isTrue);
+        expect(t.meta.notifMode.isNotEmpty, isTrue);
+        expect(t.meta.notifPort.isNotEmpty, isTrue);
+        expect(t.meta.notifProfile.isNotEmpty, isTrue);
+        expect(t.meta.notifDisconnect.isNotEmpty, isTrue);
+        expect(t.meta.notifSwitchNode.isNotEmpty, isTrue);
+        expect(t.meta.notifVpnConnected.isNotEmpty, isTrue);
       }
     });
   });

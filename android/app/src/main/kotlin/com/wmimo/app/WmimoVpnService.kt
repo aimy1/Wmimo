@@ -107,6 +107,15 @@ class WmimoVpnService : VpnService() {
             )
         } else null
 
+        val strConnected = getString(R.string.notif_connected)
+        val strVpnConnected = getString(R.string.notif_vpn_connected)
+        val strDisconnect = getString(R.string.notif_action_disconnect)
+        val strSwitchNode = getString(R.string.notif_action_switch_node)
+        val lblNode = getString(R.string.notif_label_current_node)
+        val lblMode = getString(R.string.notif_label_mode)
+        val lblPort = getString(R.string.notif_label_port)
+        val lblProfile = getString(R.string.notif_label_profile)
+
         val title = if (currentNodeName.isNotEmpty()) {
             "Wmimo · $currentNodeName"
         } else {
@@ -119,27 +128,27 @@ class WmimoVpnService : VpnService() {
                 if (isNotEmpty()) append(" · ")
                 append(currentProfileName)
             }
-            if (isEmpty()) append("VPN 代理已连接")
+            if (isEmpty()) append(strVpnConnected)
         }
 
         val bigText = buildString {
-            if (currentNodeName.isNotEmpty()) append("当前节点: $currentNodeName\n")
-            if (currentMode.isNotEmpty()) append("运行模式: $currentMode · 端口: $mixedPort\n")
-            if (currentProfileName.isNotEmpty()) append("配置订阅: $currentProfileName")
+            if (currentNodeName.isNotEmpty()) append("$lblNode: $currentNodeName\n")
+            if (currentMode.isNotEmpty()) append("$lblMode: $currentMode · $lblPort: $mixedPort\n")
+            if (currentProfileName.isNotEmpty()) append("$lblProfile: $currentProfileName")
         }.trim()
 
         val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(content)
-            .setSubText("已连接")
+            .setSubText(strConnected)
             .setSmallIcon(R.drawable.ic_statusbar)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
-            .addAction(0, "断开连接", stopPendingIntent)
+            .addAction(0, strDisconnect, stopPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
 
         if (switchNodePendingIntent != null) {
-            builder.addAction(0, "切换节点", switchNodePendingIntent)
+            builder.addAction(0, strSwitchNode, switchNodePendingIntent)
         }
 
         if (bigText.isNotEmpty()) {

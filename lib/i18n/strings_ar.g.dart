@@ -689,6 +689,21 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get invertSelection => 'عكس التحديد';
 	@override String get all => 'الكل';
 	@override String get showAppIcon => 'إظهار أيقونة التطبيق';
+	@override String get proxySelection => 'اختيار البروكسي';
+	@override String get regionHk => '🇭🇰 هونغ كونغ';
+	@override String get regionJp => '🇯🇵 اليابان';
+	@override String get regionSg => '🇸🇬 سنغافورة';
+	@override String get regionTw => '🇹🇼 تايوان';
+	@override String get regionUs => '🇺🇸 الولايات المتحدة';
+	@override String get regionKr => '🇰🇷 كوريا الجنوبية';
+	@override String get macMoveToApplications => 'يرجى نقل Wmimo إلى مجلد التطبيقات قبل التشغيل';
+	@override String get notifCurrentNode => 'الخادم الحالي';
+	@override String get notifMode => 'الوضع';
+	@override String get notifPort => 'المنفذ';
+	@override String get notifProfile => 'الملف الشخصي';
+	@override String get notifDisconnect => 'قطع الاتصال';
+	@override String get notifSwitchNode => 'تبديل الخادم';
+	@override String get notifVpnConnected => 'بروكسي VPN متصل';
 }
 
 // Path: permission
@@ -785,6 +800,9 @@ class _Translations$dns$ar implements Translations$dns$en {
 	@override String get updateAll => 'تحديث الكل';
 	@override String get updateSuccess => 'نجح التحديث';
 	@override String get updateFailed => 'فشل التحديث';
+	@override String get addPresetServer => 'إضافة DNS محدد مسبقًا';
+	@override String manageFakeIpFilter({required Object p}) => 'إدارة قائمة التصفية (${p})';
+	@override String fakeIpFilterDesc({required Object p}) => '${p} قواعد نطاق تتجاوز تحليل Fake-IP لتجنب مشكلات العزل في الشبكة.';
 }
 
 // Path: sniffer
@@ -1397,6 +1415,21 @@ extension on TranslationsAr {
 			'meta.invertSelection' => 'عكس التحديد',
 			'meta.all' => 'الكل',
 			'meta.showAppIcon' => 'إظهار أيقونة التطبيق',
+			'meta.proxySelection' => 'اختيار البروكسي',
+			'meta.regionHk' => '🇭🇰 هونغ كونغ',
+			'meta.regionJp' => '🇯🇵 اليابان',
+			'meta.regionSg' => '🇸🇬 سنغافورة',
+			'meta.regionTw' => '🇹🇼 تايوان',
+			'meta.regionUs' => '🇺🇸 الولايات المتحدة',
+			'meta.regionKr' => '🇰🇷 كوريا الجنوبية',
+			'meta.macMoveToApplications' => 'يرجى نقل Wmimo إلى مجلد التطبيقات قبل التشغيل',
+			'meta.notifCurrentNode' => 'الخادم الحالي',
+			'meta.notifMode' => 'الوضع',
+			'meta.notifPort' => 'المنفذ',
+			'meta.notifProfile' => 'الملف الشخصي',
+			'meta.notifDisconnect' => 'قطع الاتصال',
+			'meta.notifSwitchNode' => 'تبديل الخادم',
+			'meta.notifVpnConnected' => 'بروكسي VPN متصل',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',
@@ -1457,6 +1490,9 @@ extension on TranslationsAr {
 			'dns.updateAll' => 'تحديث الكل',
 			'dns.updateSuccess' => 'نجح التحديث',
 			'dns.updateFailed' => 'فشل التحديث',
+			'dns.addPresetServer' => 'إضافة DNS محدد مسبقًا',
+			'dns.manageFakeIpFilter' => ({required Object p}) => 'إدارة قائمة التصفية (${p})',
+			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} قواعد نطاق تتجاوز تحليل Fake-IP لتجنب مشكلات العزل في الشبكة.',
 			'sniffer.overrideDest' => 'غطاء',
 			'profilePatchMode.currentSelected' => 'المحدد الحالي',
 			'profilePatchMode.overwrite' => 'التجاوز المدمج',
