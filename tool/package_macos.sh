@@ -23,7 +23,7 @@ if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
       TAG="v${PUBSPEC_VER}"
     fi
   else
-    TAG="v1.2.7.1509"
+    TAG="v1.2.8.1510"
   fi
 fi
 
