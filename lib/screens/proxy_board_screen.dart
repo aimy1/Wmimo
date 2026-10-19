@@ -103,6 +103,25 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   String _currentMode = "rule"; // rule, global, direct
   final Set<String> _nodesTesting = {};
   final Map<String, bool> _groupExpanded = {};
+  Timer? _debounceFetchTimer;
+  bool _isFetchingProxies = false;
+  bool _hasPendingFetch = false;
+
+  void _debouncedFetchProxies({
+    Duration delay = const Duration(milliseconds: 300),
+    bool showLoading = false,
+  }) {
+    if (showLoading && _allNodes.isEmpty && mounted) {
+      setState(() {
+        _loading = true;
+      });
+    }
+    _debounceFetchTimer?.cancel();
+    _debounceFetchTimer = Timer(delay, () async {
+      if (!mounted) return;
+      await _fetchProxies(showLoadingIndicator: showLoading);
+    });
+  }
 
   @override
   void initState() {
@@ -133,6 +152,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   @override
   void dispose() {
+    _debounceFetchTimer?.cancel();
     VPNService.onEventStateChanged.remove(_onVpnStateChanged);
     ProfileManager.onEventCurrentChanged.remove(_onProfileChanged);
     ProfileManager.onEventAdd.remove(_onProfileChanged);
@@ -146,27 +166,27 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     super.dispose();
   }
 
-  Future<void> _onProfileUpdate(String id, bool finish) async {
+  void _onProfileUpdate(String id, bool finish) {
     if (finish && mounted) {
-      await Future.delayed(const Duration(milliseconds: 200));
-      await _fetchProxies();
+      _debouncedFetchProxies();
     }
   }
 
-  Future<void> _onVpnStateChanged(
+  void _onVpnStateChanged(
     FlutterVpnServiceState state,
     Map<String, String> params,
-  ) async {
+  ) {
     if (!mounted) return;
-    _isVpnStarted = state == FlutterVpnServiceState.connected;
-    await Future.delayed(const Duration(milliseconds: 300));
-    await _fetchProxies();
+    final isConnected = state == FlutterVpnServiceState.connected;
+    if (_isVpnStarted != isConnected) {
+      _isVpnStarted = isConnected;
+      _debouncedFetchProxies(delay: const Duration(milliseconds: 350));
+    }
   }
 
-  Future<void> _onProfileChanged(String id) async {
+  void _onProfileChanged(String id) {
     if (mounted) {
-      await Future.delayed(const Duration(milliseconds: 200));
-      await _fetchProxies();
+      _debouncedFetchProxies();
     }
   }
 
@@ -206,62 +226,70 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     return true;
   }
 
-  Future<void> _fetchProxies() async {
-    if (mounted) {
+  Future<void> _fetchProxies({bool showLoadingIndicator = false}) async {
+    if (_isFetchingProxies) {
+      _hasPendingFetch = true;
+      return;
+    }
+    _isFetchingProxies = true;
+    _hasPendingFetch = false;
+
+    if ((_allNodes.isEmpty || showLoadingIndicator) && mounted) {
       setState(() {
         _loading = true;
       });
     }
 
-    // Keep existing delays so they don't get wiped upon fetching
-    final existingDelays = <String, int?>{
-      for (var n in _allNodes)
-        if (n.delay != null) n.name: n.delay,
-    };
+    try {
+      final existingDelays = <String, int?>{
+        for (var n in _allNodes)
+          if (n.delay != null) n.name: n.delay,
+      };
 
-    final started = await VPNService.getStarted();
-    _isVpnStarted = started;
+      final started = await VPNService.getStarted();
+      _isVpnStarted = started;
 
-    if (started) {
-      final result = await ClashHttpApi.getProxies();
-      if (result.data != null && result.data!.isNotEmpty) {
-        final groups = result.data!.where((n) {
-          return ClashProtocolType.isGroupType(n.type);
-        }).toList();
+      List<ClashProxiesNode> targetNodes = [];
 
-        // Check for actual leaf proxy nodes (excluding internal dummy stubs)
-        final leafProxies = result.data!.where((n) => isRealLeafProxy(n)).toList();
+      if (started) {
+        final result = await ClashHttpApi.getProxies();
+        if (result.data != null && result.data!.isNotEmpty) {
+          final groups = result.data!.where((n) {
+            return ClashProtocolType.isGroupType(n.type);
+          }).toList();
 
-        if (groups.isNotEmpty && leafProxies.isNotEmpty) {
-          for (var n in result.data!) {
-            if (n.delay == null && existingDelays.containsKey(n.name)) {
-              n.delay = existingDelays[n.name];
-            }
+          final leafProxies = result.data!.where((n) => isRealLeafProxy(n)).toList();
+
+          if (groups.isNotEmpty && leafProxies.isNotEmpty) {
+            targetNodes = result.data!;
           }
-          if (mounted) {
-            setState(() {
-              _updateAllNodes(result.data!);
-              _loading = false;
-            });
-          }
-          return;
         }
       }
-    }
 
-    // Offline / Local profile fallback: load directly from active profile YAML/JSON
-    final offlineNodes = await ProxyNodeLoader.loadCurrentProfileNodes();
-    for (var n in offlineNodes) {
-      if (n.delay == null && existingDelays.containsKey(n.name)) {
-        n.delay = existingDelays[n.name];
+      if (targetNodes.isEmpty) {
+        targetNodes = await ProxyNodeLoader.loadCurrentProfileNodes();
+      }
+
+      if (targetNodes.isNotEmpty) {
+        for (var n in targetNodes) {
+          if (n.delay == null && existingDelays.containsKey(n.name)) {
+            n.delay = existingDelays[n.name];
+          }
+        }
+      }
+
+      if (!mounted) return;
+
+      setState(() {
+        _updateAllNodes(targetNodes);
+        _loading = false;
+      });
+    } finally {
+      _isFetchingProxies = false;
+      if (_hasPendingFetch && mounted) {
+        _debouncedFetchProxies(delay: const Duration(milliseconds: 150));
       }
     }
-    if (!mounted) return;
-
-    setState(() {
-      _updateAllNodes(offlineNodes);
-      _loading = false;
-    });
   }
 
   Future<void> _changeMode(String mode) async {
@@ -1885,7 +1913,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       message: tcontext.meta.refresh,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
-                        onTap: _fetchProxies,
+                        onTap: () => _fetchProxies(showLoadingIndicator: true),
                         child: SizedBox(
                           width: 32,
                           height: 32,
@@ -2123,9 +2151,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                           const AddProfileByUrlScreen(),
                                     ),
                                   );
-                                  await _fetchProxies();
+                                  _debouncedFetchProxies(showLoading: true);
                                 } else {
-                                  await _fetchProxies();
+                                  _debouncedFetchProxies(showLoading: true);
                                 }
                               },
                             ),

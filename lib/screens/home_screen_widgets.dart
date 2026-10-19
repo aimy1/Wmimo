@@ -132,7 +132,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     AppLifecycleStateNofity.onStateResumed(hashCode, _onStateResumed);
     AppLifecycleStateNofity.onStatePaused(hashCode, _onStatePaused);
     ProfileManager.onEventCurrentChanged.add(_onCurrentChanged);
-    ProfileManager.onEventAdd.add(_onCurrentChanged);
+    ProfileManager.onEventAdd.add(_onProfileAdded);
     ProfileManager.onEventRemove.add(_onCurrentChanged);
     ProfileManager.onEventUpdate.add(_onUpdate);
     BoardProviderNoticeManager.onEventCheck.add(_onNoticeUpdate);
@@ -166,12 +166,13 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
 
   @override
   void dispose() {
+    _currentChangedDebounce?.cancel();
     Biz.onEventProxySelected.remove(_onProxySelectedEvent);
     VPNService.onEventStateChanged.remove(_onStateChanged);
     AppLifecycleStateNofity.onStateResumed(hashCode, null);
     AppLifecycleStateNofity.onStatePaused(hashCode, null);
     ProfileManager.onEventCurrentChanged.remove(_onCurrentChanged);
-    ProfileManager.onEventAdd.remove(_onCurrentChanged);
+    ProfileManager.onEventAdd.remove(_onProfileAdded);
     ProfileManager.onEventRemove.remove(_onCurrentChanged);
     ProfileManager.onEventUpdate.remove(_onUpdate);
     BoardProviderNoticeManager.onEventCheck.remove(_onNoticeUpdate);
@@ -1110,27 +1111,48 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     _disconnectToCore(resetUI: false);
   }
 
-  Future<void> _onCurrentChanged(String id) async {
-    if (id.isEmpty) {
-      await VPNService.stop();
+  Timer? _currentChangedDebounce;
+
+  void _onProfileAdded(String id) {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _onCurrentChanged(String id) {
+    _currentChangedDebounce?.cancel();
+    _currentChangedDebounce = Timer(const Duration(milliseconds: 250), () async {
+      if (!mounted) return;
+      if (id.isEmpty) {
+        await VPNService.stop();
+        if (mounted) {
+          setState(() {});
+          _updateProxyNow();
+        }
+        return;
+      }
+
+      final started = await VPNService.getStarted();
+      if (!started) {
+        if (mounted) {
+          setState(() {});
+          _updateProxyNow();
+        }
+        return;
+      }
+
+      final err = await VPNService.restart(const Duration(seconds: 60));
+      if (err != null) {
+        if (!mounted) {
+          return;
+        }
+        DialogUtils.showAlertDialog(context, err.message, withVersion: true);
+      }
       if (mounted) {
         setState(() {});
         _updateProxyNow();
       }
-      return;
-    }
-
-    final err = await VPNService.restart(const Duration(seconds: 60));
-    if (err != null) {
-      if (!mounted) {
-        return;
-      }
-      DialogUtils.showAlertDialog(context, err.message, withVersion: true);
-    }
-    if (mounted) {
-      setState(() {});
-      _updateProxyNow();
-    }
+    });
   }
 
   Future<void> _onUpdate(String id, bool finish) async {

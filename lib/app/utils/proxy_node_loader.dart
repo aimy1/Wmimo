@@ -67,6 +67,8 @@ class ProxyNodeLoader {
     return false;
   }
 
+  static final Map<String, Future<List<ClashProxiesNode>>> _loadingFutures = {};
+
   /// Load proxies and proxy groups from the currently active profile
   static Future<List<ClashProxiesNode>> loadCurrentProfileNodes() async {
     final current = ProfileManager.getCurrent();
@@ -78,6 +80,20 @@ class ProxyNodeLoader {
   static Future<List<ClashProxiesNode>> loadNodesFromProfile(String profileId) async {
     if (profileId.isEmpty) return [];
 
+    if (_loadingFutures.containsKey(profileId)) {
+      return _loadingFutures[profileId]!;
+    }
+
+    final future = _loadNodesFromProfileInternal(profileId);
+    _loadingFutures[profileId] = future;
+    try {
+      return await future;
+    } finally {
+      _loadingFutures.remove(profileId);
+    }
+  }
+
+  static Future<List<ClashProxiesNode>> _loadNodesFromProfileInternal(String profileId) async {
     try {
       final profilesDir = await PathUtils.profilesDir();
       final filePath = path.join(profilesDir, profileId);
