@@ -131,11 +131,19 @@ void Win32Window::EnableDarkModeForApp() {
     return;
   }
 
+  DWORD light_mode = 1;
+  DWORD light_mode_size = sizeof(light_mode);
+  LSTATUS result = RegGetValue(HKEY_CURRENT_USER, kGetPreferredBrightnessRegKey,
+                               kGetPreferredBrightnessRegValue,
+                               RRF_RT_REG_DWORD, nullptr, &light_mode,
+                               &light_mode_size);
+  bool is_dark = (result == ERROR_SUCCESS && light_mode == 0);
+
   // Windows 10 1903 (18362) and newer (including Windows 11): ordinal 135 is SetPreferredAppMode
   auto set_preferred_app_mode = reinterpret_cast<fnSetPreferredAppMode>(
       GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(135)));
   if (set_preferred_app_mode != nullptr) {
-    set_preferred_app_mode(PreferredAppMode::AllowDark);
+    set_preferred_app_mode(is_dark ? PreferredAppMode::ForceDark : PreferredAppMode::AllowDark);
   } else {
     // Windows 10 1809 (17763): ordinal 135 is AllowDarkModeForApp
     auto allow_dark_mode_for_app = reinterpret_cast<fnAllowDarkModeForApp>(
@@ -374,6 +382,11 @@ void Win32Window::UpdateTheme(HWND const window) {
 
   HMODULE uxtheme_module = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
   if (uxtheme_module) {
+    auto set_preferred_app_mode = reinterpret_cast<fnSetPreferredAppMode>(
+        GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(135)));
+    if (set_preferred_app_mode != nullptr) {
+      set_preferred_app_mode(enable_dark_mode ? PreferredAppMode::ForceDark : PreferredAppMode::ForceLight);
+    }
     auto allow_dark_mode_for_window = reinterpret_cast<fnAllowDarkModeForWindow>(
         GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(133)));
     if (allow_dark_mode_for_window != nullptr) {
