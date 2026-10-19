@@ -24,6 +24,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance,
                       _In_opt_ HINSTANCE prev,
                       _In_ wchar_t* command_line,
                       _In_ int show_command) {
+  // Opt into Win32 Dark Mode for process menus (such as tray context menu) and controls.
+  Win32Window::EnableDarkModeForApp();
+
   const wchar_t* kWindowName = L"Wmimo";
   // Attach to console when present (e.g., 'flutter run') or create a
   // new console when running with a debugger.

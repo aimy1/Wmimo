@@ -29,6 +29,20 @@ constexpr const wchar_t kGetPreferredBrightnessRegValue[] = L"AppsUseLightTheme"
 // The number of Win32Window objects that currently exist.
 static int g_active_window_count = 0;
 
+enum class PreferredAppMode {
+  Default,
+  AllowDark,
+  ForceDark,
+  ForceLight,
+  Max
+};
+
+using fnSetPreferredAppMode = PreferredAppMode(WINAPI*)(PreferredAppMode appMode);
+using fnAllowDarkModeForApp = BOOL(WINAPI*)(BOOL allow);
+using fnAllowDarkModeForWindow = BOOL(WINAPI*)(HWND hWnd, BOOL allow);
+using fnFlushMenuThemes = void(WINAPI*)();
+using fnShouldAppsUseDarkMode = BOOL(WINAPI*)();
+
 using EnableNonClientDpiScaling = BOOL __stdcall(HWND hwnd);
 
 // Scale helper to convert logical scaler values to physical using passed in
@@ -111,6 +125,36 @@ void WindowClassRegistrar::UnregisterWindowClass() {
   class_registered_ = false;
 }
 
+void Win32Window::EnableDarkModeForApp() {
+  HMODULE uxtheme_module = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+  if (!uxtheme_module) {
+    return;
+  }
+
+  // Windows 10 1903 (18362) and newer (including Windows 11): ordinal 135 is SetPreferredAppMode
+  auto set_preferred_app_mode = reinterpret_cast<fnSetPreferredAppMode>(
+      GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(135)));
+  if (set_preferred_app_mode != nullptr) {
+    set_preferred_app_mode(PreferredAppMode::AllowDark);
+  } else {
+    // Windows 10 1809 (17763): ordinal 135 is AllowDarkModeForApp
+    auto allow_dark_mode_for_app = reinterpret_cast<fnAllowDarkModeForApp>(
+        GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(135)));
+    if (allow_dark_mode_for_app != nullptr) {
+      allow_dark_mode_for_app(TRUE);
+    }
+  }
+
+  // Ordinal 136: FlushMenuThemes to flush cached light menu themes
+  auto flush_menu_themes = reinterpret_cast<fnFlushMenuThemes>(
+      GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(136)));
+  if (flush_menu_themes != nullptr) {
+    flush_menu_themes();
+  }
+
+  FreeLibrary(uxtheme_module);
+}
+
 Win32Window::Win32Window() {
   ++g_active_window_count;
 }
@@ -142,6 +186,16 @@ bool Win32Window::Create(const std::wstring& title,
 
   if (!window) {
     return false;
+  }
+
+  HMODULE uxtheme_module = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+  if (uxtheme_module) {
+    auto allow_dark_mode_for_window = reinterpret_cast<fnAllowDarkModeForWindow>(
+        GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(133)));
+    if (allow_dark_mode_for_window != nullptr) {
+      allow_dark_mode_for_window(window, TRUE);
+    }
+    FreeLibrary(uxtheme_module);
   }
 
   UpdateTheme(window);
@@ -231,6 +285,8 @@ Win32Window::MessageHandler(HWND hwnd,
       }
       return 0;
 
+    case WM_THEMECHANGED:
+    case WM_SETTINGCHANGE:
     case WM_DWMCOLORIZATIONCOLORCHANGED:
       UpdateTheme(hwnd);
       return 0;
@@ -291,16 +347,43 @@ void Win32Window::OnDestroy() {
 }
 
 void Win32Window::UpdateTheme(HWND const window) {
-  DWORD light_mode;
+  DWORD light_mode = 1;
   DWORD light_mode_size = sizeof(light_mode);
   LSTATUS result = RegGetValue(HKEY_CURRENT_USER, kGetPreferredBrightnessRegKey,
                                kGetPreferredBrightnessRegValue,
                                RRF_RT_REG_DWORD, nullptr, &light_mode,
                                &light_mode_size);
 
+  BOOL enable_dark_mode = false;
   if (result == ERROR_SUCCESS) {
-    BOOL enable_dark_mode = light_mode == 0;
-    DwmSetWindowAttribute(window, DWMWA_USE_IMMERSIVE_DARK_MODE,
-                          &enable_dark_mode, sizeof(enable_dark_mode));
+    enable_dark_mode = (light_mode == 0);
+  } else {
+    HMODULE uxtheme_module = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+    if (uxtheme_module) {
+      auto should_apps_use_dark_mode = reinterpret_cast<fnShouldAppsUseDarkMode>(
+          GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(132)));
+      if (should_apps_use_dark_mode != nullptr) {
+        enable_dark_mode = should_apps_use_dark_mode();
+      }
+      FreeLibrary(uxtheme_module);
+    }
+  }
+
+  DwmSetWindowAttribute(window, DWMWA_USE_IMMERSIVE_DARK_MODE,
+                        &enable_dark_mode, sizeof(enable_dark_mode));
+
+  HMODULE uxtheme_module = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+  if (uxtheme_module) {
+    auto allow_dark_mode_for_window = reinterpret_cast<fnAllowDarkModeForWindow>(
+        GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(133)));
+    if (allow_dark_mode_for_window != nullptr) {
+      allow_dark_mode_for_window(window, enable_dark_mode);
+    }
+    auto flush_menu_themes = reinterpret_cast<fnFlushMenuThemes>(
+        GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(136)));
+    if (flush_menu_themes != nullptr) {
+      flush_menu_themes();
+    }
+    FreeLibrary(uxtheme_module);
   }
 }

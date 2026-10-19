@@ -589,7 +589,7 @@ class MyAppState extends State<MyApp>
         } else {
           await trayManager.setIcon(
             grey ? 'assets/images/grey_tray.png' : 'assets/images/tray.png',
-            isTemplate: false,
+            isTemplate: Platform.isMacOS,
           );
         }
         _trayGrey = grey;
