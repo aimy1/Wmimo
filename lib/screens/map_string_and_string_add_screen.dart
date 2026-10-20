@@ -1,12 +1,13 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:tuple/tuple.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
-import 'package:tuple/tuple.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class MapStringAndStringAddScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -15,17 +16,17 @@ class MapStringAndStringAddScreen extends LasyRenderingStatefulWidget {
 
   final String title;
   List<Tuple2<String, String>> data;
-  final String dialogTitle1;
-  final String dialogTextHit1;
+  final String dialogTitle;
   final String dialogTitle2;
+  final String dialogTextHit;
   final String dialogTextHit2;
   MapStringAndStringAddScreen({
     super.key,
     required this.title,
     required this.data,
-    this.dialogTitle1 = "",
-    this.dialogTextHit1 = "",
+    this.dialogTitle = "",
     this.dialogTitle2 = "",
+    this.dialogTextHit = "",
     this.dialogTextHit2 = "",
   });
 
@@ -48,69 +49,61 @@ class _MapStringAndStringAddScreenState
 
   @override
   Widget build(BuildContext context) {
+    final tcontext = Translations.of(context);
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: const SizedBox(
-                        width: 50,
-                        height: 30,
-                        child: Icon(Icons.arrow_back_ios_outlined, size: 26),
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        widget.title,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: ThemeConfig.kFontWeightTitle,
-                          fontSize: ThemeConfig.kFontSizeTitle,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        onTapAdd();
-                      },
-                      child: const SizedBox(
-                        width: 50,
-                        height: 30,
-                        child: Icon(Icons.add_outlined, size: 26),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Expanded(child: _loadListView()),
-            ],
+      appBar: WmimoAppBar(
+        title: widget.title,
+        actions: [
+          IconButton(
+            tooltip: tcontext.meta.add,
+            icon: const Icon(Icons.add_rounded, size: 24),
+            splashRadius: 20,
+            onPressed: () async {
+              onTapAdd();
+            },
           ),
-        ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: SafeArea(
+        child: _loadListView(),
       ),
     );
   }
 
   Widget _loadListView() {
-    Size windowSize = MediaQuery.of(context).size;
+    if (widget.data.isEmpty) {
+      final tcontext = Translations.of(context);
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.format_list_bulleted_rounded,
+              size: 48,
+              color: Colors.grey.withValues(alpha: 0.4),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              tcontext.meta.none,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     return Scrollbar(
       thumbVisibility: true,
       child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         itemCount: widget.data.length,
         itemBuilder: (BuildContext context, int index) {
           var current = widget.data[index];
-          return createWidget(index, current, windowSize);
+          return createWidget(index, current);
         },
         separatorBuilder: (BuildContext context, int index) {
           return const Divider(height: 1, thickness: 0.3);
@@ -122,63 +115,66 @@ class _MapStringAndStringAddScreenState
   Widget createWidget(
     int index,
     Tuple2<String, String> current,
-    Size windowSize,
   ) {
-    const double rightWidth = 30.0;
-    double centerWidth = windowSize.width - rightWidth - 20;
-
+    final tcontext = Translations.of(context);
     return Material(
+      color: Colors.transparent,
       borderRadius: ThemeDefine.kBorderRadius,
-      child: InkWell(
-        onTap: () async {
-          onTapEditItem(current);
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          width: double.infinity,
-          height: ThemeConfig.kListItemHeight2,
-          child: Row(
-            children: [
-              Row(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        width: double.infinity,
+        height: ThemeConfig.kListItemHeight2,
+        child: Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                borderRadius: ThemeDefine.kBorderRadius,
+                onTap: () async {
+                  onTapEditItem(current);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
                     children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: centerWidth,
-                            child: Text(
-                              current.item1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: ThemeConfig.kFontSizeGroupItem,
-                              ),
-                            ),
+                      Expanded(
+                        child: Text(
+                          current.item1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: ThemeConfig.kFontSizeGroupItem,
                           ),
-                          SizedBox(
-                            width: rightWidth,
-                            height: ThemeConfig.kListItemHeight2 - 2,
-                            child: InkWell(
-                              onTap: () async {
-                                onTapDelete(index);
-                              },
-                              child: const Icon(
-                                Icons.remove_circle_outlined,
-                                size: 26,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+                      if (current.item2.isNotEmpty) ...[
+                        const SizedBox(width: 8),
+                        Text(
+                          current.item2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: ThemeConfig.kFontSizeListSubItem,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
-                ],
+                ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8),
+            IconButton(
+              icon: const Icon(
+                Icons.remove_circle_outlined,
+                size: 24,
+                color: Colors.red,
+              ),
+              splashRadius: 20,
+              tooltip: tcontext.meta.remove,
+              onPressed: () async {
+                onTapDelete(index);
+              },
+            ),
+          ],
         ),
       ),
     );

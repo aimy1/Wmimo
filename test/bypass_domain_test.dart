@@ -1,10 +1,58 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:libclash_vpn_service/proxy_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/i18n/strings.g.dart';
+import 'package:wmimo/screens/list_add_screen.dart';
 
 void main() {
   group('System Proxy Bypass Domains Tests', () {
+    testWidgets('ListAddScreen renders domain list and delete buttons properly on PC/desktop width', (WidgetTester tester) async {
+      final domains = ['127.0.0.1', 'localhost', 'internal.company.com'];
+      List<String>? changedList;
+
+      await tester.pumpWidget(
+        TranslationProvider(
+          child: MaterialApp(
+            locale: const Locale('zh', 'CN'),
+            home: ListAddScreen(
+              title: '允许绕过系统代理的域名',
+              data: domains,
+              onChanged: (data) {
+                changedList = data;
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Check title and domains are displayed
+      expect(find.text('允许绕过系统代理的域名'), findsOneWidget);
+      expect(find.text('127.0.0.1'), findsOneWidget);
+      expect(find.text('localhost'), findsOneWidget);
+      expect(find.text('internal.company.com'), findsOneWidget);
+
+      // Verify that delete buttons (Icons.remove_circle_outlined) are rendered and visible
+      final deleteButtons = find.byIcon(Icons.remove_circle_outlined);
+      expect(deleteButtons, findsNWidgets(3));
+
+      // Tap the delete button on the first item ('127.0.0.1')
+      await tester.tap(deleteButtons.first);
+      await tester.pumpAndSettle();
+
+      // Verify item was removed
+      expect(domains.contains('127.0.0.1'), isFalse);
+      expect(find.text('127.0.0.1'), findsNothing);
+      expect(changedList, isNotNull);
+      expect(changedList, equals(['localhost', 'internal.company.com']));
+
+      // Clean unmount for LasyRenderingState timer
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(milliseconds: 50));
+    });
+
     test('ProxyOption supports both bypassDomains and bypassDomain getter', () {
       final domains = ['127.0.0.1', 'localhost', 'example.com'];
       final option = ProxyOption('127.0.0.1', 7890, domains);

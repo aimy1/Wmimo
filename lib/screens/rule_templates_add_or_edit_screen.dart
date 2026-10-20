@@ -227,62 +227,41 @@ class _RuleTemplatesAddOrEditScreenState
   }
 
   Widget createWidget(int index, String current, Size windowSize) {
-    const double rightWidth = 30.0;
-    double centerWidth = windowSize.width - rightWidth - 20 - 20 * 2;
+    final tcontext = Translations.of(context);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 2),
       child: Material(
         borderRadius: ThemeDefine.kBorderRadius,
-        child: InkWell(
-          onTap: () {
-            onTapEdit(index);
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            width: double.infinity,
-            child: Row(
-              children: [
-                Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: centerWidth,
-                              child: Text(
-                                current,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: ThemeConfig.kFontSizeGroupItem,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: rightWidth,
-                              height: ThemeConfig.kListItemHeight2 - 2,
-                              child: InkWell(
-                                onTap: () async {
-                                  onTapDelete(index);
-                                },
-                                child: const Icon(
-                                  Icons.remove_circle_outlined,
-                                  size: 26,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          width: double.infinity,
+          height: ThemeConfig.kListItemHeight2,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  current,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ThemeConfig.kFontSizeGroupItem,
+                  ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 8),
+              IconButton(
+                icon: const Icon(
+                  Icons.remove_circle_outlined,
+                  size: 24,
+                  color: Colors.red,
+                ),
+                splashRadius: 20,
+                tooltip: tcontext.meta.remove,
+                onPressed: () async {
+                  onTapDelete(index);
+                },
+              ),
+            ],
           ),
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class ListAddScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings(String viewTag) {
@@ -47,67 +48,60 @@ class _ListAddScreenState extends LasyRenderingState<ListAddScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final tcontext = Translations.of(context);
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: const SizedBox(
-                        width: 50,
-                        height: 30,
-                        child: Icon(Icons.arrow_back_ios_outlined, size: 26),
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        widget.title,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: ThemeConfig.kFontWeightTitle,
-                          fontSize: ThemeConfig.kFontSizeTitle,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        onTapAdd();
-                      },
-                      child: const SizedBox(
-                        width: 50,
-                        height: 30,
-                        child: Icon(Icons.add_outlined, size: 26),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Expanded(child: _loadListView()),
-            ],
+      appBar: WmimoAppBar(
+        title: widget.title,
+        actions: [
+          IconButton(
+            tooltip: tcontext.meta.add,
+            icon: const Icon(Icons.add_rounded, size: 24),
+            splashRadius: 20,
+            onPressed: () async {
+              onTapAdd();
+            },
           ),
-        ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: SafeArea(
+        child: _loadListView(),
       ),
     );
   }
 
   Widget _loadListView() {
-    Size windowSize = MediaQuery.of(context).size;
+    if (widget.data.isEmpty) {
+      final tcontext = Translations.of(context);
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.format_list_bulleted_rounded,
+              size: 48,
+              color: Colors.grey.withValues(alpha: 0.4),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              tcontext.meta.none,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scrollbar(
       child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         itemCount: widget.data.length,
         itemBuilder: (BuildContext context, int index) {
           var current = widget.data[index];
-          return createWidget(index, current, windowSize);
+          return createWidget(index, current);
         },
         separatorBuilder: (BuildContext context, int index) {
           return const Divider(height: 1, thickness: 0.3);
@@ -116,67 +110,45 @@ class _ListAddScreenState extends LasyRenderingState<ListAddScreen> {
     );
   }
 
-  Widget createWidget(int index, dynamic current, Size windowSize) {
-    const double rightWidth = 30.0;
-    double centerWidth = windowSize.width - rightWidth - 20;
+  Widget createWidget(int index, dynamic current) {
+    final currentStr = current.toString();
+    final tcontext = Translations.of(context);
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 2),
-      child: Material(
-        borderRadius: ThemeDefine.kBorderRadius,
-        child: InkWell(
-          onTap: () {
-            Navigator.pop(context, current);
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            width: double.infinity,
-            child: Row(
-              children: [
-                Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: centerWidth,
-                              child: Text(
-                                current,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: ThemeConfig.kFontSizeGroupItem,
-                                  color: widget.invalidData.contains(current)
-                                      ? Colors.red
-                                      : null,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: rightWidth,
-                              height: ThemeConfig.kListItemHeight2 - 2,
-                              child: InkWell(
-                                onTap: () async {
-                                  onTapDelete(current);
-                                },
-                                child: const Icon(
-                                  Icons.remove_circle_outlined,
-                                  size: 26,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+    return Material(
+      color: Colors.transparent,
+      borderRadius: ThemeDefine.kBorderRadius,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        width: double.infinity,
+        height: ThemeConfig.kListItemHeight2,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                currentStr,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: ThemeConfig.kFontSizeGroupItem,
+                  color: widget.invalidData.contains(currentStr)
+                      ? Colors.red
+                      : null,
                 ),
-              ],
+              ),
             ),
-          ),
+            const SizedBox(width: 8),
+            IconButton(
+              icon: const Icon(
+                Icons.remove_circle_outlined,
+                size: 24,
+                color: Colors.red,
+              ),
+              splashRadius: 20,
+              tooltip: tcontext.meta.remove,
+              onPressed: () async {
+                onTapDelete(currentStr);
+              },
+            ),
+          ],
         ),
       ),
     );

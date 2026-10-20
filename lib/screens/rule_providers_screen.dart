@@ -134,90 +134,74 @@ class _RuleProvidersScreenState
   }
 
   Widget createWidget(int index, RuleProvider current, Size windowSize) {
-    const double rightWidth = 32.0;
-    double centerWidth = windowSize.width - rightWidth * 2 - 20 - 20 * 2;
     final tcontext = Translations.of(context);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 2),
       child: Material(
         borderRadius: ThemeDefine.kBorderRadius,
-        child: InkWell(
-          onTap: () {
-            onTapEdit(current.name);
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            width: double.infinity,
-            child: Row(
-              children: [
-                Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: centerWidth > 60 ? centerWidth : 60,
-                              child: Text(
-                                current.name,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: ThemeConfig.kFontSizeGroupItem,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: rightWidth,
-                              height: ThemeConfig.kListItemHeight2 - 2,
-                              child: InkWell(
-                                onTap: () async {
-                                  final err = await ClashHttpApi.updateRuleProvider(current.name);
-                                  if (!context.mounted) return;
-                                  final ok = err == null;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(ok
-                                          ? "${current.name}: ${tcontext.dns.updateSuccess}"
-                                          : "${current.name}: ${err.message}"),
-                                      backgroundColor: ok
-                                          ? ThemeDefine.kColorGreenBright
-                                          : ThemeDefine.kColorRed,
-                                      duration: const Duration(seconds: 2),
-                                    ),
-                                  );
-                                },
-                                child: const Icon(
-                                  Icons.sync,
-                                  size: 22,
-                                  color: Colors.blueAccent,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: rightWidth,
-                              height: ThemeConfig.kListItemHeight2 - 2,
-                              child: InkWell(
-                                onTap: () async {
-                                  onTapDelete(current.name);
-                                },
-                                child: const Icon(
-                                  Icons.remove_circle_outlined,
-                                  size: 26,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          width: double.infinity,
+          height: ThemeConfig.kListItemHeight2,
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  borderRadius: ThemeDefine.kBorderRadius,
+                  onTap: () {
+                    onTapEdit(current.name);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      current.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: ThemeConfig.kFontSizeGroupItem,
+                      ),
                     ),
-                  ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 4),
+              IconButton(
+                icon: const Icon(
+                  Icons.sync,
+                  size: 22,
+                  color: Colors.blueAccent,
+                ),
+                splashRadius: 20,
+                onPressed: () async {
+                  final err = await ClashHttpApi.updateRuleProvider(current.name);
+                  if (!context.mounted) return;
+                  final ok = err == null;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(ok
+                          ? "${current.name}: ${tcontext.dns.updateSuccess}"
+                          : "${current.name}: ${err.message}"),
+                      backgroundColor: ok
+                          ? ThemeDefine.kColorGreenBright
+                          : ThemeDefine.kColorRed,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.remove_circle_outlined,
+                  size: 24,
+                  color: Colors.red,
+                ),
+                splashRadius: 20,
+                tooltip: tcontext.meta.remove,
+                onPressed: () async {
+                  onTapDelete(current.name);
+                },
+              ),
+            ],
           ),
         ),
       ),
