@@ -22,7 +22,7 @@ $langBar
   <img src="assets/images/app_icon_256.png" width="128" height="128" alt="Wmimo Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 188, 223, 0.25);" />
   <h1 align="center" style="font-weight: 800; border-bottom: none; margin-top: 12px; margin-bottom: 6px;">Wmimo</h1>
   <p align="center" style="font-size: 1.15rem; color: #57606a;"><strong>Next-Generation Cross-Platform Clash / Mihomo GUI Proxy Client</strong></p>
-  <p align="center">Crafted with Flutter & the high-performance Mihomo core. Engineered for uncompromising speed, modern elegance, and multi-protocol flexibility.</p>
+  <p align="center">Crafted with Flutter & the high-performance Mihomo core. Engineered for speed, modern elegance, and multi-protocol flexibility.</p>
 
   <p align="center">
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
@@ -34,11 +34,11 @@ $langBar
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 Download Releases</b></a> •
-    <a href="#-quick-start"><b>🚀 Quick Start</b></a> •
-    <a href="#-key-features"><b>✨ Features</b></a> •
-    <a href="#-platform-matrix"><b>💻 Platforms</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 Community</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>Download</b></a> •
+    <a href="#features"><b>Features</b></a> •
+    <a href="#quick-start"><b>Quick Start</b></a> •
+    <a href="#build-from-source"><b>Build</b></a> •
+    <a href="https://t.me/wmimoapp"><b>Community</b></a>
   </p>
 
   <br/>
@@ -47,59 +47,42 @@ $langBar
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="370" />
   </p>
-  <sub><em>✨ Sleek 18px micro-card aesthetic, smooth real-time bezier traffic wave, and comprehensive network diagnostics (Light & Dark dual themes)</em></sub>
+  <sub><em>18px micro-card layout system, real-time bezier traffic wave, and system-level proxy routing (Light & Dark dual themes)</em></sub>
 </div>
 
 ---
 
-## ✨ Key Features
+## Features
 
-- 🎨 **Artisan Micro-Card UI & Native Dual Themes**:
+- **Artisan Micro-Card UI & Native Dual Themes**:
   - Precision 18px rounded micro-card system infused with the signature cyan-blue accent.
   - Native, seamless transitions between Clean Light mode and Deep OLED Dark mode.
   - Responsive layout: expansive Desktop Sidebar on large screens & compact ergonomic navigation on mobile devices.
-- ⚡ **High-Performance Mihomo (Meta) Core**:
+- **High-Performance Mihomo (Meta) Core**:
   - Full protocol suite: **Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct**.
   - Asynchronous background Isolate processing for node parsing and sorting — **Zero UI Freeze** during startup.
-- 🔀 **Intelligent Routing & Dual-Engine Proxy**:
+- **Intelligent Routing & Dual-Engine Proxy**:
   - Rapid outbound mode toggling: **Rule (Split Routing)** / **Global** / **Direct**.
   - Flexible dual engine: **TUN Virtual Adapter Mode** (transparent system-wide capture) and **System Proxy Mode** (standard unprivileged routing).
   - Fine-grained traffic steering: Android Per-App Proxy filtering and Windows UWP Loopback exemption utility.
-- 📈 **Deep Real-Time Telemetry & Diagnostics**:
+- **Deep Real-Time Telemetry & Diagnostics**:
   - Ultra-smooth Bezier traffic wave monitor with multi-window spans (1m / 5m / 15m / 30m / 60m).
   - Instant egress IP, geolocation, and ISP lookup card with one-tap copy and privacy masking.
   - Subscription plan data usage progress bar with expiration countdown.
   - Built-in diagnostic toolset: Routing Rules inspection, Real-time Core Logs, Concurrent Latency Ping, and Runtime Configuration viewer.
-- 🪟 **Deep Native Operating System Integration**:
+- **Deep Native Operating System Integration**:
   - **Windows**: Native dark/light adaptive tray context menu, real-time download/upload speed indicator in tray, and modern `comctl32 v6` visual styling.
   - **Android**: Foreground service notification with instant disconnect action, Quick Settings Pull-Down Tile, and automatic language synchronization.
   - **macOS**: Adaptive menu bar Template icon and system proxy automation.
-- 🚀 **Multi-Channel Silent Auto-Updates**:
+- **Multi-Channel Silent Auto-Updates**:
   - Switch freely between `stable` (production) and `beta` (pre-release) channels.
   - Background silent download with SHA-256 hash integrity verification.
-- 🌐 **True 100% Native 9-Language Parity**:
+- **True 100% Native 9-Language Parity**:
   - Complete, seamless coverage across: 简体中文, English, 繁體中文, 日本語, 한국어, Русский, Español, العربية, فارسی.
 
 ---
 
-## 📌 Platform Matrix
-
-| Platform / Distro | Status | Package Formats | Highlights |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Production Ready** | Setup (`.exe`) & Portable (`.zip`) | Full desktop sidebar, native dynamic speed tray, TUN virtual adapter, UWP loopback tool, auto-update. |
-| 🐧 **Linux (Universal)** | ✅ **Production Ready** | Universal AppImage (`.AppImage`) & Portable (`.tar.gz`) | Fully self-contained, out-of-the-box support for all major Linux distributions. |
-| 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **Production Ready** | Debian Package (`.deb`) | Native package management with desktop shortcuts, icons, and system services. |
-| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **Production Ready** | RedHat Package (`.rpm`) | Standard RPM build with automated runtime dependencies. |
-| 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **Production Ready** | Pacman Package (`.pkg.tar.zst`) & `PKGBUILD` | Native pacman binary package and AUR build script. |
-| 📱 **Android** | ✅ **Production Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, persistent release keystore, Quick Settings Tile, per-app proxy. |
-| 🍎 **macOS** | 🛠️ **Source Ready** | DMG / Local Build | Full system proxy and TUN engine in codebase. Build locally via `flutter build macos`. |
-| 🍏 **iOS** | 📦 **Framework Ready** | IPA / Local Build | NetworkExtension architecture wired. Due to Apple signing policies, build locally or sideload via TrollStore. |
-
-> 💡 **Official Releases Notice**: Automated GitHub Releases distribute pre-compiled binaries for **Windows**, **Linux**, and **Android**. macOS and iOS source code is fully aligned with upstream standards.
-
----
-
-## 🚀 Quick Start
+## Quick Start
 
 1. **Download & Install**: Grab the latest release package for your operating system from the [Releases](https://github.com/aimy1/Wmimo/releases) page.
 2. **Import Subscription**: Navigate to `Subscriptions`, paste your Clash/Mihomo subscription link or import a local YAML profile.
@@ -108,7 +91,7 @@ $langBar
 
 ---
 
-## 🛠️ Build from Source
+## Build from Source
 
 ### Prerequisites
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`)
@@ -141,29 +124,29 @@ flutter build macos --release     # macOS
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
-- 🌟 Special thanks to **[GooRingX (vowe)](https://github.com/GooRingX)** for invaluable open-source contributions, architectural insights, and design inspiration!
-- 🚀 Sincere gratitude to the **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** team for developing the phenomenal core engine.
-- 💙 Kudos to the **[Flutter](https://flutter.dev/)** team and community for empowering modern cross-platform user interfaces.
-
----
-
-## 📬 Community & Feedback
-
-- 💬 **Telegram Channel & Group**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **Author Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **Issue Tracker**: [Submit an Issue](https://github.com/aimy1/Wmimo/issues)
+- **[GooRingX (vowe)](https://github.com/GooRingX)**: Invaluable open-source contributions, architectural insights, and design inspiration.
+- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**: Phenomenal core engine and protocol support.
+- **[Flutter](https://flutter.dev/)**: Empowering modern cross-platform user interface framework.
 
 ---
 
-## 📄 License
+## Community & Feedback
+
+- **Telegram Channel & Group**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **Author Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **Issue Tracker**: [Submit an Issue](https://github.com/aimy1/Wmimo/issues)
+
+---
+
+## License
 
 Wmimo is licensed under the **GNU General Public License v3.0 (GPL-3.0)**. See the [LICENSE](LICENSE) file for details.
 """;
@@ -191,11 +174,11 @@ $langBar
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 下载安装包</b></a> •
-    <a href="#-快速上手"><b>🚀 快速上手</b></a> •
-    <a href="#-核心特性"><b>✨ 核心特性</b></a> •
-    <a href="#-全平台支持矩阵"><b>💻 平台支持</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 官方社区</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>下载安装</b></a> •
+    <a href="#核心特性"><b>核心特性</b></a> •
+    <a href="#快速上手"><b>快速上手</b></a> •
+    <a href="#本地编译与开发"><b>本地编译</b></a> •
+    <a href="https://t.me/wmimoapp"><b>官方社区</b></a>
   </p>
 
   <br/>
@@ -204,59 +187,42 @@ $langBar
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo 深色主题" width="370" />
   </p>
-  <sub><em>✨ 18px 极简微卡片设计体系 · 实时平滑流量贝塞尔曲线监控 · TUN & 系统代理双模式（浅色 & 深色原生双主题）</em></sub>
+  <sub><em>18px 极简微卡片设计体系 · 实时平滑流量贝塞尔曲线监控 · TUN & 系统代理双模式（浅色 & 深色原生双主题）</em></sub>
 </div>
 
 ---
 
-## ✨ 核心特性
+## 核心特性
 
-- 🎨 **艺术级微卡片界面与原生双主题**：
+- **艺术级微卡片界面与原生双主题**：
   - 遵循 18px 精致圆角微卡片布局体系与天青蓝品牌视觉，高级通透，现代干练；
   - 完美原生支持极简明亮（Light）与深空黑（Dark）双主题无缝平滑切换；
   - 响应式自适应设计：大屏桌面自适应宽屏侧边栏，小屏移动端紧凑人体工学布局。
-- ⚡ **高性能 Mihomo (Meta) 核心深度驱动**：
+- **高性能 Mihomo (Meta) 核心深度驱动**：
   - 全协议矩阵覆盖：**Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct** 等；
   - 独立后台 Isolate 并发清洗节点与分流规则，启动过程 **零界面冻结（Zero UI Freeze）**，内存占用极低。
-- 🔀 **智能分流路由与系统级双代理模式**：
+- **智能分流路由与系统级双代理模式**：
   - 出站模式秒级切换：**规则分流 (Rule)** / **全局代理 (Global)** / **直接连接 (Direct)**；
   - 双引擎灵活调度：**TUN 虚拟网卡模式**（透明接管操作系统全量流量）与 **系统代理模式**（免提权快捷冲浪）；
   - 精细化应用分流：Android 分应用代理（黑白名单）与 Windows UWP Loopback 免除工具。
-- 📈 **深度实时流量监控与智能诊断套件**：
+- **深度实时流量监控与智能诊断套件**：
   - 仪表盘实时平滑贝塞尔流量曲线图，支持 1m / 5m / 15m / 30m / 60m 多时间跨度自如缩放；
   - 实时出口 IP、地理位置与 ISP 归属信息卡片，一键测速、轻触复制与隐私脱敏保护；
   - 订阅套餐用量实时进度条与到期时间精准倒计时；
   - 全套排障套件：路由规则树查看、内核实时控制台日志、全节点并发 Ping 测速与网络连通性诊断。
-- 🪟 **深度操作系统级原生融合**：
+- **深度操作系统级原生融合**：
   - **Windows**：原生系统托盘右键菜单自动同步跟随 App 深浅色主题，托盘图标动态显示实时上下行网速，启用现代 `comctl32 v6` 视觉样式；
   - **Android**：前台服务通知栏常驻（带当前状态、快捷断开按钮），支持下拉状态栏 Quick Settings 快速开关磁贴，应用内多语言实时联动；
   - **macOS**：原生状态栏自适应 Template 图标支持与系统代理无缝接管。
-- 🚀 **智能多通道无缝自动更新**：
+- **智能多通道无缝自动更新**：
   - 支持 `stable`（正式稳定通道）与 `beta`（测试预览通道）自由切换；
   - 后台静默高速下载、SHA-256 哈希完整性校验与安全原地覆盖升级。
-- 🌍 **真正 100% 完整 9 国语言覆盖**：
+- **真正 100% 完整 9 国语言覆盖**：
   - 简体中文、繁體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 全语言 705 个词条全量对齐，无任何缺失。
 
 ---
 
-## 📌 全平台支持矩阵
-
-| 平台 / 发行版 | 状态 | 软件包格式 | 功能特性与适配说明 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **正式支持** | 安装包 (`.exe`) 与 绿色便携包 (`.zip`) | 完整桌面侧边栏、原生深色托盘（实时速率）、TUN 模式、UWP Loopback、静默自动更新。 |
-| 🐧 **Linux 通用免安装** | ✅ **正式支持** | 通用独立镜像 (`.AppImage`) 与 绿色包 (`.tar.gz`) | 单文件免安装，解压即用，完美兼容所有主流与轻量 Linux 发行版。 |
-| 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **正式支持** | Debian 安装包 (`.deb`) | 原生包管理器支持，自动注册桌面启动菜单、高清矢量图标与系统服务。 |
-| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **正式支持** | RedHat 安装包 (`.rpm`) | 标准 RPM 格式封装，自动配置运行时依赖与桌面环境集成。 |
-| 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **正式支持** | Pacman 二进制包 (`.pkg.tar.zst`) 与 `PKGBUILD` | 支持 pacman 一键安装与 AUR 脚本直接构建。 |
-| 📱 **Android** | ✅ **正式支持** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、固定签名覆盖升级、快速设置磁贴、分应用分流。 |
-| 🍎 **macOS** | 🛠️ **源码已就绪** | DMG / 本地构建 | 系统代理与 TUN 模式底层均已实现，支持本地编译 (`flutter build macos`)。 |
-| 🍏 **iOS** | 📦 **架构已打通** | IPA / 本地构建 | NetworkExtension 架构已就绪。因受限于 Apple 证书签名，建议通过 TrollStore 侧载或本地编译。 |
-
-> 💡 **官方构建分发说明**：GitHub Releases 自动化工作流提供 **Windows**、**Linux** 与 **Android** 的预编译二进制安装包。
-
----
-
-## 🚀 快速上手
+## 快速上手
 
 1. **下载安装**：前往 [Releases 页面](https://github.com/aimy1/Wmimo/releases) 下载适用于您系统的安装包；
 2. **导入订阅**：进入「订阅配置」界面，粘贴您的 Clash / Mihomo 订阅链接或导入本地 YAML 规则文件；
@@ -265,7 +231,7 @@ $langBar
 
 ---
 
-## 🛠️ 本地编译与开发
+## 本地编译与开发
 
 ### 环境准备
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`)
@@ -298,29 +264,29 @@ flutter build macos --release     # macOS
 
 ---
 
-## 📊 Star 增长趋势
+## Star 增长趋势
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 🙏 致谢与鸣谢
+## 致谢
 
-- 🌟 **特别鸣谢 [GooRingX (vowe)](https://github.com/GooRingX)** 的杰出开源贡献、设计思路与灵感指导！
-- 🚀 **特别感谢 [Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** 团队提供的高性能、全协议通用代理核心。
-- 💙 **感谢 [Flutter](https://flutter.dev/)** 团队与开源社区提供的跨平台优秀框架支持。
-
----
-
-## 📬 社区交流与反馈
-
-- 💬 **Telegram 频道与交流群**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **联系邮箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **问题反馈与需求提案**: [提交 GitHub Issue](https://github.com/aimy1/Wmimo/issues)
+- **[GooRingX (vowe)](https://github.com/GooRingX)**：感谢杰出的开源贡献、设计思路与灵感指导。
+- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**：感谢团队提供的高性能、全协议通用代理核心。
+- **[Flutter](https://flutter.dev/)**：感谢团队与开源社区提供的跨平台应用开发框架。
 
 ---
 
-## 📄 开源许可证
+## 社区交流与反馈
+
+- **Telegram 频道与交流群**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **联系邮箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **问题反馈与需求提案**: [提交 GitHub Issue](https://github.com/aimy1/Wmimo/issues)
+
+---
+
+## 开源许可证
 
 本项目基于 **GPL-3.0** 开源许可证分发与使用。详细条款请参阅 [LICENSE](LICENSE) 文件。
 """;
@@ -348,11 +314,11 @@ $langBar
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 下載安裝包</b></a> •
-    <a href="#-快速上手"><b>🚀 快速上手</b></a> •
-    <a href="#-核心特性"><b>✨ 核心特性</b></a> •
-    <a href="#-全平台支援矩陣"><b>💻 平台支援</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 官方社群</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>下載安裝</b></a> •
+    <a href="#核心特性"><b>核心特性</b></a> •
+    <a href="#快速上手"><b>快速上手</b></a> •
+    <a href="#本地編譯與開發"><b>本地編譯</b></a> •
+    <a href="https://t.me/wmimoapp"><b>官方社群</b></a>
   </p>
 
   <br/>
@@ -361,57 +327,42 @@ $langBar
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo 深色主題" width="370" />
   </p>
-  <sub><em>✨ 18px 極簡微卡片設計體系 · 即時平滑流量貝塞爾曲線監控 · TUN & 系統代理雙模式（淺色 & 深色原生雙主題）</em></sub>
+  <sub><em>18px 極簡微卡片設計體系 · 即時平滑流量貝塞爾曲線監控 · TUN & 系統代理雙模式（淺色 & 深色原生雙主題）</em></sub>
 </div>
 
 ---
 
-## ✨ 核心特性
+## 核心特性
 
-- 🎨 **藝術級微卡片介面與原生雙主題**：
+- **藝術級微卡片介面與原生雙主題**：
   - 遵循 18px 精緻圓角微卡片排版體系與天青藍品牌視覺，現代高雅；
   - 原生支援極簡明亮（Light）與深邃暗黑（Dark）雙主題無縫切換；
   - 響應式自適應設計：桌面端寬螢幕側邊欄，行動端單手人體工學佈局。
-- ⚡ **高效能 Mihomo (Meta) 核心驅動**：
+- **高效能 Mihomo (Meta) 核心驅動**：
   - 全協議支援：**Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct** 等；
   - 獨立後台 Isolate 平行處理節點與規則流，啟動過程 **零介面凍結（Zero UI Freeze）**，超低記憶體佔用。
-- 🔀 **智慧分流路由與系統級雙代理模式**：
+- **智慧分流路由與系統級雙代理模式**：
   - 出站模式快速切換：**規則分流 (Rule)** / **全域代理 (Global)** / **直接連線 (Direct)**；
   - 雙引擎彈性調度：**TUN 虛擬網卡模式**（透明接管全系統流量）與 **系統代理模式**（免特權快速連線）；
   - 應用程式分流：Android 依應用程式代理（黑白名單）與 Windows UWP Loopback 免除工具。
-- 📈 **即時流量監控與智慧診斷套件**：
+- **即時流量監控與智慧診斷套件**：
   - 儀表板即時平滑貝塞爾流量曲線圖，支援 1m / 5m / 15m / 30m / 60m 跨度縮放；
   - 即時出口 IP、地理位置與 ISP 歸屬資訊卡片，一鍵測速與隱私脫敏保護；
   - 訂閱套餐用量即時進度條與到期時間精準倒數；
   - 完整診斷套件：路由規則檢視、核心即時主控台日誌、全節點平行測速與網路連通性診斷。
-- 🪟 **深度作業系統級原生整合**：
+- **深度作業系統級原生整合**：
   - **Windows**：原生系統匣右鍵選單自動同步跟隨 App 深淺色主題，系統匣圖示動態顯示即時網速，現代 `comctl32 v6` 渲染；
   - **Android**：前景服務通知欄常駐（具即時狀態與中斷按鈕），支援下拉快捷開關磁貼，多語言即時聯動；
   - **macOS**：原生選單列自適應 Template 圖示支援與系統代理自動化。
-- 🚀 **智慧多通道無縫自動更新**：
+- **智慧多通道無縫自動更新**：
   - 支援 `stable`（正式穩定通道）與 `beta`（測試預覽通道）自由切換；
   - 後台靜默高速下載、SHA-256 哈希完整性校驗與原地升級。
-- 🌍 **真正 100% 完整 9 國語言支援**：
+- **真正 100% 完整 9 國語言支援**：
   - 繁體中文、簡體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 9 種語言 705 個詞條全量對齊。
 
 ---
 
-## 📌 全平台支援矩陣
-
-| 平台 / 發行版 | 狀態 | 套件格式 | 功能特性與適配說明 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **正式支援** | 安裝包 (`.exe`) 與 綠色便攜包 (`.zip`) | 完整桌面側邊欄、原生深色系統匣（即時速率）、TUN 模式、UWP Loopback、靜默自動更新。 |
-| 🐧 **Linux 通用免安裝** | ✅ **正式支援** | 通用獨立映像 (`.AppImage`) 與 綠色包 (`.tar.gz`) | 單一檔案免安裝，解壓縮即用，相容所有主流 Linux 發行版。 |
-| 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **正式支援** | Debian 安裝包 (`.deb`) | 原生套件管理支援，自動註冊桌面啟動選單、高解析圖示與系統服務。 |
-| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **正式支援** | RedHat 安裝包 (`.rpm`) | 標準 RPM 格式封裝，自動設定執行時期依賴與桌面整合。 |
-| 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **正式支援** | Pacman 二進位套件 (`.pkg.tar.zst`) 與 `PKGBUILD` | 支援 pacman 一鍵安裝與 AUR 腳本直接建置。 |
-| 📱 **Android** | ✅ **正式支援** | 通用 APK 與 分架構套件 (`arm64-v8a`, `v7a`, `x86_64`) | 系統級 VpnService 驅動、固定簽名覆蓋升級、快速設定磁貼、分應用程式代理。 |
-| 🍎 **macOS** | 🛠️ **原始碼就緒** | DMG / 本地建置 | 系統代理與 TUN 模式底層均已實現，支援本地編譯 (`flutter build macos`)。 |
-| 🍏 **iOS** | 📦 **架構就緒** | IPA / 本地建置 | NetworkExtension 架構已搭建。建議透過 TrollStore 側載或本地建置。 |
-
----
-
-## 🚀 快速上手
+## 快速上手
 
 1. **下載安裝**：至 [Releases 頁面](https://github.com/aimy1/Wmimo/releases) 下載適用於您系統的安裝包；
 2. **匯入訂閱**：進入「訂閱配置」介面，貼上您的 Clash / Mihomo 訂閱連結或匯入本地 YAML 設定檔；
@@ -420,7 +371,7 @@ $langBar
 
 ---
 
-## 🛠️ 本地編譯與開發
+## 本地編譯與開發
 
 ```bash
 # 1. 複製程式碼庫
@@ -446,29 +397,29 @@ flutter build macos --release     # macOS
 
 ---
 
-## 📊 Star 成長趨勢
+## Star 成長趨勢
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 🙏 致謝與鳴謝
+## 致謝
 
-- 🌟 **特別鳴謝 [GooRingX (vowe)](https://github.com/GooRingX)** 的傑出開源貢獻與設計指導！
-- 🚀 **特別感謝 [Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** 團隊提供的高效能核心。
-- 💙 **感謝 [Flutter](https://flutter.dev/)** 團隊與社群提供的優秀跨平台框架支援。
-
----
-
-## 📬 社群交流與回饋
-
-- 💬 **Telegram 官方頻道**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **聯絡信箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **問題回報**: [提交 GitHub Issue](https://github.com/aimy1/Wmimo/issues)
+- **[GooRingX (vowe)](https://github.com/GooRingX)**：感謝傑出的開源貢獻與設計指導。
+- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**：感謝團隊提供的高效能核心。
+- **[Flutter](https://flutter.dev/)**：感謝團隊與社群提供的優秀跨平台框架支援。
 
 ---
 
-## 📄 開源授權
+## 社群交流與回饋
+
+- **Telegram 官方頻道**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **聯絡信箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **問題回報**: [提交 GitHub Issue](https://github.com/aimy1/Wmimo/issues)
+
+---
+
+## 開源授權
 
 本專案採用 **GPL-3.0** 授權條款開源分發。詳細內容請參閱 [LICENSE](LICENSE) 檔案。
 """;
@@ -496,11 +447,10 @@ $langBar
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 パッケージをダウンロード</b></a> •
-    <a href="#-クイックスタート"><b>🚀 クイックスタート</b></a> •
-    <a href="#-主な機能"><b>✨ 主な機能</b></a> •
-    <a href="#-プラットフォーム対応状況"><b>💻 プラットフォーム</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 コミュニティ</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>ダウンロード</b></a> •
+    <a href="#主な機能"><b>主な機能</b></a> •
+    <a href="#クイックスタート"><b>クイックスタート</b></a> •
+    <a href="https://t.me/wmimoapp"><b>コミュニティ</b></a>
   </p>
 
   <br/>
@@ -509,53 +459,38 @@ $langBar
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo ダークテーマ" width="370" />
   </p>
-  <sub><em>✨ 18px マイクロカードデザイン、リアルタイムのベジェ曲線トラフィックモニター、高度なネットワーク診断（ライト＆ダーク両対応）</em></sub>
+  <sub><em>18px マイクロカードデザイン、リアルタイムのベジェ曲線トラフィックモニター、高度なネットワーク診断（ライト＆ダーク両対応）</em></sub>
 </div>
 
 ---
 
-## ✨ 主な機能
+## 主な機能
 
-- 🎨 **洗練されたマイクロカードUIとネイティブデュアルテーマ**:
+- **洗練されたマイクロカードUIとネイティブデュアルテーマ**:
   - 美しい18px角丸マイクロカードレイアウトと洗練されたシアンブルーのアクセントカラー。
   - クリーンなライトテーマと深みのあるダークテーマをシームレスに切り替え。
   - 大画面デスクトップサイドバーとモバイル向けエルゴノミックレイアウトに自動適応。
-- ⚡ **高性能 Mihomo (Meta) コア**:
+- **高性能 Mihomo (Meta) コア**:
   - **Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct** などを完全サポート。
   - ノード解析とソートをバックグラウンド Isolate で非同期処理 — **起動時の画面フリーズゼロ (Zero UI Freeze)**。
-- 🔀 **柔軟なルーティングとデュアルプロキシエンジン**:
+- **柔軟なルーティングとデュアルプロキシエンジン**:
   - ワンタップでルーティング切替: **ルール分流 (Rule)** / **グローバル (Global)** / **ダイレクト (Direct)**。
   - **TUN 仮想アダプターモード**（システム全体の透過プロキシ）と **システムプロキシモード**（権限不要の軽快接続）。
   - Android アプリ別プロキシ設定、Windows UWP Loopback 免除ユーティリティ。
-- 📈 **リアルタイムトラフィック監視と総合ネットワーク診断**:
+- **リアルタイムトラフィック監視と総合ネットワーク診断**:
   - 1分/5分/15分/30分/60分のマルチスパンに対応した滑らかなベジェ曲線トラフィックグラフ。
   - 出口 IP、地域、ISP 情報を瞬時に取得し、プライバシー保護のマスキングとワンタップコピーに対応。
   - サブスクリプション通信量の進捗バーと有効期限カウントダウン。
-- 🪟 **OSネイティブ機能とのシームレスな統合**:
+- **OSネイティブ機能とのシームレスな統合**:
   - **Windows**: アプリのテーマに自動追従するタスクトレイメニュー、トレイアイコンでのリアルタイム速度表示、`comctl32 v6` スタイル。
   - **Android**: フォアグラウンド通知によるワンタップ切断、クイック設定タイル、多言語リアルタイム同期。
   - **macOS**: メニューバーの Template アイコン対応。
-- 🌍 **完全な 9 言語ネイティブ対応**:
+- **完全な 9 言語ネイティブ対応**:
   - 簡体字中国語、繁体字中国語、英語、日本語、韓国語、ロシア語、スペイン語、アラビア語、ペルシャ語の 705 キーを完全カバー。
 
 ---
 
-## 📌 プラットフォーム対応状況
-
-| プラットフォーム | 状態 | パッケージ形式 | 特徴 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **本番対応** | インストーラー (`.exe`) & ポータブル (`.zip`) | デスクトップサイドバー、トレイ速度表示、TUNモード、自動アップデート。 |
-| 🐧 **Linux (Universal)** | ✅ **本番対応** | AppImage (`.AppImage`) & ポータブル (`.tar.gz`) | 全ての主要Linuxディストリビューションでインストール不要で動作。 |
-| 🐧 **Debian / Ubuntu** | ✅ **本番対応** | Debian パッケージ (`.deb`) | ネイティブパッケージ管理、デスクトップ統合。 |
-| 🐧 **Fedora / openSUSE** | ✅ **本番対応** | RedHat パッケージ (`.rpm`) | 標準RPMフォーマット。 |
-| 🐧 **Arch Linux** | ✅ **本番対応** | Pacman パッケージ (`.pkg.tar.zst`) | pacman 一括インストール対応。 |
-| 📱 **Android** | ✅ **本番対応** | 汎用 APK & ABI別パッケージ (`arm64`, `v7a`, `x86_64`) | VpnService統合、クイック設定タイル、アプリ別プロキシ。 |
-| 🍎 **macOS** | 🛠️ **ソース対応** | DMG / ローカルビルド | `flutter build macos` でローカルビルド可能。 |
-| 🍏 **iOS** | 📦 **設計完了** | IPA / ローカルビルド | TrollStore またはローカル署名で利用可能。 |
-
----
-
-## 🚀 クイックスタート
+## クイックスタート
 
 1. **ダウンロード**: [Releases ページ](https://github.com/aimy1/Wmimo/releases) からお使いのOSに合ったパッケージを入手します。
 2. **サブスクリプション登録**: 「サブスクリプション」画面でリンクを貼り付けるか YAML プロファイルを読み込みます。
@@ -564,21 +499,21 @@ $langBar
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 📬 コミュニティとサポート
+## コミュニティとサポート
 
-- 💬 **Telegram 公式チャンネル**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **お問い合わせ**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **バグ報告・提案**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **Telegram 公式チャンネル**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **お問い合わせ**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **バグ報告・提案**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
-## 📄 ライセンス
+## ライセンス
 
 本プロジェクトは **GPL-3.0 ライセンス** のもとで公開されています。詳細は [LICENSE](LICENSE) をご覧ください。
 """;
@@ -606,11 +541,10 @@ $langBar
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 다운로드</b></a> •
-    <a href="#-빠른-시작"><b>🚀 빠른 시작</b></a> •
-    <a href="#-주요-기능"><b>✨ 주요 기능</b></a> •
-    <a href="#-플랫폼-지원-현황"><b>💻 플랫폼</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 커뮤니티</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>다운로드</b></a> •
+    <a href="#주요-기능"><b>주요 기능</b></a> •
+    <a href="#빠른-시작"><b>빠른 시작</b></a> •
+    <a href="https://t.me/wmimoapp"><b>커뮤니티</b></a>
   </p>
 
   <br/>
@@ -619,53 +553,38 @@ $langBar
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo 다크 모드" width="370" />
   </p>
-  <sub><em>✨ 세련된 18px 마이크로 카드 UI, 부드러운 실시간 베지에 트래픽 그래프, 종합 네트워크 진단 (라이트 & 다크 듀얼 테마)</em></sub>
+  <sub><em>세련된 18px 마이크로 카드 UI, 부드러운 실시간 베지에 트래픽 그래프, 종합 네트워크 진단 (라이트 & 다크 듀얼 테마)</em></sub>
 </div>
 
 ---
 
-## ✨ 주요 기능
+## 주요 기능
 
-- 🎨 **아티잔 마이크로 카드 디자인 & 네이티브 듀얼 테마**:
+- **아티잔 마이크로 카드 디자인 & 네이티브 듀얼 테마**:
   - 18px 곡률 마이크로 카드와 감각적인 시안 블루 컬러의 절제된 미학.
   - 라이트 모드와 깊이 있는 다크 모드를 완벽하게 지원.
   - 대화면 데스크톱 사이드바와 모바일 한 손 레이아웃 자동 적응.
-- ⚡ **강력한 Mihomo (Meta) 코어 엔진**:
+- **강력한 Mihomo (Meta) 코어 엔진**:
   - Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard 등 전 프로토콜 지원.
   - 백그라운드 Isolate 비동기 노드 파싱 — **시작 시 UI 멈춤 현상 제로 (Zero UI Freeze)**.
-- 🔀 **스마트 라우팅 및 듀얼 프록시 엔진**:
+- **스마트 라우팅 및 듀얼 프록시 엔진**:
   - 규칙 분류 (Rule) / 글로벌 (Global) / 직결 (Direct) 모드 원클릭 전환.
   - **TUN 가상 어댑터 모드** (시스템 전체 투명 캡처) 및 **시스템 프록시 모드** (간편 무권한 연결).
   - Android 앱별 분할 프록시 및 Windows UWP Loopback 제외 도구.
-- 📈 **실시간 트래픽 원격 분석 & 종합 진단 도구**:
+- **실시간 트래픽 원격 분석 & 종합 진단 도구**:
   - 1분/5분/15분/30분/60분 다중 시간 축 베지에 곡선 트래픽 그래프.
   - 출구 IP, 위치 및 ISP 정보 즉시 조회, 원터치 복사 및 마스킹 보안 기능.
   - 구독 플랜 데이터 사용량 진행률 및 만료일 카운트다운.
-- 🪟 **운영체제 네이티브 깊은 통합**:
+- **운영체제 네이티브 깊은 통합**:
   - **Windows**: 앱 테마와 동기화되는 트레이 메뉴, 트레이 아이콘 실시간 속도 표시, `comctl32 v6` 비주얼 스타일.
   - **Android**: 백그라운드 상주 알림 (즉시 연결 끊기 버튼 탑재), 퀵 세팅 타일, 실시간 다국어 동기화.
   - **macOS**: 메뉴바 Template 아이콘 지원.
-- 🌍 **완벽한 9개국어 네이티브 번역**:
+- **완벽한 9개국어 네이티브 번역**:
   - 한국어, 영어, 중국어(간체/번체), 일본어, 러시아어, 스페인어, 아랍어, 페르시아어 705개 키 100% 매칭.
 
 ---
 
-## 📌 플랫폼 지원 현황
-
-| 플랫폼 | 상태 | 패키지 형식 | 특징 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **지원 완료** | 설치 파일 (`.exe`) & 무설치 압축파일 (`.zip`) | 트레이 속도 표시, TUN 가상 어댑터, UWP Loopback 도구, 자동 업데이트. |
-| 🐧 **Linux (Universal)** | ✅ **지원 완료** | 단일 실행파일 (`.AppImage`) & 압축파일 (`.tar.gz`) | 모든 리눅스 배포판에서 별도 설치 없이 즉시 실행 가능. |
-| 🐧 **Debian / Ubuntu** | ✅ **지원 완료** | 데비안 패키지 (`.deb`) | 시스템 통합 및 바탕화면 바로가기 자동 등록. |
-| 🐧 **Fedora / openSUSE** | ✅ **지원 완료** | RPM 패키지 (`.rpm`) | 표준 RPM 빌드. |
-| 🐧 **Arch Linux** | ✅ **지원 완료** | Pacman 패키지 (`.pkg.tar.zst`) | pacman 직접 설치 지원. |
-| 📱 **Android** | ✅ **지원 완료** | 범용 APK & 아키텍처별 APK (`arm64`, `v7a`, `x86_64`) | VpnService 기반, 빠른 설정 타일, 앱별 프록시. |
-| 🍎 **macOS** | 🛠️ **소스 준비** | DMG / 로컬 빌드 | `flutter build macos`로 로컬 빌드 지원. |
-| 🍏 **iOS** | 📦 **프레임워크 완료** | IPA / 로컬 빌드 | TrollStore 또는 로컬 서명으로 설치 가능. |
-
----
-
-## 🚀 빠른 시작
+## 빠른 시작
 
 1. **다운로드**: [Releases 페이지](https://github.com/aimy1/Wmimo/releases)에서 사용 중인 OS에 맞는 패키지를 다운로드합니다.
 2. **구독 가져오기**: '구독 관리'에서 Clash/Mihomo 링크를 붙여넣거나 로컬 YAML 파일을 불러옵니다.
@@ -674,21 +593,21 @@ $langBar
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 📬 커뮤니티 & 문의
+## 커뮤니티 & 문의
 
-- 💬 **Telegram 공식 채널**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **이슈 제보**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **Telegram 공식 채널**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **이슈 제보**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
-## 📄 라이선스
+## 라이선스
 
 이 프로젝트는 **GPL-3.0 라이선스**에 따라 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하십시오.
 """;
@@ -716,11 +635,10 @@ $langBar
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 Скачать релиз</b></a> •
-    <a href="#-быстрый-старт"><b>🚀 Быстрый старт</b></a> •
-    <a href="#-ключевые-возможности"><b>✨ Возможности</b></a> •
-    <a href="#-поддерживаемые-платформы"><b>💻 Платформы</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 Сообщество</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>Скачать</b></a> •
+    <a href="#возможности"><b>Возможности</b></a> •
+    <a href="#быстрый-старт"><b>Быстрый старт</b></a> •
+    <a href="https://t.me/wmimoapp"><b>Сообщество</b></a>
   </p>
 
   <br/>
@@ -729,53 +647,38 @@ $langBar
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo Темная тема" width="370" />
   </p>
-  <sub><em>✨ Эстетика микро-карточек 18px, плавный график трафика Безье и диагностика сети (Светлая и Темная темы)</em></sub>
+  <sub><em>Эстетика микро-карточек 18px, плавный график трафика Безье и диагностика сети (Светлая и Темная темы)</em></sub>
 </div>
 
 ---
 
-## ✨ Ключевые возможности
+## Возможности
 
-- 🎨 **Эстетичный интерфейс и нативная смена тем**:
+- **Эстетичный интерфейс и нативная смена тем**:
   - Закругления карточек 18px и фирменный акцентный циан.
   - Плавное и чистое переключение между светлой и глубокой темной темами.
   - Адаптивный интерфейс для больших мониторов и смартфонов.
-- ⚡ **Ядро Mihomo (Meta) с полной поддержкой протоколов**:
+- **Ядро Mihomo (Meta) с полной поддержкой протоколов**:
   - Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct.
   - Парсинг узлов в фоновом Isolate — **полное отсутствие зависаний интерфейса (Zero UI Freeze)**.
-- 🔀 **Интеллектуальная маршрутизация и два режима работы**:
+- **Интеллектуальная маршрутизация и два режима работы**:
   - Быстрое переключение: **По правилам (Rule)** / **Глобальный (Global)** / **Прямой (Direct)**.
   - **Режим TUN-адаптера** (прозрачный системный перехват) и **Системный прокси** (без прав администратора).
   - Раздельное туннелирование приложений на Android и исключение UWP на Windows.
-- 📈 **Мониторинг трафика и диагностический центр**:
+- **Мониторинг трафика и диагностический центр**:
   - Графики трафика Безье в реальном времени (1м / 5м / 15м / 30м / 60м).
   - Карточка проверки внешнего IP, локации и провайдера в один клик.
   - Счетчик расхода тарифного плана и срока действия подписки.
-- 🪟 **Глубокая интеграция с операционными системами**:
+- **Глубокая интеграция с операционными системами**:
   - **Windows**: Нативное меню трея подстраивается под тему приложения, динамическая индикация скорости в трее, стиль `comctl32 v6`.
   - **Android**: Уведомление службы с кнопкой отключения, плитка быстрых настроек, синхронизация языка.
   - **macOS**: Нативная иконка в строке меню Template.
-- 🌍 **100% локализация на 9 языков**:
+- **100% локализация на 9 языков**:
   - Полное покрытие 705 ключей: Русский, Английский, Китайский (упр/трад), Японский, Корейский, Испанский, Арабский, Персидский.
 
 ---
 
-## 📌 Поддерживаемые платформы
-
-| Платформа | Статус | Форматы | Примечания |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Готово** | Установщик (`.exe`) и Портативная (`.zip`) | Боковая панель, трей со скоростью, TUN-режим, UWP-утилита, автообновление. |
-| 🐧 **Linux (Universal)** | ✅ **Готово** | AppImage (`.AppImage`) и Архив (`.tar.gz`) | Работает из коробки на всех дистрибутивах Linux. |
-| 🐧 **Debian / Ubuntu** | ✅ **Готово** | Пакет Debian (`.deb`) | Интеграция с рабочим столом и ярлыки. |
-| 🐧 **Fedora / openSUSE** | ✅ **Готово** | Пакет RedHat (`.rpm`) | Стандартная сборка RPM. |
-| 🐧 **Arch Linux** | ✅ **Готово** | Пакет Pacman (`.pkg.tar.zst`) | Прямая установка pacman. |
-| 📱 **Android** | ✅ **Готово** | Универсальный APK и по архитектурам | VpnService, быстрая плитка в шторке, разделение приложений. |
-| 🍎 **macOS** | 🛠️ **Исходники** | DMG / Сборка | Локальная сборка через `flutter build macos`. |
-| 🍏 **iOS** | 📦 **Архитектура** | IPA / Сборка | Доступно через TrollStore или персональный сертификат. |
-
----
-
-## 🚀 Быстрый старт
+## Быстрый старт
 
 1. **Скачать**: Перейдите в [Релизы](https://github.com/aimy1/Wmimo/releases) и скачайте нужный файл.
 2. **Импорт**: В разделе «Подписки» вставьте ссылку на подписку Clash/Mihomo.
@@ -784,21 +687,21 @@ $langBar
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 📬 Сообщество
+## Сообщество
 
-- 💬 **Telegram-канал**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **Сообщить об ошибке**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **Telegram-канал**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **Сообщить об ошибке**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
-## 📄 Лицензия
+## Лицензия
 
 Проект распространяется под лицензией **GPL-3.0**. Подробности в файле [LICENSE](LICENSE).
 """;
@@ -826,11 +729,10 @@ $langBar
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 Descargar versiones</b></a> •
-    <a href="#-inicio-rápido"><b>🚀 Inicio rápido</b></a> •
-    <a href="#-características"><b>✨ Características</b></a> •
-    <a href="#-plataformas-soportadas"><b>💻 Plataformas</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 Comunidad</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>Descargar</b></a> •
+    <a href="#características"><b>Características</b></a> •
+    <a href="#inicio-rápido"><b>Inicio rápido</b></a> •
+    <a href="https://t.me/wmimoapp"><b>Comunidad</b></a>
   </p>
 
   <br/>
@@ -839,53 +741,38 @@ $langBar
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo Tema Oscuro" width="370" />
   </p>
-  <sub><em>✨ Diseño refinado de micro-tarjetas de 18px, curvas de tráfico Bézier en tiempo real y diagnósticos completos (Temas Claro y Oscuro)</em></sub>
+  <sub><em>Diseño refinado de micro-tarjetas de 18px, curvas de tráfico Bézier en tiempo real y diagnósticos completos (Temas Claro y Oscuro)</em></sub>
 </div>
 
 ---
 
-## ✨ Características destacadas
+## Características
 
-- 🎨 **Interfaz de micro-tarjetas y doble tema nativo**:
+- **Interfaz de micro-tarjetas y doble tema nativo**:
   - Sistema de tarjetas con esquinas redondeadas de 18px y acento azul cian.
   - Transición fluida entre el modo claro y el modo oscuro profundo.
   - Diseño adaptable para escritorios de pantalla ancha y dispositivos móviles.
-- ⚡ **Núcleo Mihomo (Meta) de ultra rendimiento**:
+- **Núcleo Mihomo (Meta) de ultra rendimiento**:
   - Compatible con Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard y Direct.
   - Procesamiento asíncrono en Isolate en segundo plano — **cero congelamiento de interfaz (Zero UI Freeze)**.
-- 🔀 **Enrutamiento inteligente y dos motores de proxy**:
+- **Enrutamiento inteligente y dos motores de proxy**:
   - Conmutación rápida: **Por reglas (Rule)** / **Global** / **Directo (Direct)**.
   - **Modo Adaptador Virtual TUN** y **Modo Proxy del Sistema** sin privilegios elevados.
   - Proxy por aplicación en Android y herramienta UWP Loopback en Windows.
-- 📈 **Telemetría en tiempo real y suite de diagnóstico**:
+- **Telemetría en tiempo real y suite de diagnóstico**:
   - Gráfico de ondas Bézier con intervalos ajustables (1m / 5m / 15m / 30m / 60m).
   - Tarjeta de información de IP pública, ubicación y proveedor con copia rápida.
   - Barra de progreso de consumo de datos y cuenta regresiva de expiración.
-- 🪟 **Integración profunda con el sistema operativo**:
+- **Integración profunda con el sistema operativo**:
   - **Windows**: Menú de bandeja nativo adaptable al tema, medidor de velocidad dinámico, estilo moderno `comctl32 v6`.
   - **Android**: Notificación de servicio con desconexión rápida, mosaico de ajustes rápidos y sincronización de idiomas.
   - **macOS**: Icono de barra de menús en modo Template.
-- 🌍 **100% traducido a 9 idiomas**:
+- **100% traducido a 9 idiomas**:
   - Cobertura completa en Español, Inglés, Chino (simplificado/tradicional), Japonés, Coreano, Ruso, Árabe y Persa.
 
 ---
 
-## 📌 Plataformas soportadas
-
-| Plataforma | Estado | Formato | Detalles |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Listo** | Instalador (`.exe`) y Portable (`.zip`) | Bandeja con velocidad, modo TUN, herramienta Loopback, auto-actualización. |
-| 🐧 **Linux (Universal)** | ✅ **Listo** | AppImage (`.AppImage`) y Portátil (`.tar.gz`) | Funciona sin instalación en cualquier distribución de Linux. |
-| 🐧 **Debian / Ubuntu** | ✅ **Listo** | Paquete Debian (`.deb`) | Integración nativa con menú de escritorio y accesos directos. |
-| 🐧 **Fedora / openSUSE** | ✅ **Listo** | Paquete RedHat (`.rpm`) | Formato RPM estándar. |
-| 🐧 **Arch Linux** | ✅ **Listo** | Paquete Pacman (`.pkg.tar.zst`) | Instalación directa vía pacman. |
-| 📱 **Android** | ✅ **Listo** | APK Universal y por arquitecturas | Controlador VpnService, mosaico de ajustes rápidos, proxy por app. |
-| 🍎 **macOS** | 🛠️ **Código listo** | DMG / Compilación local | Compilable mediante `flutter build macos`. |
-| 🍏 **iOS** | 📦 **Estructura lista**| IPA / Compilación local | Disponible mediante TrollStore o firma personal. |
-
----
-
-## 🚀 Inicio rápido
+## Inicio rápido
 
 1. **Descargar**: Vaya a la sección de [Releases](https://github.com/aimy1/Wmimo/releases) y descargue el instalador de su sistema.
 2. **Importar**: En «Suscripciones», pegue su enlace de Clash/Mihomo.
@@ -894,21 +781,21 @@ $langBar
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 📬 Comunidad y contacto
+## Comunidad y contacto
 
-- 💬 **Canal de Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **Correo del desarrollador**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **Reportar errores**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **Canal de Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **Correo del desarrollador**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **Reportar errores**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la licencia **GPL-3.0**. Consulte el archivo [LICENSE](LICENSE) para más información.
 """;
@@ -936,11 +823,10 @@ $langBar
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 تنزيل الإصدارات</b></a> •
-    <a href="#-البدء-السريع"><b>🚀 البدء السريع</b></a> •
-    <a href="#-الميزات-الرئيسية"><b>✨ الميزات</b></a> •
-    <a href="#-المنصات-المدعومة"><b>💻 المنصات</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 المجتمع</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>تنزيل الإصدارات</b></a> •
+    <a href="#الميزات-الرئيسية"><b>الميزات الرئيسية</b></a> •
+    <a href="#البدء-السريع"><b>البدء السريع</b></a> •
+    <a href="https://t.me/wmimoapp"><b>المجتمع</b></a>
   </p>
 
   <br/>
@@ -949,53 +835,38 @@ $langBar
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo المظهر الداكن" width="370" />
   </p>
-  <sub><em>✨ تصميم عصري ببطاقات مصغرة 18px، مراقبة حركة المرور في الوقت الفعلي وأدوات تشخيص شاملة (المظهر الفاتح والداكن)</em></sub>
+  <sub><em>تصميم عصري ببطاقات مصغرة 18px، مراقبة حركة المرور في الوقت الفعلي وأدوات تشخيص شاملة (المظهر الفاتح والداكن)</em></sub>
 </div>
 
 ---
 
-## ✨ الميزات الرئيسية
+## الميزات الرئيسية
 
-- 🎨 **واجهة بطاقات متطورة ومظهر مزدوج أصيل**:
+- **واجهة بطاقات متطورة ومظهر مزدوج أصيل**:
   - تصميم دقيق بحواف مستديرة 18px مع لمسات زرقاء سماوية أنيقة.
   - دعم أصلي وسلس للمظهرين الفاتح (Light) والداكن (Dark).
   - تخطيط متكيف للشاشات الكبيرة والهواتف المحمولة.
-- ⚡ **نواة Mihomo فائقة السرعة**:
+- **نواة Mihomo فائقة السرعة**:
   - دعم جميع البروتوكولات: Shadowsocks وVMess وVLESS وTrojan وHysteria 1/2 وTUIC وWireGuard.
   - معالجة غير متزامنة في الخلفية — **انعدام تام لتجمد الواجهة (Zero UI Freeze)**.
-- 🔀 **توجيه ذكي ومحركا وكيل**:
+- **توجيه ذكي ومحركا وكيل**:
   - تبديل فوري لأنماط الخروج: **القواعد (Rule)** / **شامل (Global)** / **مباشر (Direct)**.
   - **وضع محول الشبكة الظاهرية TUN** و **وضع وكيل النظام**.
   - وكيل لكل تطبيق على Android وأداة UWP Loopback على Windows.
-- 📈 **مراقبة حركة البيانات في الوقت الفعلي**:
+- **مراقبة حركة البيانات في الوقت الفعلي**:
   - رسم بياني لحركة البيانات في الوقت الفعلي مع خيارات فترات زمنية متعددة.
   - بطاقة الاستعلام الفوري عن عنوان IP والموقع ومزود الخدمة.
   - شريط تقدم استهلاك الباقة والعد التنازلي لانتهاء الصلاحية.
-- 🪟 **تكامل عميق مع أنظمة التشغيل**:
+- **تكامل عميق مع أنظمة التشغيل**:
   - **Windows**: قائمة شريط المهام متكيفة مع مظهر التطبيق، وعرض حي لسرعة الشبكة، ودعم `comctl32 v6`.
   - **Android**: إشعار دائم مع زر قطع اتصال سريع، وبلاطة الإعدادات السريعة، وتزامن اللغة فورياً.
   - **macOS**: دعم أيقونة شريط القوائم التكيفية Template.
-- 🌍 **دعم كامل لـ 9 لغات عالمية**:
+- **دعم كامل لـ 9 لغات عالمية**:
   - تغطية بنسبة 100% لـ 705 مفتاح ترجمة عبر اللغات المدعومة.
 
 ---
 
-## 📌 المنصات المدعومة
-
-| المنصة | الحالة | الصيغ | المميزات |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **جاهز** | مثبت (`.exe`) ومحمول (`.zip`) | شريط جانبي، سرعة في شريط المهام، وضع TUN، تحديث تلقائي. |
-| 🐧 **Linux (Universal)** | ✅ **جاهز** | AppImage (`.AppImage`) ومحمول (`.tar.gz`) | يعمل مباشرة بدون تثبيت على جميع توزيعات لينكس. |
-| 🐧 **Debian / Ubuntu** | ✅ **جاهز** | حزمة دبيان (`.deb`) | تثبيت رسمي وتكامل كامل مع سطح المكتب. |
-| 🐧 **Fedora / openSUSE** | ✅ **جاهز** | حزمة ريد هات (`.rpm`) | حزمة RPM قياسية. |
-| 🐧 **Arch Linux** | ✅ **جاهز** | حزمة باكمان (`.pkg.tar.zst`) | تثبيت فوري عبر pacman. |
-| 📱 **Android** | ✅ **جاهز** | APK شامل وبحسب المعماريات | برنامج تشغيل VpnService، وبلاطة الإعدادات السريعة. |
-| 🍎 **macOS** | 🛠️ **الكود جاهز**| DMG / بناء محلي | بناء محلي عبر `flutter build macos`. |
-| 🍏 **iOS** | 📦 **الهيكل جاهز**| IPA / بناء محلي | متاح عبر TrollStore أو التثبيت الجانبي. |
-
----
-
-## 🚀 البدء السريع
+## البدء السريع
 
 1. **التنزيل**: حمّل الحزمة المناسبة لنظامك من صفحة [الإصدارات](https://github.com/aimy1/Wmimo/releases).
 2. **استيراد الاشتراك**: افتح قسم «الاشتراكات» والصق رابط اشتراك Clash/Mihomo.
@@ -1004,21 +875,21 @@ $langBar
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 📬 المجتمع
+## المجتمع
 
-- 💬 **قناة تيليجرام الرسمية**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **البريد الإلكتروني**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **الإبلاغ عن المشكلات**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **قناة تيليجرام الرسمية**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **البريد الإلكتروني**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **الإبلاغ عن المشكلات**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
-## 📄 الترخيص
+## الترخيص
 
 هذا المشروع مرخص بموجب **رخصة جنو العمومية v3.0 (GPL-3.0)**. انظر ملف [LICENSE](LICENSE) للمزيد من التفاصيل.
 """;
@@ -1046,11 +917,10 @@ $langBar
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 دانلود فایل‌های نصبی</b></a> •
-    <a href="#-شروع-سریع"><b>🚀 شروع سریع</b></a> •
-    <a href="#-ویژگی‌های-کلیدی"><b>✨ ویژگی‌ها</b></a> •
-    <a href="#-پلتفرم‌های-پشتیبانی‌شده"><b>💻 پلتفرم‌ها</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 انجمن</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>دانلود فایل‌های نصبی</b></a> •
+    <a href="#ویژگیهای-کلیدی"><b>ویژگی‌های کلیدی</b></a> •
+    <a href="#شروع-سریع"><b>شروع سریع</b></a> •
+    <a href="https://t.me/wmimoapp"><b>انجمن</b></a>
   </p>
 
   <br/>
@@ -1059,53 +929,38 @@ $langBar
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo تم تاریک" width="370" />
   </p>
-  <sub><em>✨ طراحی کارت‌های میکرو ۱۸ پیکسلی، نمودار روان و لحظه‌ای ترافیک و ابزارهای جامع عیب‌یابی شبکه (تم روشن و تاریک)</em></sub>
+  <sub><em>طراحی کارت‌های میکرو ۱۸ پیکسلی، نمودار روان و لحظه‌ای ترافیک و ابزارهای جامع عیب‌یابی شبکه (تم روشن و تاریک)</em></sub>
 </div>
 
 ---
 
-## ✨ ویژگی‌های کلیدی
+## ویژگی‌های کلیدی
 
-- 🎨 **رابط کاربری هنری با کارت‌های میکرو و دو تم اختصاصی**:
+- **رابط کاربری هنری با کارت‌های میکرو و دو تم اختصاصی**:
   - گوشه‌های گرد ۱۸ پیکسلی به همراه المان‌های آبی فیروزه‌ای چشم‌نواز.
   - پشتیبانی روان و سریع از دو حالت روشن (Light) و تاریک عمیق (Dark).
   - طراحی واکنش‌گرا متناسب با نمایشگرهای عریض دسکتاپ و صفحات لمسی موبایل.
-- ⚡ **هسته قدرتمند Mihomo (Meta)**:
+- **هسته قدرتمند Mihomo (Meta)**:
   - پشتیبانی از تمام پروتکل‌ها: Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard و Direct.
   - پردازش غیرهمزمان در پس‌زمینه — **بدون هیچ‌گونه هنگ یا افت فریم در رابط کاربری (Zero UI Freeze)**.
-- 🔀 **مسیریابی هوشمند و دو حالت پروکسی**:
+- **مسیریابی هوشمند و دو حالت پروکسی**:
   - تغییر سریع حالت: **بر اساس قوانین (Rule)** / **سراسری (Global)** / **مستقیم (Direct)**.
   - انعطاف‌پذیری دوگانه: **حالت آداپتور مجازی TUN** و **پروکسی سیستمی (System Proxy)**.
   - تفکیک ترافیک برنامه‌ها در اندروید و ابزار معافیت Loopback در ویندوز.
-- 📈 **نمودار ترافیک لحظه‌ای و ابزارهای تحلیل شبکه**:
+- **نمودار ترافیک لحظه‌ای و ابزارهای تحلیل شبکه**:
   - نمودار موجی نرم بزیه در بازه‌های مختلف (۱، ۵، ۱۵، ۳۰ و ۶۰ دقیقه).
   - کارت نمایش آی‌پی خروجی، موقعیت مکانی و رساننده اینترنت با کپی آسان.
   - نمایش میزان مصرف ترافیک و روزهای باقی‌مانده از اشتراک.
-- 🪟 **یکپارچگی عمیق با سیستم‌عامل‌ها**:
+- **یکپارچگی عمیق با سیستم‌عامل‌ها**:
   - **Windows**: منوی کلیک راست سینی ویندوز هماهنگ با تم برنامه، نمایش لحظه‌ای سرعت دانلود/آپلود در آیکون، سبک مدرن `comctl32 v6`.
   - **Android**: اعلان دائمی با دکمه قطع اتصال سریع، کاشی تنظیمات سریع (Quick Settings) و هماهنگی همزمان زبان.
   - **macOS**: پشتیبانی از آیکون نوار وضعیت Template.
-- 🌍 **پوشش ۱۰۰ درصدی برای ۹ زبان**:
+- **پوشش ۱۰۰ درصدی برای ۹ زبان**:
   - پشتیبانی کامل از زبان‌های فارسی، انگلیسی، چینی (ساده/سنتی)، ژاپنی، کره‌ای، روسی، اسپانیایی و عربی.
 
 ---
 
-## 📌 پلتفرم‌های پشتیبانی‌شده
-
-| پلتفرم | وضعیت | فرمت بسته‌ها | توضیحات |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **آماده استفاده** | نصبی (`.exe`) و پرتابل (`.zip`) | منوی سینی با سرعت، حالت TUN، ابزار Loopback، به‌روزرسانی خودکار. |
-| 🐧 **Linux (Universal)** | ✅ **آماده استفاده** | تک‌فایل (`.AppImage`) و فشرده (`.tar.gz`) | اجرای سریع و بدون نیاز به نصب در تمام توزیع‌های لینوکس. |
-| 🐧 **Debian / Ubuntu** | ✅ **آماده استفاده** | بسته دبیان (`.deb`) | ثبت خودکار در منوی برنامه‌ها و سرویس‌های سیستم. |
-| 🐧 **Fedora / openSUSE** | ✅ **آماده استفاده** | بسته رد هت (`.rpm`) | بسته استاندارد RPM. |
-| 🐧 **Arch Linux** | ✅ **آماده استفاده** | بسته پک‌من (`.pkg.tar.zst`) | نصب مستقیم با pacman. |
-| 📱 **Android** | ✅ **آماده استفاده** | فایل نصبی APK چندمعماری | درایور VpnService، کاشی تنظیمات سریع، تفکیک برنامه‌ها. |
-| 🍎 **macOS** | 🛠️ **سورس آماده** | DMG / ساخت محلی | قابلیت ساخت با دستور `flutter build macos`. |
-| 🍏 **iOS** | 📦 **معماری آماده** | IPA / ساخت محلی | قابل نصب از طریق TrollStore یا ساخت محلی. |
-
----
-
-## 🚀 شروع سریع
+## شروع سریع
 
 1. **دانلود**: بسته متناسب با سیستم‌عامل خود را از بخش [Releases](https://github.com/aimy1/Wmimo/releases) دریافت کنید.
 2. **افزودن اشتراک**: در بخش «اشتراک‌ها»، لینک اشتراک Clash/Mihomo را جای‌گذاری کنید.
@@ -1114,21 +969,21 @@ $langBar
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 📬 جامعه و ارتباط
+## جامعه و ارتباط
 
-- 💬 **کانال رسمی تلگرام**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **ایمیل**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **گزارش باگ و اشکالات**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **کانال رسمی تلگرام**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **ایمیل**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **گزارش باگ و اشکالات**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
-## 📄 مجوز
+## مجوز
 
 این پروژه تحت مجوز **GPL-3.0** منتشر شده است. برای جزئیات بیشتر به فایل [LICENSE](LICENSE) مراجعه کنید.
 """;

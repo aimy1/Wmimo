@@ -25,11 +25,11 @@
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 下載安裝包</b></a> •
-    <a href="#-快速上手"><b>🚀 快速上手</b></a> •
-    <a href="#-核心特性"><b>✨ 核心特性</b></a> •
-    <a href="#-全平台支援矩陣"><b>💻 平台支援</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 官方社群</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>下載安裝</b></a> •
+    <a href="#核心特性"><b>核心特性</b></a> •
+    <a href="#快速上手"><b>快速上手</b></a> •
+    <a href="#本地編譯與開發"><b>本地編譯</b></a> •
+    <a href="https://t.me/wmimoapp"><b>官方社群</b></a>
   </p>
 
   <br/>
@@ -38,57 +38,42 @@
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo 深色主題" width="370" />
   </p>
-  <sub><em>✨ 18px 極簡微卡片設計體系 · 即時平滑流量貝塞爾曲線監控 · TUN & 系統代理雙模式（淺色 & 深色原生雙主題）</em></sub>
+  <sub><em>18px 極簡微卡片設計體系 · 即時平滑流量貝塞爾曲線監控 · TUN & 系統代理雙模式（淺色 & 深色原生雙主題）</em></sub>
 </div>
 
 ---
 
-## ✨ 核心特性
+## 核心特性
 
-- 🎨 **藝術級微卡片介面與原生雙主題**：
+- **藝術級微卡片介面與原生雙主題**：
   - 遵循 18px 精緻圓角微卡片排版體系與天青藍品牌視覺，現代高雅；
   - 原生支援極簡明亮（Light）與深邃暗黑（Dark）雙主題無縫切換；
   - 響應式自適應設計：桌面端寬螢幕側邊欄，行動端單手人體工學佈局。
-- ⚡ **高效能 Mihomo (Meta) 核心驅動**：
+- **高效能 Mihomo (Meta) 核心驅動**：
   - 全協議支援：**Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct** 等；
   - 獨立後台 Isolate 平行處理節點與規則流，啟動過程 **零介面凍結（Zero UI Freeze）**，超低記憶體佔用。
-- 🔀 **智慧分流路由與系統級雙代理模式**：
+- **智慧分流路由與系統級雙代理模式**：
   - 出站模式快速切換：**規則分流 (Rule)** / **全域代理 (Global)** / **直接連線 (Direct)**；
   - 雙引擎彈性調度：**TUN 虛擬網卡模式**（透明接管全系統流量）與 **系統代理模式**（免特權快速連線）；
   - 應用程式分流：Android 依應用程式代理（黑白名單）與 Windows UWP Loopback 免除工具。
-- 📈 **即時流量監控與智慧診斷套件**：
+- **即時流量監控與智慧診斷套件**：
   - 儀表板即時平滑貝塞爾流量曲線圖，支援 1m / 5m / 15m / 30m / 60m 跨度縮放；
   - 即時出口 IP、地理位置與 ISP 歸屬資訊卡片，一鍵測速與隱私脫敏保護；
   - 訂閱套餐用量即時進度條與到期時間精準倒數；
   - 完整診斷套件：路由規則檢視、核心即時主控台日誌、全節點平行測速與網路連通性診斷。
-- 🪟 **深度作業系統級原生整合**：
+- **深度作業系統級原生整合**：
   - **Windows**：原生系統匣右鍵選單自動同步跟隨 App 深淺色主題，系統匣圖示動態顯示即時網速，現代 `comctl32 v6` 渲染；
   - **Android**：前景服務通知欄常駐（具即時狀態與中斷按鈕），支援下拉快捷開關磁貼，多語言即時聯動；
   - **macOS**：原生選單列自適應 Template 圖示支援與系統代理自動化。
-- 🚀 **智慧多通道無縫自動更新**：
+- **智慧多通道無縫自動更新**：
   - 支援 `stable`（正式穩定通道）與 `beta`（測試預覽通道）自由切換；
   - 後台靜默高速下載、SHA-256 哈希完整性校驗與原地升級。
-- 🌍 **真正 100% 完整 9 國語言支援**：
+- **真正 100% 完整 9 國語言支援**：
   - 繁體中文、簡體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 9 種語言 705 個詞條全量對齊。
 
 ---
 
-## 📌 全平台支援矩陣
-
-| 平台 / 發行版 | 狀態 | 套件格式 | 功能特性與適配說明 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **正式支援** | 安裝包 (`.exe`) 與 綠色便攜包 (`.zip`) | 完整桌面側邊欄、原生深色系統匣（即時速率）、TUN 模式、UWP Loopback、靜默自動更新。 |
-| 🐧 **Linux 通用免安裝** | ✅ **正式支援** | 通用獨立映像 (`.AppImage`) 與 綠色包 (`.tar.gz`) | 單一檔案免安裝，解壓縮即用，相容所有主流 Linux 發行版。 |
-| 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **正式支援** | Debian 安裝包 (`.deb`) | 原生套件管理支援，自動註冊桌面啟動選單、高解析圖示與系統服務。 |
-| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **正式支援** | RedHat 安裝包 (`.rpm`) | 標準 RPM 格式封裝，自動設定執行時期依賴與桌面整合。 |
-| 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **正式支援** | Pacman 二進位套件 (`.pkg.tar.zst`) 與 `PKGBUILD` | 支援 pacman 一鍵安裝與 AUR 腳本直接建置。 |
-| 📱 **Android** | ✅ **正式支援** | 通用 APK 與 分架構套件 (`arm64-v8a`, `v7a`, `x86_64`) | 系統級 VpnService 驅動、固定簽名覆蓋升級、快速設定磁貼、分應用程式代理。 |
-| 🍎 **macOS** | 🛠️ **原始碼就緒** | DMG / 本地建置 | 系統代理與 TUN 模式底層均已實現，支援本地編譯 (`flutter build macos`)。 |
-| 🍏 **iOS** | 📦 **架構就緒** | IPA / 本地建置 | NetworkExtension 架構已搭建。建議透過 TrollStore 側載或本地建置。 |
-
----
-
-## 🚀 快速上手
+## 快速上手
 
 1. **下載安裝**：至 [Releases 頁面](https://github.com/aimy1/Wmimo/releases) 下載適用於您系統的安裝包；
 2. **匯入訂閱**：進入「訂閱配置」介面，貼上您的 Clash / Mihomo 訂閱連結或匯入本地 YAML 設定檔；
@@ -97,7 +82,7 @@
 
 ---
 
-## 🛠️ 本地編譯與開發
+## 本地編譯與開發
 
 ```bash
 # 1. 複製程式碼庫
@@ -123,28 +108,28 @@ flutter build macos --release     # macOS
 
 ---
 
-## 📊 Star 成長趨勢
+## Star 成長趨勢
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 🙏 致謝與鳴謝
+## 致謝
 
-- 🌟 **特別鳴謝 [GooRingX (vowe)](https://github.com/GooRingX)** 的傑出開源貢獻與設計指導！
-- 🚀 **特別感謝 [Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** 團隊提供的高效能核心。
-- 💙 **感謝 [Flutter](https://flutter.dev/)** 團隊與社群提供的優秀跨平台框架支援。
-
----
-
-## 📬 社群交流與回饋
-
-- 💬 **Telegram 官方頻道**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **聯絡信箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **問題回報**: [提交 GitHub Issue](https://github.com/aimy1/Wmimo/issues)
+- **[GooRingX (vowe)](https://github.com/GooRingX)**：感謝傑出的開源貢獻與設計指導。
+- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**：感謝團隊提供的高效能核心。
+- **[Flutter](https://flutter.dev/)**：感謝團隊與社群提供的優秀跨平台框架支援。
 
 ---
 
-## 📄 開源授權
+## 社群交流與回饋
+
+- **Telegram 官方頻道**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **聯絡信箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **問題回報**: [提交 GitHub Issue](https://github.com/aimy1/Wmimo/issues)
+
+---
+
+## 開源授權
 
 本專案採用 **GPL-3.0** 授權條款開源分發。詳細內容請參閱 [LICENSE](LICENSE) 檔案。

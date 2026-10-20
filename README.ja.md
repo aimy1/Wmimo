@@ -25,11 +25,10 @@
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 パッケージをダウンロード</b></a> •
-    <a href="#-クイックスタート"><b>🚀 クイックスタート</b></a> •
-    <a href="#-主な機能"><b>✨ 主な機能</b></a> •
-    <a href="#-プラットフォーム対応状況"><b>💻 プラットフォーム</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 コミュニティ</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>ダウンロード</b></a> •
+    <a href="#主な機能"><b>主な機能</b></a> •
+    <a href="#クイックスタート"><b>クイックスタート</b></a> •
+    <a href="https://t.me/wmimoapp"><b>コミュニティ</b></a>
   </p>
 
   <br/>
@@ -38,53 +37,38 @@
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo ダークテーマ" width="370" />
   </p>
-  <sub><em>✨ 18px マイクロカードデザイン、リアルタイムのベジェ曲線トラフィックモニター、高度なネットワーク診断（ライト＆ダーク両対応）</em></sub>
+  <sub><em>18px マイクロカードデザイン、リアルタイムのベジェ曲線トラフィックモニター、高度なネットワーク診断（ライト＆ダーク両対応）</em></sub>
 </div>
 
 ---
 
-## ✨ 主な機能
+## 主な機能
 
-- 🎨 **洗練されたマイクロカードUIとネイティブデュアルテーマ**:
+- **洗練されたマイクロカードUIとネイティブデュアルテーマ**:
   - 美しい18px角丸マイクロカードレイアウトと洗練されたシアンブルーのアクセントカラー。
   - クリーンなライトテーマと深みのあるダークテーマをシームレスに切り替え。
   - 大画面デスクトップサイドバーとモバイル向けエルゴノミックレイアウトに自動適応。
-- ⚡ **高性能 Mihomo (Meta) コア**:
+- **高性能 Mihomo (Meta) コア**:
   - **Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct** などを完全サポート。
   - ノード解析とソートをバックグラウンド Isolate で非同期処理 — **起動時の画面フリーズゼロ (Zero UI Freeze)**。
-- 🔀 **柔軟なルーティングとデュアルプロキシエンジン**:
+- **柔軟なルーティングとデュアルプロキシエンジン**:
   - ワンタップでルーティング切替: **ルール分流 (Rule)** / **グローバル (Global)** / **ダイレクト (Direct)**。
   - **TUN 仮想アダプターモード**（システム全体の透過プロキシ）と **システムプロキシモード**（権限不要の軽快接続）。
   - Android アプリ別プロキシ設定、Windows UWP Loopback 免除ユーティリティ。
-- 📈 **リアルタイムトラフィック監視と総合ネットワーク診断**:
+- **リアルタイムトラフィック監視と総合ネットワーク診断**:
   - 1分/5分/15分/30分/60分のマルチスパンに対応した滑らかなベジェ曲線トラフィックグラフ。
   - 出口 IP、地域、ISP 情報を瞬時に取得し、プライバシー保護のマスキングとワンタップコピーに対応。
   - サブスクリプション通信量の進捗バーと有効期限カウントダウン。
-- 🪟 **OSネイティブ機能とのシームレスな統合**:
+- **OSネイティブ機能とのシームレスな統合**:
   - **Windows**: アプリのテーマに自動追従するタスクトレイメニュー、トレイアイコンでのリアルタイム速度表示、`comctl32 v6` スタイル。
   - **Android**: フォアグラウンド通知によるワンタップ切断、クイック設定タイル、多言語リアルタイム同期。
   - **macOS**: メニューバーの Template アイコン対応。
-- 🌍 **完全な 9 言語ネイティブ対応**:
+- **完全な 9 言語ネイティブ対応**:
   - 簡体字中国語、繁体字中国語、英語、日本語、韓国語、ロシア語、スペイン語、アラビア語、ペルシャ語の 705 キーを完全カバー。
 
 ---
 
-## 📌 プラットフォーム対応状況
-
-| プラットフォーム | 状態 | パッケージ形式 | 特徴 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **本番対応** | インストーラー (`.exe`) & ポータブル (`.zip`) | デスクトップサイドバー、トレイ速度表示、TUNモード、自動アップデート。 |
-| 🐧 **Linux (Universal)** | ✅ **本番対応** | AppImage (`.AppImage`) & ポータブル (`.tar.gz`) | 全ての主要Linuxディストリビューションでインストール不要で動作。 |
-| 🐧 **Debian / Ubuntu** | ✅ **本番対応** | Debian パッケージ (`.deb`) | ネイティブパッケージ管理、デスクトップ統合。 |
-| 🐧 **Fedora / openSUSE** | ✅ **本番対応** | RedHat パッケージ (`.rpm`) | 標準RPMフォーマット。 |
-| 🐧 **Arch Linux** | ✅ **本番対応** | Pacman パッケージ (`.pkg.tar.zst`) | pacman 一括インストール対応。 |
-| 📱 **Android** | ✅ **本番対応** | 汎用 APK & ABI別パッケージ (`arm64`, `v7a`, `x86_64`) | VpnService統合、クイック設定タイル、アプリ別プロキシ。 |
-| 🍎 **macOS** | 🛠️ **ソース対応** | DMG / ローカルビルド | `flutter build macos` でローカルビルド可能。 |
-| 🍏 **iOS** | 📦 **設計完了** | IPA / ローカルビルド | TrollStore またはローカル署名で利用可能。 |
-
----
-
-## 🚀 クイックスタート
+## クイックスタート
 
 1. **ダウンロード**: [Releases ページ](https://github.com/aimy1/Wmimo/releases) からお使いのOSに合ったパッケージを入手します。
 2. **サブスクリプション登録**: 「サブスクリプション」画面でリンクを貼り付けるか YAML プロファイルを読み込みます。
@@ -93,20 +77,20 @@
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 📬 コミュニティとサポート
+## コミュニティとサポート
 
-- 💬 **Telegram 公式チャンネル**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **お問い合わせ**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **バグ報告・提案**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **Telegram 公式チャンネル**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **お問い合わせ**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **バグ報告・提案**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
-## 📄 ライセンス
+## ライセンス
 
 本プロジェクトは **GPL-3.0 ライセンス** のもとで公開されています。詳細は [LICENSE](LICENSE) をご覧ください。

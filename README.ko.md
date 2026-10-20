@@ -25,11 +25,10 @@
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 다운로드</b></a> •
-    <a href="#-빠른-시작"><b>🚀 빠른 시작</b></a> •
-    <a href="#-주요-기능"><b>✨ 주요 기능</b></a> •
-    <a href="#-플랫폼-지원-현황"><b>💻 플랫폼</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 커뮤니티</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>다운로드</b></a> •
+    <a href="#주요-기능"><b>주요 기능</b></a> •
+    <a href="#빠른-시작"><b>빠른 시작</b></a> •
+    <a href="https://t.me/wmimoapp"><b>커뮤니티</b></a>
   </p>
 
   <br/>
@@ -38,53 +37,38 @@
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo 다크 모드" width="370" />
   </p>
-  <sub><em>✨ 세련된 18px 마이크로 카드 UI, 부드러운 실시간 베지에 트래픽 그래프, 종합 네트워크 진단 (라이트 & 다크 듀얼 테마)</em></sub>
+  <sub><em>세련된 18px 마이크로 카드 UI, 부드러운 실시간 베지에 트래픽 그래프, 종합 네트워크 진단 (라이트 & 다크 듀얼 테마)</em></sub>
 </div>
 
 ---
 
-## ✨ 주요 기능
+## 주요 기능
 
-- 🎨 **아티잔 마이크로 카드 디자인 & 네이티브 듀얼 테마**:
+- **아티잔 마이크로 카드 디자인 & 네이티브 듀얼 테마**:
   - 18px 곡률 마이크로 카드와 감각적인 시안 블루 컬러의 절제된 미학.
   - 라이트 모드와 깊이 있는 다크 모드를 완벽하게 지원.
   - 대화면 데스크톱 사이드바와 모바일 한 손 레이아웃 자동 적응.
-- ⚡ **강력한 Mihomo (Meta) 코어 엔진**:
+- **강력한 Mihomo (Meta) 코어 엔진**:
   - Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard 등 전 프로토콜 지원.
   - 백그라운드 Isolate 비동기 노드 파싱 — **시작 시 UI 멈춤 현상 제로 (Zero UI Freeze)**.
-- 🔀 **스마트 라우팅 및 듀얼 프록시 엔진**:
+- **스마트 라우팅 및 듀얼 프록시 엔진**:
   - 규칙 분류 (Rule) / 글로벌 (Global) / 직결 (Direct) 모드 원클릭 전환.
   - **TUN 가상 어댑터 모드** (시스템 전체 투명 캡처) 및 **시스템 프록시 모드** (간편 무권한 연결).
   - Android 앱별 분할 프록시 및 Windows UWP Loopback 제외 도구.
-- 📈 **실시간 트래픽 원격 분석 & 종합 진단 도구**:
+- **실시간 트래픽 원격 분석 & 종합 진단 도구**:
   - 1분/5분/15분/30분/60분 다중 시간 축 베지에 곡선 트래픽 그래프.
   - 출구 IP, 위치 및 ISP 정보 즉시 조회, 원터치 복사 및 마스킹 보안 기능.
   - 구독 플랜 데이터 사용량 진행률 및 만료일 카운트다운.
-- 🪟 **운영체제 네이티브 깊은 통합**:
+- **운영체제 네이티브 깊은 통합**:
   - **Windows**: 앱 테마와 동기화되는 트레이 메뉴, 트레이 아이콘 실시간 속도 표시, `comctl32 v6` 비주얼 스타일.
   - **Android**: 백그라운드 상주 알림 (즉시 연결 끊기 버튼 탑재), 퀵 세팅 타일, 실시간 다국어 동기화.
   - **macOS**: 메뉴바 Template 아이콘 지원.
-- 🌍 **완벽한 9개국어 네이티브 번역**:
+- **완벽한 9개국어 네이티브 번역**:
   - 한국어, 영어, 중국어(간체/번체), 일본어, 러시아어, 스페인어, 아랍어, 페르시아어 705개 키 100% 매칭.
 
 ---
 
-## 📌 플랫폼 지원 현황
-
-| 플랫폼 | 상태 | 패키지 형식 | 특징 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **지원 완료** | 설치 파일 (`.exe`) & 무설치 압축파일 (`.zip`) | 트레이 속도 표시, TUN 가상 어댑터, UWP Loopback 도구, 자동 업데이트. |
-| 🐧 **Linux (Universal)** | ✅ **지원 완료** | 단일 실행파일 (`.AppImage`) & 압축파일 (`.tar.gz`) | 모든 리눅스 배포판에서 별도 설치 없이 즉시 실행 가능. |
-| 🐧 **Debian / Ubuntu** | ✅ **지원 완료** | 데비안 패키지 (`.deb`) | 시스템 통합 및 바탕화면 바로가기 자동 등록. |
-| 🐧 **Fedora / openSUSE** | ✅ **지원 완료** | RPM 패키지 (`.rpm`) | 표준 RPM 빌드. |
-| 🐧 **Arch Linux** | ✅ **지원 완료** | Pacman 패키지 (`.pkg.tar.zst`) | pacman 직접 설치 지원. |
-| 📱 **Android** | ✅ **지원 완료** | 범용 APK & 아키텍처별 APK (`arm64`, `v7a`, `x86_64`) | VpnService 기반, 빠른 설정 타일, 앱별 프록시. |
-| 🍎 **macOS** | 🛠️ **소스 준비** | DMG / 로컬 빌드 | `flutter build macos`로 로컬 빌드 지원. |
-| 🍏 **iOS** | 📦 **프레임워크 완료** | IPA / 로컬 빌드 | TrollStore 또는 로컬 서명으로 설치 가능. |
-
----
-
-## 🚀 빠른 시작
+## 빠른 시작
 
 1. **다운로드**: [Releases 페이지](https://github.com/aimy1/Wmimo/releases)에서 사용 중인 OS에 맞는 패키지를 다운로드합니다.
 2. **구독 가져오기**: '구독 관리'에서 Clash/Mihomo 링크를 붙여넣거나 로컬 YAML 파일을 불러옵니다.
@@ -93,20 +77,20 @@
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 📬 커뮤니티 & 문의
+## 커뮤니티 & 문의
 
-- 💬 **Telegram 공식 채널**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **이슈 제보**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **Telegram 공식 채널**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **이슈 제보**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
-## 📄 라이선스
+## 라이선스
 
 이 프로젝트는 **GPL-3.0 라이선스**에 따라 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하십시오.

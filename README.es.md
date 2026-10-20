@@ -25,11 +25,10 @@
   </p>
 
   <p align="center">
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 Descargar versiones</b></a> •
-    <a href="#-inicio-rápido"><b>🚀 Inicio rápido</b></a> •
-    <a href="#-características"><b>✨ Características</b></a> •
-    <a href="#-plataformas-soportadas"><b>💻 Plataformas</b></a> •
-    <a href="https://t.me/wmimoapp"><b>💬 Comunidad</b></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>Descargar</b></a> •
+    <a href="#características"><b>Características</b></a> •
+    <a href="#inicio-rápido"><b>Inicio rápido</b></a> •
+    <a href="https://t.me/wmimoapp"><b>Comunidad</b></a>
   </p>
 
   <br/>
@@ -38,53 +37,38 @@
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo Tema Oscuro" width="370" />
   </p>
-  <sub><em>✨ Diseño refinado de micro-tarjetas de 18px, curvas de tráfico Bézier en tiempo real y diagnósticos completos (Temas Claro y Oscuro)</em></sub>
+  <sub><em>Diseño refinado de micro-tarjetas de 18px, curvas de tráfico Bézier en tiempo real y diagnósticos completos (Temas Claro y Oscuro)</em></sub>
 </div>
 
 ---
 
-## ✨ Características destacadas
+## Características
 
-- 🎨 **Interfaz de micro-tarjetas y doble tema nativo**:
+- **Interfaz de micro-tarjetas y doble tema nativo**:
   - Sistema de tarjetas con esquinas redondeadas de 18px y acento azul cian.
   - Transición fluida entre el modo claro y el modo oscuro profundo.
   - Diseño adaptable para escritorios de pantalla ancha y dispositivos móviles.
-- ⚡ **Núcleo Mihomo (Meta) de ultra rendimiento**:
+- **Núcleo Mihomo (Meta) de ultra rendimiento**:
   - Compatible con Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard y Direct.
   - Procesamiento asíncrono en Isolate en segundo plano — **cero congelamiento de interfaz (Zero UI Freeze)**.
-- 🔀 **Enrutamiento inteligente y dos motores de proxy**:
+- **Enrutamiento inteligente y dos motores de proxy**:
   - Conmutación rápida: **Por reglas (Rule)** / **Global** / **Directo (Direct)**.
   - **Modo Adaptador Virtual TUN** y **Modo Proxy del Sistema** sin privilegios elevados.
   - Proxy por aplicación en Android y herramienta UWP Loopback en Windows.
-- 📈 **Telemetría en tiempo real y suite de diagnóstico**:
+- **Telemetría en tiempo real y suite de diagnóstico**:
   - Gráfico de ondas Bézier con intervalos ajustables (1m / 5m / 15m / 30m / 60m).
   - Tarjeta de información de IP pública, ubicación y proveedor con copia rápida.
   - Barra de progreso de consumo de datos y cuenta regresiva de expiración.
-- 🪟 **Integración profunda con el sistema operativo**:
+- **Integración profunda con el sistema operativo**:
   - **Windows**: Menú de bandeja nativo adaptable al tema, medidor de velocidad dinámico, estilo moderno `comctl32 v6`.
   - **Android**: Notificación de servicio con desconexión rápida, mosaico de ajustes rápidos y sincronización de idiomas.
   - **macOS**: Icono de barra de menús en modo Template.
-- 🌍 **100% traducido a 9 idiomas**:
+- **100% traducido a 9 idiomas**:
   - Cobertura completa en Español, Inglés, Chino (simplificado/tradicional), Japonés, Coreano, Ruso, Árabe y Persa.
 
 ---
 
-## 📌 Plataformas soportadas
-
-| Plataforma | Estado | Formato | Detalles |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Listo** | Instalador (`.exe`) y Portable (`.zip`) | Bandeja con velocidad, modo TUN, herramienta Loopback, auto-actualización. |
-| 🐧 **Linux (Universal)** | ✅ **Listo** | AppImage (`.AppImage`) y Portátil (`.tar.gz`) | Funciona sin instalación en cualquier distribución de Linux. |
-| 🐧 **Debian / Ubuntu** | ✅ **Listo** | Paquete Debian (`.deb`) | Integración nativa con menú de escritorio y accesos directos. |
-| 🐧 **Fedora / openSUSE** | ✅ **Listo** | Paquete RedHat (`.rpm`) | Formato RPM estándar. |
-| 🐧 **Arch Linux** | ✅ **Listo** | Paquete Pacman (`.pkg.tar.zst`) | Instalación directa vía pacman. |
-| 📱 **Android** | ✅ **Listo** | APK Universal y por arquitecturas | Controlador VpnService, mosaico de ajustes rápidos, proxy por app. |
-| 🍎 **macOS** | 🛠️ **Código listo** | DMG / Compilación local | Compilable mediante `flutter build macos`. |
-| 🍏 **iOS** | 📦 **Estructura lista**| IPA / Compilación local | Disponible mediante TrollStore o firma personal. |
-
----
-
-## 🚀 Inicio rápido
+## Inicio rápido
 
 1. **Descargar**: Vaya a la sección de [Releases](https://github.com/aimy1/Wmimo/releases) y descargue el instalador de su sistema.
 2. **Importar**: En «Suscripciones», pegue su enlace de Clash/Mihomo.
@@ -93,20 +77,20 @@
 
 ---
 
-## 📊 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
-## 📬 Comunidad y contacto
+## Comunidad y contacto
 
-- 💬 **Canal de Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **Correo del desarrollador**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **Reportar errores**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **Canal de Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **Correo del desarrollador**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **Reportar errores**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la licencia **GPL-3.0**. Consulte el archivo [LICENSE](LICENSE) para más información.
