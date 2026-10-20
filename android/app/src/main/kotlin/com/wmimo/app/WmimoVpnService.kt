@@ -76,13 +76,17 @@ class WmimoVpnService : VpnService() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        val title = getString(R.string.app_name)
+        val content = getString(R.string.notif_vpn_connected)
+        val disconnect = getString(R.string.notif_action_disconnect)
+
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setContentTitle("Wmimo")
-            .setContentText("VPN 代理已连接")
+            .setContentTitle(title)
+            .setContentText(content)
             .setSmallIcon(R.drawable.ic_statusbar)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
-            .addAction(0, "断开连接", stopPendingIntent)
+            .addAction(0, disconnect, stopPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
     }
