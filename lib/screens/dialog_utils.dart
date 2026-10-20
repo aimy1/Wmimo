@@ -23,12 +23,9 @@ class DialogUtils {
 
   // Single-instance alert dialog guard to prevent popups from stacking and freezing the app
   static bool _isShowingAlertDialog = false;
-  static String? _activeDialogText;
-  static BuildContext? _activeDialogContext;
 
   // Single-instance confirm dialog guard
   static bool _isShowingConfirmDialog = false;
-  static BuildContext? _activeConfirmDialogContext;
 
   static Future<void> showAlertDialog(
     BuildContext context,
@@ -43,22 +40,6 @@ class DialogUtils {
       return;
     }
 
-    // 1. Deduplication guard: if the exact same alert is already visible, ignore to prevent stacking
-    if (_isShowingAlertDialog && _activeDialogText == text) {
-      return;
-    }
-
-    // 2. Singleton guard: if an older alert is still open, safely close it first
-    // so multiple errors NEVER stack and freeze the UI!
-    if (_isShowingAlertDialog && _activeDialogContext != null && _activeDialogContext!.mounted) {
-      try {
-        Navigator.of(_activeDialogContext!).pop();
-      } catch (_) {}
-      _isShowingAlertDialog = false;
-      _activeDialogText = null;
-      _activeDialogContext = null;
-    }
-
     if (withVersion) {
       text =
           "${AppUtils.getBuildinVersion()} ${Platform.operatingSystem}\n\n$text";
@@ -67,6 +48,11 @@ class DialogUtils {
     const int kMaxLength = 4096;
     if (text.length > kMaxLength) {
       text = "${text.substring(0, kMaxLength)}\n\n...";
+    }
+
+    // Single-instance alert guard: if an alert is already actively displayed, ignore to prevent stacking
+    if (_isShowingAlertDialog) {
+      return;
     }
 
     if (showFAQ && Platform.isAndroid) {
@@ -95,7 +81,6 @@ class DialogUtils {
     final dialogTitle = title ?? (isError ? tcontext.meta.errorPrompt : tcontext.meta.tips);
 
     _isShowingAlertDialog = true;
-    _activeDialogText = text;
 
     try {
       await showDialog<void>(
@@ -103,7 +88,6 @@ class DialogUtils {
         barrierDismissible: barrierDismissible,
         routeSettings: const RouteSettings(name: "showAlertDialog"),
         builder: (dialogCtx) {
-          _activeDialogContext = dialogCtx;
           bool copied = false;
 
           return StatefulBuilder(
@@ -213,8 +197,6 @@ class DialogUtils {
       );
     } finally {
       _isShowingAlertDialog = false;
-      _activeDialogText = null;
-      _activeDialogContext = null;
     }
   }
 
@@ -229,12 +211,9 @@ class DialogUtils {
       return null;
     }
 
-    if (_isShowingConfirmDialog && _activeConfirmDialogContext != null && _activeConfirmDialogContext!.mounted) {
-      try {
-        Navigator.of(_activeConfirmDialogContext!).pop(false);
-      } catch (_) {}
-      _isShowingConfirmDialog = false;
-      _activeConfirmDialogContext = null;
+    // Single-instance confirm guard: if a confirm dialog is already active, ignore to prevent stacking
+    if (_isShowingConfirmDialog) {
+      return null;
     }
 
     if (withVersion) {
@@ -252,7 +231,6 @@ class DialogUtils {
         routeSettings: const RouteSettings(name: "showConfirmDialog"),
         barrierDismissible: barrierDismissible,
         builder: (BuildContext dialogCtx) {
-          _activeConfirmDialogContext = dialogCtx;
           bool copied = false;
 
           return StatefulBuilder(
@@ -363,7 +341,6 @@ class DialogUtils {
       );
     } finally {
       _isShowingConfirmDialog = false;
-      _activeConfirmDialogContext = null;
     }
   }
 

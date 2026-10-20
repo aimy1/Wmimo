@@ -900,9 +900,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     }
 
     _isSwitchOperating = true;
+    bool ok = false;
     try {
       if (target) {
-        bool ok = await start(from);
+        ok = await start(from);
         if (ok && background) {
           MoveToBackgroundUtils.moveToBackground(
             duration: const Duration(milliseconds: 300),
@@ -910,6 +911,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         }
       } else {
         await stop();
+        ok = true;
         if (background) {
           MoveToBackgroundUtils.moveToBackground(
             duration: const Duration(milliseconds: 300),
@@ -919,7 +921,12 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     } finally {
       _isSwitchOperating = false;
       if (mounted) {
-        if (_desiredConnected != null &&
+        if (!ok) {
+          setState(() {
+            _desiredConnected = null;
+            _state = FlutterVpnServiceState.disconnected;
+          });
+        } else if (_desiredConnected != null &&
             _desiredConnected != (_state == FlutterVpnServiceState.connected)) {
           _executeToggle(from: from, background: background);
         } else {
@@ -964,7 +971,12 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             builder: (context) => ProfilesBoardScreen(),
           ),
         );
-        setState(() {});
+        if (mounted) {
+          setState(() {
+            _desiredConnected = null;
+            _state = FlutterVpnServiceState.disconnected;
+          });
+        }
         return false;
       }
       final clashSetting = ClashSettingManager.getConfig();
@@ -976,6 +988,12 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         );
         if (!mounted) return false;
         if (proceed != true) {
+          if (mounted) {
+            setState(() {
+              _desiredConnected = null;
+              _state = FlutterVpnServiceState.disconnected;
+            });
+          }
           return false;
         }
         clashSetting.Tun?.Enable = false;
@@ -1024,7 +1042,12 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       if (Platform.isAndroid || Platform.isIOS) {
         bool vpnGranted = await MobilePermissionHelper.requestVpnPermission();
         if (!vpnGranted) {
-          if (mounted) setState(() {});
+          if (mounted) {
+            setState(() {
+              _desiredConnected = null;
+              _state = FlutterVpnServiceState.disconnected;
+            });
+          }
           return false;
         }
       }
@@ -1033,8 +1056,13 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       if (!mounted) {
         return false;
       }
-      setState(() {});
       if (err != null) {
+        if (mounted) {
+          setState(() {
+            _desiredConnected = null;
+            _state = FlutterVpnServiceState.disconnected;
+          });
+        }
         if (err.message == "willCompleteAfterRebootInstall") {
           err.message = t.meta.willCompleteAfterRebootInstall;
         } else if (err.message == "requestNeedsUserApproval") {
