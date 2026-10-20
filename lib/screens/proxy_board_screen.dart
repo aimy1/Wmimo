@@ -1532,7 +1532,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  node.name,
+                  NodeRegionHelper.getDisplayNameWithoutFlag(node.name),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -2284,34 +2284,40 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
                   // Currently Selected Node Badge
                   if (group.now.isNotEmpty)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Row(
-                          children: [
-                            Text(
-                              getFlagEmoji(group.now),
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontFamily: Platform.isWindows ? 'Emoji' : null,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Flexible(
-                              child: Text(
-                                group.now,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: ThemeDefine.kColorBlue,
-                                  fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                    Builder(
+                      builder: (context) {
+                        final flag = getFlagEmoji(group.now);
+                        final displayName = NodeRegionHelper.getDisplayNameWithoutFlag(group.now);
+                        return Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Row(
+                              children: [
+                                Text(
+                                  flag,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: Platform.isWindows ? 'Emoji' : null,
+                                  ),
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    displayName,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: ThemeDefine.kColorBlue,
+                                      fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      },
                     )
                   else
                     const Spacer(),
@@ -2471,6 +2477,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final flag = getFlagEmoji(node.name);
+    final displayName = NodeRegionHelper.getDisplayNameWithoutFlag(node.name);
 
     return RepaintBoundary(
       child: Material(
@@ -2522,7 +2529,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      node.name,
+                      displayName,
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,

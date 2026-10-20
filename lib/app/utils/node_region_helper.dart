@@ -583,6 +583,16 @@ class NodeRegionHelper {
     return NodeRegion.other;
   }
 
+  /// Strip duplicate leading flag from node name if present
+  static String getDisplayNameWithoutFlag(String nodeName) {
+    if (nodeName.isEmpty) return nodeName;
+    final flag = getFlag(nodeName);
+    if (flag.isNotEmpty && nodeName.startsWith(flag)) {
+      return nodeName.substring(flag.length).trimLeft();
+    }
+    return nodeName;
+  }
+
   /// Get the country/region flag emoji for a node name
   static String getFlag(String nodeName) {
     final cached = _flagCache[nodeName];

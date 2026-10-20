@@ -28,6 +28,13 @@ void main() {
       expect(NodeRegionHelper.getFlag('YVR-CA-01'), '🇨🇦');
     });
 
+    test('getDisplayNameWithoutFlag strips duplicate leading flag while preserving numbers and multipliers', () {
+      expect(NodeRegionHelper.getDisplayNameWithoutFlag('🇭🇰 香港高倍01 3x流量'), '香港高倍01 3x流量');
+      expect(NodeRegionHelper.getDisplayNameWithoutFlag('🇭🇰 香港01 Hysteria2'), '香港01 Hysteria2');
+      expect(NodeRegionHelper.getDisplayNameWithoutFlag('🇸🇬 新加坡高倍02 3x流量'), '新加坡高倍02 3x流量');
+      expect(NodeRegionHelper.getDisplayNameWithoutFlag('台湾高倍家宽01 3x流量'), '台湾高倍家宽01 3x流量');
+    });
+
     test('Identifies special groups like Auto, Fallback, Direct', () {
       expect(NodeRegionHelper.getFlag('自动选择'), '⚡');
       expect(NodeRegionHelper.getFlag('AUTO-TEST'), '⚡');
