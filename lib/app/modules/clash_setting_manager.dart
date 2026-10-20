@@ -289,7 +289,7 @@ class ClashSettingManager {
       DisableKeepAlive: false,
       KeepAliveIdle: 30,
       KeepAliveInterval: 30,
-      FindProcessMode: (Platform.isIOS || Platform.isAndroid)
+      FindProcessMode: Platform.isIOS
           ? ClashFindProcessMode.off.name
           : ClashFindProcessMode.always.name,
     );
@@ -363,7 +363,7 @@ class ClashSettingManager {
     _setting.RuleProviders = null;
     _setting.ProxyGroups = null;
     _setting.Extension?.ProfileStoreSelectedPrefix = profileId;
-    if (Platform.isIOS || Platform.isAndroid) {
+    if (Platform.isIOS) {
       _setting.FindProcessMode = ClashFindProcessMode.off.name;
     }
 

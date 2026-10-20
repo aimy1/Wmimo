@@ -478,40 +478,6 @@ class VPNService {
           FlutterVpnService.firewallAddPorts(ports, PathUtils.serviceExeName()),
         );
       }
-      if (Platform.isAndroid) {
-        final curProfile = ProfileManager.getCurrent();
-        final pName = (curProfile != null && curProfile.remark.isNotEmpty)
-            ? curProfile.remark
-            : (curProfile?.url.isNotEmpty == true ? curProfile!.url : (curProfile?.id ?? ""));
-        final cfgMode = ClashSettingManager.getConfigsMode();
-        final m = getLocalizedModeName(cfgMode);
-
-        String n = "";
-        try {
-          final nodes = await ProxyNodeLoader.loadCurrentProfileNodes();
-          final groups = nodes.where((x) => ClashProtocolType.isGroupType(x.type)).toList();
-          ClashProxiesNode? sel;
-          for (var g in groups) {
-            final upper = g.name.toUpperCase();
-            if (upper == "PROXY" ||
-                upper == "PROXIES" ||
-                g.name == "节点选择" ||
-                g.name == "節點選擇" ||
-                g.name == t.meta.proxySelection) {
-              sel = g;
-              break;
-            }
-          }
-          sel ??= groups.isNotEmpty ? groups.first : null;
-          if (sel != null && sel.now.isNotEmpty) {
-            n = sel.now;
-          }
-        } catch (_) {}
-
-        FlutterVpnService.activeNodeName = n;
-        FlutterVpnService.activeMode = m;
-        FlutterVpnService.activeProfileName = pName;
-      }
       VpnServiceWaitResult result = await FlutterVpnService.start(timeout);
       if (_cancelRequested) {
         await FlutterVpnService.stop();

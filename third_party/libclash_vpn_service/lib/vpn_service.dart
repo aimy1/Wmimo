@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' as ffi;
 import 'dart:io';
-import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'state.dart';
@@ -117,301 +116,10 @@ void _refreshWinINetSettings() {
   }
 }
 
-String _filterProfileWorker(Map<String, dynamic> args) {
-  final String profileContent = args['profileContent'] as String;
-  final bool tunMode = args['tunMode'] as bool;
-  final bool isAndroid = args['isAndroid'] as bool? ?? Platform.isAndroid;
-
-  // Filter out conflicting top-level keys from raw subscription
-  final overriddenTopLevelKeys = [
-    'mixed-port',
-    'allow-lan',
-    'mode',
-    'log-level',
-    'external-controller',
-    'secret',
-    'ipv6',
-    'unified-delay',
-    'tcp-concurrent',
-    'find-process-mode',
-    'port',
-    'socks-port',
-    'redir-port',
-    'tproxy-port',
-    'interface-name',
-    'routing-mark',
-    'tun',
-    'bind-address',
-  ];
-
-  bool inOverriddenBlock = false;
-  bool inDnsBlock = false;
-  final List<String> resultLines = [];
-  final rawLines = profileContent.split('\n');
-
-  for (int i = 0; i < rawLines.length; i++) {
-    final rawLine = rawLines[i];
-    final trimmed = rawLine.trim();
-
-    // Track top-level blocks
-    if (!rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
-      if (trimmed.startsWith('dns:') || trimmed.startsWith('"dns":') || trimmed.startsWith("'dns':")) {
-        inDnsBlock = true;
-      } else if (trimmed.isNotEmpty) {
-        inDnsBlock = false;
-      }
-    }
-
-    // Check if entering a root block that we override completely (e.g. tun:)
-    // ALWAYS strip subscription tun: block because Wmimo injects its own validated tun block on desktop,
-    // and on Android/iOS native VpnService handles the tunnel. A subscription tun block causes Linux/Android crash.
-    if (trimmed.startsWith('tun:') ||
-        trimmed.startsWith('tun-') ||
-        trimmed.startsWith('"tun":') ||
-        trimmed.startsWith("'tun':") ||
-        trimmed.startsWith('tun :') ||
-        trimmed.startsWith('"tun" :') ||
-        trimmed.startsWith("'tun' :")) {
-      inOverriddenBlock = true;
-      continue;
-    }
-
-    // If we are inside an overridden block and the line is indented, skip it
-    if (inOverriddenBlock) {
-      if (rawLine.startsWith(' ') || rawLine.startsWith('\t') || trimmed.isEmpty) {
-        continue;
-      } else {
-        inOverriddenBlock = false;
-      }
-    }
-
-    // Check if it's a top-level key that we override
-    bool isOverridden = false;
-    if (!rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
-      for (final key in overriddenTopLevelKeys) {
-        if (trimmed.startsWith('$key:') ||
-            trimmed.startsWith('$key :') ||
-            trimmed.startsWith('"$key":') ||
-            trimmed.startsWith("'$key':") ||
-            trimmed.startsWith('"$key" :') ||
-            trimmed.startsWith("'$key' :")) {
-          isOverridden = true;
-          break;
-        }
-      }
-    }
-
-    if (isOverridden) {
-      continue;
-    }
-
-    // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
-    String processedLine = rawLine;
-    if (isAndroid || !tunMode) {
-      if (inDnsBlock ||
-          trimmed.startsWith('listen:') ||
-          trimmed.startsWith('bind-address:') ||
-          trimmed.startsWith('port:')) {
-        processedLine = rawLine
-            .replaceAll(RegExp(r'(:\s*)53(\b|$)'), r'${1}1053')
-            .replaceAll(RegExp(r':53(["\x27\s]|$)'), r':1053$1')
-            .replaceAll(RegExp(r'(-\s*["\x27]?.*):53(["\x27]?\s*$)'), r'${1}:1053$2')
-            .replaceAll(RegExp(r'(-\s*)53(\b|$)'), r'${1}1053');
-      }
-    }
-
-    resultLines.add(processedLine);
-  }
-
-  var filteredLines = resultLines.join('\n');
-
-  // Ensure fallback DNS with Fake-IP if not defined or if TUN is active
-  if (!filteredLines.contains('dns:') && !filteredLines.contains('nameserver:')) {
-    filteredLines += '''\n
-dns:
-  enable: true
-  listen: 127.0.0.1:1053
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
-    - 8.8.8.8
-    - 1.1.1.1
-  fallback:
-    - 1.0.0.1
-    - 8.8.4.4
-''';
-  }
-
-  // Ensure fallback proxy-groups if not defined in subscription
-  if (!filteredLines.contains('proxy-groups:') && !filteredLines.contains('"proxy-groups":')) {
-    final List<String> proxyNames = [];
-    final lines = filteredLines.split('\n');
-    final nameRegex = RegExp(r'^\s*-\s*(?:name:\s*["'']?([^"''\n]+)["'']?|{[^}]*name:\s*["'']?([^,"''}\n]+))');
-    for (var l in lines) {
-      final match = nameRegex.firstMatch(l);
-      if (match != null) {
-        final n = (match.group(1) ?? match.group(2) ?? "").trim();
-        final upperN = n.toUpperCase();
-        if (n.isNotEmpty &&
-            upperN != "DIRECT" &&
-            upperN != "REJECT" &&
-            upperN != "REJECT-DROP" &&
-            upperN != "PASS" &&
-            upperN != "PASS-RULE" &&
-            upperN != "COMPATIBLE" &&
-            upperN != "GLOBAL" &&
-            upperN != "PROXY") {
-          if (!proxyNames.contains(n)) {
-            proxyNames.add(n);
-          }
-        }
-      }
-    }
-
-    if (proxyNames.isNotEmpty) {
-      final hkNodes = proxyNames.where((n) {
-        final u = n.toUpperCase();
-        return n.contains("香港") || u.contains("HK") || u.contains("HONG KONG");
-      }).toList();
-      final jpNodes = proxyNames.where((n) {
-        final u = n.toUpperCase();
-        return n.contains("日本") || u.contains("JP") || u.contains("JAPAN") || n.contains("东京") || n.contains("大阪");
-      }).toList();
-      final sgNodes = proxyNames.where((n) {
-        final u = n.toUpperCase();
-        return n.contains("新加坡") || u.contains("SG") || u.contains("SINGAPORE") || n.contains("狮城");
-      }).toList();
-      final twNodes = proxyNames.where((n) {
-        final u = n.toUpperCase();
-        return n.contains("台湾") || u.contains("TW") || u.contains("TAIWAN") || n.contains("台北");
-      }).toList();
-      final usNodes = proxyNames.where((n) {
-        final u = n.toUpperCase();
-        return n.contains("美国") || u.contains("US") || u.contains("USA") || n.contains("美") || u.contains("UNITED STATES");
-      }).toList();
-      final krNodes = proxyNames.where((n) {
-        final u = n.toUpperCase();
-        return n.contains("韩国") || u.contains("KR") || u.contains("KOREA") || n.contains("首尔");
-      }).toList();
-
-      final buf = StringBuffer('\nproxy-groups:\n');
-      buf.writeln('  - name: 节点选择');
-      buf.writeln('    type: select');
-      buf.writeln('    proxies:');
-      buf.writeln('      - 自动选择');
-      buf.writeln('      - 故障转移');
-      for (var p in proxyNames) {
-        buf.writeln('      - "$p"');
-      }
-      buf.writeln('      - DIRECT');
-
-      buf.writeln('  - name: 自动选择');
-      buf.writeln('    type: url-test');
-      buf.writeln('    url: http://www.gstatic.com/generate_204');
-      buf.writeln('    interval: 300');
-      buf.writeln('    proxies:');
-      for (var p in proxyNames) {
-        buf.writeln('      - "$p"');
-      }
-
-      buf.writeln('  - name: 故障转移');
-      buf.writeln('    type: fallback');
-      buf.writeln('    url: http://www.gstatic.com/generate_204');
-      buf.writeln('    interval: 300');
-      buf.writeln('    proxies:');
-      for (var p in proxyNames) {
-        buf.writeln('      - "$p"');
-      }
-
-      if (hkNodes.isNotEmpty) {
-        buf.writeln('  - name: 🇭🇰 香港节点');
-        buf.writeln('    type: select');
-        buf.writeln('    proxies:');
-        for (var p in hkNodes) {
-          buf.writeln('      - "$p"');
-        }
-      }
-      if (jpNodes.isNotEmpty) {
-        buf.writeln('  - name: 🇯🇵 日本节点');
-        buf.writeln('    type: select');
-        buf.writeln('    proxies:');
-        for (var p in jpNodes) {
-          buf.writeln('      - "$p"');
-        }
-      }
-      if (sgNodes.isNotEmpty) {
-        buf.writeln('  - name: 🇸🇬 新加坡节点');
-        buf.writeln('    type: select');
-        buf.writeln('    proxies:');
-        for (var p in sgNodes) {
-          buf.writeln('      - "$p"');
-        }
-      }
-      if (twNodes.isNotEmpty) {
-        buf.writeln('  - name: 🇹🇼 台湾节点');
-        buf.writeln('    type: select');
-        buf.writeln('    proxies:');
-        for (var p in twNodes) {
-          buf.writeln('      - "$p"');
-        }
-      }
-      if (usNodes.isNotEmpty) {
-        buf.writeln('  - name: 🇺🇸 美国节点');
-        buf.writeln('    type: select');
-        buf.writeln('    proxies:');
-        for (var p in usNodes) {
-          buf.writeln('      - "$p"');
-        }
-      }
-      if (krNodes.isNotEmpty) {
-        buf.writeln('  - name: 🇰🇷 韩国节点');
-        buf.writeln('    type: select');
-        buf.writeln('    proxies:');
-        for (var p in krNodes) {
-          buf.writeln('      - "$p"');
-        }
-      }
-
-      buf.writeln('  - name: GLOBAL');
-      buf.writeln('    type: select');
-      buf.writeln('    proxies:');
-      buf.writeln('      - 节点选择');
-      buf.writeln('      - 自动选择');
-      buf.writeln('      - 故障转移');
-      for (var p in proxyNames) {
-        buf.writeln('      - "$p"');
-      }
-      buf.writeln('      - DIRECT');
-
-      filteredLines += buf.toString();
-
-      if (!filteredLines.contains('rules:') && !filteredLines.contains('"rules":')) {
-        filteredLines += '''\n
-rules:
-  - MATCH,节点选择
-''';
-      }
-    }
-  }
-
-  // Ensure fallback rules exist if not defined in subscription
-  if (!filteredLines.contains('rules:') && !filteredLines.contains('"rules":')) {
-    final firstGroupMatch = RegExp(r'''-\s*name:\s*["']?([^"'\n]+)["']?''').firstMatch(filteredLines);
-    final targetGroup = firstGroupMatch?.group(1)?.trim();
-    final fallbackTarget = (targetGroup != null && targetGroup.isNotEmpty) ? targetGroup : "DIRECT";
-    filteredLines += '''\nrules:\n  - MATCH,$fallbackTarget\n''';
-  }
-
-  return filteredLines;
-}
-
 class FlutterVpnService {
   static FlutterVpnServiceState _state = FlutterVpnServiceState.disconnected;
   static final List<void Function(FlutterVpnServiceState, Map<String, String>)> _listeners = [];
   static Process? _coreProcess;
-  static IOSink? _coreLogSink;
   static VpnServiceConfig? _savedConfig;
   static String? _savedTunnelServicePath;
   static String? _savedConfigFilePath;
@@ -629,12 +337,7 @@ class FlutterVpnService {
       try {
         const platform = MethodChannel('com.wmimo.app/native_helper');
         final String? nativeLibPath = await platform.invokeMethod<String>('getNativeLibraryPath', {'libName': 'libwmimoService.so'});
-        if (nativeLibPath != null && nativeLibPath.isNotEmpty) {
-          if (File(nativeLibPath).existsSync()) {
-            return nativeLibPath;
-          }
-          // On Android 10+, nativeLibraryDir is the only valid execution directory.
-          // Return the path directly even if existsSync fails due to directory stat permission.
+        if (nativeLibPath != null && nativeLibPath.isNotEmpty && File(nativeLibPath).existsSync()) {
           return nativeLibPath;
         }
       } catch (_) {}
@@ -656,12 +359,11 @@ class FlutterVpnService {
           final dir = Directory(nativeDir);
           if (dir.existsSync()) {
             for (final f in dir.listSync()) {
-              if (f is File && f.path.endsWith('.so') && (f.path.toLowerCase().contains('wmimo') || f.path.toLowerCase().contains('clash') || f.path.toLowerCase().contains('mihomo'))) {
+              if (f is File && f.path.endsWith('.so') && (f.path.contains('wmimo') || f.path.contains('clash') || f.path.contains('mihomo'))) {
                 return f.path;
               }
             }
           }
-          return androidLibCandidates.first;
         }
       } catch (_) {}
 
@@ -674,7 +376,6 @@ class FlutterVpnService {
           return p;
         }
       }
-      return fallbackAndroidPaths.first;
     }
 
     final currentDir = Directory.current.path;
@@ -871,12 +572,7 @@ class FlutterVpnService {
 
   static Future<String> _resolveConfigFile() async {
     String profileFile = "";
-    if (_savedConfig?.core_path_patch_final != null &&
-        _savedConfig!.core_path_patch_final.isNotEmpty &&
-        File(_savedConfig!.core_path_patch_final).existsSync() &&
-        File(_savedConfig!.core_path_patch_final).lengthSync() > 0) {
-      profileFile = _savedConfig!.core_path_patch_final;
-    } else if (_savedConfig?.core_path != null &&
+    if (_savedConfig?.core_path != null &&
         _savedConfig!.core_path.isNotEmpty &&
         File(_savedConfig!.core_path).existsSync()) {
       profileFile = _savedConfig!.core_path;
@@ -884,6 +580,10 @@ class FlutterVpnService {
         _savedConfigFilePath!.isNotEmpty &&
         File(_savedConfigFilePath!).existsSync()) {
       profileFile = _savedConfigFilePath!;
+    } else if (_savedConfig?.core_path_patch_final != null &&
+        _savedConfig!.core_path_patch_final.isNotEmpty &&
+        File(_savedConfig!.core_path_patch_final).existsSync()) {
+      profileFile = _savedConfig!.core_path_patch_final;
     }
 
     String profileContent = "";
@@ -904,7 +604,6 @@ class FlutterVpnService {
     final tunMode = _savedConfig?.tun_mode ?? false;
 
     // Header parameters matching Clash Verge standards
-    final processMode = (Platform.isAndroid || Platform.isIOS) ? 'off' : 'always';
     var header = '''
 mixed-port: $mixedPort
 allow-lan: true
@@ -915,12 +614,10 @@ secret: "$secret"
 ipv6: false
 unified-delay: true
 tcp-concurrent: true
-find-process-mode: $processMode
+find-process-mode: always
 ''';
 
-    // TUN configuration is only injected directly into Mihomo for desktop (Windows, macOS, Linux).
-    // On Android and iOS, native system VpnService / NetworkExtension manages the network interface.
-    if (tunMode && !Platform.isAndroid && !Platform.isIOS) {
+    if (tunMode && !Platform.isAndroid) {
       header += '''
 tun:
   enable: true
@@ -934,40 +631,258 @@ tun:
 ''';
     }
 
-    String filteredLines;
-    try {
-      if (profileContent.length > 500000) {
-        filteredLines = await Isolate.run(() => _filterProfileWorker({
-          'profileContent': profileContent,
-          'tunMode': tunMode,
-          'isAndroid': Platform.isAndroid,
-        }));
-      } else {
-        filteredLines = _filterProfileWorker({
-          'profileContent': profileContent,
-          'tunMode': tunMode,
-          'isAndroid': Platform.isAndroid,
-        });
+    // Filter out conflicting top-level keys from raw subscription
+    final overriddenTopLevelKeys = [
+      'mixed-port',
+      'allow-lan',
+      'mode',
+      'log-level',
+      'external-controller',
+      'secret',
+      'ipv6',
+      'unified-delay',
+      'tcp-concurrent',
+      'find-process-mode',
+      'port',
+      'socks-port',
+      'redir-port',
+      'tproxy-port',
+      'interface-name',
+      'routing-mark',
+    ];
+
+    bool inOverriddenBlock = false;
+    final List<String> resultLines = [];
+    final rawLines = profileContent.split('\n');
+
+    for (int i = 0; i < rawLines.length; i++) {
+      final rawLine = rawLines[i];
+      final trimmed = rawLine.trim();
+
+      // Check if entering a root block that we override completely (e.g. tun:)
+      if (tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-') || trimmed.startsWith('"tun":') || trimmed.startsWith("'tun':"))) {
+        inOverriddenBlock = true;
+        continue;
       }
-    } catch (_) {
-      filteredLines = _filterProfileWorker({
-        'profileContent': profileContent,
-        'tunMode': tunMode,
-        'isAndroid': Platform.isAndroid,
-      });
+
+      // If we are inside an overridden block and the line is indented, skip it
+      if (inOverriddenBlock) {
+        if (rawLine.startsWith(' ') || rawLine.startsWith('\t') || trimmed.isEmpty) {
+          continue;
+        } else {
+          inOverriddenBlock = false;
+        }
+      }
+
+      // Check if it's a top-level key that we override
+      bool isOverridden = false;
+      if (!rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
+        for (final key in overriddenTopLevelKeys) {
+          if (trimmed.startsWith('$key:') ||
+              trimmed.startsWith('$key :') ||
+              trimmed.startsWith('"$key":') ||
+              trimmed.startsWith("'$key':") ||
+              trimmed.startsWith('"$key" :') ||
+              trimmed.startsWith("'$key' :")) {
+            isOverridden = true;
+            break;
+          }
+        }
+      }
+
+      if (isOverridden) {
+        continue;
+      }
+
+      // Sanitize privileged port 53 binding on Android / Linux non-root if not in tun
+      String processedLine = rawLine;
+      if (!tunMode) {
+        if (trimmed.startsWith('listen:') && trimmed.contains(':53')) {
+          processedLine = rawLine.replaceAll(':53', ':1053');
+        } else if (trimmed.startsWith('bind-address:') && trimmed.contains(':53')) {
+          processedLine = rawLine.replaceAll(':53', ':1053');
+        }
+      }
+
+      resultLines.add(processedLine);
     }
 
-    String baseDir = _savedConfig?.base_dir.isNotEmpty == true
-        ? _savedConfig!.base_dir
-        : "";
-    if (baseDir.isEmpty) {
-      try {
-        final appSupport = await getApplicationSupportDirectory();
-        baseDir = "${appSupport.path}/com.wmimo.app";
-      } catch (_) {
-        baseDir = Directory.current.path;
+    var filteredLines = resultLines.join('\n');
+
+    // Ensure fallback DNS with Fake-IP if not defined or if TUN is active
+    if (!filteredLines.contains('dns:') && !filteredLines.contains('nameserver:')) {
+      filteredLines += '''\n
+dns:
+  enable: true
+  listen: 127.0.0.1:1053
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 8.8.8.8
+    - 1.1.1.1
+  fallback:
+    - 1.0.0.1
+    - 8.8.4.4
+''';
+    }
+
+    // Ensure fallback proxy-groups if not defined in subscription
+    if (!filteredLines.contains('proxy-groups:') && !filteredLines.contains('"proxy-groups":')) {
+      final List<String> proxyNames = [];
+      final lines = filteredLines.split('\n');
+      final nameRegex = RegExp(r'^\s*-\s*(?:name:\s*["'']?([^"''\n]+)["'']?|{[^}]*name:\s*["'']?([^,"''}\n]+))');
+      for (var l in lines) {
+        final match = nameRegex.firstMatch(l);
+        if (match != null) {
+          final n = (match.group(1) ?? match.group(2) ?? "").trim();
+          final upperN = n.toUpperCase();
+          if (n.isNotEmpty &&
+              upperN != "DIRECT" &&
+              upperN != "REJECT" &&
+              upperN != "REJECT-DROP" &&
+              upperN != "PASS" &&
+              upperN != "PASS-RULE" &&
+              upperN != "COMPATIBLE" &&
+              upperN != "GLOBAL" &&
+              upperN != "PROXY") {
+            if (!proxyNames.contains(n)) {
+              proxyNames.add(n);
+            }
+          }
+        }
+      }
+
+      if (proxyNames.isNotEmpty) {
+        final hkNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("香港") || u.contains("HK") || u.contains("HONG KONG");
+        }).toList();
+        final jpNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("日本") || u.contains("JP") || u.contains("JAPAN") || n.contains("东京") || n.contains("大阪");
+        }).toList();
+        final sgNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("新加坡") || u.contains("SG") || u.contains("SINGAPORE") || n.contains("狮城");
+        }).toList();
+        final twNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("台湾") || u.contains("TW") || u.contains("TAIWAN") || n.contains("台北");
+        }).toList();
+        final usNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("美国") || u.contains("US") || u.contains("USA") || n.contains("美") || u.contains("UNITED STATES");
+        }).toList();
+        final krNodes = proxyNames.where((n) {
+          final u = n.toUpperCase();
+          return n.contains("韩国") || u.contains("KR") || u.contains("KOREA") || n.contains("首尔");
+        }).toList();
+
+        final buf = StringBuffer('\nproxy-groups:\n');
+        buf.writeln('  - name: 节点选择');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        buf.writeln('      - 自动选择');
+        buf.writeln('      - 故障转移');
+        for (var p in proxyNames) {
+          buf.writeln('      - "$p"');
+        }
+        buf.writeln('      - DIRECT');
+
+        buf.writeln('  - name: 自动选择');
+        buf.writeln('    type: url-test');
+        buf.writeln('    url: http://www.gstatic.com/generate_204');
+        buf.writeln('    interval: 300');
+        buf.writeln('    proxies:');
+        for (var p in proxyNames) {
+          buf.writeln('      - "$p"');
+        }
+
+        buf.writeln('  - name: 故障转移');
+        buf.writeln('    type: fallback');
+        buf.writeln('    url: http://www.gstatic.com/generate_204');
+        buf.writeln('    interval: 300');
+        buf.writeln('    proxies:');
+        for (var p in proxyNames) {
+          buf.writeln('      - "$p"');
+        }
+
+        if (hkNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇭🇰 香港节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in hkNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (jpNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇯🇵 日本节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in jpNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (sgNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇸🇬 新加坡节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in sgNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (twNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇹🇼 台湾节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in twNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (usNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇺🇸 美国节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in usNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+        if (krNodes.isNotEmpty) {
+          buf.writeln('  - name: 🇰🇷 韩国节点');
+          buf.writeln('    type: select');
+          buf.writeln('    proxies:');
+          for (var p in krNodes) {
+            buf.writeln('      - "$p"');
+          }
+        }
+
+        buf.writeln('  - name: GLOBAL');
+        buf.writeln('    type: select');
+        buf.writeln('    proxies:');
+        buf.writeln('      - 节点选择');
+        buf.writeln('      - 自动选择');
+        buf.writeln('      - 故障转移');
+        for (var p in proxyNames) {
+          buf.writeln('      - "$p"');
+        }
+        buf.writeln('      - DIRECT');
+
+        filteredLines += buf.toString();
+
+        if (!filteredLines.contains('rules:') && !filteredLines.contains('"rules":')) {
+          filteredLines += '''\n
+rules:
+  - MATCH,节点选择
+''';
+        }
       }
     }
+
+    final baseDir = _savedConfig?.base_dir.isNotEmpty == true
+        ? _savedConfig!.base_dir
+        : Directory.current.path;
     try {
       if (!Directory(baseDir).existsSync()) {
         Directory(baseDir).createSync(recursive: true);
@@ -1044,7 +959,6 @@ tun:
 
   static bool _isOperating = false;
   static bool _cancelRequested = false;
-
   static String activeNodeName = "";
   static String activeMode = "";
   static String activeProfileName = "";
@@ -1100,35 +1014,10 @@ tun:
       }
       _coreProcess = null;
     }
-
-    // Forcefully cleanup any orphaned core processes left by previous runs or crashes
     if (Platform.isWindows) {
       try {
-        await Process.run('taskkill', ['/F', '/T', '/IM', 'wmimoService.exe']);
+        await Process.run('taskkill', ['/F', '/IM', 'wmimoService.exe']);
       } catch (_) {}
-    } else if (Platform.isLinux || Platform.isMacOS) {
-      try {
-        await Process.run('killall', ['-9', 'wmimoService', 'wmimoService_arm64', 'wmimoService_amd64']);
-      } catch (_) {}
-    } else if (Platform.isAndroid) {
-      try {
-        const platform = MethodChannel('com.wmimo.app/native_helper');
-        await platform.invokeMethod('killOrphanCores');
-      } catch (_) {}
-      try {
-        await Process.run('pkill', ['-9', 'libwmimoService.so']);
-      } catch (_) {}
-      try {
-        await Process.run('sh', ['-c', 'killall -9 libwmimoService.so 2>/dev/null || true']);
-      } catch (_) {}
-    }
-
-    if (_coreLogSink != null) {
-      try {
-        await _coreLogSink?.flush();
-        await _coreLogSink?.close();
-      } catch (_) {}
-      _coreLogSink = null;
     }
     await cleanSystemProxy();
   }
@@ -1152,16 +1041,11 @@ tun:
       final configFile = await _resolveConfigFile();
 
       if (!Platform.isIOS && !File(coreExe).existsSync()) {
-        if (!Platform.isAndroid || !coreExe.endsWith(".so")) {
-          _notifyState(FlutterVpnServiceState.disconnected);
-          final hint = Platform.isAndroid
-              ? "\n请确认安装包架构与手机 CPU 匹配 (建议使用 arm64-v8a 或 universal 版本)。"
-              : "";
-          return VpnServiceWaitResult(
-            type: VpnServiceWaitType.error,
-            err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe$hint"),
-          );
-        }
+        _notifyState(FlutterVpnServiceState.disconnected);
+        return VpnServiceWaitResult(
+          type: VpnServiceWaitType.error,
+          err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe"),
+        );
       }
 
       if (configFile.isEmpty || !File(configFile).existsSync()) {
@@ -1173,45 +1057,6 @@ tun:
       }
 
       await _stopInternal();
-      await Future.delayed(const Duration(milliseconds: 100));
-
-      final port = _savedConfig?.control_port ?? 9090;
-      final mixedPort = _savedConfig?.mixed_port ?? 7890;
-
-      // Port blocking check is strictly for desktop environments (Windows, macOS, Linux)
-      // where external apps like Clash Verge, Sing-box or v2rayN can occupy ports 9090/7890.
-      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        Future<bool> isPortBlocked(int p) async {
-          try {
-            final socket = await Socket.connect('127.0.0.1', p, timeout: const Duration(milliseconds: 250));
-            socket.destroy();
-            return true;
-          } catch (_) {
-            return false;
-          }
-        }
-
-        if (await isPortBlocked(port)) {
-          _notifyState(FlutterVpnServiceState.disconnected);
-          return VpnServiceWaitResult(
-            type: VpnServiceWaitType.error,
-            err: VpnServiceResultError(
-              409,
-              "内核控制端口 $port 已被占用！\n请先退出其他代理客户端 (如 Clash Verge、v2rayN、Sing-box 等) 或在【内核设置】中更改端口。",
-            ),
-          );
-        }
-        if (await isPortBlocked(mixedPort)) {
-          _notifyState(FlutterVpnServiceState.disconnected);
-          return VpnServiceWaitResult(
-            type: VpnServiceWaitType.error,
-            err: VpnServiceResultError(
-              409,
-              "混合代理端口 $mixedPort 已被占用！\n请先退出其他代理客户端或在【内核设置】中更改端口。",
-            ),
-          );
-        }
-      }
 
       if (Platform.isIOS) {
         try {
@@ -1259,29 +1104,13 @@ tun:
         workDir = _savedConfig!.base_dir;
       } else if (_savedConfig?.work_dir.isNotEmpty == true && Directory(_savedConfig!.work_dir).existsSync()) {
         workDir = _savedConfig!.work_dir;
-      }
-      if (workDir.isEmpty || (Platform.isAndroid && workDir == File(coreExe).parent.path)) {
+      } else {
         try {
           final appSupport = await getApplicationSupportDirectory();
-          final safeDir = Directory("${appSupport.path}/com.wmimo.app");
-          if (!safeDir.existsSync()) {
-            safeDir.createSync(recursive: true);
-          }
-          workDir = safeDir.path;
+          workDir = appSupport.path;
         } catch (_) {
           workDir = File(coreExe).parent.path;
         }
-      }
-      try {
-        if (!Directory(workDir).existsSync()) {
-          Directory(workDir).createSync(recursive: true);
-        }
-      } catch (_) {}
-
-      if (Platform.isAndroid) {
-        try {
-          await Process.run('chmod', ['755', coreExe]);
-        } catch (_) {}
       }
 
       _ensureWintunAvailable(workDir, coreExe);
@@ -1299,7 +1128,7 @@ tun:
         outBuffer.write(data);
         if (logFile != null) {
           try {
-            logFile.writeAsStringSync(data, mode: FileMode.append, flush: false);
+            logFile.writeAsStringSync(data, mode: FileMode.append, flush: true);
           } catch (_) {}
         }
       });
@@ -1307,18 +1136,17 @@ tun:
         errBuffer.write(data);
         if (logFile != null) {
           try {
-            logFile.writeAsStringSync(data, mode: FileMode.append, flush: false);
+            logFile.writeAsStringSync(data, mode: FileMode.append, flush: true);
           } catch (_) {}
         }
       });
-      int? coreExitCode;
       _coreProcess!.exitCode.then((code) {
-        coreExitCode = code;
         _coreProcess = null;
         _stopTrafficMonitor();
         _notifyState(FlutterVpnServiceState.disconnected);
       });
 
+      final port = _savedConfig?.control_port ?? 9090;
       final secret = _savedConfig?.secret ?? "";
       bool ready = false;
       final stopwatch = Stopwatch()..start();
@@ -1327,23 +1155,23 @@ tun:
         if (_coreProcess == null || _cancelRequested) {
           break;
         }
-        HttpClient? checkClient;
         try {
-          checkClient = HttpClient()..connectionTimeout = const Duration(milliseconds: 250);
-          final req = await checkClient.getUrl(Uri.parse("http://127.0.0.1:$port/version"));
+          final client = HttpClient()
+            ..connectionTimeout = const Duration(milliseconds: 200);
+          final req = await client
+              .getUrl(Uri.parse("http://127.0.0.1:$port/version"));
           if (secret.isNotEmpty) {
             req.headers.set('Authorization', 'Bearer $secret');
           }
           final resp = await req.close();
           if (resp.statusCode == 200) {
             ready = true;
+            client.close();
             break;
           }
-        } catch (_) {
-        } finally {
-          checkClient?.close(force: true);
-        }
-        await Future.delayed(const Duration(milliseconds: 120));
+          client.close();
+        } catch (_) {}
+        await Future.delayed(const Duration(milliseconds: 100));
       }
 
       if (_cancelRequested) {
@@ -1356,25 +1184,19 @@ tun:
       }
 
       if (!ready) {
-        await Future.delayed(const Duration(milliseconds: 120));
         final errorDetail = errBuffer.toString().trim().isNotEmpty
             ? errBuffer.toString().trim()
             : outBuffer.toString().trim();
         await _stopInternal();
         _notifyState(FlutterVpnServiceState.disconnected);
-
-        String errMsg = "";
-        if (errorDetail.isNotEmpty) {
-          errMsg = "核心启动失败: $errorDetail";
-        } else if (coreExitCode != null) {
-          errMsg = "核心异常退出 (exit code $coreExitCode)";
-        } else {
-          errMsg = "等待核心启动超时 (端口 $port 无响应)";
-        }
-
         return VpnServiceWaitResult(
           type: VpnServiceWaitType.error,
-          err: VpnServiceResultError(500, errMsg),
+          err: VpnServiceResultError(
+            500,
+            errorDetail.isNotEmpty
+                ? "核心启动失败: $errorDetail"
+                : "等待核心启动超时 (端口 $port 无响应)",
+          ),
         );
       }
 
@@ -1742,20 +1564,18 @@ tun:
   static Future<String> clashiApiConnections(bool full) async {
     final port = _savedConfig?.control_port ?? 9090;
     final secret = _savedConfig?.secret ?? "";
-    HttpClient? client;
     try {
-      client = HttpClient()..connectionTimeout = const Duration(milliseconds: 600);
+      final client = HttpClient()..connectionTimeout = const Duration(milliseconds: 600);
       final req = await client.getUrl(Uri.parse("http://127.0.0.1:$port/connections"));
       if (secret.isNotEmpty) {
         req.headers.set('Authorization', 'Bearer $secret');
       }
       final resp = await req.close();
       final body = await resp.transform(utf8.decoder).join();
+      client.close();
       return body;
     } catch (_) {
       return "{}";
-    } finally {
-      client?.close(force: true);
     }
   }
 
