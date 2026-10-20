@@ -456,6 +456,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get launchAtStartup => 'اجرا در راه‌اندازی';
 	@override String get launchAtStartupRunAsAdmin => 'لطفاً Wmimo را به عنوان مدیر راه اندازی مجدد کنید';
 	@override String get tunModeRunAsAdmin => 'حالت TUN نیازمند مجوز مدیر سیستم می‌باشد لطفا نرم‌افزار را مجدد با حالت مدیر (administrator) راه‌اندازی کنید';
+	@override String get tunSwitchToSystemProxy => 'آیا مایلید برای ادامه اتصال، موقتاً به [حالت پروکسی سیستم] تغییر وضعیت دهید؟';
 	@override String get portableMode => 'حالت قابل‌حمل';
 	@override String get portableModeDisableTips => 'اگر نیاز دارین از حالت قابل‌حمل خارج شوید لطفا از [Wmimo] خارج شده و به‌صورت دستی پوشه [portable] هم مسیر با فایل [wmimo.exe] را حذف کنید';
 	@override String get systemProxy => 'پروکسی سیستم';
@@ -1246,6 +1247,7 @@ extension on TranslationsFa {
 			'meta.launchAtStartup' => 'اجرا در راه‌اندازی',
 			'meta.launchAtStartupRunAsAdmin' => 'لطفاً Wmimo را به عنوان مدیر راه اندازی مجدد کنید',
 			'meta.tunModeRunAsAdmin' => 'حالت TUN نیازمند مجوز مدیر سیستم می‌باشد لطفا نرم‌افزار را مجدد با حالت مدیر (administrator) راه‌اندازی کنید',
+			'meta.tunSwitchToSystemProxy' => 'آیا مایلید برای ادامه اتصال، موقتاً به [حالت پروکسی سیستم] تغییر وضعیت دهید؟',
 			'meta.portableMode' => 'حالت قابل‌حمل',
 			'meta.portableModeDisableTips' => 'اگر نیاز دارین از حالت قابل‌حمل خارج شوید لطفا از [Wmimo] خارج شده و به‌صورت دستی پوشه [portable] هم مسیر با فایل [wmimo.exe] را حذف کنید',
 			'meta.systemProxy' => 'پروکسی سیستم',
@@ -1445,9 +1447,9 @@ extension on TranslationsFa {
 			'meta.expandAll' => 'باز کردن همه گروه‌ها',
 			'meta.donateTitle' => '💖 خرید یک قهوه برای نویسنده',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ حمایت شما بزرگترین انگیزه برای بهبود مداوم Wmimo است ~ ☕✨',
-			'meta.tokenCurrency' => 'ارز',
 			_ => null,
 		} ?? switch (path) {
+			'meta.tokenCurrency' => 'ارز',
 			'meta.networkChain' => 'شبکه',
 			'meta.depositAddress' => 'آدرس واریز APTOS',
 			'meta.clickToCopy' => 'کلیک برای کپی',

@@ -334,6 +334,7 @@
     "launchAtStartup": "開機啟動",
     "launchAtStartupRunAsAdmin": "請以管理員身份重新啟動Wmimo",
     "tunModeRunAsAdmin": "TUN模式需要系統管理員權限,請以管理員身份重新啟動應用",
+    "tunSwitchToSystemProxy": "是否臨時切換為【系統代理模式】繼續連線？",
     "portableMode": "便攜模式",
     "portableModeDisableTips": "如需結束免安裝便攜模式，請結束 [Wmimo] 後，手動刪除 [wmimo.exe] 同目錄下的 [portable] 資料夾即可",
     "systemProxy": "系統代理",

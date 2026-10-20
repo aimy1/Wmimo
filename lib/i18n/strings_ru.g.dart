@@ -456,6 +456,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get launchAtStartup => 'Запуск при включении';
 	@override String get launchAtStartupRunAsAdmin => 'Пожалуйста, перезапустите Wmimo от имени администратора.';
 	@override String get tunModeRunAsAdmin => 'Для режима TUN требуются права администратора. Перезапустите приложение от имени администратора';
+	@override String get tunSwitchToSystemProxy => 'Временно переключиться в [Режим системного прокси] для продолжения подключения?';
 	@override String get portableMode => 'Портативный режим';
 	@override String get portableModeDisableTips => 'Если вам нужно выйти из портативного режима, выйдите из [Wmimo] и вручную удалите папку [portable] в том же каталоге, что и [wmimo.exe]';
 	@override String get systemProxy => 'Системный прокси';
@@ -1246,6 +1247,7 @@ extension on TranslationsRu {
 			'meta.launchAtStartup' => 'Запуск при включении',
 			'meta.launchAtStartupRunAsAdmin' => 'Пожалуйста, перезапустите Wmimo от имени администратора.',
 			'meta.tunModeRunAsAdmin' => 'Для режима TUN требуются права администратора. Перезапустите приложение от имени администратора',
+			'meta.tunSwitchToSystemProxy' => 'Временно переключиться в [Режим системного прокси] для продолжения подключения?',
 			'meta.portableMode' => 'Портативный режим',
 			'meta.portableModeDisableTips' => 'Если вам нужно выйти из портативного режима, выйдите из [Wmimo] и вручную удалите папку [portable] в том же каталоге, что и [wmimo.exe]',
 			'meta.systemProxy' => 'Системный прокси',
@@ -1445,9 +1447,9 @@ extension on TranslationsRu {
 			'meta.expandAll' => 'Развернуть все группы',
 			'meta.donateTitle' => '💖 Угостить автора кофе',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Ваша поддержка — главная мотивация делать Wmimo ещё лучше ~ ☕✨',
-			'meta.tokenCurrency' => 'Токен',
 			_ => null,
 		} ?? switch (path) {
+			'meta.tokenCurrency' => 'Токен',
 			'meta.networkChain' => 'Сеть',
 			'meta.depositAddress' => 'Адрес для пополнения APTOS',
 			'meta.clickToCopy' => 'Нажмите для копирования',

@@ -456,6 +456,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get launchAtStartup => 'إطلاق عند بدء التشغيل';
 	@override String get launchAtStartupRunAsAdmin => 'يرجى إعادة تشغيل Wmimo كمسؤول';
 	@override String get tunModeRunAsAdmin => 'يتطلب وضع TUN أذونات مسؤول النظام ، يرجى إعادة تشغيل التطبيق كمسؤول';
+	@override String get tunSwitchToSystemProxy => 'هل ترغب في التبديل مؤقتًا إلى [وضع وكيل النظام] لمتابعة الاتصال؟';
 	@override String get portableMode => 'الوضع المحمول';
 	@override String get portableModeDisableTips => 'إذا كنت بحاجة إلى الخروج من الوضع المحمول، فيرجى الخروج من [Wmimo] وحذف المجلد [portable] يدويًا في نفس الدليل مثل [wmimo.exe]';
 	@override String get systemProxy => 'وكيل النظام';
@@ -1246,6 +1247,7 @@ extension on TranslationsAr {
 			'meta.launchAtStartup' => 'إطلاق عند بدء التشغيل',
 			'meta.launchAtStartupRunAsAdmin' => 'يرجى إعادة تشغيل Wmimo كمسؤول',
 			'meta.tunModeRunAsAdmin' => 'يتطلب وضع TUN أذونات مسؤول النظام ، يرجى إعادة تشغيل التطبيق كمسؤول',
+			'meta.tunSwitchToSystemProxy' => 'هل ترغب في التبديل مؤقتًا إلى [وضع وكيل النظام] لمتابعة الاتصال؟',
 			'meta.portableMode' => 'الوضع المحمول',
 			'meta.portableModeDisableTips' => 'إذا كنت بحاجة إلى الخروج من الوضع المحمول، فيرجى الخروج من [Wmimo] وحذف المجلد [portable] يدويًا في نفس الدليل مثل [wmimo.exe]',
 			'meta.systemProxy' => 'وكيل النظام',
@@ -1445,9 +1447,9 @@ extension on TranslationsAr {
 			'meta.expandAll' => 'توسيع جميع المجموعات',
 			'meta.donateTitle' => '💖 اشترِ قهوة للمطور',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ دعمكم هو أكبر دافع لنا لمواصلة تطوير Wmimo ~ ☕✨',
-			'meta.tokenCurrency' => 'العملة',
 			_ => null,
 		} ?? switch (path) {
+			'meta.tokenCurrency' => 'العملة',
 			'meta.networkChain' => 'الشبكة',
 			'meta.depositAddress' => 'عنوان إيداع APTOS',
 			'meta.clickToCopy' => 'انقر للنسخ',

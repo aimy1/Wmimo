@@ -456,6 +456,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get launchAtStartup => 'Ejecutar al Inicio';
 	@override String get launchAtStartupRunAsAdmin => 'Por favor, reinicie Wmimo como administrador';
 	@override String get tunModeRunAsAdmin => 'El modo TUN requiere permisos de administrador del sistema, por favor reinicie la aplicación como administrador';
+	@override String get tunSwitchToSystemProxy => '¿Desea cambiar temporalmente al [Modo de proxy del sistema] para continuar conectando?';
 	@override String get portableMode => 'Modo Portátil';
 	@override String get portableModeDisableTips => 'Si necesita salir del modo portátil, cierre [Wmimo] y elimine manualmente la carpeta [portable] en el mismo directorio que [wmimo.exe]';
 	@override String get systemProxy => 'Proxy del Sistema';
@@ -1246,6 +1247,7 @@ extension on TranslationsEs {
 			'meta.launchAtStartup' => 'Ejecutar al Inicio',
 			'meta.launchAtStartupRunAsAdmin' => 'Por favor, reinicie Wmimo como administrador',
 			'meta.tunModeRunAsAdmin' => 'El modo TUN requiere permisos de administrador del sistema, por favor reinicie la aplicación como administrador',
+			'meta.tunSwitchToSystemProxy' => '¿Desea cambiar temporalmente al [Modo de proxy del sistema] para continuar conectando?',
 			'meta.portableMode' => 'Modo Portátil',
 			'meta.portableModeDisableTips' => 'Si necesita salir del modo portátil, cierre [Wmimo] y elimine manualmente la carpeta [portable] en el mismo directorio que [wmimo.exe]',
 			'meta.systemProxy' => 'Proxy del Sistema',
@@ -1445,9 +1447,9 @@ extension on TranslationsEs {
 			'meta.expandAll' => 'Expandir todos los grupos',
 			'meta.donateTitle' => '💖 Invitar un café al autor',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ ¡Tu apoyo es la mayor motivación para seguir mejorando Wmimo! ~ ☕✨',
-			'meta.tokenCurrency' => 'Token',
 			_ => null,
 		} ?? switch (path) {
+			'meta.tokenCurrency' => 'Token',
 			'meta.networkChain' => 'Red',
 			'meta.depositAddress' => 'Dirección de depósito APTOS',
 			'meta.clickToCopy' => 'Clic para copiar',

@@ -456,6 +456,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get launchAtStartup => '開機啟動';
 	@override String get launchAtStartupRunAsAdmin => '請以管理員身份重新啟動Wmimo';
 	@override String get tunModeRunAsAdmin => 'TUN模式需要系統管理員權限,請以管理員身份重新啟動應用';
+	@override String get tunSwitchToSystemProxy => '是否臨時切換為【系統代理模式】繼續連線？';
 	@override String get portableMode => '便攜模式';
 	@override String get portableModeDisableTips => '如需結束免安裝便攜模式，請結束 [Wmimo] 後，手動刪除 [wmimo.exe] 同目錄下的 [portable] 資料夾即可';
 	@override String get systemProxy => '系統代理';
@@ -1246,6 +1247,7 @@ extension on TranslationsZhTw {
 			'meta.launchAtStartup' => '開機啟動',
 			'meta.launchAtStartupRunAsAdmin' => '請以管理員身份重新啟動Wmimo',
 			'meta.tunModeRunAsAdmin' => 'TUN模式需要系統管理員權限,請以管理員身份重新啟動應用',
+			'meta.tunSwitchToSystemProxy' => '是否臨時切換為【系統代理模式】繼續連線？',
 			'meta.portableMode' => '便攜模式',
 			'meta.portableModeDisableTips' => '如需結束免安裝便攜模式，請結束 [Wmimo] 後，手動刪除 [wmimo.exe] 同目錄下的 [portable] 資料夾即可',
 			'meta.systemProxy' => '系統代理',
@@ -1445,9 +1447,9 @@ extension on TranslationsZhTw {
 			'meta.expandAll' => '展開所有代理群組',
 			'meta.donateTitle' => '💖 請作者喝杯咖啡',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 你的每一份投餵，都是 Wmimo 不斷打磨與更新的最大動力呀 ~ ☕✨',
-			'meta.tokenCurrency' => '幣種',
 			_ => null,
 		} ?? switch (path) {
+			'meta.tokenCurrency' => '幣種',
 			'meta.networkChain' => '網路',
 			'meta.depositAddress' => 'APTOS 收款位址',
 			'meta.clickToCopy' => '點擊複製',

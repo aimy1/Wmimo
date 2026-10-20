@@ -389,7 +389,7 @@ class VPNService {
         await stop();
         final msg = result.err?.message.isNotEmpty == true
             ? result.err!.message
-            : "服务重启超时";
+            : t.meta.connectTimeout;
         return ReturnResultError(msg);
       }
       if (result.type != VpnServiceWaitType.done) {

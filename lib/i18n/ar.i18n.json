@@ -334,6 +334,7 @@
     "launchAtStartup": "إطلاق عند بدء التشغيل",
     "launchAtStartupRunAsAdmin": "يرجى إعادة تشغيل Wmimo كمسؤول",
     "tunModeRunAsAdmin": "يتطلب وضع TUN أذونات مسؤول النظام ، يرجى إعادة تشغيل التطبيق كمسؤول",
+    "tunSwitchToSystemProxy": "هل ترغب في التبديل مؤقتًا إلى [وضع وكيل النظام] لمتابعة الاتصال؟",
     "portableMode": "الوضع المحمول",
     "portableModeDisableTips": "إذا كنت بحاجة إلى الخروج من الوضع المحمول، فيرجى الخروج من [Wmimo] وحذف المجلد [portable] يدويًا في نفس الدليل مثل [wmimo.exe]",
     "systemProxy": "وكيل النظام",

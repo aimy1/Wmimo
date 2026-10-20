@@ -456,6 +456,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get launchAtStartup => 'スタートアップ時に起動';
 	@override String get launchAtStartupRunAsAdmin => 'Wmimoを管理者として再起動してください';
 	@override String get tunModeRunAsAdmin => 'TUNモードにはシステム管理者権限が必要です。アプリを管理者として再起動してください';
+	@override String get tunSwitchToSystemProxy => '一時的に【システムプロキシモード】に切り替えて接続を続行しますか？';
 	@override String get portableMode => 'ポータブルモード';
 	@override String get portableModeDisableTips => 'ポータブルモードを終了する必要がある場合は、[Wmimo]を終了し、[wmimo.exe]と同じディレクトリにある[portable]フォルダを手動で削除してください';
 	@override String get systemProxy => 'システムプロキシ';
@@ -1246,6 +1247,7 @@ extension on TranslationsJa {
 			'meta.launchAtStartup' => 'スタートアップ時に起動',
 			'meta.launchAtStartupRunAsAdmin' => 'Wmimoを管理者として再起動してください',
 			'meta.tunModeRunAsAdmin' => 'TUNモードにはシステム管理者権限が必要です。アプリを管理者として再起動してください',
+			'meta.tunSwitchToSystemProxy' => '一時的に【システムプロキシモード】に切り替えて接続を続行しますか？',
 			'meta.portableMode' => 'ポータブルモード',
 			'meta.portableModeDisableTips' => 'ポータブルモードを終了する必要がある場合は、[Wmimo]を終了し、[wmimo.exe]と同じディレクトリにある[portable]フォルダを手動で削除してください',
 			'meta.systemProxy' => 'システムプロキシ',
@@ -1445,9 +1447,9 @@ extension on TranslationsJa {
 			'meta.expandAll' => 'すべてのグループを展開',
 			'meta.donateTitle' => '💖 開発者にコーヒーをおごる',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 皆様のご支援が、Wmimoを磨き続ける最大の力になります ~ ☕✨',
-			'meta.tokenCurrency' => '通貨',
 			_ => null,
 		} ?? switch (path) {
+			'meta.tokenCurrency' => '通貨',
 			'meta.networkChain' => 'ネットワーク',
 			'meta.depositAddress' => 'APTOS 受取先アドレス',
 			'meta.clickToCopy' => 'クリックしてコピー',

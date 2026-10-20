@@ -1043,6 +1043,9 @@ class Translations$meta$en {
 	/// en: 'The TUN mode requires system administrator permissions, please restart the app as an administrator'
 	String get tunModeRunAsAdmin => 'The TUN mode requires system administrator permissions, please restart the app as an administrator';
 
+	/// en: 'Would you like to temporarily switch to [System Proxy Mode] to continue connecting?'
+	String get tunSwitchToSystemProxy => 'Would you like to temporarily switch to [System Proxy Mode] to continue connecting?';
+
 	/// en: 'Portable Mode'
 	String get portableMode => 'Portable Mode';
 
@@ -2642,6 +2645,7 @@ extension on Translations {
 			'meta.launchAtStartup' => 'Launch at Startup',
 			'meta.launchAtStartupRunAsAdmin' => 'Please restart Wmimo as administrator',
 			'meta.tunModeRunAsAdmin' => 'The TUN mode requires system administrator permissions, please restart the app as an administrator',
+			'meta.tunSwitchToSystemProxy' => 'Would you like to temporarily switch to [System Proxy Mode] to continue connecting?',
 			'meta.portableMode' => 'Portable Mode',
 			'meta.portableModeDisableTips' => 'If you need to exit portable mode, please exit [Wmimo] and manually delete the [portable] folder in the same directory as [wmimo.exe]',
 			'meta.systemProxy' => 'System Proxy',
@@ -2841,9 +2845,9 @@ extension on Translations {
 			'meta.expandAll' => 'Expand All Groups',
 			'meta.donateTitle' => '💖 Buy Author a Coffee',
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Every donation is our greatest motivation to keep polishing Wmimo ~ ☕✨',
-			'meta.tokenCurrency' => 'Token',
 			_ => null,
 		} ?? switch (path) {
+			'meta.tokenCurrency' => 'Token',
 			'meta.networkChain' => 'Network',
 			'meta.depositAddress' => 'APTOS Deposit Address',
 			'meta.clickToCopy' => 'Click to copy',

@@ -334,6 +334,7 @@
     "launchAtStartup": "Launch at Startup",
     "launchAtStartupRunAsAdmin": "Please restart Wmimo as administrator",
     "tunModeRunAsAdmin": "The TUN mode requires system administrator permissions, please restart the app as an administrator",
+    "tunSwitchToSystemProxy": "Would you like to temporarily switch to [System Proxy Mode] to continue connecting?",
     "portableMode": "Portable Mode",
     "portableModeDisableTips": "If you need to exit portable mode, please exit [Wmimo] and manually delete the [portable] folder in the same directory as [wmimo.exe]",
     "systemProxy": "System Proxy",

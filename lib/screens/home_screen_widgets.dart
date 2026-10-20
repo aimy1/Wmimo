@@ -972,7 +972,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       if (Platform.isWindows && isTunEnabled && !VPNService.isRunAsAdmin()) {
         final bool? proceed = await DialogUtils.showConfirmDialog(
           context,
-          "${t.meta.tunModeRunAsAdmin}\n\n是否临时切换为【系统代理模式】继续连接？",
+          "${t.meta.tunModeRunAsAdmin}\n\n${t.meta.tunSwitchToSystemProxy}",
         );
         if (!mounted) return false;
         if (proceed != true) {
