@@ -231,6 +231,7 @@ class VPNService {
     config.mixed_port = ClashSettingManager.getMixedPort();
     config.mode = setting.Mode ?? "rule";
     config.tun_mode = setting.Tun?.Enable == true;
+    config.tun_stack = setting.Tun?.Stack ?? "mixed";
     config.notification_content = t.meta.notifVpnConnected;
     config.notification_disconnect = t.meta.notifDisconnect;
     config.base_dir = await PathUtils.profileDir();

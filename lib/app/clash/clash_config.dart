@@ -288,10 +288,12 @@ enum ClashGlobalClientFingerprint {
 enum ClashTunStack {
   mixed(name: "mixed"),
   gvisor(name: "gvisor"),
-  system(name: "system");
+  system(name: "system"),
+  mips(name: "mips");
 
   const ClashTunStack({required this.name});
   final String name;
+
   static List<String> toList() {
     if (Platform.isIOS || Platform.isMacOS) {
       return [ClashTunStack.gvisor.name];
@@ -300,7 +302,33 @@ enum ClashTunStack {
       ClashTunStack.gvisor.name,
       ClashTunStack.mixed.name,
       ClashTunStack.system.name,
+      ClashTunStack.mips.name,
     ];
+  }
+
+  static List<Tuple2<String?, String>> toTupleList(BuildContext context) {
+    final tcontext = Translations.of(context);
+    if (Platform.isIOS || Platform.isMacOS) {
+      return [
+        Tuple2(ClashTunStack.gvisor.name, tcontext.tun.stackGvisor),
+      ];
+    }
+    return [
+      Tuple2(ClashTunStack.gvisor.name, tcontext.tun.stackGvisor),
+      Tuple2(ClashTunStack.mixed.name, tcontext.tun.stackMixed),
+      Tuple2(ClashTunStack.system.name, tcontext.tun.stackSystem),
+      Tuple2(ClashTunStack.mips.name, tcontext.tun.stackMips),
+    ];
+  }
+
+  static Map<String, String> getDescriptions(BuildContext context) {
+    final tcontext = Translations.of(context);
+    return {
+      ClashTunStack.gvisor.name: tcontext.tun.stackGvisorDesc,
+      ClashTunStack.mixed.name: tcontext.tun.stackMixedDesc,
+      ClashTunStack.system.name: tcontext.tun.stackSystemDesc,
+      ClashTunStack.mips.name: tcontext.tun.stackMipsDesc,
+    };
   }
 }
 

@@ -809,6 +809,14 @@ class _Translations$tun$fa implements Translations$tun$en {
 
 	// Translations
 	@override String get stack => 'پشته شبکه';
+	@override String get stackGvisor => 'gVisor';
+	@override String get stackGvisorDesc => 'پشته شبکه فضای کاربر، پایداری و سازگاری بالا';
+	@override String get stackSystem => 'System';
+	@override String get stackSystemDesc => 'پشته شبکه بومی سیستم‌عامل، عملکرد بالا وابسته به سیستم';
+	@override String get stackMixed => 'Mixed';
+	@override String get stackMixedDesc => 'حالت پشته شبکه ترکیبی، تعادل میان عملکرد و سازگاری';
+	@override String get stackMips => 'MIPS (Mihomo IP Stack)';
+	@override String get stackMipsDesc => 'پشته IP با عملکرد بالا ساخته Mihomo با توان بالا و تاخیر کم';
 	@override String get inet4Address => 'محدوده آدرس IPv4';
 	@override String get inet6Address => 'محدوده آدرس IPv6';
 	@override String get dnsHijack => 'ربودن DNS';
@@ -1576,6 +1584,14 @@ extension on TranslationsFa {
 			'tls.privateKey' => 'کلید خصوصی',
 			'tls.customTrustCert' => 'گواهی های سفارشی',
 			'tun.stack' => 'پشته شبکه',
+			'tun.stackGvisor' => 'gVisor',
+			'tun.stackGvisorDesc' => 'پشته شبکه فضای کاربر، پایداری و سازگاری بالا',
+			'tun.stackSystem' => 'System',
+			'tun.stackSystemDesc' => 'پشته شبکه بومی سیستم‌عامل، عملکرد بالا وابسته به سیستم',
+			'tun.stackMixed' => 'Mixed',
+			'tun.stackMixedDesc' => 'حالت پشته شبکه ترکیبی، تعادل میان عملکرد و سازگاری',
+			'tun.stackMips' => 'MIPS (Mihomo IP Stack)',
+			'tun.stackMipsDesc' => 'پشته IP با عملکرد بالا ساخته Mihomo با توان بالا و تاخیر کم',
 			'tun.inet4Address' => 'محدوده آدرس IPv4',
 			'tun.inet6Address' => 'محدوده آدرس IPv6',
 			'tun.dnsHijack' => 'ربودن DNS',

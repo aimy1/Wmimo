@@ -809,6 +809,14 @@ class _Translations$tun$ar implements Translations$tun$en {
 
 	// Translations
 	@override String get stack => 'مكدس الشبكة';
+	@override String get stackGvisor => 'gVisor';
+	@override String get stackGvisorDesc => 'مكدس شبكة مساحة المستخدم، استقرار وتوافق عاليان';
+	@override String get stackSystem => 'System';
+	@override String get stackSystemDesc => 'مكدس شبكة نظام التشغيل الأصلي، أداء عالي يعتمد على النظام';
+	@override String get stackMixed => 'Mixed';
+	@override String get stackMixedDesc => 'وضع مكدس الشبكة المختلط، توازن بين الأداء والتوافق';
+	@override String get stackMips => 'MIPS (Mihomo IP Stack)';
+	@override String get stackMipsDesc => 'مكدس IP عالي الأداء من Mihomo بإنتاجية عالية ووقت استجابة منخفض';
 	@override String get inet4Address => 'نطاق عناوين IPv4';
 	@override String get inet6Address => 'نطاق عناوين IPv6';
 	@override String get dnsHijack => 'اختطاف DNS';
@@ -1576,6 +1584,14 @@ extension on TranslationsAr {
 			'tls.privateKey' => 'المفتاح الخاص',
 			'tls.customTrustCert' => 'شهادات مخصصة',
 			'tun.stack' => 'مكدس الشبكة',
+			'tun.stackGvisor' => 'gVisor',
+			'tun.stackGvisorDesc' => 'مكدس شبكة مساحة المستخدم، استقرار وتوافق عاليان',
+			'tun.stackSystem' => 'System',
+			'tun.stackSystemDesc' => 'مكدس شبكة نظام التشغيل الأصلي، أداء عالي يعتمد على النظام',
+			'tun.stackMixed' => 'Mixed',
+			'tun.stackMixedDesc' => 'وضع مكدس الشبكة المختلط، توازن بين الأداء والتوافق',
+			'tun.stackMips' => 'MIPS (Mihomo IP Stack)',
+			'tun.stackMipsDesc' => 'مكدس IP عالي الأداء من Mihomo بإنتاجية عالية ووقت استجابة منخفض',
 			'tun.inet4Address' => 'نطاق عناوين IPv4',
 			'tun.inet6Address' => 'نطاق عناوين IPv6',
 			'tun.dnsHijack' => 'اختطاف DNS',

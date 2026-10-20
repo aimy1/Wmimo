@@ -2048,6 +2048,30 @@ class Translations$tun$en {
 	/// en: 'Network stack'
 	String get stack => 'Network stack';
 
+	/// en: 'gVisor'
+	String get stackGvisor => 'gVisor';
+
+	/// en: 'User-space network stack, high stability and compatibility'
+	String get stackGvisorDesc => 'User-space network stack, high stability and compatibility';
+
+	/// en: 'System'
+	String get stackSystem => 'System';
+
+	/// en: 'OS native network stack, high performance but depends on system'
+	String get stackSystemDesc => 'OS native network stack, high performance but depends on system';
+
+	/// en: 'Mixed'
+	String get stackMixed => 'Mixed';
+
+	/// en: 'Mixed stack mode, balancing performance and compatibility'
+	String get stackMixedDesc => 'Mixed stack mode, balancing performance and compatibility';
+
+	/// en: 'MIPS (Mihomo IP Stack)'
+	String get stackMips => 'MIPS (Mihomo IP Stack)';
+
+	/// en: 'Mihomo high-performance IP stack with high throughput and low latency'
+	String get stackMipsDesc => 'Mihomo high-performance IP stack with high throughput and low latency';
+
 	/// en: 'IPv4 Gateway Address'
 	String get inet4Address => 'IPv4 Gateway Address';
 
@@ -2976,6 +3000,14 @@ extension on Translations {
 			'tls.privateKey' => 'Private Key',
 			'tls.customTrustCert' => 'Custom Certifactes',
 			'tun.stack' => 'Network stack',
+			'tun.stackGvisor' => 'gVisor',
+			'tun.stackGvisorDesc' => 'User-space network stack, high stability and compatibility',
+			'tun.stackSystem' => 'System',
+			'tun.stackSystemDesc' => 'OS native network stack, high performance but depends on system',
+			'tun.stackMixed' => 'Mixed',
+			'tun.stackMixedDesc' => 'Mixed stack mode, balancing performance and compatibility',
+			'tun.stackMips' => 'MIPS (Mihomo IP Stack)',
+			'tun.stackMipsDesc' => 'Mihomo high-performance IP stack with high throughput and low latency',
 			'tun.inet4Address' => 'IPv4 Gateway Address',
 			'tun.inet6Address' => 'IPv6 Gateway Address',
 			'tun.dnsHijack' => 'DNS Hijack',

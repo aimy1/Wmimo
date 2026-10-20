@@ -1575,6 +1575,8 @@ class GroupHelper {
       var tun = setting.Tun!;
       var extensions = setting.Extension!;
       final tunStacks = ClashTunStack.toList();
+      final tunTuples = ClashTunStack.toTupleList(context);
+      final tunDescriptions = ClashTunStack.getDescriptions(context);
       List<GroupItemOptions> options = [
         GroupItemOptions(
           switchOptions: GroupItemSwitchOptions(
@@ -1621,7 +1623,8 @@ class GroupHelper {
             selected: tunStacks.contains(tun.Stack)
                 ? tun.Stack
                 : tunStacks.first,
-            strings: tunStacks,
+            tupleStrings: tunTuples,
+            descriptions: tunDescriptions,
             onPicker: tun.OverWrite != true || tun.Enable != true
                 ? null
                 : (String? selected) async {

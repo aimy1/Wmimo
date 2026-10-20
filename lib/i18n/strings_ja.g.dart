@@ -809,6 +809,14 @@ class _Translations$tun$ja implements Translations$tun$en {
 
 	// Translations
 	@override String get stack => 'ネットワークスタック';
+	@override String get stackGvisor => 'gVisor';
+	@override String get stackGvisorDesc => 'ユーザースペースのネットワークスタック、優れた安定性と互換性';
+	@override String get stackSystem => 'System';
+	@override String get stackSystemDesc => 'OSネイティブのネットワークスタック、高性能ですがシステム実装に依存';
+	@override String get stackMixed => 'Mixed';
+	@override String get stackMixedDesc => '混合スタックモード、パフォーマンスと互換性のバランス';
+	@override String get stackMips => 'MIPS (Mihomo IP Stack)';
+	@override String get stackMipsDesc => 'Mihomo独自開発の高性能IPスタック、高スループットと低遅延';
 	@override String get inet4Address => 'IPv4アドレス範囲';
 	@override String get inet6Address => 'IPv6アドレス範囲';
 	@override String get dnsHijack => 'DNSハイジャック';
@@ -1576,6 +1584,14 @@ extension on TranslationsJa {
 			'tls.privateKey' => '秘密鍵',
 			'tls.customTrustCert' => 'カスタム証明書',
 			'tun.stack' => 'ネットワークスタック',
+			'tun.stackGvisor' => 'gVisor',
+			'tun.stackGvisorDesc' => 'ユーザースペースのネットワークスタック、優れた安定性と互換性',
+			'tun.stackSystem' => 'System',
+			'tun.stackSystemDesc' => 'OSネイティブのネットワークスタック、高性能ですがシステム実装に依存',
+			'tun.stackMixed' => 'Mixed',
+			'tun.stackMixedDesc' => '混合スタックモード、パフォーマンスと互換性のバランス',
+			'tun.stackMips' => 'MIPS (Mihomo IP Stack)',
+			'tun.stackMipsDesc' => 'Mihomo独自開発の高性能IPスタック、高スループットと低遅延',
 			'tun.inet4Address' => 'IPv4アドレス範囲',
 			'tun.inet6Address' => 'IPv6アドレス範囲',
 			'tun.dnsHijack' => 'DNSハイジャック',

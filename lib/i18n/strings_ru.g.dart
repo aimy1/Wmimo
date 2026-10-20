@@ -809,6 +809,14 @@ class _Translations$tun$ru implements Translations$tun$en {
 
 	// Translations
 	@override String get stack => 'Сетевой стек';
+	@override String get stackGvisor => 'gVisor';
+	@override String get stackGvisorDesc => 'Сетевой стек пользовательского пространства, отличная стабильность';
+	@override String get stackSystem => 'System';
+	@override String get stackSystemDesc => 'Системный сетевой стек, высокая производительность';
+	@override String get stackMixed => 'Mixed';
+	@override String get stackMixedDesc => 'Смешанный сетевой стек, баланс производительности и совместимости';
+	@override String get stackMips => 'MIPS (Mihomo IP Stack)';
+	@override String get stackMipsDesc => 'Высокопроизводительный IP-стек Mihomo, высокая пропускная способность и низкая задержка';
 	@override String get inet4Address => 'Диапазон IPv4-адресов';
 	@override String get inet6Address => 'Диапазон IPv6-адресов';
 	@override String get dnsHijack => 'Перехват DNS';
@@ -1576,6 +1584,14 @@ extension on TranslationsRu {
 			'tls.privateKey' => 'Закрытый ключ',
 			'tls.customTrustCert' => 'Индивидуальные сертификаты',
 			'tun.stack' => 'Сетевой стек',
+			'tun.stackGvisor' => 'gVisor',
+			'tun.stackGvisorDesc' => 'Сетевой стек пользовательского пространства, отличная стабильность',
+			'tun.stackSystem' => 'System',
+			'tun.stackSystemDesc' => 'Системный сетевой стек, высокая производительность',
+			'tun.stackMixed' => 'Mixed',
+			'tun.stackMixedDesc' => 'Смешанный сетевой стек, баланс производительности и совместимости',
+			'tun.stackMips' => 'MIPS (Mihomo IP Stack)',
+			'tun.stackMipsDesc' => 'Высокопроизводительный IP-стек Mihomo, высокая пропускная способность и низкая задержка',
 			'tun.inet4Address' => 'Диапазон IPv4-адресов',
 			'tun.inet6Address' => 'Диапазон IPv6-адресов',
 			'tun.dnsHijack' => 'Перехват DNS',

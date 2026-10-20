@@ -47,6 +47,7 @@ class VpnServiceConfig {
   String profile_path = "";
   String config_file_path = "";
   bool tun_mode = false;
+  String tun_stack = "mixed";
   bool wake_lock = false;
   bool auto_connect_at_boot = false;
   bool include_all_networks = false;
@@ -72,6 +73,7 @@ class VpnServiceConfig {
         'log_path': log_path,
         'err_path': err_path,
         'tun_mode': tun_mode,
+        'tun_stack': tun_stack,
       };
   void fromJson(Map<String, dynamic> json) {
     if (json['control_port'] != null) control_port = json['control_port'];
@@ -86,6 +88,7 @@ class VpnServiceConfig {
     if (json['log_path'] != null) log_path = json['log_path'];
     if (json['err_path'] != null) err_path = json['err_path'];
     if (json['tun_mode'] != null) tun_mode = json['tun_mode'];
+    if (json['tun_stack'] != null) tun_stack = json['tun_stack'];
   }
 }
 
@@ -619,11 +622,15 @@ tcp-concurrent: true
 find-process-mode: always
 ''';
 
+    final tunStack = (_savedConfig?.tun_stack.isNotEmpty == true)
+        ? _savedConfig!.tun_stack
+        : 'mixed';
+
     if (tunMode && !Platform.isAndroid) {
       header += '''
 tun:
   enable: true
-  stack: mixed
+  stack: $tunStack
   dns-hijack:
     - "any:53"
     - "tcp://any:53"

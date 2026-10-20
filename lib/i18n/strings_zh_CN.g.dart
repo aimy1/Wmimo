@@ -809,6 +809,14 @@ class Translations$tun$zh_CN implements Translations$tun$en {
 
 	// Translations
 	@override String get stack => '网络栈';
+	@override String get stackGvisor => 'gVisor';
+	@override String get stackGvisorDesc => '用户空间网络栈，稳定性与兼容性极佳';
+	@override String get stackSystem => 'System';
+	@override String get stackSystemDesc => '使用系统原生网络栈，性能高但依赖系统实现';
+	@override String get stackMixed => 'Mixed';
+	@override String get stackMixedDesc => '混合网络栈模式，兼顾性能与兼容性';
+	@override String get stackMips => 'MIPS (Mihomo IP Stack)';
+	@override String get stackMipsDesc => 'Mihomo 自研高性能 IP 网络栈，高吞吐低延迟';
 	@override String get inet4Address => 'IPv4地址段';
 	@override String get inet6Address => 'IPv6地址段';
 	@override String get dnsHijack => 'DNS劫持';
@@ -1576,6 +1584,14 @@ extension on TranslationsZhCn {
 			'tls.privateKey' => '私钥',
 			'tls.customTrustCert' => '自定义证书',
 			'tun.stack' => '网络栈',
+			'tun.stackGvisor' => 'gVisor',
+			'tun.stackGvisorDesc' => '用户空间网络栈，稳定性与兼容性极佳',
+			'tun.stackSystem' => 'System',
+			'tun.stackSystemDesc' => '使用系统原生网络栈，性能高但依赖系统实现',
+			'tun.stackMixed' => 'Mixed',
+			'tun.stackMixedDesc' => '混合网络栈模式，兼顾性能与兼容性',
+			'tun.stackMips' => 'MIPS (Mihomo IP Stack)',
+			'tun.stackMipsDesc' => 'Mihomo 自研高性能 IP 网络栈，高吞吐低延迟',
 			'tun.inet4Address' => 'IPv4地址段',
 			'tun.inet6Address' => 'IPv6地址段',
 			'tun.dnsHijack' => 'DNS劫持',

@@ -419,6 +419,7 @@ class GroupItemStringPicker extends StatelessWidget {
         if (options.selected == key.item1) {
           selectedText = key.item2;
         }
+        final desc = options.descriptions?[key.item1];
         widgets.add(
           ListTile(
             title: Text(
@@ -429,6 +430,12 @@ class GroupItemStringPicker extends StatelessWidget {
                     : null,
               ),
             ),
+            subtitle: desc != null && desc.isNotEmpty
+                ? Text(
+                    desc,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  )
+                : null,
             onTap: () async {
               Navigator.pop(context);
               options.selected = key.item1;
@@ -439,6 +446,7 @@ class GroupItemStringPicker extends StatelessWidget {
       }
     } else if (options.strings != null) {
       for (var key in options.strings!) {
+        final desc = options.descriptions?[key];
         widgets.add(
           ListTile(
             title: Text(
@@ -447,6 +455,12 @@ class GroupItemStringPicker extends StatelessWidget {
                 color: options.selected == key ? ThemeDefine.kColorBlue : null,
               ),
             ),
+            subtitle: desc != null && desc.isNotEmpty
+                ? Text(
+                    desc,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  )
+                : null,
             onTap: () async {
               Navigator.pop(context);
               options.selected = key;

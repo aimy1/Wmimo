@@ -1,4 +1,4 @@
-﻿// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names
 
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:flutter/cupertino.dart';
@@ -154,6 +154,7 @@ class GroupItemStringPickerOptions {
     this.reddot,
     this.strings,
     this.tupleStrings,
+    this.descriptions,
     this.selected,
     this.textWidthPercent = 0.5,
     this.onPicker,
@@ -164,6 +165,7 @@ class GroupItemStringPickerOptions {
   final bool? reddot;
   final List<String?>? strings;
   final List<Tuple2<String?, String>>? tupleStrings;
+  final Map<String, String>? descriptions;
   String? selected;
   final double textWidthPercent;
   Future<void> Function(String?)? onPicker;

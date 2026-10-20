@@ -809,6 +809,14 @@ class _Translations$tun$es implements Translations$tun$en {
 
 	// Translations
 	@override String get stack => 'Pila de red';
+	@override String get stackGvisor => 'gVisor';
+	@override String get stackGvisorDesc => 'Pila de red de espacio de usuario, alta estabilidad y compatibilidad';
+	@override String get stackSystem => 'System';
+	@override String get stackSystemDesc => 'Pila de red nativa del sistema, alto rendimiento pero depende del SO';
+	@override String get stackMixed => 'Mixed';
+	@override String get stackMixedDesc => 'Modo de pila mixta, equilibra rendimiento y compatibilidad';
+	@override String get stackMips => 'MIPS (Mihomo IP Stack)';
+	@override String get stackMipsDesc => 'Pila IP de alto rendimiento de Mihomo, alto rendimiento y baja latencia';
 	@override String get inet4Address => 'Dirección de Puerta de Enlace IPv4';
 	@override String get inet6Address => 'Dirección de Puerta de Enlace IPv6';
 	@override String get dnsHijack => 'Secuestro de DNS';
@@ -1576,6 +1584,14 @@ extension on TranslationsEs {
 			'tls.privateKey' => 'Clave Privada',
 			'tls.customTrustCert' => 'Certificados Personalizados',
 			'tun.stack' => 'Pila de red',
+			'tun.stackGvisor' => 'gVisor',
+			'tun.stackGvisorDesc' => 'Pila de red de espacio de usuario, alta estabilidad y compatibilidad',
+			'tun.stackSystem' => 'System',
+			'tun.stackSystemDesc' => 'Pila de red nativa del sistema, alto rendimiento pero depende del SO',
+			'tun.stackMixed' => 'Mixed',
+			'tun.stackMixedDesc' => 'Modo de pila mixta, equilibra rendimiento y compatibilidad',
+			'tun.stackMips' => 'MIPS (Mihomo IP Stack)',
+			'tun.stackMipsDesc' => 'Pila IP de alto rendimiento de Mihomo, alto rendimiento y baja latencia',
 			'tun.inet4Address' => 'Dirección de Puerta de Enlace IPv4',
 			'tun.inet6Address' => 'Dirección de Puerta de Enlace IPv6',
 			'tun.dnsHijack' => 'Secuestro de DNS',

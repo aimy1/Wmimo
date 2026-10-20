@@ -809,6 +809,14 @@ class _Translations$tun$ko implements Translations$tun$en {
 
 	// Translations
 	@override String get stack => '네트워크 스택';
+	@override String get stackGvisor => 'gVisor';
+	@override String get stackGvisorDesc => '사용자 공간 네트워크 스택, 뛰어난 안정성과 호환성';
+	@override String get stackSystem => 'System';
+	@override String get stackSystemDesc => 'OS 기본 네트워크 스택, 고성능이지만 시스템 구현에 의존';
+	@override String get stackMixed => 'Mixed';
+	@override String get stackMixedDesc => '혼합 네트워크 스택 모드, 성능과 호환성의 균형';
+	@override String get stackMips => 'MIPS (Mihomo IP Stack)';
+	@override String get stackMipsDesc => 'Mihomo 자체 개발 고성능 IP 스택, 높은 처리량 및 낮은 지연 시간';
 	@override String get inet4Address => 'IPv4 주소 범위';
 	@override String get inet6Address => 'IPv6 주소 범위';
 	@override String get dnsHijack => 'DNS 하이제킹';
@@ -1576,6 +1584,14 @@ extension on TranslationsKo {
 			'tls.privateKey' => '개인 키',
 			'tls.customTrustCert' => '사용자 정의 인증서',
 			'tun.stack' => '네트워크 스택',
+			'tun.stackGvisor' => 'gVisor',
+			'tun.stackGvisorDesc' => '사용자 공간 네트워크 스택, 뛰어난 안정성과 호환성',
+			'tun.stackSystem' => 'System',
+			'tun.stackSystemDesc' => 'OS 기본 네트워크 스택, 고성능이지만 시스템 구현에 의존',
+			'tun.stackMixed' => 'Mixed',
+			'tun.stackMixedDesc' => '혼합 네트워크 스택 모드, 성능과 호환성의 균형',
+			'tun.stackMips' => 'MIPS (Mihomo IP Stack)',
+			'tun.stackMipsDesc' => 'Mihomo 자체 개발 고성능 IP 스택, 높은 처리량 및 낮은 지연 시간',
 			'tun.inet4Address' => 'IPv4 주소 범위',
 			'tun.inet6Address' => 'IPv6 주소 범위',
 			'tun.dnsHijack' => 'DNS 하이제킹',

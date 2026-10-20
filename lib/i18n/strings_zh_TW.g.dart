@@ -809,6 +809,14 @@ class Translations$tun$zh_TW implements Translations$tun$en {
 
 	// Translations
 	@override String get stack => '網路堆疊';
+	@override String get stackGvisor => 'gVisor';
+	@override String get stackGvisorDesc => '使用者空間網路棧，穩定性與相容性極佳';
+	@override String get stackSystem => 'System';
+	@override String get stackSystemDesc => '使用系統原生網路棧，效能高但依賴系統實現';
+	@override String get stackMixed => 'Mixed';
+	@override String get stackMixedDesc => '混合網路棧模式，兼顧效能與相容性';
+	@override String get stackMips => 'MIPS (Mihomo IP Stack)';
+	@override String get stackMipsDesc => 'Mihomo 自研高效能 IP 網路棧，高輸送量低延遲';
 	@override String get inet4Address => 'IPv4位址段';
 	@override String get inet6Address => 'IPv6位址段';
 	@override String get dnsHijack => 'DNS劫持';
@@ -1576,6 +1584,14 @@ extension on TranslationsZhTw {
 			'tls.privateKey' => '私鑰',
 			'tls.customTrustCert' => '自訂信任憑證',
 			'tun.stack' => '網路堆疊',
+			'tun.stackGvisor' => 'gVisor',
+			'tun.stackGvisorDesc' => '使用者空間網路棧，穩定性與相容性極佳',
+			'tun.stackSystem' => 'System',
+			'tun.stackSystemDesc' => '使用系統原生網路棧，效能高但依賴系統實現',
+			'tun.stackMixed' => 'Mixed',
+			'tun.stackMixedDesc' => '混合網路棧模式，兼顧效能與相容性',
+			'tun.stackMips' => 'MIPS (Mihomo IP Stack)',
+			'tun.stackMipsDesc' => 'Mihomo 自研高效能 IP 網路棧，高輸送量低延遲',
 			'tun.inet4Address' => 'IPv4位址段',
 			'tun.inet6Address' => 'IPv6位址段',
 			'tun.dnsHijack' => 'DNS劫持',
