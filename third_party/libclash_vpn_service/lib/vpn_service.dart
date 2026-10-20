@@ -971,19 +971,6 @@ rules:
     if (nodeName != null && nodeName.isNotEmpty) activeNodeName = nodeName;
     if (mode != null && mode.isNotEmpty) activeMode = mode;
     if (profileName != null && profileName.isNotEmpty) activeProfileName = profileName;
-
-    if (Platform.isAndroid && _state == FlutterVpnServiceState.connected) {
-      try {
-        final mixedPort = _savedConfig?.mixed_port ?? 7890;
-        const platform = MethodChannel('com.wmimo.app/native_helper');
-        await platform.invokeMethod('updateNotification', {
-          'mixedPort': mixedPort,
-          'nodeName': activeNodeName,
-          'mode': activeMode,
-          'profileName': activeProfileName,
-        });
-      } catch (_) {}
-    }
   }
 
   static void _notifyState(FlutterVpnServiceState newState) {
@@ -1226,9 +1213,6 @@ rules:
           const platform = MethodChannel('com.wmimo.app/native_helper');
           await platform.invokeMethod('startVpnService', {
             'mixedPort': mixedPort,
-            'nodeName': activeNodeName,
-            'mode': activeMode,
-            'profileName': activeProfileName,
           });
         } catch (_) {}
       }

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.net.VpnService
 import android.os.Build
-import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
@@ -25,49 +24,12 @@ class MainActivity : FlutterActivity() {
 
     private var pendingVpnResult: MethodChannel.Result? = null
     private var pendingNotifResult: MethodChannel.Result? = null
-    private var channel: MethodChannel? = null
-    private var targetScreen: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        WmimoVpnService.onVpnStopCallback = {
-            runOnUiThread {
-                channel?.invokeMethod("onVpnStopRequested", null)
-            }
-        }
-        handleIntent(intent)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleIntent(intent)
-    }
-
-    override fun onDestroy() {
-        WmimoVpnService.onVpnStopCallback = null
-        super.onDestroy()
-    }
-
-    private fun handleIntent(intent: Intent?) {
-        val target = intent?.getStringExtra("target_screen")
-        if (target != null) {
-            targetScreen = target
-            channel?.invokeMethod("onNavigateTarget", target)
-        }
-    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
 
-        val ch = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
-        channel = ch
-        ch.setMethodCallHandler { call, result ->
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
-                "getLaunchTargetScreen" -> {
-                    val target = targetScreen
-                    targetScreen = null
-                    result.success(target)
-                }
                 "getNativeLibraryDir" -> {
                     result.success(applicationInfo.nativeLibraryDir)
                 }
@@ -164,36 +126,13 @@ class MainActivity : FlutterActivity() {
                 }
                 "startVpnService" -> {
                     val mixedPort = call.argument<Int>("mixedPort") ?: 7890
-                    val nodeName = call.argument<String>("nodeName") ?: ""
-                    val mode = call.argument<String>("mode") ?: ""
-                    val profileName = call.argument<String>("profileName") ?: ""
                     val intent = Intent(this, WmimoVpnService::class.java).apply {
                         action = WmimoVpnService.ACTION_START
                         putExtra("mixedPort", mixedPort)
-                        putExtra("nodeName", nodeName)
-                        putExtra("mode", mode)
-                        putExtra("profileName", profileName)
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         startForegroundService(intent)
                     } else {
-                        startService(intent)
-                    }
-                    result.success(true)
-                }
-                "updateNotification" -> {
-                    val nodeName = call.argument<String>("nodeName") ?: ""
-                    val mode = call.argument<String>("mode") ?: ""
-                    val profileName = call.argument<String>("profileName") ?: ""
-                    val mixedPort = call.argument<Int>("mixedPort")
-                    val intent = Intent(this, WmimoVpnService::class.java).apply {
-                        action = WmimoVpnService.ACTION_UPDATE
-                        putExtra("nodeName", nodeName)
-                        putExtra("mode", mode)
-                        putExtra("profileName", profileName)
-                        if (mixedPort != null) putExtra("mixedPort", mixedPort)
-                    }
-                    if (WmimoVpnService.isServiceRunning) {
                         startService(intent)
                     }
                     result.success(true)

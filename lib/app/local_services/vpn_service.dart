@@ -29,7 +29,6 @@ import 'package:libclash_vpn_service/state.dart';
 import 'package:libclash_vpn_service/vpn_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
-import 'package:flutter/services.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 
 class VPNServiceSetServerOptions {
@@ -135,21 +134,6 @@ class VPNService {
           await FlutterVpnService.cleanSystemProxy();
         }
       }
-    }
-
-    if (Platform.isAndroid) {
-      const platform = MethodChannel('com.wmimo.app/native_helper');
-      platform.setMethodCallHandler((call) async {
-        if (call.method == 'onVpnStopRequested') {
-          await stop();
-        }
-      });
-      ClashSettingManager.onEventModeChanged.add(() {
-        unawaited(updateAndroidNotificationInfo());
-      });
-      ProfileManager.onEventCurrentChanged.add((_) {
-        unawaited(updateAndroidNotificationInfo());
-      });
     }
 
     CoreWatchdog.init();
@@ -518,10 +502,6 @@ class VPNService {
         }
       }
 
-      if (Platform.isAndroid) {
-        unawaited(updateAndroidNotificationInfo());
-      }
-
       CoreWatchdog.setUserConnected(true);
       return null;
     } finally {
@@ -553,54 +533,7 @@ class VPNService {
     String? nodeName,
     String? mode,
     String? profileName,
-  }) async {
-    if (!Platform.isAndroid) return;
-
-    String? n = nodeName;
-    String? m = mode;
-    String? pName = profileName;
-
-    if (pName == null || pName.isEmpty) {
-      final curProfile = ProfileManager.getCurrent();
-      pName = (curProfile != null && curProfile.remark.isNotEmpty)
-          ? curProfile.remark
-          : (curProfile?.url.isNotEmpty == true ? curProfile!.url : (curProfile?.id ?? ""));
-    }
-
-    if (m == null || m.isEmpty) {
-      final cfgMode = ClashSettingManager.getConfigsMode();
-      m = getLocalizedModeName(cfgMode);
-    }
-
-    if (n == null || n.isEmpty) {
-      try {
-        final nodes = await ProxyNodeLoader.loadCurrentProfileNodes();
-        final groups = nodes.where((x) => ClashProtocolType.isGroupType(x.type)).toList();
-        ClashProxiesNode? sel;
-        for (var g in groups) {
-          final upper = g.name.toUpperCase();
-          if (upper == "PROXY" ||
-              upper == "PROXIES" ||
-              g.name == "节点选择" ||
-              g.name == "節點選擇" ||
-              g.name == t.meta.proxySelection) {
-            sel = g;
-            break;
-          }
-        }
-        sel ??= groups.isNotEmpty ? groups.first : null;
-        if (sel != null && sel.now.isNotEmpty) {
-          n = sel.now;
-        }
-      } catch (_) {}
-    }
-
-    await FlutterVpnService.updateNotification(
-      nodeName: n,
-      mode: m,
-      profileName: pName,
-    );
-  }
+  }) async {}
 
   static String getLocalizedModeName(ClashConfigsMode mode) {
     switch (mode) {
