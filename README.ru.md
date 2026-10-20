@@ -10,52 +10,103 @@
 
 
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>Современный кроссплатформенный GUI-клиент прокси Clash / Mihomo</h3>
-  <p>Создан на Flutter с ядром Mihomo, обеспечивая сверхбыстрый, элегантный и мощный прокси-сервис.</p>
+  <img src="assets/images/app_icon_256.png" width="128" height="128" alt="Wmimo Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 188, 223, 0.25);" />
+  <h1 align="center" style="font-weight: 800; border-bottom: none; margin-top: 12px; margin-bottom: 6px;">Wmimo</h1>
+  <p align="center" style="font-size: 1.15rem; color: #57606a;"><strong>Современный кроссплатформенный клиент Clash / Mihomo нового поколения</strong></p>
+  <p align="center">Создан на базе Flutter и ядра Mihomo. Обеспечивает бескомпромиссную скорость, элегантный дизайн и поддержку всех современных протоколов.</p>
 
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
+  <p align="center">
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
+    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="Build" /></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
+    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
+  </p>
+
+  <p align="center">
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 Скачать релиз</b></a> •
+    <a href="#-быстрый-старт"><b>🚀 Быстрый старт</b></a> •
+    <a href="#-ключевые-возможности"><b>✨ Возможности</b></a> •
+    <a href="#-поддерживаемые-платформы"><b>💻 Платформы</b></a> •
+    <a href="https://t.me/wmimoapp"><b>💬 Сообщество</b></a>
   </p>
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo Светлая тема" width="350" />
-    <img src="docs/preview_dark.png" alt="Wmimo Темная тема" width="350" />
+    <img src="docs/preview_light.png" alt="Wmimo Светлая тема" width="370" />
+    &nbsp;&nbsp;
+    <img src="docs/preview_dark.png" alt="Wmimo Темная тема" width="370" />
   </p>
-  <sub><em>✨ Эстетика микро-карточек 18px, мониторинг трафика в реальном времени и диагностика сети (Светлая и темная темы)</em></sub>
+  <sub><em>✨ Эстетика микро-карточек 18px, плавный график трафика Безье и диагностика сети (Светлая и Темная темы)</em></sub>
 </div>
 
 ---
 
-## 📌 Поддержка платформ и дистрибутивов Linux
+## ✨ Ключевые возможности
 
-| Платформа | Статус | Формат пакетов | Описание |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Готово** | Установщик (`.exe`) и Portable (`.zip`) | Боковая панель, меню в трее, график трафика, режим TUN, автообновление. |
-| 🐧 **Linux** | ✅ **Готово** | AppImage (`.AppImage`), Debian (`.deb`), RPM (`.rpm`), Portable (`.tar.gz`) | Нативный интерфейс GTK3, интеграция с системным треем, встроенное ядро Mihomo. |
-| 📱 **Android** | ✅ **Готово** | Universal APK и Split ABIs | Интеграция VpnService, постоянная подпись Release, адаптивный интерфейс. |
-| 🍎 **macOS** | 🛠️ **Исходный код готов** | DMG / Локальная сборка | Системный прокси и режим TUN реализованы в коде. Поддерживается локальная сборка (`flutter run -d macos`); готовые DMG не публикуются в Release. |
-| 🍏 **iOS** | 📦 **Архитектура готова** | IPA / Исходный код | Архитектура NetworkExtension интегрирована. Из-за требований к сертификатам Apple официальный IPA не распространяется. |
-
-> 💡 **Политика распространения**: Официальный CI/CD выпускает сборки для **Windows**, **Linux** и **Android**. Исходный код macOS и iOS готов, но предварительно скомпилированные пакеты для платформ Apple не публикуются в Releases.
+- 🎨 **Эстетичный интерфейс и нативная смена тем**:
+  - Закругления карточек 18px и фирменный акцентный циан.
+  - Плавное и чистое переключение между светлой и глубокой темной темами.
+  - Адаптивный интерфейс для больших мониторов и смартфонов.
+- ⚡ **Ядро Mihomo (Meta) с полной поддержкой протоколов**:
+  - Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct.
+  - Парсинг узлов в фоновом Isolate — **полное отсутствие зависаний интерфейса (Zero UI Freeze)**.
+- 🔀 **Интеллектуальная маршрутизация и два режима работы**:
+  - Быстрое переключение: **По правилам (Rule)** / **Глобальный (Global)** / **Прямой (Direct)**.
+  - **Режим TUN-адаптера** (прозрачный системный перехват) и **Системный прокси** (без прав администратора).
+  - Раздельное туннелирование приложений на Android и исключение UWP на Windows.
+- 📈 **Мониторинг трафика и диагностический центр**:
+  - Графики трафика Безье в реальном времени (1м / 5м / 15м / 30м / 60м).
+  - Карточка проверки внешнего IP, локации и провайдера в один клик.
+  - Счетчик расхода тарифного плана и срока действия подписки.
+- 🪟 **Глубокая интеграция с операционными системами**:
+  - **Windows**: Нативное меню трея подстраивается под тему приложения, динамическая индикация скорости в трее, стиль `comctl32 v6`.
+  - **Android**: Уведомление службы с кнопкой отключения, плитка быстрых настроек, синхронизация языка.
+  - **macOS**: Нативная иконка в строке меню Template.
+- 🌍 **100% локализация на 9 языков**:
+  - Полное покрытие 705 ключей: Русский, Английский, Китайский (упр/трад), Японский, Корейский, Испанский, Арабский, Персидский.
 
 ---
 
-## 📬 Связь с автором и отчет об ошибках
+## 📌 Поддерживаемые платформы
 
-Если вы столкнулись с ошибками или у вас есть предложения по улучшению, свяжитесь с автором:
+| Платформа | Статус | Форматы | Примечания |
+| :--- | :---: | :--- | :--- |
+| 🪟 **Windows** | ✅ **Готово** | Установщик (`.exe`) и Портативная (`.zip`) | Боковая панель, трей со скоростью, TUN-режим, UWP-утилита, автообновление. |
+| 🐧 **Linux (Universal)** | ✅ **Готово** | AppImage (`.AppImage`) и Архив (`.tar.gz`) | Работает из коробки на всех дистрибутивах Linux. |
+| 🐧 **Debian / Ubuntu** | ✅ **Готово** | Пакет Debian (`.deb`) | Интеграция с рабочим столом и ярлыки. |
+| 🐧 **Fedora / openSUSE** | ✅ **Готово** | Пакет RedHat (`.rpm`) | Стандартная сборка RPM. |
+| 🐧 **Arch Linux** | ✅ **Готово** | Пакет Pacman (`.pkg.tar.zst`) | Прямая установка pacman. |
+| 📱 **Android** | ✅ **Готово** | Универсальный APK и по архитектурам | VpnService, быстрая плитка в шторке, разделение приложений. |
+| 🍎 **macOS** | 🛠️ **Исходники** | DMG / Сборка | Локальная сборка через `flutter build macos`. |
+| 🍏 **iOS** | 📦 **Архитектура** | IPA / Сборка | Доступно через TrollStore или персональный сертификат. |
 
-- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **Электронная почта автора**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **GitHub Issues**: [Создать Issue](https://github.com/aimy1/Wmimo/issues)
+---
+
+## 🚀 Быстрый старт
+
+1. **Скачать**: Перейдите в [Релизы](https://github.com/aimy1/Wmimo/releases) и скачайте нужный файл.
+2. **Импорт**: В разделе «Подписки» вставьте ссылку на подписку Clash/Mihomo.
+3. **Подключение**: Включите тумблер на главном экране.
+   - *Совет для Windows*: Для **TUN-режима** запускайте Wmimo от имени администратора; для повседневного использования отлично подходит **Системный прокси**.
+
+---
+
+## 📊 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
+
+---
+
+## 📬 Сообщество
+
+- 💬 **Telegram-канал**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- 📧 **Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **Сообщить об ошибке**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
 ## 📄 Лицензия
 
-Проект распространяется под лицензией **GPL-3.0**. См. файл [LICENSE](LICENSE).
+Проект распространяется под лицензией **GPL-3.0**. Подробности в файле [LICENSE](LICENSE).

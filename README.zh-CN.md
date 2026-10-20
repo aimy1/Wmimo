@@ -10,129 +10,131 @@
 
 
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>现代化跨平台 Clash / Mihomo 代理客户端</h3>
-  <p>基于 Flutter 与 Mihomo 核心打造，提供极速、优雅、强大的全协议网络代理体验。</p>
+  <img src="assets/images/app_icon_256.png" width="128" height="128" alt="Wmimo Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 188, 223, 0.25);" />
+  <h1 align="center" style="font-weight: 800; border-bottom: none; margin-top: 12px; margin-bottom: 6px;">Wmimo</h1>
+  <p align="center" style="font-size: 1.15rem; color: #57606a;"><strong>新一代现代化跨平台 Clash / Mihomo 桌面与移动端代理客户端</strong></p>
+  <p align="center">基于 Flutter 与高性能 Mihomo (Meta) 核心倾力打造。兼具极速转发性能、现代艺术级设计美学与全协议代理能力。</p>
 
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
+  <p align="center">
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
+    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="Build" /></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
+    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
+  </p>
+
+  <p align="center">
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 下载安装包</b></a> •
+    <a href="#-快速上手"><b>🚀 快速上手</b></a> •
+    <a href="#-核心特性"><b>✨ 核心特性</b></a> •
+    <a href="#-全平台支持矩阵"><b>💻 平台支持</b></a> •
+    <a href="https://t.me/wmimoapp"><b>💬 官方社区</b></a>
   </p>
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo 浅色主题" width="350" />
-    <img src="docs/preview_dark.png" alt="Wmimo 深色主题" width="350" />
+    <img src="docs/preview_light.png" alt="Wmimo 浅色主题" width="370" />
+    &nbsp;&nbsp;
+    <img src="docs/preview_dark.png" alt="Wmimo 深色主题" width="370" />
   </p>
-  <sub><em>✨ 18px 微卡片设计美学、实时平滑流量监控与丰富网络诊断工具（明亮 & 暗黑双模式）</em></sub>
+  <sub><em>✨ 18px 极简微卡片设计体系 · 实时平滑流量贝塞尔曲线监控 · TUN & 系统代理双模式（浅色 & 深色原生双主题）</em></sub>
 </div>
-
----
-
-## 📌 全平台与 Linux 各大发行版支持矩阵
-
-| 平台 / 发行版 | 状态 | 软件包格式 | 功能与适配说明 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **已基本完成** | 安装包 (`.exe`) 与 绿色便携包 (`.zip`) | 完整桌面侧边栏、全功能系统托盘（实时网速、分流模式切换、节点测速）、TUN 虚拟网卡模式、自动更新。 |
-| 🐧 **Linux 通用免安装** | ✅ **已就绪** | 通用独立镜像 (`.AppImage`) 与 绿色便携包 (`.tar.gz`) | 单文件免安装，解压即用，完美兼容所有主流与轻量 Linux 发行版。 |
-| 🐧 **Debian / Ubuntu / Mint / Deepin / UOS** | ✅ **已就绪** | Debian 安装包 (`.deb`) | 原生包管理器支持，自动注册桌面启动菜单、高清图标与系统服务。 |
-| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **已就绪** | RedHat 安装包 (`.rpm`) | 标准 RPM 格式封装，自动配置运行时依赖与桌面集成。 |
-| 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **已就绪** | Pacman 二进制包 (`.pkg.tar.zst`) 与 `PKGBUILD` | 支持 pacman 一键安装与 AUR 脚本直接构建。 |
-| 📱 **Android** | ✅ **已就绪** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、固定 Release 签名（支持无缝覆盖升级）、紧凑移动端 UI、后台保活。 |
-| 🍎 **macOS** | 🛠️ **源码已就绪** | DMG / 本地构建 | 系统代理与 TUN 模式底层均已实现，支持用户本地编译运行 (`flutter run -d macos`)；官方 Release 暂未提供预编译包。 |
-| 🍏 **iOS** | 📦 **架构已打通** | IPA / 源码 | NetworkExtension 架构与通信通道已搭建。因受限于 Apple 开发者证书签名，官方暂不提供预编译 IPA 分发，建议使用第三方成熟客户端导入订阅。 |
-
-> 💡 **平台发布策略说明**：
-> 本项目专注于 **Windows**、**Linux** 与 **Android** 平台的官方自动化预编译与发布。
-> - **macOS**：代码层已完整支持系统代理与 TUN 提权，如需使用可克隆源码在本地通过 `flutter build macos` 自行编译。
-> - **iOS**：工程框架与系统扩展接口已就绪，因受限于 Apple 开发者证书与签名体系，官方暂不提供官方打包分发，建议 iOS 用户使用同生态客户端导入订阅。
 
 ---
 
 ## ✨ 核心特性
 
-- 🎨 **现代化精致 UI**：
-  - 遵循 18px 圆角微卡片体系与天青蓝品牌设计语言，简约而不失高级感；
-  - 原生支持浅色（Light）与深空深色（Dark）双主题无缝切换；
-  - 响应式自适应布局（小屏紧凑移动模式与大屏桌面侧边栏模式联动）。
-- ⚡ **高性能 Mihomo 核心集成**：
-  - 全面支持 Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard, Direct 等丰富协议；
-  - 超低内存占用与多核高吞吐转发。
-- 🔀 **全功能系统托盘右键菜单**：
-  - 托盘图标状态与实时上下行网速动态展示；
-  - 一键切换系统代理与 TUN 虚拟网卡模式；
-  - 快速切换出站模式（规则分流 Rule / 全局代理 Global / 直接连接 Direct）；
-  - 订阅一键更新与节点快速切换（带国旗标识与延迟展示）；
-  - 快捷实用工具（复制终端代理命令、一键全节点延迟测速、查看核心日志等）。
-- 📊 **可视化流量与连接监控**：
-  - 仪表盘实时流量动效与多时间跨度（1m/5m/15m/30m/60m）平滑贝塞尔流量折线图；
-  - 内置 IP 与 ISP 信息卡片，支持一键实时查询与轻触复制；
-  - 订阅套餐流量进度条与到期时间倒计时；
-  - 快捷实用工具集：路由规则、内核日志、网络检测、节点测速、运行时配置。
-- 🚀 **智能多通道自动更新**：
+- 🎨 **艺术级微卡片界面与原生双主题**：
+  - 遵循 18px 精致圆角微卡片布局体系与天青蓝品牌视觉，高级通透，现代干练；
+  - 完美原生支持极简明亮（Light）与深空黑（Dark）双主题无缝平滑切换；
+  - 响应式自适应设计：大屏桌面自适应宽屏侧边栏，小屏移动端紧凑人体工学布局。
+- ⚡ **高性能 Mihomo (Meta) 核心深度驱动**：
+  - 全协议矩阵覆盖：**Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct** 等；
+  - 独立后台 Isolate 并发清洗节点与分流规则，启动过程 **零界面冻结（Zero UI Freeze）**，内存占用极低。
+- 🔀 **智能分流路由与系统级双代理模式**：
+  - 出站模式秒级切换：**规则分流 (Rule)** / **全局代理 (Global)** / **直接连接 (Direct)**；
+  - 双引擎灵活调度：**TUN 虚拟网卡模式**（透明接管操作系统全量流量）与 **系统代理模式**（免提权快捷冲浪）；
+  - 精细化应用分流：Android 分应用代理（黑白名单）与 Windows UWP Loopback 免除工具。
+- 📈 **深度实时流量监控与智能诊断套件**：
+  - 仪表盘实时平滑贝塞尔流量曲线图，支持 1m / 5m / 15m / 30m / 60m 多时间跨度自如缩放；
+  - 实时出口 IP、地理位置与 ISP 归属信息卡片，一键测速、轻触复制与隐私脱敏保护；
+  - 订阅套餐用量实时进度条与到期时间精准倒计时；
+  - 全套排障套件：路由规则树查看、内核实时控制台日志、全节点并发 Ping 测速与网络连通性诊断。
+- 🪟 **深度操作系统级原生融合**：
+  - **Windows**：原生系统托盘右键菜单自动同步跟随 App 深浅色主题，托盘图标动态显示实时上下行网速，启用现代 `comctl32 v6` 视觉样式；
+  - **Android**：前台服务通知栏常驻（带当前状态、快捷断开按钮），支持下拉状态栏 Quick Settings 快速开关磁贴，应用内多语言实时联动；
+  - **macOS**：原生状态栏自适应 Template 图标支持与系统代理无缝接管。
+- 🚀 **智能多通道无缝自动更新**：
   - 支持 `stable`（正式稳定通道）与 `beta`（测试预览通道）自由切换；
-  - 后台静默下载安装包、SHA-256 完整性校验与安全原地覆盖升级。
-- 🌍 **全语言国际化支持 (9 种语言)**：
-  - 简体中文、English、繁體中文、日本語、한국어、Русский、Español、العربية、فارسی 全语言 100% 覆盖。
+  - 后台静默高速下载、SHA-256 哈希完整性校验与安全原地覆盖升级。
+- 🌍 **真正 100% 完整 9 国语言覆盖**：
+  - 简体中文、繁體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 全语言 705 个词条全量对齐，无任何缺失。
 
 ---
 
-## 🛠️ 本地构建与开发
+## 📌 全平台支持矩阵
 
-### 环境要求
+| 平台 / 发行版 | 状态 | 软件包格式 | 功能特性与适配说明 |
+| :--- | :---: | :--- | :--- |
+| 🪟 **Windows** | ✅ **正式支持** | 安装包 (`.exe`) 与 绿色便携包 (`.zip`) | 完整桌面侧边栏、原生深色托盘（实时速率）、TUN 模式、UWP Loopback、静默自动更新。 |
+| 🐧 **Linux 通用免安装** | ✅ **正式支持** | 通用独立镜像 (`.AppImage`) 与 绿色包 (`.tar.gz`) | 单文件免安装，解压即用，完美兼容所有主流与轻量 Linux 发行版。 |
+| 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **正式支持** | Debian 安装包 (`.deb`) | 原生包管理器支持，自动注册桌面启动菜单、高清矢量图标与系统服务。 |
+| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **正式支持** | RedHat 安装包 (`.rpm`) | 标准 RPM 格式封装，自动配置运行时依赖与桌面环境集成。 |
+| 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **正式支持** | Pacman 二进制包 (`.pkg.tar.zst`) 与 `PKGBUILD` | 支持 pacman 一键安装与 AUR 脚本直接构建。 |
+| 📱 **Android** | ✅ **正式支持** | 通用 APK 与 分架构包 (`arm64-v8a`, `v7a`, `x86_64`) | 系统级 VpnService 驱动、固定签名覆盖升级、快速设置磁贴、分应用分流。 |
+| 🍎 **macOS** | 🛠️ **源码已就绪** | DMG / 本地构建 | 系统代理与 TUN 模式底层均已实现，支持本地编译 (`flutter build macos`)。 |
+| 🍏 **iOS** | 📦 **架构已打通** | IPA / 本地构建 | NetworkExtension 架构已就绪。因受限于 Apple 证书签名，建议通过 TrollStore 侧载或本地编译。 |
+
+> 💡 **官方构建分发说明**：GitHub Releases 自动化工作流提供 **Windows**、**Linux** 与 **Android** 的预编译二进制安装包。
+
+---
+
+## 🚀 快速上手
+
+1. **下载安装**：前往 [Releases 页面](https://github.com/aimy1/Wmimo/releases) 下载适用于您系统的安装包；
+2. **导入订阅**：进入「订阅配置」界面，粘贴您的 Clash / Mihomo 订阅链接或导入本地 YAML 规则文件；
+3. **开启连接**：在「首页」轻触顶部开关即可开启代理。
+   - *Windows 提示*：如需使用 **TUN 模式**，请右键选择【以管理员身份运行】应用；若日常免特权运行，直接开启 **系统代理模式** 即可畅快联网。
+
+---
+
+## 🛠️ 本地编译与开发
+
+### 环境准备
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`)
 - [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
-- 对应目标平台构建工具链（Windows 需 Visual Studio 2022 C++ 工具，Linux 需 GTK3/Clang/CMake，Android 需 Android SDK）
+- 对应目标平台编译套件（Windows 需 Visual Studio 2022 C++，Linux 需 GTK3/Clang/CMake，Android 需 Android SDK）
 
-### 快速开始
+### 开发命令速查
 
 ```bash
-# 1. 克隆代码仓库
+# 1. 克隆代码库
 git clone https://github.com/aimy1/Wmimo.git
 cd Wmimo
 
-# 2. 安装依赖并生成国际化代码
+# 2. 安装依赖并自动生成多语言代码
 flutter pub get
 dart run slang
 
-# 3. 下载全平台 Mihomo 内核
+# 3. 下载全平台预编译 Mihomo 核心
 dart run tool/download_all_cores.dart
 
-# 4. 运行调试
+# 4. 本地启动调试
 flutter run
-```
 
-### 编译各平台 Release 版本
-
-```bash
-# Windows Release (生成 x64 安装程序与便携包)
-flutter build windows --release
-
-# macOS Release (生成 Universal DMG 镜像与便携包)
-flutter build macos --release
-bash tool/package_macos.sh v1.2.8.1510
-
-# Linux Release (一键打包 Deb, RPM, AppImage, Arch 与 Tarball)
-flutter build linux --release
-bash tool/package_linux.sh v1.2.8.1510
-
-# Android Release (生成 APK 安装包)
-flutter build apk --release
+# 5. 编译正式发布包
+flutter build windows --release   # Windows
+flutter build apk --release       # Android
+flutter build linux --release     # Linux
+flutter build macos --release     # macOS
 ```
 
 ---
 
-## 🚀 持续集成与自动化发布 (CI/CD)
+## 📊 Star 增长趋势
 
-本项目配置了完整的 GitHub Actions 自动化工作流（`.github/workflows/release.yml`）：
-
-- **Windows x64 / ARM64**：Inno Setup 安装包 (`.exe`) + 绿色便携包 (`.zip`)
-- **Linux 全发行版支持**：Debian (`.deb`) + RedHat (`.rpm`) + AppImage (`.AppImage`) + Arch (`.pkg.tar.zst`) + 绿色包 (`.tar.gz`)
-- **Android**：分架构 APK (`arm64-v8a`, `armeabi-v7a`, `x86_64`) + 通用版 APK
-- **完整性验证**：自动生成包含所有产物的 `SHA256SUMS.txt` 校验和。
+[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
@@ -140,17 +142,15 @@ flutter build apk --release
 
 - 🌟 **特别鸣谢 [GooRingX (vowe)](https://github.com/GooRingX)** 的杰出开源贡献、设计思路与灵感指导！
 - 🚀 **特别感谢 [Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** 团队提供的高性能、全协议通用代理核心。
-- 💙 **感谢 [Flutter](https://flutter.dev/)** 团队与社区提供的跨平台 UI 框架支持。
+- 💙 **感谢 [Flutter](https://flutter.dev/)** 团队与开源社区提供的跨平台优秀框架支持。
 
 ---
 
-## 📬 联系作者与 Bug 反馈
+## 📬 社区交流与反馈
 
-如果您在使用过程中遇到任何 Bug、异常崩溃或有功能改进建议，欢迎联系作者进行反馈：
-
-- 💬 **Telegram 频道/讨论群**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- 💬 **Telegram 频道与交流群**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **联系邮箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **GitHub Issues**: [提交 Issue 反馈](https://github.com/aimy1/Wmimo/issues)
+- 🐛 **问题反馈与需求提案**: [提交 GitHub Issue](https://github.com/aimy1/Wmimo/issues)
 
 ---
 

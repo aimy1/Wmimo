@@ -10,63 +10,103 @@
 
 
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>モダンなクロスプラットフォーム Clash / Mihomo プロキシ GUI クライアント</h3>
-  <p>Flutter と Mihomo コアをベースに構築され、高速でエレガント、強力な全プロトコルプロキシ体験を提供します。</p>
+  <img src="assets/images/app_icon_256.png" width="128" height="128" alt="Wmimo Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 188, 223, 0.25);" />
+  <h1 align="center" style="font-weight: 800; border-bottom: none; margin-top: 12px; margin-bottom: 6px;">Wmimo</h1>
+  <p align="center" style="font-size: 1.15rem; color: #57606a;"><strong>次世代クロスプラットフォーム Clash / Mihomo プロキシクライアント</strong></p>
+  <p align="center">Flutter と高性能 Mihomo (Meta) コアで構築。圧倒的なスピード、洗練されたモダンUI、そして豊富な全プロトコル対応を実現。</p>
 
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
+  <p align="center">
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
+    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="Build" /></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
+    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
+  </p>
+
+  <p align="center">
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 パッケージをダウンロード</b></a> •
+    <a href="#-クイックスタート"><b>🚀 クイックスタート</b></a> •
+    <a href="#-主な機能"><b>✨ 主な機能</b></a> •
+    <a href="#-プラットフォーム対応状況"><b>💻 プラットフォーム</b></a> •
+    <a href="https://t.me/wmimoapp"><b>💬 コミュニティ</b></a>
   </p>
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo ライトテーマ" width="350" />
-    <img src="docs/preview_dark.png" alt="Wmimo ダークテーマ" width="350" />
+    <img src="docs/preview_light.png" alt="Wmimo ライトテーマ" width="370" />
+    &nbsp;&nbsp;
+    <img src="docs/preview_dark.png" alt="Wmimo ダークテーマ" width="370" />
   </p>
-  <sub><em>✨ 洗練された 18px マイクロカード UI、リアルタイムトラフィック監視、豊富なネットワーク診断ツール（ライト＆ダークテーマ）</em></sub>
+  <sub><em>✨ 18px マイクロカードデザイン、リアルタイムのベジェ曲線トラフィックモニター、高度なネットワーク診断（ライト＆ダーク両対応）</em></sub>
 </div>
-
----
-
-## 📌 プラットフォームのサポート状況
-
-| プラットフォーム | ステータス | パッケージ形式 | 特徴 |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **本番利用可能** | インストーラー (`.exe`) / ポータブル (`.zip`) | デスクトップサイドバー、トレイメニュー、リアルタイムトラフィックチャート、TUNモード、自動更新。 |
-| 🐧 **Linux** | ✅ **利用可能** | AppImage (`.AppImage`) / Debian (`.deb`) / RPM (`.rpm`) / ポータブル (`.tar.gz`) | ネイティブ GTK3 UI、システムトレイ対応、Linux版 Mihomo コア内蔵。 |
-| 📱 **Android** | ✅ **利用可能** | ユニバーサル APK / 各 ABI 分割 APK | VpnService ドライバー統合、固定 Release 署名、モバイル最適化UI、バックグラウンド常駐。 |
-| 🍎 **macOS** | 🛠️ **ソース対応済** | DMG / ローカルビルド | システムプロキシとTUNモードはコード上で完全対応。ローカルビルド（`flutter run -d macos`）をサポート。公式Releaseでの事前ビルド配布は現在未提供。 |
-| 🍏 **iOS** | 📦 **構造対応済** | IPA / ソース | NetworkExtensionアーキテクチャ統合済み。Apple署名証明書の制限のため公式IPAの配布は行っていません。既存のiOSクライアントのご利用を推奨します。 |
-
-> 💡 **配布ポリシー**：公式CI/CDでは **Windows**、**Linux**、**Android** の事前ビルドパッケージを配布しています。macOSおよびiOSはソースコードが整備されていますが、公式Releaseでの事前ビルド配布は行っていません。
 
 ---
 
 ## ✨ 主な機能
 
-- 🎨 **洗練されたモダン UI**: ライト/ダークモード、レスポンシブ適応型レイアウト（コンパクトモバイル＆デスクトップサイドバー）。
-- ⚡ **高性能 Mihomo コア**: Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard などの全プロトコルを完全サポート。
-- 🔀 **フル機能システムトレイ**: リアルタイム送受信速度表示、プロキシモード切り替え、ワンクリック遅延テスト、購読更新。
-- 📊 **リアルタイム診断 & 監視**: ベジェ曲線トラフィックチャート、ワンクリック IP/ISP 情報取得、折りたたみ可能なプロキシグループ。
-- 🚀 **マルチチャンネル自動更新**: `stable`（安定版）と `beta`（プレビュー版）の切り替えに対応。
-- 🌍 **9言語の完全多言語対応**: 日本語、英語、簡体字中国語、繁体字中国語、韓国語、ロシア語、スペイン語、アラビア語、ペルシア語。
+- 🎨 **洗練されたマイクロカードUIとネイティブデュアルテーマ**:
+  - 美しい18px角丸マイクロカードレイアウトと洗練されたシアンブルーのアクセントカラー。
+  - クリーンなライトテーマと深みのあるダークテーマをシームレスに切り替え。
+  - 大画面デスクトップサイドバーとモバイル向けエルゴノミックレイアウトに自動適応。
+- ⚡ **高性能 Mihomo (Meta) コア**:
+  - **Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct** などを完全サポート。
+  - ノード解析とソートをバックグラウンド Isolate で非同期処理 — **起動時の画面フリーズゼロ (Zero UI Freeze)**。
+- 🔀 **柔軟なルーティングとデュアルプロキシエンジン**:
+  - ワンタップでルーティング切替: **ルール分流 (Rule)** / **グローバル (Global)** / **ダイレクト (Direct)**。
+  - **TUN 仮想アダプターモード**（システム全体の透過プロキシ）と **システムプロキシモード**（権限不要の軽快接続）。
+  - Android アプリ別プロキシ設定、Windows UWP Loopback 免除ユーティリティ。
+- 📈 **リアルタイムトラフィック監視と総合ネットワーク診断**:
+  - 1分/5分/15分/30分/60分のマルチスパンに対応した滑らかなベジェ曲線トラフィックグラフ。
+  - 出口 IP、地域、ISP 情報を瞬時に取得し、プライバシー保護のマスキングとワンタップコピーに対応。
+  - サブスクリプション通信量の進捗バーと有効期限カウントダウン。
+- 🪟 **OSネイティブ機能とのシームレスな統合**:
+  - **Windows**: アプリのテーマに自動追従するタスクトレイメニュー、トレイアイコンでのリアルタイム速度表示、`comctl32 v6` スタイル。
+  - **Android**: フォアグラウンド通知によるワンタップ切断、クイック設定タイル、多言語リアルタイム同期。
+  - **macOS**: メニューバーの Template アイコン対応。
+- 🌍 **完全な 9 言語ネイティブ対応**:
+  - 簡体字中国語、繁体字中国語、英語、日本語、韓国語、ロシア語、スペイン語、アラビア語、ペルシャ語の 705 キーを完全カバー。
 
 ---
 
-## 📬 お問い合わせとバグ報告
+## 📌 プラットフォーム対応状況
 
-バグの発生や不具合、または改善のご提案がございましたら、作者までお気軽にご連絡ください：
+| プラットフォーム | 状態 | パッケージ形式 | 特徴 |
+| :--- | :---: | :--- | :--- |
+| 🪟 **Windows** | ✅ **本番対応** | インストーラー (`.exe`) & ポータブル (`.zip`) | デスクトップサイドバー、トレイ速度表示、TUNモード、自動アップデート。 |
+| 🐧 **Linux (Universal)** | ✅ **本番対応** | AppImage (`.AppImage`) & ポータブル (`.tar.gz`) | 全ての主要Linuxディストリビューションでインストール不要で動作。 |
+| 🐧 **Debian / Ubuntu** | ✅ **本番対応** | Debian パッケージ (`.deb`) | ネイティブパッケージ管理、デスクトップ統合。 |
+| 🐧 **Fedora / openSUSE** | ✅ **本番対応** | RedHat パッケージ (`.rpm`) | 標準RPMフォーマット。 |
+| 🐧 **Arch Linux** | ✅ **本番対応** | Pacman パッケージ (`.pkg.tar.zst`) | pacman 一括インストール対応。 |
+| 📱 **Android** | ✅ **本番対応** | 汎用 APK & ABI別パッケージ (`arm64`, `v7a`, `x86_64`) | VpnService統合、クイック設定タイル、アプリ別プロキシ。 |
+| 🍎 **macOS** | 🛠️ **ソース対応** | DMG / ローカルビルド | `flutter build macos` でローカルビルド可能。 |
+| 🍏 **iOS** | 📦 **設計完了** | IPA / ローカルビルド | TrollStore またはローカル署名で利用可能。 |
 
-- 💬 **Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- 📧 **作者メール**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **GitHub Issues**: [Issue を作成](https://github.com/aimy1/Wmimo/issues)
+---
+
+## 🚀 クイックスタート
+
+1. **ダウンロード**: [Releases ページ](https://github.com/aimy1/Wmimo/releases) からお使いのOSに合ったパッケージを入手します。
+2. **サブスクリプション登録**: 「サブスクリプション」画面でリンクを貼り付けるか YAML プロファイルを読み込みます。
+3. **接続**: 「ホーム」画面の接続トグルをタップするだけで高速プロキシ通信が始まります。
+   - *Windows の注意点*: **TUN モード** を使用する場合は右クリックから【管理者として実行】してください。通常利用は **システムプロキシモード** の利用を推奨します。
+
+---
+
+## 📊 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
+
+---
+
+## 📬 コミュニティとサポート
+
+- 💬 **Telegram 公式チャンネル**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- 📧 **お問い合わせ**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- 🐛 **バグ報告・提案**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
 ## 📄 ライセンス
 
-本プロジェクトは **GPL-3.0** ライセンスの下で公開されています。
+本プロジェクトは **GPL-3.0 ライセンス** のもとで公開されています。詳細は [LICENSE](LICENSE) をご覧ください。

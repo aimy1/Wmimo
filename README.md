@@ -10,147 +10,150 @@
 
 
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="120" height="120" alt="Wmimo Logo" />
-  <h3>Modern Cross-Platform Clash / Mihomo Proxy GUI Client</h3>
-  <p>Crafted with Flutter & Mihomo core, delivering ultra-fast, elegant, and powerful full-protocol network proxy capabilities.</p>
+  <img src="assets/images/app_icon_256.png" width="128" height="128" alt="Wmimo Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 188, 223, 0.25);" />
+  <h1 align="center" style="font-weight: 800; border-bottom: none; margin-top: 12px; margin-bottom: 6px;">Wmimo</h1>
+  <p align="center" style="font-size: 1.15rem; color: #57606a;"><strong>Next-Generation Cross-Platform Clash / Mihomo GUI Proxy Client</strong></p>
+  <p align="center">Crafted with Flutter & the high-performance Mihomo core. Engineered for uncompromising speed, modern elegance, and multi-protocol flexibility.</p>
 
-  <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=github&label=Build" alt="CI/CD" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter" alt="Flutter" /></a>
+  <p align="center">
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
+    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="Build" /></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
+    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
     <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram" alt="Telegram" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
+  </p>
+
+  <p align="center">
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>📥 Download Releases</b></a> •
+    <a href="#-quick-start"><b>🚀 Quick Start</b></a> •
+    <a href="#-key-features"><b>✨ Features</b></a> •
+    <a href="#-platform-matrix"><b>💻 Platforms</b></a> •
+    <a href="https://t.me/wmimoapp"><b>💬 Community</b></a>
   </p>
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="350" />
-    <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="350" />
+    <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="370" />
+    &nbsp;&nbsp;
+    <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="370" />
   </p>
-  <sub><em>✨ Sleek 18px micro-card aesthetic, real-time traffic monitor, and comprehensive network diagnostics (Light & Dark themes)</em></sub>
+  <sub><em>✨ Sleek 18px micro-card aesthetic, smooth real-time bezier traffic wave, and comprehensive network diagnostics (Light & Dark dual themes)</em></sub>
 </div>
-
----
-
-## 📌 Platform Support & Linux Multi-Distro Matrix
-
-| Platform / Distro | Status | Supported Formats | Description |
-| :--- | :---: | :--- | :--- |
-| 🪟 **Windows** | ✅ **Production Ready** | Setup (`.exe`) & Portable (`.zip`) | Full desktop sidebar, rich system tray menu, real-time speed & traffic chart, TUN mode, system proxy, auto-update. |
-| 🐧 **Linux (Universal)** | ✅ **Ready** | Universal AppImage (`.AppImage`) & Portable (`.tar.gz`) | Self-contained executable, works out-of-the-box on all Linux distributions. |
-| 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **Ready** | Debian Package (`.deb`) | Native package with desktop entry, icons, and system service integration. |
-| 🐧 **Fedora / RHEL / openSUSE** | ✅ **Ready** | RedHat Package (`.rpm`) | Standard RPM package with system dependencies and desktop shortcuts. |
-| 🐧 **Arch Linux / Manjaro** | ✅ **Ready** | Arch Package (`.pkg.tar.zst`) & `PKGBUILD` | Native pacman binary package and AUR build script. |
-| 📱 **Android** | ✅ **Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, persistent release keystore, compact mobile UI, background keep-alive. |
-| 🍎 **macOS** | 🛠️ **Source Ready** | DMG / Local Build | System proxy and TUN mode are fully implemented in code. Supports local build (`flutter run -d macos`); prebuilt DMG is not distributed in official Releases. |
-| 🍏 **iOS** | 📦 **Framework Ready** | IPA / Source | NetworkExtension architecture and MethodChannel are fully wired. Not officially distributed due to Apple signing requirements; use third-party clients for subscriptions. |
-
-> 💡 **Distribution Policy**: Official CI/CD automated releases provide prebuilt binaries for **Windows**, **Linux**, and **Android**. macOS and iOS source code is fully aligned with platform standards, but prebuilt Apple packages are not distributed in GitHub Releases.
 
 ---
 
 ## ✨ Key Features
 
-- 🎨 **Minimalist & Modern UI**:
-  - Notion/Apple-inspired clean aesthetic with 18px rounded micro-cards and cyan-blue brand accents.
-  - Seamless Light & Deep Dark mode transitions.
-  - Responsive adaptive layout (Compact Mobile mode & Clash Verge style Desktop Sidebar).
-- ⚡ **High-Performance Mihomo Core**:
-  - Full support for Shadowsocks, VMess, VLESS, Trojan, Hysteria 1/2, TUIC, WireGuard, Direct protocols.
-  - Ultra-low memory footprint and multi-core throughput optimization.
-- 🔀 **Full-Featured System Tray Integration**:
-  - Dynamic tray icon status with real-time upload/download speeds.
-  - One-click outbound mode toggling (Rule / Global / Direct) & TUN mode switcher.
-  - Fast node selector with flag badges, delay ping metrics, and one-click subscription refresh.
-- 📊 **Real-Time Visual Diagnostics**:
-  - Smooth Bezier traffic curves with customizable multi-interval viewing (1m / 5m / 15m / 30m / 60m).
-  - Built-in IP & ISP info card with instant geo-lookup and tap-to-copy.
-  - Subscription plan usage progress bar & expiration countdown.
-  - Quick utility toolset: Routing Rules, Core Logs, Network Check, Speed Test, Runtime Config.
-- 🚀 **Intelligent Multi-Channel Auto-Update**:
-  - Dual update channels: `stable` (production) and `beta` (preview).
-  - Background silent download with SHA-256 verification and automatic in-place installer execution.
-- 🌍 **Comprehensive 9-Language Internationalization**:
-  - 100% synchronized coverage across 简体中文, English, 繁體中文, 日本語, 한국어, Русский, Español, العربية, فارسی.
+- 🎨 **Artisan Micro-Card UI & Native Dual Themes**:
+  - Precision 18px rounded micro-card system infused with the signature cyan-blue accent.
+  - Native, seamless transitions between Clean Light mode and Deep OLED Dark mode.
+  - Responsive layout: expansive Desktop Sidebar on large screens & compact ergonomic navigation on mobile devices.
+- ⚡ **High-Performance Mihomo (Meta) Core**:
+  - Full protocol suite: **Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct**.
+  - Asynchronous background Isolate processing for node parsing and sorting — **Zero UI Freeze** during startup.
+- 🔀 **Intelligent Routing & Dual-Engine Proxy**:
+  - Rapid outbound mode toggling: **Rule (Split Routing)** / **Global** / **Direct**.
+  - Flexible dual engine: **TUN Virtual Adapter Mode** (transparent system-wide capture) and **System Proxy Mode** (standard unprivileged routing).
+  - Fine-grained traffic steering: Android Per-App Proxy filtering and Windows UWP Loopback exemption utility.
+- 📈 **Deep Real-Time Telemetry & Diagnostics**:
+  - Ultra-smooth Bezier traffic wave monitor with multi-window spans (1m / 5m / 15m / 30m / 60m).
+  - Instant egress IP, geolocation, and ISP lookup card with one-tap copy and privacy masking.
+  - Subscription plan data usage progress bar with expiration countdown.
+  - Built-in diagnostic toolset: Routing Rules inspection, Real-time Core Logs, Concurrent Latency Ping, and Runtime Configuration viewer.
+- 🪟 **Deep Native Operating System Integration**:
+  - **Windows**: Native dark/light adaptive tray context menu, real-time download/upload speed indicator in tray, and modern `comctl32 v6` visual styling.
+  - **Android**: Foreground service notification with instant disconnect action, Quick Settings Pull-Down Tile, and automatic language synchronization.
+  - **macOS**: Adaptive menu bar Template icon and system proxy automation.
+- 🚀 **Multi-Channel Silent Auto-Updates**:
+  - Switch freely between `stable` (production) and `beta` (pre-release) channels.
+  - Background silent download with SHA-256 hash integrity verification.
+- 🌐 **True 100% Native 9-Language Parity**:
+  - Complete, seamless coverage across: 简体中文, English, 繁體中文, 日本語, 한국어, Русский, Español, العربية, فارسی.
 
 ---
 
-## 🛠️ Build & Development
+## 📌 Platform Matrix
+
+| Platform / Distro | Status | Package Formats | Highlights |
+| :--- | :---: | :--- | :--- |
+| 🪟 **Windows** | ✅ **Production Ready** | Setup (`.exe`) & Portable (`.zip`) | Full desktop sidebar, native dynamic speed tray, TUN virtual adapter, UWP loopback tool, auto-update. |
+| 🐧 **Linux (Universal)** | ✅ **Production Ready** | Universal AppImage (`.AppImage`) & Portable (`.tar.gz`) | Fully self-contained, out-of-the-box support for all major Linux distributions. |
+| 🐧 **Debian / Ubuntu / Mint / Deepin** | ✅ **Production Ready** | Debian Package (`.deb`) | Native package management with desktop shortcuts, icons, and system services. |
+| 🐧 **Fedora / RHEL / CentOS / openSUSE** | ✅ **Production Ready** | RedHat Package (`.rpm`) | Standard RPM build with automated runtime dependencies. |
+| 🐧 **Arch Linux / Manjaro / EndeavourOS** | ✅ **Production Ready** | Pacman Package (`.pkg.tar.zst`) & `PKGBUILD` | Native pacman binary package and AUR build script. |
+| 📱 **Android** | ✅ **Production Ready** | Universal APK & Split ABIs (`arm64-v8a`, `v7a`, `x86_64`) | VpnService driver integration, persistent release keystore, Quick Settings Tile, per-app proxy. |
+| 🍎 **macOS** | 🛠️ **Source Ready** | DMG / Local Build | Full system proxy and TUN engine in codebase. Build locally via `flutter build macos`. |
+| 🍏 **iOS** | 📦 **Framework Ready** | IPA / Local Build | NetworkExtension architecture wired. Due to Apple signing policies, build locally or sideload via TrollStore. |
+
+> 💡 **Official Releases Notice**: Automated GitHub Releases distribute pre-compiled binaries for **Windows**, **Linux**, and **Android**. macOS and iOS source code is fully aligned with upstream standards.
+
+---
+
+## 🚀 Quick Start
+
+1. **Download & Install**: Grab the latest release package for your operating system from the [Releases](https://github.com/aimy1/Wmimo/releases) page.
+2. **Import Subscription**: Navigate to `Subscriptions`, paste your Clash/Mihomo subscription link or import a local YAML profile.
+3. **Connect & Enjoy**: Click the master connect toggle on the `Overview` screen to begin routing.
+   - *Windows Note*: To use **TUN Mode**, launch Wmimo by right-clicking and choosing **Run as administrator**; or simply use **System Proxy Mode** for effortless unprivileged browsing.
+
+---
+
+## 🛠️ Build from Source
 
 ### Prerequisites
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`)
 - [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
-- Target platform build tools (Visual Studio 2022 C++ on Windows, GCC/Clang/GTK3 on Linux, Android SDK on Android)
+- Host compiler toolchain (Visual Studio 2022 C++ on Windows, GTK3/Clang/CMake on Linux, Android SDK on Android)
 
-### Quick Start
+### Quick Commands
 
 ```bash
 # 1. Clone repository
 git clone https://github.com/aimy1/Wmimo.git
 cd Wmimo
 
-# 2. Install dependencies & generate i18n
+# 2. Fetch dependencies and generate i18n
 flutter pub get
 dart run slang
 
-# 3. Download multi-platform Mihomo cores
+# 3. Download Mihomo cores for all platforms
 dart run tool/download_all_cores.dart
 
-# 4. Run application
+# 4. Run development target
 flutter run
-```
 
-### Build Distribution Binaries
-
-```bash
-# Windows Release
-flutter build windows --release
-
-# macOS Release (Universal DMG and Portable Zip)
-flutter build macos --release
-bash tool/package_macos.sh v1.2.8.1510
-
-# Linux Release (Builds and packages Deb, RPM, AppImage, Arch & Tarball)
-flutter build linux --release
-bash tool/package_linux.sh v1.2.8.1510
-
-# Android APK
-flutter build apk --release
+# 5. Build production binaries
+flutter build windows --release   # Windows
+flutter build apk --release       # Android
+flutter build linux --release     # Linux
+flutter build macos --release     # macOS
 ```
 
 ---
 
-## 🚀 Automated CI/CD Releases
+## 📊 Star History
 
-Automated multi-platform packaging is handled seamlessly via GitHub Actions (`.github/workflows/release.yml`):
-
-- **Windows x64 / ARM64**: Inno Setup Installer (`.exe`) + Portable Zip (`.zip`)
-- **Linux (All Distros)**: Debian (`.deb`) + RedHat (`.rpm`) + Universal (`.AppImage`) + Arch (`.pkg.tar.zst`) + Portable (`.tar.gz`)
-- **Android**: Split ABIs (`arm64-v8a`, `armeabi-v7a`, `x86_64`) + Universal APK
-- **Checksums**: Auto-generated `SHA256SUMS.txt` for security verification.
+[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
 ## 🙏 Acknowledgements
 
-We express our heartfelt gratitude to the open-source community:
-
-- 🌟 **Special thanks to [GooRingX (vowe)](https://github.com/GooRingX)** for outstanding open-source contributions and design inspiration!
-- 🚀 **Special thanks to [Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** team for the state-of-the-art core engine.
-- 💙 **Thanks to [Flutter](https://flutter.dev/)** team and community for the cross-platform UI framework.
+- 🌟 Special thanks to **[GooRingX (vowe)](https://github.com/GooRingX)** for invaluable open-source contributions, architectural insights, and design inspiration!
+- 🚀 Sincere gratitude to the **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** team for developing the phenomenal core engine.
+- 💙 Kudos to the **[Flutter](https://flutter.dev/)** team and community for empowering modern cross-platform user interfaces.
 
 ---
 
-## 📬 Contact & Bug Reports
+## 📬 Community & Feedback
 
-If you encounter any bugs, crashes, or have feature requests, please contact the author or open an issue:
-
-- 💬 **Telegram Channel**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- 💬 **Telegram Channel & Group**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - 📧 **Author Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- 🐛 **GitHub Issues**: [Submit an Issue](https://github.com/aimy1/Wmimo/issues)
+- 🐛 **Issue Tracker**: [Submit an Issue](https://github.com/aimy1/Wmimo/issues)
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **GPL-3.0 License**. See the [LICENSE](LICENSE) file for details.
+Wmimo is licensed under the **GNU General Public License v3.0 (GPL-3.0)**. See the [LICENSE](LICENSE) file for details.
