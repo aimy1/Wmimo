@@ -548,7 +548,15 @@ class GroupHelper {
           pushOptions: GroupItemPushOptions(
             name: tcontext.meta.reset,
             onPush: () async {
+              final confirm = await DialogUtils.showConfirmDialog(
+                context,
+                "${tcontext.meta.reset}?",
+              );
+              if (confirm != true) {
+                return;
+              }
               SettingManager.reset();
+              setting = SettingManager.getConfig();
 
               Provider.of<Themes>(
                 context,
@@ -556,6 +564,7 @@ class GroupHelper {
               ).setTheme(setting.ui.theme, true);
               TextFieldEx.popupEdit = setting.ui.tvMode;
               await SettingManager.save();
+              setstate?.call();
             },
           ),
         ),
@@ -1047,7 +1056,6 @@ class GroupHelper {
       ];
 
       List<GroupItem> gitems = [
-        GroupItem(options: options0),
         GroupItem(options: options),
         GroupItem(options: options01),
         GroupItem(options: options1),
@@ -1071,6 +1079,7 @@ class GroupHelper {
       if (Platform.isMacOS) {
         gitems.add(GroupItem(options: options9));
       }
+      gitems.add(GroupItem(options: options0));
 
       return gitems;
     }
