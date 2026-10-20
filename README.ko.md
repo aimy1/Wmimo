@@ -23,9 +23,11 @@
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo 미리보기" width="380" />
-  <br/>
-  <sub><em>✨ 세련된 18px 마이크로 카드 UI, 실시간 트래픽 모니터링 및 네트워크 진단 도구</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo 라이트 모드" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo 다크 모드" width="350" />
+  </p>
+  <sub><em>✨ 세련된 18px 마이크로 카드 UI, 실시간 트래픽 모니터링 및 네트워크 진단 도구 (라이트 & 다크 모드)</em></sub>
 </div>
 
 ---

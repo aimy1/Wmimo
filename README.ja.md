@@ -23,9 +23,11 @@
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo プレビュー" width="380" />
-  <br/>
-  <sub><em>✨ 洗練された 18px マイクロカード UI、リアルタイムトラフィック監視、豊富なネットワーク診断ツール</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo ライトテーマ" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo ダークテーマ" width="350" />
+  </p>
+  <sub><em>✨ 洗練された 18px マイクロカード UI、リアルタイムトラフィック監視、豊富なネットワーク診断ツール（ライト＆ダークテーマ）</em></sub>
 </div>
 
 ---

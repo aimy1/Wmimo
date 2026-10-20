@@ -23,9 +23,11 @@
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="پیش‌نمایش Wmimo" width="380" />
-  <br/>
-  <sub><em>✨ طراحی کارت‌های میکرو ۱۸ پیکسلی، مانیتورینگ بلادرنگ ترافیک و ابزارهای تشخیص شبکه</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo تم روشن" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo تم تاریک" width="350" />
+  </p>
+  <sub><em>✨ طراحی کارت‌های میکرو ۱۸ پیکسلی، مانیتورینگ بلادرنگ ترافیک و ابزارهای تشخیص شبکه (تم روشن و تاریک)</em></sub>
 </div>
 
 ---

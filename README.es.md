@@ -23,9 +23,11 @@
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo Vista Previa" width="380" />
-  <br/>
-  <sub><em>✨ Diseño moderno de micro-tarjetas de 18px, monitoreo de tráfico en tiempo real y herramientas de diagnóstico</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo Tema Claro" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo Tema Oscuro" width="350" />
+  </p>
+  <sub><em>✨ Diseño moderno de micro-tarjetas de 18px, monitoreo de tráfico en tiempo real y herramientas de diagnóstico (Temas Claro y Oscuro)</em></sub>
 </div>
 
 ---

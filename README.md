@@ -23,9 +23,11 @@
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo UI Preview" width="380" />
-  <br/>
-  <sub><em>✨ Sleek 18px micro-card aesthetic, real-time traffic monitor, and comprehensive network diagnostics</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="350" />
+  </p>
+  <sub><em>✨ Sleek 18px micro-card aesthetic, real-time traffic monitor, and comprehensive network diagnostics (Light & Dark themes)</em></sub>
 </div>
 
 ---

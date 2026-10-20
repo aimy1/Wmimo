@@ -30,9 +30,11 @@ $langBar
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo UI Preview" width="380" />
-  <br/>
-  <sub><em>✨ Sleek 18px micro-card aesthetic, real-time traffic monitor, and comprehensive network diagnostics</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="350" />
+  </p>
+  <sub><em>✨ Sleek 18px micro-card aesthetic, real-time traffic monitor, and comprehensive network diagnostics (Light & Dark themes)</em></sub>
 </div>
 
 ---
@@ -180,9 +182,11 @@ $langBar
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo 界面预览" width="380" />
-  <br/>
-  <sub><em>✨ 18px 微卡片设计美学、实时平滑流量监控与丰富网络诊断工具</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo 浅色主题" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo 深色主题" width="350" />
+  </p>
+  <sub><em>✨ 18px 微卡片设计美学、实时平滑流量监控与丰富网络诊断工具（明亮 & 暗黑双模式）</em></sub>
 </div>
 
 ---
@@ -333,9 +337,11 @@ $langBar
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo 介面預覽" width="380" />
-  <br/>
-  <sub><em>✨ 18px 微卡片設計美學、即時平滑流量監控與豐富網路診斷工具</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo 淺色主題" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo 深色主題" width="350" />
+  </p>
+  <sub><em>✨ 18px 微卡片設計美學、即時平滑流量監控與豐富網路診斷工具（明亮 & 暗黑雙模式）</em></sub>
 </div>
 
 ---
@@ -394,9 +400,11 @@ $langBar
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo プレビュー" width="380" />
-  <br/>
-  <sub><em>✨ 洗練された 18px マイクロカード UI、リアルタイムトラフィック監視、豊富なネットワーク診断ツール</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo ライトテーマ" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo ダークテーマ" width="350" />
+  </p>
+  <sub><em>✨ 洗練された 18px マイクロカード UI、リアルタイムトラフィック監視、豊富なネットワーク診断ツール（ライト＆ダークテーマ）</em></sub>
 </div>
 
 ---
@@ -460,9 +468,11 @@ $langBar
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo 미리보기" width="380" />
-  <br/>
-  <sub><em>✨ 세련된 18px 마이크로 카드 UI, 실시간 트래픽 모니터링 및 네트워크 진단 도구</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo 라이트 모드" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo 다크 모드" width="350" />
+  </p>
+  <sub><em>✨ 세련된 18px 마이크로 카드 UI, 실시간 트래픽 모니터링 및 네트워크 진단 도구 (라이트 & 다크 모드)</em></sub>
 </div>
 
 ---
@@ -526,9 +536,11 @@ $langBar
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo Интерфейс" width="380" />
-  <br/>
-  <sub><em>✨ Эстетика микро-карточек 18px, мониторинг трафика в реальном времени и диагностика сети</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo Светлая тема" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo Темная тема" width="350" />
+  </p>
+  <sub><em>✨ Эстетика микро-карточек 18px, мониторинг трафика в реальном времени и диагностика сети (Светлая и темная темы)</em></sub>
 </div>
 
 ---
@@ -581,9 +593,11 @@ $langBar
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo Vista Previa" width="380" />
-  <br/>
-  <sub><em>✨ Diseño moderno de micro-tarjetas de 18px, monitoreo de tráfico en tiempo real y herramientas de diagnóstico</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo Tema Claro" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo Tema Oscuro" width="350" />
+  </p>
+  <sub><em>✨ Diseño moderno de micro-tarjetas de 18px, monitoreo de tráfico en tiempo real y herramientas de diagnóstico (Temas Claro y Oscuro)</em></sub>
 </div>
 
 ---
@@ -636,9 +650,11 @@ $langBar
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="معاينة Wmimo" width="380" />
-  <br/>
-  <sub><em>✨ واجهة عصرية ببطاقات مصغرة 18px، مراقبة حركة المرور في الوقت الفعلي وأدوات تشخيص الشبكة</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo المظهر الفاتح" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo المظهر الداكن" width="350" />
+  </p>
+  <sub><em>✨ واجهة عصرية ببطاقات مصغرة 18px، مراقبة حركة المرور في الوقت الفعلي وأدوات تشخيص الشبكة (المظهر الفاتح والداكن)</em></sub>
 </div>
 
 ---
@@ -691,9 +707,11 @@ $langBar
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="پیش‌نمایش Wmimo" width="380" />
-  <br/>
-  <sub><em>✨ طراحی کارت‌های میکرو ۱۸ پیکسلی، مانیتورینگ بلادرنگ ترافیک و ابزارهای تشخیص شبکه</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo تم روشن" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo تم تاریک" width="350" />
+  </p>
+  <sub><em>✨ طراحی کارت‌های میکرو ۱۸ پیکسلی، مانیتورینگ بلادرنگ ترافیک و ابزارهای تشخیص شبکه (تم روشن و تاریک)</em></sub>
 </div>
 
 ---

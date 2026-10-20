@@ -23,9 +23,11 @@
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="معاينة Wmimo" width="380" />
-  <br/>
-  <sub><em>✨ واجهة عصرية ببطاقات مصغرة 18px، مراقبة حركة المرور في الوقت الفعلي وأدوات تشخيص الشبكة</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo المظهر الفاتح" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo المظهر الداكن" width="350" />
+  </p>
+  <sub><em>✨ واجهة عصرية ببطاقات مصغرة 18px، مراقبة حركة المرور في الوقت الفعلي وأدوات تشخيص الشبكة (المظهر الفاتح والداكن)</em></sub>
 </div>
 
 ---

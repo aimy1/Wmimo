@@ -23,9 +23,11 @@
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo Интерфейс" width="380" />
-  <br/>
-  <sub><em>✨ Эстетика микро-карточек 18px, мониторинг трафика в реальном времени и диагностика сети</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo Светлая тема" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo Темная тема" width="350" />
+  </p>
+  <sub><em>✨ Эстетика микро-карточек 18px, мониторинг трафика в реальном времени и диагностика сети (Светлая и темная темы)</em></sub>
 </div>
 
 ---

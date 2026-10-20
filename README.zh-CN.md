@@ -23,9 +23,11 @@
   </p>
 
   <br/>
-  <img src="docs/preview.png" alt="Wmimo 界面预览" width="380" />
-  <br/>
-  <sub><em>✨ 18px 微卡片设计美学、实时平滑流量监控与丰富网络诊断工具</em></sub>
+  <p align="center">
+    <img src="docs/preview_light.png" alt="Wmimo 浅色主题" width="350" />
+    <img src="docs/preview_dark.png" alt="Wmimo 深色主题" width="350" />
+  </p>
+  <sub><em>✨ 18px 微卡片设计美学、实时平滑流量监控与丰富网络诊断工具（明亮 & 暗黑双模式）</em></sub>
 </div>
 
 ---
