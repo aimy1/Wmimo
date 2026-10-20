@@ -335,6 +335,7 @@
     "launchAtStartupRunAsAdmin": "Wmimo를 관리자 권한으로 다시 시작하십시오",
     "tunModeRunAsAdmin": "TUN 모드는 시스템 관리자 권한이 필요합니다. 앱을 관리자 권한으로 다시 시작하십시오",
     "tunSwitchToSystemProxy": "임시로 [시스템 프록시 모드]로 전환하여 계속 연결하시겠습니까?",
+    "tunCreateAdapterFailedAdmin": "TUN 가상 네트워크 어댑터 생성 실패: Access is denied.\nTUN 모드는 관리자 권한이 필요합니다. 마우스 우클릭 후 【관리자 권한으로 실행】을 선택하거나, 메인 화면/코어 설정에서 TUN 모드를 끄고 시스템 프록시를 사용하여 연결하십시오.",
     "portableMode": "포터블 모드",
     "portableModeDisableTips": "포터블 모드를 종료해야 하는 경우 [Wmimo]를 종료하고 [wmimo.exe]와 동일한 디렉토리에 있는 [portable] 폴더를 수동으로 삭제하십시오",
     "systemProxy": "시스템 프록시",

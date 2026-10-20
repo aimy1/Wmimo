@@ -335,6 +335,7 @@
     "launchAtStartupRunAsAdmin": "Please restart Wmimo as administrator",
     "tunModeRunAsAdmin": "The TUN mode requires system administrator permissions, please restart the app as an administrator",
     "tunSwitchToSystemProxy": "Would you like to temporarily switch to [System Proxy Mode] to continue connecting?",
+    "tunCreateAdapterFailedAdmin": "Failed to create TUN virtual adapter: Access is denied.\nTUN mode requires administrator privileges. Please right-click and choose [Run as administrator], or turn off TUN mode in the main screen/core settings and connect using system proxy.",
     "portableMode": "Portable Mode",
     "portableModeDisableTips": "If you need to exit portable mode, please exit [Wmimo] and manually delete the [portable] folder in the same directory as [wmimo.exe]",
     "systemProxy": "System Proxy",

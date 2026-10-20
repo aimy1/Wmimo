@@ -139,6 +139,7 @@ void main() {
         expect(t.meta.notifSwitchNode.isNotEmpty, isTrue);
         expect(t.meta.notifVpnConnected.isNotEmpty, isTrue);
         expect(t.meta.tunSwitchToSystemProxy.isNotEmpty, isTrue);
+        expect(t.meta.tunCreateAdapterFailedAdmin.isNotEmpty, isTrue);
       }
     });
   });

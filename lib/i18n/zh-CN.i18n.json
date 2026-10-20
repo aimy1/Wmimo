@@ -335,6 +335,7 @@
     "launchAtStartupRunAsAdmin": "请以管理员身份重新启动Wmimo",
     "tunModeRunAsAdmin": "TUN模式需要系统管理员权限,请以管理员身份重新启动应用",
     "tunSwitchToSystemProxy": "是否临时切换为【系统代理模式】继续连接？",
+    "tunCreateAdapterFailedAdmin": "TUN 虚拟网卡创建失败: Access is denied。\nTUN 模式需要管理员权限，请右键选择【以管理员身份运行】应用，或在主界面/内核设置中关闭 TUN 模式并使用系统代理连接。",
     "portableMode": "便携模式",
     "portableModeDisableTips": "如需退出便携模式,请退出[Wmimo]后,手动删除[wmimo.exe]同目录下的[portable]文件夹即可",
     "systemProxy": "系统代理",

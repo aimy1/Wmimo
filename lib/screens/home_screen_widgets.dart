@@ -1069,10 +1069,12 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           err.message = t.meta.requestNeedsUserApproval;
         } else if (err.message.contains("FullDiskAccessPermissionRequired")) {
           err.message = t.meta.FullDiskAccessPermissionRequired;
-        } else if (err.message.contains(
-          "configure tun interface: Access is denied",
-        )) {
-          err.message += "\n${t.meta.tunModeRunAsAdmin}";
+        } else if (err.message == "tunCreateAdapterFailedAdmin" ||
+            err.message.contains("Access is denied") ||
+            err.message.contains("TUN 虚拟网卡创建失败") ||
+            err.message.contains("configure tun interface: Access is denied") ||
+            err.message.contains("Start TUN listening error")) {
+          err.message = t.meta.tunCreateAdapterFailedAdmin;
         }
 
         DialogUtils.showAlertDialog(context, err.message, withVersion: true);
@@ -1189,7 +1191,15 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         if (!mounted) {
           return;
         }
-        DialogUtils.showAlertDialog(context, err.message, withVersion: true);
+        var msg = err.message;
+        if (msg == "tunCreateAdapterFailedAdmin" ||
+            msg.contains("Access is denied") ||
+            msg.contains("TUN 虚拟网卡创建失败") ||
+            msg.contains("configure tun interface: Access is denied") ||
+            msg.contains("Start TUN listening error")) {
+          msg = t.meta.tunCreateAdapterFailedAdmin;
+        }
+        DialogUtils.showAlertDialog(context, msg, withVersion: true);
       }
       if (mounted) {
         setState(() {});

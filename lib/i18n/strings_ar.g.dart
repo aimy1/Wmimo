@@ -457,6 +457,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get launchAtStartupRunAsAdmin => 'يرجى إعادة تشغيل Wmimo كمسؤول';
 	@override String get tunModeRunAsAdmin => 'يتطلب وضع TUN أذونات مسؤول النظام ، يرجى إعادة تشغيل التطبيق كمسؤول';
 	@override String get tunSwitchToSystemProxy => 'هل ترغب في التبديل مؤقتًا إلى [وضع وكيل النظام] لمتابعة الاتصال؟';
+	@override String get tunCreateAdapterFailedAdmin => 'فشل إنشاء محول الشبكة الظاهرية TUN: Access is denied.\nيتطلب وضع TUN أذونات المسؤول. يرجى النقر بزر الماوس الأيمن واختيار 【تشغيل كمسؤول】، أو إيقاف تشغيل وضع TUN في الشاشة الرئيسية/إعدادات النواة والاتصال باستخدام وكيل النظام.';
 	@override String get portableMode => 'الوضع المحمول';
 	@override String get portableModeDisableTips => 'إذا كنت بحاجة إلى الخروج من الوضع المحمول، فيرجى الخروج من [Wmimo] وحذف المجلد [portable] يدويًا في نفس الدليل مثل [wmimo.exe]';
 	@override String get systemProxy => 'وكيل النظام';
@@ -1248,6 +1249,7 @@ extension on TranslationsAr {
 			'meta.launchAtStartupRunAsAdmin' => 'يرجى إعادة تشغيل Wmimo كمسؤول',
 			'meta.tunModeRunAsAdmin' => 'يتطلب وضع TUN أذونات مسؤول النظام ، يرجى إعادة تشغيل التطبيق كمسؤول',
 			'meta.tunSwitchToSystemProxy' => 'هل ترغب في التبديل مؤقتًا إلى [وضع وكيل النظام] لمتابعة الاتصال؟',
+			'meta.tunCreateAdapterFailedAdmin' => 'فشل إنشاء محول الشبكة الظاهرية TUN: Access is denied.\nيتطلب وضع TUN أذونات المسؤول. يرجى النقر بزر الماوس الأيمن واختيار 【تشغيل كمسؤول】، أو إيقاف تشغيل وضع TUN في الشاشة الرئيسية/إعدادات النواة والاتصال باستخدام وكيل النظام.',
 			'meta.portableMode' => 'الوضع المحمول',
 			'meta.portableModeDisableTips' => 'إذا كنت بحاجة إلى الخروج من الوضع المحمول، فيرجى الخروج من [Wmimo] وحذف المجلد [portable] يدويًا في نفس الدليل مثل [wmimo.exe]',
 			'meta.systemProxy' => 'وكيل النظام',
@@ -1446,9 +1448,9 @@ extension on TranslationsAr {
 			'meta.collapseAll' => 'طي جميع المجموعات',
 			'meta.expandAll' => 'توسيع جميع المجموعات',
 			'meta.donateTitle' => '💖 اشترِ قهوة للمطور',
-			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ دعمكم هو أكبر دافع لنا لمواصلة تطوير Wmimo ~ ☕✨',
 			_ => null,
 		} ?? switch (path) {
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ دعمكم هو أكبر دافع لنا لمواصلة تطوير Wmimo ~ ☕✨',
 			'meta.tokenCurrency' => 'العملة',
 			'meta.networkChain' => 'الشبكة',
 			'meta.depositAddress' => 'عنوان إيداع APTOS',

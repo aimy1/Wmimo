@@ -457,6 +457,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get launchAtStartupRunAsAdmin => '请以管理员身份重新启动Wmimo';
 	@override String get tunModeRunAsAdmin => 'TUN模式需要系统管理员权限,请以管理员身份重新启动应用';
 	@override String get tunSwitchToSystemProxy => '是否临时切换为【系统代理模式】继续连接？';
+	@override String get tunCreateAdapterFailedAdmin => 'TUN 虚拟网卡创建失败: Access is denied。\nTUN 模式需要管理员权限，请右键选择【以管理员身份运行】应用，或在主界面/内核设置中关闭 TUN 模式并使用系统代理连接。';
 	@override String get portableMode => '便携模式';
 	@override String get portableModeDisableTips => '如需退出便携模式,请退出[Wmimo]后,手动删除[wmimo.exe]同目录下的[portable]文件夹即可';
 	@override String get systemProxy => '系统代理';
@@ -1248,6 +1249,7 @@ extension on TranslationsZhCn {
 			'meta.launchAtStartupRunAsAdmin' => '请以管理员身份重新启动Wmimo',
 			'meta.tunModeRunAsAdmin' => 'TUN模式需要系统管理员权限,请以管理员身份重新启动应用',
 			'meta.tunSwitchToSystemProxy' => '是否临时切换为【系统代理模式】继续连接？',
+			'meta.tunCreateAdapterFailedAdmin' => 'TUN 虚拟网卡创建失败: Access is denied。\nTUN 模式需要管理员权限，请右键选择【以管理员身份运行】应用，或在主界面/内核设置中关闭 TUN 模式并使用系统代理连接。',
 			'meta.portableMode' => '便携模式',
 			'meta.portableModeDisableTips' => '如需退出便携模式,请退出[Wmimo]后,手动删除[wmimo.exe]同目录下的[portable]文件夹即可',
 			'meta.systemProxy' => '系统代理',
@@ -1446,9 +1448,9 @@ extension on TranslationsZhCn {
 			'meta.collapseAll' => '折叠所有代理组',
 			'meta.expandAll' => '展开所有代理组',
 			'meta.donateTitle' => '💖 请作者喝杯咖啡',
-			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 你的每一份投喂，都是 Wmimo 不断打磨与更新的最大动力呀 ~ ☕✨',
 			_ => null,
 		} ?? switch (path) {
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 你的每一份投喂，都是 Wmimo 不断打磨与更新的最大动力呀 ~ ☕✨',
 			'meta.tokenCurrency' => '币种',
 			'meta.networkChain' => '网络',
 			'meta.depositAddress' => 'APTOS 收款地址',

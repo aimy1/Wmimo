@@ -1046,6 +1046,9 @@ class Translations$meta$en {
 	/// en: 'Would you like to temporarily switch to [System Proxy Mode] to continue connecting?'
 	String get tunSwitchToSystemProxy => 'Would you like to temporarily switch to [System Proxy Mode] to continue connecting?';
 
+	/// en: 'Failed to create TUN virtual adapter: Access is denied. TUN mode requires administrator privileges. Please right-click and choose [Run as administrator], or turn off TUN mode in the main screen/core settings and connect using system proxy.'
+	String get tunCreateAdapterFailedAdmin => 'Failed to create TUN virtual adapter: Access is denied.\nTUN mode requires administrator privileges. Please right-click and choose [Run as administrator], or turn off TUN mode in the main screen/core settings and connect using system proxy.';
+
 	/// en: 'Portable Mode'
 	String get portableMode => 'Portable Mode';
 
@@ -2646,6 +2649,7 @@ extension on Translations {
 			'meta.launchAtStartupRunAsAdmin' => 'Please restart Wmimo as administrator',
 			'meta.tunModeRunAsAdmin' => 'The TUN mode requires system administrator permissions, please restart the app as an administrator',
 			'meta.tunSwitchToSystemProxy' => 'Would you like to temporarily switch to [System Proxy Mode] to continue connecting?',
+			'meta.tunCreateAdapterFailedAdmin' => 'Failed to create TUN virtual adapter: Access is denied.\nTUN mode requires administrator privileges. Please right-click and choose [Run as administrator], or turn off TUN mode in the main screen/core settings and connect using system proxy.',
 			'meta.portableMode' => 'Portable Mode',
 			'meta.portableModeDisableTips' => 'If you need to exit portable mode, please exit [Wmimo] and manually delete the [portable] folder in the same directory as [wmimo.exe]',
 			'meta.systemProxy' => 'System Proxy',
@@ -2844,9 +2848,9 @@ extension on Translations {
 			'meta.collapseAll' => 'Collapse All Groups',
 			'meta.expandAll' => 'Expand All Groups',
 			'meta.donateTitle' => '💖 Buy Author a Coffee',
-			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Every donation is our greatest motivation to keep polishing Wmimo ~ ☕✨',
 			_ => null,
 		} ?? switch (path) {
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Every donation is our greatest motivation to keep polishing Wmimo ~ ☕✨',
 			'meta.tokenCurrency' => 'Token',
 			'meta.networkChain' => 'Network',
 			'meta.depositAddress' => 'APTOS Deposit Address',

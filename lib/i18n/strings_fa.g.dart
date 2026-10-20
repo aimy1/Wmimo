@@ -457,6 +457,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get launchAtStartupRunAsAdmin => 'لطفاً Wmimo را به عنوان مدیر راه اندازی مجدد کنید';
 	@override String get tunModeRunAsAdmin => 'حالت TUN نیازمند مجوز مدیر سیستم می‌باشد لطفا نرم‌افزار را مجدد با حالت مدیر (administrator) راه‌اندازی کنید';
 	@override String get tunSwitchToSystemProxy => 'آیا مایلید برای ادامه اتصال، موقتاً به [حالت پروکسی سیستم] تغییر وضعیت دهید؟';
+	@override String get tunCreateAdapterFailedAdmin => 'ایجاد آداپتور شبکه مجازی TUN ناموفق بود: Access is denied.\nحالت TUN نیازمند دسترسی سرپرست (Administrator) است. لطفاً کلیک راست کرده و 【اجرا به عنوان مدیر (Run as administrator)】 را انتخاب کنید، یا در صفحه اصلی/تنظیمات هسته، حالت TUN را غیرفعال کرده و با پروکسی سیستم متصل شوید.';
 	@override String get portableMode => 'حالت قابل‌حمل';
 	@override String get portableModeDisableTips => 'اگر نیاز دارین از حالت قابل‌حمل خارج شوید لطفا از [Wmimo] خارج شده و به‌صورت دستی پوشه [portable] هم مسیر با فایل [wmimo.exe] را حذف کنید';
 	@override String get systemProxy => 'پروکسی سیستم';
@@ -1248,6 +1249,7 @@ extension on TranslationsFa {
 			'meta.launchAtStartupRunAsAdmin' => 'لطفاً Wmimo را به عنوان مدیر راه اندازی مجدد کنید',
 			'meta.tunModeRunAsAdmin' => 'حالت TUN نیازمند مجوز مدیر سیستم می‌باشد لطفا نرم‌افزار را مجدد با حالت مدیر (administrator) راه‌اندازی کنید',
 			'meta.tunSwitchToSystemProxy' => 'آیا مایلید برای ادامه اتصال، موقتاً به [حالت پروکسی سیستم] تغییر وضعیت دهید؟',
+			'meta.tunCreateAdapterFailedAdmin' => 'ایجاد آداپتور شبکه مجازی TUN ناموفق بود: Access is denied.\nحالت TUN نیازمند دسترسی سرپرست (Administrator) است. لطفاً کلیک راست کرده و 【اجرا به عنوان مدیر (Run as administrator)】 را انتخاب کنید، یا در صفحه اصلی/تنظیمات هسته، حالت TUN را غیرفعال کرده و با پروکسی سیستم متصل شوید.',
 			'meta.portableMode' => 'حالت قابل‌حمل',
 			'meta.portableModeDisableTips' => 'اگر نیاز دارین از حالت قابل‌حمل خارج شوید لطفا از [Wmimo] خارج شده و به‌صورت دستی پوشه [portable] هم مسیر با فایل [wmimo.exe] را حذف کنید',
 			'meta.systemProxy' => 'پروکسی سیستم',
@@ -1446,9 +1448,9 @@ extension on TranslationsFa {
 			'meta.collapseAll' => 'بستن همه گروه‌ها',
 			'meta.expandAll' => 'باز کردن همه گروه‌ها',
 			'meta.donateTitle' => '💖 خرید یک قهوه برای نویسنده',
-			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ حمایت شما بزرگترین انگیزه برای بهبود مداوم Wmimo است ~ ☕✨',
 			_ => null,
 		} ?? switch (path) {
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ حمایت شما بزرگترین انگیزه برای بهبود مداوم Wmimo است ~ ☕✨',
 			'meta.tokenCurrency' => 'ارز',
 			'meta.networkChain' => 'شبکه',
 			'meta.depositAddress' => 'آدرس واریز APTOS',

@@ -457,6 +457,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get launchAtStartupRunAsAdmin => 'Por favor, reinicie Wmimo como administrador';
 	@override String get tunModeRunAsAdmin => 'El modo TUN requiere permisos de administrador del sistema, por favor reinicie la aplicación como administrador';
 	@override String get tunSwitchToSystemProxy => '¿Desea cambiar temporalmente al [Modo de proxy del sistema] para continuar conectando?';
+	@override String get tunCreateAdapterFailedAdmin => 'Error al crear el adaptador de red virtual TUN: Access is denied.\nEl modo TUN requiere privilegios de administrador. Haga clic derecho y seleccione 【Ejecutar como administrador】, o desactive el modo TUN en la pantalla principal/ajustes del núcleo y conéctese mediante proxy del sistema.';
 	@override String get portableMode => 'Modo Portátil';
 	@override String get portableModeDisableTips => 'Si necesita salir del modo portátil, cierre [Wmimo] y elimine manualmente la carpeta [portable] en el mismo directorio que [wmimo.exe]';
 	@override String get systemProxy => 'Proxy del Sistema';
@@ -1248,6 +1249,7 @@ extension on TranslationsEs {
 			'meta.launchAtStartupRunAsAdmin' => 'Por favor, reinicie Wmimo como administrador',
 			'meta.tunModeRunAsAdmin' => 'El modo TUN requiere permisos de administrador del sistema, por favor reinicie la aplicación como administrador',
 			'meta.tunSwitchToSystemProxy' => '¿Desea cambiar temporalmente al [Modo de proxy del sistema] para continuar conectando?',
+			'meta.tunCreateAdapterFailedAdmin' => 'Error al crear el adaptador de red virtual TUN: Access is denied.\nEl modo TUN requiere privilegios de administrador. Haga clic derecho y seleccione 【Ejecutar como administrador】, o desactive el modo TUN en la pantalla principal/ajustes del núcleo y conéctese mediante proxy del sistema.',
 			'meta.portableMode' => 'Modo Portátil',
 			'meta.portableModeDisableTips' => 'Si necesita salir del modo portátil, cierre [Wmimo] y elimine manualmente la carpeta [portable] en el mismo directorio que [wmimo.exe]',
 			'meta.systemProxy' => 'Proxy del Sistema',
@@ -1446,9 +1448,9 @@ extension on TranslationsEs {
 			'meta.collapseAll' => 'Contraer todos los grupos',
 			'meta.expandAll' => 'Expandir todos los grupos',
 			'meta.donateTitle' => '💖 Invitar un café al autor',
-			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ ¡Tu apoyo es la mayor motivación para seguir mejorando Wmimo! ~ ☕✨',
 			_ => null,
 		} ?? switch (path) {
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ ¡Tu apoyo es la mayor motivación para seguir mejorando Wmimo! ~ ☕✨',
 			'meta.tokenCurrency' => 'Token',
 			'meta.networkChain' => 'Red',
 			'meta.depositAddress' => 'Dirección de depósito APTOS',

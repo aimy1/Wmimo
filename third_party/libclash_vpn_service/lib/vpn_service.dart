@@ -1200,7 +1200,7 @@ rules:
             type: VpnServiceWaitType.error,
             err: VpnServiceResultError(
               403,
-              "TUN 虚拟网卡创建失败: Access is denied。\nTUN 模式需要管理员权限，请右键选择【以管理员身份运行】应用，或在主界面/内核设置中关闭 TUN 模式并使用系统代理连接。",
+              "tunCreateAdapterFailedAdmin",
             ),
           );
         }

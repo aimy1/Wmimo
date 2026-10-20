@@ -335,6 +335,7 @@
     "launchAtStartupRunAsAdmin": "لطفاً Wmimo را به عنوان مدیر راه اندازی مجدد کنید",
     "tunModeRunAsAdmin": "حالت TUN نیازمند مجوز مدیر سیستم می‌باشد لطفا نرم‌افزار را مجدد با حالت مدیر (administrator) راه‌اندازی کنید",
     "tunSwitchToSystemProxy": "آیا مایلید برای ادامه اتصال، موقتاً به [حالت پروکسی سیستم] تغییر وضعیت دهید؟",
+    "tunCreateAdapterFailedAdmin": "ایجاد آداپتور شبکه مجازی TUN ناموفق بود: Access is denied.\nحالت TUN نیازمند دسترسی سرپرست (Administrator) است. لطفاً کلیک راست کرده و 【اجرا به عنوان مدیر (Run as administrator)】 را انتخاب کنید، یا در صفحه اصلی/تنظیمات هسته، حالت TUN را غیرفعال کرده و با پروکسی سیستم متصل شوید.",
     "portableMode": "حالت قابل‌حمل",
     "portableModeDisableTips": "اگر نیاز دارین از حالت قابل‌حمل خارج شوید لطفا از [Wmimo] خارج شده و به‌صورت دستی پوشه [portable] هم مسیر با فایل [wmimo.exe] را حذف کنید",
     "systemProxy": "پروکسی سیستم",

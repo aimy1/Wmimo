@@ -457,6 +457,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get launchAtStartupRunAsAdmin => 'Wmimo를 관리자 권한으로 다시 시작하십시오';
 	@override String get tunModeRunAsAdmin => 'TUN 모드는 시스템 관리자 권한이 필요합니다. 앱을 관리자 권한으로 다시 시작하십시오';
 	@override String get tunSwitchToSystemProxy => '임시로 [시스템 프록시 모드]로 전환하여 계속 연결하시겠습니까?';
+	@override String get tunCreateAdapterFailedAdmin => 'TUN 가상 네트워크 어댑터 생성 실패: Access is denied.\nTUN 모드는 관리자 권한이 필요합니다. 마우스 우클릭 후 【관리자 권한으로 실행】을 선택하거나, 메인 화면/코어 설정에서 TUN 모드를 끄고 시스템 프록시를 사용하여 연결하십시오.';
 	@override String get portableMode => '포터블 모드';
 	@override String get portableModeDisableTips => '포터블 모드를 종료해야 하는 경우 [Wmimo]를 종료하고 [wmimo.exe]와 동일한 디렉토리에 있는 [portable] 폴더를 수동으로 삭제하십시오';
 	@override String get systemProxy => '시스템 프록시';
@@ -1248,6 +1249,7 @@ extension on TranslationsKo {
 			'meta.launchAtStartupRunAsAdmin' => 'Wmimo를 관리자 권한으로 다시 시작하십시오',
 			'meta.tunModeRunAsAdmin' => 'TUN 모드는 시스템 관리자 권한이 필요합니다. 앱을 관리자 권한으로 다시 시작하십시오',
 			'meta.tunSwitchToSystemProxy' => '임시로 [시스템 프록시 모드]로 전환하여 계속 연결하시겠습니까?',
+			'meta.tunCreateAdapterFailedAdmin' => 'TUN 가상 네트워크 어댑터 생성 실패: Access is denied.\nTUN 모드는 관리자 권한이 필요합니다. 마우스 우클릭 후 【관리자 권한으로 실행】을 선택하거나, 메인 화면/코어 설정에서 TUN 모드를 끄고 시스템 프록시를 사용하여 연결하십시오.',
 			'meta.portableMode' => '포터블 모드',
 			'meta.portableModeDisableTips' => '포터블 모드를 종료해야 하는 경우 [Wmimo]를 종료하고 [wmimo.exe]와 동일한 디렉토리에 있는 [portable] 폴더를 수동으로 삭제하십시오',
 			'meta.systemProxy' => '시스템 프록시',
@@ -1446,9 +1448,9 @@ extension on TranslationsKo {
 			'meta.collapseAll' => '모든 그룹 접기',
 			'meta.expandAll' => '모든 그룹 펼치기',
 			'meta.donateTitle' => '💖 개발자에게 커피 한 잔 후원하기',
-			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 여러분의 따뜻한 후원은 Wmimo를 발전시키는 가장 큰 원동력입니다 ~ ☕✨',
 			_ => null,
 		} ?? switch (path) {
+			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 여러분의 따뜻한 후원은 Wmimo를 발전시키는 가장 큰 원동력입니다 ~ ☕✨',
 			'meta.tokenCurrency' => '토큰',
 			'meta.networkChain' => '네트워크',
 			'meta.depositAddress' => 'APTOS 입금 주소',
