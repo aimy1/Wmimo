@@ -396,6 +396,14 @@ rules:
     }
   }
 
+  // Ensure fallback rules exist if not defined in subscription
+  if (!filteredLines.contains('rules:') && !filteredLines.contains('"rules":')) {
+    final firstGroupMatch = RegExp(r'''-\s*name:\s*["']?([^"'\n]+)["']?''').firstMatch(filteredLines);
+    final targetGroup = firstGroupMatch?.group(1)?.trim();
+    final fallbackTarget = (targetGroup != null && targetGroup.isNotEmpty) ? targetGroup : "DIRECT";
+    filteredLines += '''\nrules:\n  - MATCH,$fallbackTarget\n''';
+  }
+
   return filteredLines;
 }
 
@@ -621,7 +629,12 @@ class FlutterVpnService {
       try {
         const platform = MethodChannel('com.wmimo.app/native_helper');
         final String? nativeLibPath = await platform.invokeMethod<String>('getNativeLibraryPath', {'libName': 'libwmimoService.so'});
-        if (nativeLibPath != null && nativeLibPath.isNotEmpty && File(nativeLibPath).existsSync()) {
+        if (nativeLibPath != null && nativeLibPath.isNotEmpty) {
+          if (File(nativeLibPath).existsSync()) {
+            return nativeLibPath;
+          }
+          // On Android 10+, nativeLibraryDir is the only valid execution directory.
+          // Return the path directly even if existsSync fails due to directory stat permission.
           return nativeLibPath;
         }
       } catch (_) {}
@@ -648,6 +661,7 @@ class FlutterVpnService {
               }
             }
           }
+          return androidLibCandidates.first;
         }
       } catch (_) {}
 
@@ -660,6 +674,7 @@ class FlutterVpnService {
           return p;
         }
       }
+      return fallbackAndroidPaths.first;
     }
 
     final currentDir = Directory.current.path;
@@ -856,7 +871,12 @@ class FlutterVpnService {
 
   static Future<String> _resolveConfigFile() async {
     String profileFile = "";
-    if (_savedConfig?.core_path != null &&
+    if (_savedConfig?.core_path_patch_final != null &&
+        _savedConfig!.core_path_patch_final.isNotEmpty &&
+        File(_savedConfig!.core_path_patch_final).existsSync() &&
+        File(_savedConfig!.core_path_patch_final).lengthSync() > 0) {
+      profileFile = _savedConfig!.core_path_patch_final;
+    } else if (_savedConfig?.core_path != null &&
         _savedConfig!.core_path.isNotEmpty &&
         File(_savedConfig!.core_path).existsSync()) {
       profileFile = _savedConfig!.core_path;
@@ -864,10 +884,6 @@ class FlutterVpnService {
         _savedConfigFilePath!.isNotEmpty &&
         File(_savedConfigFilePath!).existsSync()) {
       profileFile = _savedConfigFilePath!;
-    } else if (_savedConfig?.core_path_patch_final != null &&
-        _savedConfig!.core_path_patch_final.isNotEmpty &&
-        File(_savedConfig!.core_path_patch_final).existsSync()) {
-      profileFile = _savedConfig!.core_path_patch_final;
     }
 
     String profileContent = "";
@@ -918,11 +934,28 @@ tun:
 ''';
     }
 
-    final filteredLines = await Isolate.run(() => _filterProfileWorker({
-      'profileContent': profileContent,
-      'tunMode': tunMode,
-      'isAndroid': Platform.isAndroid,
-    }));
+    String filteredLines;
+    try {
+      if (profileContent.length > 500000) {
+        filteredLines = await Isolate.run(() => _filterProfileWorker({
+          'profileContent': profileContent,
+          'tunMode': tunMode,
+          'isAndroid': Platform.isAndroid,
+        }));
+      } else {
+        filteredLines = _filterProfileWorker({
+          'profileContent': profileContent,
+          'tunMode': tunMode,
+          'isAndroid': Platform.isAndroid,
+        });
+      }
+    } catch (_) {
+      filteredLines = _filterProfileWorker({
+        'profileContent': profileContent,
+        'tunMode': tunMode,
+        'isAndroid': Platform.isAndroid,
+      });
+    }
 
     String baseDir = _savedConfig?.base_dir.isNotEmpty == true
         ? _savedConfig!.base_dir
@@ -1119,14 +1152,16 @@ tun:
       final configFile = await _resolveConfigFile();
 
       if (!Platform.isIOS && !File(coreExe).existsSync()) {
-        _notifyState(FlutterVpnServiceState.disconnected);
-        final hint = Platform.isAndroid
-            ? "\n请确认安装包架构与手机 CPU 匹配 (建议使用 arm64-v8a 或 universal 版本)。"
-            : "";
-        return VpnServiceWaitResult(
-          type: VpnServiceWaitType.error,
-          err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe$hint"),
-        );
+        if (!Platform.isAndroid || !coreExe.endsWith(".so")) {
+          _notifyState(FlutterVpnServiceState.disconnected);
+          final hint = Platform.isAndroid
+              ? "\n请确认安装包架构与手机 CPU 匹配 (建议使用 arm64-v8a 或 universal 版本)。"
+              : "";
+          return VpnServiceWaitResult(
+            type: VpnServiceWaitType.error,
+            err: VpnServiceResultError(404, "Mihomo 内核执行文件未找到: $coreExe$hint"),
+          );
+        }
       }
 
       if (configFile.isEmpty || !File(configFile).existsSync()) {
@@ -1259,30 +1294,27 @@ tun:
       final logFile = (_savedConfig?.log_path.isNotEmpty == true)
           ? File(_savedConfig!.log_path)
           : null;
-      IOSink? logSink;
-      if (logFile != null) {
-        try {
-          logSink = logFile.openWrite(mode: FileMode.append);
-          _coreLogSink = logSink;
-        } catch (_) {}
-      }
 
       _coreProcess!.stdout.transform(utf8.decoder).listen((data) {
         outBuffer.write(data);
-        logSink?.write(data);
+        if (logFile != null) {
+          try {
+            logFile.writeAsStringSync(data, mode: FileMode.append, flush: false);
+          } catch (_) {}
+        }
       });
       _coreProcess!.stderr.transform(utf8.decoder).listen((data) {
         errBuffer.write(data);
-        logSink?.write(data);
+        if (logFile != null) {
+          try {
+            logFile.writeAsStringSync(data, mode: FileMode.append, flush: false);
+          } catch (_) {}
+        }
       });
       int? coreExitCode;
       _coreProcess!.exitCode.then((code) {
         coreExitCode = code;
         _coreProcess = null;
-        try {
-          _coreLogSink?.close();
-          _coreLogSink = null;
-        } catch (_) {}
         _stopTrafficMonitor();
         _notifyState(FlutterVpnServiceState.disconnected);
       });
@@ -1291,30 +1323,27 @@ tun:
       bool ready = false;
       final stopwatch = Stopwatch()..start();
 
-      final checkClient = HttpClient()
-        ..connectionTimeout = const Duration(milliseconds: 300);
-
-      try {
-        while (stopwatch.elapsed < timeout) {
-          if (_coreProcess == null || _cancelRequested) {
+      while (stopwatch.elapsed < timeout) {
+        if (_coreProcess == null || _cancelRequested) {
+          break;
+        }
+        HttpClient? checkClient;
+        try {
+          checkClient = HttpClient()..connectionTimeout = const Duration(milliseconds: 250);
+          final req = await checkClient.getUrl(Uri.parse("http://127.0.0.1:$port/version"));
+          if (secret.isNotEmpty) {
+            req.headers.set('Authorization', 'Bearer $secret');
+          }
+          final resp = await req.close();
+          if (resp.statusCode == 200) {
+            ready = true;
             break;
           }
-          try {
-            final req = await checkClient
-                .getUrl(Uri.parse("http://127.0.0.1:$port/version"));
-            if (secret.isNotEmpty) {
-              req.headers.set('Authorization', 'Bearer $secret');
-            }
-            final resp = await req.close();
-            if (resp.statusCode == 200) {
-              ready = true;
-              break;
-            }
-          } catch (_) {}
-          await Future.delayed(const Duration(milliseconds: 120));
+        } catch (_) {
+        } finally {
+          checkClient?.close(force: true);
         }
-      } finally {
-        checkClient.close(force: true);
+        await Future.delayed(const Duration(milliseconds: 120));
       }
 
       if (_cancelRequested) {

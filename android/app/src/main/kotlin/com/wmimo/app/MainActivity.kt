@@ -73,26 +73,23 @@ class MainActivity : FlutterActivity() {
                 }
                 "getNativeLibraryPath" -> {
                     val libName = call.argument<String>("libName") ?: "libwmimoService.so"
-                    var file = File(applicationInfo.nativeLibraryDir, libName)
-                    if (!file.exists()) {
-                        val dir = File(applicationInfo.nativeLibraryDir)
-                        val files = dir.listFiles { _, name -> name.endsWith(".so") }
+                    val nativeDir = File(applicationInfo.nativeLibraryDir)
+                    var targetFile = File(nativeDir, libName)
+                    if (!targetFile.exists()) {
+                        val files = nativeDir.listFiles { _, name -> name.endsWith(".so") }
                         val found = files?.firstOrNull {
                             val lower = it.name.lowercase()
                             lower.contains("wmimo") || lower.contains("clash") || lower.contains("mihomo")
                         }
                         if (found != null) {
-                            file = found
+                            targetFile = found
                         }
                     }
-                    if (file.exists()) {
-                        try {
-                            file.setExecutable(true, false)
-                        } catch (_: Exception) {}
-                        result.success(file.absolutePath)
-                    } else {
-                        result.success(null)
-                    }
+                    try {
+                        targetFile.setExecutable(true, false)
+                        targetFile.setReadable(true, false)
+                    } catch (_: Exception) {}
+                    result.success(targetFile.absolutePath)
                 }
                 "killOrphanCores" -> {
                     try {
