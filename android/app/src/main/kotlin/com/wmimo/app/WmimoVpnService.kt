@@ -21,10 +21,13 @@ class WmimoVpnService : VpnService() {
     companion object {
         const val ACTION_START = "com.wmimo.app.vpn.START"
         const val ACTION_STOP = "com.wmimo.app.vpn.STOP"
+        const val ACTION_UPDATE = "com.wmimo.app.vpn.UPDATE"
         const val NOTIFICATION_CHANNEL_ID = "wmimo_vpn_channel"
         const val NOTIFICATION_ID = 10001
         var isServiceRunning = false
             private set
+        var currentNotificationContent: String? = null
+        var currentNotificationDisconnect: String? = null
     }
 
     override fun onCreate() {
@@ -35,11 +38,24 @@ class WmimoVpnService : VpnService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val action = intent?.action ?: ACTION_START
         mixedPort = intent?.getIntExtra("mixedPort", 7890) ?: 7890
+        intent?.getStringExtra("notificationContent")?.let {
+            if (it.isNotEmpty()) currentNotificationContent = it
+        }
+        intent?.getStringExtra("notificationDisconnect")?.let {
+            if (it.isNotEmpty()) currentNotificationDisconnect = it
+        }
         when (action) {
             ACTION_START -> startVpn()
             ACTION_STOP -> stopVpn()
+            ACTION_UPDATE -> updateNotification()
         }
         return START_NOT_STICKY
+    }
+
+    private fun updateNotification() {
+        if (!isRunning) return
+        val manager = getSystemService(NotificationManager::class.java)
+        manager?.notify(NOTIFICATION_ID, createNotification())
     }
 
     private fun createNotificationChannel() {
@@ -77,8 +93,8 @@ class WmimoVpnService : VpnService() {
         )
 
         val title = getString(R.string.app_name)
-        val content = getString(R.string.notif_vpn_connected)
-        val disconnect = getString(R.string.notif_action_disconnect)
+        val content = currentNotificationContent ?: getString(R.string.notif_vpn_connected)
+        val disconnect = currentNotificationDisconnect ?: getString(R.string.notif_action_disconnect)
 
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(title)
@@ -126,6 +142,8 @@ class WmimoVpnService : VpnService() {
     private fun stopVpn() {
         isRunning = false
         isServiceRunning = false
+        currentNotificationContent = null
+        currentNotificationDisconnect = null
         try {
             vpnInterface?.close()
             vpnInterface = null

@@ -56,6 +56,8 @@ class VpnServiceConfig {
   bool exclude_device_communication = false;
   bool enforce_routes = false;
   bool auto_route_use_sub_ranges_by_default = false;
+  String notification_content = "";
+  String notification_disconnect = "";
 
   Map<String, dynamic> toJson() => {
         'control_port': control_port,
@@ -1213,6 +1215,8 @@ rules:
           const platform = MethodChannel('com.wmimo.app/native_helper');
           await platform.invokeMethod('startVpnService', {
             'mixedPort': mixedPort,
+            'notificationContent': _savedConfig?.notification_content,
+            'notificationDisconnect': _savedConfig?.notification_disconnect,
           });
         } catch (_) {}
       }

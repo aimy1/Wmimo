@@ -59,6 +59,12 @@ void main(List<String> args) async {
   await VPNService.initABI();
   await RemoteConfigManager.init();
   await SettingManager.init();
+  if (Platform.isAndroid) {
+    const platform = MethodChannel('com.wmimo.app/native_helper');
+    platform.invokeMethod('setAppLocale', {
+      'languageTag': LocaleSettings.currentLocale.languageTag,
+    }).catchError((_) => null);
+  }
   Log.setLevel(SettingManager.getConfig().logLevel);
   await BoardSessionPersistentManager.init();
   await BoardProviderManager.init();
@@ -303,7 +309,18 @@ class MyAppState extends State<MyApp>
     }
 
     AppLifecycleStateNofity.init();
-    LocaleSettings.getLocaleStream().listen((event) {});
+    LocaleSettings.getLocaleStream().listen((event) {
+      if (Platform.isAndroid) {
+        const platform = MethodChannel('com.wmimo.app/native_helper');
+        platform.invokeMethod('setAppLocale', {
+          'languageTag': event.languageTag,
+        }).catchError((_) => null);
+        platform.invokeMethod('updateNotification', {
+          'notificationContent': t.meta.notifVpnConnected,
+          'notificationDisconnect': t.meta.notifDisconnect,
+        }).catchError((_) => null);
+      }
+    });
     String launchStartupArg = processArgs.firstWhere(
       (element) => element == AppArgs.launchStartup,
       orElse: () => '',

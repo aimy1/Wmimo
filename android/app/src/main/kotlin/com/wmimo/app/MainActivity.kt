@@ -1,12 +1,14 @@
 package com.wmimo.app
 
 import android.Manifest
+import android.app.LocaleManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.net.VpnService
 import android.os.Build
+import android.os.LocaleList
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
@@ -16,6 +18,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
 import java.io.File
+import java.util.Locale
 
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.wmimo.app/native_helper"
@@ -126,15 +129,48 @@ class MainActivity : FlutterActivity() {
                 }
                 "startVpnService" -> {
                     val mixedPort = call.argument<Int>("mixedPort") ?: 7890
+                    val content = call.argument<String>("notificationContent")
+                    val disconnect = call.argument<String>("notificationDisconnect")
                     val intent = Intent(this, WmimoVpnService::class.java).apply {
                         action = WmimoVpnService.ACTION_START
                         putExtra("mixedPort", mixedPort)
+                        if (content != null) putExtra("notificationContent", content)
+                        if (disconnect != null) putExtra("notificationDisconnect", disconnect)
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         startForegroundService(intent)
                     } else {
                         startService(intent)
                     }
+                    result.success(true)
+                }
+                "updateNotification" -> {
+                    val content = call.argument<String>("notificationContent")
+                    val disconnect = call.argument<String>("notificationDisconnect")
+                    val intent = Intent(this, WmimoVpnService::class.java).apply {
+                        action = WmimoVpnService.ACTION_UPDATE
+                        if (content != null) putExtra("notificationContent", content)
+                        if (disconnect != null) putExtra("notificationDisconnect", disconnect)
+                    }
+                    if (WmimoVpnService.isServiceRunning) {
+                        startService(intent)
+                    }
+                    result.success(true)
+                }
+                "setAppLocale" -> {
+                    val tag = call.argument<String>("languageTag") ?: "zh-CN"
+                    try {
+                        val locale = Locale.forLanguageTag(tag)
+                        Locale.setDefault(locale)
+                        val config = resources.configuration
+                        config.setLocale(locale)
+                        resources.updateConfiguration(config, resources.displayMetrics)
+                        applicationContext.resources.updateConfiguration(config, applicationContext.resources.displayMetrics)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val localeManager = getSystemService(LocaleManager::class.java)
+                            localeManager?.applicationLocales = LocaleList.forLanguageTags(tag)
+                        }
+                    } catch (_: Exception) {}
                     result.success(true)
                 }
                 "stopVpnService" -> {
