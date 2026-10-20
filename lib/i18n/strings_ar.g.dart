@@ -401,6 +401,10 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String updateFailed({required Object p}) => 'فشل التحديث:${p}';
 	@override String get none => 'لا أحد';
 	@override String get reset => 'إعادة ضبط';
+	@override String get resetConfirm => 'هل أنت متأكد من رغبتك في إعادة ضبط جميع إعدادات التطبيق؟';
+	@override String get resetSuccess => 'تمت إعادة ضبط إعدادات التطبيق إلى القيم الافتراضية';
+	@override String get resetCoreConfirm => 'هل أنت متأكد من رغبتك في إعادة ضبط إعدادات النواة وتجاوز التكوينات؟';
+	@override String get resetCoreSuccess => 'تمت إعادة ضبط إعدادات النواة إلى القيم الافتراضية';
 	@override String get authentication => 'التفويض';
 	@override String get submit => 'يُقدِّم';
 	@override String get user => 'مستخدم';
@@ -1201,6 +1205,10 @@ extension on TranslationsAr {
 			'meta.updateFailed' => ({required Object p}) => 'فشل التحديث:${p}',
 			'meta.none' => 'لا أحد',
 			'meta.reset' => 'إعادة ضبط',
+			'meta.resetConfirm' => 'هل أنت متأكد من رغبتك في إعادة ضبط جميع إعدادات التطبيق؟',
+			'meta.resetSuccess' => 'تمت إعادة ضبط إعدادات التطبيق إلى القيم الافتراضية',
+			'meta.resetCoreConfirm' => 'هل أنت متأكد من رغبتك في إعادة ضبط إعدادات النواة وتجاوز التكوينات؟',
+			'meta.resetCoreSuccess' => 'تمت إعادة ضبط إعدادات النواة إلى القيم الافتراضية',
 			'meta.authentication' => 'التفويض',
 			'meta.submit' => 'يُقدِّم',
 			'meta.user' => 'مستخدم',
@@ -1452,12 +1460,12 @@ extension on TranslationsAr {
 			'meta.ipCopied' => 'تم نسخ عنوان IP إلى الحافظة',
 			'meta.ipLocation' => 'الموقع',
 			'meta.ipIsp' => 'مزود الخدمة',
+			_ => null,
+		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'انقر لجلب معلومات IP',
 			'meta.collapseAll' => 'طي جميع المجموعات',
 			'meta.expandAll' => 'توسيع جميع المجموعات',
 			'meta.donateTitle' => '💖 اشترِ قهوة للمطور',
-			_ => null,
-		} ?? switch (path) {
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ دعمكم هو أكبر دافع لنا لمواصلة تطوير Wmimo ~ ☕✨',
 			'meta.tokenCurrency' => 'العملة',
 			'meta.networkChain' => 'الشبكة',

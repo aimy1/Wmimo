@@ -401,6 +401,10 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get updateIntervalPreferByProfile => '공급자 설정 우선';
 	@override String get none => '없음';
 	@override String get reset => '초기화';
+	@override String get resetConfirm => '모든 앱 설정을 초기화하시겠습니까?';
+	@override String get resetSuccess => '앱 설정이 기본값으로 초기화되었습니다';
+	@override String get resetCoreConfirm => '코어 설정 및 덮어쓰기 구성을 초기화하시겠습니까?';
+	@override String get resetCoreSuccess => '코어 설정이 기본값으로 초기화되었습니다';
 	@override String get authentication => '인증';
 	@override String get submit => '제출';
 	@override String get user => '사용자';
@@ -1201,6 +1205,10 @@ extension on TranslationsKo {
 			'meta.updateIntervalPreferByProfile' => '공급자 설정 우선',
 			'meta.none' => '없음',
 			'meta.reset' => '초기화',
+			'meta.resetConfirm' => '모든 앱 설정을 초기화하시겠습니까?',
+			'meta.resetSuccess' => '앱 설정이 기본값으로 초기화되었습니다',
+			'meta.resetCoreConfirm' => '코어 설정 및 덮어쓰기 구성을 초기화하시겠습니까?',
+			'meta.resetCoreSuccess' => '코어 설정이 기본값으로 초기화되었습니다',
 			'meta.authentication' => '인증',
 			'meta.submit' => '제출',
 			'meta.user' => '사용자',
@@ -1452,12 +1460,12 @@ extension on TranslationsKo {
 			'meta.ipCopied' => 'IP 주소가 클립보드에 복사되었습니다',
 			'meta.ipLocation' => '위치',
 			'meta.ipIsp' => '제공자',
+			_ => null,
+		} ?? switch (path) {
 			'meta.ipTapToFetch' => '탭하여 IP 정보 가져오기',
 			'meta.collapseAll' => '모든 그룹 접기',
 			'meta.expandAll' => '모든 그룹 펼치기',
 			'meta.donateTitle' => '💖 개발자에게 커피 한 잔 후원하기',
-			_ => null,
-		} ?? switch (path) {
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 여러분의 따뜻한 후원은 Wmimo를 발전시키는 가장 큰 원동력입니다 ~ ☕✨',
 			'meta.tokenCurrency' => '토큰',
 			'meta.networkChain' => '네트워크',

@@ -401,6 +401,10 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get updateIntervalPreferByProfile => 'プロバイダーの設定を優先';
 	@override String get none => 'なし';
 	@override String get reset => 'リセット';
+	@override String get resetConfirm => 'すべてのアプリ設定をリセットしてもよろしいですか？';
+	@override String get resetSuccess => 'アプリ設定が初期値にリセットされました';
+	@override String get resetCoreConfirm => 'コア設定と上書き設定をリセットしてもよろしいですか？';
+	@override String get resetCoreSuccess => 'コア設定が初期値にリセットされました';
 	@override String get authentication => '認証';
 	@override String get submit => '送信';
 	@override String get user => 'ユーザー';
@@ -1201,6 +1205,10 @@ extension on TranslationsJa {
 			'meta.updateIntervalPreferByProfile' => 'プロバイダーの設定を優先',
 			'meta.none' => 'なし',
 			'meta.reset' => 'リセット',
+			'meta.resetConfirm' => 'すべてのアプリ設定をリセットしてもよろしいですか？',
+			'meta.resetSuccess' => 'アプリ設定が初期値にリセットされました',
+			'meta.resetCoreConfirm' => 'コア設定と上書き設定をリセットしてもよろしいですか？',
+			'meta.resetCoreSuccess' => 'コア設定が初期値にリセットされました',
 			'meta.authentication' => '認証',
 			'meta.submit' => '送信',
 			'meta.user' => 'ユーザー',
@@ -1452,12 +1460,12 @@ extension on TranslationsJa {
 			'meta.ipCopied' => 'IPアドレスをクリップボードにコピーしました',
 			'meta.ipLocation' => '位置',
 			'meta.ipIsp' => 'プロバイダ',
+			_ => null,
+		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'タップしてIP情報を取得',
 			'meta.collapseAll' => 'すべてのグループを折りたたむ',
 			'meta.expandAll' => 'すべてのグループを展開',
 			'meta.donateTitle' => '💖 開発者にコーヒーをおごる',
-			_ => null,
-		} ?? switch (path) {
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 皆様のご支援が、Wmimoを磨き続ける最大の力になります ~ ☕✨',
 			'meta.tokenCurrency' => '通貨',
 			'meta.networkChain' => 'ネットワーク',

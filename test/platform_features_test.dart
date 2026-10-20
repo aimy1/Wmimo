@@ -140,6 +140,10 @@ void main() {
         expect(t.meta.notifVpnConnected.isNotEmpty, isTrue);
         expect(t.meta.tunSwitchToSystemProxy.isNotEmpty, isTrue);
         expect(t.meta.tunCreateAdapterFailedAdmin.isNotEmpty, isTrue);
+        expect(t.meta.resetConfirm.isNotEmpty, isTrue);
+        expect(t.meta.resetSuccess.isNotEmpty, isTrue);
+        expect(t.meta.resetCoreConfirm.isNotEmpty, isTrue);
+        expect(t.meta.resetCoreSuccess.isNotEmpty, isTrue);
       }
     });
   });

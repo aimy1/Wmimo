@@ -401,6 +401,10 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String updateFailed({required Object p}) => 'به‌روزرسانی ناموفق بود:${p}';
 	@override String get none => 'هیچ‌کدام';
 	@override String get reset => 'بازنشانی';
+	@override String get resetConfirm => 'آیا مطمئن هستید که می‌خواهید تمام تنظیمات برنامه را بازنشانی کنید؟';
+	@override String get resetSuccess => 'تنظیمات برنامه به مقادیر پیش‌فرض بازنشانی شد';
+	@override String get resetCoreConfirm => 'آیا مطمئن هستید که می‌خواهید تنظیمات هسته و بازنویسی‌ها را بازنشانی کنید؟';
+	@override String get resetCoreSuccess => 'تنظیمات هسته به مقادیر پیش‌فرض بازنشانی شد';
 	@override String get authentication => 'مجوز';
 	@override String get submit => 'ارسال';
 	@override String get user => 'کاربر';
@@ -1201,6 +1205,10 @@ extension on TranslationsFa {
 			'meta.updateFailed' => ({required Object p}) => 'به‌روزرسانی ناموفق بود:${p}',
 			'meta.none' => 'هیچ‌کدام',
 			'meta.reset' => 'بازنشانی',
+			'meta.resetConfirm' => 'آیا مطمئن هستید که می‌خواهید تمام تنظیمات برنامه را بازنشانی کنید؟',
+			'meta.resetSuccess' => 'تنظیمات برنامه به مقادیر پیش‌فرض بازنشانی شد',
+			'meta.resetCoreConfirm' => 'آیا مطمئن هستید که می‌خواهید تنظیمات هسته و بازنویسی‌ها را بازنشانی کنید؟',
+			'meta.resetCoreSuccess' => 'تنظیمات هسته به مقادیر پیش‌فرض بازنشانی شد',
 			'meta.authentication' => 'مجوز',
 			'meta.submit' => 'ارسال',
 			'meta.user' => 'کاربر',
@@ -1452,12 +1460,12 @@ extension on TranslationsFa {
 			'meta.ipCopied' => 'آدرس IP در کلیپ‌بورد کپی شد',
 			'meta.ipLocation' => 'مکان',
 			'meta.ipIsp' => 'ارائه‌دهنده',
+			_ => null,
+		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'برای دریافت اطلاعات IP ضربه بزنید',
 			'meta.collapseAll' => 'بستن همه گروه‌ها',
 			'meta.expandAll' => 'باز کردن همه گروه‌ها',
 			'meta.donateTitle' => '💖 خرید یک قهوه برای نویسنده',
-			_ => null,
-		} ?? switch (path) {
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ حمایت شما بزرگترین انگیزه برای بهبود مداوم Wmimo است ~ ☕✨',
 			'meta.tokenCurrency' => 'ارز',
 			'meta.networkChain' => 'شبکه',

@@ -401,6 +401,10 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String updateFailed({required Object p}) => '更新失败:${p}';
 	@override String get none => '无';
 	@override String get reset => '重置';
+	@override String get resetConfirm => '确定重置所有应用设置吗？';
+	@override String get resetSuccess => '应用设置已重置为默认值';
+	@override String get resetCoreConfirm => '确定重置内核设置与覆写配置吗？';
+	@override String get resetCoreSuccess => '内核设置已重置为默认值';
 	@override String get authentication => '授权';
 	@override String get submit => '提交';
 	@override String get user => '用户';
@@ -1201,6 +1205,10 @@ extension on TranslationsZhCn {
 			'meta.updateFailed' => ({required Object p}) => '更新失败:${p}',
 			'meta.none' => '无',
 			'meta.reset' => '重置',
+			'meta.resetConfirm' => '确定重置所有应用设置吗？',
+			'meta.resetSuccess' => '应用设置已重置为默认值',
+			'meta.resetCoreConfirm' => '确定重置内核设置与覆写配置吗？',
+			'meta.resetCoreSuccess' => '内核设置已重置为默认值',
 			'meta.authentication' => '授权',
 			'meta.submit' => '提交',
 			'meta.user' => '用户',
@@ -1452,12 +1460,12 @@ extension on TranslationsZhCn {
 			'meta.ipCopied' => 'IP 地址已复制到剪贴板',
 			'meta.ipLocation' => '位置',
 			'meta.ipIsp' => '服务商',
+			_ => null,
+		} ?? switch (path) {
 			'meta.ipTapToFetch' => '点击获取 IP 信息',
 			'meta.collapseAll' => '折叠所有代理组',
 			'meta.expandAll' => '展开所有代理组',
 			'meta.donateTitle' => '💖 请作者喝杯咖啡',
-			_ => null,
-		} ?? switch (path) {
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ 你的每一份投喂，都是 Wmimo 不断打磨与更新的最大动力呀 ~ ☕✨',
 			'meta.tokenCurrency' => '币种',
 			'meta.networkChain' => '网络',

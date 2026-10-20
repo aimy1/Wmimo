@@ -550,7 +550,7 @@ class GroupHelper {
             onPush: () async {
               final confirm = await DialogUtils.showConfirmDialog(
                 context,
-                "${tcontext.meta.reset}?",
+                tcontext.meta.resetConfirm,
               );
               if (confirm != true) {
                 return;
@@ -564,6 +564,11 @@ class GroupHelper {
               ).setTheme(setting.ui.theme, true);
               TextFieldEx.popupEdit = setting.ui.tvMode;
               await SettingManager.save();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(tcontext.meta.resetSuccess)),
+                );
+              }
               setstate?.call();
             },
           ),
@@ -1141,8 +1146,21 @@ class GroupHelper {
           pushOptions: GroupItemPushOptions(
             name: tcontext.meta.reset,
             onPush: () async {
+              final confirm = await DialogUtils.showConfirmDialog(
+                context,
+                tcontext.meta.resetCoreConfirm,
+              );
+              if (confirm != true) {
+                return;
+              }
               ClashSettingManager.reset();
               ProfilePatchManager.reset();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(tcontext.meta.resetCoreSuccess)),
+                );
+              }
+              setstate?.call();
             },
           ),
         ),
@@ -1332,7 +1350,6 @@ class GroupHelper {
       }
 
       groups.addAll([
-        GroupItem(options: options0),
         GroupItem(options: options1),
         GroupItem(options: options2),
         GroupItem(options: options3),
@@ -1447,6 +1464,7 @@ class GroupHelper {
           GroupItem(options: options7),
         ]);
       }
+      groups.add(GroupItem(options: options0));
 
       return groups;
     }

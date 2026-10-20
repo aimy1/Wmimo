@@ -401,6 +401,10 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get updateIntervalPreferByProfile => 'Preferir configuración del proveedor';
 	@override String get none => 'Ninguno';
 	@override String get reset => 'Restablecer';
+	@override String get resetConfirm => '¿Está seguro de que desea restablecer todas las configuraciones de la aplicación?';
+	@override String get resetSuccess => 'La configuración de la aplicación se ha restablecido a los valores predeterminados';
+	@override String get resetCoreConfirm => '¿Está seguro de que desea restablecer la configuración del núcleo y las anulaciones?';
+	@override String get resetCoreSuccess => 'La configuración del núcleo se ha restablecido a los valores predeterminados';
 	@override String get authentication => 'Autenticación';
 	@override String get submit => 'Enviar';
 	@override String get user => 'Usuario';
@@ -1201,6 +1205,10 @@ extension on TranslationsEs {
 			'meta.updateIntervalPreferByProfile' => 'Preferir configuración del proveedor',
 			'meta.none' => 'Ninguno',
 			'meta.reset' => 'Restablecer',
+			'meta.resetConfirm' => '¿Está seguro de que desea restablecer todas las configuraciones de la aplicación?',
+			'meta.resetSuccess' => 'La configuración de la aplicación se ha restablecido a los valores predeterminados',
+			'meta.resetCoreConfirm' => '¿Está seguro de que desea restablecer la configuración del núcleo y las anulaciones?',
+			'meta.resetCoreSuccess' => 'La configuración del núcleo se ha restablecido a los valores predeterminados',
 			'meta.authentication' => 'Autenticación',
 			'meta.submit' => 'Enviar',
 			'meta.user' => 'Usuario',
@@ -1452,12 +1460,12 @@ extension on TranslationsEs {
 			'meta.ipCopied' => 'Dirección IP copiada al portapapeles',
 			'meta.ipLocation' => 'Ubicación',
 			'meta.ipIsp' => 'Proveedor',
+			_ => null,
+		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'Toca para obtener IP',
 			'meta.collapseAll' => 'Contraer todos los grupos',
 			'meta.expandAll' => 'Expandir todos los grupos',
 			'meta.donateTitle' => '💖 Invitar un café al autor',
-			_ => null,
-		} ?? switch (path) {
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ ¡Tu apoyo es la mayor motivación para seguir mejorando Wmimo! ~ ☕✨',
 			'meta.tokenCurrency' => 'Token',
 			'meta.networkChain' => 'Red',

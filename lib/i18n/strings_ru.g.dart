@@ -401,6 +401,10 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String updateFailed({required Object p}) => 'Не удалось обновить:${p}';
 	@override String get none => 'Ничего не делать';
 	@override String get reset => 'Сбросить';
+	@override String get resetConfirm => 'Вы уверены, что хотите сбросить все настройки приложения?';
+	@override String get resetSuccess => 'Настройки приложения сброшены по умолчанию';
+	@override String get resetCoreConfirm => 'Вы уверены, что хотите сбросить настройки ядра и переопределения?';
+	@override String get resetCoreSuccess => 'Настройки ядра сброшены по умолчанию';
 	@override String get authentication => 'Авторизация';
 	@override String get submit => 'Отправить';
 	@override String get user => 'Пользователь';
@@ -1201,6 +1205,10 @@ extension on TranslationsRu {
 			'meta.updateFailed' => ({required Object p}) => 'Не удалось обновить:${p}',
 			'meta.none' => 'Ничего не делать',
 			'meta.reset' => 'Сбросить',
+			'meta.resetConfirm' => 'Вы уверены, что хотите сбросить все настройки приложения?',
+			'meta.resetSuccess' => 'Настройки приложения сброшены по умолчанию',
+			'meta.resetCoreConfirm' => 'Вы уверены, что хотите сбросить настройки ядра и переопределения?',
+			'meta.resetCoreSuccess' => 'Настройки ядра сброшены по умолчанию',
 			'meta.authentication' => 'Авторизация',
 			'meta.submit' => 'Отправить',
 			'meta.user' => 'Пользователь',
@@ -1452,12 +1460,12 @@ extension on TranslationsRu {
 			'meta.ipCopied' => 'IP-адрес скопирован в буфер обмена',
 			'meta.ipLocation' => 'Местоположение',
 			'meta.ipIsp' => 'Провайдер',
+			_ => null,
+		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'Нажмите для получения IP',
 			'meta.collapseAll' => 'Свернуть все группы',
 			'meta.expandAll' => 'Развернуть все группы',
 			'meta.donateTitle' => '💖 Угостить автора кофе',
-			_ => null,
-		} ?? switch (path) {
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Ваша поддержка — главная мотивация делать Wmimo ещё лучше ~ ☕✨',
 			'meta.tokenCurrency' => 'Токен',
 			'meta.networkChain' => 'Сеть',

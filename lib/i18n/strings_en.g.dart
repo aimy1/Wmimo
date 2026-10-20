@@ -878,6 +878,18 @@ class Translations$meta$en {
 	/// en: 'Reset'
 	String get reset => 'Reset';
 
+	/// en: 'Are you sure you want to reset all app settings?'
+	String get resetConfirm => 'Are you sure you want to reset all app settings?';
+
+	/// en: 'App settings have been reset to defaults'
+	String get resetSuccess => 'App settings have been reset to defaults';
+
+	/// en: 'Are you sure you want to reset core settings and override configurations?'
+	String get resetCoreConfirm => 'Are you sure you want to reset core settings and override configurations?';
+
+	/// en: 'Core settings have been reset to defaults'
+	String get resetCoreSuccess => 'Core settings have been reset to defaults';
+
 	/// en: 'Authentication'
 	String get authentication => 'Authentication';
 
@@ -2617,6 +2629,10 @@ extension on Translations {
 			'meta.updateIntervalPreferByProfile' => 'Prefer provider settings',
 			'meta.none' => 'None',
 			'meta.reset' => 'Reset',
+			'meta.resetConfirm' => 'Are you sure you want to reset all app settings?',
+			'meta.resetSuccess' => 'App settings have been reset to defaults',
+			'meta.resetCoreConfirm' => 'Are you sure you want to reset core settings and override configurations?',
+			'meta.resetCoreSuccess' => 'Core settings have been reset to defaults',
 			'meta.authentication' => 'Authentication',
 			'meta.submit' => 'Submit',
 			'meta.user' => 'User',
@@ -2868,12 +2884,12 @@ extension on Translations {
 			'meta.ipCopied' => 'IP address copied to clipboard',
 			'meta.ipLocation' => 'Location',
 			'meta.ipIsp' => 'Provider',
+			_ => null,
+		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'Tap to fetch IP info',
 			'meta.collapseAll' => 'Collapse All Groups',
 			'meta.expandAll' => 'Expand All Groups',
 			'meta.donateTitle' => '💖 Buy Author a Coffee',
-			_ => null,
-		} ?? switch (path) {
 			'meta.donateThankYou' => 'ฅ^•ﻌ•^ฅ Every donation is our greatest motivation to keep polishing Wmimo ~ ☕✨',
 			'meta.tokenCurrency' => 'Token',
 			'meta.networkChain' => 'Network',
