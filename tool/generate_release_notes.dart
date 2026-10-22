@@ -55,7 +55,7 @@ void main(List<String> args) {
       buildNumber = tag.split('+')[1];
     } else {
       final parts = rawVer.split('.');
-      buildNumber = parts.length > 3 ? parts[3] : '1511';
+      buildNumber = parts.length > 3 ? parts[3] : '1512';
     }
   }
 

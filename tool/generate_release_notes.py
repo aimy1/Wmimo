@@ -49,7 +49,7 @@ def main():
         elif len(parts) > 3:
             build_number = parts[3]
         else:
-            build_number = "1511"
+            build_number = "1512"
 
     release_date = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
     base_download_url = f"https://github.com/{repo}/releases/download/{tag}"
