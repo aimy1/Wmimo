@@ -403,6 +403,8 @@
     "searchConnections": "接続を検索 (ドメイン/IP/ルール/プロセス)",
     "noFilterResults": "一致する接続がありません",
     "searchRules": "ルールを検索 (タイプ/ペイロード/プロキシ)",
+    "searchProfiles": "プロファイルを検索 (名前/URL/備考)",
+    "noMatchingProfiles": "一致するプロファイルが見つかりません",
     "rules": "ルーティングルール",
     "clear": "クリア",
     "copySuccess": "コピーしました",

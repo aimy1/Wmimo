@@ -525,6 +525,8 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get searchConnections => '연결 검색 (도메인/IP/규칙/프로세스)';
 	@override String get noFilterResults => '일치하는 연결 없음';
 	@override String get searchRules => '규칙 검색 (유형/페이로드/프록시)';
+	@override String get searchProfiles => '프로필 검색 (이름/URL/비고)';
+	@override String get noMatchingProfiles => '일치하는 프로필을 찾을 수 없습니다';
 	@override String get rules => '분류 규칙';
 	@override String get clear => '지우기';
 	@override String get copySuccess => '복사되었습니다';
@@ -1337,6 +1339,8 @@ extension on TranslationsKo {
 			'meta.searchConnections' => '연결 검색 (도메인/IP/규칙/프로세스)',
 			'meta.noFilterResults' => '일치하는 연결 없음',
 			'meta.searchRules' => '규칙 검색 (유형/페이로드/프록시)',
+			'meta.searchProfiles' => '프로필 검색 (이름/URL/비고)',
+			'meta.noMatchingProfiles' => '일치하는 프로필을 찾을 수 없습니다',
 			'meta.rules' => '분류 규칙',
 			'meta.clear' => '지우기',
 			'meta.copySuccess' => '복사되었습니다',
@@ -1466,10 +1470,10 @@ extension on TranslationsKo {
 			'meta.ipInfo' => 'IP 정보',
 			'meta.ipFetching' => 'IP 정보 가져오는 중...',
 			'meta.ipCopied' => 'IP 주소가 클립보드에 복사되었습니다',
-			'meta.ipLocation' => '위치',
-			'meta.ipIsp' => '제공자',
 			_ => null,
 		} ?? switch (path) {
+			'meta.ipLocation' => '위치',
+			'meta.ipIsp' => '제공자',
 			'meta.ipTapToFetch' => '탭하여 IP 정보 가져오기',
 			'meta.ipProxy' => '프록시 출구',
 			'meta.ipDirect' => '로컬 직접 연결',

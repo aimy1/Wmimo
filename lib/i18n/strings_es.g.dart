@@ -525,6 +525,8 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get searchConnections => 'Buscar conexiones (Dominio/IP/Regla/Proceso)';
 	@override String get noFilterResults => 'No hay conexiones coincidentes';
 	@override String get searchRules => 'Buscar reglas (Tipo/Carga útil/Proxy)';
+	@override String get searchProfiles => 'Buscar perfiles (Nombre/URL/Nota)';
+	@override String get noMatchingProfiles => 'No se encontraron perfiles coincidentes';
 	@override String get rules => 'Reglas de enrutamiento';
 	@override String get clear => 'Limpiar';
 	@override String get copySuccess => 'Copiado con éxito';
@@ -1337,6 +1339,8 @@ extension on TranslationsEs {
 			'meta.searchConnections' => 'Buscar conexiones (Dominio/IP/Regla/Proceso)',
 			'meta.noFilterResults' => 'No hay conexiones coincidentes',
 			'meta.searchRules' => 'Buscar reglas (Tipo/Carga útil/Proxy)',
+			'meta.searchProfiles' => 'Buscar perfiles (Nombre/URL/Nota)',
+			'meta.noMatchingProfiles' => 'No se encontraron perfiles coincidentes',
 			'meta.rules' => 'Reglas de enrutamiento',
 			'meta.clear' => 'Limpiar',
 			'meta.copySuccess' => 'Copiado con éxito',
@@ -1466,10 +1470,10 @@ extension on TranslationsEs {
 			'meta.ipInfo' => 'Información de IP',
 			'meta.ipFetching' => 'Obteniendo información de IP...',
 			'meta.ipCopied' => 'Dirección IP copiada al portapapeles',
-			'meta.ipLocation' => 'Ubicación',
-			'meta.ipIsp' => 'Proveedor',
 			_ => null,
 		} ?? switch (path) {
+			'meta.ipLocation' => 'Ubicación',
+			'meta.ipIsp' => 'Proveedor',
 			'meta.ipTapToFetch' => 'Toca para obtener IP',
 			'meta.ipProxy' => 'Salida Proxy',
 			'meta.ipDirect' => 'Conexión Directa',

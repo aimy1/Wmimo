@@ -553,8 +553,15 @@ class ProfilesBoardItem extends StatelessWidget {
 }
 
 class ProfilesBoardScreenWidget extends StatefulWidget {
-  const ProfilesBoardScreenWidget({super.key, required this.settings});
+  const ProfilesBoardScreenWidget({
+    super.key,
+    required this.settings,
+    this.searchKeyword = '',
+    this.onClearSearch,
+  });
   final List<ProfileSetting> settings;
+  final String searchKeyword;
+  final VoidCallback? onClearSearch;
 
   @override
   State<ProfilesBoardScreenWidget> createState() => _ProfilesBoardScreenWidget();
@@ -574,6 +581,42 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
     final current = ProfileManager.getCurrent();
 
     if (widget.settings.isEmpty) {
+      if (widget.searchKeyword.isNotEmpty) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.search_off_rounded,
+                  size: 56,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.25),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  tcontext.meta.noMatchingProfiles,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                if (widget.onClearSearch != null)
+                  TextButton.icon(
+                    onPressed: widget.onClearSearch,
+                    icon: const Icon(Icons.clear_rounded, size: 16),
+                    label: Text(tcontext.meta.clear),
+                    style: TextButton.styleFrom(
+                      foregroundColor: theme.colorScheme.primary,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      }
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

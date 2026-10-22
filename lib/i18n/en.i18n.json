@@ -403,6 +403,8 @@
     "searchConnections": "Search connections (Domain/IP/Rule/Process)",
     "noFilterResults": "No matching connections",
     "searchRules": "Search rules (Type/Payload/Proxy)",
+    "searchProfiles": "Search profiles (Name/URL/Remark)",
+    "noMatchingProfiles": "No matching profiles found",
     "rules": "Routing Rules",
     "clear": "Clear",
     "copySuccess": "Copied to clipboard",

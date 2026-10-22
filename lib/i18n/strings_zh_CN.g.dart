@@ -525,6 +525,8 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get searchConnections => '搜索连接 (域名/IP/规则/进程)';
 	@override String get noFilterResults => '没有匹配的连接';
 	@override String get searchRules => '搜索规则 (类型/特征/目标代理)';
+	@override String get searchProfiles => '搜索配置 (名称/链接/备注)';
+	@override String get noMatchingProfiles => '未找到匹配的订阅配置';
 	@override String get rules => '分流规则';
 	@override String get clear => '清除';
 	@override String get copySuccess => '复制成功';
@@ -1337,6 +1339,8 @@ extension on TranslationsZhCn {
 			'meta.searchConnections' => '搜索连接 (域名/IP/规则/进程)',
 			'meta.noFilterResults' => '没有匹配的连接',
 			'meta.searchRules' => '搜索规则 (类型/特征/目标代理)',
+			'meta.searchProfiles' => '搜索配置 (名称/链接/备注)',
+			'meta.noMatchingProfiles' => '未找到匹配的订阅配置',
 			'meta.rules' => '分流规则',
 			'meta.clear' => '清除',
 			'meta.copySuccess' => '复制成功',
@@ -1466,10 +1470,10 @@ extension on TranslationsZhCn {
 			'meta.ipInfo' => 'IP 信息',
 			'meta.ipFetching' => '正在获取 IP 信息...',
 			'meta.ipCopied' => 'IP 地址已复制到剪贴板',
-			'meta.ipLocation' => '位置',
-			'meta.ipIsp' => '服务商',
 			_ => null,
 		} ?? switch (path) {
+			'meta.ipLocation' => '位置',
+			'meta.ipIsp' => '服务商',
 			'meta.ipTapToFetch' => '点击获取 IP 信息',
 			'meta.ipProxy' => '代理出口',
 			'meta.ipDirect' => '本地直连',

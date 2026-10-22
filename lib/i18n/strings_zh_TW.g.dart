@@ -525,6 +525,8 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get searchConnections => '搜尋連線 (網域名稱/IP/規則/處理程序)';
 	@override String get noFilterResults => '沒有相符的連接';
 	@override String get searchRules => '搜尋規則 (類型/特徵/目標代理)';
+	@override String get searchProfiles => '搜尋設定檔 (名稱/連結/備註)';
+	@override String get noMatchingProfiles => '未找到相符的訂閱設定檔';
 	@override String get rules => '分流規則';
 	@override String get clear => '清除';
 	@override String get copySuccess => '複製成功';
@@ -1337,6 +1339,8 @@ extension on TranslationsZhTw {
 			'meta.searchConnections' => '搜尋連線 (網域名稱/IP/規則/處理程序)',
 			'meta.noFilterResults' => '沒有相符的連接',
 			'meta.searchRules' => '搜尋規則 (類型/特徵/目標代理)',
+			'meta.searchProfiles' => '搜尋設定檔 (名稱/連結/備註)',
+			'meta.noMatchingProfiles' => '未找到相符的訂閱設定檔',
 			'meta.rules' => '分流規則',
 			'meta.clear' => '清除',
 			'meta.copySuccess' => '複製成功',
@@ -1466,10 +1470,10 @@ extension on TranslationsZhTw {
 			'meta.ipInfo' => 'IP 資訊',
 			'meta.ipFetching' => '正在取得 IP 資訊...',
 			'meta.ipCopied' => 'IP 位址已複製到剪貼簿',
-			'meta.ipLocation' => '位置',
-			'meta.ipIsp' => '服務商',
 			_ => null,
 		} ?? switch (path) {
+			'meta.ipLocation' => '位置',
+			'meta.ipIsp' => '服務商',
 			'meta.ipTapToFetch' => '點擊取得 IP 資訊',
 			'meta.ipProxy' => '代理出口',
 			'meta.ipDirect' => '本機直連',

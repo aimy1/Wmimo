@@ -525,6 +525,8 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get searchConnections => 'بحث في الاتصالات (النطاق/IP/القاعدة/العملية)';
 	@override String get noFilterResults => 'لا توجد اتصالات مطابقة';
 	@override String get searchRules => 'بحث في القواعد (النوع/الحمولة/الوكيل)';
+	@override String get searchProfiles => 'البحث في الملفات الشخصية (الاسم/الرابط/الملاحظة)';
+	@override String get noMatchingProfiles => 'لم يتم العثور على ملفات تعريف مطابقة';
 	@override String get rules => 'قواعد التوجيه';
 	@override String get clear => 'مسح';
 	@override String get copySuccess => 'تم النسخ';
@@ -1337,6 +1339,8 @@ extension on TranslationsAr {
 			'meta.searchConnections' => 'بحث في الاتصالات (النطاق/IP/القاعدة/العملية)',
 			'meta.noFilterResults' => 'لا توجد اتصالات مطابقة',
 			'meta.searchRules' => 'بحث في القواعد (النوع/الحمولة/الوكيل)',
+			'meta.searchProfiles' => 'البحث في الملفات الشخصية (الاسم/الرابط/الملاحظة)',
+			'meta.noMatchingProfiles' => 'لم يتم العثور على ملفات تعريف مطابقة',
 			'meta.rules' => 'قواعد التوجيه',
 			'meta.clear' => 'مسح',
 			'meta.copySuccess' => 'تم النسخ',
@@ -1466,10 +1470,10 @@ extension on TranslationsAr {
 			'meta.ipInfo' => 'معلومات IP',
 			'meta.ipFetching' => 'جارٍ جلب معلومات IP...',
 			'meta.ipCopied' => 'تم نسخ عنوان IP إلى الحافظة',
-			'meta.ipLocation' => 'الموقع',
-			'meta.ipIsp' => 'مزود الخدمة',
 			_ => null,
 		} ?? switch (path) {
+			'meta.ipLocation' => 'الموقع',
+			'meta.ipIsp' => 'مزود الخدمة',
 			'meta.ipTapToFetch' => 'انقر لجلب معلومات IP',
 			'meta.ipProxy' => 'مخرج الوكيل',
 			'meta.ipDirect' => 'اتصال مباشر محلي',

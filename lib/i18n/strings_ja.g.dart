@@ -525,6 +525,8 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get searchConnections => '接続を検索 (ドメイン/IP/ルール/プロセス)';
 	@override String get noFilterResults => '一致する接続がありません';
 	@override String get searchRules => 'ルールを検索 (タイプ/ペイロード/プロキシ)';
+	@override String get searchProfiles => 'プロファイルを検索 (名前/URL/備考)';
+	@override String get noMatchingProfiles => '一致するプロファイルが見つかりません';
 	@override String get rules => 'ルーティングルール';
 	@override String get clear => 'クリア';
 	@override String get copySuccess => 'コピーしました';
@@ -1337,6 +1339,8 @@ extension on TranslationsJa {
 			'meta.searchConnections' => '接続を検索 (ドメイン/IP/ルール/プロセス)',
 			'meta.noFilterResults' => '一致する接続がありません',
 			'meta.searchRules' => 'ルールを検索 (タイプ/ペイロード/プロキシ)',
+			'meta.searchProfiles' => 'プロファイルを検索 (名前/URL/備考)',
+			'meta.noMatchingProfiles' => '一致するプロファイルが見つかりません',
 			'meta.rules' => 'ルーティングルール',
 			'meta.clear' => 'クリア',
 			'meta.copySuccess' => 'コピーしました',
@@ -1466,10 +1470,10 @@ extension on TranslationsJa {
 			'meta.ipInfo' => 'IP 情報',
 			'meta.ipFetching' => 'IP情報を取得中...',
 			'meta.ipCopied' => 'IPアドレスをクリップボードにコピーしました',
-			'meta.ipLocation' => '位置',
-			'meta.ipIsp' => 'プロバイダ',
 			_ => null,
 		} ?? switch (path) {
+			'meta.ipLocation' => '位置',
+			'meta.ipIsp' => 'プロバイダ',
 			'meta.ipTapToFetch' => 'タップしてIP情報を取得',
 			'meta.ipProxy' => 'プロキシ出口',
 			'meta.ipDirect' => 'ローカル直結',

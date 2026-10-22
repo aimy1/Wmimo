@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
+import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/modules/remote_config_manager.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/utils/url_launcher_utils.dart';
@@ -34,14 +35,28 @@ class ProfilesBoardScreen extends StatefulWidget {
 
 class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
     with WidgetsBindingObserver, AfterLayoutMixin {
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+  String _searchKeyword = "";
+
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     ProfileManager.onEventAdd.add(_onAdd);
     ProfileManager.onEventRemove.add(_onRemove);
     ProfileManager.onEventUpdate.add(_onUpdate);
     ProfileManager.onEventCurrentChanged.add(_onCurrentChanged);
     _reloadProfiles();
+  }
+
+  void _onSearchChanged() {
+    final kw = _searchController.text.trim();
+    if (_searchKeyword != kw) {
+      setState(() {
+        _searchKeyword = kw;
+      });
+    }
   }
 
   Future<void> _reloadProfiles() async {
@@ -61,6 +76,9 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    _searchFocusNode.dispose();
     ProfileManager.onEventAdd.remove(_onAdd);
     ProfileManager.onEventRemove.remove(_onRemove);
     ProfileManager.onEventUpdate.remove(_onUpdate);
@@ -71,6 +89,30 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final allProfiles = ProfileManager.getProfiles();
+
+    final filteredProfiles = _searchKeyword.isEmpty
+        ? allProfiles
+        : allProfiles.where((s) {
+            final kw = _searchKeyword.toLowerCase();
+            final name = s.getShowName().toLowerCase();
+            final remark = s.remark.toLowerCase();
+            final url = s.url.toLowerCase();
+            final id = s.id.toLowerCase();
+            final provider = BoardProviderManager.getProviderById(s.boardProviderId);
+            final providerName = provider?.name.toLowerCase() ?? "";
+            final patch = ProfilePatchManager.getProfilePatch(s.patch);
+            final patchName = patch.getShowName(context).toLowerCase();
+
+            return name.contains(kw) ||
+                remark.contains(kw) ||
+                url.contains(kw) ||
+                id.contains(kw) ||
+                providerName.contains(kw) ||
+                patchName.contains(kw);
+          }).toList();
 
     return Scaffold(
       appBar: WmimoAppBar(
@@ -127,9 +169,83 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
           child: Column(
             children: [
+              if (allProfiles.isNotEmpty || _searchKeyword.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Container(
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? const Color(0xFF1E293B)
+                          : const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: theme.dividerColor.withValues(alpha: 0.15),
+                        width: 0.6,
+                      ),
+                    ),
+                    child: TextField(
+                      controller: _searchController,
+                      focusNode: _searchFocusNode,
+                      decoration: InputDecoration(
+                        hintText: tcontext.meta.searchProfiles,
+                        hintStyle: TextStyle(
+                          fontSize: 12.5,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.search_rounded,
+                          size: 18,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                        suffixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (_searchKeyword.isNotEmpty) ...[
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  '${filteredProfiles.length}/${allProfiles.length}',
+                                  style: TextStyle(
+                                    fontSize: 10.5,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              InkWell(
+                                borderRadius: BorderRadius.circular(16),
+                                onTap: () {
+                                  _searchController.clear();
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.all(6),
+                                  child: Icon(Icons.clear_rounded, size: 16),
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                            ],
+                          ],
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 9),
+                      ),
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
               Expanded(
                 child: ProfilesBoardScreenWidget(
-                  settings: ProfileManager.getProfiles(),
+                  settings: filteredProfiles,
+                  searchKeyword: _searchKeyword,
+                  onClearSearch: () => _searchController.clear(),
                 ),
               ),
             ],

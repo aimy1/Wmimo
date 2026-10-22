@@ -525,6 +525,8 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get searchConnections => 'جستجوی اتصال‌ها (دامنه/IP/قاعده/پردازش)';
 	@override String get noFilterResults => 'اتصالی یافت نشد';
 	@override String get searchRules => 'جستجوی قوانین (نوع/محتوا/پروکسی)';
+	@override String get searchProfiles => 'جستجوی پروفایل‌ها (نام/لینک/یادداشت)';
+	@override String get noMatchingProfiles => 'هیچ پروفایل متطابقی یافت نشد';
 	@override String get rules => 'قوانین مسیریابی';
 	@override String get clear => 'پاک کردن';
 	@override String get copySuccess => 'کپی شد';
@@ -1337,6 +1339,8 @@ extension on TranslationsFa {
 			'meta.searchConnections' => 'جستجوی اتصال‌ها (دامنه/IP/قاعده/پردازش)',
 			'meta.noFilterResults' => 'اتصالی یافت نشد',
 			'meta.searchRules' => 'جستجوی قوانین (نوع/محتوا/پروکسی)',
+			'meta.searchProfiles' => 'جستجوی پروفایل‌ها (نام/لینک/یادداشت)',
+			'meta.noMatchingProfiles' => 'هیچ پروفایل متطابقی یافت نشد',
 			'meta.rules' => 'قوانین مسیریابی',
 			'meta.clear' => 'پاک کردن',
 			'meta.copySuccess' => 'کپی شد',
@@ -1466,10 +1470,10 @@ extension on TranslationsFa {
 			'meta.ipInfo' => 'اطلاعات IP',
 			'meta.ipFetching' => 'در حال دریافت اطلاعات IP...',
 			'meta.ipCopied' => 'آدرس IP در کلیپ‌بورد کپی شد',
-			'meta.ipLocation' => 'مکان',
-			'meta.ipIsp' => 'ارائه‌دهنده',
 			_ => null,
 		} ?? switch (path) {
+			'meta.ipLocation' => 'مکان',
+			'meta.ipIsp' => 'ارائه‌دهنده',
 			'meta.ipTapToFetch' => 'برای دریافت اطلاعات IP ضربه بزنید',
 			'meta.ipProxy' => 'خروجی پروکسی',
 			'meta.ipDirect' => 'اتصال مستقیم محلی',

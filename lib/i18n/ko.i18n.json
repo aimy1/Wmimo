@@ -403,6 +403,8 @@
     "searchConnections": "연결 검색 (도메인/IP/규칙/프로세스)",
     "noFilterResults": "일치하는 연결 없음",
     "searchRules": "규칙 검색 (유형/페이로드/프록시)",
+    "searchProfiles": "프로필 검색 (이름/URL/비고)",
+    "noMatchingProfiles": "일치하는 프로필을 찾을 수 없습니다",
     "rules": "분류 규칙",
     "clear": "지우기",
     "copySuccess": "복사되었습니다",

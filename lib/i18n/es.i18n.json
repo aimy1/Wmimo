@@ -403,6 +403,8 @@
     "searchConnections": "Buscar conexiones (Dominio/IP/Regla/Proceso)",
     "noFilterResults": "No hay conexiones coincidentes",
     "searchRules": "Buscar reglas (Tipo/Carga útil/Proxy)",
+    "searchProfiles": "Buscar perfiles (Nombre/URL/Nota)",
+    "noMatchingProfiles": "No se encontraron perfiles coincidentes",
     "rules": "Reglas de enrutamiento",
     "clear": "Limpiar",
     "copySuccess": "Copiado con éxito",

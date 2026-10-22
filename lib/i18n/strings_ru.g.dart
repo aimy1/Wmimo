@@ -525,6 +525,8 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get searchConnections => 'Поиск соединений (Домен/IP/Правило/Процесс)';
 	@override String get noFilterResults => 'Нет подходящих соединений';
 	@override String get searchRules => 'Поиск правил (Тип/Пейлоад/Прокси)';
+	@override String get searchProfiles => 'Поиск профилей (Имя/URL/Примечание)';
+	@override String get noMatchingProfiles => 'Подходящие профили не найдены';
 	@override String get rules => 'Правила маршрутизации';
 	@override String get clear => 'Очистить';
 	@override String get copySuccess => 'Скопировано';
@@ -1337,6 +1339,8 @@ extension on TranslationsRu {
 			'meta.searchConnections' => 'Поиск соединений (Домен/IP/Правило/Процесс)',
 			'meta.noFilterResults' => 'Нет подходящих соединений',
 			'meta.searchRules' => 'Поиск правил (Тип/Пейлоад/Прокси)',
+			'meta.searchProfiles' => 'Поиск профилей (Имя/URL/Примечание)',
+			'meta.noMatchingProfiles' => 'Подходящие профили не найдены',
 			'meta.rules' => 'Правила маршрутизации',
 			'meta.clear' => 'Очистить',
 			'meta.copySuccess' => 'Скопировано',
@@ -1466,10 +1470,10 @@ extension on TranslationsRu {
 			'meta.ipInfo' => 'Информация об IP',
 			'meta.ipFetching' => 'Получение данных IP...',
 			'meta.ipCopied' => 'IP-адрес скопирован в буфер обмена',
-			'meta.ipLocation' => 'Местоположение',
-			'meta.ipIsp' => 'Провайдер',
 			_ => null,
 		} ?? switch (path) {
+			'meta.ipLocation' => 'Местоположение',
+			'meta.ipIsp' => 'Провайдер',
 			'meta.ipTapToFetch' => 'Нажмите для получения IP',
 			'meta.ipProxy' => 'Прокси выход',
 			'meta.ipDirect' => 'Прямое подключение',

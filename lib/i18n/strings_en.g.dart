@@ -1250,6 +1250,12 @@ class Translations$meta$en {
 	/// en: 'Search rules (Type/Payload/Proxy)'
 	String get searchRules => 'Search rules (Type/Payload/Proxy)';
 
+	/// en: 'Search profiles (Name/URL/Remark)'
+	String get searchProfiles => 'Search profiles (Name/URL/Remark)';
+
+	/// en: 'No matching profiles found'
+	String get noMatchingProfiles => 'No matching profiles found';
+
 	/// en: 'Routing Rules'
 	String get rules => 'Routing Rules';
 
@@ -2777,6 +2783,8 @@ extension on Translations {
 			'meta.searchConnections' => 'Search connections (Domain/IP/Rule/Process)',
 			'meta.noFilterResults' => 'No matching connections',
 			'meta.searchRules' => 'Search rules (Type/Payload/Proxy)',
+			'meta.searchProfiles' => 'Search profiles (Name/URL/Remark)',
+			'meta.noMatchingProfiles' => 'No matching profiles found',
 			'meta.rules' => 'Routing Rules',
 			'meta.clear' => 'Clear',
 			'meta.copySuccess' => 'Copied to clipboard',
@@ -2906,10 +2914,10 @@ extension on Translations {
 			'meta.ipInfo' => 'IP Info',
 			'meta.ipFetching' => 'Fetching IP info...',
 			'meta.ipCopied' => 'IP address copied to clipboard',
-			'meta.ipLocation' => 'Location',
-			'meta.ipIsp' => 'Provider',
 			_ => null,
 		} ?? switch (path) {
+			'meta.ipLocation' => 'Location',
+			'meta.ipIsp' => 'Provider',
 			'meta.ipTapToFetch' => 'Tap to fetch IP info',
 			'meta.ipProxy' => 'Proxy Exit',
 			'meta.ipDirect' => 'Local Direct',
