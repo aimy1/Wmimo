@@ -83,6 +83,8 @@ dist/
 /android/app/src/main/jniLibs/
 /bind/linux/
 /bind/macos/
+/bind/windows/core/wmimoService.exe
+/bind/windows/core_arm64/wmimoService.exe
 *.zip
 !assets/datas/*.zip
 *.gz

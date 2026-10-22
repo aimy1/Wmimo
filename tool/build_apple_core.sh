@@ -11,7 +11,7 @@ ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 OUTPUT_DIR="${ROOT_DIR}/bind/apple"
 BUILD_TMP_DIR="${ROOT_DIR}/build/apple_core_tmp"
 
-MIHOMO_TAG="v1.19.32"
+MIHOMO_TAG="v1.19.33"
 MIHOMO_REPO="https://github.com/MetaCubeX/mihomo.git"
 
 echo "=== [1/5] Checking Build Environment ==="

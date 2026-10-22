@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:archive/archive.dart';
 
-const String kVersion = 'v1.19.32';
+const String kVersion = 'v1.19.33';
 const String kBaseUrl = 'https://github.com/MetaCubeX/mihomo/releases/download/$kVersion';
 
 final Map<String, List<String>> targets = {
