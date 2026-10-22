@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:libclash_vpn_service/state.dart';
 import 'package:wmimo/app/clash/clash_config.dart';
@@ -52,6 +53,7 @@ class NodeLatencyState {
 class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     with WidgetsBindingObserver, AfterLayoutMixin {
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _regionScrollController = ScrollController();
   List<ClashProxiesNode> _allNodes = [];
   Map<String, ClashProxiesNode> _nodeMap = {};
   bool _loading = false;
@@ -159,6 +161,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     ProfileManager.onEventUpdate.remove(_onProfileUpdate);
     ProfileManager.onEventRemove.remove(_onProfileChanged);
     _searchController.dispose();
+    _regionScrollController.dispose();
     for (final notifier in _nodeLatencyNotifiers.values) {
       notifier.dispose();
     }
@@ -1676,67 +1679,90 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     return Container(
       height: 32,
       margin: const EdgeInsets.only(top: 8, bottom: 2),
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: regionSummaries.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 6),
-        itemBuilder: (context, index) {
-          final summary = regionSummaries[index];
-          final isSelected = _selectedRegionCode == summary.region.code;
-
-          return InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: () {
-              setState(() {
-                if (_selectedRegionCode == summary.region.code) {
-                  _selectedRegionCode = "ALL";
-                } else {
-                  _selectedRegionCode = summary.region.code;
-                }
-              });
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? ThemeDefine.kColorBlue
-                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isSelected
-                      ? ThemeDefine.kColorBlue
-                      : theme.dividerColor.withValues(alpha: 0.25),
-                  width: 0.8,
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    summary.region.flag,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: Platform.isWindows ? 'Emoji' : null,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    "${summary.region.getDisplayName(isZh)} (${summary.count})",
-                    style: TextStyle(
-                      fontSize: 11.5,
-                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                      color: isSelected
-                          ? Colors.white
-                          : theme.colorScheme.onSurface.withValues(alpha: 0.85),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
+      child: Listener(
+        onPointerSignal: (pointerSignal) {
+          if (pointerSignal is PointerScrollEvent) {
+            final delta = pointerSignal.scrollDelta.dy != 0
+                ? pointerSignal.scrollDelta.dy
+                : pointerSignal.scrollDelta.dx;
+            if (delta != 0 && _regionScrollController.hasClients) {
+              _regionScrollController.position.pointerScroll(delta);
+            }
+          }
         },
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.trackpad,
+              PointerDeviceKind.stylus,
+            },
+          ),
+          child: ListView.separated(
+            controller: _regionScrollController,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: regionSummaries.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 6),
+            itemBuilder: (context, index) {
+              final summary = regionSummaries[index];
+              final isSelected = _selectedRegionCode == summary.region.code;
+
+              return InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () {
+                  setState(() {
+                    if (_selectedRegionCode == summary.region.code) {
+                      _selectedRegionCode = "ALL";
+                    } else {
+                      _selectedRegionCode = summary.region.code;
+                    }
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? ThemeDefine.kColorBlue
+                        : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isSelected
+                          ? ThemeDefine.kColorBlue
+                          : theme.dividerColor.withValues(alpha: 0.25),
+                      width: 0.8,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        summary.region.flag,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: Platform.isWindows ? 'Emoji' : null,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "${summary.region.getDisplayName(isZh)} (${summary.count})",
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                          color: isSelected
+                              ? Colors.white
+                              : theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
