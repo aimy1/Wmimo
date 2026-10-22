@@ -657,6 +657,14 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get ipLocation => 'مکان';
 	@override String get ipIsp => 'ارائه‌دهنده';
 	@override String get ipTapToFetch => 'برای دریافت اطلاعات IP ضربه بزنید';
+	@override String get ipProxy => 'خروجی پروکسی';
+	@override String get ipDirect => 'اتصال مستقیم محلی';
+	@override String get ipAsn => 'ASN';
+	@override String get ipOrg => 'سازمان';
+	@override String get ipTimezone => 'منطقه زمانی';
+	@override String get ipCoordinates => 'مختصات';
+	@override String get ipMoreDetails => 'جزئیات بیشتر';
+	@override String get ipLessDetails => 'بستن جزئیات';
 	@override String get collapseAll => 'بستن همه گروه‌ها';
 	@override String get expandAll => 'باز کردن همه گروه‌ها';
 	@override String get donateTitle => '💖 خرید یک قهوه برای نویسنده';
@@ -1463,6 +1471,14 @@ extension on TranslationsFa {
 			_ => null,
 		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'برای دریافت اطلاعات IP ضربه بزنید',
+			'meta.ipProxy' => 'خروجی پروکسی',
+			'meta.ipDirect' => 'اتصال مستقیم محلی',
+			'meta.ipAsn' => 'ASN',
+			'meta.ipOrg' => 'سازمان',
+			'meta.ipTimezone' => 'منطقه زمانی',
+			'meta.ipCoordinates' => 'مختصات',
+			'meta.ipMoreDetails' => 'جزئیات بیشتر',
+			'meta.ipLessDetails' => 'بستن جزئیات',
 			'meta.collapseAll' => 'بستن همه گروه‌ها',
 			'meta.expandAll' => 'باز کردن همه گروه‌ها',
 			'meta.donateTitle' => '💖 خرید یک قهوه برای نویسنده',

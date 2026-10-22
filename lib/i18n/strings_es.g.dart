@@ -657,6 +657,14 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get ipLocation => 'Ubicación';
 	@override String get ipIsp => 'Proveedor';
 	@override String get ipTapToFetch => 'Toca para obtener IP';
+	@override String get ipProxy => 'Salida Proxy';
+	@override String get ipDirect => 'Conexión Directa';
+	@override String get ipAsn => 'ASN';
+	@override String get ipOrg => 'Organización';
+	@override String get ipTimezone => 'Zona horaria';
+	@override String get ipCoordinates => 'Coordenadas';
+	@override String get ipMoreDetails => 'Más detalles';
+	@override String get ipLessDetails => 'Contraer';
 	@override String get collapseAll => 'Contraer todos los grupos';
 	@override String get expandAll => 'Expandir todos los grupos';
 	@override String get donateTitle => '💖 Invitar un café al autor';
@@ -1463,6 +1471,14 @@ extension on TranslationsEs {
 			_ => null,
 		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'Toca para obtener IP',
+			'meta.ipProxy' => 'Salida Proxy',
+			'meta.ipDirect' => 'Conexión Directa',
+			'meta.ipAsn' => 'ASN',
+			'meta.ipOrg' => 'Organización',
+			'meta.ipTimezone' => 'Zona horaria',
+			'meta.ipCoordinates' => 'Coordenadas',
+			'meta.ipMoreDetails' => 'Más detalles',
+			'meta.ipLessDetails' => 'Contraer',
 			'meta.collapseAll' => 'Contraer todos los grupos',
 			'meta.expandAll' => 'Expandir todos los grupos',
 			'meta.donateTitle' => '💖 Invitar un café al autor',

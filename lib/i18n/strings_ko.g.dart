@@ -657,6 +657,14 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get ipLocation => '위치';
 	@override String get ipIsp => '제공자';
 	@override String get ipTapToFetch => '탭하여 IP 정보 가져오기';
+	@override String get ipProxy => '프록시 출구';
+	@override String get ipDirect => '로컬 직접 연결';
+	@override String get ipAsn => 'ASN';
+	@override String get ipOrg => '소속 조직';
+	@override String get ipTimezone => '시간대';
+	@override String get ipCoordinates => '좌표';
+	@override String get ipMoreDetails => '자세한 정보';
+	@override String get ipLessDetails => '접기';
 	@override String get collapseAll => '모든 그룹 접기';
 	@override String get expandAll => '모든 그룹 펼치기';
 	@override String get donateTitle => '💖 개발자에게 커피 한 잔 후원하기';
@@ -1463,6 +1471,14 @@ extension on TranslationsKo {
 			_ => null,
 		} ?? switch (path) {
 			'meta.ipTapToFetch' => '탭하여 IP 정보 가져오기',
+			'meta.ipProxy' => '프록시 출구',
+			'meta.ipDirect' => '로컬 직접 연결',
+			'meta.ipAsn' => 'ASN',
+			'meta.ipOrg' => '소속 조직',
+			'meta.ipTimezone' => '시간대',
+			'meta.ipCoordinates' => '좌표',
+			'meta.ipMoreDetails' => '자세한 정보',
+			'meta.ipLessDetails' => '접기',
 			'meta.collapseAll' => '모든 그룹 접기',
 			'meta.expandAll' => '모든 그룹 펼치기',
 			'meta.donateTitle' => '💖 개발자에게 커피 한 잔 후원하기',

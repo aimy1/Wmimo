@@ -657,6 +657,14 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get ipLocation => '位置';
 	@override String get ipIsp => '服务商';
 	@override String get ipTapToFetch => '点击获取 IP 信息';
+	@override String get ipProxy => '代理出口';
+	@override String get ipDirect => '本地直连';
+	@override String get ipAsn => '自治系统';
+	@override String get ipOrg => '归属组织';
+	@override String get ipTimezone => '时区';
+	@override String get ipCoordinates => '坐标';
+	@override String get ipMoreDetails => '更多详情';
+	@override String get ipLessDetails => '收起详情';
 	@override String get collapseAll => '折叠所有代理组';
 	@override String get expandAll => '展开所有代理组';
 	@override String get donateTitle => '💖 请作者喝杯咖啡';
@@ -1463,6 +1471,14 @@ extension on TranslationsZhCn {
 			_ => null,
 		} ?? switch (path) {
 			'meta.ipTapToFetch' => '点击获取 IP 信息',
+			'meta.ipProxy' => '代理出口',
+			'meta.ipDirect' => '本地直连',
+			'meta.ipAsn' => '自治系统',
+			'meta.ipOrg' => '归属组织',
+			'meta.ipTimezone' => '时区',
+			'meta.ipCoordinates' => '坐标',
+			'meta.ipMoreDetails' => '更多详情',
+			'meta.ipLessDetails' => '收起详情',
 			'meta.collapseAll' => '折叠所有代理组',
 			'meta.expandAll' => '展开所有代理组',
 			'meta.donateTitle' => '💖 请作者喝杯咖啡',

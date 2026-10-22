@@ -1646,6 +1646,30 @@ class Translations$meta$en {
 	/// en: 'Tap to fetch IP info'
 	String get ipTapToFetch => 'Tap to fetch IP info';
 
+	/// en: 'Proxy Exit'
+	String get ipProxy => 'Proxy Exit';
+
+	/// en: 'Local Direct'
+	String get ipDirect => 'Local Direct';
+
+	/// en: 'ASN'
+	String get ipAsn => 'ASN';
+
+	/// en: 'Organization'
+	String get ipOrg => 'Organization';
+
+	/// en: 'Timezone'
+	String get ipTimezone => 'Timezone';
+
+	/// en: 'Coordinates'
+	String get ipCoordinates => 'Coordinates';
+
+	/// en: 'More Details'
+	String get ipMoreDetails => 'More Details';
+
+	/// en: 'Collapse'
+	String get ipLessDetails => 'Collapse';
+
 	/// en: 'Collapse All Groups'
 	String get collapseAll => 'Collapse All Groups';
 
@@ -2887,6 +2911,14 @@ extension on Translations {
 			_ => null,
 		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'Tap to fetch IP info',
+			'meta.ipProxy' => 'Proxy Exit',
+			'meta.ipDirect' => 'Local Direct',
+			'meta.ipAsn' => 'ASN',
+			'meta.ipOrg' => 'Organization',
+			'meta.ipTimezone' => 'Timezone',
+			'meta.ipCoordinates' => 'Coordinates',
+			'meta.ipMoreDetails' => 'More Details',
+			'meta.ipLessDetails' => 'Collapse',
 			'meta.collapseAll' => 'Collapse All Groups',
 			'meta.expandAll' => 'Expand All Groups',
 			'meta.donateTitle' => '💖 Buy Author a Coffee',

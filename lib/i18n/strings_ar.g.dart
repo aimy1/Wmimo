@@ -657,6 +657,14 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get ipLocation => 'الموقع';
 	@override String get ipIsp => 'مزود الخدمة';
 	@override String get ipTapToFetch => 'انقر لجلب معلومات IP';
+	@override String get ipProxy => 'مخرج الوكيل';
+	@override String get ipDirect => 'اتصال مباشر محلي';
+	@override String get ipAsn => 'ASN';
+	@override String get ipOrg => 'المنظمة';
+	@override String get ipTimezone => 'المنطقة الزمنية';
+	@override String get ipCoordinates => 'الإحداثيات';
+	@override String get ipMoreDetails => 'مزيد من التفاصيل';
+	@override String get ipLessDetails => 'طي التفاصيل';
 	@override String get collapseAll => 'طي جميع المجموعات';
 	@override String get expandAll => 'توسيع جميع المجموعات';
 	@override String get donateTitle => '💖 اشترِ قهوة للمطور';
@@ -1463,6 +1471,14 @@ extension on TranslationsAr {
 			_ => null,
 		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'انقر لجلب معلومات IP',
+			'meta.ipProxy' => 'مخرج الوكيل',
+			'meta.ipDirect' => 'اتصال مباشر محلي',
+			'meta.ipAsn' => 'ASN',
+			'meta.ipOrg' => 'المنظمة',
+			'meta.ipTimezone' => 'المنطقة الزمنية',
+			'meta.ipCoordinates' => 'الإحداثيات',
+			'meta.ipMoreDetails' => 'مزيد من التفاصيل',
+			'meta.ipLessDetails' => 'طي التفاصيل',
 			'meta.collapseAll' => 'طي جميع المجموعات',
 			'meta.expandAll' => 'توسيع جميع المجموعات',
 			'meta.donateTitle' => '💖 اشترِ قهوة للمطور',

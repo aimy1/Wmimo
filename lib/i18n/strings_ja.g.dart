@@ -657,6 +657,14 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get ipLocation => '位置';
 	@override String get ipIsp => 'プロバイダ';
 	@override String get ipTapToFetch => 'タップしてIP情報を取得';
+	@override String get ipProxy => 'プロキシ出口';
+	@override String get ipDirect => 'ローカル直結';
+	@override String get ipAsn => 'ASN';
+	@override String get ipOrg => '組織';
+	@override String get ipTimezone => 'タイムゾーン';
+	@override String get ipCoordinates => '座標';
+	@override String get ipMoreDetails => '詳細情報';
+	@override String get ipLessDetails => '折りたたむ';
 	@override String get collapseAll => 'すべてのグループを折りたたむ';
 	@override String get expandAll => 'すべてのグループを展開';
 	@override String get donateTitle => '💖 開発者にコーヒーをおごる';
@@ -1463,6 +1471,14 @@ extension on TranslationsJa {
 			_ => null,
 		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'タップしてIP情報を取得',
+			'meta.ipProxy' => 'プロキシ出口',
+			'meta.ipDirect' => 'ローカル直結',
+			'meta.ipAsn' => 'ASN',
+			'meta.ipOrg' => '組織',
+			'meta.ipTimezone' => 'タイムゾーン',
+			'meta.ipCoordinates' => '座標',
+			'meta.ipMoreDetails' => '詳細情報',
+			'meta.ipLessDetails' => '折りたたむ',
 			'meta.collapseAll' => 'すべてのグループを折りたたむ',
 			'meta.expandAll' => 'すべてのグループを展開',
 			'meta.donateTitle' => '💖 開発者にコーヒーをおごる',

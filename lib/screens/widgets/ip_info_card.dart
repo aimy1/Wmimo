@@ -20,15 +20,18 @@ class IpInfoCard extends StatefulWidget {
 }
 
 class _IpInfoCardState extends State<IpInfoCard> {
-  IpInfoData? _ipInfo;
+  IpInfoData? _proxyIpInfo;
+  IpInfoData? _directIpInfo;
+  bool _showDirect = false;
   bool _loading = false;
   bool _maskIp = false;
+  bool _expanded = false;
   Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
-    _fetchIpInfo();
+    _fetchCurrentInfo();
   }
 
   @override
@@ -42,35 +45,63 @@ class _IpInfoCardState extends State<IpInfoCard> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.isConnected != widget.isConnected) {
       _debounceTimer?.cancel();
+      // Reset view to default when disconnected
+      if (!widget.isConnected) {
+        _showDirect = true;
+      } else {
+        _showDirect = false;
+      }
+
       // On connect, delay slightly (1.2s) so Mihomo core finishes upstream proxy handshake
       final delay = widget.isConnected
           ? const Duration(milliseconds: 1200)
           : const Duration(milliseconds: 150);
       _debounceTimer = Timer(delay, () {
         if (mounted) {
-          _fetchIpInfo();
+          _fetchCurrentInfo();
         }
       });
     }
   }
 
-  Future<void> _fetchIpInfo() async {
+  IpInfoData? get _currentInfo => _isProxyModeActive ? _proxyIpInfo : _directIpInfo;
+
+  bool get _isProxyModeActive => widget.isConnected && !_showDirect;
+
+  Future<void> _fetchCurrentInfo() async {
     if (!mounted) return;
     setState(() {
       _loading = true;
     });
 
-    final port = widget.isConnected ? widget.mixedPort : null;
+    final isProxy = _isProxyModeActive;
+    final port = isProxy ? widget.mixedPort : null;
     final info = await IpInfoHelper.fetchIpInfo(
-      isProxy: widget.isConnected,
+      isProxy: isProxy,
       proxyPort: port,
     );
 
     if (!mounted) return;
     setState(() {
-      _ipInfo = info;
+      if (isProxy) {
+        _proxyIpInfo = info;
+      } else {
+        _directIpInfo = info;
+      }
       _loading = false;
     });
+  }
+
+  void _copyIp(String ip) {
+    Clipboard.setData(ClipboardData(text: ip));
+    final tcontext = Translations.of(context);
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(tcontext.meta.ipCopied),
+        duration: const Duration(seconds: 1),
+      ),
+    );
   }
 
   String _formatIp(String ip) {
@@ -86,21 +117,48 @@ class _IpInfoCardState extends State<IpInfoCard> {
     return '***.***.***.***';
   }
 
+  Widget _buildInfoRow({
+    required IconData icon,
+    required String label,
+    required Widget content,
+    required TextStyle titleStyle,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            icon,
+            size: 13.5,
+            color: titleStyle.color?.withValues(alpha: 0.65),
+          ),
+          const SizedBox(width: 4),
+          Text("$label: ", style: titleStyle),
+          Expanded(child: content),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final labelTitleStyle = TextStyle(
-      fontSize: 12.5,
+      fontSize: 12,
       fontWeight: FontWeight.w500,
       color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
     );
     final labelValueStyle = TextStyle(
-      fontSize: 13,
+      fontSize: 12.5,
       fontWeight: FontWeight.w500,
       color: isDark ? Colors.white : Colors.black87,
     );
+
+    final currentInfo = _currentInfo;
+    final isProxy = _isProxyModeActive;
 
     return Card(
       elevation: 0,
@@ -118,7 +176,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 1. Header: Location icon + Title + Refresh Button
+            // 1. Header: Location icon + Title + Outbound Badge + Toggle/Refresh
             Row(
               children: [
                 Container(
@@ -143,10 +201,92 @@ class _IpInfoCardState extends State<IpInfoCard> {
                     letterSpacing: 0.2,
                   ),
                 ),
+                const SizedBox(width: 6),
+                // Outbound Type Pill Badge
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: (isProxy ? const Color(0xFF10B981) : const Color(0xFF3B82F6))
+                        .withValues(alpha: isDark ? 0.25 : 0.12),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: (isProxy ? const Color(0xFF10B981) : const Color(0xFF3B82F6))
+                          .withValues(alpha: 0.35),
+                      width: 0.6,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isProxy ? const Color(0xFF10B981) : const Color(0xFF3B82F6),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        isProxy ? tcontext.meta.ipProxy : tcontext.meta.ipDirect,
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w600,
+                          color: isProxy ? const Color(0xFF10B981) : const Color(0xFF3B82F6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const Spacer(),
+                if (widget.isConnected) ...[
+                  // Switch between Proxy Exit and Local Direct
+                  InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () {
+                      setState(() {
+                        _showDirect = !_showDirect;
+                      });
+                      if (_currentInfo == null) {
+                        _fetchCurrentInfo();
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: theme.dividerColor.withValues(alpha: 0.2),
+                          width: 0.5,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.swap_horiz_rounded,
+                            size: 13,
+                            color: theme.colorScheme.primary,
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            _showDirect ? tcontext.meta.ipProxy : tcontext.meta.ipDirect,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                ],
                 InkWell(
                   borderRadius: BorderRadius.circular(16),
-                  onTap: _loading ? null : _fetchIpInfo,
+                  onTap: _loading ? null : _fetchCurrentInfo,
                   child: Padding(
                     padding: const EdgeInsets.all(4),
                     child: _loading
@@ -166,8 +306,8 @@ class _IpInfoCardState extends State<IpInfoCard> {
             ),
             const SizedBox(height: 8),
 
-            // 2. Simplified Content Area
-            if (_loading && _ipInfo == null)
+            // 2. Content Area
+            if (_loading && currentInfo == null)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 child: Center(
@@ -191,32 +331,42 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   ),
                 ),
               )
-            else if (_ipInfo != null) ...[
-              // Line 1: IP Address + Mask + Copy
+            else if (currentInfo != null) ...[
+              // Line 1: IP Hero Row (IP + Type Badge + Mask + Copy)
               Row(
                 children: [
                   Text("IP: ", style: labelTitleStyle),
                   Flexible(
                     child: InkWell(
                       borderRadius: BorderRadius.circular(4),
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(text: _ipInfo!.ip));
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(tcontext.meta.ipCopied),
-                            duration: const Duration(seconds: 1),
-                          ),
-                        );
-                      },
+                      onTap: () => _copyIp(currentInfo.ip),
                       child: Text(
-                        _formatIp(_ipInfo!.ip),
+                        _formatIp(currentInfo.ip),
                         style: labelValueStyle.copyWith(
-                          fontWeight: FontWeight.w600,
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w700,
                           fontFamily: "monospace",
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  // IPv4 / IPv6 Badge
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                    decoration: BoxDecoration(
+                      color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      currentInfo.ipType,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.7),
+                        fontFamily: "monospace",
                       ),
                     ),
                   ),
@@ -239,57 +389,173 @@ class _IpInfoCardState extends State<IpInfoCard> {
                       ),
                     ),
                   ),
+                  const Spacer(),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () => _copyIp(currentInfo.ip),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Icon(
+                        Icons.copy_rounded,
+                        size: 14,
+                        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
 
               // Line 2: Location
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("${tcontext.meta.ipLocation}: ", style: labelTitleStyle),
-                  Text(
-                    _ipInfo!.flagEmoji,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: Platform.isWindows ? 'Emoji' : null,
+              _buildInfoRow(
+                icon: Icons.public_rounded,
+                label: tcontext.meta.ipLocation,
+                titleStyle: labelTitleStyle,
+                content: Row(
+                  children: [
+                    Text(
+                      currentInfo.flagEmoji,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: Platform.isWindows ? 'Emoji' : null,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      _ipInfo!.locationString,
-                      style: labelValueStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        currentInfo.locationString,
+                        style: labelValueStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(height: 8),
 
-              // Line 3: ISP / ASN
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("${tcontext.meta.ipIsp}: ", style: labelTitleStyle),
-                  Expanded(
-                    child: Text(
-                      [
-                        _ipInfo!.isp.isNotEmpty ? _ipInfo!.isp : _ipInfo!.org,
-                        if (_ipInfo!.asn.isNotEmpty) "(${_ipInfo!.asn})"
-                      ].where((s) => s.isNotEmpty).join(' '),
-                      style: labelValueStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+              // Line 3: ISP & ASN
+              _buildInfoRow(
+                icon: Icons.dns_rounded,
+                label: tcontext.meta.ipIsp,
+                titleStyle: labelTitleStyle,
+                content: Text(
+                  [
+                    currentInfo.isp.isNotEmpty ? currentInfo.isp : currentInfo.org,
+                    if (currentInfo.asn.isNotEmpty) "(${currentInfo.asn})"
+                  ].where((s) => s.isNotEmpty).join(' '),
+                  style: labelValueStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+
+              // Expandable Detailed Fields
+              AnimatedCrossFade(
+                duration: const Duration(milliseconds: 200),
+                crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                firstChild: const SizedBox.shrink(),
+                secondChild: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // ASN
+                    if (currentInfo.asn.isNotEmpty)
+                      _buildInfoRow(
+                        icon: Icons.hub_rounded,
+                        label: tcontext.meta.ipAsn,
+                        titleStyle: labelTitleStyle,
+                        content: Text(
+                          currentInfo.asn,
+                          style: labelValueStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+
+                    // Organization (if distinct from ISP)
+                    if (currentInfo.org.isNotEmpty && currentInfo.org != currentInfo.isp)
+                      _buildInfoRow(
+                        icon: Icons.business_rounded,
+                        label: tcontext.meta.ipOrg,
+                        titleStyle: labelTitleStyle,
+                        content: Text(
+                          currentInfo.org,
+                          style: labelValueStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+
+                    // Timezone
+                    if (currentInfo.timezoneDisplay.isNotEmpty)
+                      _buildInfoRow(
+                        icon: Icons.schedule_rounded,
+                        label: tcontext.meta.ipTimezone,
+                        titleStyle: labelTitleStyle,
+                        content: Text(
+                          currentInfo.timezoneDisplay,
+                          style: labelValueStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+
+                    // Coordinates
+                    if (currentInfo.formattedCoordinates.isNotEmpty)
+                      _buildInfoRow(
+                        icon: Icons.explore_rounded,
+                        label: tcontext.meta.ipCoordinates,
+                        titleStyle: labelTitleStyle,
+                        content: Text(
+                          currentInfo.formattedCoordinates,
+                          style: labelValueStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+
+              // Expand/Collapse Toggle Button
+              Center(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () {
+                    setState(() {
+                      _expanded = !_expanded;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _expanded ? tcontext.meta.ipLessDetails : tcontext.meta.ipMoreDetails,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: theme.colorScheme.primary.withValues(alpha: 0.85),
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        Icon(
+                          _expanded
+                              ? Icons.keyboard_arrow_up_rounded
+                              : Icons.keyboard_arrow_down_rounded,
+                          size: 15,
+                          color: theme.colorScheme.primary.withValues(alpha: 0.85),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ] else
               InkWell(
                 borderRadius: BorderRadius.circular(8),
-                onTap: _fetchIpInfo,
+                onTap: _fetchCurrentInfo,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Center(

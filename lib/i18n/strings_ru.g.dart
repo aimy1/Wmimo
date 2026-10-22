@@ -657,6 +657,14 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get ipLocation => 'Местоположение';
 	@override String get ipIsp => 'Провайдер';
 	@override String get ipTapToFetch => 'Нажмите для получения IP';
+	@override String get ipProxy => 'Прокси выход';
+	@override String get ipDirect => 'Прямое подключение';
+	@override String get ipAsn => 'ASN';
+	@override String get ipOrg => 'Организация';
+	@override String get ipTimezone => 'Часовой пояс';
+	@override String get ipCoordinates => 'Координаты';
+	@override String get ipMoreDetails => 'Подробнее';
+	@override String get ipLessDetails => 'Свернуть';
 	@override String get collapseAll => 'Свернуть все группы';
 	@override String get expandAll => 'Развернуть все группы';
 	@override String get donateTitle => '💖 Угостить автора кофе';
@@ -1463,6 +1471,14 @@ extension on TranslationsRu {
 			_ => null,
 		} ?? switch (path) {
 			'meta.ipTapToFetch' => 'Нажмите для получения IP',
+			'meta.ipProxy' => 'Прокси выход',
+			'meta.ipDirect' => 'Прямое подключение',
+			'meta.ipAsn' => 'ASN',
+			'meta.ipOrg' => 'Организация',
+			'meta.ipTimezone' => 'Часовой пояс',
+			'meta.ipCoordinates' => 'Координаты',
+			'meta.ipMoreDetails' => 'Подробнее',
+			'meta.ipLessDetails' => 'Свернуть',
 			'meta.collapseAll' => 'Свернуть все группы',
 			'meta.expandAll' => 'Развернуть все группы',
 			'meta.donateTitle' => '💖 Угостить автора кофе',

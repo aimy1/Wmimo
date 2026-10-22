@@ -657,6 +657,14 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get ipLocation => '位置';
 	@override String get ipIsp => '服務商';
 	@override String get ipTapToFetch => '點擊取得 IP 資訊';
+	@override String get ipProxy => '代理出口';
+	@override String get ipDirect => '本機直連';
+	@override String get ipAsn => '自治系統';
+	@override String get ipOrg => '歸屬組織';
+	@override String get ipTimezone => '時區';
+	@override String get ipCoordinates => '座標';
+	@override String get ipMoreDetails => '更多詳細資訊';
+	@override String get ipLessDetails => '收起詳細資訊';
 	@override String get collapseAll => '收合所有代理群組';
 	@override String get expandAll => '展開所有代理群組';
 	@override String get donateTitle => '💖 請作者喝杯咖啡';
@@ -1463,6 +1471,14 @@ extension on TranslationsZhTw {
 			_ => null,
 		} ?? switch (path) {
 			'meta.ipTapToFetch' => '點擊取得 IP 資訊',
+			'meta.ipProxy' => '代理出口',
+			'meta.ipDirect' => '本機直連',
+			'meta.ipAsn' => '自治系統',
+			'meta.ipOrg' => '歸屬組織',
+			'meta.ipTimezone' => '時區',
+			'meta.ipCoordinates' => '座標',
+			'meta.ipMoreDetails' => '更多詳細資訊',
+			'meta.ipLessDetails' => '收起詳細資訊',
 			'meta.collapseAll' => '收合所有代理群組',
 			'meta.expandAll' => '展開所有代理群組',
 			'meta.donateTitle' => '💖 請作者喝杯咖啡',
