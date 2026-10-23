@@ -276,7 +276,7 @@ if [ ! -f "$APPIMAGETOOL_BIN" ]; then
 fi
 
 if [ -f "$APPIMAGETOOL_BIN" ]; then
-  ARCH="$APPIMAGE_ARCH" ./"$APPIMAGETOOL_BIN" --no-appstream --appimage-extract-and-run "$APP_DIR" "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.AppImage"
+  APPIMAGE_EXTRACT_AND_RUN=1 ARCH="$APPIMAGE_ARCH" ./"$APPIMAGETOOL_BIN" --no-appstream "$APP_DIR" "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.AppImage"
   if [ -f "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.AppImage" ]; then
     chmod +x "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.AppImage"
     echo "  -> Created $DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.AppImage"
