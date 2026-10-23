@@ -335,7 +335,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   children: [
                     // Country Code / Flag Badge
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 6.5, vertical: 3),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.primary.withValues(
                           alpha: isDark ? 0.2 : 0.1,
@@ -348,20 +348,24 @@ class _IpInfoCardState extends State<IpInfoCard> {
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          if (!Platform.isWindows) ...[
-                            Text(
-                              currentInfo.flagEmoji,
-                              style: const TextStyle(fontSize: 12),
+                          Text(
+                            currentInfo.flagEmoji,
+                            style: TextStyle(
+                              fontSize: 13.5,
+                              height: 1.1,
+                              fontFamily: Platform.isWindows ? 'Emoji' : null,
                             ),
-                            const SizedBox(width: 4),
-                          ],
+                          ),
+                          const SizedBox(width: 4.5),
                           Text(
                             currentInfo.countryCode.isNotEmpty
                                 ? currentInfo.countryCode.toUpperCase()
                                 : 'IP',
                             style: TextStyle(
                               fontSize: 10.5,
+                              height: 1.1,
                               fontWeight: FontWeight.w700,
                               color: theme.colorScheme.primary,
                               fontFamily: 'monospace',
@@ -466,7 +470,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
                               icon: Icons.place_outlined,
                               iconColor: const Color(0xFF38BDF8),
                               label: tcontext.meta.ipLocation,
-                              value: currentInfo.locationString,
+                              value: "${currentInfo.flagEmoji} ${currentInfo.locationString}",
                             ),
                           ),
                           _buildVerticalDivider(theme),
@@ -643,6 +647,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
             fontSize: 11.5,
             fontWeight: FontWeight.w600,
             color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
+            fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

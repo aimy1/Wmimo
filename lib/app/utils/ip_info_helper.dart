@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:wmimo/app/utils/node_region_helper.dart';
 
 class IpInfoData {
   final String ip;
@@ -38,10 +39,19 @@ class IpInfoData {
   String get ipType => ip.contains(':') ? 'IPv6' : 'IPv4';
 
   String get flagEmoji {
-    if (countryCode.length != 2) return "🌐";
-    final int firstLetter = countryCode.toUpperCase().codeUnitAt(0) - 0x41 + 0x1F1E6;
-    final int secondLetter = countryCode.toUpperCase().codeUnitAt(1) - 0x41 + 0x1F1E6;
-    return String.fromCharCode(firstLetter) + String.fromCharCode(secondLetter);
+    final code = countryCode.trim().toUpperCase();
+    if (code.length == 2) {
+      final int c1 = code.codeUnitAt(0);
+      final int c2 = code.codeUnitAt(1);
+      if (c1 >= 0x41 && c1 <= 0x5A && c2 >= 0x41 && c2 <= 0x5A) {
+        return String.fromCharCode(c1 - 0x41 + 0x1F1E6) +
+            String.fromCharCode(c2 - 0x41 + 0x1F1E6);
+      }
+    }
+    if (country.isNotEmpty) {
+      return NodeRegionHelper.getFlag(country);
+    }
+    return "🌐";
   }
 
   String get formattedCoordinates {

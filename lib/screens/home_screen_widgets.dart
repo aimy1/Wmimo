@@ -371,6 +371,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .primary,
+                                              fontFamilyFallback: Platform.isWindows
+                                                  ? const ['Emoji']
+                                                  : null,
                                             ),
                                           ),
                                         ),

@@ -327,21 +327,35 @@ class _HomeScreenState extends State<HomeScreen>
     required BuildContext context,
     required int index,
     required IconData icon,
+    required IconData selectedIcon,
     required String label,
   }) {
     final isSelected = _currentNavIndex == index;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
+    final Color activeColor = ThemeDefine.kColorBlue;
+    final Color inactiveIconColor = isDark
+        ? const Color(0xFF98989D)
+        : const Color(0xFF64748B);
+    final Color inactiveTextColor = isDark
+        ? const Color(0xFFD1D1D6)
+        : const Color(0xFF334155);
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(vertical: 2.5),
       child: Material(
         color: isSelected
-            ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.2 : 0.12)
+            ? activeColor.withValues(alpha: isDark ? 0.18 : 0.12)
             : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
+          hoverColor: isDark
+              ? Colors.white.withValues(alpha: 0.04)
+              : Colors.black.withValues(alpha: 0.04),
+          splashColor: activeColor.withValues(alpha: 0.12),
+          highlightColor: activeColor.withValues(alpha: 0.06),
           onTap: () {
             if (_currentNavIndex == index) {
               final navState = _navigatorKeys[index].currentState;
@@ -361,65 +375,90 @@ class _HomeScreenState extends State<HomeScreen>
               });
             }
           },
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(14, PlatformUtils.isPC() ? 2 : 10, 14, 10),
+          child: Container(
+            height: 40,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isSelected
+                    ? activeColor.withValues(alpha: isDark ? 0.28 : 0.2)
+                    : Colors.transparent,
+                width: 0.8,
+              ),
+            ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Icon(
-                      icon,
-                      size: 20,
-                      color: isSelected
-                          ? ThemeDefine.kColorBlue
-                          : theme.colorScheme.onSurface.withValues(alpha: 0.65),
-                    ),
-                    if (index == 4 && AutoUpdateManager.getVersionCheck().newVersion)
-                      Positioned(
-                        top: -2,
-                        right: -2,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFF3B30),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: isDark ? ThemeDefine.kColorDarkSidebar : Colors.white,
-                              width: 1.5,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFFFF3B30).withValues(alpha: 0.5),
-                                blurRadius: 4,
+                SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    clipBehavior: Clip.none,
+                    children: [
+                      Icon(
+                        isSelected ? selectedIcon : icon,
+                        size: 20,
+                        color: isSelected ? activeColor : inactiveIconColor,
+                      ),
+                      if (index == 4 &&
+                          AutoUpdateManager.getVersionCheck().newVersion)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFF3B30),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: isDark
+                                    ? ThemeDefine.kColorDarkSidebar
+                                    : const Color(0xFFF1F5F9),
+                                width: 1.5,
                               ),
-                            ],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFFFF3B30)
+                                      .withValues(alpha: 0.5),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 11),
                 Expanded(
                   child: Text(
                     label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    strutStyle: const StrutStyle(
+                      fontSize: 13.5,
+                      height: 1.2,
+                      forceStrutHeight: true,
+                    ),
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                      color: isSelected
-                          ? ThemeDefine.kColorBlue
-                          : theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                      fontSize: 13.5,
+                      height: 1.2,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      color: isSelected ? activeColor : inactiveTextColor,
                     ),
                   ),
                 ),
                 if (isSelected)
                   Container(
-                    width: 3.5,
-                    height: 16,
+                    width: 3,
+                    height: 14,
                     decoration: BoxDecoration(
-                      color: ThemeDefine.kColorBlue,
-                      borderRadius: BorderRadius.circular(2),
+                      color: activeColor,
+                      borderRadius: BorderRadius.circular(1.5),
                     ),
                   ),
               ],
@@ -756,9 +795,9 @@ class _HomeScreenState extends State<HomeScreen>
                             : const Color(0xFFF1F5F9),
                         border: Border(
                           right: BorderSide(
-                            color: Theme.of(context)
-                                .dividerColor
-                                .withValues(alpha: 0.5),
+                            color: isDark
+                                ? ThemeDefine.kColorDarkBorder
+                                : const Color(0xFFE2E8F0),
                             width: 0.8,
                           ),
                         ),
@@ -771,35 +810,41 @@ class _HomeScreenState extends State<HomeScreen>
                                 14,
                                 Platform.isMacOS ? 34 : 14,
                                 14,
-                                10,
+                                12,
                               ),
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Image.asset(
                                     'assets/images/app_icon_256.png',
-                                    width: 28,
-                                    height: 28,
+                                    width: 32,
+                                    height: 32,
                                     fit: BoxFit.contain,
-                                    filterQuality: FilterQuality.medium,
+                                    filterQuality: FilterQuality.high,
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           AppUtils.getName(),
                                           style: const TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 15.5,
+                                            height: 1.15,
                                             fontWeight: FontWeight.w700,
                                             letterSpacing: 0.3,
                                           ),
                                         ),
-                                        const SizedBox(height: 1),
+                                        const SizedBox(height: 2),
                                         Text(
                                           AppUtils.getFormattedVersion(),
                                           style: TextStyle(
                                             fontSize: 11,
+                                            height: 1.15,
+                                            fontWeight: FontWeight.w500,
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .onSurface
@@ -813,40 +858,55 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                           ),
-                          const Divider(height: 1, thickness: 0.8),
-                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 14),
+                            child: Divider(
+                              height: 1,
+                              thickness: 0.8,
+                              color: isDark
+                                  ? ThemeDefine.kColorDarkBorder
+                                  : const Color(0xFFE2E8F0),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
                           Expanded(
                             child: ListView(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               children: [
                                 _buildNavItem(
                                   context: context,
                                   index: 0,
-                                  icon: Icons.dashboard_rounded,
+                                  icon: Icons.dashboard_outlined,
+                                  selectedIcon: Icons.dashboard_rounded,
                                   label: tcontext.meta.overview,
                                 ),
                                 _buildNavItem(
                                   context: context,
                                   index: 1,
-                                  icon: Icons.alt_route_rounded,
+                                  icon: Icons.alt_route_outlined,
+                                  selectedIcon: Icons.alt_route_rounded,
                                   label: tcontext.meta.proxy,
                                 ),
                                 _buildNavItem(
                                   context: context,
                                   index: 2,
-                                  icon: Icons.dns_rounded,
+                                  icon: Icons.dns_outlined,
+                                  selectedIcon: Icons.dns_rounded,
                                   label: tcontext.meta.myProfiles,
                                 ),
                                 _buildNavItem(
                                   context: context,
                                   index: 3,
                                   icon: Icons.hub_outlined,
+                                  selectedIcon: Icons.hub_rounded,
                                   label: tcontext.meta.connections,
                                 ),
                                 _buildNavItem(
                                   context: context,
                                   index: 4,
-                                  icon: Icons.tune_rounded,
+                                  icon: Icons.tune_outlined,
+                                  selectedIcon: Icons.tune_rounded,
                                   label: tcontext.meta.settingApp,
                                 ),
                               ],
