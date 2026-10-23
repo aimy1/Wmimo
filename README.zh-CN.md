@@ -34,9 +34,7 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo 浅色主题" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo 深色主题" width="370" />
+    <img src="docs/preview_light.png" alt="Wmimo 浅色主题" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo 深色主题" width="45%" />
   </p>
   <sub><em>18px 极简微卡片设计体系 · 实时平滑流量贝塞尔曲线监控 · TUN & 系统代理双模式（浅色 & 深色原生双主题）</em></sub>
 </div>

@@ -33,9 +33,7 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo المظهر الفاتح" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo المظهر الداكن" width="370" />
+    <img src="docs/preview_light.png" alt="Wmimo المظهر الفاتح" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo المظهر الداكن" width="45%" />
   </p>
   <sub><em>تصميم عصري ببطاقات مصغرة 18px، مراقبة حركة المرور في الوقت الفعلي وأدوات تشخيص شاملة (المظهر الفاتح والداكن)</em></sub>
 </div>

@@ -33,9 +33,7 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo Светлая тема" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo Темная тема" width="370" />
+    <img src="docs/preview_light.png" alt="Wmimo Светлая тема" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo Темная тема" width="45%" />
   </p>
   <sub><em>Эстетика микро-карточек 18px, плавный график трафика Безье и диагностика сети (Светлая и Темная темы)</em></sub>
 </div>

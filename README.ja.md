@@ -33,9 +33,7 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo ライトテーマ" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo ダークテーマ" width="370" />
+    <img src="docs/preview_light.png" alt="Wmimo ライトテーマ" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo ダークテーマ" width="45%" />
   </p>
   <sub><em>18px マイクロカードデザイン、リアルタイムのベジェ曲線トラフィックモニター、高度なネットワーク診断（ライト＆ダーク両対応）</em></sub>
 </div>

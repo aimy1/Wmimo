@@ -33,9 +33,7 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo Tema Claro" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo Tema Oscuro" width="370" />
+    <img src="docs/preview_light.png" alt="Wmimo Tema Claro" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo Tema Oscuro" width="45%" />
   </p>
   <sub><em>Diseño refinado de micro-tarjetas de 18px, curvas de tráfico Bézier en tiempo real y diagnósticos completos (Temas Claro y Oscuro)</em></sub>
 </div>

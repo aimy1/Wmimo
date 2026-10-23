@@ -34,9 +34,7 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo 淺色主題" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo 深色主題" width="370" />
+    <img src="docs/preview_light.png" alt="Wmimo 淺色主題" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo 深色主題" width="45%" />
   </p>
   <sub><em>18px 極簡微卡片設計體系 · 即時平滑流量貝塞爾曲線監控 · TUN & 系統代理雙模式（淺色 & 深色原生雙主題）</em></sub>
 </div>

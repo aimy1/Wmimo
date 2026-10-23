@@ -33,9 +33,7 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo تم روشن" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo تم تاریک" width="370" />
+    <img src="docs/preview_light.png" alt="Wmimo تم روشن" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo تم تاریک" width="45%" />
   </p>
   <sub><em>طراحی کارت‌های میکرو ۱۸ پیکسلی، نمودار روان و لحظه‌ای ترافیک و ابزارهای جامع عیب‌یابی شبکه (تم روشن و تاریک)</em></sub>
 </div>

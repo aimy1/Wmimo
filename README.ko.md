@@ -33,9 +33,7 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo 라이트 모드" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo 다크 모드" width="370" />
+    <img src="docs/preview_light.png" alt="Wmimo 라이트 모드" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo 다크 모드" width="45%" />
   </p>
   <sub><em>세련된 18px 마이크로 카드 UI, 부드러운 실시간 베지에 트래픽 그래프, 종합 네트워크 진단 (라이트 & 다크 듀얼 테마)</em></sub>
 </div>

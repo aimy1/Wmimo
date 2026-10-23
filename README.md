@@ -34,9 +34,7 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="370" />
+    <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="45%" />
   </p>
   <sub><em>18px micro-card layout system, real-time bezier traffic wave, and system-level proxy routing (Light & Dark dual themes)</em></sub>
 </div>
