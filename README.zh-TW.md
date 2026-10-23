@@ -34,9 +34,6 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_desktop.png" alt="Wmimo 桌面端寬螢幕視圖" width="756" />
-  </p>
-  <p align="center">
     <img src="docs/preview_light.png" alt="Wmimo 淺色主題" width="370" />
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo 深色主題" width="370" />

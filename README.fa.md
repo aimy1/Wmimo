@@ -33,9 +33,6 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_desktop.png" alt="Wmimo نمای دسکتاپ" width="756" />
-  </p>
-  <p align="center">
     <img src="docs/preview_light.png" alt="Wmimo تم روشن" width="370" />
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo تم تاریک" width="370" />

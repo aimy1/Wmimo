@@ -34,9 +34,6 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_desktop.png" alt="Wmimo Desktop Layout" width="756" />
-  </p>
-  <p align="center">
     <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="370" />
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="370" />

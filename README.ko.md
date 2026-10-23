@@ -33,9 +33,6 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_desktop.png" alt="Wmimo 데스크톱 레이아웃" width="756" />
-  </p>
-  <p align="center">
     <img src="docs/preview_light.png" alt="Wmimo 라이트 모드" width="370" />
     &nbsp;&nbsp;
     <img src="docs/preview_dark.png" alt="Wmimo 다크 모드" width="370" />
