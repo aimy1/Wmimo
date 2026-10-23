@@ -49,7 +49,7 @@ class _SegmentedElevatedButtonState extends State<SegmentedElevatedButton> {
       decoration: BoxDecoration(
         color: widget.background ??
             (isDark
-                ? ThemeDefine.kColorDarkBg
+                ? ThemeDefine.kColorDarkInner
                 : const Color(0xFFF1F5F9)),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
@@ -76,7 +76,7 @@ class _SegmentedElevatedButtonState extends State<SegmentedElevatedButton> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? (isDark
-                          ? ThemeDefine.kColorDarkCard
+                          ? ThemeDefine.kColorDarkElevated
                           : Colors.white)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(9),

@@ -188,7 +188,7 @@ class _RulesScreenState extends State<RulesScreen> with AfterLayoutMixin {
                       height: 38,
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF1E293B)
+                            ? const Color(0xFF262629)
                             : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -289,7 +289,7 @@ class _RulesScreenState extends State<RulesScreen> with AfterLayoutMixin {
     return Material(
       color: isSelected
           ? ThemeDefine.kColorBlue
-          : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
+          : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
@@ -328,7 +328,7 @@ class _RulesScreenState extends State<RulesScreen> with AfterLayoutMixin {
       margin: const EdgeInsets.only(bottom: 6),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151D2E) : const Color(0xFFF8FAFC),
+        color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: theme.dividerColor.withValues(alpha: 0.4),

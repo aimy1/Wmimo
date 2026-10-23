@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/i18n/strings.g.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class DonateScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -25,6 +25,7 @@ class _DonateScreenState extends LasyRenderingState<DonateScreen> {
   bool _isCopied = false;
 
   void _copyAddress() {
+    HapticFeedback.selectionClick();
     final t = Translations.of(context);
     Clipboard.setData(const ClipboardData(text: walletAddress));
     setState(() {
@@ -34,21 +35,13 @@ class _DonateScreenState extends LasyRenderingState<DonateScreen> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 18),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                t.meta.donateAddressCopied,
-                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-              ),
-            ),
-          ],
+        content: Text(
+          t.meta.donateAddressCopied,
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
         ),
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
 
@@ -67,371 +60,405 @@ class _DonateScreenState extends LasyRenderingState<DonateScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final cardBgColor = isDark ? ThemeDefine.kColorDarkCard : Colors.white;
-    final innerBoxBgColor =
-        isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC);
-    final borderColor =
-        theme.dividerColor.withValues(alpha: isDark ? 0.25 : 0.12);
+    final innerBgColor = isDark
+        ? ThemeDefine.kColorDarkInner
+        : const Color(0xFFF1F5F9).withValues(alpha: 0.85);
+    final innerBorderColor = isDark
+        ? ThemeDefine.kColorDarkBorder
+        : const Color(0xFFE2E8F0);
 
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: WmimoAppBar(
+        title: Text(tcontext.meta.donateTitle),
+      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-          child: Column(
-            children: [
-              // 1. Top Navigation Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (ModalRoute.of(context)?.canPop ?? false)
-                      InkWell(
-                        borderRadius: BorderRadius.circular(15),
-                        onTap: () => Navigator.pop(context),
-                        child: const SizedBox(
-                          width: 36,
-                          height: 30,
-                          child: Icon(Icons.arrow_back_ios_outlined, size: 20),
-                        ),
-                      )
-                    else
-                      const SizedBox(width: 36, height: 30),
-                    Expanded(
-                      child: Text(
-                        tcontext.meta.donateTitle,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: ThemeConfig.kFontWeightTitle,
-                          fontSize: ThemeConfig.kFontSizeTitle,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 36, height: 30),
-                  ],
+        child: Center(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Card(
+                elevation: 0,
+                margin: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(
+                    color: theme.dividerColor.withValues(alpha: 0.35),
+                    width: 0.8,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-
-              // 2. Main Scrollable Content
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 440),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 1. Header Row (matches TrafficChartCard & IpInfoCard)
+                      Row(
                         children: [
-                          // A. Cute Thank You Greeting Card
                           Container(
-                            width: double.infinity,
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFF38BDF8), Color(0xFF0284C7)],
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF0EA5E9)
+                                      .withValues(alpha: 0.32),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.favorite_rounded,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              tcontext.meta.donate,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.2,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 14,
+                              horizontal: 8,
+                              vertical: 3,
                             ),
                             decoration: BoxDecoration(
-                              color: ThemeDefine.kColorBlue.withValues(
-                                alpha: isDark ? 0.12 : 0.08,
+                              color: ThemeDefine.kColorGreenBright.withValues(
+                                alpha: isDark ? 0.15 : 0.1,
                               ),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: ThemeDefine.kColorBlue.withValues(
-                                  alpha: isDark ? 0.22 : 0.16,
-                                ),
+                                color: ThemeDefine.kColorGreenBright
+                                    .withValues(alpha: 0.35),
                                 width: 0.8,
                               ),
                             ),
-                            child: Column(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text("☕", style: TextStyle(fontSize: 16)),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      tcontext.meta.donate,
-                                      style: TextStyle(
-                                        fontSize: 13.5,
-                                        fontWeight: FontWeight.w700,
-                                        color: ThemeDefine.kColorBlue,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    const Text("✨", style: TextStyle(fontSize: 14)),
-                                  ],
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  tcontext.meta.donateThankYou,
-                                  style: TextStyle(
-                                    fontSize: 12.5,
-                                    height: 1.5,
-                                    color: isDark
-                                        ? const Color(0xFFCBD5E1)
-                                        : const Color(0xFF475569),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-
-                          // B. Unified Master Donation Card
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: cardBgColor,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: borderColor,
-                                width: 1,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(
-                                    alpha: isDark ? 0.2 : 0.04,
-                                  ),
-                                  blurRadius: 16,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                // QR Code Container
                                 Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                      color: const Color(0xFFE2E8F0),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.asset(
-                                      "assets/images/donate_qr.png",
-                                      width: 160,
-                                      height: 160,
-                                      fit: BoxFit.contain,
-                                      filterQuality: FilterQuality.medium,
-                                    ),
+                                  width: 5,
+                                  height: 5,
+                                  decoration: const BoxDecoration(
+                                    color: ThemeDefine.kColorGreenBright,
+                                    shape: BoxShape.circle,
                                   ),
                                 ),
-                                const SizedBox(height: 16),
-
-                                // Token & Network Chips
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    _buildBadge(
-                                      icon: Icons.monetization_on_rounded,
-                                      label: "${tcontext.meta.tokenCurrency}: $currency",
-                                      color: const Color(0xFF10B981),
-                                      isDark: isDark,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    _buildBadge(
-                                      icon: Icons.hub_rounded,
-                                      label: "${tcontext.meta.networkChain}: $networkName",
-                                      color: ThemeDefine.kColorBlue,
-                                      isDark: isDark,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 18),
-
-                                const Divider(height: 1, thickness: 0.8),
-                                const SizedBox(height: 16),
-
-                                // Deposit Address Box
-                                Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(14),
-                                    onTap: _copyAddress,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(14),
-                                      decoration: BoxDecoration(
-                                        color: innerBoxBgColor,
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
-                                          color: _isCopied
-                                              ? ThemeDefine.kColorBlue
-                                              : borderColor,
-                                          width: 0.8,
-                                        ),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                tcontext.meta.depositAddress,
-                                                style: TextStyle(
-                                                  fontSize: 11.5,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: theme
-                                                      .colorScheme.onSurface
-                                                      .withValues(alpha: 0.55),
-                                                ),
-                                              ),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Icon(
-                                                    _isCopied
-                                                        ? Icons.check_circle_rounded
-                                                        : Icons.copy_rounded,
-                                                    size: 13,
-                                                    color: _isCopied
-                                                        ? const Color(0xFF10B981)
-                                                        : ThemeDefine.kColorBlue,
-                                                  ),
-                                                  const SizedBox(width: 4),
-                                                  Text(
-                                                    _isCopied
-                                                        ? tcontext.meta.copySuccess
-                                                        : tcontext.meta.clickToCopy,
-                                                    style: TextStyle(
-                                                      fontSize: 11,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: _isCopied
-                                                          ? const Color(0xFF10B981)
-                                                          : ThemeDefine.kColorBlue,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          SelectableText(
-                                            walletAddress,
-                                            style: TextStyle(
-                                              fontSize: 11.5,
-                                              fontFamily: "monospace",
-                                              letterSpacing: 0.3,
-                                              height: 1.4,
-                                              color: theme.colorScheme.onSurface
-                                                  .withValues(alpha: 0.85),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-
-                                // Copy Button
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 44,
-                                  child: ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: ThemeDefine.kColorBlue,
-                                      foregroundColor: Colors.white,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    onPressed: _copyAddress,
-                                    icon: Icon(
-                                      _isCopied
-                                          ? Icons.check_rounded
-                                          : Icons.copy_rounded,
-                                      size: 16,
-                                    ),
-                                    label: Text(
-                                      _isCopied
-                                          ? tcontext.meta.copySuccess
-                                          : tcontext.meta.copyAddressBtn,
-                                      style: const TextStyle(
-                                        fontSize: 13.5,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
+                                const SizedBox(width: 4),
+                                const Text(
+                                  "$currency · $networkName",
+                                  style: TextStyle(
+                                    fontSize: 10.5,
+                                    fontWeight: FontWeight.w700,
+                                    color: ThemeDefine.kColorGreenBright,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: 16),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        tcontext.meta.donateThankYou,
+                        style: TextStyle(
+                          fontSize: 12,
+                          height: 1.45,
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.62),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
 
-                          // C. Bottom Tip
+                      // 2. Inner QR Code + 2-Column Spec Box
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.fromLTRB(12, 14, 12, 10),
+                        decoration: BoxDecoration(
+                          color: innerBgColor,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: innerBorderColor,
+                            width: 0.8,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            // Crisp White QR Frame
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: const Color(0xFFE2E8F0),
+                                  width: 0.8,
+                                ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(6),
+                                child: Image.asset(
+                                  "assets/images/donate_qr.png",
+                                  width: 144,
+                                  height: 144,
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.medium,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Divider(
+                              height: 1,
+                              thickness: 0.8,
+                              color: theme.dividerColor.withValues(alpha: 0.25),
+                            ),
+                            const SizedBox(height: 8),
+                            // 2-Column Token & Network Grid
+                            IntrinsicHeight(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: _buildSpecCell(
+                                      context: context,
+                                      icon: Icons.monetization_on_outlined,
+                                      iconColor: ThemeDefine.kColorGreenBright,
+                                      label: tcontext.meta.tokenCurrency,
+                                      value: currency,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 0.8,
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    color: theme.dividerColor
+                                        .withValues(alpha: 0.25),
+                                  ),
+                                  Expanded(
+                                    child: _buildSpecCell(
+                                      context: context,
+                                      icon: Icons.hub_outlined,
+                                      iconColor: ThemeDefine.kColorBlueLight,
+                                      label: tcontext.meta.networkChain,
+                                      value: networkName,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      // 3. One-Click Deposit Address Box (No Duplicate Bottom Button)
+                      InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: _copyAddress,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: innerBgColor,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: _isCopied
+                                  ? ThemeDefine.kColorGreenBright
+                                      .withValues(alpha: 0.6)
+                                  : innerBorderColor,
+                              width: 0.8,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.account_balance_wallet_outlined,
+                                    size: 13,
+                                    color: theme.colorScheme.onSurface
+                                        .withValues(alpha: 0.55),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Expanded(
+                                    child: Text(
+                                      tcontext.meta.depositAddress,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        color: theme.colorScheme.onSurface
+                                            .withValues(alpha: 0.6),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 3,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: (_isCopied
+                                              ? ThemeDefine.kColorGreenBright
+                                              : ThemeDefine.kColorBlue)
+                                          .withValues(
+                                        alpha: isDark ? 0.18 : 0.12,
+                                      ),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          _isCopied
+                                              ? Icons.check_rounded
+                                              : Icons.copy_rounded,
+                                          size: 12,
+                                          color: _isCopied
+                                              ? ThemeDefine.kColorGreenBright
+                                              : ThemeDefine.kColorBlue,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          _isCopied
+                                              ? tcontext.meta.copySuccess
+                                              : tcontext.meta.clickToCopy,
+                                          style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight: FontWeight.w600,
+                                            color: _isCopied
+                                                ? ThemeDefine.kColorGreenBright
+                                                : ThemeDefine.kColorBlue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 7),
+                              Text(
+                                walletAddress,
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: "monospace",
+                                  letterSpacing: 0.25,
+                                  height: 1.35,
+                                  color: theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.88),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      // 4. Compact Footer Tip
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            padding: const EdgeInsets.only(top: 1.5),
+                            child: Icon(
+                              Icons.info_outline_rounded,
+                              size: 13,
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.45),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
                             child: Text(
                               tcontext.meta.donateTip,
                               style: TextStyle(
-                                fontSize: 11.5,
+                                fontSize: 11,
+                                height: 1.35,
                                 color: theme.colorScheme.onSurface
-                                    .withValues(alpha: 0.45),
-                                height: 1.4,
+                                    .withValues(alpha: 0.48),
                               ),
-                              textAlign: TextAlign.center,
                             ),
                           ),
-                          const SizedBox(height: 20),
                         ],
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildBadge({
+  Widget _buildSpecCell({
+    required BuildContext context,
     required IconData icon,
+    required Color iconColor,
     required String label,
-    required Color color,
-    required bool isDark,
+    required String value,
   }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: isDark ? 0.15 : 0.08),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: color.withValues(alpha: isDark ? 0.3 : 0.2),
-          width: 0.8,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 13, color: color),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11.5,
-              fontWeight: FontWeight.w600,
-              color: color,
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 12, color: iconColor),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10.5,
+                  fontWeight: FontWeight.w500,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.58),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
+          ],
+        ),
+        const SizedBox(height: 2.5),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 12.5,
+            fontWeight: FontWeight.w700,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.92),
           ),
-        ],
-      ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
     );
   }
 }

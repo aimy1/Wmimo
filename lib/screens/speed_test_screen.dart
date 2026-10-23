@@ -1553,7 +1553,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF151D2E) : Colors.white,
+      backgroundColor: isDark ? const Color(0xFF1C1C1E) : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -1648,7 +1648,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? ThemeDefine.kColorBlue.withValues(alpha: 0.12)
-                                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC)),
+                                    : (isDark ? const Color(0xFF262629) : const Color(0xFFF8FAFC)),
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                   color: isSelected
@@ -1702,7 +1702,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                        color: isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: _currentServer.id == 'custom'
@@ -1801,7 +1801,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
             end: Alignment.bottomRight,
             colors: [
               ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.08 : 0.04),
-              isDark ? const Color(0xFF1E293B) : Colors.white,
+              isDark ? const Color(0xFF262629) : Colors.white,
             ],
           ),
         ),
@@ -2132,7 +2132,7 @@ class _SpeedtestDialPainter extends CustomPainter {
 
     // 5. Center Hub Disc
     final hubOuterPaint = Paint()
-      ..color = isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)
+      ..color = isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, 9, hubOuterPaint);
 

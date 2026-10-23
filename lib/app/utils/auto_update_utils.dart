@@ -160,6 +160,13 @@ abstract final class AutoupdateUtils {
     return [];
   }
 
+  static List<String> _resolveArchAbis(String assetName) {
+    if (assetName.contains("arm64") || assetName.contains("aarch64")) {
+      return ["arm64", "aarch64"];
+    }
+    return ["x86_64", "x64", "*"];
+  }
+
   static List<AutoupdateItem> _parseGithubReleaseJson(String jsonStr) {
     List<AutoupdateItem> list = [];
     try {
@@ -184,11 +191,7 @@ abstract final class AutoupdateUtils {
 
           if (name.endsWith(".exe") && (name.contains("windows") || name.contains("setup"))) {
             item.platform = "windows";
-            if (name.contains("arm64")) {
-              item.abis = ["arm64", "aarch64"];
-            } else {
-              item.abis = ["x86_64", "x64", "*"];
-            }
+            item.abis = _resolveArchAbis(name);
             item.channels = ["*"];
             list.add(item);
           } else if (name.endsWith(".apk") && name.contains("android")) {
@@ -206,22 +209,26 @@ abstract final class AutoupdateUtils {
             list.add(item);
           } else if (name.endsWith(".dmg") && (name.contains("macos") || name.contains("mac"))) {
             item.platform = "macos";
-            item.abis = ["*"];
+            if (name.contains("universal")) {
+              item.abis = ["arm64", "aarch64", "x86_64", "x64", "*"];
+            } else {
+              item.abis = _resolveArchAbis(name);
+            }
             item.channels = ["*"];
             list.add(item);
           } else if (name.endsWith(".deb") && name.contains("linux")) {
             item.platform = "linux";
-            item.abis = ["*"];
+            item.abis = _resolveArchAbis(name);
             item.channels = ["deb", "*"];
             list.add(item);
           } else if (name.endsWith(".rpm") && name.contains("linux")) {
             item.platform = "linux";
-            item.abis = ["*"];
+            item.abis = _resolveArchAbis(name);
             item.channels = ["rpm", "*"];
             list.add(item);
           } else if (name.endsWith(".appimage") && name.contains("linux")) {
             item.platform = "linux";
-            item.abis = ["*"];
+            item.abis = _resolveArchAbis(name);
             item.channels = ["appimage", "*"];
             list.add(item);
           }
@@ -267,6 +274,20 @@ abstract final class AutoupdateUtils {
       AutoupdateItem()
         ..platform = "android"
         ..version = version
+        ..abis = ["armeabi-v7a"]
+        ..channels = ["*"]
+        ..updateChannel = ["stable", "beta"]
+        ..url = "$baseUrl/Wmimo-Android-armeabi-v7a-$cleanTag.apk",
+      AutoupdateItem()
+        ..platform = "android"
+        ..version = version
+        ..abis = ["x86_64"]
+        ..channels = ["*"]
+        ..updateChannel = ["stable", "beta"]
+        ..url = "$baseUrl/Wmimo-Android-x86_64-$cleanTag.apk",
+      AutoupdateItem()
+        ..platform = "android"
+        ..version = version
         ..abis = ["*"]
         ..channels = ["*"]
         ..updateChannel = ["stable", "beta"]
@@ -274,31 +295,52 @@ abstract final class AutoupdateUtils {
       AutoupdateItem()
         ..platform = "linux"
         ..version = version
-        ..abis = ["*"]
+        ..abis = ["x86_64", "x64", "*"]
         ..channels = ["deb", "*"]
         ..updateChannel = ["stable", "beta"]
         ..url = "$baseUrl/Wmimo-Linux-x64-$cleanTag.deb",
       AutoupdateItem()
         ..platform = "linux"
         ..version = version
-        ..abis = ["*"]
+        ..abis = ["arm64", "aarch64"]
+        ..channels = ["deb", "*"]
+        ..updateChannel = ["stable", "beta"]
+        ..url = "$baseUrl/Wmimo-Linux-arm64-$cleanTag.deb",
+      AutoupdateItem()
+        ..platform = "linux"
+        ..version = version
+        ..abis = ["x86_64", "x64", "*"]
         ..channels = ["rpm", "*"]
         ..updateChannel = ["stable", "beta"]
         ..url = "$baseUrl/Wmimo-Linux-x64-$cleanTag.rpm",
       AutoupdateItem()
         ..platform = "linux"
         ..version = version
-        ..abis = ["*"]
+        ..abis = ["arm64", "aarch64"]
+        ..channels = ["rpm", "*"]
+        ..updateChannel = ["stable", "beta"]
+        ..url = "$baseUrl/Wmimo-Linux-arm64-$cleanTag.rpm",
+      AutoupdateItem()
+        ..platform = "linux"
+        ..version = version
+        ..abis = ["x86_64", "x64", "*"]
         ..channels = ["appimage", "*"]
         ..updateChannel = ["stable", "beta"]
         ..url = "$baseUrl/Wmimo-Linux-x64-$cleanTag.AppImage",
       AutoupdateItem()
+        ..platform = "linux"
+        ..version = version
+        ..abis = ["arm64", "aarch64"]
+        ..channels = ["appimage", "*"]
+        ..updateChannel = ["stable", "beta"]
+        ..url = "$baseUrl/Wmimo-Linux-arm64-$cleanTag.AppImage",
+      AutoupdateItem()
         ..platform = "macos"
         ..version = version
-        ..abis = ["*"]
+        ..abis = ["arm64", "aarch64", "x86_64", "x64", "*"]
         ..channels = ["*"]
         ..updateChannel = ["stable", "beta"]
-        ..url = "$baseUrl/Wmimo-MacOS-x64-$cleanTag.dmg",
+        ..url = "$baseUrl/Wmimo-macOS-universal-$cleanTag.dmg",
     ];
 
     return items.where((e) => e.platform == Platform.operatingSystem).toList();

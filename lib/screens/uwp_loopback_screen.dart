@@ -162,7 +162,7 @@ class _UwpLoopbackScreenState extends LasyRenderingState<UwpLoopbackScreen> {
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                color: isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: theme.dividerColor.withValues(alpha: 0.2),
@@ -295,7 +295,7 @@ class _UwpLoopbackScreenState extends LasyRenderingState<UwpLoopbackScreen> {
                               decoration: BoxDecoration(
                                 color: app.isExempt
                                     ? ThemeDefine.kColorGreenBright.withValues(alpha: 0.15)
-                                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0)),
+                                    : (isDark ? const Color(0xFF262629) : const Color(0xFFE2E8F0)),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Icon(

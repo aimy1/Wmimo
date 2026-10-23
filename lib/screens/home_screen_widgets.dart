@@ -579,7 +579,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }) {
     return Expanded(
       child: Material(
-        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.6),
+        color: Theme.of(context).brightness == Brightness.dark ? ThemeDefine.kColorDarkInner : Theme.of(context).colorScheme.surface.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
         child: InkWell(
           borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
@@ -633,7 +633,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: isDark
-            ? const Color(0xFF151D2E)
+            ? ThemeDefine.kColorDarkInner
             : const Color(0xFFF1F5F9).withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
@@ -756,7 +756,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: isDark
-            ? const Color(0xFF151D2E)
+            ? ThemeDefine.kColorDarkInner
             : const Color(0xFFF1F5F9).withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(

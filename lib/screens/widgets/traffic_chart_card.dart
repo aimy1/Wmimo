@@ -53,8 +53,8 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
 
     final uploadColor = const Color(0xFFF59E0B);
     final downloadColor = const Color(0xFF38BDF8);
-    final chartBgColor = isDark ? const Color(0xFF161922) : const Color(0xFFF1F5F9);
-    final borderColor = isDark ? const Color(0xFF2E3440) : const Color(0xFFE2E8F0);
+    final chartBgColor = isDark ? ThemeDefine.kColorDarkInner : const Color(0xFFF1F5F9);
+    final borderColor = isDark ? ThemeDefine.kColorDarkBorder : const Color(0xFFE2E8F0);
 
     return Card(
       elevation: 0,
@@ -116,7 +116,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                         ? ThemeDefine.kColorGreenBright.withValues(
                             alpha: isDark ? 0.15 : 0.1,
                           )
-                        : (isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0)),
+                        : (isDark ? ThemeDefine.kColorDarkElevated : const Color(0xFFE2E8F0)),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: widget.isConnected
@@ -223,7 +223,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: (isDark ? const Color(0xFF2E3440) : const Color(0xFFE2E8F0))
+                        color: (isDark ? ThemeDefine.kColorDarkElevated : const Color(0xFFE2E8F0))
                             .withValues(alpha: 0.8),
                         borderRadius: BorderRadius.circular(6),
                       ),
@@ -277,7 +277,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 decoration: BoxDecoration(
                   color: isDark
-                      ? const Color(0xFF111827).withValues(alpha: 0.6)
+                      ? ThemeDefine.kColorDarkInner
                       : const Color(0xFFF1F5F9).withValues(alpha: 0.8),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
@@ -641,7 +641,7 @@ class ClashVergeChartPainter extends CustomPainter {
         );
 
         final tooltipBgPaint = Paint()
-          ..color = const Color(0xFF1E222D).withValues(alpha: 0.92)
+          ..color = ThemeDefine.kColorDarkCard.withValues(alpha: 0.94)
           ..style = PaintingStyle.fill;
         final tooltipBorderPaint = Paint()
           ..color = Colors.white.withValues(alpha: 0.15)

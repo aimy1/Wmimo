@@ -102,7 +102,7 @@ class ProfilesBoardItem extends StatelessWidget {
             ? (isDark
                 ? const Color(0xFF1E3A8A).withValues(alpha: 0.35)
                 : const Color(0xFFEFF6FF))
-            : (isDark ? const Color(0xFF151D2E) : Colors.white),
+            : (isDark ? const Color(0xFF1C1C1E) : Colors.white),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: selected
@@ -141,7 +141,7 @@ class ProfilesBoardItem extends StatelessWidget {
                         color: selected
                             ? ThemeDefine.kColorBlue.withValues(alpha: 0.15)
                             : (isDark
-                                ? const Color(0xFF1E293B)
+                                ? const Color(0xFF262629)
                                 : const Color(0xFFF1F5F9)),
                         borderRadius: BorderRadius.circular(10),
                       ),

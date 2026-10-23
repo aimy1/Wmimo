@@ -13,7 +13,7 @@ if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
       TAG="v${PUBSPEC_VER}"
     fi
   else
-    TAG="v1.2.10.1512"
+    TAG="v1.2.11.1513"
   fi
 fi
 
@@ -24,22 +24,45 @@ fi
 
 RAW_VERSION="${TAG#v}"
 if [ -z "$RAW_VERSION" ] || [ "$RAW_VERSION" = "v" ]; then
-  RAW_VERSION="1.2.10.1512"
-  TAG="v1.2.10.1512"
+  RAW_VERSION="1.2.11.1513"
+  TAG="v1.2.11.1513"
 fi
 VERSION="$RAW_VERSION"
-BUNDLE_DIR="build/linux/x64/release/bundle"
-DIST_DIR="dist"
 
+# Detect target architecture (supports x64 and arm64)
+ARCH_INPUT="${2:-$(uname -m)}"
+case "$ARCH_INPUT" in
+  aarch64|arm64)
+    ARCH_LABEL="arm64"
+    DEB_ARCH="arm64"
+    RPM_ARCH="aarch64"
+    APPIMAGE_ARCH="aarch64"
+    BUNDLE_DIR="build/linux/arm64/release/bundle"
+    CORE_SRC="bind/linux/core_arm64/wmimoService"
+    ;;
+  *)
+    ARCH_LABEL="x64"
+    DEB_ARCH="amd64"
+    RPM_ARCH="x86_64"
+    APPIMAGE_ARCH="x86_64"
+    BUNDLE_DIR="build/linux/x64/release/bundle"
+    CORE_SRC="bind/linux/core/wmimoService"
+    ;;
+esac
+
+DIST_DIR="dist"
 mkdir -p "$DIST_DIR"
 
 echo "=========================================================="
-echo " Packaging Wmimo for all Linux Distributions ($TAG, version: $RAW_VERSION) "
+echo " Packaging Wmimo for Linux ($ARCH_LABEL, $TAG, version: $RAW_VERSION) "
 echo "=========================================================="
 
 # 0. Ensure Linux core service is copied & executable
-if [ -f "bind/linux/core/wmimoService" ]; then
-  cp bind/linux/core/wmimoService "$BUNDLE_DIR/wmimoService"
+if [ -f "$CORE_SRC" ]; then
+  cp "$CORE_SRC" "$BUNDLE_DIR/wmimoService"
+  chmod +x "$BUNDLE_DIR/wmimoService"
+elif [ -f "bind/linux/core/wmimoService" ]; then
+  cp "bind/linux/core/wmimoService" "$BUNDLE_DIR/wmimoService"
   chmod +x "$BUNDLE_DIR/wmimoService"
 fi
 chmod +x "$BUNDLE_DIR/wmimo"
@@ -48,7 +71,7 @@ chmod +x "$BUNDLE_DIR/wmimo"
 # 1. Universal Portable Archive (.tar.gz) - All Linux Distros
 # ------------------------------------------------------------
 echo "[1/5] Packaging Universal Portable Tarball (.tar.gz)..."
-PORTABLE_DIR="Wmimo-Linux-x64-$TAG"
+PORTABLE_DIR="Wmimo-Linux-${ARCH_LABEL}-$TAG"
 rm -rf "$PORTABLE_DIR"
 mkdir -p "$PORTABLE_DIR"
 cp -r "$BUNDLE_DIR"/* "$PORTABLE_DIR/"
@@ -85,14 +108,14 @@ echo "Wmimo installed to ~/.local/share/applications/wmimo.desktop and ~/.local/
 EOF
 chmod +x "$PORTABLE_DIR/install.sh"
 
-tar -czf "$DIST_DIR/Wmimo-Linux-x64-$TAG.tar.gz" "$PORTABLE_DIR"
+tar -czf "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.tar.gz" "$PORTABLE_DIR"
 rm -rf "$PORTABLE_DIR"
-echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.tar.gz"
+echo "  -> Created $DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.tar.gz"
 
 # ------------------------------------------------------------
 # Common Base Layout for Deb, RPM, and Pacman packages
 # ------------------------------------------------------------
-PKG_ROOT="linux_pkg_root"
+PKG_ROOT="linux_pkg_root_${ARCH_LABEL}"
 rm -rf "$PKG_ROOT"
 mkdir -p "$PKG_ROOT/opt/wmimo"
 mkdir -p "$PKG_ROOT/usr/bin"
@@ -130,7 +153,7 @@ Package: wmimo
 Version: $RAW_VERSION
 Section: net
 Priority: optional
-Architecture: amd64
+Architecture: $DEB_ARCH
 Depends: libgtk-3-0, libayatana-appindicator3-1, libkeybinder-3.0-0, libsecret-1-0, libstdc++6
 Maintainer: Wmimo <https://github.com/aimy1/Wmimo>
 Homepage: https://github.com/aimy1/Wmimo
@@ -138,9 +161,9 @@ Description: Modern cross-platform Clash/Mihomo GUI proxy client.
  A sleek, modern proxy GUI client crafted with Flutter and Mihomo core.
 EOF
 
-dpkg-deb --build "$PKG_ROOT" "$DIST_DIR/Wmimo-Linux-x64-$TAG.deb"
+dpkg-deb --build "$PKG_ROOT" "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.deb"
 rm -rf "$PKG_ROOT/DEBIAN"
-echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.deb"
+echo "  -> Created $DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.deb"
 
 # ------------------------------------------------------------
 # 3. RedHat / Fedora / CentOS / openSUSE Package (.rpm)
@@ -150,7 +173,7 @@ if command -v fpm >/dev/null 2>&1; then
   fpm -s dir -t rpm \
     -n wmimo \
     -v "$RAW_VERSION" \
-    -a x86_64 \
+    -a "$RPM_ARCH" \
     --license "GPL-3.0" \
     --vendor "Wmimo" \
     --url "https://github.com/aimy1/Wmimo" \
@@ -159,8 +182,8 @@ if command -v fpm >/dev/null 2>&1; then
     --depends gtk3 \
     --depends libsecret \
     -C "$PKG_ROOT" \
-    -p "$DIST_DIR/Wmimo-Linux-x64-$TAG.rpm"
-  echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.rpm"
+    -p "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.rpm"
+  echo "  -> Created $DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.rpm"
 else
   echo "  [Notice] fpm not found, skipping RPM package generation."
 fi
@@ -174,15 +197,15 @@ if command -v fpm >/dev/null 2>&1; then
     fpm -s dir -t pacman \
       -n wmimo \
       -v "$RAW_VERSION" \
-      -a x86_64 \
+      -a "$RPM_ARCH" \
       --license "GPL-3.0" \
       --vendor "Wmimo" \
       --url "https://github.com/aimy1/Wmimo" \
       --description "Modern cross-platform Clash/Mihomo GUI proxy client." \
       --category "Network" \
       -C "$PKG_ROOT" \
-      -p "$DIST_DIR/Wmimo-Linux-x64-$TAG.pkg.tar.zst" || true
-    echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.pkg.tar.zst"
+      -p "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.pkg.tar.zst" || true
+    echo "  -> Created $DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.pkg.tar.zst"
   else
     echo "  [Notice] bsdtar not found, skipping pacman generation."
   fi
@@ -195,10 +218,11 @@ rm -rf "$PKG_ROOT"
 # 5. Universal AppImage Package (.AppImage)
 # ------------------------------------------------------------
 echo "[5/5] Packaging Universal AppImage (.AppImage)..."
-APP_DIR="AppDir"
+APP_DIR="AppDir_${ARCH_LABEL}"
 rm -rf "$APP_DIR"
 mkdir -p "$APP_DIR/usr/bin"
 mkdir -p "$APP_DIR/usr/lib"
+mkdir -p "$APP_DIR/usr/share/applications"
 mkdir -p "$APP_DIR/usr/share/icons/hicolor/256x256/apps"
 
 cp -r "$BUNDLE_DIR"/* "$APP_DIR/usr/bin/"
@@ -208,6 +232,7 @@ fi
 
 if [ -f "assets/images/app_icon_256.png" ]; then
   cp assets/images/app_icon_256.png "$APP_DIR/wmimo.png"
+  cp assets/images/app_icon_256.png "$APP_DIR/.DirIcon"
   cp assets/images/app_icon_256.png "$APP_DIR/usr/share/icons/hicolor/256x256/apps/wmimo.png"
 fi
 
@@ -224,6 +249,7 @@ Categories=Network;Utility;
 StartupNotify=true
 MimeType=x-scheme-handler/wmimo;x-scheme-handler/clash;
 EOF
+cp "$APP_DIR/wmimo.desktop" "$APP_DIR/usr/share/applications/wmimo.desktop"
 
 cat << 'EOF' > "$APP_DIR/AppRun"
 #!/usr/bin/env bash
@@ -234,29 +260,31 @@ exec "${HERE}/usr/bin/wmimo" "$@"
 EOF
 chmod +x "$APP_DIR/AppRun"
 
-# Download appimagetool if not present
-if [ ! -f "appimagetool" ]; then
-  echo "Downloading appimagetool..."
-  if command -v wget >/dev/null 2>&1; then
-    wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O appimagetool || true
-  elif command -v curl >/dev/null 2>&1; then
-    curl -sSL https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -o appimagetool || true
+APPIMAGETOOL_BIN="appimagetool-${APPIMAGE_ARCH}"
+if [ ! -f "$APPIMAGETOOL_BIN" ]; then
+  echo "Downloading $APPIMAGETOOL_BIN..."
+  TOOL_URL_1="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${APPIMAGE_ARCH}.AppImage"
+  TOOL_URL_2="https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-${APPIMAGE_ARCH}.AppImage"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fL "$TOOL_URL_1" -o "$APPIMAGETOOL_BIN" || curl -fL "$TOOL_URL_2" -o "$APPIMAGETOOL_BIN" || true
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q "$TOOL_URL_1" -O "$APPIMAGETOOL_BIN" || wget -q "$TOOL_URL_2" -O "$APPIMAGETOOL_BIN" || true
   fi
-  if [ -f "appimagetool" ]; then
-    chmod +x appimagetool
+  if [ -f "$APPIMAGETOOL_BIN" ]; then
+    chmod +x "$APPIMAGETOOL_BIN"
   fi
 fi
 
-if [ -f "appimagetool" ]; then
-  ARCH=x86_64 ./appimagetool --appimage-extract-and-run "$APP_DIR" "$DIST_DIR/Wmimo-Linux-x64-$TAG.AppImage" || true
-  if [ -f "$DIST_DIR/Wmimo-Linux-x64-$TAG.AppImage" ]; then
-    chmod +x "$DIST_DIR/Wmimo-Linux-x64-$TAG.AppImage"
-    echo "  -> Created $DIST_DIR/Wmimo-Linux-x64-$TAG.AppImage"
+if [ -f "$APPIMAGETOOL_BIN" ]; then
+  ARCH="$APPIMAGE_ARCH" ./"$APPIMAGETOOL_BIN" --no-appstream --appimage-extract-and-run "$APP_DIR" "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.AppImage"
+  if [ -f "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.AppImage" ]; then
+    chmod +x "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.AppImage"
+    echo "  -> Created $DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.AppImage"
   fi
 fi
 rm -rf "$APP_DIR"
 
 echo "=========================================================="
-echo " All Linux Packages Built in $DIST_DIR/:"
+echo " All Linux ($ARCH_LABEL) Packages Built in $DIST_DIR/:"
 echo "=========================================================="
 ls -lh "$DIST_DIR"/Wmimo-Linux* || true

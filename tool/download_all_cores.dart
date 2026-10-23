@@ -28,6 +28,9 @@ final Map<String, List<String>> targets = {
   '$kBaseUrl/mihomo-linux-amd64-$kVersion.gz': [
     'bind/linux/core/wmimoService',
   ],
+  '$kBaseUrl/mihomo-linux-arm64-$kVersion.gz': [
+    'bind/linux/core_arm64/wmimoService',
+  ],
   // macOS
   '$kBaseUrl/mihomo-darwin-arm64-$kVersion.gz': [
     'bind/macos/core/wmimoService_arm64',
@@ -49,11 +52,12 @@ List<String> getUrlCandidates(String originalUrl) {
 Future<List<int>?> downloadBytes(HttpClient client, String originalUrl) async {
   final candidates = getUrlCandidates(originalUrl);
   final tempFile = File('${Directory.systemTemp.path}/mihomo_temp_${DateTime.now().millisecondsSinceEpoch}');
+  final curlExe = Platform.isWindows ? 'curl.exe' : 'curl';
 
   for (final url in candidates) {
     try {
       print('  Attempting (via curl): $url');
-      final result = await Process.run('curl.exe', [
+      final result = await Process.run(curlExe, [
         '-L',
         '-f',
         '-s',
@@ -242,6 +246,7 @@ Future<void> main(List<String> args) async {
     'bind/macos/core/wmimoService_arm64',
     'bind/macos/core/wmimoService_amd64',
     'bind/linux/core/wmimoService',
+    'bind/linux/core_arm64/wmimoService',
   ]) {
     final f = File(path);
     if (f.existsSync()) {

@@ -313,7 +313,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
                         height: 38,
                         decoration: BoxDecoration(
                           color: isDark
-                              ? const Color(0xFF1E293B)
+                              ? const Color(0xFF262629)
                               : const Color(0xFFF1F5F9),
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -403,7 +403,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     return Material(
       color: isSelected
           ? ThemeDefine.kColorBlue
-          : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
+          : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
@@ -443,7 +443,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151D2E) : const Color(0xFFF8FAFC),
+        color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: theme.dividerColor.withValues(alpha: 0.4),

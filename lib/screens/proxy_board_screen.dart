@@ -16,6 +16,7 @@ import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/node_region_helper.dart';
+import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
@@ -953,7 +954,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDark ? const Color(0xFF151D2E) : Colors.white,
+      backgroundColor: isDark ? const Color(0xFF1C1C1E) : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -1070,7 +1071,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                     const SizedBox(height: 6),
                     Container(
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC),
+                        color: isDark ? const Color(0xFF262629) : const Color(0xFFF8FAFC),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: theme.dividerColor.withValues(alpha: 0.3),
@@ -1109,7 +1110,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC),
+                          color: isDark ? const Color(0xFF262629) : const Color(0xFFF8FAFC),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: theme.dividerColor.withValues(alpha: 0.3),
@@ -1183,7 +1184,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         decoration: BoxDecoration(
           color: isSelected
               ? ThemeDefine.kColorBlue
-              : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
+              : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? ThemeDefine.kColorBlue : theme.dividerColor.withValues(alpha: 0.3),
@@ -1226,7 +1227,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF151D2E) : Colors.white,
+      backgroundColor: isDark ? const Color(0xFF1C1C1E) : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -1363,7 +1364,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? ThemeDefine.kColorBlue.withValues(alpha: 0.12)
-                                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC)),
+                                    : (isDark ? const Color(0xFF262629) : const Color(0xFFF8FAFC)),
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                   color: isSelected
@@ -1419,7 +1420,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                        color: isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: _activeLatencyTarget.id == "custom"
@@ -1518,7 +1519,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: isDark ? const Color(0xFF151D2E) : Colors.white,
+          backgroundColor: isDark ? const Color(0xFF1C1C1E) : Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           titlePadding: const EdgeInsets.fromLTRB(18, 18, 18, 8),
           contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
@@ -1726,7 +1727,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   decoration: BoxDecoration(
                     color: isSelected
                         ? ThemeDefine.kColorBlue
-                        : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
+                        : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: isSelected
@@ -1780,7 +1781,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, PlatformUtils.isPC() ? 4 : 16, 0, 0),
           child: Column(
             children: [
               // Top Header Bar (Clash Verge Style)
@@ -1810,7 +1811,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                     Container(
                       height: 32,
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+                        color: isDark ? const Color(0xFF262629) : const Color(0xFFE2E8F0),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       padding: const EdgeInsets.all(2),
@@ -1970,7 +1971,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         height: 36,
                         decoration: BoxDecoration(
                           color: isDark
-                              ? const Color(0xFF1E293B)
+                              ? const Color(0xFF262629)
                               : const Color(0xFFF1F5F9),
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -2011,7 +2012,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: isDark
-                              ? const Color(0xFF1E293B)
+                              ? const Color(0xFF262629)
                               : const Color(0xFFF1F5F9),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
@@ -2060,7 +2061,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
+                    color: isDark ? const Color(0xFF262629) : const Color(0xFFEFF6FF),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: ThemeDefine.kColorBlue.withValues(alpha: 0.25),
@@ -2243,7 +2244,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       child: Container(
         margin: const EdgeInsets.only(bottom: 14),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF151D2E) : const Color(0xFFF8FAFC),
+        color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: theme.dividerColor.withValues(alpha: 0.4),
@@ -2512,7 +2513,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               ? const Color(0xFF1E3A8A).withValues(alpha: 0.45)
               : const Color(0xFFDBEAFE).withValues(alpha: 0.7))
           : (isDark
-              ? const Color(0xFF0F172A).withValues(alpha: 0.6)
+              ? const Color(0xFF141416).withValues(alpha: 0.6)
               : const Color(0xFFFFFFFF)),
       borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
       child: InkWell(

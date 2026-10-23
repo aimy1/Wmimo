@@ -226,7 +226,7 @@ class _LanguageSettingsScreenState
       child: Material(
         color: isSelected
             ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.2 : 0.1)
-            : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC)),
+            : (isDark ? const Color(0xFF262629) : const Color(0xFFF8FAFC)),
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),

@@ -268,14 +268,28 @@ class IpInfoHelper {
     if (offset == null) return '';
     final str = offset.toString().trim();
     if (str.isEmpty) return '';
-    if (str.startsWith('+') || str.startsWith('-')) {
-      return "UTC$str";
-    }
     final numVal = int.tryParse(str);
     if (numVal != null) {
-      final hours = (numVal / 3600).round();
-      final sign = hours >= 0 ? '+' : '';
-      return "UTC$sign$hours";
+      if (numVal.abs() >= 1800) {
+        // Offset in seconds (e.g., -28800 -> UTC-8, 28800 -> UTC+8)
+        final hours = (numVal / 3600).round();
+        final sign = hours >= 0 ? '+' : '';
+        return "UTC$sign$hours";
+      } else if (numVal.abs() >= 100 && numVal.abs() <= 1400) {
+        // Offset in HHMM format (e.g., +0800 -> UTC+8, -0530 -> UTC-5:30)
+        final hours = numVal ~/ 100;
+        final mins = numVal.abs() % 100;
+        final sign = hours >= 0 ? '+' : '';
+        return mins == 0
+            ? "UTC$sign$hours"
+            : "UTC$sign$hours:${mins.toString().padLeft(2, '0')}";
+      } else {
+        final sign = numVal >= 0 ? '+' : '';
+        return "UTC$sign$numVal";
+      }
+    }
+    if (str.startsWith('+') || str.startsWith('-')) {
+      return "UTC$str";
     }
     return str;
   }

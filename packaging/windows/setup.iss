@@ -6,7 +6,7 @@
 #endif
 
 #ifndef MyAppVersion
-  #define MyAppVersion "1.2.10.1512"
+  #define MyAppVersion "1.2.11.1513"
 #endif
 
 #ifndef MyAppPublisher
@@ -53,6 +53,7 @@ OutputDir={#OutputDir}
 OutputBaseFilename=Wmimo-Windows-{#MyAppArch}-Setup-v{#MyAppVersion}
 SetupIconFile=..\..\windows\runner\resources\app_icon.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
+ChangesAssociations=yes
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern

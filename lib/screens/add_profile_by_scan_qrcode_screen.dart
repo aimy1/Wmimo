@@ -397,7 +397,7 @@ class _AddProfileByScanQrcodeScanScreenState
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: isDark
-                          ? const Color(0xFF1E293B).withValues(alpha: 0.9)
+                          ? const Color(0xFF262629).withValues(alpha: 0.9)
                           : Colors.black.withValues(alpha: 0.75),
                       borderRadius: BorderRadius.circular(20),
                     ),

@@ -151,7 +151,7 @@ class _QrcodeScreenState extends LasyRenderingState<QrcodeScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                             decoration: BoxDecoration(
                               color: isDark
-                                  ? const Color(0xFF1E293B)
+                                  ? const Color(0xFF262629)
                                   : const Color(0xFFF1F5F9),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(

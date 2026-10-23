@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/screens/theme_define.dart';
+import 'package:wmimo/screens/widgets/desktop_window_caption_bar.dart';
 
 /// A unified, responsive application bar for secondary screens in Wmimo.
 /// Replaces inconsistent faux-appbar rows and standardizes navigation, title typography,
@@ -142,6 +143,7 @@ class WmimoAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: centerTitle ?? (Platform.isIOS),
       backgroundColor: backgroundColor ?? theme.scaffoldBackgroundColor,
       automaticallyImplyLeading: false,
+      flexibleSpace: const DesktopDragArea(child: SizedBox.expand()),
       leading: _buildLeading(context),
       leadingWidth: leadingWidth ??
           (leading != null
@@ -164,7 +166,7 @@ class WmimoAppBar extends StatelessWidget implements PreferredSizeWidget {
                   preferredSize: const Size.fromHeight(0.8),
                   child: Container(
                     color: isDark
-                        ? const Color(0xFF1E293B)
+                        ? const Color(0xFF262629)
                         : const Color(0xFFE2E8F0),
                     height: 0.8,
                   ),

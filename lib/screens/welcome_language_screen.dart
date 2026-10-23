@@ -207,7 +207,7 @@ class _WelcomeLanguageScreenState
           width: 68,
           height: 68,
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF151D2E) : Colors.white,
+            color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isDark
@@ -322,7 +322,7 @@ class _WelcomeLanguageScreenState
                 ? (isDark
                     ? ThemeDefine.kColorBlue.withValues(alpha: 0.16)
                     : ThemeDefine.kColorBlue.withValues(alpha: 0.08))
-                : (isDark ? const Color(0xFF151D2E) : Colors.white);
+                : (isDark ? const Color(0xFF1C1C1E) : Colors.white);
 
             final borderColor = isSelected
                 ? ThemeDefine.kColorBlue

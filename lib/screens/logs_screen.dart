@@ -266,7 +266,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+      backgroundColor: isDark ? const Color(0xFF141416) : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -323,7 +323,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                  color: isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: theme.dividerColor.withValues(alpha: 0.2),
@@ -504,7 +504,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                       height: 36,
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF1E293B)
+                            ? const Color(0xFF262629)
                             : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -662,7 +662,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     return Material(
       color: isSelected
           ? chipColor
-          : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
+          : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),

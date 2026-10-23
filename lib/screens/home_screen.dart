@@ -17,6 +17,8 @@ import 'package:wmimo/app/utils/local_storage.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/mobile_permission_helper.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
+import 'package:wmimo/app/utils/platform_utils.dart';
+import 'package:wmimo/screens/widgets/desktop_window_caption_bar.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
@@ -75,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen>
       _TabNavigator(
         navigatorKey: _navigatorKeys[0],
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: EdgeInsets.fromLTRB(14, PlatformUtils.isPC() ? 2 : 10, 14, 10),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -111,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen>
       _TabNavigator(
         navigatorKey: _navigatorKeys[4],
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: EdgeInsets.fromLTRB(14, PlatformUtils.isPC() ? 2 : 10, 14, 10),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -360,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen>
             }
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: EdgeInsets.fromLTRB(14, PlatformUtils.isPC() ? 2 : 10, 14, 10),
             child: Row(
               children: [
                 Stack(
@@ -384,7 +386,7 @@ class _HomeScreenState extends State<HomeScreen>
                             color: const Color(0xFFFF3B30),
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: isDark ? const Color(0xFF0F172A) : Colors.white,
+                              color: isDark ? ThemeDefine.kColorDarkSidebar : Colors.white,
                               width: 1.5,
                             ),
                             boxShadow: [
@@ -442,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
       child: Material(
         color: isDark
-            ? const Color(0xFF151D2E)
+            ? ThemeDefine.kColorDarkCard
             : const Color(0xFFE2E8F0).withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
@@ -569,11 +571,11 @@ class _HomeScreenState extends State<HomeScreen>
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF0F172A) : Colors.white,
+        color: isDark ? ThemeDefine.kColorDarkSidebar : Colors.white,
         border: Border(
           top: BorderSide(
             color: isDark
-                ? const Color(0xFF1E293B)
+                ? ThemeDefine.kColorDarkBorder
                 : const Color(0xFFE2E8F0),
             width: 0.8,
           ),
@@ -659,7 +661,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     color: const Color(0xFFFF3B30),
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: isDark ? const Color(0xFF0F172A) : Colors.white,
+                                      color: isDark ? ThemeDefine.kColorDarkSidebar : Colors.white,
                                       width: 1.5,
                                     ),
                                     boxShadow: [
@@ -750,7 +752,7 @@ class _HomeScreenState extends State<HomeScreen>
                       width: 180,
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF0F172A)
+                            ? ThemeDefine.kColorDarkSidebar
                             : const Color(0xFFF1F5F9),
                         border: Border(
                           right: BorderSide(
@@ -763,45 +765,52 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/images/app_icon_256.png',
-                                  width: 28,
-                                  height: 28,
-                                  fit: BoxFit.contain,
-                                  filterQuality: FilterQuality.medium,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        AppUtils.getName(),
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: 0.3,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 1),
-                                      Text(
-                                        AppUtils.getFormattedVersion(),
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface
-                                              .withValues(alpha: 0.45),
-                                        ),
-                                      ),
-                                    ],
+                          DesktopDragArea(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                14,
+                                Platform.isMacOS ? 34 : 14,
+                                14,
+                                10,
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/app_icon_256.png',
+                                    width: 28,
+                                    height: 28,
+                                    fit: BoxFit.contain,
+                                    filterQuality: FilterQuality.medium,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          AppUtils.getName(),
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 0.3,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 1),
+                                        Text(
+                                          AppUtils.getFormattedVersion(),
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withValues(alpha: 0.45),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           const Divider(height: 1, thickness: 0.8),
@@ -849,16 +858,32 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     // Right Main Workspace
                     Expanded(
+                      child: Column(
+                        children: [
+                          if (PlatformUtils.isPC())
+                            const DesktopWindowCaptionBar(),
+                          Expanded(
+                            child: IndexedStack(
+                              index: _currentNavIndex,
+                              children: _tabPages,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    if (PlatformUtils.isPC())
+                      const DesktopWindowCaptionBar(showLeadingLogo: true),
+                    Expanded(
                       child: IndexedStack(
                         index: _currentNavIndex,
                         children: _tabPages,
                       ),
                     ),
                   ],
-                )
-              : IndexedStack(
-                  index: _currentNavIndex,
-                  children: _tabPages,
                 ),
         ),
       ),

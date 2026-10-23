@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/utils/ip_info_helper.dart';
 import 'package:wmimo/i18n/strings.g.dart';
+import 'package:wmimo/screens/theme_define.dart';
 
 class IpInfoCard extends StatefulWidget {
   final bool isConnected;
@@ -25,7 +26,6 @@ class _IpInfoCardState extends State<IpInfoCard> {
   bool _showDirect = false;
   bool _loading = false;
   bool _maskIp = false;
-  bool _expanded = false;
   Timer? _debounceTimer;
 
   @override
@@ -45,14 +45,12 @@ class _IpInfoCardState extends State<IpInfoCard> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.isConnected != widget.isConnected) {
       _debounceTimer?.cancel();
-      // Reset view to default when disconnected
       if (!widget.isConnected) {
         _showDirect = true;
       } else {
         _showDirect = false;
       }
 
-      // On connect, delay slightly (1.2s) so Mihomo core finishes upstream proxy handshake
       final delay = widget.isConnected
           ? const Duration(milliseconds: 1200)
           : const Duration(milliseconds: 150);
@@ -93,6 +91,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
   }
 
   void _copyIp(String ip) {
+    HapticFeedback.selectionClick();
     Clipboard.setData(ClipboardData(text: ip));
     final tcontext = Translations.of(context);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -117,48 +116,27 @@ class _IpInfoCardState extends State<IpInfoCard> {
     return '***.***.***.***';
   }
 
-  Widget _buildInfoRow({
-    required IconData icon,
-    required String label,
-    required Widget content,
-    required TextStyle titleStyle,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            icon,
-            size: 13.5,
-            color: titleStyle.color?.withValues(alpha: 0.65),
-          ),
-          const SizedBox(width: 4),
-          Text("$label: ", style: titleStyle),
-          Expanded(child: content),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final labelTitleStyle = TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w500,
-      color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
-    );
-    final labelValueStyle = TextStyle(
-      fontSize: 12.5,
-      fontWeight: FontWeight.w500,
-      color: isDark ? Colors.white : Colors.black87,
-    );
-
     final currentInfo = _currentInfo;
     final isProxy = _isProxyModeActive;
+
+    final innerBgColor = isDark
+        ? ThemeDefine.kColorDarkInner
+        : const Color(0xFFF1F5F9);
+    final gridBgColor = isDark
+        ? ThemeDefine.kColorDarkInner
+        : const Color(0xFFF1F5F9).withValues(alpha: 0.8);
+    final innerBorderColor = isDark
+        ? ThemeDefine.kColorDarkBorder
+        : const Color(0xFFE2E8F0);
+
+    final statusColor = isProxy
+        ? ThemeDefine.kColorGreenBright
+        : ThemeDefine.kColorBlue;
 
     return Card(
       elevation: 0,
@@ -171,24 +149,35 @@ class _IpInfoCardState extends State<IpInfoCard> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 1. Header: Location icon + Title + Outbound Badge + Toggle/Refresh
+            // 1. Card Header (matches TrafficChartCard header style)
             Row(
               children: [
                 Container(
-                  width: 26,
-                  height: 26,
+                  width: 28,
+                  height: 28,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E3A5F).withValues(alpha: isDark ? 0.8 : 0.2),
-                    borderRadius: BorderRadius.circular(7),
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xFF38BDF8), Color(0xFF0284C7)],
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: const Icon(
-                    Icons.location_on_rounded,
-                    color: Color(0xFF38BDF8),
+                    Icons.public_rounded,
+                    color: Colors.white,
                     size: 16,
                   ),
                 ),
@@ -196,109 +185,100 @@ class _IpInfoCardState extends State<IpInfoCard> {
                 Text(
                   tcontext.meta.ipInfo,
                   style: const TextStyle(
-                    fontSize: 14.5,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.2,
                   ),
                 ),
-                const SizedBox(width: 6),
-                // Outbound Type Pill Badge
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: (isProxy ? const Color(0xFF10B981) : const Color(0xFF3B82F6))
-                        .withValues(alpha: isDark ? 0.25 : 0.12),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: (isProxy ? const Color(0xFF10B981) : const Color(0xFF3B82F6))
-                          .withValues(alpha: 0.35),
-                      width: 0.6,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 5,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isProxy ? const Color(0xFF10B981) : const Color(0xFF3B82F6),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        isProxy ? tcontext.meta.ipProxy : tcontext.meta.ipDirect,
-                        style: TextStyle(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w600,
-                          color: isProxy ? const Color(0xFF10B981) : const Color(0xFF3B82F6),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 const Spacer(),
-                if (widget.isConnected) ...[
-                  // Switch between Proxy Exit and Local Direct
-                  InkWell(
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: () {
-                      setState(() {
-                        _showDirect = !_showDirect;
-                      });
-                      if (_currentInfo == null) {
-                        _fetchCurrentInfo();
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: theme.dividerColor.withValues(alpha: 0.2),
-                          width: 0.5,
-                        ),
+                // Current Mode Status Pill (clickable to switch when connected)
+                InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: widget.isConnected
+                      ? () {
+                          HapticFeedback.selectionClick();
+                          setState(() {
+                            _showDirect = !_showDirect;
+                          });
+                          if (_currentInfo == null) {
+                            _fetchCurrentInfo();
+                          }
+                        }
+                      : null,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha: isDark ? 0.15 : 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: statusColor.withValues(alpha: 0.35),
+                        width: 0.8,
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 5,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: statusColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          isProxy ? tcontext.meta.ipProxy : tcontext.meta.ipDirect,
+                          style: TextStyle(
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w600,
+                            color: statusColor,
+                          ),
+                        ),
+                        if (widget.isConnected) ...[
+                          const SizedBox(width: 3),
                           Icon(
                             Icons.swap_horiz_rounded,
-                            size: 13,
-                            color: theme.colorScheme.primary,
-                          ),
-                          const SizedBox(width: 3),
-                          Text(
-                            _showDirect ? tcontext.meta.ipProxy : tcontext.meta.ipDirect,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.primary,
-                            ),
+                            size: 12,
+                            color: statusColor,
                           ),
                         ],
-                      ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 4),
-                ],
+                ),
+                const SizedBox(width: 6),
+                // Refresh Button
                 InkWell(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(8),
                   onTap: _loading ? null : _fetchCurrentInfo,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
+                  child: Container(
+                    width: 24,
+                    height: 24,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? ThemeDefine.kColorDarkElevated
+                          : const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(7),
+                      border: Border.all(
+                        color: theme.dividerColor.withValues(alpha: 0.3),
+                        width: 0.8,
+                      ),
+                    ),
                     child: _loading
-                        ? const SizedBox(
-                            width: 15,
-                            height: 15,
-                            child: CircularProgressIndicator(strokeWidth: 2),
+                        ? SizedBox(
+                            width: 12,
+                            height: 12,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1.8,
+                              color: theme.colorScheme.primary,
+                            ),
                           )
                         : Icon(
                             Icons.refresh_rounded,
-                            size: 18,
-                            color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.7),
+                            size: 14.5,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                   ),
                 ),
@@ -306,284 +286,368 @@ class _IpInfoCardState extends State<IpInfoCard> {
             ),
             const SizedBox(height: 8),
 
-            // 2. Content Area
+            // 2. Body Content
             if (_loading && currentInfo == null)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(
-                        width: 14,
-                        height: 14,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 22),
+                decoration: BoxDecoration(
+                  color: innerBgColor,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: innerBorderColor, width: 0.8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: theme.colorScheme.primary,
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        tcontext.meta.ipFetching,
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
-                        ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      tcontext.meta.ipFetching,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               )
             else if (currentInfo != null) ...[
-              // Line 1: IP Hero Row (IP + Type Badge + Mask + Copy)
-              Row(
-                children: [
-                  Text("IP: ", style: labelTitleStyle),
-                  Flexible(
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(4),
-                      onTap: () => _copyIp(currentInfo.ip),
-                      child: Text(
-                        _formatIp(currentInfo.ip),
-                        style: labelValueStyle.copyWith(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "monospace",
+              // 2a. Inner IP Hero Banner Box
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                decoration: BoxDecoration(
+                  color: innerBgColor,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: innerBorderColor,
+                    width: 0.8,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    // Country Code / Flag Badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primary.withValues(
+                          alpha: isDark ? 0.2 : 0.1,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.25),
+                          width: 0.6,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (!Platform.isWindows) ...[
+                            Text(
+                              currentInfo.flagEmoji,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                            const SizedBox(width: 4),
+                          ],
+                          Text(
+                            currentInfo.countryCode.isNotEmpty
+                                ? currentInfo.countryCode.toUpperCase()
+                                : 'IP',
+                            style: TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w700,
+                              color: theme.colorScheme.primary,
+                              fontFamily: 'monospace',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
-                  // IPv4 / IPv6 Badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-                    decoration: BoxDecoration(
-                      color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      currentInfo.ipType,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.7),
-                        fontFamily: "monospace",
+                    const SizedBox(width: 8),
+                    // Monospace IP Address
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(4),
+                              onTap: () => _copyIp(currentInfo.ip),
+                              child: Text(
+                                _formatIp(currentInfo.ip),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'monospace',
+                                  letterSpacing: 0.3,
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          // IPv4 / IPv6 tag
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                            decoration: BoxDecoration(
+                              color: (isDark ? Colors.white : Colors.black)
+                                  .withValues(alpha: 0.07),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              currentInfo.ipType,
+                              style: TextStyle(
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'monospace',
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(10),
-                    onTap: () {
-                      setState(() {
-                        _maskIp = !_maskIp;
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: Icon(
-                        _maskIp
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        size: 15,
-                        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.5),
-                      ),
+                    const SizedBox(width: 6),
+                    // Mask / Unmask Button
+                    _buildMiniActionButton(
+                      context: context,
+                      isDark: isDark,
+                      icon: _maskIp
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      onTap: () {
+                        HapticFeedback.selectionClick();
+                        setState(() {
+                          _maskIp = !_maskIp;
+                        });
+                      },
                     ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: () => _copyIp(currentInfo.ip),
-                    child: Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: Icon(
-                        Icons.copy_rounded,
-                        size: 14,
-                        color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.5),
-                      ),
+                    const SizedBox(width: 5),
+                    // Copy IP Button
+                    _buildMiniActionButton(
+                      context: context,
+                      isDark: isDark,
+                      icon: Icons.copy_rounded,
+                      onTap: () => _copyIp(currentInfo.ip),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: 8),
 
-              // Line 2: Location
-              _buildInfoRow(
-                icon: Icons.public_rounded,
-                label: tcontext.meta.ipLocation,
-                titleStyle: labelTitleStyle,
-                content: Row(
-                  children: [
-                    Text(
-                      currentInfo.flagEmoji,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: Platform.isWindows ? 'Emoji' : null,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        currentInfo.locationString,
-                        style: labelValueStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+              // 2b. 2x2 Structured Metadata Grid (matches TrafficChartCard bottom stat container)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                decoration: BoxDecoration(
+                  color: gridBgColor,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: theme.dividerColor.withValues(alpha: 0.25),
+                    width: 0.8,
+                  ),
                 ),
-              ),
-
-              // Line 3: ISP & ASN
-              _buildInfoRow(
-                icon: Icons.dns_rounded,
-                label: tcontext.meta.ipIsp,
-                titleStyle: labelTitleStyle,
-                content: Text(
-                  [
-                    currentInfo.isp.isNotEmpty ? currentInfo.isp : currentInfo.org,
-                    if (currentInfo.asn.isNotEmpty) "(${currentInfo.asn})"
-                  ].where((s) => s.isNotEmpty).join(' '),
-                  style: labelValueStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-
-              // Expandable Detailed Fields
-              AnimatedCrossFade(
-                duration: const Duration(milliseconds: 200),
-                crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                firstChild: const SizedBox.shrink(),
-                secondChild: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // ASN
-                    if (currentInfo.asn.isNotEmpty)
-                      _buildInfoRow(
-                        icon: Icons.hub_rounded,
-                        label: tcontext.meta.ipAsn,
-                        titleStyle: labelTitleStyle,
-                        content: Text(
-                          currentInfo.asn,
-                          style: labelValueStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-
-                    // Organization (if distinct from ISP)
-                    if (currentInfo.org.isNotEmpty && currentInfo.org != currentInfo.isp)
-                      _buildInfoRow(
-                        icon: Icons.business_rounded,
-                        label: tcontext.meta.ipOrg,
-                        titleStyle: labelTitleStyle,
-                        content: Text(
-                          currentInfo.org,
-                          style: labelValueStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-
-                    // Timezone
-                    if (currentInfo.timezoneDisplay.isNotEmpty)
-                      _buildInfoRow(
-                        icon: Icons.schedule_rounded,
-                        label: tcontext.meta.ipTimezone,
-                        titleStyle: labelTitleStyle,
-                        content: Text(
-                          currentInfo.timezoneDisplay,
-                          style: labelValueStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-
-                    // Coordinates
-                    if (currentInfo.formattedCoordinates.isNotEmpty)
-                      _buildInfoRow(
-                        icon: Icons.explore_rounded,
-                        label: tcontext.meta.ipCoordinates,
-                        titleStyle: labelTitleStyle,
-                        content: Text(
-                          currentInfo.formattedCoordinates,
-                          style: labelValueStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-
-              // Expand/Collapse Toggle Button
-              Center(
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: () {
-                    setState(() {
-                      _expanded = !_expanded;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          _expanded ? tcontext.meta.ipLessDetails : tcontext.meta.ipMoreDetails,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            color: theme.colorScheme.primary.withValues(alpha: 0.85),
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _buildGridItem(
+                              context: context,
+                              icon: Icons.place_outlined,
+                              iconColor: const Color(0xFF38BDF8),
+                              label: tcontext.meta.ipLocation,
+                              value: currentInfo.locationString,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 2),
-                        Icon(
-                          _expanded
-                              ? Icons.keyboard_arrow_up_rounded
-                              : Icons.keyboard_arrow_down_rounded,
-                          size: 15,
-                          color: theme.colorScheme.primary.withValues(alpha: 0.85),
-                        ),
-                      ],
+                          _buildVerticalDivider(theme),
+                          Expanded(
+                            child: _buildGridItem(
+                              context: context,
+                              icon: Icons.dns_outlined,
+                              iconColor: const Color(0xFF818CF8),
+                              label: tcontext.meta.ipIsp,
+                              value: (currentInfo.isp.isNotEmpty
+                                      ? currentInfo.isp
+                                      : currentInfo.org)
+                                  .isNotEmpty
+                                  ? (currentInfo.isp.isNotEmpty
+                                      ? currentInfo.isp
+                                      : currentInfo.org)
+                                  : '-',
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Divider(
+                        height: 1,
+                        thickness: 0.8,
+                        color: theme.dividerColor.withValues(alpha: 0.22),
+                      ),
+                    ),
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _buildGridItem(
+                              context: context,
+                              icon: Icons.hub_outlined,
+                              iconColor: const Color(0xFF10B981),
+                              label: tcontext.meta.ipAsn,
+                              value: currentInfo.asn.isNotEmpty
+                                  ? currentInfo.asn
+                                  : '-',
+                            ),
+                          ),
+                          _buildVerticalDivider(theme),
+                          Expanded(
+                            child: _buildGridItem(
+                              context: context,
+                              icon: Icons.schedule_rounded,
+                              iconColor: const Color(0xFFF59E0B),
+                              label: tcontext.meta.ipTimezone,
+                              value: currentInfo.timezoneDisplay.isNotEmpty
+                                  ? currentInfo.timezoneDisplay
+                                  : (currentInfo.formattedCoordinates.isNotEmpty
+                                      ? currentInfo.formattedCoordinates
+                                      : '-'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ] else
               InkWell(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
                 onTap: _fetchCurrentInfo,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.refresh_rounded,
-                          size: 15,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  decoration: BoxDecoration(
+                    color: innerBgColor,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: innerBorderColor, width: 0.8),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.refresh_rounded,
+                        size: 15,
+                        color: theme.colorScheme.primary,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        tcontext.meta.ipTapToFetch,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
                           color: theme.colorScheme.primary,
                         ),
-                        const SizedBox(width: 6),
-                        Text(
-                          tcontext.meta.ipTapToFetch,
-                          style: TextStyle(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildMiniActionButton({
+    required BuildContext context,
+    required bool isDark,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    return InkWell(
+      borderRadius: BorderRadius.circular(6),
+      onTap: onTap,
+      child: Container(
+        width: 24,
+        height: 24,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Icon(
+          icon,
+          size: 13.5,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVerticalDivider(ThemeData theme) {
+    return Container(
+      width: 0.8,
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      color: theme.dividerColor.withValues(alpha: 0.25),
+    );
+  }
+
+  Widget _buildGridItem({
+    required BuildContext context,
+    required IconData icon,
+    required Color iconColor,
+    required String label,
+    required String value,
+  }) {
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 11.5, color: iconColor),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.58),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 2.5),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 11.5,
+            fontWeight: FontWeight.w600,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
     );
   }
 }

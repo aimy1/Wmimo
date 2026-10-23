@@ -135,13 +135,14 @@ Future<void> run(List<String> args) async {
 
     if (PlatformUtils.isPC()) {
       await windowManager.ensureInitialized();
-      WindowOptions windowOptions = const WindowOptions(
+      WindowOptions windowOptions = WindowOptions(
         size: Size(800, 560),
         minimumSize: Size(360, 480),
         center: true,
         backgroundColor: Colors.transparent,
         skipTaskbar: false,
-        titleBarStyle: TitleBarStyle.normal,
+        titleBarStyle: TitleBarStyle.hidden,
+        windowButtonVisibility: Platform.isMacOS,
       );
       windowManager.waitUntilReadyToShow(windowOptions, () async {
         await windowManager.setMinimumSize(const Size(360, 480));

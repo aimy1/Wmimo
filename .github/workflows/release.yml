@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.2.10.1512)'
+        description: 'Release Tag (e.g. v1.2.11.1513)'
         required: false
-        default: 'v1.2.10.1512'
+        default: 'v1.2.11.1513'
 
 permissions:
   contents: write
@@ -68,7 +68,7 @@ jobs:
                 $tag = "v$pubVer"
               }
             } else {
-              $tag = "v1.2.10.1512"
+              $tag = "v1.2.11.1513"
             }
           }
           if (-not $tag.StartsWith("v")) {
@@ -179,7 +179,8 @@ jobs:
             file \
             wget \
             squashfs-tools \
-            libarchive-tools
+            libarchive-tools \
+            desktop-file-utils
           sudo apt-get install -y libfuse2 || sudo apt-get install -y libfuse2t64 || true
           sudo gem install --no-document fpm
 
@@ -223,7 +224,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.10.1512"
+              TAG="v1.2.11.1513"
             fi
           fi
           chmod +x tool/package_linux.sh
@@ -233,6 +234,107 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-release
+          path: dist/*
+
+  build-linux-arm64:
+    name: Build Linux ARM64 Release (Deb, RPM, AppImage, Arch & Tarball)
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet 2>/dev/null || true
+          sudo rm -rf /opt/ghc 2>/dev/null || true
+          sudo docker image prune -a -f 2>/dev/null || true
+          df -h
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install Linux ARM64 Build & Packaging Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang \
+            cmake \
+            ninja-build \
+            pkg-config \
+            libgtk-3-dev \
+            liblzma-dev \
+            libayatana-appindicator3-dev \
+            libkeybinder-3.0-dev \
+            libsecret-1-dev \
+            rpm \
+            ruby \
+            ruby-dev \
+            rubygems \
+            build-essential \
+            zstd \
+            file \
+            wget \
+            curl \
+            xz-utils \
+            unzip \
+            squashfs-tools \
+            libarchive-tools \
+            desktop-file-utils
+          sudo apt-get install -y libfuse2t64 || sudo apt-get install -y libfuse2 || true
+          sudo gem install --no-document fpm
+
+      - name: Setup Flutter (ARM64)
+        run: |
+          git clone https://github.com/flutter/flutter.git --depth 1 -b stable "$HOME/flutter"
+          echo "$HOME/flutter/bin" >> $GITHUB_PATH
+          "$HOME/flutter/bin/flutter" config --no-analytics
+          "$HOME/flutter/bin/flutter" --version
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Generate Translations
+        run: dart run slang
+
+      - name: Download Multiplatform Mihomo Cores
+        run: dart run tool/download_all_cores.dart
+
+      - name: Build Linux ARM64 Desktop Application
+        run: |
+          PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+          PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1513"
+          flutter build linux --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
+
+      - name: Package Linux ARM64 Artifacts
+        run: |
+          TAG="${{ github.event.inputs.tag_name }}"
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+              TAG="${{ github.ref_name }}"
+            fi
+          fi
+          if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
+            if [ -f "pubspec.yaml" ]; then
+              PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
+              PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
+              if [ -n "$PUBSPEC_BUILD" ]; then
+                TAG="v${PUBSPEC_VER}.${PUBSPEC_BUILD}"
+              else
+                TAG="v${PUBSPEC_VER}"
+              fi
+            else
+              TAG="v1.2.11.1513"
+            fi
+          fi
+          chmod +x tool/package_linux.sh
+          bash tool/package_linux.sh "$TAG" arm64
+
+      - name: Upload Linux ARM64 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-arm64-release
           path: dist/*
 
   build-android:
@@ -317,7 +419,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.10.1512"
+              TAG="v1.2.11.1513"
             fi
           fi
           
@@ -412,7 +514,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.10.1512"
+              TAG="v1.2.11.1513"
             fi
           fi
           chmod +x tool/package_macos.sh
@@ -494,7 +596,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.10.1512"
+              TAG="v1.2.11.1513"
             fi
           fi
           chmod +x tool/package_ios.sh
@@ -508,7 +610,7 @@ jobs:
 
   publish-release:
     name: Publish GitHub Release
-    needs: [build-windows, build-linux, build-android, build-macos, build-ios]
+    needs: [build-windows, build-linux, build-linux-arm64, build-android, build-macos, build-ios]
     runs-on: ubuntu-latest
 
     steps:
@@ -534,7 +636,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.10.1512"
+              TAG="v1.2.11.1513"
             fi
           fi
 
@@ -548,7 +650,7 @@ jobs:
             BUILD_NUM=$(echo "$RAW_VER" | awk -F'.' '{if (NF>3) print $4}')
           fi
           if [ -z "$BUILD_NUM" ]; then
-            BUILD_NUM="1512"
+            BUILD_NUM="1513"
           fi
 
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT
