@@ -51,18 +51,12 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
   String _selectedProtocol = "ALL"; // ALL, TCP, UDP
   ConnectionSortType _sortType = ConnectionSortType.defaultOrder;
 
-  ClashConnections? _connectionsData;
   List<ClashConnectionsTrack> _connections = [];
 
   // Traffic & Speed calculation
   Map<String, _TrafficSnapshot> _prevConnTraffic = {};
   Map<String, num> _connUploadSpeeds = {};
   Map<String, num> _connDownloadSpeeds = {};
-  num _totalUploadSpeed = 0;
-  num _totalDownloadSpeed = 0;
-  num? _prevUploadTotal;
-  num? _prevDownloadTotal;
-  DateTime? _prevTotalTime;
 
   @override
   void initState() {
@@ -111,14 +105,8 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     if (!started) {
       if (mounted) {
         setState(() {
-          _connectionsData = null;
           _connections = [];
           _loading = false;
-          _totalUploadSpeed = 0;
-          _totalDownloadSpeed = 0;
-          _prevUploadTotal = null;
-          _prevDownloadTotal = null;
-          _prevTotalTime = null;
           _prevConnTraffic.clear();
           _connUploadSpeeds.clear();
           _connDownloadSpeeds.clear();
@@ -134,21 +122,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
       final now = DateTime.now();
       final data = result.data!;
 
-      // 1. Calculate overall real-time speeds
-      if (_prevUploadTotal != null && _prevDownloadTotal != null && _prevTotalTime != null) {
-        final dt = now.difference(_prevTotalTime!).inMilliseconds / 1000.0;
-        if (dt > 0.3) {
-          final upDiff = data.uploadTotal - _prevUploadTotal!;
-          final downDiff = data.downloadTotal - _prevDownloadTotal!;
-          _totalUploadSpeed = upDiff > 0 ? (upDiff / dt) : 0;
-          _totalDownloadSpeed = downDiff > 0 ? (downDiff / dt) : 0;
-        }
-      }
-      _prevUploadTotal = data.uploadTotal;
-      _prevDownloadTotal = data.downloadTotal;
-      _prevTotalTime = now;
-
-      // 2. Calculate per-connection real-time speeds
+      // Calculate per-connection real-time speeds
       final Map<String, num> newUpSpeeds = {};
       final Map<String, num> newDownSpeeds = {};
       final Map<String, _TrafficSnapshot> newSnapshots = {};
@@ -168,7 +142,6 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
       }
 
       setState(() {
-        _connectionsData = data;
         _connections = data.connections;
         _prevConnTraffic = newSnapshots;
         _connUploadSpeeds = newUpSpeeds;
@@ -212,8 +185,6 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
         _prevConnTraffic.clear();
         _connUploadSpeeds.clear();
         _connDownloadSpeeds.clear();
-        _totalUploadSpeed = 0;
-        _totalDownloadSpeed = 0;
       });
       _fetchConnections();
     }
@@ -610,174 +581,6 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     );
   }
 
-  Widget _buildStatsHeader(bool isDark, ThemeData theme, Translations tcontext) {
-    final uploadSpeedStr = _formatSpeed(_totalUploadSpeed);
-    final downloadSpeedStr = _formatSpeed(_totalDownloadSpeed);
-    final uploadTotalStr = ClashHttpApi.convertTrafficToStringDouble(_connectionsData?.uploadTotal ?? 0);
-    final downloadTotalStr = ClashHttpApi.convertTrafficToStringDouble(_connectionsData?.downloadTotal ?? 0);
-    final memoryStr = _connectionsData != null && _connectionsData!.memory > 0
-        ? ClashHttpApi.convertTrafficToStringDouble(_connectionsData!.memory)
-        : "";
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E22) : const Color(0xFFF1F5F9),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: theme.dividerColor.withValues(alpha: isDark ? 0.2 : 0.4),
-          width: 0.8,
-        ),
-      ),
-      child: Row(
-        children: [
-          // Realtime Download Speed
-          Expanded(
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: ThemeDefine.kColorGreenBright.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_downward_rounded,
-                    size: 14,
-                    color: ThemeDefine.kColorGreenBright,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        downloadSpeedStr,
-                        style: const TextStyle(
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        "${tcontext.meta.totalDownload} $downloadTotalStr",
-                        style: TextStyle(
-                          fontSize: 10.5,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 24,
-            width: 1,
-            color: theme.dividerColor.withValues(alpha: 0.3),
-          ),
-          const SizedBox(width: 12),
-          // Realtime Upload Speed
-          Expanded(
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: Colors.orangeAccent.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_upward_rounded,
-                    size: 14,
-                    color: Colors.orangeAccent,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        uploadSpeedStr,
-                        style: const TextStyle(
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        "${tcontext.meta.totalUpload} $uploadTotalStr",
-                        style: TextStyle(
-                          fontSize: 10.5,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (memoryStr.isNotEmpty) ...[
-            Container(
-              height: 24,
-              width: 1,
-              color: theme.dividerColor.withValues(alpha: 0.3),
-            ),
-            const SizedBox(width: 12),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: ThemeDefine.kColorBlue.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: const Icon(
-                    Icons.memory_rounded,
-                    size: 14,
-                    color: ThemeDefine.kColorBlue,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      memoryStr,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      tcontext.meta.memoryUsage,
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
@@ -897,12 +700,6 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
           child: Column(
             children: [
-              if (_connectionsData != null) ...[
-                const SizedBox(height: 4),
-                _buildStatsHeader(isDark, theme, tcontext),
-              ],
-              const SizedBox(height: 10),
-
               // Search bar and protocol filter
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
