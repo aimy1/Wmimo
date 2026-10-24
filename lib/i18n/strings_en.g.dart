@@ -2032,6 +2032,99 @@ class Translations$meta$en {
 
 	/// en: 'VPN Proxy Connected'
 	String get notifVpnConnected => 'VPN Proxy Connected';
+
+	/// en: 'Connection Details'
+	String get connectionDetails => 'Connection Details';
+
+	/// en: 'Source Address'
+	String get sourceAddress => 'Source Address';
+
+	/// en: 'Destination Address'
+	String get destinationAddress => 'Destination Address';
+
+	/// en: 'Host'
+	String get host => 'Host';
+
+	/// en: 'Process'
+	String get process => 'Process';
+
+	/// en: 'Process Path'
+	String get processPath => 'Process Path';
+
+	/// en: 'Proxy Chain'
+	String get proxyChain => 'Proxy Chain';
+
+	/// en: 'Protocol'
+	String get networkProtocol => 'Protocol';
+
+	/// en: 'Upload Traffic'
+	String get trafficUpload => 'Upload Traffic';
+
+	/// en: 'Download Traffic'
+	String get trafficDownload => 'Download Traffic';
+
+	/// en: 'Duration'
+	String get connectionDuration => 'Duration';
+
+	/// en: 'Start Time'
+	String get connectionStart => 'Start Time';
+
+	/// en: 'Copy Host'
+	String get copyHost => 'Copy Host';
+
+	/// en: 'Copy All Details'
+	String get copyAllDetails => 'Copy All Details';
+
+	/// en: 'Close Connection'
+	String get closeThisConnection => 'Close Connection';
+
+	/// en: 'By Download'
+	String get sortByDownload => 'By Download';
+
+	/// en: 'By Upload'
+	String get sortByUpload => 'By Upload';
+
+	/// en: 'By Speed'
+	String get sortBySpeed => 'By Speed';
+
+	/// en: 'By Duration'
+	String get sortByDuration => 'By Duration';
+
+	/// en: 'By Host'
+	String get sortByHost => 'By Host';
+
+	/// en: 'Real-time Speed'
+	String get realtimeSpeed => 'Real-time Speed';
+
+	/// en: 'Total Upload'
+	String get totalUpload => 'Total Upload';
+
+	/// en: 'Total Download'
+	String get totalDownload => 'Total Download';
+
+	/// en: 'Active'
+	String get activeConnections => 'Active';
+
+	/// en: 'Show in Folder'
+	String get openInFolder => 'Show in Folder';
+
+	/// en: 'Open Profiles Directory'
+	String get openProfilesDir => 'Open Profiles Directory';
+
+	/// en: 'Profile Overwrites'
+	String get profilePatches => 'Profile Overwrites';
+
+	/// en: '$p Nodes'
+	String nodeCount({required Object p}) => '${p} Nodes';
+
+	/// en: 'Copy File Path'
+	String get copyFilePath => 'Copy File Path';
+
+	/// en: 'Duplicate Profile'
+	String get duplicateProfile => 'Duplicate Profile';
+
+	/// en: 'Use This Profile'
+	String get useThisProfile => 'Use This Profile';
 }
 
 // Path: permission
@@ -3046,6 +3139,37 @@ extension on Translations {
 			'meta.notifDisconnect' => 'Disconnect',
 			'meta.notifSwitchNode' => 'Switch Node',
 			'meta.notifVpnConnected' => 'VPN Proxy Connected',
+			'meta.connectionDetails' => 'Connection Details',
+			'meta.sourceAddress' => 'Source Address',
+			'meta.destinationAddress' => 'Destination Address',
+			'meta.host' => 'Host',
+			'meta.process' => 'Process',
+			'meta.processPath' => 'Process Path',
+			'meta.proxyChain' => 'Proxy Chain',
+			'meta.networkProtocol' => 'Protocol',
+			'meta.trafficUpload' => 'Upload Traffic',
+			'meta.trafficDownload' => 'Download Traffic',
+			'meta.connectionDuration' => 'Duration',
+			'meta.connectionStart' => 'Start Time',
+			'meta.copyHost' => 'Copy Host',
+			'meta.copyAllDetails' => 'Copy All Details',
+			'meta.closeThisConnection' => 'Close Connection',
+			'meta.sortByDownload' => 'By Download',
+			'meta.sortByUpload' => 'By Upload',
+			'meta.sortBySpeed' => 'By Speed',
+			'meta.sortByDuration' => 'By Duration',
+			'meta.sortByHost' => 'By Host',
+			'meta.realtimeSpeed' => 'Real-time Speed',
+			'meta.totalUpload' => 'Total Upload',
+			'meta.totalDownload' => 'Total Download',
+			'meta.activeConnections' => 'Active',
+			'meta.openInFolder' => 'Show in Folder',
+			'meta.openProfilesDir' => 'Open Profiles Directory',
+			'meta.profilePatches' => 'Profile Overwrites',
+			'meta.nodeCount' => ({required Object p}) => '${p} Nodes',
+			'meta.copyFilePath' => 'Copy File Path',
+			'meta.duplicateProfile' => 'Duplicate Profile',
+			'meta.useThisProfile' => 'Use This Profile',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

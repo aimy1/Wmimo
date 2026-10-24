@@ -157,31 +157,12 @@ class _IpInfoCardState extends State<IpInfoCard> {
             // 1. Card Header (matches TrafficChartCard header style)
             Row(
               children: [
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFF38BDF8), Color(0xFF0284C7)],
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF0EA5E9).withValues(alpha: 0.35),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.public_rounded,
-                    color: Colors.white,
-                    size: 16,
-                  ),
+                Icon(
+                  Icons.public_rounded,
+                  size: 20,
+                  color: ThemeDefine.kColorBlue,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 7),
                 Text(
                   tcontext.meta.ipInfo,
                   style: const TextStyle(
@@ -193,7 +174,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
                 const Spacer(),
                 // Current Mode Status Pill (clickable to switch when connected)
                 InkWell(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(6),
                   onTap: widget.isConnected
                       ? () {
                           HapticFeedback.selectionClick();
@@ -206,40 +187,36 @@ class _IpInfoCardState extends State<IpInfoCard> {
                         }
                       : null,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3.5),
                     decoration: BoxDecoration(
-                      color: statusColor.withValues(alpha: isDark ? 0.15 : 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: statusColor.withValues(alpha: 0.35),
-                        width: 0.8,
-                      ),
+                      color: statusColor.withValues(alpha: isDark ? 0.12 : 0.08),
+                      borderRadius: BorderRadius.circular(6),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          width: 5,
-                          height: 5,
+                          width: 5.5,
+                          height: 5.5,
                           decoration: BoxDecoration(
                             color: statusColor,
                             shape: BoxShape.circle,
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 4.5),
                         Text(
                           isProxy ? tcontext.meta.ipProxy : tcontext.meta.ipDirect,
                           style: TextStyle(
-                            fontSize: 10.5,
+                            fontSize: 11,
                             fontWeight: FontWeight.w600,
                             color: statusColor,
                           ),
                         ),
                         if (widget.isConnected) ...[
-                          const SizedBox(width: 3),
+                          const SizedBox(width: 3.5),
                           Icon(
                             Icons.swap_horiz_rounded,
-                            size: 12,
+                            size: 13,
                             color: statusColor,
                           ),
                         ],
@@ -333,48 +310,35 @@ class _IpInfoCardState extends State<IpInfoCard> {
                 ),
                 child: Row(
                   children: [
-                    // Country Code / Flag Badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.5, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withValues(
-                          alpha: isDark ? 0.2 : 0.1,
-                        ),
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.25),
-                          width: 0.6,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            currentInfo.flagEmoji,
-                            style: TextStyle(
-                              fontSize: 13.5,
-                              height: 1.1,
-                              fontFamily: Platform.isWindows ? 'Emoji' : null,
-                            ),
+                    // Country Flag & Code
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          currentInfo.flagEmoji,
+                          style: TextStyle(
+                            fontSize: 15,
+                            height: 1.1,
+                            fontFamily: Platform.isWindows ? 'Emoji' : null,
                           ),
-                          const SizedBox(width: 4.5),
-                          Text(
-                            currentInfo.countryCode.isNotEmpty
-                                ? currentInfo.countryCode.toUpperCase()
-                                : 'IP',
-                            style: TextStyle(
-                              fontSize: 10.5,
-                              height: 1.1,
-                              fontWeight: FontWeight.w700,
-                              color: theme.colorScheme.primary,
-                              fontFamily: 'monospace',
-                            ),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          currentInfo.countryCode.isNotEmpty
+                              ? currentInfo.countryCode.toUpperCase()
+                              : 'IP',
+                          style: TextStyle(
+                            fontSize: 11,
+                            height: 1.1,
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                            fontFamily: 'monospace',
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 10),
                     // Monospace IP Address
                     Expanded(
                       child: Row(

@@ -73,32 +73,12 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
             // Card Title Header
             Row(
               children: [
-                // Speedometer Gauge icon with orange gradient badge
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFFF59E0B), Color(0xFFD97706)],
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFF59E0B).withValues(alpha: 0.35),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.speed_rounded,
-                    color: Colors.white,
-                    size: 16,
-                  ),
+                Icon(
+                  Icons.ssid_chart_rounded,
+                  size: 20,
+                  color: ThemeDefine.kColorAmber,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 7),
                 Text(
                   tcontext.meta.trafficStats,
                   style: const TextStyle(
@@ -108,51 +88,34 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                   ),
                 ),
                 const Spacer(),
-                // Connection status badge
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: widget.isConnected
-                        ? ThemeDefine.kColorGreenBright.withValues(
-                            alpha: isDark ? 0.15 : 0.1,
-                          )
-                        : (isDark ? ThemeDefine.kColorDarkElevated : const Color(0xFFE2E8F0)),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: widget.isConnected
-                          ? ThemeDefine.kColorGreenBright.withValues(alpha: 0.35)
-                          : theme.dividerColor.withValues(alpha: 0.3),
-                      width: 0.8,
+                // Connection status indicator
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: widget.isConnected
+                            ? ThemeDefine.kColorGreenBright
+                            : const Color(0xFF94A3B8),
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 5,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: widget.isConnected
-                              ? ThemeDefine.kColorGreenBright
-                              : const Color(0xFF94A3B8),
-                          shape: BoxShape.circle,
-                        ),
+                    const SizedBox(width: 5),
+                    Text(
+                      widget.isConnected
+                          ? tcontext.meta.realtimeMonitor
+                          : tcontext.meta.disconnected,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: widget.isConnected
+                            ? ThemeDefine.kColorGreenBright
+                            : theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        widget.isConnected
-                            ? tcontext.meta.realtimeMonitor
-                            : tcontext.meta.disconnected,
-                        style: TextStyle(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w600,
-                          color: widget.isConnected
-                              ? ThemeDefine.kColorGreenBright
-                              : theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),

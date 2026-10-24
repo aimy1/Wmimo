@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,22 @@ import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
+
+enum ConnectionSortType {
+  defaultOrder,
+  downloadDesc,
+  uploadDesc,
+  speedDesc,
+  durationDesc,
+  hostAsc,
+}
+
+class _TrafficSnapshot {
+  final num upload;
+  final num download;
+  final DateTime time;
+  _TrafficSnapshot(this.upload, this.download, this.time);
+}
 
 class ConnectionsScreen extends StatefulWidget {
   static RouteSettings routSettings() {
@@ -31,9 +49,20 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
   bool _loading = false;
   String _searchKeyword = "";
   String _selectedProtocol = "ALL"; // ALL, TCP, UDP
+  ConnectionSortType _sortType = ConnectionSortType.defaultOrder;
 
   ClashConnections? _connectionsData;
   List<ClashConnectionsTrack> _connections = [];
+
+  // Traffic & Speed calculation
+  Map<String, _TrafficSnapshot> _prevConnTraffic = {};
+  Map<String, num> _connUploadSpeeds = {};
+  Map<String, num> _connDownloadSpeeds = {};
+  num _totalUploadSpeed = 0;
+  num _totalDownloadSpeed = 0;
+  num? _prevUploadTotal;
+  num? _prevDownloadTotal;
+  DateTime? _prevTotalTime;
 
   @override
   void initState() {
@@ -85,6 +114,14 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
           _connectionsData = null;
           _connections = [];
           _loading = false;
+          _totalUploadSpeed = 0;
+          _totalDownloadSpeed = 0;
+          _prevUploadTotal = null;
+          _prevDownloadTotal = null;
+          _prevTotalTime = null;
+          _prevConnTraffic.clear();
+          _connUploadSpeeds.clear();
+          _connDownloadSpeeds.clear();
         });
       }
       return;
@@ -94,9 +131,48 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     if (!mounted) return;
 
     if (result.error == null && result.data != null) {
+      final now = DateTime.now();
+      final data = result.data!;
+
+      // 1. Calculate overall real-time speeds
+      if (_prevUploadTotal != null && _prevDownloadTotal != null && _prevTotalTime != null) {
+        final dt = now.difference(_prevTotalTime!).inMilliseconds / 1000.0;
+        if (dt > 0.3) {
+          final upDiff = data.uploadTotal - _prevUploadTotal!;
+          final downDiff = data.downloadTotal - _prevDownloadTotal!;
+          _totalUploadSpeed = upDiff > 0 ? (upDiff / dt) : 0;
+          _totalDownloadSpeed = downDiff > 0 ? (downDiff / dt) : 0;
+        }
+      }
+      _prevUploadTotal = data.uploadTotal;
+      _prevDownloadTotal = data.downloadTotal;
+      _prevTotalTime = now;
+
+      // 2. Calculate per-connection real-time speeds
+      final Map<String, num> newUpSpeeds = {};
+      final Map<String, num> newDownSpeeds = {};
+      final Map<String, _TrafficSnapshot> newSnapshots = {};
+
+      for (final conn in data.connections) {
+        if (_prevConnTraffic.containsKey(conn.id)) {
+          final prev = _prevConnTraffic[conn.id]!;
+          final dt = now.difference(prev.time).inMilliseconds / 1000.0;
+          if (dt > 0.3) {
+            final upDiff = conn.upload - prev.upload;
+            final downDiff = conn.download - prev.download;
+            newUpSpeeds[conn.id] = upDiff > 0 ? (upDiff / dt) : 0;
+            newDownSpeeds[conn.id] = downDiff > 0 ? (downDiff / dt) : 0;
+          }
+        }
+        newSnapshots[conn.id] = _TrafficSnapshot(conn.upload, conn.download, now);
+      }
+
       setState(() {
-        _connectionsData = result.data;
-        _connections = result.data!.connections;
+        _connectionsData = data;
+        _connections = data.connections;
+        _prevConnTraffic = newSnapshots;
+        _connUploadSpeeds = newUpSpeeds;
+        _connDownloadSpeeds = newDownSpeeds;
         _loading = false;
       });
     } else {
@@ -114,6 +190,9 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     if (err == null) {
       setState(() {
         _connections.removeWhere((c) => c.id == conn.id);
+        _prevConnTraffic.remove(conn.id);
+        _connUploadSpeeds.remove(conn.id);
+        _connDownloadSpeeds.remove(conn.id);
       });
     }
   }
@@ -130,13 +209,23 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     if (err == null) {
       setState(() {
         _connections.clear();
+        _prevConnTraffic.clear();
+        _connUploadSpeeds.clear();
+        _connDownloadSpeeds.clear();
+        _totalUploadSpeed = 0;
+        _totalDownloadSpeed = 0;
       });
       _fetchConnections();
     }
   }
 
+  String _formatSpeed(num bytesPerSec) {
+    if (bytesPerSec <= 0) return "0 B/s";
+    return "${ClashHttpApi.convertTrafficToStringDouble(bytesPerSec)}/s";
+  }
+
   List<ClashConnectionsTrack> get _filteredConnections {
-    return _connections.where((c) {
+    final list = _connections.where((c) {
       if (_selectedProtocol != "ALL") {
         if (c.network.toUpperCase() != _selectedProtocol) {
           return false;
@@ -146,6 +235,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
 
       final host = c.host.toLowerCase();
       final destIp = c.destinationIP.toLowerCase();
+      final sourceIp = c.sourceIP.toLowerCase();
       final rule = c.rule.toLowerCase();
       final rulePayload = c.rulePayload.toLowerCase();
       final process = c.process.toLowerCase();
@@ -153,11 +243,43 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
 
       return host.contains(_searchKeyword) ||
           destIp.contains(_searchKeyword) ||
+          sourceIp.contains(_searchKeyword) ||
           rule.contains(_searchKeyword) ||
           rulePayload.contains(_searchKeyword) ||
           process.contains(_searchKeyword) ||
           chains.contains(_searchKeyword);
     }).toList();
+
+    switch (_sortType) {
+      case ConnectionSortType.downloadDesc:
+        list.sort((a, b) => b.download.compareTo(a.download));
+        break;
+      case ConnectionSortType.uploadDesc:
+        list.sort((a, b) => b.upload.compareTo(a.upload));
+        break;
+      case ConnectionSortType.speedDesc:
+        list.sort((a, b) {
+          final speedA = (_connDownloadSpeeds[a.id] ?? 0) + (_connUploadSpeeds[a.id] ?? 0);
+          final speedB = (_connDownloadSpeeds[b.id] ?? 0) + (_connUploadSpeeds[b.id] ?? 0);
+          return speedB.compareTo(speedA);
+        });
+        break;
+      case ConnectionSortType.durationDesc:
+        list.sort((a, b) => a.start.compareTo(b.start));
+        break;
+      case ConnectionSortType.hostAsc:
+        list.sort((a, b) {
+          final targetA = (a.host.isNotEmpty ? a.host : a.destinationIP).toLowerCase();
+          final targetB = (b.host.isNotEmpty ? b.host : b.destinationIP).toLowerCase();
+          return targetA.compareTo(targetB);
+        });
+        break;
+      case ConnectionSortType.defaultOrder:
+        list.sort((a, b) => b.start.compareTo(a.start));
+        break;
+    }
+
+    return list;
   }
 
   String _formatDuration(String startStr) {
@@ -177,6 +299,485 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     }
   }
 
+  void _showConnectionDetail(ClashConnectionsTrack conn) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final tcontext = Translations.of(context);
+    final uploadStr = ClashHttpApi.convertTrafficToStringDouble(conn.upload);
+    final downloadStr = ClashHttpApi.convertTrafficToStringDouble(conn.download);
+    final duration = _formatDuration(conn.start);
+    final upSpeed = _connUploadSpeeds[conn.id] ?? 0;
+    final downSpeed = _connDownloadSpeeds[conn.id] ?? 0;
+    final target = conn.targetDisplay;
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          backgroundColor: isDark ? const Color(0xFF1E1E22) : Colors.white,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 540, maxHeight: 660),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Dialog Header
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: (conn.network == "UDP" ? Colors.orange : ThemeDefine.kColorBlue)
+                              .withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          conn.network,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: conn.network == "UDP" ? Colors.orange : ThemeDefine.kColorBlue,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        tcontext.meta.connectionDetails,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 20),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: () => Navigator.of(ctx).pop(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  const Divider(height: 1),
+                  const SizedBox(height: 8),
+
+                  // Detail rows (scrollable)
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildDetailSection(
+                            title: tcontext.meta.destinationAddress,
+                            content: target.isNotEmpty ? target : conn.destinationIP,
+                            subContent: conn.destinationIP.isNotEmpty && conn.destinationIP != target
+                                ? "IP: ${conn.destinationIP}:${conn.destinationPort}"
+                                : null,
+                            copyable: true,
+                          ),
+                          _buildDetailSection(
+                            title: tcontext.meta.sourceAddress,
+                            content: "${conn.sourceIP}:${conn.sourcePort}",
+                            copyable: true,
+                          ),
+                          _buildDetailSection(
+                            title: tcontext.meta.networkProtocol,
+                            content: "${conn.network} / ${conn.type.isNotEmpty ? conn.type : '-'}",
+                          ),
+                          if (conn.process.isNotEmpty || conn.processPath.isNotEmpty)
+                            _buildDetailSection(
+                              title: tcontext.meta.process,
+                              content: conn.process.isNotEmpty ? conn.process : "-",
+                              subContent: conn.processPath.isNotEmpty ? conn.processPath : null,
+                              copyable: conn.processPath.isNotEmpty,
+                              copyText: conn.processPath,
+                            ),
+                          _buildDetailSection(
+                            title: tcontext.meta.rule,
+                            content: conn.rulePayload.isNotEmpty
+                                ? "${conn.rule} (${conn.rulePayload})"
+                                : (conn.rule.isNotEmpty ? conn.rule : "-"),
+                          ),
+                          _buildDetailSection(
+                            title: tcontext.meta.proxyChain,
+                            content: conn.chains.isNotEmpty ? conn.chains.join('  ➜  ') : "DIRECT",
+                            isChain: true,
+                          ),
+                          _buildDetailSection(
+                            title: tcontext.meta.trafficUpload,
+                            content: upSpeed > 0
+                                ? "$uploadStr (${_formatSpeed(upSpeed)})"
+                                : uploadStr,
+                          ),
+                          _buildDetailSection(
+                            title: tcontext.meta.trafficDownload,
+                            content: downSpeed > 0
+                                ? "$downloadStr (${_formatSpeed(downSpeed)})"
+                                : downloadStr,
+                          ),
+                          _buildDetailSection(
+                            title: tcontext.meta.connectionDuration,
+                            content: duration.isNotEmpty ? duration : "-",
+                            subContent: conn.start.isNotEmpty ? "${tcontext.meta.connectionStart}: ${conn.start}" : null,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+                  const Divider(height: 1),
+                  const SizedBox(height: 12),
+
+                  // Action buttons
+                  Wrap(
+                    alignment: WrapAlignment.end,
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      // Copy Host
+                      OutlinedButton.icon(
+                        icon: const Icon(Icons.copy_rounded, size: 14),
+                        label: Text(tcontext.meta.copyHost, style: const TextStyle(fontSize: 12)),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        onPressed: () {
+                          final host = conn.host.isNotEmpty ? conn.host : conn.destinationIP;
+                          Clipboard.setData(ClipboardData(text: host));
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(tcontext.meta.copySuccess),
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                      ),
+                      // Copy All JSON
+                      OutlinedButton.icon(
+                        icon: const Icon(Icons.data_object_rounded, size: 14),
+                        label: Text(tcontext.meta.copyAllDetails, style: const TextStyle(fontSize: 12)),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        onPressed: () {
+                          final jsonStr = const JsonEncoder.withIndent('  ').convert(conn.toJson());
+                          Clipboard.setData(ClipboardData(text: jsonStr));
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(tcontext.meta.copySuccess),
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                      ),
+                      // Close Connection
+                      ElevatedButton.icon(
+                        icon: const Icon(Icons.close_rounded, size: 14, color: Colors.white),
+                        label: Text(
+                          tcontext.meta.closeThisConnection,
+                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        onPressed: () async {
+                          Navigator.of(ctx).pop();
+                          await _closeConnection(conn);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailSection({
+    required String title,
+    required String content,
+    String? subContent,
+    bool copyable = false,
+    String? copyText,
+    bool isChain = false,
+  }) {
+    final theme = Theme.of(context);
+    final textToCopy = copyText ?? content;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+            ),
+          ),
+          const SizedBox(height: 2),
+          Row(
+            children: [
+              Expanded(
+                child: SelectableText(
+                  content,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    fontFamilyFallback: (isChain && Platform.isWindows) ? const ['Emoji'] : null,
+                  ),
+                ),
+              ),
+              if (copyable && textToCopy.isNotEmpty)
+                InkWell(
+                  borderRadius: BorderRadius.circular(4),
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: textToCopy));
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(Translations.of(context).meta.copySuccess),
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Icon(
+                      Icons.copy_rounded,
+                      size: 14,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          if (subContent != null && subContent.isNotEmpty) ...[
+            const SizedBox(height: 2),
+            SelectableText(
+              subContent,
+              style: TextStyle(
+                fontSize: 11.5,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  PopupMenuItem<ConnectionSortType> _buildSortMenuItem(
+    ConnectionSortType sortType,
+    String label,
+  ) {
+    final isSelected = _sortType == sortType;
+    return PopupMenuItem<ConnectionSortType>(
+      value: sortType,
+      child: Row(
+        children: [
+          Icon(
+            isSelected ? Icons.check_rounded : Icons.circle_outlined,
+            size: 16,
+            color: isSelected ? ThemeDefine.kColorBlue : Colors.transparent,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              color: isSelected ? ThemeDefine.kColorBlue : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatsHeader(bool isDark, ThemeData theme, Translations tcontext) {
+    final uploadSpeedStr = _formatSpeed(_totalUploadSpeed);
+    final downloadSpeedStr = _formatSpeed(_totalDownloadSpeed);
+    final uploadTotalStr = ClashHttpApi.convertTrafficToStringDouble(_connectionsData?.uploadTotal ?? 0);
+    final downloadTotalStr = ClashHttpApi.convertTrafficToStringDouble(_connectionsData?.downloadTotal ?? 0);
+    final memoryStr = _connectionsData != null && _connectionsData!.memory > 0
+        ? ClashHttpApi.convertTrafficToStringDouble(_connectionsData!.memory)
+        : "";
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E22) : const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: isDark ? 0.2 : 0.4),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        children: [
+          // Realtime Download Speed
+          Expanded(
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: ThemeDefine.kColorGreenBright.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: const Icon(
+                    Icons.arrow_downward_rounded,
+                    size: 14,
+                    color: ThemeDefine.kColorGreenBright,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        downloadSpeedStr,
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "${tcontext.meta.totalDownload} $downloadTotalStr",
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 24,
+            width: 1,
+            color: theme.dividerColor.withValues(alpha: 0.3),
+          ),
+          const SizedBox(width: 12),
+          // Realtime Upload Speed
+          Expanded(
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.orangeAccent.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: const Icon(
+                    Icons.arrow_upward_rounded,
+                    size: 14,
+                    color: Colors.orangeAccent,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        uploadSpeedStr,
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "${tcontext.meta.totalUpload} $uploadTotalStr",
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (memoryStr.isNotEmpty) ...[
+            Container(
+              height: 24,
+              width: 1,
+              color: theme.dividerColor.withValues(alpha: 0.3),
+            ),
+            const SizedBox(width: 12),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: ThemeDefine.kColorBlue.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: const Icon(
+                    Icons.memory_rounded,
+                    size: 14,
+                    color: ThemeDefine.kColorBlue,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      memoryStr,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      tcontext.meta.memoryUsage,
+                      style: TextStyle(
+                        fontSize: 10.5,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
@@ -185,6 +786,30 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     final filtered = _filteredConnections;
 
     final actions = [
+      // Sort Menu Button
+      PopupMenuButton<ConnectionSortType>(
+        tooltip: tcontext.meta.sort,
+        icon: Icon(
+          Icons.sort_rounded,
+          color: _sortType != ConnectionSortType.defaultOrder
+              ? ThemeDefine.kColorBlue
+              : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+        ),
+        onSelected: (sort) {
+          HapticFeedback.selectionClick();
+          setState(() {
+            _sortType = sort;
+          });
+        },
+        itemBuilder: (context) => [
+          _buildSortMenuItem(ConnectionSortType.defaultOrder, tcontext.meta.sortDefault),
+          _buildSortMenuItem(ConnectionSortType.downloadDesc, tcontext.meta.sortByDownload),
+          _buildSortMenuItem(ConnectionSortType.uploadDesc, tcontext.meta.sortByUpload),
+          _buildSortMenuItem(ConnectionSortType.speedDesc, tcontext.meta.sortBySpeed),
+          _buildSortMenuItem(ConnectionSortType.durationDesc, tcontext.meta.sortByDuration),
+          _buildSortMenuItem(ConnectionSortType.hostAsc, tcontext.meta.sortByHost),
+        ],
+      ),
       // Auto-refresh toggle
       IconButton(
         tooltip: _isAutoRefresh ? tcontext.meta.pause : tcontext.meta.resume,
@@ -223,19 +848,22 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
           _fetchConnections();
         },
       ),
-      // Close all connections button
-      if (_connections.isNotEmpty)
-        IconButton(
-          tooltip: tcontext.meta.closeAllConnections,
-          icon: const Icon(
-            Icons.delete_sweep_outlined,
-            color: Colors.redAccent,
-          ),
-          onPressed: () {
-            HapticFeedback.lightImpact();
-            _closeAllConnections();
-          },
+      // Close all connections button (always visible, disabled when empty)
+      IconButton(
+        tooltip: tcontext.meta.closeAllConnections,
+        icon: Icon(
+          Icons.delete_sweep_outlined,
+          color: _connections.isNotEmpty
+              ? Colors.redAccent
+              : theme.colorScheme.onSurface.withValues(alpha: 0.25),
         ),
+        onPressed: _connections.isNotEmpty
+            ? () {
+                HapticFeedback.lightImpact();
+                _closeAllConnections();
+              }
+            : null,
+      ),
     ];
 
     return Scaffold(
@@ -270,36 +898,8 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
           child: Column(
             children: [
               if (_connectionsData != null) ...[
-                const SizedBox(height: 6),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.arrow_upward_rounded, size: 13, color: Colors.orangeAccent),
-                      const SizedBox(width: 2),
-                      Text(
-                        ClashHttpApi.convertTrafficToStringDouble(_connectionsData!.uploadTotal),
-                        style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
-                      ),
-                      const SizedBox(width: 12),
-                      const Icon(Icons.arrow_downward_rounded, size: 13, color: ThemeDefine.kColorGreenBright),
-                      const SizedBox(width: 2),
-                      Text(
-                        ClashHttpApi.convertTrafficToStringDouble(_connectionsData!.downloadTotal),
-                        style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
-                      ),
-                      if (_connectionsData!.memory > 0) ...[
-                        const Spacer(),
-                        const Icon(Icons.memory_rounded, size: 13, color: ThemeDefine.kColorBlue),
-                        const SizedBox(width: 2),
-                        Text(
-                          ClashHttpApi.convertTrafficToStringDouble(_connectionsData!.memory),
-                          style: TextStyle(fontSize: 11, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
+                const SizedBox(height: 4),
+                _buildStatsHeader(isDark, theme, tcontext),
               ],
               const SizedBox(height: 10),
 
@@ -438,168 +1038,231 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     final target = conn.targetDisplay;
     final process = conn.process.isNotEmpty ? conn.process : conn.type;
     final chain = conn.chains.isNotEmpty ? conn.chains.join(' → ') : "";
+    final downSpeed = _connDownloadSpeeds[conn.id] ?? 0;
+    final upSpeed = _connUploadSpeeds[conn.id] ?? 0;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.dividerColor.withValues(alpha: 0.4),
+          color: theme.dividerColor.withValues(alpha: isDark ? 0.2 : 0.4),
           width: 0.8,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              // Network badge
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: (conn.network == "UDP" ? Colors.orange : ThemeDefine.kColorBlue)
-                      .withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  conn.network,
-                  style: TextStyle(
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                    color: conn.network == "UDP" ? Colors.orange : ThemeDefine.kColorBlue,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              // Target Host / IP
-              Expanded(
-                child: Text(
-                  target.isNotEmpty ? target : conn.destinationIP,
-                  style: const TextStyle(
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              if (duration.isNotEmpty)
-                Text(
-                  duration,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
-                  ),
-                ),
-              const SizedBox(width: 6),
-              // Close connection button
-              InkWell(
-                borderRadius: BorderRadius.circular(6),
-                onTap: () => _closeConnection(conn),
-                child: Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: Icon(
-                    Icons.close,
-                    size: 16,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          // Details row
-          Row(
-            children: [
-              Expanded(
-                child: Row(
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => _showConnectionDetail(conn),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    if (process.isNotEmpty) ...[
-                      Icon(
-                        Icons.terminal_rounded,
-                        size: 13,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                    // Network badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: (conn.network == "UDP" ? Colors.orange : ThemeDefine.kColorBlue)
+                            .withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
                       ),
-                      const SizedBox(width: 4),
-                      Flexible(
-                        child: Text(
-                          process,
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                      child: Text(
+                        conn.network,
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w700,
+                          color: conn.network == "UDP" ? Colors.orange : ThemeDefine.kColorBlue,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                    ],
-                    if (conn.rule.isNotEmpty) ...[
-                      Icon(
-                        Icons.alt_route_rounded,
-                        size: 13,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                    ),
+                    const SizedBox(width: 8),
+                    // Target Host / IP
+                    Expanded(
+                      child: Text(
+                        target.isNotEmpty ? target : conn.destinationIP,
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(width: 4),
-                      Flexible(
-                        child: Text(
-                          conn.rulePayload.isNotEmpty
-                              ? "${conn.rule}(${conn.rulePayload})"
-                              : conn.rule,
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                    ),
+                    if (duration.isNotEmpty)
+                      Text(
+                        duration,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
                         ),
                       ),
-                    ],
+                    const SizedBox(width: 6),
+                    // Close connection button
+                    InkWell(
+                      borderRadius: BorderRadius.circular(6),
+                      onTap: () => _closeConnection(conn),
+                      child: Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: Icon(
+                          Icons.close,
+                          size: 16,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              const SizedBox(width: 8),
-              // Traffic transferred
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.arrow_upward_rounded, size: 12, color: Colors.orangeAccent),
-                  Text(
-                    uploadStr,
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(width: 6),
-                  const Icon(Icons.arrow_downward_rounded, size: 12, color: ThemeDefine.kColorGreenBright),
-                  Text(
-                    downloadStr,
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+                const SizedBox(height: 8),
+                // Details row
+                Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          if (process.isNotEmpty) ...[
+                            InkWell(
+                              borderRadius: BorderRadius.circular(4),
+                              onTap: () {
+                                _searchController.text = process;
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.terminal_rounded,
+                                    size: 13,
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Flexible(
+                                    child: Text(
+                                      process,
+                                      style: TextStyle(
+                                        fontSize: 11.5,
+                                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                          if (conn.rule.isNotEmpty) ...[
+                            Flexible(
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(4),
+                                onTap: () {
+                                  _searchController.text = conn.rule;
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.alt_route_rounded,
+                                      size: 13,
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Flexible(
+                                      child: Text(
+                                        conn.rulePayload.isNotEmpty
+                                            ? "${conn.rule}(${conn.rulePayload})"
+                                            : conn.rule,
+                                        style: TextStyle(
+                                          fontSize: 11.5,
+                                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Traffic & Speed transferred
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (upSpeed > 0 || downSpeed > 0) ...[
+                          if (upSpeed > 0) ...[
+                            const Icon(Icons.arrow_upward_rounded, size: 12, color: Colors.orangeAccent),
+                            Text(
+                              _formatSpeed(upSpeed),
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.orangeAccent,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                          ],
+                          if (downSpeed > 0) ...[
+                            const Icon(Icons.arrow_downward_rounded, size: 12, color: ThemeDefine.kColorGreenBright),
+                            Text(
+                              _formatSpeed(downSpeed),
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: ThemeDefine.kColorGreenBright,
+                              ),
+                            ),
+                          ],
+                        ] else ...[
+                          const Icon(Icons.arrow_upward_rounded, size: 12, color: Colors.orangeAccent),
+                          Text(
+                            uploadStr,
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(width: 6),
+                          const Icon(Icons.arrow_downward_rounded, size: 12, color: ThemeDefine.kColorGreenBright),
+                          Text(
+                            downloadStr,
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+                if (chain.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface.withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      chain,
+                      style: TextStyle(
+                        fontSize: 10.5,
+                        fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
-              ),
-            ],
-          ),
-          if (chain.isNotEmpty) ...[
-            const SizedBox(height: 6),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface.withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                chain,
-                style: TextStyle(
-                  fontSize: 10.5,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              ],
             ),
-          ],
-        ],
+          ),
+        ),
       ),
     );
   }

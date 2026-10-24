@@ -6,6 +6,9 @@ import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/modules/remote_config_manager.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
+import 'package:wmimo/app/utils/file_utils.dart';
+import 'package:wmimo/app/utils/path_utils.dart';
+import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/url_launcher_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/add_profile_by_import_from_file_screen.dart';
@@ -15,6 +18,7 @@ import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/group_helper.dart';
 import 'package:wmimo/screens/login_step_provider_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen_widgets.dart';
+import 'package:wmimo/screens/profiles_patch_board_screen.dart';
 import 'package:wmimo/screens/webview_helper.dart';
 import 'package:wmimo/screens/widgets/sheet.dart';
 import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
@@ -118,6 +122,39 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
       appBar: WmimoAppBar(
         title: tcontext.meta.myProfiles,
         actions: [
+          if (PlatformUtils.isPC())
+            Tooltip(
+              message: tcontext.meta.openProfilesDir,
+              child: IconButton(
+                onPressed: () async {
+                  final dir = await PathUtils.profilesDir();
+                  await FileUtils.openDirectory(dir);
+                },
+                icon: const Icon(
+                  Icons.folder_open_outlined,
+                  size: 22,
+                ),
+              ),
+            ),
+          Tooltip(
+            message: tcontext.meta.profilePatches,
+            child: IconButton(
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    settings: ProfilesPatchBoardScreen.routSettings(),
+                    builder: (context) => const ProfilesPatchBoardScreen(),
+                  ),
+                );
+                await _reloadProfiles();
+              },
+              icon: const Icon(
+                Icons.alt_route_rounded,
+                size: 22,
+              ),
+            ),
+          ),
           Tooltip(
             message: tcontext.meta.backupAndSync,
             child: IconButton(

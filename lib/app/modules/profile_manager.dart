@@ -1348,4 +1348,35 @@ class ProfileManager {
     await file.writeAsString(decodedContent);
     return null;
   }
+
+  static Future<ReturnResult<String>> duplicateProfile(String sourceId) async {
+    final index = _config.profiles.indexWhere((p) => p.id == sourceId);
+    if (index < 0) {
+      return ReturnResult(error: ReturnResultError('Profile not found'));
+    }
+    final source = _config.profiles[index];
+    final profilesDir = await PathUtils.profilesDir();
+    final sourcePath = path.join(profilesDir, source.id);
+    final sourceFile = File(sourcePath);
+    if (!await sourceFile.exists()) {
+      return ReturnResult(error: ReturnResultError('Source file not found'));
+    }
+
+    final newId = '.yaml';
+    final targetPath = path.join(profilesDir, newId);
+    await sourceFile.copy(targetPath);
+
+    final cloned = source.clone();
+    cloned.id = newId;
+    cloned.remark = ' (Copy)';
+    cloned.update = DateTime.now();
+
+    _config.profiles.add(cloned);
+    await save();
+
+    for (var event in onEventAdd) {
+      event(newId);
+    }
+    return ReturnResult(data: newId);
+  }
 }

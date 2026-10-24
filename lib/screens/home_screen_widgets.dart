@@ -333,33 +333,18 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 7,
-                                      vertical: 2.5,
+                                      vertical: 3,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary
-                                          .withValues(alpha: 0.1),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary
-                                            .withValues(alpha: 0.25),
-                                        width: 0.8,
-                                      ),
+                                      color: (Theme.of(context).brightness == Brightness.dark
+                                              ? Colors.white
+                                              : Colors.black)
+                                          .withValues(alpha: 0.05),
+                                      borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(
-                                          Icons.flight_takeoff_rounded,
-                                          size: 12,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        const SizedBox(width: 4),
                                         Flexible(
                                           child: Text(
                                             proxyName,
@@ -370,7 +355,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                               fontWeight: FontWeight.w600,
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .primary,
+                                                  .onSurface
+                                                  .withValues(alpha: 0.85),
                                               fontFamilyFallback: Platform.isWindows
                                                   ? const ['Emoji']
                                                   : null,
@@ -379,7 +365,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  )
                                 );
                               },
                             ),

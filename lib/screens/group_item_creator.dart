@@ -25,6 +25,9 @@ class GroupItemCreator {
     GroupItemCreator giCreator = GroupItemCreator();
     int index = 0;
     for (var group in groups) {
+      if (group.options.isEmpty) {
+        continue;
+      }
       widgets.add(
         Padding(
           padding: const EdgeInsets.only(bottom: 12),

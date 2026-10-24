@@ -519,7 +519,10 @@ class GroupHelper {
           ),
         ),
       ];
-      return [GroupItem(options: options), GroupItem(options: options1)];
+      return [
+        GroupItem(options: options),
+        if (options1.isNotEmpty) GroupItem(options: options1),
+      ];
     }
 
     final tcontext = Translations.of(context);
@@ -1872,7 +1875,10 @@ class GroupHelper {
         ]);
       }
 
-      return [GroupItem(options: options), GroupItem(options: options1)];
+      return [
+        GroupItem(options: options),
+        if (options1.isNotEmpty) GroupItem(options: options1),
+      ];
     }
 
     await Navigator.push(

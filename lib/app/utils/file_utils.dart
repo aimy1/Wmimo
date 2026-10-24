@@ -245,6 +245,16 @@ abstract final class FileUtils {
     return rs;
   }
 
+  static Future<bool> openFileInFolder(String filePath) async {
+    final dir = path.dirname(filePath);
+    final fileName = path.basename(filePath);
+    final rs = await OpenDir().openNativeDir(
+      path: dir,
+      highlightedFileName: fileName,
+    );
+    return rs ?? false;
+  }
+
   static List<String> recursionFile(
     String dirPath, {
     bool recursive = false,

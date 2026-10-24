@@ -2509,9 +2509,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     return RepaintBoundary(
       child: Material(
         color: isSelected
-          ? (isDark
-              ? const Color(0xFF1E3A8A).withValues(alpha: 0.45)
-              : const Color(0xFFDBEAFE).withValues(alpha: 0.7))
+          ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.14 : 0.08)
           : (isDark
               ? const Color(0xFF141416).withValues(alpha: 0.6)
               : const Color(0xFFFFFFFF)),
@@ -2532,9 +2530,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
             borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
             border: Border.all(
               color: isSelected
-                  ? ThemeDefine.kColorBlue
-                  : theme.dividerColor.withValues(alpha: 0.3),
-              width: isSelected ? 1.5 : 0.8,
+                  ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.55 : 0.45)
+                  : theme.dividerColor.withValues(alpha: isDark ? 0.2 : 0.3),
+              width: isSelected ? 1.1 : 0.8,
             ),
           ),
           child: Row(
