@@ -111,9 +111,9 @@ flutter build macos --release     # macOS
 <div align="center">
   <a href="https://www.star-history.com/#aimy1/Wmimo&Date">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&theme=dark" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date" />
-      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date" width="720" />
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&theme=dark&v=20261024" />
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" />
+      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" width="720" />
     </picture>
   </a>
 </div>
