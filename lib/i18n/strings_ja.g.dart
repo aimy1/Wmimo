@@ -479,7 +479,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get showTrayTraffic => 'トレイに通信量情報を表示';
 	@override String get website => 'ウェブサイト';
 	@override String get homePage => 'ホームページ';
-	@override String get rule => 'ルーティングルール';
+	@override String get rule => 'ルール';
 	@override String get global => 'グローバル';
 	@override String get direct => '直通';
 	@override String get block => 'ブロック';
@@ -1324,7 +1324,7 @@ extension on TranslationsJa {
 			'meta.showTrayTraffic' => 'トレイに通信量情報を表示',
 			'meta.website' => 'ウェブサイト',
 			'meta.homePage' => 'ホームページ',
-			'meta.rule' => 'ルーティングルール',
+			'meta.rule' => 'ルール',
 			'meta.global' => 'グローバル',
 			'meta.direct' => '直通',
 			'meta.block' => 'ブロック',

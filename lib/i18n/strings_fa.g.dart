@@ -479,7 +479,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get hideVpnTips => 'فعال کردن IPv6 باعث از کار افتادن این عملکرد خواهد شد.';
 	@override String get website => 'وبسایت';
 	@override String get homePage => 'صفحه اصلی';
-	@override String get rule => 'قاعده';
+	@override String get rule => 'قانون';
 	@override String get global => 'عمومی';
 	@override String get direct => 'مستقیم';
 	@override String get block => 'مسدود';
@@ -1324,7 +1324,7 @@ extension on TranslationsFa {
 			'meta.hideVpnTips' => 'فعال کردن IPv6 باعث از کار افتادن این عملکرد خواهد شد.',
 			'meta.website' => 'وبسایت',
 			'meta.homePage' => 'صفحه اصلی',
-			'meta.rule' => 'قاعده',
+			'meta.rule' => 'قانون',
 			'meta.global' => 'عمومی',
 			'meta.direct' => 'مستقیم',
 			'meta.block' => 'مسدود',

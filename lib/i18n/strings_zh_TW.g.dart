@@ -479,7 +479,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get showTrayTraffic => '系統匣顯示流量資訊';
 	@override String get website => '官網';
 	@override String get homePage => '主頁';
-	@override String get rule => '分流規則';
+	@override String get rule => '規則';
 	@override String get global => '全域';
 	@override String get direct => '直連';
 	@override String get block => '攔截';
@@ -1324,7 +1324,7 @@ extension on TranslationsZhTw {
 			'meta.showTrayTraffic' => '系統匣顯示流量資訊',
 			'meta.website' => '官網',
 			'meta.homePage' => '主頁',
-			'meta.rule' => '分流規則',
+			'meta.rule' => '規則',
 			'meta.global' => '全域',
 			'meta.direct' => '直連',
 			'meta.block' => '攔截',

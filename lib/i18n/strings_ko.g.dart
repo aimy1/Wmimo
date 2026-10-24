@@ -479,7 +479,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get showTrayTraffic => '트레이에 트래픽 정보 표시';
 	@override String get website => '웹사이트';
 	@override String get homePage => '홈페이지';
-	@override String get rule => '라우팅 규칙';
+	@override String get rule => '규칙';
 	@override String get global => '글로벌';
 	@override String get direct => '직접 연결';
 	@override String get block => '차단';
@@ -1324,7 +1324,7 @@ extension on TranslationsKo {
 			'meta.showTrayTraffic' => '트레이에 트래픽 정보 표시',
 			'meta.website' => '웹사이트',
 			'meta.homePage' => '홈페이지',
-			'meta.rule' => '라우팅 규칙',
+			'meta.rule' => '규칙',
 			'meta.global' => '글로벌',
 			'meta.direct' => '직접 연결',
 			'meta.block' => '차단',

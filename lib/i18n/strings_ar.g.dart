@@ -479,7 +479,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get showTrayTraffic => 'إظهار معلومات حركة المرور في شريط النظام';
 	@override String get website => 'موقع إلكتروني';
 	@override String get homePage => 'الصفحة الرئيسية';
-	@override String get rule => 'القاعدة';
+	@override String get rule => 'قاعدة';
 	@override String get global => 'عالمي';
 	@override String get direct => 'مباشر';
 	@override String get block => 'حاجز';
@@ -1324,7 +1324,7 @@ extension on TranslationsAr {
 			'meta.showTrayTraffic' => 'إظهار معلومات حركة المرور في شريط النظام',
 			'meta.website' => 'موقع إلكتروني',
 			'meta.homePage' => 'الصفحة الرئيسية',
-			'meta.rule' => 'القاعدة',
+			'meta.rule' => 'قاعدة',
 			'meta.global' => 'عالمي',
 			'meta.direct' => 'مباشر',
 			'meta.block' => 'حاجز',

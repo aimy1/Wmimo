@@ -479,7 +479,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get showTrayTraffic => 'Показывать трафик в трее';
 	@override String get website => 'Веб-сайт';
 	@override String get homePage => 'Главная';
-	@override String get rule => 'Правило';
+	@override String get rule => 'Правила';
 	@override String get global => 'Глобально';
 	@override String get direct => 'Напрямую';
 	@override String get block => 'Блокировать';
@@ -1324,7 +1324,7 @@ extension on TranslationsRu {
 			'meta.showTrayTraffic' => 'Показывать трафик в трее',
 			'meta.website' => 'Веб-сайт',
 			'meta.homePage' => 'Главная',
-			'meta.rule' => 'Правило',
+			'meta.rule' => 'Правила',
 			'meta.global' => 'Глобально',
 			'meta.direct' => 'Напрямую',
 			'meta.block' => 'Блокировать',

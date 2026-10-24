@@ -479,7 +479,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get showTrayTraffic => '托盘上显示流量信息';
 	@override String get website => '官网';
 	@override String get homePage => '主页';
-	@override String get rule => '分流规则';
+	@override String get rule => '规则';
 	@override String get global => '全局';
 	@override String get direct => '直连';
 	@override String get block => '拦截';
@@ -1324,7 +1324,7 @@ extension on TranslationsZhCn {
 			'meta.showTrayTraffic' => '托盘上显示流量信息',
 			'meta.website' => '官网',
 			'meta.homePage' => '主页',
-			'meta.rule' => '分流规则',
+			'meta.rule' => '规则',
 			'meta.global' => '全局',
 			'meta.direct' => '直连',
 			'meta.block' => '拦截',

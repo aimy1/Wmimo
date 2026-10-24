@@ -367,7 +367,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
                               copyText: conn.processPath,
                             ),
                           _buildDetailSection(
-                            title: tcontext.meta.rule,
+                            title: tcontext.meta.rules,
                             content: conn.rulePayload.isNotEmpty
                                 ? "${conn.rule} (${conn.rulePayload})"
                                 : (conn.rule.isNotEmpty ? conn.rule : "-"),
