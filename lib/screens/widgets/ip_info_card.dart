@@ -172,9 +172,9 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   ),
                 ),
                 const Spacer(),
-                // Current Mode Status Pill (clickable to switch when connected)
+                // Current Mode Status (Scheme 1: pure text + status dot, borderless & background-less)
                 InkWell(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(4),
                   onTap: widget.isConnected
                       ? () {
                           HapticFeedback.selectionClick();
@@ -186,34 +186,30 @@ class _IpInfoCardState extends State<IpInfoCard> {
                           }
                         }
                       : null,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3.5),
-                    decoration: BoxDecoration(
-                      color: statusColor.withValues(alpha: isDark ? 0.12 : 0.08),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          width: 5.5,
-                          height: 5.5,
+                          width: 6,
+                          height: 6,
                           decoration: BoxDecoration(
                             color: statusColor,
                             shape: BoxShape.circle,
                           ),
                         ),
-                        const SizedBox(width: 4.5),
+                        const SizedBox(width: 5),
                         Text(
                           isProxy ? tcontext.meta.ipProxy : tcontext.meta.ipDirect,
                           style: TextStyle(
                             fontSize: 11,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                             color: statusColor,
                           ),
                         ),
                         if (widget.isConnected) ...[
-                          const SizedBox(width: 3.5),
+                          const SizedBox(width: 3),
                           Icon(
                             Icons.swap_horiz_rounded,
                             size: 13,
