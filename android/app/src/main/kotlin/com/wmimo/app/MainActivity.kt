@@ -163,151 +163,118 @@ class MainActivity : FlutterActivity() {
                     }
                 }
                 "getInstalledAppList" -> {
+                    val list = ArrayList<Map<String, Any>>()
+                    val seenPackages = HashSet<String>()
+                    val pm = packageManager
+                    val responded = java.util.concurrent.atomic.AtomicBoolean(false)
+
+                    val watchdog = Runnable {
+                        if (responded.compareAndSet(false, true)) {
+                            try {
+                                result.success(list)
+                            } catch (_: Throwable) {}
+                        }
+                    }
+                    mainHandler.postDelayed(watchdog, 2500)
+
                     Thread {
-                        val list = ArrayList<Map<String, Any>>()
-                        val seenPackages = HashSet<String>()
-                        val pm = packageManager
                         try {
-                            // Stage 1: Launcher activities query with flag 0 first (matches <queries> in manifest)
-                            try {
-                                val launcherIntent = Intent(Intent.ACTION_MAIN).apply {
-                                    addCategory(Intent.CATEGORY_LAUNCHER)
+                            // Method 1: Direct getInstalledApplications (fastest, 1 IPC call, <20ms)
+                            var allApps: List<ApplicationInfo> = try {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0))
+                                } else {
+                                    @Suppress("DEPRECATION")
+                                    pm.getInstalledApplications(0)
                                 }
-                                var launcherApps: List<ResolveInfo> = try {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                        pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(0))
+                            } catch (_: Throwable) {
+                                emptyList()
+                            }
+
+                            if (allApps.isEmpty()) {
+                                try {
+                                    allApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
                                     } else {
                                         @Suppress("DEPRECATION")
-                                        pm.queryIntentActivities(launcherIntent, 0)
+                                        pm.getInstalledApplications(PackageManager.MATCH_ALL)
                                     }
+                                } catch (_: Throwable) {}
+                            }
+
+                            for (app in allApps) {
+                                val pkg = app.packageName ?: continue
+                                if (pkg == packageName || seenPackages.contains(pkg)) continue
+                                seenPackages.add(pkg)
+
+                                val isSystem = (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+                                val label = try {
+                                    app.loadLabel(pm).toString()
                                 } catch (_: Throwable) {
-                                    emptyList()
+                                    app.nonLocalizedLabel?.toString() ?: pkg
                                 }
 
-                                if (launcherApps.isEmpty()) {
-                                    try {
-                                        launcherApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                            pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
+                                list.add(mapOf(
+                                    "packageName" to pkg,
+                                    "name" to label,
+                                    "isSystem" to isSystem,
+                                    "flags" to app.flags
+                                ))
+                            }
+
+                            // Method 2: If getInstalledApplications returned nothing (restricted by OEM), query launcher activities
+                            if (list.isEmpty()) {
+                                try {
+                                    val launcherIntent = Intent(Intent.ACTION_MAIN).apply {
+                                        addCategory(Intent.CATEGORY_LAUNCHER)
+                                    }
+                                    var launcherApps: List<ResolveInfo> = try {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                            pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(0))
                                         } else {
                                             @Suppress("DEPRECATION")
-                                            pm.queryIntentActivities(launcherIntent, PackageManager.MATCH_ALL)
+                                            pm.queryIntentActivities(launcherIntent, 0)
                                         }
-                                    } catch (_: Throwable) {}
-                                }
-
-                                for (resolveInfo in launcherApps) {
-                                    val actInfo = resolveInfo.activityInfo ?: continue
-                                    val pkg = actInfo.packageName ?: continue
-                                    if (pkg == packageName || seenPackages.contains(pkg)) continue
-                                    seenPackages.add(pkg)
-
-                                    val label = try {
-                                        resolveInfo.loadLabel(pm)?.toString() ?: actInfo.loadLabel(pm)?.toString() ?: pkg
                                     } catch (_: Throwable) {
-                                        pkg
+                                        emptyList()
                                     }
-                                    val appFlags = actInfo.applicationInfo?.flags ?: 0
-                                    val isSystem = (appFlags and ApplicationInfo.FLAG_SYSTEM) != 0
 
-                                    list.add(mapOf(
-                                        "packageName" to pkg,
-                                        "name" to label,
-                                        "isSystem" to isSystem,
-                                        "flags" to appFlags
-                                    ))
-                                }
-                            } catch (_: Throwable) {}
-
-                            // Stage 1.5: Broad MAIN activities query with flag 0 first
-                            try {
-                                val mainIntent = Intent(Intent.ACTION_MAIN)
-                                var mainApps: List<ResolveInfo> = try {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                        pm.queryIntentActivities(mainIntent, PackageManager.ResolveInfoFlags.of(0))
-                                    } else {
-                                        @Suppress("DEPRECATION")
-                                        pm.queryIntentActivities(mainIntent, 0)
+                                    if (launcherApps.isEmpty()) {
+                                        try {
+                                            launcherApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                                pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
+                                            } else {
+                                                @Suppress("DEPRECATION")
+                                                pm.queryIntentActivities(launcherIntent, PackageManager.MATCH_ALL)
+                                            }
+                                        } catch (_: Throwable) {}
                                     }
-                                } catch (_: Throwable) {
-                                    emptyList()
-                                }
 
-                                if (mainApps.isEmpty()) {
-                                    try {
-                                        mainApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                            pm.queryIntentActivities(mainIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
-                                        } else {
-                                            @Suppress("DEPRECATION")
-                                            pm.queryIntentActivities(mainIntent, PackageManager.MATCH_ALL)
+                                    for (resolveInfo in launcherApps) {
+                                        val actInfo = resolveInfo.activityInfo ?: continue
+                                        val pkg = actInfo.packageName ?: continue
+                                        if (pkg == packageName || seenPackages.contains(pkg)) continue
+                                        seenPackages.add(pkg)
+
+                                        val label = try {
+                                            resolveInfo.loadLabel(pm)?.toString() ?: actInfo.loadLabel(pm)?.toString() ?: pkg
+                                        } catch (_: Throwable) {
+                                            pkg
                                         }
-                                    } catch (_: Throwable) {}
-                                }
+                                        val appFlags = actInfo.applicationInfo?.flags ?: 0
+                                        val isSystem = (appFlags and ApplicationInfo.FLAG_SYSTEM) != 0
 
-                                for (resolveInfo in mainApps) {
-                                    val actInfo = resolveInfo.activityInfo ?: continue
-                                    val pkg = actInfo.packageName ?: continue
-                                    if (pkg == packageName || seenPackages.contains(pkg)) continue
-                                    seenPackages.add(pkg)
-
-                                    val label = try {
-                                        resolveInfo.loadLabel(pm)?.toString() ?: actInfo.loadLabel(pm)?.toString() ?: pkg
-                                    } catch (_: Throwable) {
-                                        pkg
+                                        list.add(mapOf(
+                                            "packageName" to pkg,
+                                            "name" to label,
+                                            "isSystem" to isSystem,
+                                            "flags" to appFlags
+                                        ))
                                     }
-                                    val appFlags = actInfo.applicationInfo?.flags ?: 0
-                                    val isSystem = (appFlags and ApplicationInfo.FLAG_SYSTEM) != 0
+                                } catch (_: Throwable) {}
+                            }
 
-                                    list.add(mapOf(
-                                        "packageName" to pkg,
-                                        "name" to label,
-                                        "isSystem" to isSystem,
-                                        "flags" to appFlags
-                                    ))
-                                }
-                            } catch (_: Throwable) {}
-
-                            // Stage 2: Background / system applications via getInstalledApplications
-                            try {
-                                var allApps: List<ApplicationInfo> = try {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                        pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0))
-                                    } else {
-                                        @Suppress("DEPRECATION")
-                                        pm.getInstalledApplications(0)
-                                    }
-                                } catch (_: Throwable) {
-                                    emptyList()
-                                }
-
-                                if (allApps.isEmpty()) {
-                                    try {
-                                        allApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                            pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
-                                        } else {
-                                            @Suppress("DEPRECATION")
-                                            pm.getInstalledApplications(PackageManager.MATCH_ALL)
-                                        }
-                                    } catch (_: Throwable) {}
-                                }
-
-                                for (app in allApps) {
-                                    val pkg = app.packageName ?: continue
-                                    if (pkg == packageName || seenPackages.contains(pkg)) continue
-                                    seenPackages.add(pkg)
-
-                                    val isSystem = (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
-                                    val label = app.nonLocalizedLabel?.toString() ?: pkg
-
-                                    list.add(mapOf(
-                                        "packageName" to pkg,
-                                        "name" to label,
-                                        "isSystem" to isSystem,
-                                        "flags" to app.flags
-                                    ))
-                                }
-                            } catch (_: Throwable) {}
-
-                            // Stage 3: If still empty (e.g. system restricted both), try getInstalledPackages
+                            // Method 3: Final fallback to getInstalledPackages
                             if (list.isEmpty()) {
                                 try {
                                     var packages: List<PackageInfo> = try {
@@ -340,7 +307,11 @@ class MainActivity : FlutterActivity() {
                                         val appInfo = p.applicationInfo
                                         val isSystem = if (appInfo != null) (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0 else false
                                         val appFlags = appInfo?.flags ?: (if (isSystem) 1 else 0)
-                                        val label = appInfo?.nonLocalizedLabel?.toString() ?: pkg
+                                        val label = try {
+                                            appInfo?.loadLabel(pm)?.toString() ?: pkg
+                                        } catch (_: Throwable) {
+                                            appInfo?.nonLocalizedLabel?.toString() ?: pkg
+                                        }
 
                                         list.add(mapOf(
                                             "packageName" to pkg,
@@ -351,14 +322,11 @@ class MainActivity : FlutterActivity() {
                                     }
                                 } catch (_: Throwable) {}
                             }
+                        } catch (_: Throwable) {}
 
-                            runOnUiThread {
-                                try {
-                                    result.success(list)
-                                } catch (_: Throwable) {}
-                            }
-                        } catch (t: Throwable) {
-                            runOnUiThread {
+                        mainHandler.removeCallbacks(watchdog)
+                        if (responded.compareAndSet(false, true)) {
+                            mainHandler.post {
                                 try {
                                     result.success(list)
                                 } catch (_: Throwable) {}

@@ -1,5 +1,7 @@
 // ignore_for_file: unused_catch_stack
 
+import 'dart:async';
+
 import 'package:android_package_manager/android_package_manager.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,26 @@ class _PerAppAndroidScreenState
   List<PackageInfoEx> _searchedData = [];
   bool _needPermission = false;
   String _selectedCategory = 'all'; // 'all', 'user', 'system', 'selected'
+  Timer? _loadingTimeoutTimer;
+
+  static const List<Map<String, String>> _commonProxyPresets = [
+    {'name': 'Telegram', 'pkg': 'org.telegram.messenger'},
+    {'name': 'Telegram Plus', 'pkg': 'org.telegram.plus'},
+    {'name': 'YouTube', 'pkg': 'com.google.android.youtube'},
+    {'name': 'Google Chrome', 'pkg': 'com.android.chrome'},
+    {'name': 'Google Play 商店', 'pkg': 'com.android.vending'},
+    {'name': 'Google 基础服务', 'pkg': 'com.google.android.gms'},
+    {'name': 'Twitter / X', 'pkg': 'com.twitter.android'},
+    {'name': 'Instagram', 'pkg': 'com.instagram.android'},
+    {'name': 'WhatsApp', 'pkg': 'com.whatsapp'},
+    {'name': 'Discord', 'pkg': 'com.discord'},
+    {'name': 'GitHub', 'pkg': 'com.github.android'},
+    {'name': 'TikTok', 'pkg': 'com.zhiliaoapp.musically'},
+    {'name': 'Spotify', 'pkg': 'com.spotify.music'},
+    {'name': 'Netflix', 'pkg': 'com.netflix.mediaclient'},
+    {'name': 'Facebook', 'pkg': 'com.facebook.katana'},
+    {'name': 'Reddit', 'pkg': 'com.reddit.frontpage'},
+  ];
 
   @override
   void initState() {
@@ -48,6 +70,7 @@ class _PerAppAndroidScreenState
 
   @override
   void dispose() {
+    _loadingTimeoutTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     _searchController.dispose();
     ClashSettingManager.save();
@@ -157,6 +180,18 @@ class _PerAppAndroidScreenState
   }
 
   Future<void> getInstalledPackages() async {
+    _loadingTimeoutTimer?.cancel();
+    _loadingTimeoutTimer = Timer(const Duration(milliseconds: 2500), () {
+      if (mounted && _loading) {
+        setState(() {
+          _loading = false;
+          if (_applicationInfoList.isEmpty) {
+            _needPermission = true;
+          }
+        });
+      }
+    });
+
     _applicationInfoList.clear();
     _searchedData.clear();
     var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
@@ -172,11 +207,23 @@ class _PerAppAndroidScreenState
         },
       );
 
+      _loadingTimeoutTimer?.cancel();
       if (!mounted) {
         return;
       }
       _needPermission = packages.isEmpty;
       if (_needPermission) {
+        if (perapp.PackageIds != null && perapp.PackageIds!.isNotEmpty) {
+          for (var papp in perapp.PackageIds!) {
+            PackageInfoEx info = PackageInfoEx();
+            info.info = PackageInfoImpl(papp);
+            info.name = papp;
+            info.icon = null;
+            _applicationInfoList.add(info);
+          }
+          _selectedCategory = 'all';
+          _applyFilter();
+        }
         return;
       }
       List<PackageInfoEx> notExists = [];
@@ -221,6 +268,7 @@ class _PerAppAndroidScreenState
     } catch (_) {
       // ignore
     } finally {
+      _loadingTimeoutTimer?.cancel();
       _loading = false;
       if (mounted) {
         setState(() {});
@@ -949,6 +997,132 @@ class _PerAppAndroidScreenState
     );
   }
 
+  void _showManualAddDialog() {
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text("手动添加应用包名"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "请输入需要代理的应用包名（支持多个，使用空格、逗号或换行分隔，例如：org.telegram.messenger, com.google.android.youtube）：",
+                style: TextStyle(fontSize: 12),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: controller,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "例如：org.telegram.messenger\ncom.google.android.youtube",
+                  isDense: true,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text("取消"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final text = controller.text.trim();
+                if (text.isNotEmpty) {
+                  final parts = text.split(RegExp(r'[\s,\n;]+'));
+                  var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+                  perapp.PackageIds ??= [];
+                  int added = 0;
+                  for (var p in parts) {
+                    final clean = p.trim();
+                    if (clean.isNotEmpty && !perapp.PackageIds!.contains(clean)) {
+                      perapp.PackageIds!.add(clean);
+                      added++;
+                    }
+                  }
+                  if (added > 0) {
+                    ClashSettingManager.save();
+                    getInstalledPackages();
+                  }
+                }
+                Navigator.pop(ctx);
+              },
+              child: const Text("添加"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showPresetAppsDialog() {
+    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    perapp.PackageIds ??= [];
+    final selectedPkgs = perapp.PackageIds!.toSet();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text("快捷添加常用代理应用"),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: _commonProxyPresets.map((preset) {
+                      final pkg = preset['pkg']!;
+                      final name = preset['name']!;
+                      final isChecked = selectedPkgs.contains(pkg);
+                      return CheckboxListTile(
+                        dense: true,
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+                        subtitle: Text(pkg, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                        value: isChecked,
+                        onChanged: (bool? val) {
+                          setDialogState(() {
+                            if (val == true) {
+                              selectedPkgs.add(pkg);
+                            } else {
+                              selectedPkgs.remove(pkg);
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text("取消"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+                    perapp.PackageIds = selectedPkgs.toList();
+                    ClashSettingManager.save();
+                    Navigator.pop(ctx);
+                    getInstalledPackages();
+                  },
+                  child: const Text("保存所选"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget createNeedPermission(
     BuildContext context,
     String text,
@@ -957,6 +1131,8 @@ class _PerAppAndroidScreenState
   ) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
+    final selectedCount = _getSelectedCount();
+
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -986,7 +1162,7 @@ class _PerAppAndroidScreenState
             ),
             const SizedBox(height: 8),
             Text(
-              "当前系统限制了已安装软件列表的读取。请先点击下方「一键申请权限」弹出系统授权框；若系统未弹出，可点击「前往权限设置页」手动开启。",
+              "当前系统限制了读取软件列表。请点击下方【前往系统权限设置页】开启「获取应用列表」，或直接使用免授权的「常用应用预设」一键代理。",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
@@ -1025,8 +1201,8 @@ class _PerAppAndroidScreenState
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "• 小米 / HyperOS / MIUI：点击下方【前往权限设置页】直达，开启「获取应用列表」权限。\n"
-                    "• 华为 / 荣耀：进入设置 -> 应用管理 -> Wmimo -> 权限，开启「读取已安装应用列表」。\n"
+                    "• 小米 / HyperOS / MIUI：点击下方【前往系统权限设置页】直达安全中心，开启「获取应用列表」权限。\n"
+                    "• 华为 / 荣耀：设置 -> 应用管理 -> Wmimo -> 权限，开启「读取已安装应用列表」。\n"
                     "• OPPO / vivo：在应用权限中开启「读取应用列表」。\n"
                     "• 开启权限后切回 Wmimo 即可自动加载，无需重复进入。",
                     style: TextStyle(
@@ -1040,12 +1216,54 @@ class _PerAppAndroidScreenState
             ),
             const SizedBox(height: 20),
 
-            // Button 1: Request permission system popup
+            // Button 1: Jump to system permission settings (Primary for HyperOS)
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
+                icon: const Icon(Icons.settings_outlined, size: 18),
+                label: const Text("前往系统权限设置页 (直达小米安全中心)"),
+                onPressed: () async {
+                  try {
+                    const platform = MethodChannel('com.wmimo.app/native_helper');
+                    await platform.invokeMethod('openAppSettings');
+                  } catch (_) {
+                    AppSettings.openAppSettings(
+                      type: AppSettingsType.settings,
+                    );
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Button 2: Quick add presets (No permission needed!)
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.auto_awesome_outlined, size: 18),
+                label: const Text("快捷添加常用应用 (免授权预设)"),
+                onPressed: _showPresetAppsDialog,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Button 3: Manual input package names
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.add_circle_outline, size: 18),
+                label: const Text("手动添加应用包名"),
+                onPressed: _showManualAddDialog,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Button 4: System permission popup fallback
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
                 icon: const Icon(Icons.verified_user_outlined, size: 18),
-                label: const Text("一键申请权限 (弹出系统授权框)"),
+                label: const Text("尝试一键申请权限 (系统弹窗)"),
                 onPressed: () async {
                   try {
                     final granted = await PackageManagerAndroid.requestAppListPermission();
@@ -1059,36 +1277,30 @@ class _PerAppAndroidScreenState
                 },
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
-            // Button 2: Jump to system permission settings
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                icon: const Icon(Icons.settings_outlined, size: 18),
-                label: const Text("前往系统权限设置页 (手动开启)"),
-                onPressed: () async {
-                  try {
-                    const platform = MethodChannel('com.wmimo.app/native_helper');
-                    await platform.invokeMethod('openAppSettings');
-                  } catch (_) {
-                    AppSettings.openAppSettings(
-                      type: AppSettingsType.settings,
-                    );
-                  }
-                },
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            // Button 3: Refresh
-            TextButton.icon(
-              icon: const Icon(Icons.refresh_outlined, size: 16),
-              label: Text(tcontext.meta.refresh),
-              onPressed: () async {
-                _needPermission = false;
-                onRefresh();
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (selectedCount > 0)
+                  Text(
+                    "已配置 $selectedCount 个分流应用",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: ThemeDefine.kColorBlue,
+                    ),
+                  ),
+                if (selectedCount > 0) const SizedBox(width: 16),
+                TextButton.icon(
+                  icon: const Icon(Icons.refresh_outlined, size: 16),
+                  label: Text(tcontext.meta.refresh),
+                  onPressed: () async {
+                    _needPermission = false;
+                    onRefresh();
+                  },
+                ),
+              ],
             ),
           ],
         ),
