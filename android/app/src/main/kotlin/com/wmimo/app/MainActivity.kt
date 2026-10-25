@@ -163,6 +163,7 @@ class MainActivity : FlutterActivity() {
                     }
                 }
                 "getInstalledAppList" -> {
+                    val mainHandler = Handler(Looper.getMainLooper())
                     val list = ArrayList<Map<String, Any>>()
                     val seenPackages = HashSet<String>()
                     val pm = packageManager
