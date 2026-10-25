@@ -57,6 +57,26 @@ class PackageManagerAndroid {
   static final Map<String, String> _appNameCache = {};
   static final Map<String, Image> _appIconCache = {};
 
+  static Future<bool> hasAppListPermission() async {
+    if (!Platform.isAndroid) return true;
+    try {
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      return await platform.invokeMethod<bool>('hasAppListPermission') ?? true;
+    } catch (_) {
+      return true;
+    }
+  }
+
+  static Future<bool> requestAppListPermission() async {
+    if (!Platform.isAndroid) return true;
+    try {
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      return await platform.invokeMethod<bool>('requestAppListPermission') ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   static Future<List<PackageInfoEx>> getInstalledPackages({
     bool Function(PackageInfo)? onValid,
   }) async {
@@ -68,7 +88,7 @@ class PackageManagerAndroid {
       const platform = MethodChannel('com.wmimo.app/native_helper');
       final List<dynamic>? rawList = await platform
           .invokeMethod<List<dynamic>>('getInstalledAppList')
-          .timeout(const Duration(seconds: 5));
+          .timeout(const Duration(seconds: 10));
       if (rawList != null && rawList.isNotEmpty) {
         List<PackageInfoEx> packages = [];
         for (var item in rawList) {

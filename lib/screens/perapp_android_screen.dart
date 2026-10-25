@@ -29,27 +29,38 @@ class PerAppAndroidScreen extends LasyRenderingStatefulWidget {
 }
 
 class _PerAppAndroidScreenState
-    extends LasyRenderingState<PerAppAndroidScreen> {
+    extends LasyRenderingState<PerAppAndroidScreen>
+    with WidgetsBindingObserver {
   bool _loading = true;
   final List<PackageInfoEx> _applicationInfoList = [];
   final _searchController = TextEditingController();
   List<PackageInfoEx> _searchedData = [];
   bool _needPermission = false;
+  bool _hasAutoRequestedPermission = false;
   String _selectedCategory = 'all'; // 'all', 'user', 'system', 'selected'
 
   @override
   void initState() {
     _loading = true;
+    WidgetsBinding.instance.addObserver(this);
     getInstalledPackages();
     super.initState();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _searchController.dispose();
     ClashSettingManager.save();
     SettingManager.save();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _needPermission) {
+      getInstalledPackages();
+    }
   }
 
   bool _isSystemApp(PackageInfoEx app) {
@@ -153,7 +164,7 @@ class _PerAppAndroidScreenState
     _loading = true;
     setState(() {});
     try {
-      final packages = await PackageManagerAndroid.getInstalledPackages(
+      var packages = await PackageManagerAndroid.getInstalledPackages(
         onValid: (PackageInfo info) {
           if (info.packageName == AppUtils.getId()) {
             return false;
@@ -161,6 +172,20 @@ class _PerAppAndroidScreenState
           return true;
         },
       );
+
+      // If empty on Android, automatically request system permission once
+      if (packages.isEmpty && !_hasAutoRequestedPermission) {
+        _hasAutoRequestedPermission = true;
+        try {
+          final granted = await PackageManagerAndroid.requestAppListPermission();
+          if (granted) {
+            packages = await PackageManagerAndroid.getInstalledPackages(
+              onValid: (PackageInfo info) => info.packageName != AppUtils.getId(),
+            );
+          }
+        } catch (_) {}
+      }
+
       if (!mounted) {
         return;
       }
@@ -948,7 +973,7 @@ class _PerAppAndroidScreenState
     final theme = Theme.of(context);
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -960,7 +985,7 @@ class _PerAppAndroidScreenState
               ),
               child: Icon(
                 Icons.security_outlined,
-                size: 48,
+                size: 44,
                 color: theme.colorScheme.primary,
               ),
             ),
@@ -973,33 +998,109 @@ class _PerAppAndroidScreenState
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
-              "部分手机系统（如小米/HyperOS、OPPO、vivo、华为等）默认限制应用读取应用列表。请在系统设置中为 Wmimo 开启「读取应用列表」或「应用查询」权限，然后点击下方刷新即可正常使用。",
+              "当前系统限制了已安装软件列表的读取。请先点击下方「一键申请权限」弹出系统授权框；若系统未弹出，可点击「前往权限设置页」手动开启。",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 height: 1.45,
               ),
             ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.security_outlined, size: 18),
-              label: const Text("申请权限并前往系统设置"),
-              onPressed: () async {
-                try {
-                  const platform = MethodChannel('com.wmimo.app/native_helper');
-                  await platform.invokeMethod('requestAppListPermission');
-                } catch (_) {}
-                onPermission();
-              },
+            const SizedBox(height: 16),
+
+            // Step guide container
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: theme.dividerColor.withValues(alpha: 0.1),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.info_outline, size: 16, color: theme.colorScheme.primary),
+                      const SizedBox(width: 6),
+                      Text(
+                        "常见系统开启指引",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "• 小米 / HyperOS / MIUI：点击下方【前往权限设置页】直达，开启「获取应用列表」权限。\n"
+                    "• 华为 / 荣耀：进入设置 -> 应用管理 -> Wmimo -> 权限，开启「读取已安装应用列表」。\n"
+                    "• OPPO / vivo：在应用权限中开启「读取应用列表」。\n"
+                    "• 开启权限后切回 Wmimo 即可自动加载，无需重复进入。",
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.refresh_outlined, size: 18),
+            const SizedBox(height: 20),
+
+            // Button 1: Request permission system popup
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.verified_user_outlined, size: 18),
+                label: const Text("一键申请权限 (弹出系统授权框)"),
+                onPressed: () async {
+                  try {
+                    final granted = await PackageManagerAndroid.requestAppListPermission();
+                    if (granted) {
+                      _needPermission = false;
+                      await getInstalledPackages();
+                      return;
+                    }
+                  } catch (_) {}
+                  await getInstalledPackages();
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Button 2: Jump to system permission settings
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.settings_outlined, size: 18),
+                label: const Text("前往系统权限设置页 (手动开启)"),
+                onPressed: () async {
+                  try {
+                    const platform = MethodChannel('com.wmimo.app/native_helper');
+                    await platform.invokeMethod('openAppSettings');
+                  } catch (_) {
+                    AppSettings.openAppSettings(
+                      type: AppSettingsType.settings,
+                    );
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            // Button 3: Refresh
+            TextButton.icon(
+              icon: const Icon(Icons.refresh_outlined, size: 16),
               label: Text(tcontext.meta.refresh),
               onPressed: () async {
+                _needPermission = false;
                 onRefresh();
               },
             ),

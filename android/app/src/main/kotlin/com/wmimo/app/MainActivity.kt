@@ -29,9 +29,11 @@ class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.wmimo.app/native_helper"
     private val VPN_REQUEST_CODE = 1001
     private val NOTIF_REQUEST_CODE = 1002
+    private val APP_LIST_REQUEST_CODE = 1003
 
     private var pendingVpnResult: MethodChannel.Result? = null
     private var pendingNotifResult: MethodChannel.Result? = null
+    private var pendingAppListResult: MethodChannel.Result? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
@@ -54,36 +56,97 @@ class MainActivity : FlutterActivity() {
                     }
                 }
                 "openAppSettings" -> {
+                    var opened = false
+                    // 1. First attempt: MIUI / HyperOS Security Center AppPermissionsEditorActivity (where "获取应用列表" resides)
                     try {
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", packageName, null)
+                        val miuiIntent = Intent("miui.intent.action.APP_PERM_EDITOR").apply {
+                            setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity")
+                            putExtra("extra_pkgname", packageName)
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         }
-                        startActivity(intent)
-                        result.success(true)
+                        startActivity(miuiIntent)
+                        opened = true
                     } catch (_: Throwable) {
                         try {
-                            val fallbackIntent = Intent(Settings.ACTION_SETTINGS).apply {
+                            val miuiIntent2 = Intent("miui.intent.action.APP_PERM_EDITOR").apply {
+                                setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity")
+                                putExtra("extra_pkgname", packageName)
                                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             }
-                            startActivity(fallbackIntent)
-                            result.success(true)
+                            startActivity(miuiIntent2)
+                            opened = true
                         } catch (_: Throwable) {
-                            result.success(false)
+                            try {
+                                val miuiIntent3 = Intent("miui.intent.action.APP_PERM_EDITOR").apply {
+                                    putExtra("extra_pkgname", packageName)
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                }
+                                startActivity(miuiIntent3)
+                                opened = true
+                            } catch (_: Throwable) {}
                         }
+                    }
+
+                    // 2. Fallback: Standard Android Application Details Settings
+                    if (!opened) {
+                        try {
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                data = Uri.fromParts("package", packageName, null)
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            }
+                            startActivity(intent)
+                            opened = true
+                        } catch (_: Throwable) {
+                            try {
+                                val fallbackIntent = Intent(Settings.ACTION_SETTINGS).apply {
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                }
+                                startActivity(fallbackIntent)
+                                opened = true
+                            } catch (_: Throwable) {}
+                        }
+                    }
+                    result.success(opened)
+                }
+                "hasAppListPermission" -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        try {
+                            val granted = ContextCompat.checkSelfPermission(
+                                this,
+                                "com.android.permission.GET_INSTALLED_APPS"
+                            ) == PackageManager.PERMISSION_GRANTED
+                            result.success(granted)
+                        } catch (_: Throwable) {
+                            result.success(true)
+                        }
+                    } else {
+                        result.success(true)
                     }
                 }
                 "requestAppListPermission" -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        try {
-                            ActivityCompat.requestPermissions(
-                                this,
-                                arrayOf("com.android.permission.GET_INSTALLED_APPS"),
-                                1003
-                            )
-                        } catch (_: Throwable) {}
+                        val isGranted = ContextCompat.checkSelfPermission(
+                            this,
+                            "com.android.permission.GET_INSTALLED_APPS"
+                        ) == PackageManager.PERMISSION_GRANTED
+                        if (isGranted) {
+                            result.success(true)
+                        } else {
+                            pendingAppListResult = result
+                            try {
+                                ActivityCompat.requestPermissions(
+                                    this,
+                                    arrayOf("com.android.permission.GET_INSTALLED_APPS"),
+                                    APP_LIST_REQUEST_CODE
+                                )
+                            } catch (_: Throwable) {
+                                pendingAppListResult = null
+                                result.success(false)
+                            }
+                        }
+                    } else {
+                        result.success(true)
                     }
-                    result.success(true)
                 }
                 "getInstalledAppList" -> {
                     Thread {
@@ -91,18 +154,27 @@ class MainActivity : FlutterActivity() {
                         val seenPackages = HashSet<String>()
                         val pm = packageManager
                         try {
-                            // Stage 1: Launcher activities query
-                            // Extremely fast (<20ms), bypasses HyperOS/MIUI/ColorOS bulk Binder block, and gets all user-visible apps
+                            // Stage 1: Launcher activities query with MATCH_ALL and fallback to 0
                             try {
                                 val launcherIntent = Intent(Intent.ACTION_MAIN).apply {
                                     addCategory(Intent.CATEGORY_LAUNCHER)
                                 }
-                                val launcherApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                    pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(0))
-                                } else {
-                                    @Suppress("DEPRECATION")
-                                    pm.queryIntentActivities(launcherIntent, 0)
+                                val launcherApps = try {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
+                                    } else {
+                                        @Suppress("DEPRECATION")
+                                        pm.queryIntentActivities(launcherIntent, PackageManager.MATCH_ALL)
+                                    }
+                                } catch (_: Throwable) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(0))
+                                    } else {
+                                        @Suppress("DEPRECATION")
+                                        pm.queryIntentActivities(launcherIntent, 0)
+                                    }
                                 }
+
                                 for (resolveInfo in launcherApps) {
                                     val actInfo = resolveInfo.activityInfo ?: continue
                                     val pkg = actInfo.packageName ?: continue
@@ -126,14 +198,64 @@ class MainActivity : FlutterActivity() {
                                 }
                             } catch (_: Throwable) {}
 
-                            // Stage 2: Background / system applications via getInstalledApplications
-                            // Fast in-memory list without heavy resource extraction
+                            // Stage 1.5: Broad MAIN activities query
                             try {
-                                val allApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                    pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0))
-                                } else {
-                                    @Suppress("DEPRECATION")
-                                    pm.getInstalledApplications(0)
+                                val mainIntent = Intent(Intent.ACTION_MAIN)
+                                val mainApps = try {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        pm.queryIntentActivities(mainIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
+                                    } else {
+                                        @Suppress("DEPRECATION")
+                                        pm.queryIntentActivities(mainIntent, PackageManager.MATCH_ALL)
+                                    }
+                                } catch (_: Throwable) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        pm.queryIntentActivities(mainIntent, PackageManager.ResolveInfoFlags.of(0))
+                                    } else {
+                                        @Suppress("DEPRECATION")
+                                        pm.queryIntentActivities(mainIntent, 0)
+                                    }
+                                }
+
+                                for (resolveInfo in mainApps) {
+                                    val actInfo = resolveInfo.activityInfo ?: continue
+                                    val pkg = actInfo.packageName ?: continue
+                                    if (pkg == packageName || seenPackages.contains(pkg)) continue
+                                    seenPackages.add(pkg)
+
+                                    val label = try {
+                                        resolveInfo.loadLabel(pm)?.toString() ?: actInfo.loadLabel(pm)?.toString() ?: pkg
+                                    } catch (_: Throwable) {
+                                        pkg
+                                    }
+                                    val appFlags = actInfo.applicationInfo?.flags ?: 0
+                                    val isSystem = (appFlags and ApplicationInfo.FLAG_SYSTEM) != 0
+
+                                    list.add(mapOf(
+                                        "packageName" to pkg,
+                                        "name" to label,
+                                        "isSystem" to isSystem,
+                                        "flags" to appFlags
+                                    ))
+                                }
+                            } catch (_: Throwable) {}
+
+                            // Stage 2: Background / system applications via getInstalledApplications
+                            try {
+                                val allApps = try {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
+                                    } else {
+                                        @Suppress("DEPRECATION")
+                                        pm.getInstalledApplications(PackageManager.MATCH_ALL)
+                                    }
+                                } catch (_: Throwable) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0))
+                                    } else {
+                                        @Suppress("DEPRECATION")
+                                        pm.getInstalledApplications(0)
+                                    }
                                 }
                                 for (app in allApps) {
                                     val pkg = app.packageName ?: continue
@@ -155,11 +277,20 @@ class MainActivity : FlutterActivity() {
                             // Stage 3: If still empty (e.g. system restricted both), try getInstalledPackages
                             if (list.isEmpty()) {
                                 try {
-                                    val packages = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                        pm.getInstalledPackages(PackageManager.PackageInfoFlags.of(0))
-                                    } else {
-                                        @Suppress("DEPRECATION")
-                                        pm.getInstalledPackages(0)
+                                    val packages = try {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                            pm.getInstalledPackages(PackageManager.PackageInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
+                                        } else {
+                                            @Suppress("DEPRECATION")
+                                            pm.getInstalledPackages(PackageManager.MATCH_ALL)
+                                        }
+                                    } catch (_: Throwable) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                            pm.getInstalledPackages(PackageManager.PackageInfoFlags.of(0))
+                                        } else {
+                                            @Suppress("DEPRECATION")
+                                            pm.getInstalledPackages(0)
+                                        }
                                     }
                                     for (p in packages) {
                                         val pkg = p.packageName ?: continue
@@ -396,6 +527,17 @@ class MainActivity : FlutterActivity() {
             val isGranted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
             pendingNotifResult?.success(isGranted)
             pendingNotifResult = null
+        } else if (requestCode == APP_LIST_REQUEST_CODE) {
+            val isGranted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            pendingAppListResult?.success(isGranted)
+            pendingAppListResult = null
         }
+    }
+
+    override fun onDestroy() {
+        pendingVpnResult = null
+        pendingNotifResult = null
+        pendingAppListResult = null
+        super.onDestroy()
     }
 }
