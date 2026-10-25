@@ -55,6 +55,7 @@ class PackageManagerAndroid {
   static const kRemoved = "[removed]";
   static AndroidPackageManager? _pkgMgr;
   static final Map<String, String> _appNameCache = {};
+  static final Map<String, Image> _appIconCache = {};
 
   static Future<List<PackageInfoEx>> getInstalledPackages({
     bool Function(PackageInfo)? onValid,
@@ -66,8 +67,9 @@ class PackageManagerAndroid {
     // 1. High-Performance Native Single-Call (bypasses TransactionTooLargeException & loop overhead)
     try {
       const platform = MethodChannel('com.wmimo.app/native_helper');
-      final List<dynamic>? rawList =
-          await platform.invokeMethod<List<dynamic>>('getInstalledAppList');
+      final List<dynamic>? rawList = await platform
+          .invokeMethod<List<dynamic>>('getInstalledAppList')
+          .timeout(const Duration(seconds: 4));
       if (rawList != null && rawList.isNotEmpty) {
         List<PackageInfoEx> packages = [];
         for (var item in rawList) {
@@ -106,9 +108,10 @@ class PackageManagerAndroid {
       try {
         packageInfos = await _pkgMgr!.getInstalledPackages(
           flags: PackageInfoFlags({}),
-        );
+        ).timeout(const Duration(seconds: 3));
       } catch (_) {
-        packageInfos = await _getInstalledPackagesFallback();
+        packageInfos = await _getInstalledPackagesFallback()
+            .timeout(const Duration(seconds: 3), onTimeout: () => null);
       }
 
       return await _buildPackageInfoList(packageInfos, onValid: onValid);
@@ -236,27 +239,48 @@ class PackageManagerAndroid {
     if (packageName == null || packageName.isEmpty) {
       return null;
     }
+    if (_appIconCache.containsKey(packageName)) {
+      return _appIconCache[packageName];
+    }
     // 1. Fast Native Icon Lookup
     try {
       const platform = MethodChannel('com.wmimo.app/native_helper');
-      final Uint8List? bytes = await platform.invokeMethod<Uint8List>(
-        'getAppIcon',
-        {'packageName': packageName},
-      );
+      final Uint8List? bytes = await platform
+          .invokeMethod<Uint8List>(
+            'getAppIcon',
+            {'packageName': packageName},
+          )
+          .timeout(const Duration(seconds: 2));
       if (bytes != null && bytes.isNotEmpty) {
-        return Image.memory(bytes, cacheHeight: size, cacheWidth: size);
+        final img = Image.memory(
+          bytes,
+          cacheHeight: size,
+          cacheWidth: size,
+          gaplessPlayback: true,
+        );
+        _appIconCache[packageName] = img;
+        return img;
       }
     } catch (_) {}
 
     // 2. Plugin Fallback
     if (_pkgMgr != null) {
       try {
-        var data = await _pkgMgr!.getApplicationIcon(
-          packageName: packageName,
-          format: BitmapCompressFormat.png,
-        );
+        var data = await _pkgMgr!
+            .getApplicationIcon(
+              packageName: packageName,
+              format: BitmapCompressFormat.png,
+            )
+            .timeout(const Duration(seconds: 2));
         if (data != null) {
-          return Image.memory(data, cacheHeight: size, cacheWidth: size);
+          final img = Image.memory(
+            data,
+            cacheHeight: size,
+            cacheWidth: size,
+            gaplessPlayback: true,
+          );
+          _appIconCache[packageName] = img;
+          return img;
         }
       } catch (_) {}
     }

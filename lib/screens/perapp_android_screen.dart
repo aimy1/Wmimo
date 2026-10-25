@@ -152,62 +152,71 @@ class _PerAppAndroidScreenState
     var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     _loading = true;
     setState(() {});
-    final packages = await PackageManagerAndroid.getInstalledPackages(
-      onValid: (PackageInfo info) {
-        if (info.packageName == AppUtils.getId()) {
-          return false;
-        }
-        return true;
-      },
-    );
-    _loading = false;
-    _needPermission = packages.isEmpty;
-    if (!mounted) {
-      return;
-    }
-    if (_needPermission) {
-      setState(() {});
-      return;
-    }
-    List<PackageInfoEx> notExists = [];
-    List<PackageInfoEx> added = [];
-    List<PackageInfoEx> notAdded = [];
-    Set<String> exists = {};
-
-    for (var app in packages) {
-      exists.add(app.info.packageName!);
-      if (perapp.PackageIds != null &&
-          perapp.PackageIds!.contains(app.info.packageName!)) {
-        added.add(app);
-      } else {
-        notAdded.add(app);
+    try {
+      final packages = await PackageManagerAndroid.getInstalledPackages(
+        onValid: (PackageInfo info) {
+          if (info.packageName == AppUtils.getId()) {
+            return false;
+          }
+          return true;
+        },
+      );
+      if (!mounted) {
+        return;
       }
-    }
-    if (perapp.PackageIds != null) {
-      for (var papp in perapp.PackageIds!) {
-        if (!exists.contains(papp)) {
-          PackageInfoEx info = PackageInfoEx();
-          info.info = PackageInfoImpl(papp);
-          info.name = PackageManagerAndroid.kRemoved;
-          info.icon = null;
+      _needPermission = packages.isEmpty;
+      if (_needPermission) {
+        return;
+      }
+      List<PackageInfoEx> notExists = [];
+      List<PackageInfoEx> added = [];
+      List<PackageInfoEx> notAdded = [];
+      Set<String> exists = {};
 
-          notExists.add(info);
+      for (var app in packages) {
+        final pkg = app.info.packageName;
+        if (pkg == null || pkg.isEmpty) continue;
+        exists.add(pkg);
+        if (perapp.PackageIds != null &&
+            perapp.PackageIds!.contains(pkg)) {
+          added.add(app);
+        } else {
+          notAdded.add(app);
         }
       }
+      if (perapp.PackageIds != null) {
+        for (var papp in perapp.PackageIds!) {
+          if (!exists.contains(papp)) {
+            PackageInfoEx info = PackageInfoEx();
+            info.info = PackageInfoImpl(papp);
+            info.name = PackageManagerAndroid.kRemoved;
+            info.icon = null;
+
+            notExists.add(info);
+          }
+        }
+      }
+
+      notExists.sort(PackageManagerAndroid.sortByName);
+      added.sort(PackageManagerAndroid.sortByName);
+      notAdded.sort(PackageManagerAndroid.sortByName);
+      _applicationInfoList.addAll(notExists);
+      _applicationInfoList.addAll(added);
+      _applicationInfoList.addAll(notAdded);
+
+      if (SettingManager.getConfig().ui.perAppHideSystemApp) {
+        _selectedCategory = 'user';
+      }
+
+      _applyFilter();
+    } catch (_) {
+      // ignore
+    } finally {
+      _loading = false;
+      if (mounted) {
+        setState(() {});
+      }
     }
-
-    notExists.sort(PackageManagerAndroid.sortByName);
-    added.sort(PackageManagerAndroid.sortByName);
-    notAdded.sort(PackageManagerAndroid.sortByName);
-    _applicationInfoList.addAll(notExists);
-    _applicationInfoList.addAll(added);
-    _applicationInfoList.addAll(notAdded);
-
-    if (SettingManager.getConfig().ui.perAppHideSystemApp) {
-      _selectedCategory = 'user';
-    }
-
-    _applyFilter();
   }
 
   Future<Image?> getInstalledPackageIcon(String packageName) async {

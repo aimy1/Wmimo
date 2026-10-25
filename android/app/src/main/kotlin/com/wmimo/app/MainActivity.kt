@@ -55,32 +55,85 @@ class MainActivity : FlutterActivity() {
                 }
                 "getInstalledAppList" -> {
                     Thread {
+                        val list = ArrayList<Map<String, Any>>()
+                        val seenPackages = HashSet<String>()
+                        val pm = packageManager
                         try {
-                            val pm = packageManager
-                            val apps = pm.getInstalledApplications(0)
-                            val list = ArrayList<Map<String, Any>>()
-                            for (app in apps) {
-                                val pkg = app.packageName ?: continue
-                                if (pkg == packageName) continue
-                                val name = try {
-                                    pm.getApplicationLabel(app).toString()
-                                } catch (_: Exception) {
+                            // 1. Fast query for launcher applications (user apps + system apps with UI)
+                            // This takes < 30ms and resolves human-readable labels for the apps users actually want to proxy
+                            val launcherIntent = Intent(Intent.ACTION_MAIN, null).apply {
+                                addCategory(Intent.CATEGORY_LAUNCHER)
+                            }
+                            val launcherApps = try {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(0))
+                                } else {
+                                    pm.queryIntentActivities(launcherIntent, 0)
+                                }
+                            } catch (_: Throwable) {
+                                emptyList()
+                            }
+
+                            for (resolveInfo in launcherApps) {
+                                val actInfo = resolveInfo.activityInfo ?: continue
+                                val pkg = actInfo.packageName ?: continue
+                                if (pkg == packageName || seenPackages.contains(pkg)) continue
+                                seenPackages.add(pkg)
+
+                                val label = try {
+                                    resolveInfo.loadLabel(pm)?.toString() ?: actInfo.loadLabel(pm)?.toString() ?: pkg
+                                } catch (_: Throwable) {
                                     pkg
                                 }
-                                val isSystem = (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+                                val appFlags = actInfo.applicationInfo?.flags ?: 0
+                                val isSystem = (appFlags and ApplicationInfo.FLAG_SYSTEM) != 0
+
                                 list.add(mapOf(
                                     "packageName" to pkg,
-                                    "name" to name,
+                                    "name" to label,
                                     "isSystem" to isSystem,
-                                    "flags" to app.flags
+                                    "flags" to appFlags
                                 ))
                             }
+
+                            // 2. Query remaining background/system applications
+                            // Do not call slow resource-loading pm.getApplicationLabel for these; use nonLocalizedLabel or packageName
+                            try {
+                                val allApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0))
+                                } else {
+                                    pm.getInstalledApplications(0)
+                                }
+                                for (app in allApps) {
+                                    val pkg = app.packageName ?: continue
+                                    if (pkg == packageName || seenPackages.contains(pkg)) continue
+                                    seenPackages.add(pkg)
+
+                                    val label = app.nonLocalizedLabel?.toString() ?: pkg
+                                    val isSystem = (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+                                    list.add(mapOf(
+                                        "packageName" to pkg,
+                                        "name" to label,
+                                        "isSystem" to isSystem,
+                                        "flags" to app.flags
+                                    ))
+                                }
+                            } catch (_: Throwable) {}
+
                             runOnUiThread {
-                                result.success(list)
+                                try {
+                                    result.success(list)
+                                } catch (_: Throwable) {
+                                    result.success(emptyList<Map<String, Any>>())
+                                }
                             }
-                        } catch (e: Exception) {
+                        } catch (t: Throwable) {
                             runOnUiThread {
-                                result.error("GET_APPS_FAILED", e.message, null)
+                                try {
+                                    result.success(list)
+                                } catch (_: Throwable) {
+                                    result.error("GET_APPS_FAILED", t.message ?: "error", null)
+                                }
                             }
                         }
                     }.start()
@@ -109,11 +162,17 @@ class MainActivity : FlutterActivity() {
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
                                 val bytes = stream.toByteArray()
                                 runOnUiThread {
-                                    result.success(bytes)
+                                    try {
+                                        result.success(bytes)
+                                    } catch (_: Throwable) {
+                                        result.success(null)
+                                    }
                                 }
-                            } catch (_: Exception) {
+                            } catch (_: Throwable) {
                                 runOnUiThread {
-                                    result.success(null)
+                                    try {
+                                        result.success(null)
+                                    } catch (_: Throwable) {}
                                 }
                             }
                         }.start()
