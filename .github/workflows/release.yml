@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.2.12.1514)'
+        description: 'Release Tag (e.g. v1.2.13.1515)'
         required: false
-        default: 'v1.2.12.1514'
+        default: 'v1.2.13.1515'
 
 permissions:
   contents: write
@@ -68,7 +68,7 @@ jobs:
                 $tag = "v$pubVer"
               }
             } else {
-              $tag = "v1.2.12.1514"
+              $tag = "v1.2.13.1515"
             }
           }
           if (-not $tag.StartsWith("v")) {
@@ -224,7 +224,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.12.1514"
+              TAG="v1.2.13.1515"
             fi
           fi
           chmod +x tool/package_linux.sh
@@ -325,7 +325,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.12.1514"
+              TAG="v1.2.13.1515"
             fi
           fi
           chmod +x tool/package_linux.sh
@@ -419,7 +419,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.12.1514"
+              TAG="v1.2.13.1515"
             fi
           fi
           
@@ -514,7 +514,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.12.1514"
+              TAG="v1.2.13.1515"
             fi
           fi
           chmod +x tool/package_macos.sh
@@ -596,7 +596,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.12.1514"
+              TAG="v1.2.13.1515"
             fi
           fi
           chmod +x tool/package_ios.sh
@@ -636,7 +636,7 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.2.12.1514"
+              TAG="v1.2.13.1515"
             fi
           fi
 
