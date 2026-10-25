@@ -71,7 +71,10 @@ class PackageManagerAndroid {
     if (!Platform.isAndroid) return true;
     try {
       const platform = MethodChannel('com.wmimo.app/native_helper');
-      return await platform.invokeMethod<bool>('requestAppListPermission') ?? false;
+      return await platform
+              .invokeMethod<bool>('requestAppListPermission')
+              .timeout(const Duration(seconds: 3), onTimeout: () => false) ??
+          false;
     } catch (_) {
       return false;
     }
@@ -88,7 +91,7 @@ class PackageManagerAndroid {
       const platform = MethodChannel('com.wmimo.app/native_helper');
       final List<dynamic>? rawList = await platform
           .invokeMethod<List<dynamic>>('getInstalledAppList')
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 5), onTimeout: () => null);
       if (rawList != null && rawList.isNotEmpty) {
         List<PackageInfoEx> packages = [];
         for (var item in rawList) {

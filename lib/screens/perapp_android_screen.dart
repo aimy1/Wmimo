@@ -36,7 +36,6 @@ class _PerAppAndroidScreenState
   final _searchController = TextEditingController();
   List<PackageInfoEx> _searchedData = [];
   bool _needPermission = false;
-  bool _hasAutoRequestedPermission = false;
   String _selectedCategory = 'all'; // 'all', 'user', 'system', 'selected'
 
   @override
@@ -164,7 +163,7 @@ class _PerAppAndroidScreenState
     _loading = true;
     setState(() {});
     try {
-      var packages = await PackageManagerAndroid.getInstalledPackages(
+      final packages = await PackageManagerAndroid.getInstalledPackages(
         onValid: (PackageInfo info) {
           if (info.packageName == AppUtils.getId()) {
             return false;
@@ -172,19 +171,6 @@ class _PerAppAndroidScreenState
           return true;
         },
       );
-
-      // If empty on Android, automatically request system permission once
-      if (packages.isEmpty && !_hasAutoRequestedPermission) {
-        _hasAutoRequestedPermission = true;
-        try {
-          final granted = await PackageManagerAndroid.requestAppListPermission();
-          if (granted) {
-            packages = await PackageManagerAndroid.getInstalledPackages(
-              onValid: (PackageInfo info) => info.packageName != AppUtils.getId(),
-            );
-          }
-        } catch (_) {}
-      }
 
       if (!mounted) {
         return;
