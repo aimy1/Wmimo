@@ -69,7 +69,7 @@ class PackageManagerAndroid {
       const platform = MethodChannel('com.wmimo.app/native_helper');
       final List<dynamic>? rawList = await platform
           .invokeMethod<List<dynamic>>('getInstalledAppList')
-          .timeout(const Duration(seconds: 4));
+          .timeout(const Duration(seconds: 15));
       if (rawList != null && rawList.isNotEmpty) {
         List<PackageInfoEx> packages = [];
         for (var item in rawList) {
@@ -108,10 +108,10 @@ class PackageManagerAndroid {
       try {
         packageInfos = await _pkgMgr!.getInstalledPackages(
           flags: PackageInfoFlags({}),
-        ).timeout(const Duration(seconds: 3));
+        ).timeout(const Duration(seconds: 8));
       } catch (_) {
         packageInfos = await _getInstalledPackagesFallback()
-            .timeout(const Duration(seconds: 3), onTimeout: () => null);
+            .timeout(const Duration(seconds: 8), onTimeout: () => null);
       }
 
       return await _buildPackageInfoList(packageInfos, onValid: onValid);

@@ -204,9 +204,7 @@ class _PerAppAndroidScreenState
       _applicationInfoList.addAll(added);
       _applicationInfoList.addAll(notAdded);
 
-      if (SettingManager.getConfig().ui.perAppHideSystemApp) {
-        _selectedCategory = 'user';
-      }
+      _selectedCategory = 'all';
 
       _applyFilter();
     } catch (_) {
@@ -944,30 +942,51 @@ class _PerAppAndroidScreenState
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.security_outlined,
-              size: 56,
-              color: theme.colorScheme.primary.withValues(alpha: 0.8),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.security_outlined,
+                size: 48,
+                color: theme.colorScheme.primary,
+              ),
             ),
             const SizedBox(height: 16),
             Text(
               text,
               textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "部分手机系统（如小米/HyperOS、OPPO、vivo、华为等）默认限制应用读取应用列表。请在系统设置中为 Wmimo 开启「读取应用列表」或「应用查询」权限，然后点击下方刷新即可正常使用。",
+              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 14,
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                fontSize: 12,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                height: 1.45,
               ),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
-              icon: const Icon(Icons.settings_outlined, size: 18),
-              label: Text(text),
+              icon: const Icon(Icons.security_outlined, size: 18),
+              label: const Text("申请权限并前往系统设置"),
               onPressed: () async {
+                try {
+                  const platform = MethodChannel('com.wmimo.app/native_helper');
+                  await platform.invokeMethod('requestAppListPermission');
+                } catch (_) {}
                 onPermission();
               },
             ),
