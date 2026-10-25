@@ -64,12 +64,11 @@ class PackageManagerAndroid {
       return [];
     }
 
-    // 1. High-Performance Native Single-Call (bypasses TransactionTooLargeException & loop overhead)
     try {
       const platform = MethodChannel('com.wmimo.app/native_helper');
       final List<dynamic>? rawList = await platform
           .invokeMethod<List<dynamic>>('getInstalledAppList')
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 5));
       if (rawList != null && rawList.isNotEmpty) {
         List<PackageInfoEx> packages = [];
         for (var item in rawList) {
@@ -93,100 +92,13 @@ class PackageManagerAndroid {
             packages.add(info);
           }
         }
-        if (packages.isNotEmpty) {
-          return packages;
-        }
+        return packages;
       }
     } catch (e) {
-      Log.w("PackageManagerAndroid: native getInstalledAppList fallback: $e");
+      Log.w("PackageManagerAndroid: native getInstalledAppList error: $e");
     }
 
-    // 2. Fallback: android_package_manager plugin without PMFlag.getMetaData
-    _pkgMgr ??= AndroidPackageManager();
-    try {
-      List<PackageInfo>? packageInfos;
-      try {
-        packageInfos = await _pkgMgr!.getInstalledPackages(
-          flags: PackageInfoFlags({}),
-        ).timeout(const Duration(seconds: 8));
-      } catch (_) {
-        packageInfos = await _getInstalledPackagesFallback()
-            .timeout(const Duration(seconds: 8), onTimeout: () => null);
-      }
-
-      return await _buildPackageInfoList(packageInfos, onValid: onValid);
-    } catch (e) {
-      Log.w("PackageManagerAndroid: getInstalledPackages error: $e");
-    }
     return [];
-  }
-
-  static Future<List<PackageInfo>?> _getInstalledPackagesFallback() async {
-    final applications = await _pkgMgr!.getInstalledApplications(
-      flags: ApplicationInfoFlags({}),
-    );
-    if (applications == null) {
-      return null;
-    }
-
-    return applications
-        .where((app) => app.packageName != null)
-        .map(
-          (app) => PackageInfoFromApplicationInfo(
-            app.packageName == null ? ApplicationInfoImpl("") : app,
-          ),
-        )
-        .toList();
-  }
-
-  static Future<List<PackageInfoEx>> _buildPackageInfoList(
-    List<PackageInfo>? packageInfos, {
-    bool Function(PackageInfo)? onValid,
-  }) async {
-    if (packageInfos == null || packageInfos.isEmpty) {
-      return [];
-    }
-
-    List<PackageInfoEx> packages = [];
-    for (var app in packageInfos) {
-      final pkg = app.packageName;
-      if (pkg == null || pkg.isEmpty) {
-        continue;
-      }
-      if (onValid != null && !onValid(app)) {
-        continue;
-      }
-      PackageInfoEx info = PackageInfoEx();
-      info.info = app;
-      info.name = _appNameCache[pkg] ?? pkg;
-      if (info.name.contains("{") &&
-          info.name.contains(":") &&
-          info.name.contains("\"")) {
-        continue;
-      }
-
-      packages.add(info);
-    }
-
-    // Lazily resolve display names in parallel chunks for cached apps
-    _resolveNamesInBackground(packages);
-
-    return packages;
-  }
-
-  static void _resolveNamesInBackground(List<PackageInfoEx> packages) {
-    Future.microtask(() async {
-      for (var app in packages) {
-        final pkg = app.info.packageName;
-        if (pkg != null && !_appNameCache.containsKey(pkg)) {
-          final label = await getAppName(pkg);
-          if (label.isNotEmpty) {
-            _appNameCache[pkg] = label;
-            app.name = label;
-          }
-        }
-      }
-    });
   }
 
   static Future<Image?> getInstalledPackageIcon(

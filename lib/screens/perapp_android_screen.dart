@@ -398,10 +398,15 @@ class _PerAppAndroidScreenState
                         tcontext.permission.request(
                           p: tcontext.permission.appQuery,
                         ),
-                        () {
-                          AppSettings.openAppSettings(
-                            type: AppSettingsType.settings,
-                          );
+                        () async {
+                          try {
+                            const platform = MethodChannel('com.wmimo.app/native_helper');
+                            await platform.invokeMethod('openAppSettings');
+                          } catch (_) {
+                            AppSettings.openAppSettings(
+                              type: AppSettingsType.settings,
+                            );
+                          }
                         },
                         () {
                           _needPermission = false;
