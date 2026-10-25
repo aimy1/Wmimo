@@ -363,6 +363,19 @@ class ClashSettingManager {
     _setting.RuleProviders = null;
     _setting.ProxyGroups = null;
     _setting.Extension?.ProfileStoreSelectedPrefix = profileId;
+    final perApp = _setting.Extension?.Tun.perApp;
+    if (perApp != null && perApp.Enable == true && perApp.PackageIds != null && perApp.PackageIds!.isNotEmpty) {
+      if (perApp.WhiteList == true) {
+        _setting.Tun?.IncludePackage = List<String>.from(perApp.PackageIds!);
+        _setting.Tun?.ExcludePackage = null;
+      } else {
+        _setting.Tun?.IncludePackage = null;
+        _setting.Tun?.ExcludePackage = List<String>.from(perApp.PackageIds!);
+      }
+    } else {
+      _setting.Tun?.IncludePackage = null;
+      _setting.Tun?.ExcludePackage = null;
+    }
     if (Platform.isIOS) {
       _setting.FindProcessMode = ClashFindProcessMode.off.name;
     }

@@ -57,6 +57,9 @@ class VpnServiceConfig {
   bool exclude_device_communication = false;
   bool enforce_routes = false;
   bool auto_route_use_sub_ranges_by_default = false;
+  bool per_app_enable = false;
+  bool per_app_whitelist = false;
+  List<String> per_app_packages = [];
   String notification_content = "";
   String notification_disconnect = "";
 
@@ -74,6 +77,9 @@ class VpnServiceConfig {
         'err_path': err_path,
         'tun_mode': tun_mode,
         'tun_stack': tun_stack,
+        'per_app_enable': per_app_enable,
+        'per_app_whitelist': per_app_whitelist,
+        'per_app_packages': per_app_packages,
       };
   void fromJson(Map<String, dynamic> json) {
     if (json['control_port'] != null) control_port = json['control_port'];
@@ -89,6 +95,11 @@ class VpnServiceConfig {
     if (json['err_path'] != null) err_path = json['err_path'];
     if (json['tun_mode'] != null) tun_mode = json['tun_mode'];
     if (json['tun_stack'] != null) tun_stack = json['tun_stack'];
+    if (json['per_app_enable'] != null) per_app_enable = json['per_app_enable'];
+    if (json['per_app_whitelist'] != null) per_app_whitelist = json['per_app_whitelist'];
+    if (json['per_app_packages'] != null) {
+      per_app_packages = (json['per_app_packages'] as List).map((e) => e.toString()).toList();
+    }
   }
 }
 
@@ -1224,6 +1235,9 @@ rules:
             'mixedPort': mixedPort,
             'notificationContent': _savedConfig?.notification_content,
             'notificationDisconnect': _savedConfig?.notification_disconnect,
+            'perAppEnable': _savedConfig?.per_app_enable ?? false,
+            'perAppWhitelist': _savedConfig?.per_app_whitelist ?? false,
+            'perAppPackages': _savedConfig?.per_app_packages ?? [],
           });
         } catch (_) {}
       }

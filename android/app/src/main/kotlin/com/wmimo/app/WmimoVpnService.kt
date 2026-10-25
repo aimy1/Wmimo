@@ -17,6 +17,9 @@ class WmimoVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
     private var isRunning = false
     private var mixedPort = 7890
+    private var perAppEnable = false
+    private var perAppWhitelist = false
+    private var perAppPackages: ArrayList<String> = ArrayList()
 
     companion object {
         const val ACTION_START = "com.wmimo.app.vpn.START"
@@ -38,6 +41,11 @@ class WmimoVpnService : VpnService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val action = intent?.action ?: ACTION_START
         mixedPort = intent?.getIntExtra("mixedPort", 7890) ?: 7890
+        perAppEnable = intent?.getBooleanExtra("perAppEnable", false) ?: false
+        perAppWhitelist = intent?.getBooleanExtra("perAppWhitelist", false) ?: false
+        intent?.getStringArrayListExtra("perAppPackages")?.let {
+            perAppPackages = it
+        }
         intent?.getStringExtra("notificationContent")?.let {
             if (it.isNotEmpty()) currentNotificationContent = it
         }
@@ -126,10 +134,36 @@ class WmimoVpnService : VpnService() {
                 } catch (_: Exception) {}
             }
 
-            // Prevent routing Wmimo itself into the VPN loop
-            try {
-                builder.addDisallowedApplication(packageName)
-            } catch (_: Exception) {}
+            // Apply Per-App routing configuration
+            if (perAppEnable && perAppPackages.isNotEmpty()) {
+                if (perAppWhitelist) {
+                    // Whitelist mode: ONLY route selected applications through the VPN
+                    for (pkg in perAppPackages) {
+                        if (pkg.isNotEmpty() && pkg != packageName) {
+                            try {
+                                builder.addAllowedApplication(pkg)
+                            } catch (_: Exception) {}
+                        }
+                    }
+                } else {
+                    // Blacklist mode: Bypass selected applications, and always bypass Wmimo itself
+                    try {
+                        builder.addDisallowedApplication(packageName)
+                    } catch (_: Exception) {}
+                    for (pkg in perAppPackages) {
+                        if (pkg.isNotEmpty() && pkg != packageName) {
+                            try {
+                                builder.addDisallowedApplication(pkg)
+                            } catch (_: Exception) {}
+                        }
+                    }
+                }
+            } else {
+                // Default mode: Route all applications through the VPN, disallowing Wmimo itself
+                try {
+                    builder.addDisallowedApplication(packageName)
+                } catch (_: Exception) {}
+            }
 
             vpnInterface = builder.establish()
             isRunning = true

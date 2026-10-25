@@ -142,6 +142,24 @@ rules:
       expect(restored.control_port, equals(9090));
       expect(restored.mixed_port, equals(7890));
     });
+
+    test('VpnServiceConfig properly serializes and deserializes per-app proxy fields', () {
+      final config = VpnServiceConfig();
+      config.per_app_enable = true;
+      config.per_app_whitelist = true;
+      config.per_app_packages = ['org.telegram.messenger', 'com.google.android.youtube'];
+
+      final json = config.toJson();
+      expect(json['per_app_enable'], isTrue);
+      expect(json['per_app_whitelist'], isTrue);
+      expect(json['per_app_packages'], equals(['org.telegram.messenger', 'com.google.android.youtube']));
+
+      final restored = VpnServiceConfig();
+      restored.fromJson(json);
+      expect(restored.per_app_enable, isTrue);
+      expect(restored.per_app_whitelist, isTrue);
+      expect(restored.per_app_packages, containsAll(['org.telegram.messenger', 'com.google.android.youtube']));
+    });
   });
 
   group('ClashProxiesNode and ClashProxies delay tests', () {

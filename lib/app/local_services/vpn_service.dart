@@ -276,6 +276,10 @@ class VPNService {
     config.enforce_routes = setting.Extension?.Tun.enforceRoutes ?? false;
     config.auto_route_use_sub_ranges_by_default =
         setting.Extension?.Tun.autoRouteUseSubRangesByDefault ?? false;
+    final perApp = setting.Extension?.Tun.perApp;
+    config.per_app_enable = perApp?.Enable ?? false;
+    config.per_app_whitelist = perApp?.WhiteList ?? false;
+    config.per_app_packages = perApp?.PackageIds ?? [];
     var bundleIdentifier = AppUtils.getBundleId(_systemExtension);
     var uiServerAddress = name;
     var uiLocalizedDescription = vpnName;

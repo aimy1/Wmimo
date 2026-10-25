@@ -3,43 +3,45 @@ import 'dart:io';
 import 'package:android_package_manager/android_package_manager.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:wmimo/app/utils/log.dart';
 
 class PackageInfoImpl extends PackageInfo {
-  PackageInfoImpl(String packageName)
-    : super(
-        packageName: packageName,
-        installLocation: AndroidInstallLocation.unspecified,
-      );
+  PackageInfoImpl(String packageName, {int flags = 0})
+      : super(
+          packageName: packageName,
+          applicationInfo: ApplicationInfoImpl(packageName, flags: flags),
+          installLocation: AndroidInstallLocation.unspecified,
+        );
 }
 
 class ApplicationInfoImpl extends ApplicationInfo {
   ApplicationInfoImpl(String packageName, {int flags = 0})
-    : super(
-        compatibleWidthLimitDp: 0,
-        dataDir: null,
-        descriptionRes: 0,
-        enabled: true,
-        flags: flags,
-        largestWidthLimitDp: 0,
-        processName: packageName,
-        publicSourceDir: null,
-        requiresSmallestWidthDp: 0,
-        sourceDir: null,
-        theme: 0,
-        uiOptions: 0,
-        uid: 0,
-        targetSdkVersion: 0,
-        packageItemInfo: {'packageName': packageName},
-      );
+      : super(
+          compatibleWidthLimitDp: 0,
+          dataDir: null,
+          descriptionRes: 0,
+          enabled: true,
+          flags: flags,
+          largestWidthLimitDp: 0,
+          processName: packageName,
+          publicSourceDir: null,
+          requiresSmallestWidthDp: 0,
+          sourceDir: null,
+          theme: 0,
+          uiOptions: 0,
+          uid: 0,
+          targetSdkVersion: 0,
+          packageItemInfo: {'packageName': packageName},
+        );
 }
 
 class PackageInfoFromApplicationInfo extends PackageInfo {
   PackageInfoFromApplicationInfo(ApplicationInfo applicationInfo)
-    : super(
-        applicationInfo: applicationInfo,
-        packageName: applicationInfo.packageName,
-        installLocation: AndroidInstallLocation.unspecified,
-      );
+      : super(
+          applicationInfo: applicationInfo,
+          packageName: applicationInfo.packageName,
+          installLocation: AndroidInstallLocation.unspecified,
+        );
 }
 
 class PackageInfoEx {
@@ -61,27 +63,64 @@ class PackageManagerAndroid {
       return [];
     }
 
+    // 1. High-Performance Native Single-Call (bypasses TransactionTooLargeException & loop overhead)
+    try {
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      final List<dynamic>? rawList =
+          await platform.invokeMethod<List<dynamic>>('getInstalledAppList');
+      if (rawList != null && rawList.isNotEmpty) {
+        List<PackageInfoEx> packages = [];
+        for (var item in rawList) {
+          if (item is Map) {
+            final pkg = item['packageName']?.toString() ?? '';
+            if (pkg.isEmpty) continue;
+            final name = item['name']?.toString() ?? pkg;
+            final isSystem = item['isSystem'] == true;
+            final flags =
+                (item['flags'] as num?)?.toInt() ?? (isSystem ? 1 : 0);
+
+            final appInfo = PackageInfoImpl(pkg, flags: flags);
+            if (onValid != null && !onValid(appInfo)) {
+              continue;
+            }
+
+            PackageInfoEx info = PackageInfoEx();
+            info.info = appInfo;
+            info.name = name;
+            _appNameCache[pkg] = name;
+            packages.add(info);
+          }
+        }
+        if (packages.isNotEmpty) {
+          return packages;
+        }
+      }
+    } catch (e) {
+      Log.w("PackageManagerAndroid: native getInstalledAppList fallback: $e");
+    }
+
+    // 2. Fallback: android_package_manager plugin without PMFlag.getMetaData
     _pkgMgr ??= AndroidPackageManager();
     try {
       List<PackageInfo>? packageInfos;
       try {
         packageInfos = await _pkgMgr!.getInstalledPackages(
-          flags: PackageInfoFlags({PMFlag.getMetaData}),
+          flags: PackageInfoFlags({}),
         );
-      } on PlatformException {
-        packageInfos = await _getInstalledPackagesFallback();
       } catch (_) {
         packageInfos = await _getInstalledPackagesFallback();
       }
 
       return await _buildPackageInfoList(packageInfos, onValid: onValid);
-    } catch (_) {}
+    } catch (e) {
+      Log.w("PackageManagerAndroid: getInstalledPackages error: $e");
+    }
     return [];
   }
 
   static Future<List<PackageInfo>?> _getInstalledPackagesFallback() async {
     final applications = await _pkgMgr!.getInstalledApplications(
-      flags: ApplicationInfoFlags({PMFlag.getMetaData}),
+      flags: ApplicationInfoFlags({}),
     );
     if (applications == null) {
       return null;
@@ -101,13 +140,14 @@ class PackageManagerAndroid {
     List<PackageInfo>? packageInfos, {
     bool Function(PackageInfo)? onValid,
   }) async {
-    if (packageInfos == null || packageInfos.length <= 1) {
+    if (packageInfos == null || packageInfos.isEmpty) {
       return [];
     }
 
     List<PackageInfoEx> packages = [];
     for (var app in packageInfos) {
-      if (app.packageName == null) {
+      final pkg = app.packageName;
+      if (pkg == null || pkg.isEmpty) {
         continue;
       }
       if (onValid != null && !onValid(app)) {
@@ -115,9 +155,7 @@ class PackageManagerAndroid {
       }
       PackageInfoEx info = PackageInfoEx();
       info.info = app;
-      info.name =
-          _appNameCache[app.packageName!] ?? await getAppName(app.packageName!);
-      _appNameCache[app.packageName!] = info.name;
+      info.name = _appNameCache[pkg] ?? pkg;
       if (info.name.contains("{") &&
           info.name.contains(":") &&
           info.name.contains("\"")) {
@@ -127,7 +165,25 @@ class PackageManagerAndroid {
       packages.add(info);
     }
 
+    // Lazily resolve display names in parallel chunks for cached apps
+    _resolveNamesInBackground(packages);
+
     return packages;
+  }
+
+  static void _resolveNamesInBackground(List<PackageInfoEx> packages) {
+    Future.microtask(() async {
+      for (var app in packages) {
+        final pkg = app.info.packageName;
+        if (pkg != null && !_appNameCache.containsKey(pkg)) {
+          final label = await getAppName(pkg);
+          if (label.isNotEmpty) {
+            _appNameCache[pkg] = label;
+            app.name = label;
+          }
+        }
+      }
+    });
   }
 
   static Future<Image?> getInstalledPackageIcon(
@@ -156,31 +212,54 @@ class PackageManagerAndroid {
   }
 
   static Future<String> getAppName(String? packageName) async {
-    if (_pkgMgr == null || packageName == null) {
+    if (packageName == null || packageName.isEmpty) {
       return "";
     }
-    try {
-      return await _pkgMgr!.getApplicationLabel(packageName: packageName) ?? "";
-    } catch (_) {
+    if (_appNameCache.containsKey(packageName)) {
+      return _appNameCache[packageName]!;
+    }
+    if (_pkgMgr == null) {
       return packageName;
     }
+    try {
+      final label =
+          await _pkgMgr!.getApplicationLabel(packageName: packageName) ?? "";
+      if (label.isNotEmpty) {
+        _appNameCache[packageName] = label;
+        return label;
+      }
+    } catch (_) {}
+    return packageName;
   }
 
   static Future<Image?> getAppIcon(String? packageName, {int size = 96}) async {
-    if (_pkgMgr == null || packageName == null) {
+    if (packageName == null || packageName.isEmpty) {
       return null;
     }
+    // 1. Fast Native Icon Lookup
     try {
-      var data = await _pkgMgr!.getApplicationIcon(
-        packageName: packageName,
-        format: BitmapCompressFormat.png,
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      final Uint8List? bytes = await platform.invokeMethod<Uint8List>(
+        'getAppIcon',
+        {'packageName': packageName},
       );
-      if (data == null) {
-        return null;
+      if (bytes != null && bytes.isNotEmpty) {
+        return Image.memory(bytes, cacheHeight: size, cacheWidth: size);
       }
-      return Image.memory(data, cacheHeight: size, cacheWidth: size);
-    } catch (_) {
-      return null;
+    } catch (_) {}
+
+    // 2. Plugin Fallback
+    if (_pkgMgr != null) {
+      try {
+        var data = await _pkgMgr!.getApplicationIcon(
+          packageName: packageName,
+          format: BitmapCompressFormat.png,
+        );
+        if (data != null) {
+          return Image.memory(data, cacheHeight: size, cacheWidth: size);
+        }
+      } catch (_) {}
     }
+    return null;
   }
 }

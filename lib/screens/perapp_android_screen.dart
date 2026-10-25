@@ -46,9 +46,10 @@ class _PerAppAndroidScreenState
 
   @override
   void dispose() {
-    super.dispose();
+    _searchController.dispose();
     ClashSettingManager.save();
     SettingManager.save();
+    super.dispose();
   }
 
   bool _isSystemApp(PackageInfoEx app) {
@@ -111,6 +112,7 @@ class _PerAppAndroidScreenState
         perapp.PackageIds!.add(pkg);
       }
     }
+    ClashSettingManager.save();
     _applyFilter();
   }
 
@@ -122,6 +124,7 @@ class _PerAppAndroidScreenState
         .whereType<String>()
         .toSet();
     perapp.PackageIds!.removeWhere((pkg) => toRemove.contains(pkg));
+    ClashSettingManager.save();
     _applyFilter();
   }
 
@@ -139,6 +142,7 @@ class _PerAppAndroidScreenState
         }
       }
     }
+    ClashSettingManager.save();
     _applyFilter();
   }
 
@@ -157,7 +161,7 @@ class _PerAppAndroidScreenState
       },
     );
     _loading = false;
-    _needPermission = packages.length <= 1;
+    _needPermission = packages.isEmpty;
     if (!mounted) {
       return;
     }
@@ -288,7 +292,31 @@ class _PerAppAndroidScreenState
               ),
 
               // Dual-mode selector card (Whitelist / Blacklist)
-              if (perapp.Enable == true) _buildModeSelector(context),
+              if (perapp.Enable == true) ...[
+                _buildModeSelector(context),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 2),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline_rounded,
+                        size: 13,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          tcontext.meta.coreSettingTips,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
 
               // Search Bar
               Container(
@@ -693,6 +721,7 @@ class _PerAppAndroidScreenState
           } else {
             perapp.PackageIds!.remove(current.info.packageName!);
           }
+          ClashSettingManager.save();
           setState(() {});
         },
         child: Container(
@@ -779,6 +808,7 @@ class _PerAppAndroidScreenState
                   } else {
                     perapp.PackageIds!.remove(current.info.packageName!);
                   }
+                  ClashSettingManager.save();
                   setState(() {});
                 },
               ),
@@ -800,6 +830,7 @@ class _PerAppAndroidScreenState
           switchValue: perapp.Enable,
           onSwitch: (bool value) async {
             perapp.Enable = value;
+            ClashSettingManager.save();
             setState(() {});
           },
         ),
@@ -836,6 +867,7 @@ class _PerAppAndroidScreenState
                   perapp.PackageIds!.add(app);
                 }
               }
+              ClashSettingManager.save();
               _applyFilter();
             } catch (err) {
               if (!mounted) {
@@ -901,25 +933,45 @@ class _PerAppAndroidScreenState
     Function() onRefresh,
   ) {
     final tcontext = Translations.of(context);
-    return SizedBox(
-      width: 300,
-      child: Column(
-        children: [
-          const SizedBox(height: 50),
-          ElevatedButton(
-            child: Text(text),
-            onPressed: () async {
-              onPermission();
-            },
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            child: Text(tcontext.meta.refresh),
-            onPressed: () async {
-              onRefresh();
-            },
-          ),
-        ],
+    final theme = Theme.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.security_outlined,
+              size: 56,
+              color: theme.colorScheme.primary.withValues(alpha: 0.8),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.settings_outlined, size: 18),
+              label: Text(text),
+              onPressed: () async {
+                onPermission();
+              },
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.refresh_outlined, size: 18),
+              label: Text(tcontext.meta.refresh),
+              onPressed: () async {
+                onRefresh();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

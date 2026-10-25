@@ -4,7 +4,11 @@ import android.Manifest
 import android.app.LocaleManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.net.VpnService
 import android.os.Build
@@ -17,6 +21,7 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.Locale
 
@@ -46,6 +51,74 @@ class MainActivity : FlutterActivity() {
                         val files = dir.listFiles { _, name -> name.endsWith(".so") }
                         val found = files?.firstOrNull { it.name.contains("wmimo") || it.name.contains("clash") || it.name.contains("mihomo") }
                         result.success(found?.absolutePath ?: file.absolutePath)
+                    }
+                }
+                "getInstalledAppList" -> {
+                    Thread {
+                        try {
+                            val pm = packageManager
+                            val apps = pm.getInstalledApplications(0)
+                            val list = ArrayList<Map<String, Any>>()
+                            for (app in apps) {
+                                val pkg = app.packageName ?: continue
+                                if (pkg == packageName) continue
+                                val name = try {
+                                    pm.getApplicationLabel(app).toString()
+                                } catch (_: Exception) {
+                                    pkg
+                                }
+                                val isSystem = (app.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+                                list.add(mapOf(
+                                    "packageName" to pkg,
+                                    "name" to name,
+                                    "isSystem" to isSystem,
+                                    "flags" to app.flags
+                                ))
+                            }
+                            runOnUiThread {
+                                result.success(list)
+                            }
+                        } catch (e: Exception) {
+                            runOnUiThread {
+                                result.error("GET_APPS_FAILED", e.message, null)
+                            }
+                        }
+                    }.start()
+                }
+                "getAppIcon" -> {
+                    val pkg = call.argument<String>("packageName")
+                    if (pkg != null) {
+                        Thread {
+                            try {
+                                val pm = packageManager
+                                val iconDrawable = pm.getApplicationIcon(pkg)
+                                val bitmap = if (iconDrawable is BitmapDrawable) {
+                                    iconDrawable.bitmap
+                                } else {
+                                    val bmp = Bitmap.createBitmap(
+                                        iconDrawable.intrinsicWidth.coerceAtLeast(1),
+                                        iconDrawable.intrinsicHeight.coerceAtLeast(1),
+                                        Bitmap.Config.ARGB_8888
+                                    )
+                                    val canvas = Canvas(bmp)
+                                    iconDrawable.setBounds(0, 0, canvas.width, canvas.height)
+                                    iconDrawable.draw(canvas)
+                                    bmp
+                                }
+                                val stream = ByteArrayOutputStream()
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                                val bytes = stream.toByteArray()
+                                runOnUiThread {
+                                    result.success(bytes)
+                                }
+                            } catch (_: Exception) {
+                                runOnUiThread {
+                                    result.success(null)
+                                }
+                            }
+                        }.start()
+                    } else {
+                        result.success(null)
                     }
                 }
                 "checkVpnPermission" -> {
@@ -131,11 +204,18 @@ class MainActivity : FlutterActivity() {
                     val mixedPort = call.argument<Int>("mixedPort") ?: 7890
                     val content = call.argument<String>("notificationContent")
                     val disconnect = call.argument<String>("notificationDisconnect")
+                    val perAppEnable = call.argument<Boolean>("perAppEnable") ?: false
+                    val perAppWhitelist = call.argument<Boolean>("perAppWhitelist") ?: false
+                    val perAppPackages = call.argument<List<String>>("perAppPackages") ?: emptyList()
+
                     val intent = Intent(this, WmimoVpnService::class.java).apply {
                         action = WmimoVpnService.ACTION_START
                         putExtra("mixedPort", mixedPort)
                         if (content != null) putExtra("notificationContent", content)
                         if (disconnect != null) putExtra("notificationDisconnect", disconnect)
+                        putExtra("perAppEnable", perAppEnable)
+                        putExtra("perAppWhitelist", perAppWhitelist)
+                        putStringArrayListExtra("perAppPackages", ArrayList(perAppPackages))
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         startForegroundService(intent)
