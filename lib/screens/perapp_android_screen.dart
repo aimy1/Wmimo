@@ -17,7 +17,6 @@ import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
-import 'package:wmimo/screens/widgets/text_field.dart';
 
 class PerAppAndroidScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -290,6 +289,7 @@ class _PerAppAndroidScreenState
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
 
     final allCount = _applicationInfoList.length;
@@ -387,42 +387,49 @@ class _PerAppAndroidScreenState
               // Search Bar
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                height: 42,
+                height: 40,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
-                  borderRadius: ThemeDefine.kBorderRadius,
+                  color: isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: theme.dividerColor.withValues(alpha: 0.15),
                     width: 0.8,
                   ),
                 ),
-                child: TextFieldEx(
+                child: TextField(
                   controller: _searchController,
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.search,
                   onChanged: _loadSearch,
+                  textAlignVertical: TextAlignVertical.center,
+                  style: const TextStyle(fontSize: 13),
                   decoration: InputDecoration(
-                    border: InputBorder.none,
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                    icon: Icon(
-                      Icons.search_outlined,
-                      size: 20,
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    prefixIcon: Icon(
+                      Icons.search_rounded,
+                      size: 19,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
-                    hintText: tcontext.meta.search,
+                    prefixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 38),
+                    hintText: "${tcontext.meta.search} (应用名 / 包名)",
                     hintStyle: TextStyle(
-                      fontSize: 13,
+                      fontSize: 12.5,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                     ),
                     suffixIcon: _searchController.text.isNotEmpty
-                        ? IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: const Icon(Icons.clear_outlined, size: 18),
-                            onPressed: _clearSearch,
+                        ? InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            onTap: _clearSearch,
+                            child: Icon(
+                              Icons.cancel_rounded,
+                              size: 17,
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+                            ),
                           )
                         : null,
+                    suffixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 38),
                   ),
                 ),
               ),
