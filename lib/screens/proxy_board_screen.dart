@@ -1698,7 +1698,193 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final tcontext = Translations.of(context);
     final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
     final regionSummaries = NodeRegionHelper.extractAvailableRegions(leafNodes);
-    if (regionSummaries.length <= 1) return const SizedBox.shrink();
+
+    final List<Widget> items = [];
+
+    // 1. Quick Latency Sort Pill
+    final isDelayAsc = _sortMode == "delay_asc";
+    items.add(
+      InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          HapticFeedback.selectionClick();
+          setState(() {
+            _sortMode = isDelayAsc ? "default" : "delay_asc";
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: isDelayAsc
+                ? ThemeDefine.kColorBlue
+                : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isDelayAsc
+                  ? ThemeDefine.kColorBlue
+                  : theme.dividerColor.withValues(alpha: 0.25),
+              width: 0.8,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.bolt_rounded,
+                size: 14,
+                color: isDelayAsc ? Colors.white : ThemeDefine.kColorBlue,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                isZh
+                    ? (isDelayAsc ? "最低延迟 ✓" : "延迟排序")
+                    : (isDelayAsc ? "Fastest ✓" : "Sort Latency"),
+                style: TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: isDelayAsc ? FontWeight.w700 : FontWeight.w500,
+                  color: isDelayAsc
+                      ? Colors.white
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    // 2. Quick Hide Timeout Pill
+    final timeoutCount = leafNodes.where((n) => n.delay != null && n.delay! < 0).length;
+    final hideTimeoutText = isZh
+        ? (_hideTimeoutNodes
+            ? (timeoutCount > 0 ? "已过滤 $timeoutCount 个超时 ✓" : "已过滤超时 ✓")
+            : (timeoutCount > 0 ? "隐藏超时 ($timeoutCount)" : "隐藏超时"))
+        : (_hideTimeoutNodes
+            ? (timeoutCount > 0 ? "Filtered $timeoutCount ✓" : "Filtered ✓")
+            : (timeoutCount > 0 ? "Hide Timeout ($timeoutCount)" : "Hide Timeout"));
+
+    items.add(
+      InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          HapticFeedback.selectionClick();
+          setState(() {
+            _hideTimeoutNodes = !_hideTimeoutNodes;
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: _hideTimeoutNodes
+                ? ThemeDefine.kColorBlue
+                : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: _hideTimeoutNodes
+                  ? ThemeDefine.kColorBlue
+                  : theme.dividerColor.withValues(alpha: 0.25),
+              width: 0.8,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.visibility_off_rounded,
+                size: 13,
+                color: _hideTimeoutNodes
+                    ? Colors.white
+                    : (timeoutCount > 0 ? Colors.orange : theme.colorScheme.onSurface.withValues(alpha: 0.6)),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                hideTimeoutText,
+                style: TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: _hideTimeoutNodes ? FontWeight.w700 : FontWeight.w500,
+                  color: _hideTimeoutNodes
+                      ? Colors.white
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    // 3. Divider & Region Chips
+    if (regionSummaries.length > 1) {
+      items.add(
+        Center(
+          child: Container(
+            width: 1,
+            height: 16,
+            color: theme.dividerColor.withValues(alpha: 0.4),
+          ),
+        ),
+      );
+
+      for (final summary in regionSummaries) {
+        final isSelected = _selectedRegionCode == summary.region.code;
+        items.add(
+          InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () {
+              HapticFeedback.selectionClick();
+              setState(() {
+                if (_selectedRegionCode == summary.region.code) {
+                  _selectedRegionCode = "ALL";
+                } else {
+                  _selectedRegionCode = summary.region.code;
+                }
+              });
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? ThemeDefine.kColorBlue
+                    : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected
+                    ? ThemeDefine.kColorBlue
+                    : theme.dividerColor.withValues(alpha: 0.25),
+                  width: 0.8,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    summary.region.flag,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: Platform.isWindows ? 'Emoji' : null,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    "${summary.region.getDisplayName(isZh)} (${summary.count})",
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                      color: isSelected
+                          ? Colors.white
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+    }
 
     return Container(
       height: 32,
@@ -1727,64 +1913,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
             controller: _regionScrollController,
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: regionSummaries.length,
+            itemCount: items.length,
             separatorBuilder: (_, __) => const SizedBox(width: 6),
-            itemBuilder: (context, index) {
-              final summary = regionSummaries[index];
-              final isSelected = _selectedRegionCode == summary.region.code;
-
-              return InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () {
-                  setState(() {
-                    if (_selectedRegionCode == summary.region.code) {
-                      _selectedRegionCode = "ALL";
-                    } else {
-                      _selectedRegionCode = summary.region.code;
-                    }
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? ThemeDefine.kColorBlue
-                        : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isSelected
-                          ? ThemeDefine.kColorBlue
-                          : theme.dividerColor.withValues(alpha: 0.25),
-                      width: 0.8,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        summary.region.flag,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: Platform.isWindows ? 'Emoji' : null,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        "${summary.region.getDisplayName(isZh)} (${summary.count})",
-                        style: TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                          color: isSelected
-                              ? Colors.white
-                              : theme.colorScheme.onSurface.withValues(alpha: 0.85),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+            itemBuilder: (context, index) => items[index],
           ),
         ),
       ),
