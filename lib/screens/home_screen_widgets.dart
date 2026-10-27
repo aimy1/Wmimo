@@ -31,6 +31,7 @@ import 'package:wmimo/screens/speed_test_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen.dart';
 import 'package:wmimo/screens/proxy_board_screen.dart';
 import 'package:wmimo/screens/settings_screen.dart';
+import 'package:wmimo/screens/perapp_android_screen.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/ip_info_card.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
@@ -433,28 +434,70 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Clash Verge 风格开关: 系统代理 & TUN 模式
+                // Clash Verge 风格开关: 系统代理 (PC) / 分应用代理 (Android) & TUN 模式
                 Row(
                   children: [
-                    // 系统代理
+                    // 系统代理 (PC端) 或 分应用代理 (Android端)
                     Expanded(
-                      child: _buildClashVergeModeSwitch(
-                        context: context,
-                        icon: Icons.laptop_windows_rounded,
-                        iconColor: ThemeDefine.kColorBlue,
-                        title: tcontext.meta.systemProxy,
-                        isActive: SettingManager.getConfig().autoSetSystemProxy,
-                        onChanged: (bool value) async {
-                          SettingManager.getConfig().autoSetSystemProxy = value;
-                          SettingManager.save();
-                          if (PlatformUtils.isPC()) {
-                            if (_state == FlutterVpnServiceState.connected) {
-                              await VPNService.setSystemProxy(value);
-                            }
-                          }
-                          setState(() {});
-                        },
-                      ),
+                      child: Platform.isAndroid
+                          ? _buildClashVergeModeSwitch(
+                              context: context,
+                              icon: Icons.apps_rounded,
+                              iconColor: ThemeDefine.kColorBlue,
+                              title: tcontext.PerAppAndroidScreen.title,
+                              isActive: ClashSettingManager.getConfig().Extension?.Tun.perApp.Enable == true,
+                              subtitle: (ClashSettingManager.getConfig().Extension?.Tun.perApp.Enable == true)
+                                  ? "${ClashSettingManager.getConfig().Extension?.Tun.perApp.PackageIds?.length ?? 0} ${tcontext.meta.selectedOnly}"
+                                  : tcontext.meta.disable,
+                              onTap: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    settings: PerAppAndroidScreen.routSettings(),
+                                    builder: (context) => const PerAppAndroidScreen(),
+                                  ),
+                                );
+                                setState(() {});
+                              },
+                              onSettingsTap: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    settings: PerAppAndroidScreen.routSettings(),
+                                    builder: (context) => const PerAppAndroidScreen(),
+                                  ),
+                                );
+                                setState(() {});
+                              },
+                              onChanged: (bool value) async {
+                                var perapp = ClashSettingManager.getConfig().Extension?.Tun.perApp;
+                                if (perapp != null) {
+                                  perapp.Enable = value;
+                                  await ClashSettingManager.save();
+                                  setState(() {});
+                                  if (_state == FlutterVpnServiceState.connected) {
+                                    VpnActionHandler.vpnReconnect?.call("perapp", false);
+                                  }
+                                }
+                              },
+                            )
+                          : _buildClashVergeModeSwitch(
+                              context: context,
+                              icon: Icons.laptop_windows_rounded,
+                              iconColor: ThemeDefine.kColorBlue,
+                              title: tcontext.meta.systemProxy,
+                              isActive: SettingManager.getConfig().autoSetSystemProxy,
+                              onChanged: (bool value) async {
+                                SettingManager.getConfig().autoSetSystemProxy = value;
+                                SettingManager.save();
+                                if (PlatformUtils.isPC()) {
+                                  if (_state == FlutterVpnServiceState.connected) {
+                                    await VPNService.setSystemProxy(value);
+                                  }
+                                }
+                                setState(() {});
+                              },
+                            ),
                     ),
                     const SizedBox(width: 8),
                     // TUN 模式
@@ -617,72 +660,80 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     required bool isActive,
     required ValueChanged<bool> onChanged,
     VoidCallback? onSettingsTap,
+    VoidCallback? onTap,
+    String? subtitle,
   }) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final tcontext = Translations.of(context);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      decoration: BoxDecoration(
-        color: isDark
-            ? ThemeDefine.kColorDarkInner
-            : const Color(0xFFF1F5F9).withValues(alpha: 0.9),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isActive
-              ? iconColor.withValues(alpha: 0.45)
-              : theme.dividerColor.withValues(alpha: 0.35),
-          width: isActive ? 1.0 : 0.8,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: (isActive ? iconColor : const Color(0xFF94A3B8))
-                  .withValues(alpha: isDark ? 0.2 : 0.12),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Icon(
-              icon,
-              size: 15,
-              color: isActive ? iconColor : const Color(0xFF94A3B8),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+            color: isDark
+                ? ThemeDefine.kColorDarkInner
+                : const Color(0xFFF1F5F9).withValues(alpha: 0.9),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isActive
+                  ? iconColor.withValues(alpha: 0.45)
+                  : theme.dividerColor.withValues(alpha: 0.35),
+              width: isActive ? 1.0 : 0.8,
             ),
           ),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w600,
-                    color: isActive
-                        ? theme.colorScheme.onSurface
-                        : theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: (isActive ? iconColor : const Color(0xFF94A3B8))
+                      .withValues(alpha: isDark ? 0.2 : 0.12),
+                  borderRadius: BorderRadius.circular(6),
                 ),
-                Text(
-                  isActive ? tcontext.meta.enable : tcontext.meta.disable,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    color: isActive
-                        ? iconColor
-                        : theme.colorScheme.onSurface.withValues(alpha: 0.45),
-                  ),
-                  maxLines: 1,
+                child: Icon(
+                  icon,
+                  size: 15,
+                  color: isActive ? iconColor : const Color(0xFF94A3B8),
                 ),
-              ],
-            ),
-          ),
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w600,
+                        color: isActive
+                            ? theme.colorScheme.onSurface
+                            : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      subtitle ?? (isActive ? tcontext.meta.enable : tcontext.meta.disable),
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                        color: isActive
+                            ? iconColor
+                            : theme.colorScheme.onSurface.withValues(alpha: 0.45),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
           if (onSettingsTap != null) ...[
             InkWell(
               borderRadius: BorderRadius.circular(6),
@@ -717,7 +768,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           ),
         ],
       ),
-    );
+    ),
+  ),
+);
   }
 
 
