@@ -613,25 +613,113 @@ class FlutterVpnService {
       return profileFile;
     }
 
+    Map<String, dynamic>? patchJson;
+    if (_savedConfig?.core_path_patch_final != null &&
+        _savedConfig!.core_path_patch_final.isNotEmpty &&
+        File(_savedConfig!.core_path_patch_final).existsSync()) {
+      try {
+        final patchStr =
+            await File(_savedConfig!.core_path_patch_final).readAsString();
+        if (patchStr.trim().isNotEmpty) {
+          patchJson = jsonDecode(patchStr) as Map<String, dynamic>;
+        }
+      } catch (_) {}
+    }
+
     final port = _savedConfig?.control_port ?? 9090;
-    final mixedPort = _savedConfig?.mixed_port ?? 7890;
+    final mixedPort = _savedConfig?.mixed_port ?? (patchJson?['mixed-port'] ?? 7890);
     final secret = _savedConfig?.secret ?? "";
-    final mode = (_savedConfig?.mode.isNotEmpty == true) ? _savedConfig!.mode : "rule";
+    final mode = (_savedConfig?.mode.isNotEmpty == true)
+        ? _savedConfig!.mode
+        : (patchJson?['mode'] ?? "rule");
     final tunMode = _savedConfig?.tun_mode ?? false;
+
+    final logLevel = patchJson?['log-level'] ?? 'info';
+    final ipv6 = patchJson?['ipv6'] ?? false;
+    final allowLan = patchJson?['allow-lan'] ?? true;
+    final tcpConcurrent = patchJson?['tcp-concurrent'] ?? true;
+    final unifiedDelay = patchJson?['unified-delay'] ?? true;
+    final findProcessMode = patchJson?['find-process-mode'] ?? 'always';
+    final fingerprint =
+        patchJson?['global-client-fingerprint']?.toString() ?? '';
 
     // Header parameters matching Clash Verge standards
     var header = '''
 mixed-port: $mixedPort
-allow-lan: true
+allow-lan: $allowLan
 mode: $mode
-log-level: info
+log-level: $logLevel
 external-controller: 127.0.0.1:$port
 secret: "$secret"
-ipv6: false
-unified-delay: true
-tcp-concurrent: true
-find-process-mode: always
+ipv6: $ipv6
+unified-delay: $unifiedDelay
+tcp-concurrent: $tcpConcurrent
+find-process-mode: $findProcessMode
 ''';
+
+    if (fingerprint.isNotEmpty &&
+        fingerprint != 'none' &&
+        fingerprint != 'no-overwrite') {
+      header += 'global-client-fingerprint: $fingerprint\n';
+    }
+
+    if (patchJson != null && patchJson['geox-url'] is Map) {
+      final geox = patchJson['geox-url'] as Map;
+      final geosite = geox['geosite']?.toString();
+      final geoip = geox['geoip']?.toString();
+      final mmdb = geox['mmdb']?.toString();
+      final asn = geox['asn']?.toString();
+      if ((geosite != null && geosite.isNotEmpty) ||
+          (geoip != null && geoip.isNotEmpty) ||
+          (mmdb != null && mmdb.isNotEmpty) ||
+          (asn != null && asn.isNotEmpty)) {
+        header += 'geox-url:\n';
+        if (geoip != null && geoip.isNotEmpty) header += '  geoip: "$geoip"\n';
+        if (geosite != null && geosite.isNotEmpty) header += '  geosite: "$geosite"\n';
+        if (mmdb != null && mmdb.isNotEmpty) header += '  mmdb: "$mmdb"\n';
+        if (asn != null && asn.isNotEmpty) header += '  asn: "$asn"\n';
+      }
+    }
+
+    if (patchJson != null && patchJson['sniffer'] is Map) {
+      final sniffer = patchJson['sniffer'] as Map;
+      if (sniffer['enable'] == true) {
+        header += 'sniffer:\n';
+        header += '  enable: true\n';
+        if (sniffer['sniffing'] is List) {
+          header += '  sniffing:\n';
+          for (var s in sniffer['sniffing']) {
+            header += '    - "$s"\n';
+          }
+        }
+        if (sniffer['override-destination'] != null) {
+          header += '  override-destination: ${sniffer['override-destination']}\n';
+        }
+      }
+    }
+
+    if (patchJson != null && patchJson['ntp'] is Map) {
+      final ntp = patchJson['ntp'] as Map;
+      if (ntp['enable'] == true) {
+        header += 'ntp:\n';
+        header += '  enable: true\n';
+        if (ntp['server'] != null) header += '  server: "${ntp['server']}"\n';
+        if (ntp['server-port'] != null) header += '  server-port: ${ntp['server-port']}\n';
+      }
+    }
+
+    if (patchJson != null && patchJson['tls'] is Map) {
+      final tls = patchJson['tls'] as Map;
+      if (tls['certificate'] != null &&
+          tls['certificate'].toString().isNotEmpty) {
+        header += 'tls:\n';
+        header += '  certificate: "${tls['certificate']}"\n';
+        if (tls['private-key'] != null &&
+            tls['private-key'].toString().isNotEmpty) {
+          header += '  private-key: "${tls['private-key']}"\n';
+        }
+      }
+    }
 
     final tunStack = (_savedConfig?.tun_stack.isNotEmpty == true)
         ? _savedConfig!.tun_stack
@@ -663,6 +751,11 @@ tun:
       'unified-delay',
       'tcp-concurrent',
       'find-process-mode',
+      'global-client-fingerprint',
+      'geox-url',
+      'sniffer',
+      'ntp',
+      'tls',
       'port',
       'socks-port',
       'redir-port',
@@ -898,6 +991,55 @@ rules:
 ''';
         }
       }
+    }
+
+    // Merge custom rules from patchJson (Diversion templates & custom overwrites)
+    if (patchJson != null &&
+        patchJson['rules'] is List &&
+        (patchJson['rules'] as List).isNotEmpty) {
+      final customRules =
+          (patchJson['rules'] as List).map((r) => r.toString()).toList();
+      final rulesIndex = filteredLines.indexOf('rules:');
+      if (rulesIndex != -1) {
+        final rulesBuf = StringBuffer('rules:\n');
+        for (var r in customRules) {
+          rulesBuf.writeln('  - $r');
+        }
+        filteredLines =
+            filteredLines.replaceFirst('rules:\n', rulesBuf.toString());
+      } else {
+        final rulesBuf = StringBuffer('\nrules:\n');
+        for (var r in customRules) {
+          rulesBuf.writeln('  - $r');
+        }
+        filteredLines += rulesBuf.toString();
+      }
+    }
+
+    // Merge custom rule-providers from patchJson
+    if (patchJson != null &&
+        patchJson['rule-providers'] is Map &&
+        (patchJson['rule-providers'] as Map).isNotEmpty) {
+      final providers = patchJson['rule-providers'] as Map;
+      final provBuf = StringBuffer('\nrule-providers:\n');
+      providers.forEach((key, val) {
+        if (val is Map) {
+          provBuf.writeln('  $key:');
+          val.forEach((k, v) {
+            if (v is List) {
+              provBuf.writeln('    $k:');
+              for (var item in v) {
+                provBuf.writeln('      - "$item"');
+              }
+            } else if (v is bool || v is num) {
+              provBuf.writeln('    $k: $v');
+            } else {
+              provBuf.writeln('    $k: "$v"');
+            }
+          });
+        }
+      });
+      filteredLines += provBuf.toString();
     }
 
     final baseDir = _savedConfig?.base_dir.isNotEmpty == true

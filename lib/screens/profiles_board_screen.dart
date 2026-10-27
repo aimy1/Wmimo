@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
-import 'package:wmimo/app/modules/remote_config_manager.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/utils/file_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
-import 'package:wmimo/app/utils/url_launcher_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/add_profile_by_import_from_file_screen.dart';
 import 'package:wmimo/screens/add_profile_by_scan_qrcode_screen.dart';
@@ -19,7 +16,6 @@ import 'package:wmimo/screens/group_helper.dart';
 import 'package:wmimo/screens/login_step_provider_screen.dart';
 import 'package:wmimo/screens/profiles_board_screen_widgets.dart';
 import 'package:wmimo/screens/profiles_patch_board_screen.dart';
-import 'package:wmimo/screens/webview_helper.dart';
 import 'package:wmimo/screens/widgets/sheet.dart';
 import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -298,16 +294,6 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
 
   void onTapAdd() async {
     final tcontext = Translations.of(context);
-    bool hideGetProfile = false;
-    final currentProfile = ProfileManager.getCurrent();
-    if (currentProfile != null && currentProfile.boardProviderId.isNotEmpty) {
-      var provider = BoardProviderManager.getProviderById(
-        currentProfile.boardProviderId,
-      );
-      if (provider != null && provider.hideRecommendMenu) {
-        hideGetProfile = true;
-      }
-    }
     final cn =
         WidgetsBinding.instance.platformDispatcher.locale.countryCode == "CN";
     final login = ListTile(
@@ -326,36 +312,6 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
       },
     );
     var widgets = [
-      if (!hideGetProfile) ...[
-        ListTile(
-          leading: const Icon(Icons.shopping_cart_outlined),
-          title: Text(
-            Platform.isIOS
-                ? tcontext.meta.getProfile
-                : "${tcontext.meta.getProfile} / ${tcontext.meta.buyProfile}",
-          ),
-          onTap: () async {
-            Navigator.of(context).pop();
-            var remoteConfig = RemoteConfigManager.getConfig();
-
-            String url = remoteConfig.getTranffic;
-
-            url = await UrlLauncherUtils.reorganizationUrlWithAnchor(url);
-
-            if (!mounted) {
-              return;
-            }
-            await WebviewHelper.loadUrl(
-              context,
-              url,
-              "getTranffic",
-              title: tcontext.meta.getProfile,
-              inappWebViewOpenExternal: true,
-            );
-            await _reloadProfiles();
-          },
-        ),
-      ],
       if (cn) ...[login],
       ListTile(
         leading: const Icon(Icons.add_link_outlined),

@@ -977,65 +977,6 @@ class GroupHelper {
           ),
         ),
       ];
-      List<GroupItemOptions> options7 = [
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.meta.excludeFromRecent,
-            switchValue: setting.excludeFromRecent,
-            onSwitch: (bool value) async {
-              setting.excludeFromRecent = value;
-              final err = await FlutterVpnService.setExcludeFromRecents(value);
-              await SettingManager.save();
-              if (err != null) {
-                if (!context.mounted) {
-                  return;
-                }
-                DialogUtils.showAlertDialog(
-                  context,
-                  err,
-                  showCopy: true,
-                  showFAQ: true,
-                  withVersion: true,
-                );
-              }
-            },
-          ),
-        ),
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.meta.wakeLock,
-            switchValue: setting.wakeLock,
-            onSwitch: (bool value) async {
-              setting.wakeLock = value;
-              await SettingManager.save();
-            },
-          ),
-        ),
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.meta.autoConnectAtBoot,
-            switchValue: setting.autoConnectAtBoot,
-            tips:
-                "${tcontext.meta.reconnectTakesEffect};${tcontext.meta.autoConnectAtBootTips}",
-            onSwitch: (bool value) async {
-              setting.autoConnectAtBoot = value;
-              await SettingManager.save();
-            },
-          ),
-        ),
-      ];
-      List<GroupItemOptions> options8 = [
-        GroupItemOptions(
-          switchOptions: GroupItemSwitchOptions(
-            name: tcontext.meta.alwayOnVPN,
-            switchValue: setting.alwayOn,
-            onSwitch: (bool value) async {
-              setting.alwayOn = value;
-              await SettingManager.save();
-            },
-          ),
-        ),
-      ];
       List<GroupItemOptions> options9 = [
         GroupItemOptions(
           switchOptions: GroupItemSwitchOptions(
@@ -1077,12 +1018,6 @@ class GroupHelper {
       }
       if (Platform.isWindows) {
         gitems.add(GroupItem(options: options6));
-      }
-      if (Platform.isAndroid) {
-        gitems.add(GroupItem(options: options7));
-      }
-      if (Platform.isIOS || Platform.isMacOS) {
-        gitems.add(GroupItem(options: options8));
       }
       if (Platform.isMacOS) {
         gitems.add(GroupItem(options: options9));
@@ -1676,92 +1611,6 @@ class GroupHelper {
                   },
           ),
         ),
-        if (Platform.isIOS || Platform.isMacOS) ...[
-          GroupItemOptions(
-            switchOptions: GroupItemSwitchOptions(
-              name: tcontext.tun.tunDefaultRoute,
-              switchValue:
-                  extensions.Tun.autoRouteUseSubRangesByDefault != true,
-              onSwitch: tun.OverWrite != true || tun.Enable != true
-                  ? null
-                  : (bool value) async {
-                      extensions.Tun.autoRouteUseSubRangesByDefault = !value;
-                    },
-            ),
-          ),
-          GroupItemOptions(
-            switchOptions: GroupItemSwitchOptions(
-              name: "includeAllNetworks",
-              tips: "iOS 14.0+;macOS 10.15+",
-              switchValue: extensions.Tun.includeAllNetworks,
-              onSwitch: tun.OverWrite != true || tun.Enable != true
-                  ? null
-                  : (bool value) async {
-                      extensions.Tun.includeAllNetworks = value;
-                    },
-            ),
-          ),
-          GroupItemOptions(
-            switchOptions: GroupItemSwitchOptions(
-              name: "excludeLocalNetworks",
-              tips: "iOS 14.2+;macOS 10.15+",
-              switchValue: extensions.Tun.excludeLocalNetworks,
-              onSwitch: tun.OverWrite != true || tun.Enable != true
-                  ? null
-                  : (bool value) async {
-                      extensions.Tun.excludeLocalNetworks = value;
-                    },
-            ),
-          ),
-          GroupItemOptions(
-            switchOptions: GroupItemSwitchOptions(
-              name: "excludeCellularServices",
-              tips: "iOS 16.4+;macOS 13.3+",
-              switchValue: extensions.Tun.excludeCellularServices,
-              onSwitch: tun.OverWrite != true || tun.Enable != true
-                  ? null
-                  : (bool value) async {
-                      extensions.Tun.excludeCellularServices = value;
-                    },
-            ),
-          ),
-          GroupItemOptions(
-            switchOptions: GroupItemSwitchOptions(
-              name: "excludeAPNs",
-              tips: "iOS 16.4+;macOS 13.3+",
-              switchValue: extensions.Tun.excludeApns,
-              onSwitch: tun.OverWrite != true || tun.Enable != true
-                  ? null
-                  : (bool value) async {
-                      extensions.Tun.excludeApns = value;
-                    },
-            ),
-          ),
-          GroupItemOptions(
-            switchOptions: GroupItemSwitchOptions(
-              name: "excludeDeviceCommunication",
-              tips: "iOS 17.4+;macOS 14.4+",
-              switchValue: extensions.Tun.excludeDeviceCommunication,
-              onSwitch: tun.OverWrite != true || tun.Enable != true
-                  ? null
-                  : (bool value) async {
-                      extensions.Tun.excludeDeviceCommunication = value;
-                    },
-            ),
-          ),
-          GroupItemOptions(
-            switchOptions: GroupItemSwitchOptions(
-              name: "enforceRoutes",
-              tips: "iOS 14.2+;macOS 11.0+",
-              switchValue: extensions.Tun.enforceRoutes,
-              onSwitch: tun.OverWrite != true || tun.Enable != true
-                  ? null
-                  : (bool value) async {
-                      extensions.Tun.enforceRoutes = value;
-                    },
-            ),
-          ),
-        ],
         GroupItemOptions(
           switchOptions: GroupItemSwitchOptions(
             name: tcontext.tun.icmpForward,

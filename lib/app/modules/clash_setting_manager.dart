@@ -473,6 +473,16 @@ class ClashSettingManager {
     Map<String, ProfileSettingProxyGroup>? overwriteProxyGroups,
     List<String>? appendRules,
   ) async {
+    final ruleset = _setting.Extension?.Ruleset;
+    if (ruleset != null) {
+      _setting.GeoXUrl = RawGeoXUrl(
+        true,
+        ruleset.GeoIpUrl,
+        null,
+        ruleset.AsnUrl,
+        ruleset.GeoSiteUrl,
+      );
+    }
     final result = await getPatchContent(
       profileId,
       overwrite,
@@ -566,6 +576,16 @@ class ClashSettingManager {
     _setting.Tun?.AutoRoute = !Platform.isAndroid;
     _setting.Tun?.AutoDetectInterface = Platform.isWindows || Platform.isLinux;
     _setting.Profile = RawProfile.by(StoreSelected: true, StoreFakeIP: true);
+    final ruleset = _setting.Extension?.Ruleset;
+    if (ruleset != null) {
+      _setting.GeoXUrl = RawGeoXUrl(
+        true,
+        ruleset.GeoIpUrl,
+        null,
+        ruleset.AsnUrl,
+        ruleset.GeoSiteUrl,
+      );
+    }
     _setting.Extension?.RuntimeProfileSavePath =
         await PathUtils.serviceCoreRuntimeProfileFilePath();
   }
