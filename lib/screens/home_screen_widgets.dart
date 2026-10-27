@@ -569,26 +569,22 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
               return Column(
                 children: [
                   const SizedBox(height: 10),
-                  IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(child: websiteCard),
-                        const SizedBox(width: 10),
-                        Expanded(child: ipCard),
-                      ],
-                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: websiteCard),
+                      const SizedBox(width: 10),
+                      Expanded(child: ipCard),
+                    ],
                   ),
                   const SizedBox(height: 10),
-                  IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(child: subCard),
-                        const SizedBox(width: 10),
-                        Expanded(child: quickActionCard),
-                      ],
-                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: subCard),
+                      const SizedBox(width: 10),
+                      Expanded(child: quickActionCard),
+                    ],
                   ),
                 ],
               );
@@ -822,7 +818,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           );
           setState(() {});
         },
-        child: Padding(
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 102),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1013,7 +1010,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           );
           setState(() {});
         },
-        child: Padding(
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 102),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -295,6 +295,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
             // 2. Body Content
             if (_loading && currentInfo == null)
               Container(
+                constraints: const BoxConstraints(minHeight: 96),
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 26),
                 decoration: BoxDecoration(
@@ -327,6 +328,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
               )
             else if (currentInfo != null)
               Container(
+                constraints: const BoxConstraints(minHeight: 96),
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 decoration: BoxDecoration(
                   color: innerBgColor,
@@ -378,6 +380,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
                 borderRadius: BorderRadius.circular(10),
                 onTap: _fetchCurrentInfo,
                 child: Container(
+                  constraints: const BoxConstraints(minHeight: 96),
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 22),
                   decoration: BoxDecoration(

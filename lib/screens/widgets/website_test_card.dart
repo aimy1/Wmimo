@@ -1145,6 +1145,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
 
             // 2. Content Grid / Row of Targets (with PC right-click & Mobile long-press)
             Container(
+              constraints: const BoxConstraints(minHeight: 96),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               decoration: BoxDecoration(
                 color: innerBgColor,
