@@ -153,6 +153,7 @@ class SettingConfig {
   bool wakeLock = false; //android
   bool autoConnectAtBoot = false; //android
   bool hideVpn = false; //ios
+  List<Map<String, dynamic>>? websiteTestTargets;
 
   Map<String, dynamic> toJson() => {
     'language_tag': languageTag,
@@ -177,6 +178,7 @@ class SettingConfig {
     'wake_lock': wakeLock,
     'auto_connect_at_boot': autoConnectAtBoot,
     'hide_vpn': hideVpn,
+    'website_test_targets': websiteTestTargets,
   };
   void fromJson(Map<String, dynamic>? map) {
     if (map == null) {
@@ -217,6 +219,11 @@ class SettingConfig {
     wakeLock = map["wake_lock"] ?? false;
     autoConnectAtBoot = map["auto_connect_at_boot"] ?? false;
     hideVpn = map["hide_vpn"] ?? false;
+    if (map["website_test_targets"] is List) {
+      websiteTestTargets = (map["website_test_targets"] as List)
+          .whereType<Map<String, dynamic>>()
+          .toList();
+    }
   }
 
   String userAgent() {

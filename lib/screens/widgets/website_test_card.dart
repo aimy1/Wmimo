@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
+import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
 
 class WebsiteTarget {
   final String id;
-  final String name;
-  final String url;
-  final IconData? icon;
-  final Color? color;
+  String name;
+  String url;
+  IconData? icon;
+  Color? color;
   int? latency;
   bool isTesting;
 
@@ -24,28 +25,60 @@ class WebsiteTarget {
     this.latency,
     this.isTesting = false,
   });
-}
 
-class WebsiteTestCard extends StatefulWidget {
-  final int? mixedPort;
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'url': url,
+  };
 
-  const WebsiteTestCard({
-    super.key,
-    this.mixedPort,
-  });
+  factory WebsiteTarget.fromJson(Map<String, dynamic> json) {
+    final id = json['id']?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString();
+    final name = json['name']?.toString() ?? '';
+    final url = json['url']?.toString() ?? '';
+    final match = matchBrand(name, url);
+    return WebsiteTarget(
+      id: id,
+      name: name,
+      url: url,
+      icon: match.icon,
+      color: match.color,
+    );
+  }
 
-  @override
-  State<WebsiteTestCard> createState() => _WebsiteTestCardState();
-}
+  static ({IconData icon, Color? color}) matchBrand(String name, String url) {
+    final lowerName = name.toLowerCase();
+    final lowerUrl = url.toLowerCase();
 
-class _WebsiteTestCardState extends State<WebsiteTestCard> {
-  late final List<WebsiteTarget> _targets;
-  bool _isTestingAll = false;
+    if (lowerUrl.contains('apple.com') || lowerName == 'apple') {
+      return (icon: Icons.apple, color: null);
+    }
+    if (lowerUrl.contains('github.com') || lowerName == 'github') {
+      return (icon: Icons.code_rounded, color: null);
+    }
+    if (lowerUrl.contains('google.') || lowerName == 'google') {
+      return (icon: Icons.travel_explore_rounded, color: const Color(0xFF4285F4));
+    }
+    if (lowerUrl.contains('youtube.com') || lowerName == 'youtube') {
+      return (icon: Icons.play_arrow_rounded, color: const Color(0xFFFF0000));
+    }
+    if (lowerUrl.contains('bilibili.com') || lowerName.contains('bilibili')) {
+      return (icon: Icons.tv_rounded, color: const Color(0xFF00AEEC));
+    }
+    if (lowerUrl.contains('baidu.com') || lowerName.contains('baidu')) {
+      return (icon: Icons.search_rounded, color: const Color(0xFF2932E1));
+    }
+    if (lowerUrl.contains('twitter.com') || lowerUrl.contains('x.com') || lowerName == 'twitter' || lowerName == 'x') {
+      return (icon: Icons.alternate_email_rounded, color: null);
+    }
+    if (lowerUrl.contains('t.me') || lowerUrl.contains('telegram') || lowerName.contains('telegram')) {
+      return (icon: Icons.send_rounded, color: const Color(0xFF0088CC));
+    }
+    return (icon: Icons.public_rounded, color: ThemeDefine.kColorBlue);
+  }
 
-  @override
-  void initState() {
-    super.initState();
-    _targets = [
+  static List<WebsiteTarget> getDefaultTargets() {
+    return [
       WebsiteTarget(
         id: 'apple',
         name: 'Apple',
@@ -74,6 +107,45 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
       ),
     ];
   }
+}
+
+class WebsiteTestCard extends StatefulWidget {
+  final int? mixedPort;
+
+  const WebsiteTestCard({
+    super.key,
+    this.mixedPort,
+  });
+
+  @override
+  State<WebsiteTestCard> createState() => _WebsiteTestCardState();
+}
+
+class _WebsiteTestCardState extends State<WebsiteTestCard> {
+  late List<WebsiteTarget> _targets;
+  bool _isTestingAll = false;
+  Offset _lastTapPosition = Offset.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTargets();
+  }
+
+  void _loadTargets() {
+    final saved = SettingManager.getConfig().websiteTestTargets;
+    if (saved != null && saved.isNotEmpty) {
+      _targets = saved.map((m) => WebsiteTarget.fromJson(m)).toList();
+    } else {
+      _targets = WebsiteTarget.getDefaultTargets();
+    }
+  }
+
+  Future<void> _saveTargets() async {
+    final list = _targets.map((t) => t.toJson()).toList();
+    SettingManager.getConfig().websiteTestTargets = list;
+    await SettingManager.save();
+  }
 
   int? get _effectivePort => widget.mixedPort ?? ClashSettingManager.getMixedPort();
 
@@ -94,7 +166,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
   }
 
   Future<void> _testAllTargets() async {
-    if (_isTestingAll || !mounted) return;
+    if (_isTestingAll || !mounted || _targets.isEmpty) return;
     HapticFeedback.selectionClick();
     setState(() {
       _isTestingAll = true;
@@ -149,6 +221,92 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     }
   }
 
+  void _showContextMenu(WebsiteTarget target, Offset globalPosition) async {
+    HapticFeedback.mediumImpact();
+    final tcontext = Translations.of(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final pos = globalPosition == Offset.zero
+        ? Offset(MediaQuery.of(context).size.width / 2, MediaQuery.of(context).size.height / 2)
+        : globalPosition;
+
+    final selected = await showMenu<String>(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        pos.dx,
+        pos.dy,
+        pos.dx + 1,
+        pos.dy + 1,
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: isDark ? const Color(0xFF232328) : Colors.white,
+      elevation: 8,
+      items: [
+        PopupMenuItem<String>(
+          value: 'test',
+          height: 38,
+          child: Row(
+            children: [
+              const Icon(Icons.bolt_rounded, size: 18, color: ThemeDefine.kColorBlue),
+              const SizedBox(width: 9),
+              Text(
+                tcontext.meta.test,
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'edit',
+          height: 38,
+          child: Row(
+            children: [
+              Icon(
+                Icons.edit_outlined,
+                size: 17,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+              ),
+              const SizedBox(width: 9),
+              Text(
+                tcontext.meta.edit,
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+        const PopupMenuDivider(height: 1),
+        PopupMenuItem<String>(
+          value: 'delete',
+          height: 38,
+          child: Row(
+            children: [
+              const Icon(Icons.delete_outline_rounded, size: 17, color: Colors.redAccent),
+              const SizedBox(width: 9),
+              Text(
+                tcontext.meta.remove,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.redAccent,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    if (!mounted || selected == null) return;
+    if (selected == 'test') {
+      _testTarget(target);
+    } else if (selected == 'edit') {
+      _showEditTargetDialog(target);
+    } else if (selected == 'delete') {
+      _showDeleteTargetDialog(target);
+    }
+  }
+
   void _showAddTargetDialog() {
     final nameController = TextEditingController();
     final urlController = TextEditingController(text: 'https://');
@@ -159,22 +317,111 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
       builder: (ctx) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Text(
-            tcontext.meta.addTestWebsite,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          title: Row(
+            children: [
+              const Icon(Icons.add_link_rounded, color: ThemeDefine.kColorBlue, size: 22),
+              const SizedBox(width: 8),
+              Text(
+                tcontext.meta.addTestWebsite,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
+                autofocus: true,
                 decoration: InputDecoration(
                   labelText: tcontext.meta.websiteNameHint,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                   isDense: true,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
+              TextField(
+                controller: urlController,
+                decoration: InputDecoration(
+                  labelText: tcontext.meta.websiteUrl,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  isDense: true,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(tcontext.meta.cancel),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ThemeDefine.kColorBlue,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              onPressed: () {
+                final name = nameController.text.trim();
+                final url = urlController.text.trim();
+                if (name.isNotEmpty && url.startsWith('http')) {
+                  final match = WebsiteTarget.matchBrand(name, url);
+                  setState(() {
+                    _targets.add(
+                      WebsiteTarget(
+                        id: DateTime.now().millisecondsSinceEpoch.toString(),
+                        name: name,
+                        url: url,
+                        icon: match.icon,
+                        color: match.color,
+                      ),
+                    );
+                  });
+                  _saveTargets();
+                  Navigator.pop(ctx);
+                }
+              },
+              child: Text(tcontext.meta.ok),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEditTargetDialog(WebsiteTarget target) {
+    final tcontext = Translations.of(context);
+    final nameController = TextEditingController(text: target.name);
+    final urlController = TextEditingController(text: target.url);
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Row(
+            children: [
+              const Icon(Icons.edit_note_rounded, color: ThemeDefine.kColorBlue, size: 22),
+              const SizedBox(width: 8),
+              Text(
+                "${tcontext.meta.edit} - ${target.name}",
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: tcontext.meta.websiteNameHint,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  isDense: true,
+                ),
+              ),
+              const SizedBox(height: 14),
               TextField(
                 controller: urlController,
                 decoration: InputDecoration(
@@ -201,16 +448,14 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                 final url = urlController.text.trim();
                 if (name.isNotEmpty && url.startsWith('http')) {
                   setState(() {
-                    _targets.add(
-                      WebsiteTarget(
-                        id: DateTime.now().millisecondsSinceEpoch.toString(),
-                        name: name,
-                        url: url,
-                        icon: Icons.public_rounded,
-                        color: ThemeDefine.kColorBlue,
-                      ),
-                    );
+                    target.name = name;
+                    target.url = url;
+                    target.latency = null;
+                    final match = WebsiteTarget.matchBrand(name, url);
+                    target.icon = match.icon;
+                    target.color = match.color;
                   });
+                  _saveTargets();
                   Navigator.pop(ctx);
                 }
               },
@@ -222,15 +467,65 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     );
   }
 
+  void _showDeleteTargetDialog(WebsiteTarget target) {
+    final tcontext = Translations.of(context);
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Row(
+            children: [
+              const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 22),
+              const SizedBox(width: 8),
+              Text(
+                tcontext.meta.removeConfirm,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          content: Text(
+            "${target.name}\n${target.url}",
+            style: const TextStyle(fontSize: 13, height: 1.4),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(tcontext.meta.cancel),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              onPressed: () {
+                setState(() {
+                  _targets.removeWhere((t) => t.id == target.id);
+                });
+                _saveTargets();
+                Navigator.pop(ctx);
+              },
+              child: Text(tcontext.meta.remove),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildBrandLogo(WebsiteTarget target, bool isDark) {
-    if (target.id == 'apple') {
+    final lowerName = target.name.toLowerCase();
+    final lowerUrl = target.url.toLowerCase();
+
+    if (lowerUrl.contains('apple.com') || lowerName == 'apple' || target.id == 'apple') {
       return Icon(
         Icons.apple,
         size: 26,
         color: isDark ? Colors.white : Colors.black87,
       );
     }
-    if (target.id == 'github') {
+    if (lowerUrl.contains('github.com') || lowerName == 'github' || target.id == 'github') {
       return Container(
         width: 26,
         height: 26,
@@ -238,14 +533,14 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
           color: isDark ? Colors.white24 : Colors.black87,
           shape: BoxShape.circle,
         ),
-        child: Icon(
+        child: const Icon(
           Icons.code_rounded,
           size: 16,
-          color: isDark ? Colors.white : Colors.white,
+          color: Colors.white,
         ),
       );
     }
-    if (target.id == 'google') {
+    if (lowerUrl.contains('google.') || lowerName == 'google' || target.id == 'google') {
       return Container(
         width: 26,
         height: 26,
@@ -272,7 +567,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
         ),
       );
     }
-    if (target.id == 'youtube') {
+    if (lowerUrl.contains('youtube.com') || lowerName == 'youtube' || target.id == 'youtube') {
       return Container(
         width: 28,
         height: 20,
@@ -287,11 +582,135 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
         ),
       );
     }
+    if (lowerUrl.contains('bilibili.com') || lowerName.contains('bilibili')) {
+      return Container(
+        width: 26,
+        height: 26,
+        decoration: BoxDecoration(
+          color: const Color(0xFF00AEEC),
+          borderRadius: BorderRadius.circular(7),
+        ),
+        child: const Icon(
+          Icons.tv_rounded,
+          size: 16,
+          color: Colors.white,
+        ),
+      );
+    }
+    if (lowerUrl.contains('baidu.com') || lowerName.contains('baidu')) {
+      return Container(
+        width: 26,
+        height: 26,
+        decoration: const BoxDecoration(
+          color: Color(0xFF2932E1),
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          Icons.search_rounded,
+          size: 16,
+          color: Colors.white,
+        ),
+      );
+    }
+    if (lowerUrl.contains('twitter.com') || lowerUrl.contains('x.com') || lowerName == 'twitter' || lowerName == 'x') {
+      return Container(
+        width: 26,
+        height: 26,
+        decoration: BoxDecoration(
+          color: isDark ? Colors.white24 : Colors.black87,
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          Icons.alternate_email_rounded,
+          size: 15,
+          color: Colors.white,
+        ),
+      );
+    }
+    if (lowerUrl.contains('t.me') || lowerUrl.contains('telegram') || lowerName.contains('telegram')) {
+      return Container(
+        width: 26,
+        height: 26,
+        decoration: const BoxDecoration(
+          color: Color(0xFF0088CC),
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          Icons.send_rounded,
+          size: 14,
+          color: Colors.white,
+        ),
+      );
+    }
 
     return Icon(
       target.icon ?? Icons.public_rounded,
       size: 24,
       color: target.color ?? ThemeDefine.kColorBlue,
+    );
+  }
+
+  Widget _buildTargetItem(
+    WebsiteTarget target,
+    bool isDark,
+    ThemeData theme,
+    Translations tcontext,
+  ) {
+    return Material(
+      color: isDark ? const Color(0xFF1E1E22) : Colors.white,
+      borderRadius: BorderRadius.circular(10),
+      child: Listener(
+        onPointerDown: (event) {
+          _lastTapPosition = event.position;
+        },
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () => _testTarget(target),
+          onSecondaryTap: () {
+            _showContextMenu(target, _lastTapPosition);
+          },
+          onLongPress: () {
+            _showContextMenu(target, _lastTapPosition);
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: theme.dividerColor.withValues(alpha: 0.2),
+                width: 0.8,
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Logo
+                Container(
+                  height: 28,
+                  alignment: Alignment.center,
+                  child: _buildBrandLogo(target, isDark),
+                ),
+                const SizedBox(height: 5),
+                // Name
+                Text(
+                  target.name,
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 5),
+                // Action / Latency Badge
+                _buildLatencyBadge(target, tcontext),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -347,7 +766,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                   message: tcontext.meta.testAll,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(7),
-                    onTap: _isTestingAll ? null : _testAllTargets,
+                    onTap: _isTestingAll || _targets.isEmpty ? null : _testAllTargets,
                     child: Container(
                       width: 24,
                       height: 24,
@@ -412,7 +831,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
             ),
             const SizedBox(height: 8),
 
-            // 2. Content Grid / Row of Targets (matching Clash Verge style)
+            // 2. Content Grid / Row of Targets (with PC right-click & Mobile long-press)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               decoration: BoxDecoration(
@@ -420,62 +839,65 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: innerBorderColor, width: 0.8),
               ),
-              child: Row(
-                children: _targets.map((target) {
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Material(
-                        color: isDark
-                            ? const Color(0xFF1E1E22)
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(10),
-                          onTap: () => _testTarget(target),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: theme.dividerColor.withValues(alpha: 0.2),
-                                width: 0.8,
+              child: _targets.isEmpty
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              tcontext.meta.noMatchingProfiles,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                               ),
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // Logo
-                                Container(
-                                  height: 28,
-                                  alignment: Alignment.center,
-                                  child: _buildBrandLogo(target, isDark),
-                                ),
-                                const SizedBox(height: 5),
-                                // Name
-                                Text(
-                                  target.name,
-                                  style: TextStyle(
-                                    fontSize: 11.5,
+                            const SizedBox(width: 8),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(6),
+                              onTap: () {
+                                setState(() {
+                                  _targets = WebsiteTarget.getDefaultTargets();
+                                });
+                                _saveTargets();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                child: Text(
+                                  tcontext.meta.reset,
+                                  style: const TextStyle(
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w600,
-                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                                    color: ThemeDefine.kColorBlue,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
                                 ),
-                                const SizedBox(height: 5),
-                                // Action / Latency Badge
-                                _buildLatencyBadge(target, tcontext),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
+                    )
+                  : LayoutBuilder(
+                      builder: (context, constraints) {
+                        final total = _targets.length;
+                        final columns = constraints.maxWidth > 560
+                            ? (total <= 6 ? total : 4)
+                            : (total <= 4 ? total : (constraints.maxWidth > 340 ? 3 : 2));
+                        final itemWidth =
+                            ((constraints.maxWidth - (columns - 1) * 8) / columns).floorToDouble();
+                        return Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: _targets.map((target) {
+                            return SizedBox(
+                              width: itemWidth,
+                              child: _buildTargetItem(target, isDark, theme, tcontext),
+                            );
+                          }).toList(),
+                        );
+                      },
                     ),
-                  );
-                }).toList(),
-              ),
             ),
           ],
         ),
