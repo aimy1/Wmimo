@@ -509,6 +509,11 @@ class VPNService {
         }
       }
 
+      final savedMode = ClashSettingManager.getConfigsMode();
+      try {
+        await ClashHttpApi.setConfigsMode(savedMode.name);
+      } catch (_) {}
+
       CoreWatchdog.setUserConnected(true);
       return null;
     } finally {

@@ -144,12 +144,28 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     ProfileManager.onEventUpdate.add(_onProfileUpdate);
     ProfileManager.onEventRemove.add(_onProfileChanged);
     ClashSettingManager.onEventModeChanged.add(_onModeChangedEvent);
+    Biz.onEventInitAllFinish.add(_onInitAllFinish);
+  }
+
+  void _onInitAllFinish() {
+    if (!mounted) return;
+    final savedMode = ClashSettingManager.getConfigsMode().name.toLowerCase();
+    if (_currentMode != savedMode) {
+      setState(() {
+        _currentMode = savedMode;
+      });
+      _debouncedFetchProxies();
+    }
   }
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
+    _currentMode = ClashSettingManager.getConfigsMode().name.toLowerCase();
     _isVpnStarted = await VPNService.getStarted();
     setState(() {});
+    if (_isVpnStarted) {
+      unawaited(ClashHttpApi.setConfigsMode(_currentMode));
+    }
     await _fetchProxies();
     await _fetchMode();
   }
@@ -163,6 +179,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     ProfileManager.onEventUpdate.remove(_onProfileUpdate);
     ProfileManager.onEventRemove.remove(_onProfileChanged);
     ClashSettingManager.onEventModeChanged.remove(_onModeChangedEvent);
+    Biz.onEventInitAllFinish.remove(_onInitAllFinish);
     _searchController.dispose();
     _regionScrollController.dispose();
     for (final notifier in _nodeLatencyNotifiers.values) {
@@ -186,6 +203,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final isConnected = state == FlutterVpnServiceState.connected;
     if (_isVpnStarted != isConnected) {
       _isVpnStarted = isConnected;
+      if (isConnected) {
+        final savedMode = ClashSettingManager.getConfigsMode().name.toLowerCase();
+        unawaited(ClashHttpApi.setConfigsMode(savedMode));
+      }
       _debouncedFetchProxies(delay: const Duration(milliseconds: 350));
     }
   }
@@ -211,17 +232,21 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final res = await ClashHttpApi.getConfigs();
     if (res.data != null && res.data!.mode.isNotEmpty && mounted) {
       final coreMode = res.data!.mode.toLowerCase();
-      if (_currentMode != coreMode) {
-        setState(() {
-          _currentMode = coreMode;
-        });
-      }
-      ClashConfigsMode? type;
-      if (coreMode == "rule") type = ClashConfigsMode.rule;
-      if (coreMode == "global") type = ClashConfigsMode.global;
-      if (coreMode == "direct") type = ClashConfigsMode.direct;
-      if (type != null && ClashSettingManager.getConfigsMode() != type) {
-        ClashSettingManager.setConfigsMode(type);
+      final savedMode = ClashSettingManager.getConfigsMode().name.toLowerCase();
+      if (coreMode != savedMode) {
+        // App's persisted configuration takes precedence over core default on restart
+        await ClashHttpApi.setConfigsMode(savedMode);
+        if (_currentMode != savedMode) {
+          setState(() {
+            _currentMode = savedMode;
+          });
+        }
+      } else {
+        if (_currentMode != coreMode) {
+          setState(() {
+            _currentMode = coreMode;
+          });
+        }
       }
     }
   }
@@ -1922,6 +1947,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   @override
   Widget build(BuildContext context) {
+    final activeMode = ClashSettingManager.getConfigsMode().name.toLowerCase();
+    if (_currentMode.isEmpty || _currentMode != activeMode) {
+      _currentMode = activeMode;
+    }
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
@@ -2359,7 +2388,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   }
 
   Widget _buildModeButton(String modeKey, String label) {
-    final isSelected = _currentMode == modeKey;
+    final activeMode = ClashSettingManager.getConfigsMode().name.toLowerCase();
+    final isSelected = (_currentMode.isNotEmpty ? _currentMode : activeMode) == modeKey;
     return InkWell(
       borderRadius: BorderRadius.circular(6),
       onTap: () => _changeMode(modeKey),

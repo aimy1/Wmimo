@@ -509,6 +509,13 @@ class ClashSettingManager {
       await save();
     }
     await _initFixed();
+    for (var callback in onEventModeChanged) {
+      try {
+        callback();
+      } catch (e) {
+        Log.w("onEventModeChanged callback error: $e");
+      }
+    }
   }
 
   static Future<void> _load(String content) async {
@@ -566,10 +573,14 @@ class ClashSettingManager {
   static Future<ReturnResultError?> setConfigsMode(
     ClashConfigsMode mode,
   ) async {
-    _setting.Mode = mode.name;
+    _setting.Mode = mode.name.toLowerCase();
     await save();
     for (var callback in onEventModeChanged) {
-      callback();
+      try {
+        callback();
+      } catch (e) {
+        Log.w("onEventModeChanged callback error: $e");
+      }
     }
 
     bool run = await VPNService.getStarted();
@@ -580,9 +591,10 @@ class ClashSettingManager {
   }
 
   static ClashConfigsMode getConfigsMode() {
+    final lowerMode = _setting.Mode?.toLowerCase();
     for (var i = 0; i <= ClashConfigsMode.direct.index; ++i) {
       ClashConfigsMode type = ClashConfigsMode.values[i];
-      if (type.name == _setting.Mode) {
+      if (type.name.toLowerCase() == lowerMode) {
         return type;
       }
     }
@@ -597,6 +609,13 @@ class ClashSettingManager {
   static Future<void> reset() async {
     _setting = defaultConfig();
     await _initFixed();
+    for (var callback in onEventModeChanged) {
+      try {
+        callback();
+      } catch (e) {
+        Log.w("onEventModeChanged callback error: $e");
+      }
+    }
   }
 
   static int getControlPort() {

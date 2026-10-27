@@ -1108,6 +1108,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     final currentProfile = ProfileManager.getCurrent();
     if (currentProfile != null) {
       await start("launch");
+      final savedMode = ClashSettingManager.getConfigsMode();
+      unawaited(ClashHttpApi.setConfigsMode(savedMode.name));
     }
   }
 
@@ -1372,6 +1374,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       }
     } else if (state == FlutterVpnServiceState.connecting) {
     } else if (state == FlutterVpnServiceState.connected) {
+      final savedMode = ClashSettingManager.getConfigsMode();
+      unawaited(ClashHttpApi.setConfigsMode(savedMode.name));
       if (!AppLifecycleStateNofity.isPaused()) {
         _connectToCore();
       }
@@ -1547,6 +1551,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     if (AppLifecycleStateNofity.isPaused()) {
       return;
     }
+    final savedMode = ClashSettingManager.getConfigsMode();
+    unawaited(ClashHttpApi.setConfigsMode(savedMode.name));
     await _updateConnections();
     const Duration duration = Duration(seconds: 1);
     _timerConnectToCore ??= Timer.periodic(duration, (timer) async {
