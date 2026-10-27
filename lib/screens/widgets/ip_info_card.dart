@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wmimo/app/modules/biz.dart';
 import 'package:wmimo/app/utils/ip_info_helper.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -26,18 +27,52 @@ class _IpInfoCardState extends State<IpInfoCard> {
   bool _showDirect = false;
   bool _loading = false;
   bool _maskIp = false;
+  int _countdown = 240;
+  Timer? _countdownTimer;
   Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
+    Biz.onEventProxySelected.add(_onProxyNodeChanged);
+    _startAutoRefreshTimer();
     _fetchCurrentInfo();
   }
 
   @override
   void dispose() {
+    Biz.onEventProxySelected.remove(_onProxyNodeChanged);
+    _countdownTimer?.cancel();
     _debounceTimer?.cancel();
     super.dispose();
+  }
+
+  void _startAutoRefreshTimer() {
+    _countdownTimer?.cancel();
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
+      setState(() {
+        if (_countdown > 1) {
+          _countdown--;
+        } else {
+          _countdown = 240;
+          _fetchCurrentInfo();
+        }
+      });
+    });
+  }
+
+  void _onProxyNodeChanged(String nodeName) {
+    if (!mounted) return;
+    setState(() {
+      _countdown = 240;
+    });
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        _fetchCurrentInfo();
+      }
+    });
   }
 
   @override
@@ -70,6 +105,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
     if (!mounted) return;
     setState(() {
       _loading = true;
+      _countdown = 240;
     });
 
     final isProxy = _isProxyModeActive;
@@ -127,9 +163,6 @@ class _IpInfoCardState extends State<IpInfoCard> {
     final innerBgColor = isDark
         ? ThemeDefine.kColorDarkInner
         : const Color(0xFFF1F5F9);
-    final gridBgColor = isDark
-        ? ThemeDefine.kColorDarkInner
-        : const Color(0xFFF1F5F9).withValues(alpha: 0.8);
     final innerBorderColor = isDark
         ? ThemeDefine.kColorDarkBorder
         : const Color(0xFFE2E8F0);
@@ -154,7 +187,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 1. Card Header (matches TrafficChartCard header style)
+            // 1. Card Header
             Row(
               children: [
                 Icon(
@@ -172,7 +205,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   ),
                 ),
                 const Spacer(),
-                // Current Mode Status (Scheme 1: pure text + status dot, borderless & background-less)
+                // Current Mode Status Toggle
                 InkWell(
                   borderRadius: BorderRadius.circular(4),
                   onTap: widget.isConnected
@@ -263,7 +296,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
             if (_loading && currentInfo == null)
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 22),
+                padding: const EdgeInsets.symmetric(vertical: 26),
                 decoration: BoxDecoration(
                   color: innerBgColor,
                   borderRadius: BorderRadius.circular(10),
@@ -292,8 +325,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   ],
                 ),
               )
-            else if (currentInfo != null) ...[
-              // 2a. Inner IP Hero Banner Box
+            else if (currentInfo != null)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 decoration: BoxDecoration(
@@ -304,204 +336,50 @@ class _IpInfoCardState extends State<IpInfoCard> {
                     width: 0.8,
                   ),
                 ),
-                child: Row(
-                  children: [
-                    // Country Flag & Code
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          currentInfo.flagEmoji,
-                          style: TextStyle(
-                            fontSize: 15,
-                            height: 1.1,
-                            fontFamily: Platform.isWindows ? 'Emoji' : null,
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          currentInfo.countryCode.isNotEmpty
-                              ? currentInfo.countryCode.toUpperCase()
-                              : 'IP',
-                          style: TextStyle(
-                            fontSize: 11,
-                            height: 1.1,
-                            fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
-                            fontFamily: 'monospace',
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 10),
-                    // Monospace IP Address
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(4),
-                              onTap: () => _copyIp(currentInfo.ip),
-                              child: Text(
-                                _formatIp(currentInfo.ip),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'monospace',
-                                  letterSpacing: 0.3,
-                                  color: theme.colorScheme.onSurface,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          // IPv4 / IPv6 tag
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-                            decoration: BoxDecoration(
-                              color: (isDark ? Colors.white : Colors.black)
-                                  .withValues(alpha: 0.07),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              currentInfo.ipType,
-                              style: TextStyle(
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'monospace',
-                                color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    // Mask / Unmask Button
-                    _buildMiniActionButton(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isTwoCol = constraints.maxWidth >= 240;
+                    final leftCol = _buildLeftColumn(
                       context: context,
+                      theme: theme,
                       isDark: isDark,
-                      icon: _maskIp
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      onTap: () {
-                        HapticFeedback.selectionClick();
-                        setState(() {
-                          _maskIp = !_maskIp;
-                        });
-                      },
-                    ),
-                    const SizedBox(width: 5),
-                    // Copy IP Button
-                    _buildMiniActionButton(
+                      currentInfo: currentInfo,
+                    );
+                    final rightCol = _buildRightColumn(
                       context: context,
-                      isDark: isDark,
-                      icon: Icons.copy_rounded,
-                      onTap: () => _copyIp(currentInfo.ip),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
+                      theme: theme,
+                      currentInfo: currentInfo,
+                    );
 
-              // 2b. 2x2 Structured Metadata Grid (matches TrafficChartCard bottom stat container)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                decoration: BoxDecoration(
-                  color: gridBgColor,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: theme.dividerColor.withValues(alpha: 0.25),
-                    width: 0.8,
-                  ),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IntrinsicHeight(
-                      child: Row(
+                    if (isTwoCol) {
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: _buildGridItem(
-                              context: context,
-                              icon: Icons.place_outlined,
-                              iconColor: const Color(0xFF38BDF8),
-                              label: tcontext.meta.ipLocation,
-                              value: "${currentInfo.flagEmoji} ${currentInfo.locationString}",
-                            ),
-                          ),
-                          _buildVerticalDivider(theme),
-                          Expanded(
-                            child: _buildGridItem(
-                              context: context,
-                              icon: Icons.dns_outlined,
-                              iconColor: const Color(0xFF818CF8),
-                              label: tcontext.meta.ipIsp,
-                              value: (currentInfo.isp.isNotEmpty
-                                      ? currentInfo.isp
-                                      : currentInfo.org)
-                                  .isNotEmpty
-                                  ? (currentInfo.isp.isNotEmpty
-                                      ? currentInfo.isp
-                                      : currentInfo.org)
-                                  : '-',
-                            ),
-                          ),
+                          Expanded(child: leftCol),
+                          const SizedBox(width: 8),
+                          Expanded(child: rightCol),
                         ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Divider(
-                        height: 1,
-                        thickness: 0.8,
-                        color: theme.dividerColor.withValues(alpha: 0.22),
-                      ),
-                    ),
-                    IntrinsicHeight(
-                      child: Row(
+                      );
+                    } else {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: _buildGridItem(
-                              context: context,
-                              icon: Icons.hub_outlined,
-                              iconColor: const Color(0xFF10B981),
-                              label: tcontext.meta.ipAsn,
-                              value: currentInfo.asn.isNotEmpty
-                                  ? currentInfo.asn
-                                  : '-',
-                            ),
-                          ),
-                          _buildVerticalDivider(theme),
-                          Expanded(
-                            child: _buildGridItem(
-                              context: context,
-                              icon: Icons.schedule_rounded,
-                              iconColor: const Color(0xFFF59E0B),
-                              label: tcontext.meta.ipTimezone,
-                              value: currentInfo.timezoneDisplay.isNotEmpty
-                                  ? currentInfo.timezoneDisplay
-                                  : (currentInfo.formattedCoordinates.isNotEmpty
-                                      ? currentInfo.formattedCoordinates
-                                      : '-'),
-                            ),
-                          ),
+                          leftCol,
+                          const SizedBox(height: 6),
+                          rightCol,
                         ],
-                      ),
-                    ),
-                  ],
+                      );
+                    }
+                  },
                 ),
-              ),
-            ] else
+              )
+            else
               InkWell(
                 borderRadius: BorderRadius.circular(10),
                 onTap: _fetchCurrentInfo,
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  padding: const EdgeInsets.symmetric(vertical: 22),
                   decoration: BoxDecoration(
                     color: innerBgColor,
                     borderRadius: BorderRadius.circular(10),
@@ -534,6 +412,216 @@ class _IpInfoCardState extends State<IpInfoCard> {
     );
   }
 
+  Widget _buildLeftColumn({
+    required BuildContext context,
+    required ThemeData theme,
+    required bool isDark,
+    required IpInfoData currentInfo,
+  }) {
+    final tcontext = Translations.of(context);
+    final isZh = LocaleSettings.currentLocale.languageCode == 'zh';
+    final labelColor = theme.colorScheme.onSurface.withValues(alpha: 0.55);
+    final valueColor = theme.colorScheme.onSurface.withValues(alpha: 0.9);
+
+    final countryName = currentInfo.country.isNotEmpty
+        ? currentInfo.country
+        : (currentInfo.countryCode.isNotEmpty ? currentInfo.countryCode.toUpperCase() : 'Unknown');
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // 1. Country & Flag
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2.5),
+          child: Row(
+            children: [
+              Text(
+                currentInfo.flagEmoji,
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.1,
+                  fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                ),
+              ),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  countryName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // 2. IP Address with Eye & Copy
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2),
+          child: Row(
+            children: [
+              Flexible(
+                child: Text(
+                  _formatIp(currentInfo.ip),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'monospace',
+                    letterSpacing: 0.2,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
+              _buildMiniActionButton(
+                context: context,
+                isDark: isDark,
+                icon: _maskIp ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  setState(() {
+                    _maskIp = !_maskIp;
+                  });
+                },
+              ),
+              const SizedBox(width: 3),
+              _buildMiniActionButton(
+                context: context,
+                isDark: isDark,
+                icon: Icons.copy_rounded,
+                onTap: () => _copyIp(currentInfo.ip),
+              ),
+            ],
+          ),
+        ),
+
+        // 3. 自治系统 (ASN)
+        _buildInfoLine(
+          label: tcontext.meta.ipAsn,
+          value: currentInfo.asn.isNotEmpty ? currentInfo.asn : '-',
+          labelColor: labelColor,
+          valueColor: valueColor,
+        ),
+
+        // 4. 自动刷新倒计时
+        _buildInfoLine(
+          label: isZh ? '自动刷新' : 'Auto Refresh',
+          value: '${_countdown}s',
+          labelColor: labelColor,
+          valueColor: theme.colorScheme.primary,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRightColumn({
+    required BuildContext context,
+    required ThemeData theme,
+    required IpInfoData currentInfo,
+  }) {
+    final tcontext = Translations.of(context);
+    final labelColor = theme.colorScheme.onSurface.withValues(alpha: 0.55);
+    final valueColor = theme.colorScheme.onSurface.withValues(alpha: 0.9);
+
+    final ispDisplay = (currentInfo.isp.isNotEmpty ? currentInfo.isp : currentInfo.org).isNotEmpty
+        ? (currentInfo.isp.isNotEmpty ? currentInfo.isp : currentInfo.org)
+        : '-';
+
+    final orgDisplay = (currentInfo.org.isNotEmpty ? currentInfo.org : currentInfo.isp).isNotEmpty
+        ? (currentInfo.org.isNotEmpty ? currentInfo.org : currentInfo.isp)
+        : '-';
+
+    final locationDisplay = currentInfo.locationCityRegion.isNotEmpty
+        ? currentInfo.locationCityRegion
+        : '-';
+
+    final timezoneDisplay = currentInfo.timezone.isNotEmpty
+        ? currentInfo.timezone
+        : (currentInfo.timezoneUtc.isNotEmpty ? currentInfo.timezoneUtc : '-');
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // 1. 服务商
+        _buildInfoLine(
+          label: tcontext.meta.ipIsp,
+          value: ispDisplay,
+          labelColor: labelColor,
+          valueColor: valueColor,
+        ),
+
+        // 2. 组织
+        _buildInfoLine(
+          label: tcontext.meta.ipOrg,
+          value: orgDisplay,
+          labelColor: labelColor,
+          valueColor: valueColor,
+        ),
+
+        // 3. 位置
+        _buildInfoLine(
+          label: tcontext.meta.ipLocation,
+          value: locationDisplay,
+          labelColor: labelColor,
+          valueColor: valueColor,
+        ),
+
+        // 4. 时区
+        _buildInfoLine(
+          label: tcontext.meta.ipTimezone,
+          value: timezoneDisplay,
+          labelColor: labelColor,
+          valueColor: valueColor,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoLine({
+    required String label,
+    required String value,
+    required Color labelColor,
+    required Color valueColor,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.5),
+      child: Row(
+        children: [
+          Text(
+            '$label: ',
+            style: TextStyle(
+              fontSize: 11,
+              color: labelColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 11,
+                color: valueColor,
+                fontWeight: FontWeight.w600,
+                fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildMiniActionButton({
     required BuildContext context,
     required bool isDark,
@@ -542,77 +630,22 @@ class _IpInfoCardState extends State<IpInfoCard> {
   }) {
     final theme = Theme.of(context);
     return InkWell(
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.circular(5),
       onTap: onTap,
       child: Container(
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(5),
         ),
         child: Icon(
           icon,
-          size: 13.5,
+          size: 12,
           color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
         ),
       ),
-    );
-  }
-
-  Widget _buildVerticalDivider(ThemeData theme) {
-    return Container(
-      width: 0.8,
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      color: theme.dividerColor.withValues(alpha: 0.25),
-    );
-  }
-
-  Widget _buildGridItem({
-    required BuildContext context,
-    required IconData icon,
-    required Color iconColor,
-    required String label,
-    required String value,
-  }) {
-    final theme = Theme.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 11.5, color: iconColor),
-            const SizedBox(width: 4),
-            Flexible(
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.58),
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 2.5),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w600,
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
-            fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
     );
   }
 }

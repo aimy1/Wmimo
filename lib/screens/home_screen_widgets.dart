@@ -36,6 +36,7 @@ import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/ip_info_card.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
 import 'package:wmimo/screens/widgets/traffic_chart_card.dart';
+import 'package:wmimo/screens/widgets/website_test_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:libclash_vpn_service/state.dart';
@@ -544,64 +545,66 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           uploadTotal: _uploadTotalRaw,
           downloadTotal: _downloadTotalRaw,
         ),
-        // 订阅套餐流量进度
-        if (currentProfile != null && currentProfile.isRemote() && currentProfile.total > 0) ...[
-          const SizedBox(height: 10),
-          _buildSubscriptionQuotaSection(
-            context: context,
-            profile: currentProfile,
-            expireInfo: tranfficExpire,
-          ),
-        ],
-        const SizedBox(height: 10),
-        IpInfoCard(
-          isConnected: _state == FlutterVpnServiceState.connected,
-          mixedPort: ClashSettingManager.getMixedPort(),
-        ),
-        const SizedBox(height: 10),
-        Card(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-            child: Row(
-              children: [
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.policy_rounded,
-                  label: tcontext.meta.rules,
-                  onTap: _onTapRules,
-                ),
-                const SizedBox(width: 4),
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.article_outlined,
-                  label: tcontext.meta.coreLog,
-                  onTap: _onTapLogs,
-                ),
-                const SizedBox(width: 4),
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.network_check_rounded,
-                  label: tcontext.meta.networkCheck,
-                  onTap: _onTapNetCheck,
-                ),
-                const SizedBox(width: 4),
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.speed_rounded,
-                  label: tcontext.meta.speedTest,
-                  onTap: _onTapSpeedTest,
-                ),
-                const SizedBox(width: 4),
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.description_outlined,
-                  label: tcontext.meta.runtimeProfile,
-                  onTap: _onTapRunTimeProfile,
-                ),
-              ],
-            ),
-          ),
+        // 首页并列排布: 网站测试 + IP 信息, 订阅配置 + 快捷工具
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth >= 580;
+            final websiteCard = WebsiteTestCard(
+              mixedPort: ClashSettingManager.getMixedPort(),
+            );
+            final ipCard = IpInfoCard(
+              isConnected: _state == FlutterVpnServiceState.connected,
+              mixedPort: ClashSettingManager.getMixedPort(),
+            );
+            final subCard = _buildSubscriptionOrProfileCard(
+              context: context,
+              profile: currentProfile,
+              expireInfo: tranfficExpire,
+            );
+            final quickActionCard = _buildQuickActionCard(context, tcontext);
+
+            if (isWide) {
+              return Column(
+                children: [
+                  const SizedBox(height: 10),
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(child: websiteCard),
+                        const SizedBox(width: 10),
+                        Expanded(child: ipCard),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(child: subCard),
+                        const SizedBox(width: 10),
+                        Expanded(child: quickActionCard),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Column(
+                children: [
+                  const SizedBox(height: 10),
+                  websiteCard,
+                  const SizedBox(height: 10),
+                  ipCard,
+                  const SizedBox(height: 10),
+                  subCard,
+                  const SizedBox(height: 10),
+                  quickActionCard,
+                ],
+              );
+            }
+          },
         ),
       ],
     );
@@ -775,6 +778,194 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
 
 
 
+  Widget _buildSubscriptionOrProfileCard({
+    required BuildContext context,
+    required ProfileSetting? profile,
+    required Tuple2<bool, String>? expireInfo,
+  }) {
+    if (profile != null && profile.isRemote() && profile.total > 0) {
+      return _buildSubscriptionQuotaSection(
+        context: context,
+        profile: profile,
+        expireInfo: expireInfo,
+      );
+    }
+
+    final tcontext = Translations.of(context);
+    final theme = Theme.of(context);
+
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: theme.dividerColor.withValues(alpha: 0.35),
+          width: 0.8,
+        ),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () async {
+          if (widget.onNavigateToTab != null) {
+            widget.onNavigateToTab!(2);
+            return;
+          }
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              settings: ProfilesBoardScreen.routSettings(),
+              builder: (context) => const ProfilesBoardScreen(),
+            ),
+          );
+          setState(() {});
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.description_outlined,
+                    size: 18,
+                    color: ThemeDefine.kColorBlue,
+                  ),
+                  const SizedBox(width: 7),
+                  Text(
+                    LocaleSettings.currentLocale.languageCode == 'zh'
+                        ? '当前配置'
+                        : 'Current Profile',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const Spacer(),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: 18,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                profile?.getShowName() ?? tcontext.meta.noProfilesYet,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                profile?.isRemote() == true
+                    ? tcontext.meta.remoteSubscription
+                    : tcontext.meta.localProfile,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickActionCard(BuildContext context, Translations tcontext) {
+    final theme = Theme.of(context);
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: theme.dividerColor.withValues(alpha: 0.35),
+          width: 0.8,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.grid_view_rounded,
+                    size: 17,
+                    color: ThemeDefine.kColorBlue,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    LocaleSettings.currentLocale.languageCode == 'zh'
+                        ? '快捷工具'
+                        : 'Quick Actions',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.policy_rounded,
+                  label: tcontext.meta.rules,
+                  onTap: _onTapRules,
+                ),
+                const SizedBox(width: 4),
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.article_outlined,
+                  label: tcontext.meta.coreLog,
+                  onTap: _onTapLogs,
+                ),
+                const SizedBox(width: 4),
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.network_check_rounded,
+                  label: tcontext.meta.networkCheck,
+                  onTap: _onTapNetCheck,
+                ),
+                const SizedBox(width: 4),
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.speed_rounded,
+                  label: tcontext.meta.speedTest,
+                  onTap: _onTapSpeedTest,
+                ),
+                const SizedBox(width: 4),
+                _buildQuickActionTile(
+                  context: context,
+                  icon: Icons.description_outlined,
+                  label: tcontext.meta.runtimeProfile,
+                  onTap: _onTapRunTimeProfile,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSubscriptionQuotaSection({
     required BuildContext context,
     required ProfileSetting profile,
@@ -798,97 +989,117 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         ? Colors.red
         : (percent > 0.7 ? Colors.orange : ThemeDefine.kColorBlue);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: isDark
-            ? ThemeDefine.kColorDarkInner
-            : const Color(0xFFF1F5F9).withValues(alpha: 0.8),
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
+        side: BorderSide(
           color: theme.dividerColor.withValues(alpha: 0.35),
           width: 0.8,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.pie_chart_outline_rounded,
-                size: 15,
-                color: theme.colorScheme.primary,
-              ),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  '${tcontext.meta.planUsage}: $usedStr / $totalStr',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                '${(percent * 100).toStringAsFixed(1)}%',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: statusColor,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: percent,
-              minHeight: 6,
-              backgroundColor: (isDark ? Colors.white : Colors.black)
-                  .withValues(alpha: 0.08),
-              valueColor: AlwaysStoppedAnimation<Color>(statusColor),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () async {
+          if (widget.onNavigateToTab != null) {
+            widget.onNavigateToTab!(2);
+            return;
+          }
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              settings: ProfilesBoardScreen.routSettings(),
+              builder: (context) => const ProfilesBoardScreen(),
             ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          );
+          setState(() {});
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(
-                child: Text(
-                  '${tcontext.meta.remaining}: $remainingStr',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              Row(
+                children: [
+                  Icon(
+                    Icons.pie_chart_outline_rounded,
+                    size: 15,
+                    color: theme.colorScheme.primary,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      '${tcontext.meta.planUsage}: $usedStr / $totalStr',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    '${(percent * 100).toStringAsFixed(1)}%',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: statusColor,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  value: percent,
+                  minHeight: 6,
+                  backgroundColor: (isDark ? Colors.white : Colors.black)
+                      .withValues(alpha: 0.08),
+                  valueColor: AlwaysStoppedAnimation<Color>(statusColor),
                 ),
               ),
-              if (expireInfo != null) ...[
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    '📅 ${tcontext.meta.expireTime}: ${expireInfo.item2}',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: expireInfo.item1
-                          ? Colors.red
-                          : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      '${tcontext.meta.remaining}: $remainingStr',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
                   ),
-                ),
-              ],
+                  if (expireInfo != null) ...[
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        '📅 ${tcontext.meta.expireTime}: ${expireInfo.item2}',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: expireInfo.item1
+                              ? Colors.red
+                              : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

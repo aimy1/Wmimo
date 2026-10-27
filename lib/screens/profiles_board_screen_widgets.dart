@@ -960,128 +960,170 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
       );
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      itemCount: widget.settings.length,
-      itemBuilder: (context, index) {
-        final setting = widget.settings[index];
-        final isCurrent = current?.id == setting.id;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final int crossAxisCount = constraints.maxWidth >= 1050
+            ? 3
+            : (constraints.maxWidth >= 600 ? 2 : 1);
 
-        return ProfilesBoardItem(
-          key: Key(setting.id),
-          setting: setting,
-          selected: isCurrent,
-          nodeCount: _nodeCounts[setting.id],
-          onTap: () {
-            ProfileManager.setCurrent(setting.id);
-            if (ModalRoute.of(context)?.canPop ?? false) {
-              Navigator.of(context).pop();
-            } else {
-              setState(() {});
-            }
-          },
-          onTapUpdate: () async {
-            ReturnResultError? err = await ProfileManager.update(setting.id);
-            if (err != null && mounted) {
-              DialogUtils.showAlertDialog(
-                context,
-                err.message,
-                showCopy: true,
-                showFAQ: true,
-                withVersion: true,
-              );
-            }
-            if (mounted) setState(() {});
-          },
-          onTapEdit: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                settings: ProfilesSettingsEditScreen.routSettings(),
-                builder: (context) => ProfilesSettingsEditScreen(profile: setting),
-              ),
-            );
-            if (mounted) setState(() {});
-          },
-          onTapDelete: () async {
-            bool? del = await DialogUtils.showConfirmDialog(
-              context,
-              tcontext.meta.removeConfirm,
-            );
-            if (del == true) {
-              ProfileManager.remove(setting.id);
-              if (mounted) setState(() {});
-            }
-          },
-          onTapViewFile: () async {
-            final path = await ProfileManager.getProfilePath(setting.id);
-            final content = await File(path).readAsString();
-            if (!mounted) return;
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                settings: FileViewScreen.routSettings(),
-                builder: (context) => FileViewScreen(
-                  title: setting.getShowName(),
-                  content: content,
-                  onSave: setting.isRemote()
-                      ? null
-                      : (BuildContext context, String content) async {
-                          await File(path).writeAsString(content);
-                        },
+        if (crossAxisCount == 1) {
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            itemCount: widget.settings.length,
+            itemBuilder: (context, index) {
+              return _buildItem(widget.settings[index], current, tcontext);
+            },
+          );
+        }
+
+        final columns = List.generate(crossAxisCount, (_) => <Widget>[]);
+        for (int i = 0; i < widget.settings.length; i++) {
+          columns[i % crossAxisCount].add(
+            _buildItem(widget.settings[i], current, tcontext),
+          );
+        }
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (int c = 0; c < crossAxisCount; c++) ...[
+                if (c > 0) const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: columns[c],
+                  ),
                 ),
-              ),
-            );
-          },
-          onTapOpenInFolder: () async {
-            final path = await ProfileManager.getProfilePath(setting.id);
-            await FileUtils.openFileInFolder(path);
-          },
-          onTapCopyFilePath: () async {
-            final path = await ProfileManager.getProfilePath(setting.id);
-            Clipboard.setData(ClipboardData(text: path));
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(tcontext.meta.copySuccess),
-                  duration: const Duration(seconds: 1),
-                ),
-              );
-            }
-          },
-          onTapDuplicate: () async {
-            final res = await ProfileManager.duplicateProfile(setting.id);
-            if (res.error == null && mounted) {
-              await _loadNodeCounts();
-              setState(() {});
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(tcontext.meta.copySuccess),
-                  duration: const Duration(seconds: 1),
-                ),
-              );
-            }
-          },
-          onTapCopyUrl: () {
-            try {
-              Clipboard.setData(ClipboardData(text: setting.url));
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(tcontext.meta.subscriptionUrlCopied),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-            } catch (_) {}
-          },
-          onTapQrcode: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                settings: QrcodeScreen.routSettings(),
-                builder: (context) => QrcodeScreen(content: setting.url),
-              ),
-            );
-          },
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildItem(
+    ProfileSetting setting,
+    ProfileSetting? current,
+    Translations tcontext,
+  ) {
+    final isCurrent = current?.id == setting.id;
+
+    return ProfilesBoardItem(
+      key: Key(setting.id),
+      setting: setting,
+      selected: isCurrent,
+      nodeCount: _nodeCounts[setting.id],
+      onTap: () {
+        ProfileManager.setCurrent(setting.id);
+        if (ModalRoute.of(context)?.canPop ?? false) {
+          Navigator.of(context).pop();
+        } else {
+          setState(() {});
+        }
+      },
+      onTapUpdate: () async {
+        ReturnResultError? err = await ProfileManager.update(setting.id);
+        if (err != null && mounted) {
+          DialogUtils.showAlertDialog(
+            context,
+            err.message,
+            showCopy: true,
+            showFAQ: true,
+            withVersion: true,
+          );
+        }
+        if (mounted) setState(() {});
+      },
+      onTapEdit: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            settings: ProfilesSettingsEditScreen.routSettings(),
+            builder: (context) => ProfilesSettingsEditScreen(profile: setting),
+          ),
+        );
+        if (mounted) setState(() {});
+      },
+      onTapDelete: () async {
+        bool? del = await DialogUtils.showConfirmDialog(
+          context,
+          tcontext.meta.removeConfirm,
+        );
+        if (del == true) {
+          ProfileManager.remove(setting.id);
+          if (mounted) setState(() {});
+        }
+      },
+      onTapViewFile: () async {
+        final path = await ProfileManager.getProfilePath(setting.id);
+        final content = await File(path).readAsString();
+        if (!mounted) return;
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            settings: FileViewScreen.routSettings(),
+            builder: (context) => FileViewScreen(
+              title: setting.getShowName(),
+              content: content,
+              onSave: setting.isRemote()
+                  ? null
+                  : (BuildContext context, String content) async {
+                      await File(path).writeAsString(content);
+                    },
+            ),
+          ),
+        );
+      },
+      onTapOpenInFolder: () async {
+        final path = await ProfileManager.getProfilePath(setting.id);
+        await FileUtils.openFileInFolder(path);
+      },
+      onTapCopyFilePath: () async {
+        final path = await ProfileManager.getProfilePath(setting.id);
+        Clipboard.setData(ClipboardData(text: path));
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(tcontext.meta.copySuccess),
+              duration: const Duration(seconds: 1),
+            ),
+          );
+        }
+      },
+      onTapDuplicate: () async {
+        final res = await ProfileManager.duplicateProfile(setting.id);
+        if (res.error == null && mounted) {
+          await _loadNodeCounts();
+          setState(() {});
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(tcontext.meta.copySuccess),
+              duration: const Duration(seconds: 1),
+            ),
+          );
+        }
+      },
+      onTapCopyUrl: () {
+        try {
+          Clipboard.setData(ClipboardData(text: setting.url));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(tcontext.meta.subscriptionUrlCopied),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        } catch (_) {}
+      },
+      onTapQrcode: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            settings: QrcodeScreen.routSettings(),
+            builder: (context) => QrcodeScreen(content: setting.url),
+          ),
         );
       },
     );
