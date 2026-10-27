@@ -143,6 +143,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     ProfileManager.onEventAdd.add(_onProfileChanged);
     ProfileManager.onEventUpdate.add(_onProfileUpdate);
     ProfileManager.onEventRemove.add(_onProfileChanged);
+    ClashSettingManager.onEventModeChanged.add(_onModeChangedEvent);
   }
 
   @override
@@ -161,6 +162,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     ProfileManager.onEventAdd.remove(_onProfileChanged);
     ProfileManager.onEventUpdate.remove(_onProfileUpdate);
     ProfileManager.onEventRemove.remove(_onProfileChanged);
+    ClashSettingManager.onEventModeChanged.remove(_onModeChangedEvent);
     _searchController.dispose();
     _regionScrollController.dispose();
     for (final notifier in _nodeLatencyNotifiers.values) {
@@ -194,12 +196,33 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
   }
 
+  void _onModeChangedEvent() {
+    if (!mounted) return;
+    final newMode = ClashSettingManager.getConfigsMode().name.toLowerCase();
+    if (_currentMode != newMode) {
+      setState(() {
+        _currentMode = newMode;
+      });
+      _debouncedFetchProxies();
+    }
+  }
+
   Future<void> _fetchMode() async {
     final res = await ClashHttpApi.getConfigs();
     if (res.data != null && res.data!.mode.isNotEmpty && mounted) {
-      setState(() {
-        _currentMode = res.data!.mode.toLowerCase();
-      });
+      final coreMode = res.data!.mode.toLowerCase();
+      if (_currentMode != coreMode) {
+        setState(() {
+          _currentMode = coreMode;
+        });
+      }
+      ClashConfigsMode? type;
+      if (coreMode == "rule") type = ClashConfigsMode.rule;
+      if (coreMode == "global") type = ClashConfigsMode.global;
+      if (coreMode == "direct") type = ClashConfigsMode.direct;
+      if (type != null && ClashSettingManager.getConfigsMode() != type) {
+        ClashSettingManager.setConfigsMode(type);
+      }
     }
   }
 

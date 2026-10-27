@@ -148,11 +148,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       }
       await _onInitAllFinish();
     });
-    ClashSettingManager.onEventModeChanged.add(() async {
-      setState(() {});
-      _updateProxyNow();
-    });
+    ClashSettingManager.onEventModeChanged.add(_onModeChangedEvent);
     Biz.onEventProxySelected.add(_onProxySelectedEvent);
+    _updateProxyNow();
+  }
+
+  void _onModeChangedEvent() {
+    if (!mounted) return;
+    setState(() {});
     _updateProxyNow();
   }
 
@@ -167,6 +170,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   @override
   void dispose() {
     _currentChangedDebounce?.cancel();
+    ClashSettingManager.onEventModeChanged.remove(_onModeChangedEvent);
     Biz.onEventProxySelected.remove(_onProxySelectedEvent);
     VPNService.onEventStateChanged.remove(_onStateChanged);
     AppLifecycleStateNofity.onStateResumed(hashCode, null);
