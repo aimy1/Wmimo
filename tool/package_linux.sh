@@ -13,7 +13,7 @@ if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
       TAG="v${PUBSPEC_VER}"
     fi
   else
-    TAG="v1.2.13.1515"
+    TAG="v1.2.14.1516"
   fi
 fi
 
@@ -24,8 +24,8 @@ fi
 
 RAW_VERSION="${TAG#v}"
 if [ -z "$RAW_VERSION" ] || [ "$RAW_VERSION" = "v" ]; then
-  RAW_VERSION="1.2.13.1515"
-  TAG="v1.2.13.1515"
+  RAW_VERSION="1.2.14.1516"
+  TAG="v1.2.14.1516"
 fi
 VERSION="$RAW_VERSION"
 
