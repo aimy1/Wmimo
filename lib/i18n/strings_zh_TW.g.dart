@@ -120,6 +120,14 @@ class Translations$PerAppAndroidScreen$zh_TW implements Translations$PerAppAndro
 	@override String get title => '分應用代理';
 	@override String get whiteListMode => '白名單模式';
 	@override String get whiteListModeTip => '啟用後:僅代理已勾選的App;未啟用:僅代理未勾選的App';
+	@override String get manualAddPackage => '手動新增應用程式套件名稱';
+	@override String get manualAddPackageHint => '請輸入需要代理的應用程式套件名稱（支援多個，使用空格、逗號或換行分隔，例如：org.telegram.messenger, com.google.android.youtube）：';
+	@override String get quickAddPresets => '捷徑新增常用代理應用程式';
+	@override String get saveSelected => '儲存所選';
+	@override String get permissionRestrictedTip => '目前系統限制了讀取軟體列表。請點擊下方【前往系統權限設定頁】開啟「取得應用程式列表」，或直接使用免授權的「常用應用程式預設」一鍵代理。';
+	@override String get openSystemPermission => '前往系統權限設定頁';
+	@override String get presetApps => '捷徑新增常用應用程式 (免授權預設)';
+	@override String get requestPermissionPopup => '嘗試一鍵申請權限 (系統彈窗)';
 }
 
 // Path: UserAgreementScreen
@@ -691,7 +699,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get sortAndFilterNodes => '節點排序與篩選';
 	@override String get sortOptions => '排序方式';
 	@override String get sortDefault => '預設排序';
-	@override String get sortLatency => '按延遲由低到高';
+	@override String get sortLatency => '延遲排序';
 	@override String get sortName => '按名稱 A-Z';
 	@override String get sortRegion => '按地區分組';
 	@override String get filterOptions => '篩選選項';
@@ -817,6 +825,22 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get copyFilePath => '複製檔案路徑';
 	@override String get duplicateProfile => '建立複本';
 	@override String get useThisProfile => '使用此設定';
+	@override String get websiteTest => '網站測試';
+	@override String get testAll => '測試全部';
+	@override String get addTestWebsite => '新增測試網站';
+	@override String get websiteName => '網站名稱';
+	@override String get websiteUrl => '測試 URL';
+	@override String get websiteNameHint => '網站名稱 (如: Cloudflare)';
+	@override String get websiteInputEmpty => '請輸入網站名稱與 URL';
+	@override String get autoRefresh => '自動重新整理';
+	@override String get currentProfile => '目前設定';
+	@override String get quickActions => '捷徑工具';
+	@override String get fastest => '最低延遲';
+	@override String get hideTimeout => '隱藏超時';
+	@override String get filteredTimeout => '已過濾超時';
+	@override String get tunDeviceCreateFailed => 'TUN 虛擬網卡建立失敗';
+	@override String get test => '測試';
+	@override String get addWebsite => '新增網站';
 }
 
 // Path: permission
@@ -1005,6 +1029,14 @@ extension on TranslationsZhTw {
 			'PerAppAndroidScreen.title' => '分應用代理',
 			'PerAppAndroidScreen.whiteListMode' => '白名單模式',
 			'PerAppAndroidScreen.whiteListModeTip' => '啟用後:僅代理已勾選的App;未啟用:僅代理未勾選的App',
+			'PerAppAndroidScreen.manualAddPackage' => '手動新增應用程式套件名稱',
+			'PerAppAndroidScreen.manualAddPackageHint' => '請輸入需要代理的應用程式套件名稱（支援多個，使用空格、逗號或換行分隔，例如：org.telegram.messenger, com.google.android.youtube）：',
+			'PerAppAndroidScreen.quickAddPresets' => '捷徑新增常用代理應用程式',
+			'PerAppAndroidScreen.saveSelected' => '儲存所選',
+			'PerAppAndroidScreen.permissionRestrictedTip' => '目前系統限制了讀取軟體列表。請點擊下方【前往系統權限設定頁】開啟「取得應用程式列表」，或直接使用免授權的「常用應用程式預設」一鍵代理。',
+			'PerAppAndroidScreen.openSystemPermission' => '前往系統權限設定頁',
+			'PerAppAndroidScreen.presetApps' => '捷徑新增常用應用程式 (免授權預設)',
+			'PerAppAndroidScreen.requestPermissionPopup' => '嘗試一鍵申請權限 (系統彈窗)',
 			'UserAgreementScreen.privacyFirst' => '您的隱私很重要',
 			'UserAgreementScreen.agreeAndContinue' => '接受並繼續',
 			'NetCheckScreen.title' => '網路鏈路體檢與診斷',
@@ -1493,6 +1525,8 @@ extension on TranslationsZhTw {
 			'meta.noLogsPrompt' => '暫無日誌，啟動代理後將即時捕獲核心日誌',
 			'meta.searchLogsHint' => ' (IP, 網域名稱, 規則, 錯誤...)',
 			'meta.offlinePreviewPrompt' => '離線設定預覽中，開啟代理後可進行分流與節點測速',
+			_ => null,
+		} ?? switch (path) {
 			'meta.manualSelect' => '手動選擇',
 			'meta.autoSelect' => '自動選擇',
 			'meta.speedTestGroup' => '策略群組測速',
@@ -1501,8 +1535,6 @@ extension on TranslationsZhTw {
 			'meta.ipInfo' => 'IP 資訊',
 			'meta.ipFetching' => '正在取得 IP 資訊...',
 			'meta.ipCopied' => 'IP 位址已複製到剪貼簿',
-			_ => null,
-		} ?? switch (path) {
 			'meta.ipLocation' => '位置',
 			'meta.ipIsp' => '服務商',
 			'meta.ipTapToFetch' => '點擊取得 IP 資訊',
@@ -1538,7 +1570,7 @@ extension on TranslationsZhTw {
 			'meta.sortAndFilterNodes' => '節點排序與篩選',
 			'meta.sortOptions' => '排序方式',
 			'meta.sortDefault' => '預設排序',
-			'meta.sortLatency' => '按延遲由低到高',
+			'meta.sortLatency' => '延遲排序',
 			'meta.sortName' => '按名稱 A-Z',
 			'meta.sortRegion' => '按地區分組',
 			'meta.filterOptions' => '篩選選項',
@@ -1664,6 +1696,22 @@ extension on TranslationsZhTw {
 			'meta.copyFilePath' => '複製檔案路徑',
 			'meta.duplicateProfile' => '建立複本',
 			'meta.useThisProfile' => '使用此設定',
+			'meta.websiteTest' => '網站測試',
+			'meta.testAll' => '測試全部',
+			'meta.addTestWebsite' => '新增測試網站',
+			'meta.websiteName' => '網站名稱',
+			'meta.websiteUrl' => '測試 URL',
+			'meta.websiteNameHint' => '網站名稱 (如: Cloudflare)',
+			'meta.websiteInputEmpty' => '請輸入網站名稱與 URL',
+			'meta.autoRefresh' => '自動重新整理',
+			'meta.currentProfile' => '目前設定',
+			'meta.quickActions' => '捷徑工具',
+			'meta.fastest' => '最低延遲',
+			'meta.hideTimeout' => '隱藏超時',
+			'meta.filteredTimeout' => '已過濾超時',
+			'meta.tunDeviceCreateFailed' => 'TUN 虛擬網卡建立失敗',
+			'meta.test' => '測試',
+			'meta.addWebsite' => '新增網站',
 			'permission.camera' => '相機',
 			'permission.screen' => '螢幕錄製',
 			'permission.appQuery' => '取得應用程式列表',

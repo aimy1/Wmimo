@@ -153,7 +153,6 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     final nameController = TextEditingController();
     final urlController = TextEditingController(text: 'https://');
     final tcontext = Translations.of(context);
-    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
 
     showDialog(
       context: context,
@@ -161,7 +160,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: Text(
-            isZh ? '添加测试网站' : 'Add Test Website',
+            tcontext.meta.addTestWebsite,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           content: Column(
@@ -170,7 +169,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
-                  labelText: isZh ? '网站名称 (如: Cloudflare)' : 'Website Name',
+                  labelText: tcontext.meta.websiteNameHint,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                   isDense: true,
                 ),
@@ -179,7 +178,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
               TextField(
                 controller: urlController,
                 decoration: InputDecoration(
-                  labelText: isZh ? '测试 URL' : 'Test URL',
+                  labelText: tcontext.meta.websiteUrl,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                   isDense: true,
                 ),
@@ -301,7 +300,6 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
 
     final innerBgColor = isDark
         ? ThemeDefine.kColorDarkInner
@@ -336,7 +334,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                 ),
                 const SizedBox(width: 7),
                 Text(
-                  isZh ? '网站测试' : 'Website Test',
+                  tcontext.meta.websiteTest,
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -346,7 +344,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                 const Spacer(),
                 // Test All Icon Button
                 Tooltip(
-                  message: isZh ? '测试全部' : 'Test All',
+                  message: tcontext.meta.testAll,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(7),
                     onTap: _isTestingAll ? null : _testAllTargets,
@@ -384,7 +382,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                 const SizedBox(width: 6),
                 // Add Target Button
                 Tooltip(
-                  message: isZh ? '添加网站' : 'Add Website',
+                  message: tcontext.meta.addWebsite,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(7),
                     onTap: _showAddTargetDialog,
@@ -468,7 +466,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                                 ),
                                 const SizedBox(height: 5),
                                 // Action / Latency Badge
-                                _buildLatencyBadge(target, isZh),
+                                _buildLatencyBadge(target, tcontext),
                               ],
                             ),
                           ),
@@ -485,7 +483,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     );
   }
 
-  Widget _buildLatencyBadge(WebsiteTarget target, bool isZh) {
+  Widget _buildLatencyBadge(WebsiteTarget target, Translations tcontext) {
     if (target.isTesting) {
       return const SizedBox(
         height: 16,
@@ -510,7 +508,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
-          isZh ? '测试' : 'Test',
+          tcontext.meta.test,
           style: const TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w600,
@@ -528,7 +526,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
-          isZh ? '超时' : 'Error',
+          tcontext.meta.timeout,
           style: const TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w600,

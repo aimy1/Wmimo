@@ -21,7 +21,15 @@
   "PerAppAndroidScreen": {
     "title": "アプリごとのプロキシ",
     "whiteListMode": "ホワイトリストモード",
-    "whiteListModeTip": "有効な場合：チェックされたアプリのみがプロキシされます。無効な場合：チェックされていないアプリのみがプロキシされます"
+    "whiteListModeTip": "有効な場合：チェックされたアプリのみがプロキシされます。無効な場合：チェックされていないアプリのみがプロキシされます",
+    "manualAddPackage": "パッケージ名を手動で追加",
+    "manualAddPackageHint": "プロキシするパッケージ名を入力してください (空白、カンマ、改行で複数指定可能、例: org.telegram.messenger, com.google.android.youtube):",
+    "quickAddPresets": "よく使うプロキシアプリをクイック追加",
+    "saveSelected": "選択項目を保存",
+    "permissionRestrictedTip": "システムによりアプリ一覧の読み取りが制限されています。下の【システム権限設定を開く】をタップしてアプリ一覧取得権限を許可するか、権限不要のプリセットをご利用ください。",
+    "openSystemPermission": "システム権限設定を開く",
+    "presetApps": "よく使うアプリを追加 (権限不要プリセット)",
+    "requestPermissionPopup": "権限をリクエスト (システムダイアログ)"
   },
   "UserAgreementScreen": {
     "privacyFirst": "プライバシーを第一に",
@@ -569,7 +577,7 @@
     "sortAndFilterNodes": "ノードの並べ替えと絞り込み",
     "sortOptions": "並べ替え",
     "sortDefault": "デフォルト順",
-    "sortLatency": "遅延の少ない順",
+    "sortLatency": "遅延順",
     "sortName": "名前順 (A-Z)",
     "sortRegion": "地域別グループ",
     "filterOptions": "絞り込みオプション",
@@ -694,7 +702,23 @@
     "nodeCount": "$p 個のノード",
     "copyFilePath": "ファイルパスをコピー",
     "duplicateProfile": "複製を作成",
-    "useThisProfile": "このプロファイルを使用"
+    "useThisProfile": "このプロファイルを使用",
+    "websiteTest": "ウェブサイトテスト",
+    "testAll": "すべてテスト",
+    "addTestWebsite": "テストサイトを追加",
+    "websiteName": "サイト名",
+    "websiteUrl": "テスト URL",
+    "websiteNameHint": "サイト名 (例: Cloudflare)",
+    "websiteInputEmpty": "サイト名と URL を入力してください",
+    "autoRefresh": "自動更新",
+    "currentProfile": "現在のプロファイル",
+    "quickActions": "クイックツール",
+    "fastest": "最低遅延",
+    "hideTimeout": "タイムアウト非表示",
+    "filteredTimeout": "タイムアウト除外済",
+    "tunDeviceCreateFailed": "TUN 仮想ネットワークアダプターの作成に失敗しました",
+    "test": "テスト",
+    "addWebsite": "サイトを追加"
   },
   "permission": {
     "camera": "カメラ",

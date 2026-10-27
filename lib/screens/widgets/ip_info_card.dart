@@ -419,7 +419,6 @@ class _IpInfoCardState extends State<IpInfoCard> {
     required IpInfoData currentInfo,
   }) {
     final tcontext = Translations.of(context);
-    final isZh = LocaleSettings.currentLocale.languageCode == 'zh';
     final labelColor = theme.colorScheme.onSurface.withValues(alpha: 0.55);
     final valueColor = theme.colorScheme.onSurface.withValues(alpha: 0.9);
 
@@ -513,7 +512,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
 
         // 4. 自动刷新倒计时
         _buildInfoLine(
-          label: isZh ? '自动刷新' : 'Auto Refresh',
+          label: tcontext.meta.autoRefresh,
           value: '${_countdown}s',
           labelColor: labelColor,
           valueColor: theme.colorScheme.primary,

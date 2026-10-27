@@ -120,6 +120,14 @@ class _Translations$PerAppAndroidScreen$ja implements Translations$PerAppAndroid
 	@override String get title => 'アプリごとのプロキシ';
 	@override String get whiteListMode => 'ホワイトリストモード';
 	@override String get whiteListModeTip => '有効な場合：チェックされたアプリのみがプロキシされます。無効な場合：チェックされていないアプリのみがプロキシされます';
+	@override String get manualAddPackage => 'パッケージ名を手動で追加';
+	@override String get manualAddPackageHint => 'プロキシするパッケージ名を入力してください (空白、カンマ、改行で複数指定可能、例: org.telegram.messenger, com.google.android.youtube):';
+	@override String get quickAddPresets => 'よく使うプロキシアプリをクイック追加';
+	@override String get saveSelected => '選択項目を保存';
+	@override String get permissionRestrictedTip => 'システムによりアプリ一覧の読み取りが制限されています。下の【システム権限設定を開く】をタップしてアプリ一覧取得権限を許可するか、権限不要のプリセットをご利用ください。';
+	@override String get openSystemPermission => 'システム権限設定を開く';
+	@override String get presetApps => 'よく使うアプリを追加 (権限不要プリセット)';
+	@override String get requestPermissionPopup => '権限をリクエスト (システムダイアログ)';
 }
 
 // Path: UserAgreementScreen
@@ -691,7 +699,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get sortAndFilterNodes => 'ノードの並べ替えと絞り込み';
 	@override String get sortOptions => '並べ替え';
 	@override String get sortDefault => 'デフォルト順';
-	@override String get sortLatency => '遅延の少ない順';
+	@override String get sortLatency => '遅延順';
 	@override String get sortName => '名前順 (A-Z)';
 	@override String get sortRegion => '地域別グループ';
 	@override String get filterOptions => '絞り込みオプション';
@@ -817,6 +825,22 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get copyFilePath => 'ファイルパスをコピー';
 	@override String get duplicateProfile => '複製を作成';
 	@override String get useThisProfile => 'このプロファイルを使用';
+	@override String get websiteTest => 'ウェブサイトテスト';
+	@override String get testAll => 'すべてテスト';
+	@override String get addTestWebsite => 'テストサイトを追加';
+	@override String get websiteName => 'サイト名';
+	@override String get websiteUrl => 'テスト URL';
+	@override String get websiteNameHint => 'サイト名 (例: Cloudflare)';
+	@override String get websiteInputEmpty => 'サイト名と URL を入力してください';
+	@override String get autoRefresh => '自動更新';
+	@override String get currentProfile => '現在のプロファイル';
+	@override String get quickActions => 'クイックツール';
+	@override String get fastest => '最低遅延';
+	@override String get hideTimeout => 'タイムアウト非表示';
+	@override String get filteredTimeout => 'タイムアウト除外済';
+	@override String get tunDeviceCreateFailed => 'TUN 仮想ネットワークアダプターの作成に失敗しました';
+	@override String get test => 'テスト';
+	@override String get addWebsite => 'サイトを追加';
 }
 
 // Path: permission
@@ -1005,6 +1029,14 @@ extension on TranslationsJa {
 			'PerAppAndroidScreen.title' => 'アプリごとのプロキシ',
 			'PerAppAndroidScreen.whiteListMode' => 'ホワイトリストモード',
 			'PerAppAndroidScreen.whiteListModeTip' => '有効な場合：チェックされたアプリのみがプロキシされます。無効な場合：チェックされていないアプリのみがプロキシされます',
+			'PerAppAndroidScreen.manualAddPackage' => 'パッケージ名を手動で追加',
+			'PerAppAndroidScreen.manualAddPackageHint' => 'プロキシするパッケージ名を入力してください (空白、カンマ、改行で複数指定可能、例: org.telegram.messenger, com.google.android.youtube):',
+			'PerAppAndroidScreen.quickAddPresets' => 'よく使うプロキシアプリをクイック追加',
+			'PerAppAndroidScreen.saveSelected' => '選択項目を保存',
+			'PerAppAndroidScreen.permissionRestrictedTip' => 'システムによりアプリ一覧の読み取りが制限されています。下の【システム権限設定を開く】をタップしてアプリ一覧取得権限を許可するか、権限不要のプリセットをご利用ください。',
+			'PerAppAndroidScreen.openSystemPermission' => 'システム権限設定を開く',
+			'PerAppAndroidScreen.presetApps' => 'よく使うアプリを追加 (権限不要プリセット)',
+			'PerAppAndroidScreen.requestPermissionPopup' => '権限をリクエスト (システムダイアログ)',
 			'UserAgreementScreen.privacyFirst' => 'プライバシーを第一に',
 			'UserAgreementScreen.agreeAndContinue' => '同意して続行',
 			'NetCheckScreen.title' => 'ネットワーク診断と修復',
@@ -1493,6 +1525,8 @@ extension on TranslationsJa {
 			'meta.noLogsPrompt' => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。',
 			'meta.searchLogsHint' => ' (IP, ドメイン, ルール, エラー...)',
 			'meta.offlinePreviewPrompt' => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。',
+			_ => null,
+		} ?? switch (path) {
 			'meta.manualSelect' => '手動選択',
 			'meta.autoSelect' => '自動選択',
 			'meta.speedTestGroup' => 'グループ速度テスト',
@@ -1501,8 +1535,6 @@ extension on TranslationsJa {
 			'meta.ipInfo' => 'IP 情報',
 			'meta.ipFetching' => 'IP情報を取得中...',
 			'meta.ipCopied' => 'IPアドレスをクリップボードにコピーしました',
-			_ => null,
-		} ?? switch (path) {
 			'meta.ipLocation' => '位置',
 			'meta.ipIsp' => 'プロバイダ',
 			'meta.ipTapToFetch' => 'タップしてIP情報を取得',
@@ -1538,7 +1570,7 @@ extension on TranslationsJa {
 			'meta.sortAndFilterNodes' => 'ノードの並べ替えと絞り込み',
 			'meta.sortOptions' => '並べ替え',
 			'meta.sortDefault' => 'デフォルト順',
-			'meta.sortLatency' => '遅延の少ない順',
+			'meta.sortLatency' => '遅延順',
 			'meta.sortName' => '名前順 (A-Z)',
 			'meta.sortRegion' => '地域別グループ',
 			'meta.filterOptions' => '絞り込みオプション',
@@ -1664,6 +1696,22 @@ extension on TranslationsJa {
 			'meta.copyFilePath' => 'ファイルパスをコピー',
 			'meta.duplicateProfile' => '複製を作成',
 			'meta.useThisProfile' => 'このプロファイルを使用',
+			'meta.websiteTest' => 'ウェブサイトテスト',
+			'meta.testAll' => 'すべてテスト',
+			'meta.addTestWebsite' => 'テストサイトを追加',
+			'meta.websiteName' => 'サイト名',
+			'meta.websiteUrl' => 'テスト URL',
+			'meta.websiteNameHint' => 'サイト名 (例: Cloudflare)',
+			'meta.websiteInputEmpty' => 'サイト名と URL を入力してください',
+			'meta.autoRefresh' => '自動更新',
+			'meta.currentProfile' => '現在のプロファイル',
+			'meta.quickActions' => 'クイックツール',
+			'meta.fastest' => '最低遅延',
+			'meta.hideTimeout' => 'タイムアウト非表示',
+			'meta.filteredTimeout' => 'タイムアウト除外済',
+			'meta.tunDeviceCreateFailed' => 'TUN 仮想ネットワークアダプターの作成に失敗しました',
+			'meta.test' => 'テスト',
+			'meta.addWebsite' => 'サイトを追加',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

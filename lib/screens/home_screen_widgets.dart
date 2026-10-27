@@ -836,9 +836,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   ),
                   const SizedBox(width: 7),
                   Text(
-                    LocaleSettings.currentLocale.languageCode == 'zh'
-                        ? '当前配置'
-                        : 'Current Profile',
+                    tcontext.meta.currentProfile,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -909,9 +907,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    LocaleSettings.currentLocale.languageCode == 'zh'
-                        ? '快捷工具'
-                        : 'Quick Actions',
+                    tcontext.meta.quickActions,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,

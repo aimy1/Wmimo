@@ -162,6 +162,30 @@ class Translations$PerAppAndroidScreen$en {
 
 	/// en: 'When enabled: only the apps that have been checked are proxies; when not enabled: only the apps that are not checked are proxies'
 	String get whiteListModeTip => 'When enabled: only the apps that have been checked are proxies; when not enabled: only the apps that are not checked are proxies';
+
+	/// en: 'Manually Add Package Name'
+	String get manualAddPackage => 'Manually Add Package Name';
+
+	/// en: 'Enter package names to proxy (multiple supported, separated by spaces, commas or newlines, e.g.: org.telegram.messenger, com.google.android.youtube):'
+	String get manualAddPackageHint => 'Enter package names to proxy (multiple supported, separated by spaces, commas or newlines, e.g.: org.telegram.messenger, com.google.android.youtube):';
+
+	/// en: 'Quick Add Common Proxy Apps'
+	String get quickAddPresets => 'Quick Add Common Proxy Apps';
+
+	/// en: 'Save Selected'
+	String get saveSelected => 'Save Selected';
+
+	/// en: 'The system restricted reading the app list. Please tap 【Open System Permission Settings】 below to enable 'Get installed apps', or use preset apps directly without permission.'
+	String get permissionRestrictedTip => 'The system restricted reading the app list. Please tap 【Open System Permission Settings】 below to enable \'Get installed apps\', or use preset apps directly without permission.';
+
+	/// en: 'Open System Permission Settings'
+	String get openSystemPermission => 'Open System Permission Settings';
+
+	/// en: 'Quick Add Common Apps (Preset)'
+	String get presetApps => 'Quick Add Common Apps (Preset)';
+
+	/// en: 'Request Permission (System Dialog)'
+	String get requestPermissionPopup => 'Request Permission (System Dialog)';
 }
 
 // Path: UserAgreementScreen
@@ -1748,8 +1772,8 @@ class Translations$meta$en {
 	/// en: 'Default'
 	String get sortDefault => 'Default';
 
-	/// en: 'Lowest Latency'
-	String get sortLatency => 'Lowest Latency';
+	/// en: 'Sort Latency'
+	String get sortLatency => 'Sort Latency';
 
 	/// en: 'Name A-Z'
 	String get sortName => 'Name A-Z';
@@ -2125,6 +2149,54 @@ class Translations$meta$en {
 
 	/// en: 'Use This Profile'
 	String get useThisProfile => 'Use This Profile';
+
+	/// en: 'Website Test'
+	String get websiteTest => 'Website Test';
+
+	/// en: 'Test All'
+	String get testAll => 'Test All';
+
+	/// en: 'Add Test Website'
+	String get addTestWebsite => 'Add Test Website';
+
+	/// en: 'Website Name'
+	String get websiteName => 'Website Name';
+
+	/// en: 'Test URL'
+	String get websiteUrl => 'Test URL';
+
+	/// en: 'Website name (e.g. Cloudflare)'
+	String get websiteNameHint => 'Website name (e.g. Cloudflare)';
+
+	/// en: 'Please enter website name and URL'
+	String get websiteInputEmpty => 'Please enter website name and URL';
+
+	/// en: 'Auto Refresh'
+	String get autoRefresh => 'Auto Refresh';
+
+	/// en: 'Current Profile'
+	String get currentProfile => 'Current Profile';
+
+	/// en: 'Quick Actions'
+	String get quickActions => 'Quick Actions';
+
+	/// en: 'Fastest'
+	String get fastest => 'Fastest';
+
+	/// en: 'Hide Timeout'
+	String get hideTimeout => 'Hide Timeout';
+
+	/// en: 'Filtered Timeout'
+	String get filteredTimeout => 'Filtered Timeout';
+
+	/// en: 'Failed to create TUN virtual network adapter'
+	String get tunDeviceCreateFailed => 'Failed to create TUN virtual network adapter';
+
+	/// en: 'Test'
+	String get test => 'Test';
+
+	/// en: 'Add Website'
+	String get addWebsite => 'Add Website';
 }
 
 // Path: permission
@@ -2511,6 +2583,14 @@ extension on Translations {
 			'PerAppAndroidScreen.title' => 'Per-App Proxy',
 			'PerAppAndroidScreen.whiteListMode' => 'Whitelist Mode',
 			'PerAppAndroidScreen.whiteListModeTip' => 'When enabled: only the apps that have been checked are proxies; when not enabled: only the apps that are not checked are proxies',
+			'PerAppAndroidScreen.manualAddPackage' => 'Manually Add Package Name',
+			'PerAppAndroidScreen.manualAddPackageHint' => 'Enter package names to proxy (multiple supported, separated by spaces, commas or newlines, e.g.: org.telegram.messenger, com.google.android.youtube):',
+			'PerAppAndroidScreen.quickAddPresets' => 'Quick Add Common Proxy Apps',
+			'PerAppAndroidScreen.saveSelected' => 'Save Selected',
+			'PerAppAndroidScreen.permissionRestrictedTip' => 'The system restricted reading the app list. Please tap 【Open System Permission Settings】 below to enable \'Get installed apps\', or use preset apps directly without permission.',
+			'PerAppAndroidScreen.openSystemPermission' => 'Open System Permission Settings',
+			'PerAppAndroidScreen.presetApps' => 'Quick Add Common Apps (Preset)',
+			'PerAppAndroidScreen.requestPermissionPopup' => 'Request Permission (System Dialog)',
 			'UserAgreementScreen.privacyFirst' => 'Your Privacy Comes First',
 			'UserAgreementScreen.agreeAndContinue' => 'Accept & Continue',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'The new version[${p}] is ready',
@@ -2999,6 +3079,8 @@ extension on Translations {
 			'meta.noLogsPrompt' => 'No logs yet. Core logs will appear after starting proxy.',
 			'meta.searchLogsHint' => ' (IP, Domain, Rule, Error...)',
 			'meta.offlinePreviewPrompt' => 'Offline preview mode. Start proxy to enable routing and latency testing.',
+			_ => null,
+		} ?? switch (path) {
 			'meta.manualSelect' => 'Manual',
 			'meta.autoSelect' => 'Auto Select',
 			'meta.speedTestGroup' => 'Test Group Latency',
@@ -3007,8 +3089,6 @@ extension on Translations {
 			'meta.ipInfo' => 'IP Info',
 			'meta.ipFetching' => 'Fetching IP info...',
 			'meta.ipCopied' => 'IP address copied to clipboard',
-			_ => null,
-		} ?? switch (path) {
 			'meta.ipLocation' => 'Location',
 			'meta.ipIsp' => 'Provider',
 			'meta.ipTapToFetch' => 'Tap to fetch IP info',
@@ -3044,7 +3124,7 @@ extension on Translations {
 			'meta.sortAndFilterNodes' => 'Sort & Filter Nodes',
 			'meta.sortOptions' => 'Sort Options',
 			'meta.sortDefault' => 'Default',
-			'meta.sortLatency' => 'Lowest Latency',
+			'meta.sortLatency' => 'Sort Latency',
 			'meta.sortName' => 'Name A-Z',
 			'meta.sortRegion' => 'Region',
 			'meta.filterOptions' => 'Filter Options',
@@ -3170,6 +3250,22 @@ extension on Translations {
 			'meta.copyFilePath' => 'Copy File Path',
 			'meta.duplicateProfile' => 'Duplicate Profile',
 			'meta.useThisProfile' => 'Use This Profile',
+			'meta.websiteTest' => 'Website Test',
+			'meta.testAll' => 'Test All',
+			'meta.addTestWebsite' => 'Add Test Website',
+			'meta.websiteName' => 'Website Name',
+			'meta.websiteUrl' => 'Test URL',
+			'meta.websiteNameHint' => 'Website name (e.g. Cloudflare)',
+			'meta.websiteInputEmpty' => 'Please enter website name and URL',
+			'meta.autoRefresh' => 'Auto Refresh',
+			'meta.currentProfile' => 'Current Profile',
+			'meta.quickActions' => 'Quick Actions',
+			'meta.fastest' => 'Fastest',
+			'meta.hideTimeout' => 'Hide Timeout',
+			'meta.filteredTimeout' => 'Filtered Timeout',
+			'meta.tunDeviceCreateFailed' => 'Failed to create TUN virtual network adapter',
+			'meta.test' => 'Test',
+			'meta.addWebsite' => 'Add Website',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

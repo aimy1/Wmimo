@@ -120,6 +120,14 @@ class _Translations$PerAppAndroidScreen$ru implements Translations$PerAppAndroid
 	@override String get title => 'Проксируемые приложения';
 	@override String get whiteListMode => 'Режим белого списка';
 	@override String get whiteListModeTip => 'Если включено: перенаправляются через прокси-сервер только те приложения, которые были отмечены. Если выключено: перенаправляются через прокси-сервер только те приложения, которые не были отмечены.';
+	@override String get manualAddPackage => 'Добавить имя пакета вручную';
+	@override String get manualAddPackageHint => 'Введите имена пакетов для проксирования (разделяйте пробелами, запятыми или переносом строк, напр.: org.telegram.messenger, com.google.android.youtube):';
+	@override String get quickAddPresets => 'Быстрое добавление популярных приложений';
+	@override String get saveSelected => 'Сохранить выбранное';
+	@override String get permissionRestrictedTip => 'Система ограничила чтение списка приложений. Нажмите 【Открыть настройки разрешений】 ниже, чтобы включить доступ к списку приложений, или используйте пресеты без разрешений.';
+	@override String get openSystemPermission => 'Открыть настройки разрешений';
+	@override String get presetApps => 'Быстрое добавление (пресет без разрешений)';
+	@override String get requestPermissionPopup => 'Запросить разрешение (системный диалог)';
 }
 
 // Path: UserAgreementScreen
@@ -691,7 +699,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get sortAndFilterNodes => 'Сортировка и фильтрация узлов';
 	@override String get sortOptions => 'Параметры сортировки';
 	@override String get sortDefault => 'По умолчанию';
-	@override String get sortLatency => 'По наименьшей задержке';
+	@override String get sortLatency => 'По задержке';
 	@override String get sortName => 'По имени (A-Z)';
 	@override String get sortRegion => 'По регионам';
 	@override String get filterOptions => 'Параметры фильтра';
@@ -817,6 +825,22 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get copyFilePath => 'Копировать путь к файлу';
 	@override String get duplicateProfile => 'Создать копию';
 	@override String get useThisProfile => 'Использовать этот профиль';
+	@override String get websiteTest => 'Тест сайтов';
+	@override String get testAll => 'Тест всех';
+	@override String get addTestWebsite => 'Добавить сайт для теста';
+	@override String get websiteName => 'Название сайта';
+	@override String get websiteUrl => 'URL для теста';
+	@override String get websiteNameHint => 'Название сайта (напр. Cloudflare)';
+	@override String get websiteInputEmpty => 'Пожалуйста, введите название сайта и URL';
+	@override String get autoRefresh => 'Автообновление';
+	@override String get currentProfile => 'Текущий профиль';
+	@override String get quickActions => 'Быстрые инструменты';
+	@override String get fastest => 'Самый быстрый';
+	@override String get hideTimeout => 'Скрыть тайм-ауты';
+	@override String get filteredTimeout => 'Тайм-ауты скрыты';
+	@override String get tunDeviceCreateFailed => 'Не удалось создать виртуальный сетевой адаптер TUN';
+	@override String get test => 'Тест';
+	@override String get addWebsite => 'Добавить сайт';
 }
 
 // Path: permission
@@ -1005,6 +1029,14 @@ extension on TranslationsRu {
 			'PerAppAndroidScreen.title' => 'Проксируемые приложения',
 			'PerAppAndroidScreen.whiteListMode' => 'Режим белого списка',
 			'PerAppAndroidScreen.whiteListModeTip' => 'Если включено: перенаправляются через прокси-сервер только те приложения, которые были отмечены. Если выключено: перенаправляются через прокси-сервер только те приложения, которые не были отмечены.',
+			'PerAppAndroidScreen.manualAddPackage' => 'Добавить имя пакета вручную',
+			'PerAppAndroidScreen.manualAddPackageHint' => 'Введите имена пакетов для проксирования (разделяйте пробелами, запятыми или переносом строк, напр.: org.telegram.messenger, com.google.android.youtube):',
+			'PerAppAndroidScreen.quickAddPresets' => 'Быстрое добавление популярных приложений',
+			'PerAppAndroidScreen.saveSelected' => 'Сохранить выбранное',
+			'PerAppAndroidScreen.permissionRestrictedTip' => 'Система ограничила чтение списка приложений. Нажмите 【Открыть настройки разрешений】 ниже, чтобы включить доступ к списку приложений, или используйте пресеты без разрешений.',
+			'PerAppAndroidScreen.openSystemPermission' => 'Открыть настройки разрешений',
+			'PerAppAndroidScreen.presetApps' => 'Быстрое добавление (пресет без разрешений)',
+			'PerAppAndroidScreen.requestPermissionPopup' => 'Запросить разрешение (системный диалог)',
 			'UserAgreementScreen.privacyFirst' => 'Ваша конфиденциальность превыше всего',
 			'UserAgreementScreen.agreeAndContinue' => 'Принять и продолжить',
 			'NetCheckScreen.title' => 'Диагностика сети',
@@ -1493,6 +1525,8 @@ extension on TranslationsRu {
 			'meta.noLogsPrompt' => 'Логов пока нет. Логи ядра появятся после запуска прокси.',
 			'meta.searchLogsHint' => ' (IP, Домен, Правило, Ошибка...)',
 			'meta.offlinePreviewPrompt' => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.',
+			_ => null,
+		} ?? switch (path) {
 			'meta.manualSelect' => 'Ручной выбор',
 			'meta.autoSelect' => 'Автовыбор',
 			'meta.speedTestGroup' => 'Тест скорости группы',
@@ -1501,8 +1535,6 @@ extension on TranslationsRu {
 			'meta.ipInfo' => 'Информация об IP',
 			'meta.ipFetching' => 'Получение данных IP...',
 			'meta.ipCopied' => 'IP-адрес скопирован в буфер обмена',
-			_ => null,
-		} ?? switch (path) {
 			'meta.ipLocation' => 'Местоположение',
 			'meta.ipIsp' => 'Провайдер',
 			'meta.ipTapToFetch' => 'Нажмите для получения IP',
@@ -1538,7 +1570,7 @@ extension on TranslationsRu {
 			'meta.sortAndFilterNodes' => 'Сортировка и фильтрация узлов',
 			'meta.sortOptions' => 'Параметры сортировки',
 			'meta.sortDefault' => 'По умолчанию',
-			'meta.sortLatency' => 'По наименьшей задержке',
+			'meta.sortLatency' => 'По задержке',
 			'meta.sortName' => 'По имени (A-Z)',
 			'meta.sortRegion' => 'По регионам',
 			'meta.filterOptions' => 'Параметры фильтра',
@@ -1664,6 +1696,22 @@ extension on TranslationsRu {
 			'meta.copyFilePath' => 'Копировать путь к файлу',
 			'meta.duplicateProfile' => 'Создать копию',
 			'meta.useThisProfile' => 'Использовать этот профиль',
+			'meta.websiteTest' => 'Тест сайтов',
+			'meta.testAll' => 'Тест всех',
+			'meta.addTestWebsite' => 'Добавить сайт для теста',
+			'meta.websiteName' => 'Название сайта',
+			'meta.websiteUrl' => 'URL для теста',
+			'meta.websiteNameHint' => 'Название сайта (напр. Cloudflare)',
+			'meta.websiteInputEmpty' => 'Пожалуйста, введите название сайта и URL',
+			'meta.autoRefresh' => 'Автообновление',
+			'meta.currentProfile' => 'Текущий профиль',
+			'meta.quickActions' => 'Быстрые инструменты',
+			'meta.fastest' => 'Самый быстрый',
+			'meta.hideTimeout' => 'Скрыть тайм-ауты',
+			'meta.filteredTimeout' => 'Тайм-ауты скрыты',
+			'meta.tunDeviceCreateFailed' => 'Не удалось создать виртуальный сетевой адаптер TUN',
+			'meta.test' => 'Тест',
+			'meta.addWebsite' => 'Добавить сайт',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

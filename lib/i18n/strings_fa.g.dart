@@ -120,6 +120,14 @@ class _Translations$PerAppAndroidScreen$fa implements Translations$PerAppAndroid
 	@override String get title => 'پروکسی به‌تفکیک برنامه';
 	@override String get whiteListMode => 'حالت لیست سفید';
 	@override String get whiteListModeTip => 'وقتی فعال باشد: فقط برنامه‌هایی که انتخاب شده‌اند پروکسی می‌شوند؛ وقتی فعال نباشد: فقط برنامه‌هایی که انتخاب نشده‌اند پروکسی می‌شوند';
+	@override String get manualAddPackage => 'افزودن نام بسته به صورت دستی';
+	@override String get manualAddPackageHint => 'نام بسته‌های مورد نظر برای پروکسی را وارد کنید (با فاصله، ویرگول یا خط جدید جدا کنید):';
+	@override String get quickAddPresets => 'افزودن سریع برنامه‌های پراستفاده';
+	@override String get saveSelected => 'ذخیره انتخاب‌شده‌ها';
+	@override String get permissionRestrictedTip => 'سیستم دسترسی به لیست برنامه‌ها را محدود کرده است. لطفاً برای فعال‌سازی دسترسی به تنظیمات بروید یا از الگوهای آماده استفاده کنید.';
+	@override String get openSystemPermission => 'رفتن به تنظیمات مجوزهای سیستم';
+	@override String get presetApps => 'افزودن سریع برنامه‌ها (بدون نیاز به مجوز)';
+	@override String get requestPermissionPopup => 'درخواست مجوز (پاپ‌آپ سیستم)';
 }
 
 // Path: UserAgreementScreen
@@ -382,7 +390,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get disconnected => 'قطع شد';
 	@override String get connecting => 'درحال اتصال';
 	@override String get connectTimeout => 'اتمام مهلت اتصال';
-	@override String get timeout => 'تایم اوت';
+	@override String get timeout => 'مهلت تمام شد';
 	@override String get timeoutDuration => 'مدت زمان وقفه';
 	@override String get latency => 'پینگ';
 	@override String get latencyTest => 'تست پینگ';
@@ -691,7 +699,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get sortAndFilterNodes => 'مرتب‌سازی و فیلتر نودها';
 	@override String get sortOptions => 'گزینه‌های مرتب‌سازی';
 	@override String get sortDefault => 'پیش‌فرض';
-	@override String get sortLatency => 'کمترین تاخیر';
+	@override String get sortLatency => 'مرتب‌سازی بر اساس تأخیر';
 	@override String get sortName => 'بر اساس نام (A-Z)';
 	@override String get sortRegion => 'بر اساس منطقه';
 	@override String get filterOptions => 'گزینه‌های فیلتر';
@@ -817,6 +825,22 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get copyFilePath => 'کپی مسیر فایل';
 	@override String get duplicateProfile => 'ایجاد رونوشت';
 	@override String get useThisProfile => 'استفاده از این پروفایل';
+	@override String get websiteTest => 'تست وب‌سایت';
+	@override String get testAll => 'تست همه';
+	@override String get addTestWebsite => 'افزودن وب‌سایت تست';
+	@override String get websiteName => 'نام وب‌سایت';
+	@override String get websiteUrl => 'URL تست';
+	@override String get websiteNameHint => 'نام وب‌سایت (مانند Cloudflare)';
+	@override String get websiteInputEmpty => 'لطفاً نام وب‌سایت و URL را وارد کنید';
+	@override String get autoRefresh => 'به‌روزرسانی خودکار';
+	@override String get currentProfile => 'پروفایل فعلی';
+	@override String get quickActions => 'ابزارهای سریع';
+	@override String get fastest => 'سریع‌ترین';
+	@override String get hideTimeout => 'پنهان‌سازی مهلت‌های تمام شده';
+	@override String get filteredTimeout => 'مهلت‌های تمام شده فیلتر شدند';
+	@override String get tunDeviceCreateFailed => 'ایجاد آداپتور شبکه مجازی TUN انجام نشد';
+	@override String get test => 'تست';
+	@override String get addWebsite => 'افزودن وب‌سایت';
 }
 
 // Path: permission
@@ -1005,6 +1029,14 @@ extension on TranslationsFa {
 			'PerAppAndroidScreen.title' => 'پروکسی به‌تفکیک برنامه',
 			'PerAppAndroidScreen.whiteListMode' => 'حالت لیست سفید',
 			'PerAppAndroidScreen.whiteListModeTip' => 'وقتی فعال باشد: فقط برنامه‌هایی که انتخاب شده‌اند پروکسی می‌شوند؛ وقتی فعال نباشد: فقط برنامه‌هایی که انتخاب نشده‌اند پروکسی می‌شوند',
+			'PerAppAndroidScreen.manualAddPackage' => 'افزودن نام بسته به صورت دستی',
+			'PerAppAndroidScreen.manualAddPackageHint' => 'نام بسته‌های مورد نظر برای پروکسی را وارد کنید (با فاصله، ویرگول یا خط جدید جدا کنید):',
+			'PerAppAndroidScreen.quickAddPresets' => 'افزودن سریع برنامه‌های پراستفاده',
+			'PerAppAndroidScreen.saveSelected' => 'ذخیره انتخاب‌شده‌ها',
+			'PerAppAndroidScreen.permissionRestrictedTip' => 'سیستم دسترسی به لیست برنامه‌ها را محدود کرده است. لطفاً برای فعال‌سازی دسترسی به تنظیمات بروید یا از الگوهای آماده استفاده کنید.',
+			'PerAppAndroidScreen.openSystemPermission' => 'رفتن به تنظیمات مجوزهای سیستم',
+			'PerAppAndroidScreen.presetApps' => 'افزودن سریع برنامه‌ها (بدون نیاز به مجوز)',
+			'PerAppAndroidScreen.requestPermissionPopup' => 'درخواست مجوز (پاپ‌آپ سیستم)',
 			'UserAgreementScreen.privacyFirst' => 'حریم‌خصوصی شما اولویت دارد',
 			'UserAgreementScreen.agreeAndContinue' => 'پذیرفتن و ادامه',
 			'NetCheckScreen.title' => 'عیب‌یابی و تشخیص شبکه',
@@ -1227,7 +1259,7 @@ extension on TranslationsFa {
 			'meta.disconnected' => 'قطع شد',
 			'meta.connecting' => 'درحال اتصال',
 			'meta.connectTimeout' => 'اتمام مهلت اتصال',
-			'meta.timeout' => 'تایم اوت',
+			'meta.timeout' => 'مهلت تمام شد',
 			'meta.timeoutDuration' => 'مدت زمان وقفه',
 			'meta.latency' => 'پینگ',
 			'meta.latencyTest' => 'تست پینگ',
@@ -1493,6 +1525,8 @@ extension on TranslationsFa {
 			'meta.noLogsPrompt' => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.',
 			'meta.searchLogsHint' => ' (IP, دامنه, قانون, خطا...)',
 			'meta.offlinePreviewPrompt' => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.',
+			_ => null,
+		} ?? switch (path) {
 			'meta.manualSelect' => 'انتخاب دستی',
 			'meta.autoSelect' => 'انتخاب خودکار',
 			'meta.speedTestGroup' => 'تست سرعت گروه',
@@ -1501,8 +1535,6 @@ extension on TranslationsFa {
 			'meta.ipInfo' => 'اطلاعات IP',
 			'meta.ipFetching' => 'در حال دریافت اطلاعات IP...',
 			'meta.ipCopied' => 'آدرس IP در کلیپ‌بورد کپی شد',
-			_ => null,
-		} ?? switch (path) {
 			'meta.ipLocation' => 'مکان',
 			'meta.ipIsp' => 'ارائه‌دهنده',
 			'meta.ipTapToFetch' => 'برای دریافت اطلاعات IP ضربه بزنید',
@@ -1538,7 +1570,7 @@ extension on TranslationsFa {
 			'meta.sortAndFilterNodes' => 'مرتب‌سازی و فیلتر نودها',
 			'meta.sortOptions' => 'گزینه‌های مرتب‌سازی',
 			'meta.sortDefault' => 'پیش‌فرض',
-			'meta.sortLatency' => 'کمترین تاخیر',
+			'meta.sortLatency' => 'مرتب‌سازی بر اساس تأخیر',
 			'meta.sortName' => 'بر اساس نام (A-Z)',
 			'meta.sortRegion' => 'بر اساس منطقه',
 			'meta.filterOptions' => 'گزینه‌های فیلتر',
@@ -1664,6 +1696,22 @@ extension on TranslationsFa {
 			'meta.copyFilePath' => 'کپی مسیر فایل',
 			'meta.duplicateProfile' => 'ایجاد رونوشت',
 			'meta.useThisProfile' => 'استفاده از این پروفایل',
+			'meta.websiteTest' => 'تست وب‌سایت',
+			'meta.testAll' => 'تست همه',
+			'meta.addTestWebsite' => 'افزودن وب‌سایت تست',
+			'meta.websiteName' => 'نام وب‌سایت',
+			'meta.websiteUrl' => 'URL تست',
+			'meta.websiteNameHint' => 'نام وب‌سایت (مانند Cloudflare)',
+			'meta.websiteInputEmpty' => 'لطفاً نام وب‌سایت و URL را وارد کنید',
+			'meta.autoRefresh' => 'به‌روزرسانی خودکار',
+			'meta.currentProfile' => 'پروفایل فعلی',
+			'meta.quickActions' => 'ابزارهای سریع',
+			'meta.fastest' => 'سریع‌ترین',
+			'meta.hideTimeout' => 'پنهان‌سازی مهلت‌های تمام شده',
+			'meta.filteredTimeout' => 'مهلت‌های تمام شده فیلتر شدند',
+			'meta.tunDeviceCreateFailed' => 'ایجاد آداپتور شبکه مجازی TUN انجام نشد',
+			'meta.test' => 'تست',
+			'meta.addWebsite' => 'افزودن وب‌سایت',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

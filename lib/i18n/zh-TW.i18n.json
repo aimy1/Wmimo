@@ -21,7 +21,15 @@
   "PerAppAndroidScreen": {
     "title": "分應用代理",
     "whiteListMode": "白名單模式",
-    "whiteListModeTip": "啟用後:僅代理已勾選的App;未啟用:僅代理未勾選的App"
+    "whiteListModeTip": "啟用後:僅代理已勾選的App;未啟用:僅代理未勾選的App",
+    "manualAddPackage": "手動新增應用程式套件名稱",
+    "manualAddPackageHint": "請輸入需要代理的應用程式套件名稱（支援多個，使用空格、逗號或換行分隔，例如：org.telegram.messenger, com.google.android.youtube）：",
+    "quickAddPresets": "捷徑新增常用代理應用程式",
+    "saveSelected": "儲存所選",
+    "permissionRestrictedTip": "目前系統限制了讀取軟體列表。請點擊下方【前往系統權限設定頁】開啟「取得應用程式列表」，或直接使用免授權的「常用應用程式預設」一鍵代理。",
+    "openSystemPermission": "前往系統權限設定頁",
+    "presetApps": "捷徑新增常用應用程式 (免授權預設)",
+    "requestPermissionPopup": "嘗試一鍵申請權限 (系統彈窗)"
   },
   "UserAgreementScreen": {
     "privacyFirst": "您的隱私很重要",
@@ -569,7 +577,7 @@
     "sortAndFilterNodes": "節點排序與篩選",
     "sortOptions": "排序方式",
     "sortDefault": "預設排序",
-    "sortLatency": "按延遲由低到高",
+    "sortLatency": "延遲排序",
     "sortName": "按名稱 A-Z",
     "sortRegion": "按地區分組",
     "filterOptions": "篩選選項",
@@ -694,7 +702,23 @@
     "nodeCount": "$p 個節點",
     "copyFilePath": "複製檔案路徑",
     "duplicateProfile": "建立複本",
-    "useThisProfile": "使用此設定"
+    "useThisProfile": "使用此設定",
+    "websiteTest": "網站測試",
+    "testAll": "測試全部",
+    "addTestWebsite": "新增測試網站",
+    "websiteName": "網站名稱",
+    "websiteUrl": "測試 URL",
+    "websiteNameHint": "網站名稱 (如: Cloudflare)",
+    "websiteInputEmpty": "請輸入網站名稱與 URL",
+    "autoRefresh": "自動重新整理",
+    "currentProfile": "目前設定",
+    "quickActions": "捷徑工具",
+    "fastest": "最低延遲",
+    "hideTimeout": "隱藏超時",
+    "filteredTimeout": "已過濾超時",
+    "tunDeviceCreateFailed": "TUN 虛擬網卡建立失敗",
+    "test": "測試",
+    "addWebsite": "新增網站"
   },
   "permission": {
     "camera": "相機",

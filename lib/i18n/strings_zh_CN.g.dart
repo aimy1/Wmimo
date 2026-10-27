@@ -120,6 +120,14 @@ class Translations$PerAppAndroidScreen$zh_CN implements Translations$PerAppAndro
 	@override String get title => '分应用代理';
 	@override String get whiteListMode => '白名单模式';
 	@override String get whiteListModeTip => '启用后:仅代理已勾选的App;未启用:仅代理未勾选的App';
+	@override String get manualAddPackage => '手动添加应用包名';
+	@override String get manualAddPackageHint => '请输入需要代理的应用包名（支持多个，使用空格、逗号或换行分隔，例如：org.telegram.messenger, com.google.android.youtube）：';
+	@override String get quickAddPresets => '快捷添加常用代理应用';
+	@override String get saveSelected => '保存所选';
+	@override String get permissionRestrictedTip => '当前系统限制了读取软件列表。请点击下方【前往系统权限设置页】开启「获取应用列表」，或直接使用免授权的「常用应用预设」一键代理。';
+	@override String get openSystemPermission => '前往系统权限设置页';
+	@override String get presetApps => '快捷添加常用应用 (免授权预设)';
+	@override String get requestPermissionPopup => '尝试一键申请权限 (系统弹窗)';
 }
 
 // Path: UserAgreementScreen
@@ -691,7 +699,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get sortAndFilterNodes => '节点排序与筛选';
 	@override String get sortOptions => '排序方式';
 	@override String get sortDefault => '默认排序';
-	@override String get sortLatency => '按延迟由低到高';
+	@override String get sortLatency => '延迟排序';
 	@override String get sortName => '按名称 A-Z';
 	@override String get sortRegion => '按地区分组';
 	@override String get filterOptions => '筛选选项';
@@ -817,6 +825,22 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get copyFilePath => '复制文件路径';
 	@override String get duplicateProfile => '创建副本';
 	@override String get useThisProfile => '使用此配置';
+	@override String get websiteTest => '网站测试';
+	@override String get testAll => '测试全部';
+	@override String get addTestWebsite => '添加测试网站';
+	@override String get websiteName => '网站名称';
+	@override String get websiteUrl => '测试 URL';
+	@override String get websiteNameHint => '网站名称 (如: Cloudflare)';
+	@override String get websiteInputEmpty => '请输入网站名称与 URL';
+	@override String get autoRefresh => '自动刷新';
+	@override String get currentProfile => '当前配置';
+	@override String get quickActions => '快捷工具';
+	@override String get fastest => '最低延迟';
+	@override String get hideTimeout => '隐藏超时';
+	@override String get filteredTimeout => '已过滤超时';
+	@override String get tunDeviceCreateFailed => 'TUN 虚拟网卡创建失败';
+	@override String get test => '测试';
+	@override String get addWebsite => '添加网站';
 }
 
 // Path: permission
@@ -1005,6 +1029,14 @@ extension on TranslationsZhCn {
 			'PerAppAndroidScreen.title' => '分应用代理',
 			'PerAppAndroidScreen.whiteListMode' => '白名单模式',
 			'PerAppAndroidScreen.whiteListModeTip' => '启用后:仅代理已勾选的App;未启用:仅代理未勾选的App',
+			'PerAppAndroidScreen.manualAddPackage' => '手动添加应用包名',
+			'PerAppAndroidScreen.manualAddPackageHint' => '请输入需要代理的应用包名（支持多个，使用空格、逗号或换行分隔，例如：org.telegram.messenger, com.google.android.youtube）：',
+			'PerAppAndroidScreen.quickAddPresets' => '快捷添加常用代理应用',
+			'PerAppAndroidScreen.saveSelected' => '保存所选',
+			'PerAppAndroidScreen.permissionRestrictedTip' => '当前系统限制了读取软件列表。请点击下方【前往系统权限设置页】开启「获取应用列表」，或直接使用免授权的「常用应用预设」一键代理。',
+			'PerAppAndroidScreen.openSystemPermission' => '前往系统权限设置页',
+			'PerAppAndroidScreen.presetApps' => '快捷添加常用应用 (免授权预设)',
+			'PerAppAndroidScreen.requestPermissionPopup' => '尝试一键申请权限 (系统弹窗)',
 			'UserAgreementScreen.privacyFirst' => '您的隐私很重要',
 			'UserAgreementScreen.agreeAndContinue' => '接受并继续',
 			'NetCheckScreen.title' => '网络链路体检与诊断',
@@ -1493,6 +1525,8 @@ extension on TranslationsZhCn {
 			'meta.noLogsPrompt' => '暂无日志，启动代理后将实时捕获核心日志',
 			'meta.searchLogsHint' => ' (IP, 域名, 规则, 错误...)',
 			'meta.offlinePreviewPrompt' => '离线配置预览中，开启代理后可进行分流与节点测速',
+			_ => null,
+		} ?? switch (path) {
 			'meta.manualSelect' => '手动选择',
 			'meta.autoSelect' => '自动选择',
 			'meta.speedTestGroup' => '策略组测速',
@@ -1501,8 +1535,6 @@ extension on TranslationsZhCn {
 			'meta.ipInfo' => 'IP 信息',
 			'meta.ipFetching' => '正在获取 IP 信息...',
 			'meta.ipCopied' => 'IP 地址已复制到剪贴板',
-			_ => null,
-		} ?? switch (path) {
 			'meta.ipLocation' => '位置',
 			'meta.ipIsp' => '服务商',
 			'meta.ipTapToFetch' => '点击获取 IP 信息',
@@ -1538,7 +1570,7 @@ extension on TranslationsZhCn {
 			'meta.sortAndFilterNodes' => '节点排序与筛选',
 			'meta.sortOptions' => '排序方式',
 			'meta.sortDefault' => '默认排序',
-			'meta.sortLatency' => '按延迟由低到高',
+			'meta.sortLatency' => '延迟排序',
 			'meta.sortName' => '按名称 A-Z',
 			'meta.sortRegion' => '按地区分组',
 			'meta.filterOptions' => '筛选选项',
@@ -1664,6 +1696,22 @@ extension on TranslationsZhCn {
 			'meta.copyFilePath' => '复制文件路径',
 			'meta.duplicateProfile' => '创建副本',
 			'meta.useThisProfile' => '使用此配置',
+			'meta.websiteTest' => '网站测试',
+			'meta.testAll' => '测试全部',
+			'meta.addTestWebsite' => '添加测试网站',
+			'meta.websiteName' => '网站名称',
+			'meta.websiteUrl' => '测试 URL',
+			'meta.websiteNameHint' => '网站名称 (如: Cloudflare)',
+			'meta.websiteInputEmpty' => '请输入网站名称与 URL',
+			'meta.autoRefresh' => '自动刷新',
+			'meta.currentProfile' => '当前配置',
+			'meta.quickActions' => '快捷工具',
+			'meta.fastest' => '最低延迟',
+			'meta.hideTimeout' => '隐藏超时',
+			'meta.filteredTimeout' => '已过滤超时',
+			'meta.tunDeviceCreateFailed' => 'TUN 虚拟网卡创建失败',
+			'meta.test' => '测试',
+			'meta.addWebsite' => '添加网站',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',

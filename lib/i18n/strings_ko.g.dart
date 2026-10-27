@@ -120,6 +120,14 @@ class _Translations$PerAppAndroidScreen$ko implements Translations$PerAppAndroid
 	@override String get title => '앱별 프록시';
 	@override String get whiteListMode => '화이트리스트 모드';
 	@override String get whiteListModeTip => '활성화 시: 체크된 앱만 프록시됩니다. 비활성화 시: 체크되지 않은 앱만 프록시됩니다';
+	@override String get manualAddPackage => '패키지 이름 직접 추가';
+	@override String get manualAddPackageHint => '프록시할 패키지 이름을 입력하세요 (공백, 쉼표 또는 줄바꿈으로 구분하여 여러 개 지원, 예: org.telegram.messenger, com.google.android.youtube):';
+	@override String get quickAddPresets => '자주 쓰는 프록시 앱 빠른 추가';
+	@override String get saveSelected => '선택 항목 저장';
+	@override String get permissionRestrictedTip => '시스템에서 앱 목록 읽기가 제한되었습니다. 아래 【시스템 권한 설정 열기】를 눌러 앱 목록 접근 권한을 허용하거나 권한이 필요 없는 프리셋을 사용하세요.';
+	@override String get openSystemPermission => '시스템 권한 설정으로 이동';
+	@override String get presetApps => '자주 쓰는 앱 빠른 추가 (권한 불필요 프리셋)';
+	@override String get requestPermissionPopup => '권한 요청 (시스템 팝업)';
 }
 
 // Path: UserAgreementScreen
@@ -691,7 +699,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get sortAndFilterNodes => '노드 정렬 및 필터링';
 	@override String get sortOptions => '정렬 옵션';
 	@override String get sortDefault => '기본 정렬';
-	@override String get sortLatency => '지연 시간 낮은 순';
+	@override String get sortLatency => '지연 시간 정렬';
 	@override String get sortName => '이름순 (A-Z)';
 	@override String get sortRegion => '지역별 그룹';
 	@override String get filterOptions => '필터 옵션';
@@ -817,6 +825,22 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get copyFilePath => '파일 경로 복사';
 	@override String get duplicateProfile => '사본 만들기';
 	@override String get useThisProfile => '이 프로필 사용';
+	@override String get websiteTest => '웹사이트 테스트';
+	@override String get testAll => '모두 테스트';
+	@override String get addTestWebsite => '테스트 사이트 추가';
+	@override String get websiteName => '웹사이트 이름';
+	@override String get websiteUrl => '테스트 URL';
+	@override String get websiteNameHint => '웹사이트 이름 (예: Cloudflare)';
+	@override String get websiteInputEmpty => '웹사이트 이름과 URL을 입력하세요';
+	@override String get autoRefresh => '자동 새로고침';
+	@override String get currentProfile => '현재 프로필';
+	@override String get quickActions => '빠른 도구';
+	@override String get fastest => '가장 빠름';
+	@override String get hideTimeout => '시간 초과 숨기기';
+	@override String get filteredTimeout => '시간 초과 필터링됨';
+	@override String get tunDeviceCreateFailed => 'TUN 가상 네트워크 어댑터 생성 실패';
+	@override String get test => '테스트';
+	@override String get addWebsite => '웹사이트 추가';
 }
 
 // Path: permission
@@ -1005,6 +1029,14 @@ extension on TranslationsKo {
 			'PerAppAndroidScreen.title' => '앱별 프록시',
 			'PerAppAndroidScreen.whiteListMode' => '화이트리스트 모드',
 			'PerAppAndroidScreen.whiteListModeTip' => '활성화 시: 체크된 앱만 프록시됩니다. 비활성화 시: 체크되지 않은 앱만 프록시됩니다',
+			'PerAppAndroidScreen.manualAddPackage' => '패키지 이름 직접 추가',
+			'PerAppAndroidScreen.manualAddPackageHint' => '프록시할 패키지 이름을 입력하세요 (공백, 쉼표 또는 줄바꿈으로 구분하여 여러 개 지원, 예: org.telegram.messenger, com.google.android.youtube):',
+			'PerAppAndroidScreen.quickAddPresets' => '자주 쓰는 프록시 앱 빠른 추가',
+			'PerAppAndroidScreen.saveSelected' => '선택 항목 저장',
+			'PerAppAndroidScreen.permissionRestrictedTip' => '시스템에서 앱 목록 읽기가 제한되었습니다. 아래 【시스템 권한 설정 열기】를 눌러 앱 목록 접근 권한을 허용하거나 권한이 필요 없는 프리셋을 사용하세요.',
+			'PerAppAndroidScreen.openSystemPermission' => '시스템 권한 설정으로 이동',
+			'PerAppAndroidScreen.presetApps' => '자주 쓰는 앱 빠른 추가 (권한 불필요 프리셋)',
+			'PerAppAndroidScreen.requestPermissionPopup' => '권한 요청 (시스템 팝업)',
 			'UserAgreementScreen.privacyFirst' => '개인 정보 보호 우선',
 			'UserAgreementScreen.agreeAndContinue' => '동의 및 계속',
 			'NetCheckScreen.title' => '네트워크 진단 및 복구',
@@ -1493,6 +1525,8 @@ extension on TranslationsKo {
 			'meta.noLogsPrompt' => '아직 로그가 없습니다. 프록시 시작 후 실시간 로그가 표시됩니다.',
 			'meta.searchLogsHint' => ' (IP, 도메인, 규칙, 오류...)',
 			'meta.offlinePreviewPrompt' => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.',
+			_ => null,
+		} ?? switch (path) {
 			'meta.manualSelect' => '수동 선택',
 			'meta.autoSelect' => '자동 선택',
 			'meta.speedTestGroup' => '그룹 속도 테스트',
@@ -1501,8 +1535,6 @@ extension on TranslationsKo {
 			'meta.ipInfo' => 'IP 정보',
 			'meta.ipFetching' => 'IP 정보 가져오는 중...',
 			'meta.ipCopied' => 'IP 주소가 클립보드에 복사되었습니다',
-			_ => null,
-		} ?? switch (path) {
 			'meta.ipLocation' => '위치',
 			'meta.ipIsp' => '제공자',
 			'meta.ipTapToFetch' => '탭하여 IP 정보 가져오기',
@@ -1538,7 +1570,7 @@ extension on TranslationsKo {
 			'meta.sortAndFilterNodes' => '노드 정렬 및 필터링',
 			'meta.sortOptions' => '정렬 옵션',
 			'meta.sortDefault' => '기본 정렬',
-			'meta.sortLatency' => '지연 시간 낮은 순',
+			'meta.sortLatency' => '지연 시간 정렬',
 			'meta.sortName' => '이름순 (A-Z)',
 			'meta.sortRegion' => '지역별 그룹',
 			'meta.filterOptions' => '필터 옵션',
@@ -1664,6 +1696,22 @@ extension on TranslationsKo {
 			'meta.copyFilePath' => '파일 경로 복사',
 			'meta.duplicateProfile' => '사본 만들기',
 			'meta.useThisProfile' => '이 프로필 사용',
+			'meta.websiteTest' => '웹사이트 테스트',
+			'meta.testAll' => '모두 테스트',
+			'meta.addTestWebsite' => '테스트 사이트 추가',
+			'meta.websiteName' => '웹사이트 이름',
+			'meta.websiteUrl' => '테스트 URL',
+			'meta.websiteNameHint' => '웹사이트 이름 (예: Cloudflare)',
+			'meta.websiteInputEmpty' => '웹사이트 이름과 URL을 입력하세요',
+			'meta.autoRefresh' => '자동 새로고침',
+			'meta.currentProfile' => '현재 프로필',
+			'meta.quickActions' => '빠른 도구',
+			'meta.fastest' => '가장 빠름',
+			'meta.hideTimeout' => '시간 초과 숨기기',
+			'meta.filteredTimeout' => '시간 초과 필터링됨',
+			'meta.tunDeviceCreateFailed' => 'TUN 가상 네트워크 어댑터 생성 실패',
+			'meta.test' => '테스트',
+			'meta.addWebsite' => '웹사이트 추가',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

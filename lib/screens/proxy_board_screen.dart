@@ -1737,9 +1737,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               ),
               const SizedBox(width: 4),
               Text(
-                isZh
-                    ? (isDelayAsc ? "最低延迟 ✓" : "延迟排序")
-                    : (isDelayAsc ? "Fastest ✓" : "Sort Latency"),
+                isDelayAsc ? "${tcontext.meta.fastest} ✓" : tcontext.meta.sortLatency,
                 style: TextStyle(
                   fontSize: 11.5,
                   fontWeight: isDelayAsc ? FontWeight.w700 : FontWeight.w500,
@@ -1756,13 +1754,13 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     // 2. Quick Hide Timeout Pill
     final timeoutCount = leafNodes.where((n) => n.delay != null && n.delay! < 0).length;
-    final hideTimeoutText = isZh
-        ? (_hideTimeoutNodes
-            ? (timeoutCount > 0 ? "已过滤 $timeoutCount 个超时 ✓" : "已过滤超时 ✓")
-            : (timeoutCount > 0 ? "隐藏超时 ($timeoutCount)" : "隐藏超时"))
-        : (_hideTimeoutNodes
-            ? (timeoutCount > 0 ? "Filtered $timeoutCount ✓" : "Filtered ✓")
-            : (timeoutCount > 0 ? "Hide Timeout ($timeoutCount)" : "Hide Timeout"));
+    final hideTimeoutText = _hideTimeoutNodes
+        ? (timeoutCount > 0
+            ? "${tcontext.meta.filteredTimeout} ($timeoutCount) ✓"
+            : "${tcontext.meta.filteredTimeout} ✓")
+        : (timeoutCount > 0
+            ? "${tcontext.meta.hideTimeout} ($timeoutCount)"
+            : tcontext.meta.hideTimeout);
 
     items.add(
       InkWell(

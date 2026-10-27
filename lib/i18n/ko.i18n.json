@@ -21,7 +21,15 @@
   "PerAppAndroidScreen": {
     "title": "앱별 프록시",
     "whiteListMode": "화이트리스트 모드",
-    "whiteListModeTip": "활성화 시: 체크된 앱만 프록시됩니다. 비활성화 시: 체크되지 않은 앱만 프록시됩니다"
+    "whiteListModeTip": "활성화 시: 체크된 앱만 프록시됩니다. 비활성화 시: 체크되지 않은 앱만 프록시됩니다",
+    "manualAddPackage": "패키지 이름 직접 추가",
+    "manualAddPackageHint": "프록시할 패키지 이름을 입력하세요 (공백, 쉼표 또는 줄바꿈으로 구분하여 여러 개 지원, 예: org.telegram.messenger, com.google.android.youtube):",
+    "quickAddPresets": "자주 쓰는 프록시 앱 빠른 추가",
+    "saveSelected": "선택 항목 저장",
+    "permissionRestrictedTip": "시스템에서 앱 목록 읽기가 제한되었습니다. 아래 【시스템 권한 설정 열기】를 눌러 앱 목록 접근 권한을 허용하거나 권한이 필요 없는 프리셋을 사용하세요.",
+    "openSystemPermission": "시스템 권한 설정으로 이동",
+    "presetApps": "자주 쓰는 앱 빠른 추가 (권한 불필요 프리셋)",
+    "requestPermissionPopup": "권한 요청 (시스템 팝업)"
   },
   "UserAgreementScreen": {
     "privacyFirst": "개인 정보 보호 우선",
@@ -569,7 +577,7 @@
     "sortAndFilterNodes": "노드 정렬 및 필터링",
     "sortOptions": "정렬 옵션",
     "sortDefault": "기본 정렬",
-    "sortLatency": "지연 시간 낮은 순",
+    "sortLatency": "지연 시간 정렬",
     "sortName": "이름순 (A-Z)",
     "sortRegion": "지역별 그룹",
     "filterOptions": "필터 옵션",
@@ -694,7 +702,23 @@
     "nodeCount": "$p개 노드",
     "copyFilePath": "파일 경로 복사",
     "duplicateProfile": "사본 만들기",
-    "useThisProfile": "이 프로필 사용"
+    "useThisProfile": "이 프로필 사용",
+    "websiteTest": "웹사이트 테스트",
+    "testAll": "모두 테스트",
+    "addTestWebsite": "테스트 사이트 추가",
+    "websiteName": "웹사이트 이름",
+    "websiteUrl": "테스트 URL",
+    "websiteNameHint": "웹사이트 이름 (예: Cloudflare)",
+    "websiteInputEmpty": "웹사이트 이름과 URL을 입력하세요",
+    "autoRefresh": "자동 새로고침",
+    "currentProfile": "현재 프로필",
+    "quickActions": "빠른 도구",
+    "fastest": "가장 빠름",
+    "hideTimeout": "시간 초과 숨기기",
+    "filteredTimeout": "시간 초과 필터링됨",
+    "tunDeviceCreateFailed": "TUN 가상 네트워크 어댑터 생성 실패",
+    "test": "테스트",
+    "addWebsite": "웹사이트 추가"
   },
   "permission": {
     "camera": "카메라",

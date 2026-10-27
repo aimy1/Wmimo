@@ -21,7 +21,15 @@
   "PerAppAndroidScreen": {
     "title": "Per-App Proxy",
     "whiteListMode": "Whitelist Mode",
-    "whiteListModeTip": "When enabled: only the apps that have been checked are proxies; when not enabled: only the apps that are not checked are proxies"
+    "whiteListModeTip": "When enabled: only the apps that have been checked are proxies; when not enabled: only the apps that are not checked are proxies",
+    "manualAddPackage": "Manually Add Package Name",
+    "manualAddPackageHint": "Enter package names to proxy (multiple supported, separated by spaces, commas or newlines, e.g.: org.telegram.messenger, com.google.android.youtube):",
+    "quickAddPresets": "Quick Add Common Proxy Apps",
+    "saveSelected": "Save Selected",
+    "permissionRestrictedTip": "The system restricted reading the app list. Please tap 【Open System Permission Settings】 below to enable 'Get installed apps', or use preset apps directly without permission.",
+    "openSystemPermission": "Open System Permission Settings",
+    "presetApps": "Quick Add Common Apps (Preset)",
+    "requestPermissionPopup": "Request Permission (System Dialog)"
   },
   "UserAgreementScreen": {
     "privacyFirst": "Your Privacy Comes First",
@@ -569,7 +577,7 @@
     "sortAndFilterNodes": "Sort & Filter Nodes",
     "sortOptions": "Sort Options",
     "sortDefault": "Default",
-    "sortLatency": "Lowest Latency",
+    "sortLatency": "Sort Latency",
     "sortName": "Name A-Z",
     "sortRegion": "Region",
     "filterOptions": "Filter Options",
@@ -694,7 +702,23 @@
     "nodeCount": "$p Nodes",
     "copyFilePath": "Copy File Path",
     "duplicateProfile": "Duplicate Profile",
-    "useThisProfile": "Use This Profile"
+    "useThisProfile": "Use This Profile",
+    "websiteTest": "Website Test",
+    "testAll": "Test All",
+    "addTestWebsite": "Add Test Website",
+    "websiteName": "Website Name",
+    "websiteUrl": "Test URL",
+    "websiteNameHint": "Website name (e.g. Cloudflare)",
+    "websiteInputEmpty": "Please enter website name and URL",
+    "autoRefresh": "Auto Refresh",
+    "currentProfile": "Current Profile",
+    "quickActions": "Quick Actions",
+    "fastest": "Fastest",
+    "hideTimeout": "Hide Timeout",
+    "filteredTimeout": "Filtered Timeout",
+    "tunDeviceCreateFailed": "Failed to create TUN virtual network adapter",
+    "test": "Test",
+    "addWebsite": "Add Website"
   },
   "permission": {
     "camera": "Camera",

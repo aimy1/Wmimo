@@ -1005,19 +1005,20 @@ class _PerAppAndroidScreenState
   }
 
   void _showManualAddDialog() {
+    final tcontext = Translations.of(context);
     final controller = TextEditingController();
     showDialog(
       context: context,
       builder: (BuildContext ctx) {
         return AlertDialog(
-          title: const Text("手动添加应用包名"),
+          title: Text(tcontext.PerAppAndroidScreen.manualAddPackage),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "请输入需要代理的应用包名（支持多个，使用空格、逗号或换行分隔，例如：org.telegram.messenger, com.google.android.youtube）：",
-                style: TextStyle(fontSize: 12),
+              Text(
+                tcontext.PerAppAndroidScreen.manualAddPackageHint,
+                style: const TextStyle(fontSize: 12),
               ),
               const SizedBox(height: 12),
               TextField(
@@ -1034,7 +1035,7 @@ class _PerAppAndroidScreenState
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text("取消"),
+              child: Text(tcontext.meta.cancel),
             ),
             ElevatedButton(
               onPressed: () {
@@ -1058,7 +1059,7 @@ class _PerAppAndroidScreenState
                 }
                 Navigator.pop(ctx);
               },
-              child: const Text("添加"),
+              child: Text(tcontext.meta.add),
             ),
           ],
         );
@@ -1067,6 +1068,7 @@ class _PerAppAndroidScreenState
   }
 
   void _showPresetAppsDialog() {
+    final tcontext = Translations.of(context);
     var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     perapp.PackageIds ??= [];
     final selectedPkgs = perapp.PackageIds!.toSet();
@@ -1077,7 +1079,7 @@ class _PerAppAndroidScreenState
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: const Text("快捷添加常用代理应用"),
+              title: Text(tcontext.PerAppAndroidScreen.quickAddPresets),
               content: SizedBox(
                 width: double.maxFinite,
                 child: SingleChildScrollView(
@@ -1110,7 +1112,7 @@ class _PerAppAndroidScreenState
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(ctx),
-                  child: const Text("取消"),
+                  child: Text(tcontext.meta.cancel),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -1120,7 +1122,7 @@ class _PerAppAndroidScreenState
                     Navigator.pop(ctx);
                     getInstalledPackages();
                   },
-                  child: const Text("保存所选"),
+                  child: Text(tcontext.PerAppAndroidScreen.saveSelected),
                 ),
               ],
             );
@@ -1169,7 +1171,7 @@ class _PerAppAndroidScreenState
             ),
             const SizedBox(height: 8),
             Text(
-              "当前系统限制了读取软件列表。请点击下方【前往系统权限设置页】开启「获取应用列表」，或直接使用免授权的「常用应用预设」一键代理。",
+              tcontext.PerAppAndroidScreen.permissionRestrictedTip,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
@@ -1228,7 +1230,7 @@ class _PerAppAndroidScreenState
               width: double.infinity,
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.settings_outlined, size: 18),
-                label: const Text("前往系统权限设置页 (直达小米安全中心)"),
+                label: Text(tcontext.PerAppAndroidScreen.openSystemPermission),
                 onPressed: () async {
                   try {
                     const platform = MethodChannel('com.wmimo.app/native_helper');
@@ -1248,7 +1250,7 @@ class _PerAppAndroidScreenState
               width: double.infinity,
               child: OutlinedButton.icon(
                 icon: const Icon(Icons.auto_awesome_outlined, size: 18),
-                label: const Text("快捷添加常用应用 (免授权预设)"),
+                label: Text(tcontext.PerAppAndroidScreen.presetApps),
                 onPressed: _showPresetAppsDialog,
               ),
             ),
@@ -1259,7 +1261,7 @@ class _PerAppAndroidScreenState
               width: double.infinity,
               child: OutlinedButton.icon(
                 icon: const Icon(Icons.add_circle_outline, size: 18),
-                label: const Text("手动添加应用包名"),
+                label: Text(tcontext.PerAppAndroidScreen.manualAddPackage),
                 onPressed: _showManualAddDialog,
               ),
             ),
@@ -1270,7 +1272,7 @@ class _PerAppAndroidScreenState
               width: double.infinity,
               child: OutlinedButton.icon(
                 icon: const Icon(Icons.verified_user_outlined, size: 18),
-                label: const Text("尝试一键申请权限 (系统弹窗)"),
+                label: Text(tcontext.PerAppAndroidScreen.requestPermissionPopup),
                 onPressed: () async {
                   try {
                     final granted = await PackageManagerAndroid.requestAppListPermission();

@@ -120,6 +120,14 @@ class _Translations$PerAppAndroidScreen$es implements Translations$PerAppAndroid
 	@override String get title => 'Proxy por Aplicación';
 	@override String get whiteListMode => 'Modo Lista Blanca';
 	@override String get whiteListModeTip => 'Cuando está habilitado: solo las aplicaciones marcadas son proxies; cuando no está habilitado: solo las aplicaciones no marcadas son proxies';
+	@override String get manualAddPackage => 'Añadir nombre de paquete manualmente';
+	@override String get manualAddPackageHint => 'Ingrese los nombres de paquetes para usar proxy (separados por espacios, comas o saltos de línea, ej.: org.telegram.messenger, com.google.android.youtube):';
+	@override String get quickAddPresets => 'Añadir rápidamente apps comunes para proxy';
+	@override String get saveSelected => 'Guardar seleccionados';
+	@override String get permissionRestrictedTip => 'El sistema restringió la lectura de la lista de aplicaciones. Toque 【Abrir configuración de permisos】 abajo para habilitar el acceso o use ajustes preestablecidos sin permisos.';
+	@override String get openSystemPermission => 'Abrir configuración de permisos del sistema';
+	@override String get presetApps => 'Añadir apps comunes (sin permisos)';
+	@override String get requestPermissionPopup => 'Solicitar permiso (diálogo del sistema)';
 }
 
 // Path: UserAgreementScreen
@@ -382,7 +390,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get disconnected => 'Desconectado';
 	@override String get connecting => 'Conectando';
 	@override String get connectTimeout => 'Tiempo de espera de conexión agotado';
-	@override String get timeout => 'Tiempo de espera agotado';
+	@override String get timeout => 'Tiempo agotado';
 	@override String get timeoutDuration => 'Duración del tiempo de espera';
 	@override String get latency => 'Latencia';
 	@override String get latencyTest => 'Prueba de latencia';
@@ -691,7 +699,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get sortAndFilterNodes => 'Ordenar y filtrar nodos';
 	@override String get sortOptions => 'Opciones de ordenación';
 	@override String get sortDefault => 'Por defecto';
-	@override String get sortLatency => 'Menor latencia';
+	@override String get sortLatency => 'Ordenar por latencia';
 	@override String get sortName => 'Por nombre (A-Z)';
 	@override String get sortRegion => 'Por región';
 	@override String get filterOptions => 'Opciones de filtro';
@@ -817,6 +825,22 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get copyFilePath => 'Copiar ruta del archivo';
 	@override String get duplicateProfile => 'Duplicar perfil';
 	@override String get useThisProfile => 'Usar este perfil';
+	@override String get websiteTest => 'Prueba de sitios';
+	@override String get testAll => 'Probar todo';
+	@override String get addTestWebsite => 'Añadir sitio de prueba';
+	@override String get websiteName => 'Nombre del sitio';
+	@override String get websiteUrl => 'URL de prueba';
+	@override String get websiteNameHint => 'Nombre del sitio (ej. Cloudflare)';
+	@override String get websiteInputEmpty => 'Por favor ingrese el nombre del sitio y la URL';
+	@override String get autoRefresh => 'Actualización automática';
+	@override String get currentProfile => 'Perfil actual';
+	@override String get quickActions => 'Acciones rápidas';
+	@override String get fastest => 'Más rápido';
+	@override String get hideTimeout => 'Ocultar tiempos agotados';
+	@override String get filteredTimeout => 'Tiempos agotados filtrados';
+	@override String get tunDeviceCreateFailed => 'Error al crear el adaptador de red virtual TUN';
+	@override String get test => 'Probar';
+	@override String get addWebsite => 'Añadir sitio';
 }
 
 // Path: permission
@@ -1005,6 +1029,14 @@ extension on TranslationsEs {
 			'PerAppAndroidScreen.title' => 'Proxy por Aplicación',
 			'PerAppAndroidScreen.whiteListMode' => 'Modo Lista Blanca',
 			'PerAppAndroidScreen.whiteListModeTip' => 'Cuando está habilitado: solo las aplicaciones marcadas son proxies; cuando no está habilitado: solo las aplicaciones no marcadas son proxies',
+			'PerAppAndroidScreen.manualAddPackage' => 'Añadir nombre de paquete manualmente',
+			'PerAppAndroidScreen.manualAddPackageHint' => 'Ingrese los nombres de paquetes para usar proxy (separados por espacios, comas o saltos de línea, ej.: org.telegram.messenger, com.google.android.youtube):',
+			'PerAppAndroidScreen.quickAddPresets' => 'Añadir rápidamente apps comunes para proxy',
+			'PerAppAndroidScreen.saveSelected' => 'Guardar seleccionados',
+			'PerAppAndroidScreen.permissionRestrictedTip' => 'El sistema restringió la lectura de la lista de aplicaciones. Toque 【Abrir configuración de permisos】 abajo para habilitar el acceso o use ajustes preestablecidos sin permisos.',
+			'PerAppAndroidScreen.openSystemPermission' => 'Abrir configuración de permisos del sistema',
+			'PerAppAndroidScreen.presetApps' => 'Añadir apps comunes (sin permisos)',
+			'PerAppAndroidScreen.requestPermissionPopup' => 'Solicitar permiso (diálogo del sistema)',
 			'UserAgreementScreen.privacyFirst' => 'Su Privacidad es lo Primero',
 			'UserAgreementScreen.agreeAndContinue' => 'Aceptar y Continuar',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'La nueva versión [${p}] está lista',
@@ -1227,7 +1259,7 @@ extension on TranslationsEs {
 			'meta.disconnected' => 'Desconectado',
 			'meta.connecting' => 'Conectando',
 			'meta.connectTimeout' => 'Tiempo de espera de conexión agotado',
-			'meta.timeout' => 'Tiempo de espera agotado',
+			'meta.timeout' => 'Tiempo agotado',
 			'meta.timeoutDuration' => 'Duración del tiempo de espera',
 			'meta.latency' => 'Latencia',
 			'meta.latencyTest' => 'Prueba de latencia',
@@ -1493,6 +1525,8 @@ extension on TranslationsEs {
 			'meta.noLogsPrompt' => 'Aún no hay registros. Aparecerán tras iniciar el proxy.',
 			'meta.searchLogsHint' => ' (IP, Dominio, Regla, Error...)',
 			'meta.offlinePreviewPrompt' => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.',
+			_ => null,
+		} ?? switch (path) {
 			'meta.manualSelect' => 'Selección manual',
 			'meta.autoSelect' => 'Selección automática',
 			'meta.speedTestGroup' => 'Probar velocidad de grupo',
@@ -1501,8 +1535,6 @@ extension on TranslationsEs {
 			'meta.ipInfo' => 'Información de IP',
 			'meta.ipFetching' => 'Obteniendo información de IP...',
 			'meta.ipCopied' => 'Dirección IP copiada al portapapeles',
-			_ => null,
-		} ?? switch (path) {
 			'meta.ipLocation' => 'Ubicación',
 			'meta.ipIsp' => 'Proveedor',
 			'meta.ipTapToFetch' => 'Toca para obtener IP',
@@ -1538,7 +1570,7 @@ extension on TranslationsEs {
 			'meta.sortAndFilterNodes' => 'Ordenar y filtrar nodos',
 			'meta.sortOptions' => 'Opciones de ordenación',
 			'meta.sortDefault' => 'Por defecto',
-			'meta.sortLatency' => 'Menor latencia',
+			'meta.sortLatency' => 'Ordenar por latencia',
 			'meta.sortName' => 'Por nombre (A-Z)',
 			'meta.sortRegion' => 'Por región',
 			'meta.filterOptions' => 'Opciones de filtro',
@@ -1664,6 +1696,22 @@ extension on TranslationsEs {
 			'meta.copyFilePath' => 'Copiar ruta del archivo',
 			'meta.duplicateProfile' => 'Duplicar perfil',
 			'meta.useThisProfile' => 'Usar este perfil',
+			'meta.websiteTest' => 'Prueba de sitios',
+			'meta.testAll' => 'Probar todo',
+			'meta.addTestWebsite' => 'Añadir sitio de prueba',
+			'meta.websiteName' => 'Nombre del sitio',
+			'meta.websiteUrl' => 'URL de prueba',
+			'meta.websiteNameHint' => 'Nombre del sitio (ej. Cloudflare)',
+			'meta.websiteInputEmpty' => 'Por favor ingrese el nombre del sitio y la URL',
+			'meta.autoRefresh' => 'Actualización automática',
+			'meta.currentProfile' => 'Perfil actual',
+			'meta.quickActions' => 'Acciones rápidas',
+			'meta.fastest' => 'Más rápido',
+			'meta.hideTimeout' => 'Ocultar tiempos agotados',
+			'meta.filteredTimeout' => 'Tiempos agotados filtrados',
+			'meta.tunDeviceCreateFailed' => 'Error al crear el adaptador de red virtual TUN',
+			'meta.test' => 'Probar',
+			'meta.addWebsite' => 'Añadir sitio',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

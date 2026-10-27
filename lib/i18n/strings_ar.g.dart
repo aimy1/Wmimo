@@ -120,6 +120,14 @@ class _Translations$PerAppAndroidScreen$ar implements Translations$PerAppAndroid
 	@override String get title => 'لكل وكيل تطبيق';
 	@override String get whiteListMode => 'وضع القائمة البيضاء';
 	@override String get whiteListModeTip => 'عند التمكين: فقط التطبيقات التي تم فحصها هي وكلاء ؛عندما لا يتم تمكينها: فقط التطبيقات التي لم يتم فحصها هي وكلاء';
+	@override String get manualAddPackage => 'إضافة اسم الحزمة يدويًا';
+	@override String get manualAddPackageHint => 'أدخل أسماء الحزم المراد توجيهها عبر الوكيل (مفصولة بمسافات أو فواصل أو أسطر جديدة):';
+	@override String get quickAddPresets => 'إضافة سريعة للتطبيقات الشائعة';
+	@override String get saveSelected => 'حفظ المحدد';
+	@override String get permissionRestrictedTip => 'يقيد النظام قراءة قائمة التطبيقات. يرجى فتح إعدادات الأذونات لتمكين الوصول إلى قائمة التطبيقات، أو استخدام التطبيقات المعدة مسبقًا بدون إذن.';
+	@override String get openSystemPermission => 'الانتقال إلى إعدادات أذونات النظام';
+	@override String get presetApps => 'إضافة سريعة للتطبيقات الشائعة (بدون إذن)';
+	@override String get requestPermissionPopup => 'طلب الإذن (نافذة النظام)';
 }
 
 // Path: UserAgreementScreen
@@ -382,7 +390,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get disconnected => 'انقطع الاتصال';
 	@override String get connecting => 'توصيل';
 	@override String get connectTimeout => 'ربط مهلة';
-	@override String get timeout => 'نفذ الوقت';
+	@override String get timeout => 'انتهت المهلة';
 	@override String get timeoutDuration => 'مدة مهلة الانتظار';
 	@override String get latency => 'الاستجابة';
 	@override String get latencyTest => 'اختبار الاستجابة';
@@ -691,7 +699,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get sortAndFilterNodes => 'فرز وتصفية العقد';
 	@override String get sortOptions => 'خيارات الفرز';
 	@override String get sortDefault => 'الافتراضي';
-	@override String get sortLatency => 'أقل زمن استجابة';
+	@override String get sortLatency => 'ترتيب حسب التأخير';
 	@override String get sortName => 'بالاسم (A-Z)';
 	@override String get sortRegion => 'حسب المنطقة';
 	@override String get filterOptions => 'خيارات التصفية';
@@ -817,6 +825,22 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get copyFilePath => 'نسخ مسار الملف';
 	@override String get duplicateProfile => 'تكرار الملف الشخصي';
 	@override String get useThisProfile => 'استخدام هذا الملف الشخصي';
+	@override String get websiteTest => 'اختبار المواقع';
+	@override String get testAll => 'اختبار الكل';
+	@override String get addTestWebsite => 'إضافة موقع للاختبار';
+	@override String get websiteName => 'اسم الموقع';
+	@override String get websiteUrl => 'رابط الاختبار';
+	@override String get websiteNameHint => 'اسم الموقع (مثل Cloudflare)';
+	@override String get websiteInputEmpty => 'يرجى إدخال اسم الموقع ورابط URL';
+	@override String get autoRefresh => 'تحديث تلقائي';
+	@override String get currentProfile => 'الملف الحالي';
+	@override String get quickActions => 'إجراءات سريعة';
+	@override String get fastest => 'الأسرع';
+	@override String get hideTimeout => 'إخفاء المنتهية مهلتها';
+	@override String get filteredTimeout => 'تمت تصفية المنتهية مهلتها';
+	@override String get tunDeviceCreateFailed => 'فشل إنشاء محول الشبكة الافتراضي TUN';
+	@override String get test => 'اختبار';
+	@override String get addWebsite => 'إضافة موقع';
 }
 
 // Path: permission
@@ -1005,6 +1029,14 @@ extension on TranslationsAr {
 			'PerAppAndroidScreen.title' => 'لكل وكيل تطبيق',
 			'PerAppAndroidScreen.whiteListMode' => 'وضع القائمة البيضاء',
 			'PerAppAndroidScreen.whiteListModeTip' => 'عند التمكين: فقط التطبيقات التي تم فحصها هي وكلاء ؛عندما لا يتم تمكينها: فقط التطبيقات التي لم يتم فحصها هي وكلاء',
+			'PerAppAndroidScreen.manualAddPackage' => 'إضافة اسم الحزمة يدويًا',
+			'PerAppAndroidScreen.manualAddPackageHint' => 'أدخل أسماء الحزم المراد توجيهها عبر الوكيل (مفصولة بمسافات أو فواصل أو أسطر جديدة):',
+			'PerAppAndroidScreen.quickAddPresets' => 'إضافة سريعة للتطبيقات الشائعة',
+			'PerAppAndroidScreen.saveSelected' => 'حفظ المحدد',
+			'PerAppAndroidScreen.permissionRestrictedTip' => 'يقيد النظام قراءة قائمة التطبيقات. يرجى فتح إعدادات الأذونات لتمكين الوصول إلى قائمة التطبيقات، أو استخدام التطبيقات المعدة مسبقًا بدون إذن.',
+			'PerAppAndroidScreen.openSystemPermission' => 'الانتقال إلى إعدادات أذونات النظام',
+			'PerAppAndroidScreen.presetApps' => 'إضافة سريعة للتطبيقات الشائعة (بدون إذن)',
+			'PerAppAndroidScreen.requestPermissionPopup' => 'طلب الإذن (نافذة النظام)',
 			'UserAgreementScreen.privacyFirst' => 'خصوصيتك تأتي أولا',
 			'UserAgreementScreen.agreeAndContinue' => 'قبول ومتابعة',
 			'NetCheckScreen.title' => 'فحص وتشخيص الشبكة',
@@ -1227,7 +1259,7 @@ extension on TranslationsAr {
 			'meta.disconnected' => 'انقطع الاتصال',
 			'meta.connecting' => 'توصيل',
 			'meta.connectTimeout' => 'ربط مهلة',
-			'meta.timeout' => 'نفذ الوقت',
+			'meta.timeout' => 'انتهت المهلة',
 			'meta.timeoutDuration' => 'مدة مهلة الانتظار',
 			'meta.latency' => 'الاستجابة',
 			'meta.latencyTest' => 'اختبار الاستجابة',
@@ -1493,6 +1525,8 @@ extension on TranslationsAr {
 			'meta.noLogsPrompt' => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.',
 			'meta.searchLogsHint' => ' (IP, النطاق, القاعدة, الخطأ...)',
 			'meta.offlinePreviewPrompt' => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.',
+			_ => null,
+		} ?? switch (path) {
 			'meta.manualSelect' => 'اختيار يدوي',
 			'meta.autoSelect' => 'اختيار تلقائي',
 			'meta.speedTestGroup' => 'اختبار سرعة المجموعة',
@@ -1501,8 +1535,6 @@ extension on TranslationsAr {
 			'meta.ipInfo' => 'معلومات IP',
 			'meta.ipFetching' => 'جارٍ جلب معلومات IP...',
 			'meta.ipCopied' => 'تم نسخ عنوان IP إلى الحافظة',
-			_ => null,
-		} ?? switch (path) {
 			'meta.ipLocation' => 'الموقع',
 			'meta.ipIsp' => 'مزود الخدمة',
 			'meta.ipTapToFetch' => 'انقر لجلب معلومات IP',
@@ -1538,7 +1570,7 @@ extension on TranslationsAr {
 			'meta.sortAndFilterNodes' => 'فرز وتصفية العقد',
 			'meta.sortOptions' => 'خيارات الفرز',
 			'meta.sortDefault' => 'الافتراضي',
-			'meta.sortLatency' => 'أقل زمن استجابة',
+			'meta.sortLatency' => 'ترتيب حسب التأخير',
 			'meta.sortName' => 'بالاسم (A-Z)',
 			'meta.sortRegion' => 'حسب المنطقة',
 			'meta.filterOptions' => 'خيارات التصفية',
@@ -1664,6 +1696,22 @@ extension on TranslationsAr {
 			'meta.copyFilePath' => 'نسخ مسار الملف',
 			'meta.duplicateProfile' => 'تكرار الملف الشخصي',
 			'meta.useThisProfile' => 'استخدام هذا الملف الشخصي',
+			'meta.websiteTest' => 'اختبار المواقع',
+			'meta.testAll' => 'اختبار الكل',
+			'meta.addTestWebsite' => 'إضافة موقع للاختبار',
+			'meta.websiteName' => 'اسم الموقع',
+			'meta.websiteUrl' => 'رابط الاختبار',
+			'meta.websiteNameHint' => 'اسم الموقع (مثل Cloudflare)',
+			'meta.websiteInputEmpty' => 'يرجى إدخال اسم الموقع ورابط URL',
+			'meta.autoRefresh' => 'تحديث تلقائي',
+			'meta.currentProfile' => 'الملف الحالي',
+			'meta.quickActions' => 'إجراءات سريعة',
+			'meta.fastest' => 'الأسرع',
+			'meta.hideTimeout' => 'إخفاء المنتهية مهلتها',
+			'meta.filteredTimeout' => 'تمت تصفية المنتهية مهلتها',
+			'meta.tunDeviceCreateFailed' => 'فشل إنشاء محول الشبكة الافتراضي TUN',
+			'meta.test' => 'اختبار',
+			'meta.addWebsite' => 'إضافة موقع',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',
