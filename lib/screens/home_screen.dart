@@ -824,34 +824,13 @@ class _HomeScreenState extends State<HomeScreen>
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          AppUtils.getName(),
-                                          style: const TextStyle(
-                                            fontSize: 15.5,
-                                            height: 1.15,
-                                            fontWeight: FontWeight.w700,
-                                            letterSpacing: 0.3,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 2),
-                                        Text(
-                                          AppUtils.getFormattedVersion(),
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            height: 1.15,
-                                            fontWeight: FontWeight.w500,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface
-                                                .withValues(alpha: 0.45),
-                                          ),
-                                        ),
-                                      ],
+                                    child: Text(
+                                      AppUtils.getName(),
+                                      style: const TextStyle(
+                                        fontSize: 16.5,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 0.3,
+                                      ),
                                     ),
                                   ),
                                 ],

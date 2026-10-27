@@ -497,6 +497,10 @@ class MyAppState extends State<MyApp>
         if (Platform.isMacOS && settings.hideDockIcon) {
           FlutterVpnService.hideDockIcon(true);
         }
+        if (settings.ui.hideAfterLaunch && !forceShow) {
+          await windowManager.hide();
+          return;
+        }
         await windowManager.show();
         await windowManager.focus();
         onWindowRestore();

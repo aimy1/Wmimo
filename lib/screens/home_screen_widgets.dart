@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:path/path.dart' as path;
+
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
@@ -1106,7 +1108,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     VpnActionHandler.vpnReconnect = _vpnReconnect;
     initQuickAction();
     final currentProfile = ProfileManager.getCurrent();
-    if (currentProfile != null) {
+    if (currentProfile != null && SettingManager.getConfig().autoConnectAfterLaunch) {
       await start("launch");
       final savedMode = ClashSettingManager.getConfigsMode();
       unawaited(ClashHttpApi.setConfigsMode(savedMode.name));
@@ -1656,33 +1658,67 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
 
   Future<void> _onTapRunTimeProfile() async {
     final tcontext = Translations.of(context);
-    late String content;
+    String? content;
     try {
-      final path = await PathUtils.serviceCoreRuntimeProfileFilePath();
-      content = await File(path).readAsString();
-    } catch (err) {
-      if (!mounted) {
-        return;
+      final runtimePath = await PathUtils.serviceCoreRuntimeProfileFilePath();
+      final runtimeFile = File(runtimePath);
+      if (await runtimeFile.exists()) {
+        final text = await runtimeFile.readAsString();
+        if (text.trim().isNotEmpty) {
+          content = text;
+        }
       }
-      DialogUtils.showAlertDialog(
-        context,
-        err.toString(),
-        showCopy: true,
-        showFAQ: true,
-        withVersion: true,
-      );
-      return;
+
+      if (content == null) {
+        final patchFinalPath = await PathUtils.serviceCorePatchFinalPath();
+        final patchFinalFile = File(patchFinalPath);
+        if (await patchFinalFile.exists()) {
+          final text = await patchFinalFile.readAsString();
+          if (text.trim().isNotEmpty) {
+            content = text;
+          }
+        }
+      }
+
+      if (content == null) {
+        final currentProfile = ProfileManager.getCurrent();
+        if (currentProfile != null) {
+          final profileDir = await PathUtils.profilesDir();
+          final profileFile = File(path.join(profileDir, currentProfile.id));
+          if (await profileFile.exists()) {
+            final text = await profileFile.readAsString();
+            if (text.trim().isNotEmpty) {
+              content = text;
+            }
+          }
+        }
+      }
+    } catch (err) {
+      Log.w("Read runtime profile exception: $err");
     }
+
     if (!mounted) {
       return;
     }
+
+    if (content == null || content.trim().isEmpty) {
+      DialogUtils.showAlertDialog(
+        context,
+        tcontext.meta.noProfilesYet,
+        showCopy: false,
+        showFAQ: false,
+        withVersion: false,
+      );
+      return;
+    }
+
     await Navigator.push(
       context,
       MaterialPageRoute(
         settings: FileViewScreen.routSettings(),
         builder: (context) => FileViewScreen(
           title: tcontext.meta.runtimeProfile,
-          content: content,
+          content: content!,
         ),
       ),
     );

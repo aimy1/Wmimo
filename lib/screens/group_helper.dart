@@ -1115,7 +1115,6 @@ class GroupHelper {
       final currentPatch = ProfilePatchManager.getCurrent();
       final remark = currentPatch.getShowName(context);
       var setting = ClashSettingManager.getConfig();
-      var extensions = setting.Extension!;
       final logLevels = ClashLogLevel.toList();
       final findProcessModes = ClashFindProcessMode.toList();
 
@@ -1242,31 +1241,6 @@ class GroupHelper {
             ),
           ),
         ],
-        GroupItemOptions(
-          textFormFieldOptions: GroupItemTextFieldOptions(
-            name: "Pprof Address",
-            text: extensions.PprofAddr,
-            hint: "127.0.0.1:4578",
-            textWidthPercent: 0.5,
-            onChanged: (String value) {
-              extensions.PprofAddr = value;
-            },
-          ),
-        ),
-        GroupItemOptions(
-          pushOptions: GroupItemPushOptions(
-            name: "Pprof",
-            onPush: () async {
-              if (extensions.PprofAddr == null ||
-                  extensions.PprofAddr!.isEmpty) {
-                return;
-              }
-              await UrlLauncherUtils.loadUrl(
-                "http://${extensions.PprofAddr}/debug/pprof/",
-              );
-            },
-          ),
-        ),
       ];
 
       List<GroupItemOptions> options2 = [
