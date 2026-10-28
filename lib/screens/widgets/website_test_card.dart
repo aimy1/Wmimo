@@ -257,17 +257,17 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
+    final RenderBox? overlay = Overlay.of(context).context.findRenderObject() as RenderBox?;
+    final overlaySize = overlay?.size ?? MediaQuery.of(context).size;
     final pos = globalPosition == Offset.zero
-        ? Offset(MediaQuery.of(context).size.width / 2, MediaQuery.of(context).size.height / 2)
+        ? Offset(overlaySize.width / 2, overlaySize.height / 2)
         : globalPosition;
 
     final selected = await showMenu<String>(
       context: context,
-      position: RelativeRect.fromLTRB(
-        pos.dx,
-        pos.dy,
-        pos.dx + 1,
-        pos.dy + 1,
+      position: RelativeRect.fromRect(
+        Rect.fromLTWH(pos.dx, pos.dy, 0, 0),
+        Offset.zero & overlaySize,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       color: isDark ? const Color(0xFF232328) : Colors.white,
@@ -978,8 +978,14 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
           onTap: () => _testTarget(target),
-          onSecondaryTap: () {
-            _showContextMenu(target, _lastTapPosition);
+          onTapDown: (details) {
+            _lastTapPosition = details.globalPosition;
+          },
+          onSecondaryTapDown: (details) {
+            _lastTapPosition = details.globalPosition;
+          },
+          onSecondaryTapUp: (details) {
+            _showContextMenu(target, details.globalPosition);
           },
           onLongPress: () {
             _showContextMenu(target, _lastTapPosition);
