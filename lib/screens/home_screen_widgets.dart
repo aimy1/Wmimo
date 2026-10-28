@@ -1076,18 +1076,30 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                   ),
                   if (expireInfo != null) ...[
                     const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        '📅 ${tcontext.meta.expireTime}: ${expireInfo.item2}',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: expireInfo.item1
-                              ? Colors.red
-                              : theme.colorScheme.onSurface.withValues(alpha: 0.65),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
+                    Tooltip(
+                      message: '${tcontext.meta.expireTime}: ${expireInfo.item2}',
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.event_outlined,
+                            size: 12,
+                            color: expireInfo.item1
+                                ? Colors.red
+                                : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            expireInfo.item2,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: expireInfo.item1
+                                  ? Colors.red
+                                  : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

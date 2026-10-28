@@ -730,47 +730,68 @@ class ProfilesBoardItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Traffic Used / Total
-                      Row(
-                        children: [
-                          Text(
-                            "↑ $uploadStr",
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                            ),
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "↑ $uploadStr  ",
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                ),
+                              ),
+                              TextSpan(
+                                text: "↓ $downloadStr  ",
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                ),
+                              ),
+                              TextSpan(
+                                text: "/ $totalStr",
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 6),
-                          Text(
-                            "↓ $downloadStr",
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            "/ $totalStr",
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
-                            ),
-                          ),
-                        ],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
+                      const SizedBox(width: 8),
 
                       // Expire Date
                       if (trafficExpire != null)
-                        Text(
-                          "📅 ${tcontext.meta.expireTime}: ${trafficExpire.item2}",
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            color: trafficExpire.item1
-                                ? Colors.redAccent
-                                : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        Tooltip(
+                          message: "${tcontext.meta.expireTime}: ${trafficExpire.item2}",
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.event_outlined,
+                                size: 12,
+                                color: trafficExpire.item1
+                                    ? Colors.redAccent
+                                    : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                              ),
+                              const SizedBox(width: 3),
+                              Text(
+                                trafficExpire.item2,
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: trafficExpire.item1
+                                      ? Colors.redAccent
+                                      : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                     ],
@@ -785,28 +806,37 @@ class ProfilesBoardItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // File Name
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.insert_drive_file_outlined,
-                          size: 13,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          setting.id,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontFamily: 'monospace',
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                    Flexible(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.insert_drive_file_outlined,
+                            size: 13,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              setting.id,
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontFamily: 'monospace',
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8),
 
                     // Last Updated
                     if (updateInterval.isNotEmpty)
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
                             Icons.schedule_rounded,
