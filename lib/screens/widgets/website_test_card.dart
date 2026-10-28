@@ -66,39 +66,41 @@ class WebsiteTarget {
 
   static ({IconData icon, Color? color}) matchBrand(String name, String url) {
     final lowerName = name.toLowerCase();
-    final lowerUrl = url.toLowerCase();
+    final uri = Uri.tryParse(url);
+    final host = uri?.host.toLowerCase() ?? url.toLowerCase();
 
-    if (lowerUrl.contains('apple.com') || lowerName == 'apple') {
+    if (host.contains('apple.com') || lowerName == 'apple') {
       return (icon: Icons.apple, color: null);
     }
-    if (lowerUrl.contains('github.com') || lowerName == 'github') {
+    if (host.contains('github.com') || lowerName == 'github') {
       return (icon: Icons.code_rounded, color: null);
     }
-    if (lowerUrl.contains('google.') || lowerName == 'google') {
+    if (host.contains('google.') || lowerName == 'google') {
       return (icon: Icons.travel_explore_rounded, color: const Color(0xFF4285F4));
     }
-    if (lowerUrl.contains('youtube.com') || lowerName == 'youtube') {
+    if (host.contains('youtube.com') || lowerName == 'youtube') {
       return (icon: Icons.play_arrow_rounded, color: const Color(0xFFFF0000));
     }
-    if (lowerUrl.contains('bilibili.com') || lowerName.contains('bilibili')) {
-      return (icon: Icons.tv_rounded, color: const Color(0xFF00AEEC));
-    }
-    if (lowerUrl.contains('baidu.com') || lowerName.contains('baidu')) {
-      return (icon: Icons.search_rounded, color: const Color(0xFF2932E1));
-    }
-    if (lowerUrl.contains('twitter.com') || lowerUrl.contains('x.com') || lowerName == 'twitter' || lowerName == 'x') {
-      return (icon: Icons.alternate_email_rounded, color: null);
-    }
-    if (lowerUrl.contains('t.me') || lowerUrl.contains('telegram') || lowerName.contains('telegram')) {
-      return (icon: Icons.send_rounded, color: const Color(0xFF0088CC));
-    }
-    if (lowerUrl.contains('chatgpt.com') || lowerUrl.contains('openai.com') || lowerName.contains('chatgpt')) {
-      return (icon: Icons.smart_toy_rounded, color: const Color(0xFF10A37F));
-    }
-    if (lowerUrl.contains('netflix.com') || lowerName.contains('netflix')) {
+    // Check Netflix before Twitter/x.com to prevent "netflix.com" matching "x.com" substring
+    if (host.contains('netflix.com') || lowerName.contains('netflix')) {
       return (icon: Icons.movie_rounded, color: const Color(0xFFE50914));
     }
-    if (lowerUrl.contains('cloudflare.com') || lowerUrl.contains('1.1.1.1') || lowerName.contains('cloudflare')) {
+    if (host.contains('bilibili.com') || lowerName.contains('bilibili')) {
+      return (icon: Icons.tv_rounded, color: const Color(0xFF00AEEC));
+    }
+    if (host.contains('baidu.com') || lowerName.contains('baidu')) {
+      return (icon: Icons.search_rounded, color: const Color(0xFF2932E1));
+    }
+    if (host == 'x.com' || host == 'twitter.com' || host.endsWith('.x.com') || host.endsWith('.twitter.com') || lowerName == 'twitter' || lowerName == 'x') {
+      return (icon: Icons.close_rounded, color: null);
+    }
+    if (host.contains('t.me') || host.contains('telegram') || lowerName.contains('telegram')) {
+      return (icon: Icons.send_rounded, color: const Color(0xFF0088CC));
+    }
+    if (host.contains('chatgpt.com') || host.contains('openai.com') || lowerName.contains('chatgpt') || lowerName.contains('openai')) {
+      return (icon: Icons.smart_toy_rounded, color: const Color(0xFF10A37F));
+    }
+    if (host.contains('cloudflare.com') || host.contains('1.1.1.1') || lowerName.contains('cloudflare')) {
       return (icon: Icons.cloud_rounded, color: const Color(0xFFF38020));
     }
     return (icon: Icons.public_rounded, color: ThemeDefine.kColorBlue);
@@ -117,14 +119,14 @@ class WebsiteTarget {
         id: 'github',
         name: 'GitHub',
         url: 'https://github.com',
-        iconUrl: 'https://www.google.com/s2/favicons?domain=github.com&sz=64',
+        iconUrl: '',
         icon: Icons.code_rounded,
       ),
       WebsiteTarget(
         id: 'google',
         name: 'Google',
         url: 'https://www.google.com/generate_204',
-        iconUrl: 'https://www.google.com/s2/favicons?domain=google.com&sz=64',
+        iconUrl: '',
         icon: Icons.travel_explore_rounded,
         color: const Color(0xFF4285F4),
       ),
@@ -132,7 +134,7 @@ class WebsiteTarget {
         id: 'youtube',
         name: 'YouTube',
         url: 'https://www.youtube.com/generate_204',
-        iconUrl: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=64',
+        iconUrl: '',
         icon: Icons.play_arrow_rounded,
         color: const Color(0xFFFF0000),
       ),
@@ -357,16 +359,17 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     final isDark = theme.brightness == Brightness.dark;
 
     final presets = [
-      (name: 'Google', url: 'https://www.google.com/generate_204', iconUrl: 'https://www.google.com/s2/favicons?domain=google.com&sz=64'),
-      (name: 'YouTube', url: 'https://www.youtube.com/generate_204', iconUrl: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=64'),
-      (name: 'GitHub', url: 'https://github.com', iconUrl: 'https://www.google.com/s2/favicons?domain=github.com&sz=64'),
+      (name: 'Google', url: 'https://www.google.com/generate_204', iconUrl: ''),
+      (name: 'YouTube', url: 'https://www.youtube.com/generate_204', iconUrl: ''),
+      (name: 'GitHub', url: 'https://github.com', iconUrl: ''),
       (name: 'Apple', url: 'https://captive.apple.com/hotspot-detect.html', iconUrl: ''),
-      (name: 'Bilibili', url: 'https://www.bilibili.com', iconUrl: 'https://www.google.com/s2/favicons?domain=bilibili.com&sz=64'),
-      (name: 'Baidu', url: 'https://www.baidu.com', iconUrl: 'https://www.google.com/s2/favicons?domain=baidu.com&sz=64'),
-      (name: 'ChatGPT', url: 'https://chatgpt.com', iconUrl: 'https://www.google.com/s2/favicons?domain=chatgpt.com&sz=64'),
-      (name: 'Telegram', url: 'https://t.me', iconUrl: 'https://www.google.com/s2/favicons?domain=telegram.org&sz=64'),
-      (name: 'Netflix', url: 'https://www.netflix.com', iconUrl: 'https://www.google.com/s2/favicons?domain=netflix.com&sz=64'),
-      (name: 'Cloudflare', url: 'https://1.1.1.1', iconUrl: 'https://www.google.com/s2/favicons?domain=cloudflare.com&sz=64'),
+      (name: 'Bilibili', url: 'https://www.bilibili.com', iconUrl: ''),
+      (name: 'Baidu', url: 'https://www.baidu.com', iconUrl: ''),
+      (name: 'ChatGPT', url: 'https://chatgpt.com', iconUrl: ''),
+      (name: 'Telegram', url: 'https://t.me', iconUrl: ''),
+      (name: 'Netflix', url: 'https://www.netflix.com', iconUrl: ''),
+      (name: 'X', url: 'https://x.com', iconUrl: ''),
+      (name: 'Cloudflare', url: 'https://1.1.1.1', iconUrl: ''),
     ];
 
     showDialog(
@@ -544,16 +547,17 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     final iconController = TextEditingController(text: target.iconUrl ?? '');
 
     final presets = [
-      (name: 'Google', url: 'https://www.google.com/generate_204', iconUrl: 'https://www.google.com/s2/favicons?domain=google.com&sz=64'),
-      (name: 'YouTube', url: 'https://www.youtube.com/generate_204', iconUrl: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=64'),
-      (name: 'GitHub', url: 'https://github.com', iconUrl: 'https://www.google.com/s2/favicons?domain=github.com&sz=64'),
+      (name: 'Google', url: 'https://www.google.com/generate_204', iconUrl: ''),
+      (name: 'YouTube', url: 'https://www.youtube.com/generate_204', iconUrl: ''),
+      (name: 'GitHub', url: 'https://github.com', iconUrl: ''),
       (name: 'Apple', url: 'https://captive.apple.com/hotspot-detect.html', iconUrl: ''),
-      (name: 'Bilibili', url: 'https://www.bilibili.com', iconUrl: 'https://www.google.com/s2/favicons?domain=bilibili.com&sz=64'),
-      (name: 'Baidu', url: 'https://www.baidu.com', iconUrl: 'https://www.google.com/s2/favicons?domain=baidu.com&sz=64'),
-      (name: 'ChatGPT', url: 'https://chatgpt.com', iconUrl: 'https://www.google.com/s2/favicons?domain=chatgpt.com&sz=64'),
-      (name: 'Telegram', url: 'https://t.me', iconUrl: 'https://www.google.com/s2/favicons?domain=telegram.org&sz=64'),
-      (name: 'Netflix', url: 'https://www.netflix.com', iconUrl: 'https://www.google.com/s2/favicons?domain=netflix.com&sz=64'),
-      (name: 'Cloudflare', url: 'https://1.1.1.1', iconUrl: 'https://www.google.com/s2/favicons?domain=cloudflare.com&sz=64'),
+      (name: 'Bilibili', url: 'https://www.bilibili.com', iconUrl: ''),
+      (name: 'Baidu', url: 'https://www.baidu.com', iconUrl: ''),
+      (name: 'ChatGPT', url: 'https://chatgpt.com', iconUrl: ''),
+      (name: 'Telegram', url: 'https://t.me', iconUrl: ''),
+      (name: 'Netflix', url: 'https://www.netflix.com', iconUrl: ''),
+      (name: 'X', url: 'https://x.com', iconUrl: ''),
+      (name: 'Cloudflare', url: 'https://1.1.1.1', iconUrl: ''),
     ];
 
     showDialog(
@@ -760,20 +764,52 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     );
   }
 
-  Widget _buildBrandLogo(WebsiteTarget target, bool isDark) {
+  bool _isKnownBrand(WebsiteTarget target) {
     final lowerName = target.name.toLowerCase();
-    final lowerUrl = target.url.toLowerCase();
+    final uri = Uri.tryParse(target.url);
+    final host = uri?.host.toLowerCase() ?? target.url.toLowerCase();
 
-    // 1. Apple special-case: Material Icons.apple is official, crisp monochrome vector
-    if (lowerUrl.contains('apple.com') || lowerName == 'apple' || target.id == 'apple') {
-      return Icon(
-        Icons.apple,
-        size: 26,
-        color: isDark ? Colors.white : Colors.black87,
+    return host.contains('apple.com') || lowerName == 'apple' || target.id == 'apple' ||
+        host.contains('github.com') || lowerName == 'github' || target.id == 'github' ||
+        host.contains('google.') || lowerName == 'google' || target.id == 'google' ||
+        host.contains('youtube.com') || lowerName == 'youtube' || target.id == 'youtube' ||
+        host.contains('netflix.com') || lowerName.contains('netflix') ||
+        host.contains('bilibili.com') || lowerName.contains('bilibili') ||
+        host.contains('baidu.com') || lowerName.contains('baidu') ||
+        host == 'x.com' || host == 'twitter.com' || host.endsWith('.x.com') || host.endsWith('.twitter.com') || lowerName == 'twitter' || lowerName == 'x' ||
+        host.contains('t.me') || host.contains('telegram') || lowerName.contains('telegram') ||
+        host.contains('chatgpt.com') || host.contains('openai.com') || lowerName.contains('chatgpt') || lowerName.contains('openai') ||
+        host.contains('cloudflare.com') || host.contains('1.1.1.1') || lowerName.contains('cloudflare');
+  }
+
+  Widget _buildBrandLogo(WebsiteTarget target, bool isDark) {
+    final customUrl = target.iconUrl?.trim() ?? '';
+    final hasUserCustomIcon = customUrl.isNotEmpty && !customUrl.contains('google.com/s2/favicons');
+
+    // 1. If user provided an explicit custom image URL, load it
+    if (hasUserCustomIcon) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: FastCachedImage(
+          url: customUrl,
+          width: 24,
+          height: 24,
+          cacheWidth: 64,
+          cacheHeight: 64,
+          fit: BoxFit.contain,
+          fadeInDuration: const Duration(milliseconds: 100),
+          loadingBuilder: (context, progress) => _buildBrandFallback(target, isDark),
+          errorBuilder: (context, error, stackTrace) => _buildBrandFallback(target, isDark),
+        ),
       );
     }
 
-    // 2. High-res Favicon / Icon via FastCachedImage
+    // 2. For known presets/brands, use native pixel-perfect vector logo (100% offline & robust in all regions)
+    if (_isKnownBrand(target)) {
+      return _buildBrandFallback(target, isDark);
+    }
+
+    // 3. For custom websites, try fetching favicon from network with fallback
     final iconUrl = target.effectiveIconUrl;
     if (iconUrl.isNotEmpty) {
       return ClipRRect(
@@ -786,12 +822,8 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
           cacheHeight: 64,
           fit: BoxFit.contain,
           fadeInDuration: const Duration(milliseconds: 100),
-          loadingBuilder: (context, progress) {
-            return _buildBrandFallback(target, isDark);
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return _buildBrandFallback(target, isDark);
-          },
+          loadingBuilder: (context, progress) => _buildBrandFallback(target, isDark),
+          errorBuilder: (context, error, stackTrace) => _buildBrandFallback(target, isDark),
         ),
       );
     }
@@ -802,23 +834,39 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
   Widget _buildBrandFallback(WebsiteTarget target, bool isDark) {
     final lowerName = target.name.toLowerCase();
     final lowerUrl = target.url.toLowerCase();
+    final uri = Uri.tryParse(target.url);
+    final host = uri?.host.toLowerCase() ?? lowerUrl;
 
-    if (lowerUrl.contains('github.com') || lowerName == 'github' || target.id == 'github') {
+    // 1. Apple: Official crisp monochrome vector
+    if (host.contains('apple.com') || lowerName == 'apple' || target.id == 'apple') {
+      return Icon(
+        Icons.apple,
+        size: 26,
+        color: isDark ? Colors.white : Colors.black87,
+      );
+    }
+
+    // 2. GitHub: Official Invertocat silhouette
+    if (host.contains('github.com') || lowerName == 'github' || target.id == 'github') {
       return Container(
         width: 24,
         height: 24,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isDark ? Colors.white : Colors.black87,
+          color: isDark ? Colors.white : const Color(0xFF24292F),
           shape: BoxShape.circle,
         ),
-        child: Icon(
-          Icons.terminal_rounded,
-          size: 14,
-          color: isDark ? Colors.black87 : Colors.white,
+        child: CustomPaint(
+          size: const Size(16, 16),
+          painter: _GithubLogoPainter(
+            color: isDark ? const Color(0xFF24292F) : Colors.white,
+          ),
         ),
       );
     }
-    if (lowerUrl.contains('google.') || lowerName == 'google' || target.id == 'google') {
+
+    // 3. Google: Crisp classic bold G badge
+    if (host.contains('google.') || lowerName == 'google' || target.id == 'google') {
       return Container(
         width: 24,
         height: 24,
@@ -828,7 +876,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withValues(alpha: 0.12),
               blurRadius: 2,
               offset: const Offset(0, 1),
             ),
@@ -845,7 +893,9 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
         ),
       );
     }
-    if (lowerUrl.contains('youtube.com') || lowerName == 'youtube' || target.id == 'youtube') {
+
+    // 4. YouTube: Official red play badge
+    if (host.contains('youtube.com') || lowerName == 'youtube' || target.id == 'youtube') {
       return Container(
         width: 26,
         height: 18,
@@ -860,52 +910,84 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
         ),
       );
     }
-    if (lowerUrl.contains('bilibili.com') || lowerName.contains('bilibili')) {
+
+    // 5. Netflix: Official bold red N on black (checked BEFORE x.com)
+    if (host.contains('netflix.com') || lowerName.contains('netflix')) {
       return Container(
         width: 24,
         height: 24,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: const Color(0xFF00AEEC),
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: const Text(
+          'N',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w900,
+            color: Color(0xFFE50914),
+            fontFamily: 'Arial',
+            letterSpacing: -0.5,
+          ),
+        ),
+      );
+    }
+
+    // 6. Bilibili: Official cute TV mascot with antennae & face
+    if (host.contains('bilibili.com') || lowerName.contains('bilibili')) {
+      return Container(
+        width: 25,
+        height: 25,
+        alignment: Alignment.center,
+        child: const CustomPaint(
+          size: Size(22, 20),
+          painter: _BilibiliLogoPainter(),
+        ),
+      );
+    }
+
+    // 7. Baidu: Baidu blue badge with bold white "度"
+    if (host.contains('baidu.com') || lowerName.contains('baidu')) {
+      return Container(
+        width: 24,
+        height: 24,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: const Color(0xFF2932E1),
           borderRadius: BorderRadius.circular(6),
         ),
-        child: const Icon(
-          Icons.tv_rounded,
-          size: 15,
-          color: Colors.white,
+        child: const Text(
+          '度',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            height: 1.1,
+          ),
         ),
       );
     }
-    if (lowerUrl.contains('baidu.com') || lowerName.contains('baidu')) {
+
+    // 8. ChatGPT / OpenAI: Official 6-petal geometric spiral knot
+    if (host.contains('chatgpt.com') || host.contains('openai.com') || lowerName.contains('chatgpt') || lowerName.contains('openai')) {
       return Container(
         width: 24,
         height: 24,
+        alignment: Alignment.center,
         decoration: const BoxDecoration(
-          color: Color(0xFF2932E1),
+          color: Color(0xFF10A37F),
           shape: BoxShape.circle,
         ),
-        child: const Icon(
-          Icons.search_rounded,
-          size: 14,
-          color: Colors.white,
+        child: const CustomPaint(
+          size: Size(15, 15),
+          painter: _OpenAiLogoPainter(color: Colors.white),
         ),
       );
     }
-    if (lowerUrl.contains('twitter.com') || lowerUrl.contains('x.com') || lowerName == 'twitter' || lowerName == 'x') {
-      return Container(
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-          color: isDark ? Colors.white24 : Colors.black87,
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.alternate_email_rounded,
-          size: 14,
-          color: Colors.white,
-        ),
-      );
-    }
-    if (lowerUrl.contains('t.me') || lowerUrl.contains('telegram') || lowerName.contains('telegram')) {
+
+    // 9. Telegram: Paper plane on blue circle
+    if (host.contains('t.me') || host.contains('telegram') || lowerName.contains('telegram')) {
       return Container(
         width: 24,
         height: 24,
@@ -920,41 +1002,31 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
         ),
       );
     }
-    if (lowerUrl.contains('chatgpt.com') || lowerUrl.contains('openai.com') || lowerName.contains('chatgpt')) {
-      return Container(
-        width: 24,
-        height: 24,
-        decoration: const BoxDecoration(
-          color: Color(0xFF10A37F),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.smart_toy_rounded,
-          size: 14,
-          color: Colors.white,
-        ),
-      );
-    }
-    if (lowerUrl.contains('netflix.com') || lowerName.contains('netflix')) {
+
+    // 10. Twitter / X: Bold mathematical 𝕏 on dark badge
+    if (host == 'x.com' || host == 'twitter.com' || host.endsWith('.x.com') || host.endsWith('.twitter.com') || lowerName == 'twitter' || lowerName == 'x') {
       return Container(
         width: 24,
         height: 24,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.black87,
-          borderRadius: BorderRadius.circular(5),
+          color: isDark ? const Color(0xFF2A2A2E) : Colors.black,
+          borderRadius: BorderRadius.circular(6),
         ),
         child: const Text(
-          'N',
+          '𝕏',
           style: TextStyle(
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: FontWeight.w900,
-            color: Color(0xFFE50914),
+            color: Colors.white,
+            fontFamily: 'sans-serif',
           ),
         ),
       );
     }
-    if (lowerUrl.contains('cloudflare.com') || lowerUrl.contains('1.1.1.1') || lowerName.contains('cloudflare')) {
+
+    // 11. Cloudflare: Official Cloudflare orange cloud
+    if (host.contains('cloudflare.com') || host.contains('1.1.1.1') || lowerName.contains('cloudflare')) {
       return Container(
         width: 24,
         height: 24,
@@ -1320,4 +1392,154 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
       ),
     );
   }
+}
+
+class _GithubLogoPainter extends CustomPainter {
+  final Color color;
+  const _GithubLogoPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    final scale = size.width / 16.0;
+    canvas.save();
+    canvas.scale(scale, scale);
+
+    final path = Path()
+      ..moveTo(8, 0)
+      ..cubicTo(3.58, 0, 0, 3.58, 0, 8)
+      ..cubicTo(0, 11.54, 2.29, 14.53, 5.47, 15.59)
+      ..cubicTo(5.87, 15.66, 6.02, 15.42, 6.02, 15.21)
+      ..cubicTo(6.02, 15.02, 6.01, 14.39, 6.01, 13.72)
+      ..cubicTo(3.79, 14.2, 3.32, 12.65, 3.32, 12.65)
+      ..cubicTo(2.95, 11.73, 2.43, 11.48, 2.43, 11.48)
+      ..cubicTo(1.71, 10.99, 2.49, 11.0, 2.49, 11.0)
+      ..cubicTo(3.29, 11.06, 3.71, 11.82, 3.71, 11.82)
+      ..cubicTo(4.42, 13.04, 5.58, 12.69, 6.03, 12.48)
+      ..cubicTo(6.1, 11.96, 6.31, 11.61, 6.54, 11.41)
+      ..cubicTo(4.77, 11.21, 2.91, 10.52, 2.91, 7.48)
+      ..cubicTo(2.91, 6.61, 3.22, 5.91, 3.73, 5.36)
+      ..cubicTo(3.65, 5.16, 3.38, 4.35, 3.81, 3.26)
+      ..cubicTo(3.81, 3.26, 4.48, 3.05, 6.0, 4.08)
+      ..cubicTo(6.64, 3.9, 7.32, 3.81, 8.0, 3.81)
+      ..cubicTo(8.68, 3.81, 9.36, 3.9, 10.0, 4.08)
+      ..cubicTo(11.52, 3.05, 12.19, 3.26, 12.19, 3.26)
+      ..cubicTo(12.62, 4.35, 12.35, 5.16, 12.27, 5.36)
+      ..cubicTo(12.78, 5.91, 13.09, 6.61, 13.09, 7.48)
+      ..cubicTo(13.09, 10.53, 11.22, 11.21, 9.44, 11.4)
+      ..cubicTo(9.74, 11.66, 10.0, 12.16, 10.0, 12.92)
+      ..cubicTo(10.0, 14.02, 9.99, 14.9, 9.99, 15.21)
+      ..cubicTo(9.99, 15.42, 10.13, 15.67, 10.54, 15.59)
+      ..cubicTo(13.71, 14.53, 16.0, 11.53, 16.0, 8.0)
+      ..cubicTo(16.0, 3.58, 12.42, 0, 8.0, 0)
+      ..close();
+
+    canvas.drawPath(path, paint);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant _GithubLogoPainter oldDelegate) => oldDelegate.color != color;
+}
+
+class _BilibiliLogoPainter extends CustomPainter {
+  const _BilibiliLogoPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final antPaint = Paint()
+      ..color = const Color(0xFF00AEEC)
+      ..strokeWidth = 1.6
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+    final bodyPaint = Paint()
+      ..color = const Color(0xFF00AEEC)
+      ..style = PaintingStyle.fill;
+    final facePaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+    final smilePaint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 1.2
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+
+    // Antennae
+    canvas.drawLine(
+      Offset(size.width * 0.35, size.height * 0.25),
+      Offset(size.width * 0.2, size.height * 0.05),
+      antPaint,
+    );
+    canvas.drawLine(
+      Offset(size.width * 0.65, size.height * 0.25),
+      Offset(size.width * 0.8, size.height * 0.05),
+      antPaint,
+    );
+
+    // Body
+    final bodyRect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, size.height * 0.22, size.width, size.height * 0.78),
+      const Radius.circular(5.5),
+    );
+    canvas.drawRRect(bodyRect, bodyPaint);
+
+    // Eyes
+    canvas.drawCircle(Offset(size.width * 0.32, size.height * 0.58), 1.6, facePaint);
+    canvas.drawCircle(Offset(size.width * 0.68, size.height * 0.58), 1.6, facePaint);
+
+    // Smile
+    canvas.drawArc(
+      Rect.fromCenter(
+        center: Offset(size.width * 0.5, size.height * 0.68),
+        width: 4.5,
+        height: 2.8,
+      ),
+      0,
+      3.14159,
+      false,
+      smilePaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _OpenAiLogoPainter extends CustomPainter {
+  final Color color;
+  const _OpenAiLogoPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final stroke = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.3
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final double r = size.width * 0.42;
+
+    for (int i = 0; i < 6; i++) {
+      final double angle = i * (3.141592653589793 / 3);
+      canvas.save();
+      canvas.translate(center.dx, center.dy);
+      canvas.rotate(angle);
+      final path = Path()
+        ..moveTo(0, -r)
+        ..lineTo(r * 0.45, -r * 0.78)
+        ..lineTo(r * 0.78, -r * 0.16)
+        ..lineTo(r * 0.4, 0.12)
+        ..lineTo(0, -r * 0.22);
+      canvas.drawPath(path, stroke);
+      canvas.restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _OpenAiLogoPainter oldDelegate) => oldDelegate.color != color;
 }
