@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
@@ -16,6 +17,14 @@ import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 class LogsScreen extends StatefulWidget {
   static RouteSettings routSettings() {
     return const RouteSettings(name: "LogsScreen");
+  }
+
+  static String normalizeLevel(String rawType) {
+    final t = rawType.trim().toLowerCase();
+    if (t == "error" || t == "fatal") return "ERROR";
+    if (t == "warning" || t == "warn") return "WARN";
+    if (t == "debug") return "DEBUG";
+    return "INFO";
   }
 
   const LogsScreen({super.key});
@@ -73,22 +82,42 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     await _startLogStream();
   }
 
+  Timer? _reconnectTimer;
+
   @override
   void dispose() {
     _batchUpdateTimer?.cancel();
+    _reconnectTimer?.cancel();
     _stopLogStream();
     _searchController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
+  static String normalizeLevel(String rawType) {
+    final t = rawType.trim().toLowerCase();
+    if (t == "error" || t == "fatal") return "ERROR";
+    if (t == "warning" || t == "warn") return "WARN";
+    if (t == "debug") return "DEBUG";
+    return "INFO";
+  }
+
   Future<void> _startLogStream() async {
     _stopLogStream();
+
+    // 1. Always load recent historical logs from file first so the view is never empty
+    await _loadFileLogs();
+
+    // 2. Connect real-time stream if VPN service is running
     final started = await VPNService.getStarted();
-    if (!started) {
-      await _loadFileLogs();
-      return;
+    if (started) {
+      _connectStream();
     }
+  }
+
+  void _connectStream() {
+    _stopLogStream();
+    if (!_isStreaming || !mounted) return;
 
     try {
       final stream = ClashHttpApi.getLogsStream(level: "debug");
@@ -105,12 +134,28 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
           _scheduleBatchUpdate();
         },
         onError: (_) {
-          _loadFileLogs();
+          _scheduleStreamReconnect();
         },
+        onDone: () {
+          _scheduleStreamReconnect();
+        },
+        cancelOnError: true,
       );
     } catch (_) {
-      await _loadFileLogs();
+      _scheduleStreamReconnect();
     }
+  }
+
+  void _scheduleStreamReconnect() {
+    if (!mounted || !_isStreaming) return;
+    if (_reconnectTimer?.isActive == true) return;
+    _reconnectTimer = Timer(const Duration(seconds: 3), () async {
+      if (!mounted || !_isStreaming) return;
+      final started = await VPNService.getStarted();
+      if (started) {
+        _connectStream();
+      }
+    });
   }
 
   void _scheduleBatchUpdate() {
@@ -126,50 +171,90 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
       });
 
       if (_autoScroll && !_userScrolledUp && _scrollController.hasClients) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+          }
+        });
       }
     });
   }
 
   Future<void> _loadFileLogs() async {
     try {
-      final logPath = await PathUtils.serviceLogFilePath();
-      final file = File(logPath);
-      if (await file.exists()) {
-        final lines = await file.readAsLines();
-        final recent = lines.length > 500 ? lines.sublist(lines.length - 500) : lines;
-        if (!mounted) return;
-        setState(() {
-          _logs.clear();
-          for (var line in recent) {
-            if (line.trim().isEmpty) continue;
-            final l = ClashLog();
-            final lower = line.toLowerCase();
-            if (lower.contains("level=error") || lower.contains("error") || lower.contains("fatal")) {
-              l.type = "error";
-            } else if (lower.contains("level=warning") || lower.contains("warn")) {
-              l.type = "warning";
-            } else if (lower.contains("level=debug") || lower.contains("[debug]")) {
-              l.type = "debug";
-            } else {
-              l.type = "info";
-            }
-            l.payload = line;
-            _logs.add(l);
+      final logs = await _readRecentLogsFromFile();
+      if (!mounted) return;
+      setState(() {
+        _logs.clear();
+        _logs.addAll(logs);
+      });
+      if (_autoScroll && _scrollController.hasClients) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
           }
         });
-        if (_autoScroll && _scrollController.hasClients) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (_scrollController.hasClients) {
-              _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-            }
-          });
-        }
       }
     } catch (_) {}
   }
 
+  Future<List<ClashLog>> _readRecentLogsFromFile() async {
+    final List<ClashLog> loaded = [];
+    try {
+      final logPath = await PathUtils.serviceLogFilePath();
+      final file = File(logPath);
+      if (await file.exists()) {
+        final parsed = await _parseLinesFromTail(file);
+        if (parsed.isNotEmpty) return parsed;
+      }
+
+      // Fallback to std error file if core log doesn't exist or is empty
+      final errPath = await PathUtils.serviceStdErrorFilePath();
+      final errFile = File(errPath);
+      if (await errFile.exists()) {
+        return await _parseLinesFromTail(errFile);
+      }
+    } catch (_) {}
+    return loaded;
+  }
+
+  static Future<List<ClashLog>> _parseLinesFromTail(File file) async {
+    final List<ClashLog> logs = [];
+    try {
+      final length = await file.length();
+      if (length == 0) return logs;
+
+      List<String> lines;
+      const int maxReadBytes = 384 * 1024; // 384 KB
+      if (length > maxReadBytes) {
+        final raf = await file.open(mode: FileMode.read);
+        try {
+          await raf.setPosition(length - maxReadBytes);
+          final bytes = await raf.read(maxReadBytes);
+          final text = utf8.decode(bytes, allowMalformed: true);
+          lines = const LineSplitter().convert(text);
+          if (lines.isNotEmpty) {
+            lines.removeAt(0); // discard incomplete line
+          }
+        } finally {
+          await raf.close();
+        }
+      } else {
+        lines = await file.readAsLines();
+      }
+
+      final recent = lines.length > 500 ? lines.sublist(lines.length - 500) : lines;
+      for (final line in recent) {
+        if (line.trim().isEmpty) continue;
+        logs.add(ClashLog.fromLogLine(line));
+      }
+    } catch (_) {}
+    return logs;
+  }
+
   void _stopLogStream() {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = null;
     _logSubscription?.cancel();
     _logSubscription = null;
   }
@@ -177,16 +262,14 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
   List<ClashLog> get _filteredLogs {
     return _logs.where((l) {
       if (_selectedLevel != "ALL") {
-        final level = l.type.toUpperCase();
-        if (_selectedLevel == "WARN" && (level == "WARNING" || level == "WARN")) {
-          // match
-        } else if (level != _selectedLevel) {
+        if (normalizeLevel(l.type) != _selectedLevel) {
           return false;
         }
       }
       if (_searchKeyword.isEmpty) return true;
-      return l.payload.toLowerCase().contains(_searchKeyword) ||
-          l.type.toLowerCase().contains(_searchKeyword);
+      final kw = _searchKeyword;
+      return l.payload.toLowerCase().contains(kw) ||
+          normalizeLevel(l.type).toLowerCase().contains(kw);
     }).toList();
   }
 
@@ -197,15 +280,20 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     int debug = 0;
 
     for (var l in _logs) {
-      final t = l.type.toLowerCase();
-      if (t == "error" || t == "fatal") {
-        error++;
-      } else if (t == "warning" || t == "warn") {
-        warn++;
-      } else if (t == "debug") {
-        debug++;
-      } else {
-        info++;
+      switch (normalizeLevel(l.type)) {
+        case "ERROR":
+          error++;
+          break;
+        case "WARN":
+          warn++;
+          break;
+        case "DEBUG":
+          debug++;
+          break;
+        case "INFO":
+        default:
+          info++;
+          break;
       }
     }
     return {
@@ -218,16 +306,14 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
   }
 
   Color _getLevelColor(String type) {
-    switch (type.toLowerCase()) {
-      case "error":
-      case "fatal":
+    switch (normalizeLevel(type)) {
+      case "ERROR":
         return const Color(0xFFEF4444);
-      case "warning":
-      case "warn":
+      case "WARN":
         return const Color(0xFFF59E0B);
-      case "info":
+      case "INFO":
         return const Color(0xFF3B82F6);
-      case "debug":
+      case "DEBUG":
         return const Color(0xFFA855F7);
       default:
         return const Color(0xFF64748B);
@@ -242,9 +328,18 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     return "$h:$m:$s.$ms";
   }
 
+  String _formatFullDateTime(DateTime time) {
+    final y = time.year.toString();
+    final mo = time.month.toString().padLeft(2, '0');
+    final d = time.day.toString().padLeft(2, '0');
+    return "$y-$mo-$d ${_formatTime(time)}";
+  }
+
   Future<void> _copyAllLogs() async {
     final tcontext = Translations.of(context);
-    final text = _filteredLogs.map((l) => "[${l.type.toUpperCase()}] ${l.payload}").join('\n');
+    final text = _filteredLogs
+        .map((l) => "[${_formatTime(l.time)}] [${normalizeLevel(l.type)}] ${l.payload}")
+        .join('\n');
     if (text.isEmpty) return;
     await Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -261,7 +356,8 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final color = _getLevelColor(log.type);
+    final level = normalizeLevel(log.type);
+    final color = _getLevelColor(level);
 
     showModalBottomSheet(
       context: context,
@@ -292,7 +388,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      log.type.toUpperCase(),
+                      level,
                       style: TextStyle(
                         color: color,
                         fontWeight: FontWeight.w700,
@@ -302,11 +398,11 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    _formatTime(log.time),
+                    _formatFullDateTime(log.time),
                     style: TextStyle(
                       fontFamily: 'monospace',
                       fontSize: 12,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                   const Spacer(),
@@ -321,6 +417,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
               // Content box
               Container(
                 width: double.infinity,
+                constraints: const BoxConstraints(maxHeight: 360),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9),
@@ -329,12 +426,14 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                     color: theme.dividerColor.withValues(alpha: 0.2),
                   ),
                 ),
-                child: SelectableText(
-                  log.payload,
-                  style: const TextStyle(
-                    fontFamily: 'monospace',
-                    fontSize: 12.5,
-                    height: 1.5,
+                child: SingleChildScrollView(
+                  child: SelectableText(
+                    log.payload,
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 12.5,
+                      height: 1.5,
+                    ),
                   ),
                 ),
               ),
@@ -398,6 +497,15 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     final counts = _levelCounts;
 
     final actions = [
+      // Refresh / Reload
+      IconButton(
+        tooltip: tcontext.meta.refresh,
+        icon: const Icon(Icons.refresh_rounded, size: 20),
+        onPressed: () {
+          HapticFeedback.selectionClick();
+          _startLogStream();
+        },
+      ),
       // Auto-scroll toggle
       IconButton(
         tooltip: _autoScroll
@@ -436,6 +544,11 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
           HapticFeedback.selectionClick();
           setState(() {
             _isStreaming = !_isStreaming;
+            if (_isStreaming) {
+              _connectStream();
+            } else {
+              _stopLogStream();
+            }
           });
         },
       ),
@@ -594,14 +707,17 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                                 ],
                               ),
                             )
-                          : ListView.builder(
-                              controller: _scrollController,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                              itemCount: filtered.length,
-                              itemBuilder: (context, index) {
-                                final log = filtered[index];
-                                return _buildLogItem(log);
-                              },
+                          : RefreshIndicator(
+                              onRefresh: _startLogStream,
+                              child: ListView.builder(
+                                controller: _scrollController,
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                itemCount: filtered.length,
+                                itemBuilder: (context, index) {
+                                  final log = filtered[index];
+                                  return _buildLogItem(log);
+                                },
+                              ),
                             ),
                     ),
 
@@ -716,22 +832,50 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
   Widget _buildLogItem(ClashLog log) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final color = _getLevelColor(log.type);
+    final level = normalizeLevel(log.type);
+    final color = _getLevelColor(level);
     final timeStr = _formatTime(log.time);
 
-    // Extract sub-tags like [TCP], [UDP], [DNS], [Rule], [Match]
+    // Extract sub-tags like [TCP], [UDP], [DNS], [Rule], [Match], [Sniffer]
     String? categoryTag;
+    Color? tagColor;
     final lower = log.payload.toLowerCase();
     if (lower.contains("[dns]")) {
       categoryTag = "DNS";
+      tagColor = const Color(0xFF06B6D4);
     } else if (lower.contains("[tcp]")) {
       categoryTag = "TCP";
+      tagColor = const Color(0xFF3B82F6);
     } else if (lower.contains("[udp]")) {
       categoryTag = "UDP";
+      tagColor = const Color(0xFF8B5CF6);
     } else if (lower.contains("[rule]") || lower.contains("match rule")) {
       categoryTag = "RULE";
+      tagColor = const Color(0xFF10B981);
     } else if (lower.contains("[process]")) {
       categoryTag = "PROC";
+      tagColor = const Color(0xFFF59E0B);
+    } else if (lower.contains("[sniffer]")) {
+      categoryTag = "SNIFF";
+      tagColor = const Color(0xFFEC4899);
+    }
+
+    // Strip leading [tag] if present so it's not duplicated next to categoryTag badge
+    var displayPayload = log.payload;
+    if (categoryTag != null) {
+      final tagPrefix = "[$categoryTag]";
+      if (displayPayload.toLowerCase().startsWith(tagPrefix.toLowerCase())) {
+        displayPayload = displayPayload.substring(tagPrefix.length).trimLeft();
+      }
+    }
+
+    Color textColor;
+    if (level == "ERROR") {
+      textColor = const Color(0xFFEF4444);
+    } else if (level == "WARN") {
+      textColor = isDark ? const Color(0xFFFBBF24) : const Color(0xFFD97706);
+    } else {
+      textColor = isDark ? const Color(0xFFE2E8F0) : const Color(0xFF1E293B);
     }
 
     return InkWell(
@@ -761,7 +905,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                 borderRadius: BorderRadius.circular(3),
               ),
               child: Text(
-                log.type.toUpperCase(),
+                level,
                 style: TextStyle(
                   fontSize: 9,
                   fontWeight: FontWeight.w700,
@@ -776,17 +920,15 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 0.5),
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.blueGrey.withValues(alpha: 0.25)
-                      : Colors.blueGrey.withValues(alpha: 0.12),
+                  color: (tagColor ?? Colors.blueGrey).withValues(alpha: isDark ? 0.2 : 0.12),
                   borderRadius: BorderRadius.circular(3),
                 ),
                 child: Text(
                   categoryTag,
                   style: TextStyle(
                     fontSize: 8.5,
-                    fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.blueGrey.shade200 : Colors.blueGrey.shade800,
+                    fontWeight: FontWeight.w700,
+                    color: tagColor ?? (isDark ? Colors.blueGrey.shade200 : Colors.blueGrey.shade800),
                   ),
                 ),
               ),
@@ -796,14 +938,12 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
             // Log Payload Content
             Expanded(
               child: Text(
-                log.payload,
+                displayPayload,
                 style: TextStyle(
                   fontSize: 11,
                   fontFamily: 'monospace',
                   height: 1.35,
-                  color: log.type.toLowerCase() == "error"
-                      ? Colors.redAccent
-                      : (isDark ? const Color(0xFFE2E8F0) : const Color(0xFF1E293B)),
+                  color: textColor,
                 ),
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,

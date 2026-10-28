@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:wmimo/app/clash/clash_config.dart';
+import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/auto_update_manager.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
@@ -1153,10 +1154,16 @@ class GroupHelper {
             tips: "log-level",
             selected: logLevels.contains(setting.LogLevel)
                 ? setting.LogLevel
-                : logLevels.last,
+                : ClashLogLevel.info.name,
             strings: logLevels,
             onPicker: (String? selected) async {
               setting.LogLevel = selected;
+              await ClashSettingManager.save();
+              if (await VPNService.getStarted()) {
+                await ClashHttpApi.patchConfigs({
+                  "log-level": selected ?? ClashLogLevel.info.name,
+                });
+              }
             },
           ),
         ),

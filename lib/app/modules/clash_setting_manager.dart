@@ -276,7 +276,7 @@ class ClashSettingManager {
     return RawConfig.by(
       Mode: ClashConfigsMode.rule.name,
       MixedPort: 7890,
-      LogLevel: ClashLogLevel.error.name,
+      LogLevel: ClashLogLevel.info.name,
       ExternalController: "127.0.0.1:9090",
       IPv6: false,
       DNS: defaultDNS(),
@@ -563,6 +563,9 @@ class ClashSettingManager {
   }
 
   static Future<void> _initFixed() async {
+    if (_setting.LogLevel == null || _setting.LogLevel == ClashLogLevel.error.name) {
+      _setting.LogLevel = ClashLogLevel.info.name;
+    }
     if (_setting.Secret == null || _setting.Secret!.isEmpty) {
       _setting.Secret = await getSecretFromDid();
     }

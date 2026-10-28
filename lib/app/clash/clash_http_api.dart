@@ -245,6 +245,59 @@ class ClashLog {
     payload = map['payload'] ?? '';
     time = DateTime.now();
   }
+
+  static final RegExp _logLineRegex = RegExp(
+    r'^time="([^"]+)"\s+level=(\w+)\s+msg=(.*)$',
+  );
+
+  static ClashLog fromLogLine(String rawLine) {
+    final log = ClashLog();
+    final trimmed = rawLine.trim();
+    if (trimmed.isEmpty) return log;
+
+    final match = _logLineRegex.firstMatch(trimmed);
+    if (match != null) {
+      final timeStr = match.group(1);
+      final levelStr = match.group(2);
+      var msg = match.group(3)?.trim() ?? "";
+
+      if (timeStr != null) {
+        final parsed = DateTime.tryParse(timeStr);
+        if (parsed != null) {
+          log.time = parsed.toLocal();
+        }
+      }
+
+      log.type = (levelStr ?? "info").toLowerCase();
+
+      // Clean unescaped quotes if msg is quoted
+      if (msg.startsWith('"') && msg.endsWith('"') && msg.length >= 2) {
+        msg = msg.substring(1, msg.length - 1);
+        msg = msg.replaceAll(r'\"', '"').replaceAll(r'\\', r'\');
+      }
+      log.payload = msg;
+      return log;
+    }
+
+    // Fallback: heuristic parsing for non-standard or raw stdout lines
+    log.payload = trimmed;
+    final lower = trimmed.toLowerCase();
+    if (lower.startsWith("fatal:") ||
+        lower.contains("level=error") ||
+        lower.contains("error:") ||
+        lower.contains("[error]")) {
+      log.type = "error";
+    } else if (lower.contains("level=warning") ||
+        lower.contains("warning:") ||
+        lower.contains("[warn")) {
+      log.type = "warning";
+    } else if (lower.contains("level=debug") || lower.contains("[debug]")) {
+      log.type = "debug";
+    } else {
+      log.type = "info";
+    }
+    return log;
+  }
 }
 
 class ClashProxiesNode {
@@ -530,16 +583,24 @@ class ClashHttpApi {
   }
 
   static Stream<ClashLog> getLogsStream({String level = "info"}) async* {
+    final port = getControlPort?.call();
+    if (port == null || port <= 0) {
+      throw Exception("Control port is not available");
+    }
     String secret = getSecret?.call() ?? "";
-    var client = HttpClient();
+    var client = HttpClient()
+      ..connectionTimeout = const Duration(seconds: 4);
     try {
       var request = await client.getUrl(
-        Uri.parse("$host:${getControlPort?.call()}/logs?level=$level"),
+        Uri.parse("$host:$port/logs?level=$level"),
       );
       if (secret.isNotEmpty) {
         request.headers.add("Authorization", "Bearer $secret");
       }
       var response = await request.close();
+      if (response.statusCode != 200) {
+        throw Exception("Logs stream returned HTTP ${response.statusCode}");
+      }
       await for (var line in response.transform(utf8.decoder).transform(const LineSplitter())) {
         line = line.trim();
         if (line.isEmpty) continue;
@@ -550,7 +611,6 @@ class ClashHttpApi {
           yield log;
         } catch (_) {}
       }
-    } catch (_) {
     } finally {
       client.close(force: true);
     }
