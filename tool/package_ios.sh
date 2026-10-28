@@ -23,8 +23,19 @@ if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
       TAG="v${PUBSPEC_VER}"
     fi
   else
-    TAG="v1.3.1.1517"
+    echo "Error: pubspec.yaml not found and no TAG specified." >&2
+    exit 1
   fi
+fi
+
+if [[ "$TAG" != v* ]]; then
+  TAG="v$TAG"
+fi
+
+RAW_VERSION="${TAG#v}"
+if [ -z "$RAW_VERSION" ] || [ "$RAW_VERSION" = "v" ]; then
+  echo "Error: Invalid TAG '$TAG'" >&2
+  exit 1
 fi
 
 echo "======================================================================"

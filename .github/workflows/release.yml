@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release Tag (e.g. v1.3.1.1517)'
+        description: 'Release Tag (leave empty to auto-detect from pubspec.yaml)'
         required: false
-        default: 'v1.3.1.1517'
+        default: ''
 
 permissions:
   contents: write
@@ -47,7 +47,7 @@ jobs:
         run: |
           $pubVer = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[0]
           $pubBuild = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[1]
-          if (-not $pubBuild) { $pubBuild = "1517" }
+          if (-not $pubBuild) { $pubBuild = "1" }
           Write-Host "Building Windows Application version $pubVer+$pubBuild..."
           flutter build windows --release --build-name=$pubVer --build-number=$pubBuild
 
@@ -68,7 +68,7 @@ jobs:
                 $tag = "v$pubVer"
               }
             } else {
-              $tag = "v1.3.1.1517"
+              throw "pubspec.yaml not found and no release tag provided."
             }
           }
           if (-not $tag.StartsWith("v")) {
@@ -203,7 +203,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1"
           flutter build linux --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
       - name: Package Linux Artifacts (.deb & .tar.gz)
@@ -224,7 +224,8 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.3.1.1517"
+              echo "Error: pubspec.yaml not found" >&2
+              exit 1
             fi
           fi
           chmod +x tool/package_linux.sh
@@ -304,7 +305,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1"
           flutter build linux --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
       - name: Package Linux ARM64 Artifacts
@@ -325,7 +326,8 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.3.1.1517"
+              echo "Error: pubspec.yaml not found" >&2
+              exit 1
             fi
           fi
           chmod +x tool/package_linux.sh
@@ -396,7 +398,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1"
           flutter build apk --release --split-per-abi --android-skip-build-dependency-validation --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
           flutter build apk --release --android-skip-build-dependency-validation --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
@@ -419,7 +421,8 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.3.1.1517"
+              echo "Error: pubspec.yaml not found" >&2
+              exit 1
             fi
           fi
           
@@ -492,7 +495,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1"
           echo "Building macOS application version $PUBSPEC_VER+$PUBSPEC_BUILD..."
           flutter build macos --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
@@ -514,7 +517,8 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.3.1.1517"
+              echo "Error: pubspec.yaml not found" >&2
+              exit 1
             fi
           fi
           chmod +x tool/package_macos.sh
@@ -574,7 +578,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1"
           echo "Building iOS application version $PUBSPEC_VER+$PUBSPEC_BUILD..."
           flutter build ios --release --no-codesign --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
@@ -596,7 +600,8 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.3.1.1517"
+              echo "Error: pubspec.yaml not found" >&2
+              exit 1
             fi
           fi
           chmod +x tool/package_ios.sh
@@ -636,7 +641,8 @@ jobs:
                 TAG="v${PUBSPEC_VER}"
               fi
             else
-              TAG="v1.3.1.1517"
+              echo "Error: pubspec.yaml not found" >&2
+              exit 1
             fi
           fi
 
@@ -650,7 +656,7 @@ jobs:
             BUILD_NUM=$(echo "$RAW_VER" | awk -F'.' '{if (NF>3) print $4}')
           fi
           if [ -z "$BUILD_NUM" ]; then
-            BUILD_NUM="1517"
+            BUILD_NUM="1"
           fi
 
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT

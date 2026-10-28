@@ -2,7 +2,7 @@
 set -e
 
 # Extract version from argument, environment, or pubspec.yaml
-TAG="${1:-$TAG}"
+TAG="${1:-${TAG:-}}"
 if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
   if [ -f "pubspec.yaml" ]; then
     PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
@@ -13,7 +13,8 @@ if [ -z "$TAG" ] || [ "$TAG" = "main" ]; then
       TAG="v${PUBSPEC_VER}"
     fi
   else
-    TAG="v1.3.1.1517"
+    echo "Error: pubspec.yaml not found and no TAG specified." >&2
+    exit 1
   fi
 fi
 
@@ -24,8 +25,8 @@ fi
 
 RAW_VERSION="${TAG#v}"
 if [ -z "$RAW_VERSION" ] || [ "$RAW_VERSION" = "v" ]; then
-  RAW_VERSION="1.3.1.1517"
-  TAG="v1.3.1.1517"
+  echo "Error: Invalid TAG '$TAG'" >&2
+  exit 1
 fi
 VERSION="$RAW_VERSION"
 

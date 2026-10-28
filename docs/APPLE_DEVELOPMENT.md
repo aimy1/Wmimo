@@ -27,13 +27,13 @@ dart run tool/download_all_cores.dart
 # 2. 生成 macOS 生产构建
 flutter build macos --release
 
-# 3. 执行原生一键打包脚本（自动嵌入核心、执行 ad-hoc 签名并生成 DMG 与 Portable Zip）
-bash tool/package_macos.sh v1.3.1.1517
+# 3. 执行原生一键打包脚本（自动提取 pubspec.yaml 版本、嵌入核心、执行 ad-hoc 签名并生成 DMG 与 Portable Zip）
+bash tool/package_macos.sh
 ```
 
 产物将输出在 `dist/` 目录：
-- `dist/Wmimo-macOS-universal-v1.3.1.1517.dmg`（带 Applications 软链接的原生拖拽安装镜像）
-- `dist/Wmimo-macOS-universal-v1.3.1.1517.zip`（绿色便携包，完整保留可执行权限与 SUID 标志）
+- `dist/Wmimo-macOS-universal-<version>.dmg`（带 Applications 软链接的原生拖拽安装镜像）
+- `dist/Wmimo-macOS-universal-<version>.zip`（绿色便携包，完整保留可执行权限与 SUID 标志）
 
 ### 3. CI/CD 自动化持续集成
 GitHub Actions 工作流（`.github/workflows/release.yml`）已包含 `build-macos` Job，任何 Release 标签推送或手动触发均会自动在 `macos-latest` 虚拟机中编译生成 Universal DMG 与 Zip，并自动聚合计算 SHA-256 校验和上传发布。
