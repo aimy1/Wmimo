@@ -842,6 +842,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get tunDeviceCreateFailed => 'TUN 가상 네트워크 어댑터 생성 실패';
 	@override String get test => '테스트';
 	@override String get addWebsite => '웹사이트 추가';
+	@override String get maxWebsitesReached => '테스트 웹사이트는 최대 6개까지 추가할 수 있습니다';
 }
 
 // Path: permission
@@ -1714,6 +1715,7 @@ extension on TranslationsKo {
 			'meta.tunDeviceCreateFailed' => 'TUN 가상 네트워크 어댑터 생성 실패',
 			'meta.test' => '테스트',
 			'meta.addWebsite' => '웹사이트 추가',
+			'meta.maxWebsitesReached' => '테스트 웹사이트는 최대 6개까지 추가할 수 있습니다',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

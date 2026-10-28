@@ -719,7 +719,8 @@
     "filteredTimeout": "تمت تصفية المنتهية مهلتها",
     "tunDeviceCreateFailed": "فشل إنشاء محول الشبكة الافتراضي TUN",
     "test": "اختبار",
-    "addWebsite": "إضافة موقع"
+    "addWebsite": "إضافة موقع",
+    "maxWebsitesReached": "يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى"
   },
   "permission": {
     "camera": "الكاميرا",

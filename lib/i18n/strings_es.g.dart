@@ -842,6 +842,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get tunDeviceCreateFailed => 'Error al crear el adaptador de red virtual TUN';
 	@override String get test => 'Probar';
 	@override String get addWebsite => 'Añadir sitio';
+	@override String get maxWebsitesReached => 'Se pueden agregar hasta 6 sitios web de prueba';
 }
 
 // Path: permission
@@ -1714,6 +1715,7 @@ extension on TranslationsEs {
 			'meta.tunDeviceCreateFailed' => 'Error al crear el adaptador de red virtual TUN',
 			'meta.test' => 'Probar',
 			'meta.addWebsite' => 'Añadir sitio',
+			'meta.maxWebsitesReached' => 'Se pueden agregar hasta 6 sitios web de prueba',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

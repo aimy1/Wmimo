@@ -719,7 +719,8 @@
     "filteredTimeout": "已过滤超时",
     "tunDeviceCreateFailed": "TUN 虚拟网卡创建失败",
     "test": "测试",
-    "addWebsite": "添加网站"
+    "addWebsite": "添加网站",
+    "maxWebsitesReached": "最多支持添加 6 个测试网站"
   },
   "permission": {
     "camera": "摄像头",

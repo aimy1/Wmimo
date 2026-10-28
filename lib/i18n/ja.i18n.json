@@ -719,7 +719,8 @@
     "filteredTimeout": "タイムアウト除外済",
     "tunDeviceCreateFailed": "TUN 仮想ネットワークアダプターの作成に失敗しました",
     "test": "テスト",
-    "addWebsite": "サイトを追加"
+    "addWebsite": "サイトを追加",
+    "maxWebsitesReached": "最大6つのテストWebサイトを追加できます"
   },
   "permission": {
     "camera": "カメラ",

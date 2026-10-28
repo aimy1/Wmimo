@@ -842,6 +842,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get tunDeviceCreateFailed => 'TUN 仮想ネットワークアダプターの作成に失敗しました';
 	@override String get test => 'テスト';
 	@override String get addWebsite => 'サイトを追加';
+	@override String get maxWebsitesReached => '最大6つのテストWebサイトを追加できます';
 }
 
 // Path: permission
@@ -1714,6 +1715,7 @@ extension on TranslationsJa {
 			'meta.tunDeviceCreateFailed' => 'TUN 仮想ネットワークアダプターの作成に失敗しました',
 			'meta.test' => 'テスト',
 			'meta.addWebsite' => 'サイトを追加',
+			'meta.maxWebsitesReached' => '最大6つのテストWebサイトを追加できます',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

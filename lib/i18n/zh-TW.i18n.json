@@ -719,7 +719,8 @@
     "filteredTimeout": "已過濾超時",
     "tunDeviceCreateFailed": "TUN 虛擬網卡建立失敗",
     "test": "測試",
-    "addWebsite": "新增網站"
+    "addWebsite": "新增網站",
+    "maxWebsitesReached": "最多支援新增 6 個測試網站"
   },
   "permission": {
     "camera": "相機",

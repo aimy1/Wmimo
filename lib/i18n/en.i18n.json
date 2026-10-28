@@ -719,7 +719,8 @@
     "filteredTimeout": "Filtered Timeout",
     "tunDeviceCreateFailed": "Failed to create TUN virtual network adapter",
     "test": "Test",
-    "addWebsite": "Add Website"
+    "addWebsite": "Add Website",
+    "maxWebsitesReached": "Up to 6 test websites can be added"
   },
   "permission": {
     "camera": "Camera",

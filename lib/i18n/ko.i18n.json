@@ -719,7 +719,8 @@
     "filteredTimeout": "시간 초과 필터링됨",
     "tunDeviceCreateFailed": "TUN 가상 네트워크 어댑터 생성 실패",
     "test": "테스트",
-    "addWebsite": "웹사이트 추가"
+    "addWebsite": "웹사이트 추가",
+    "maxWebsitesReached": "테스트 웹사이트는 최대 6개까지 추가할 수 있습니다"
   },
   "permission": {
     "camera": "카메라",

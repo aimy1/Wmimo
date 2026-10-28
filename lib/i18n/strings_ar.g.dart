@@ -842,6 +842,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get tunDeviceCreateFailed => 'فشل إنشاء محول الشبكة الافتراضي TUN';
 	@override String get test => 'اختبار';
 	@override String get addWebsite => 'إضافة موقع';
+	@override String get maxWebsitesReached => 'يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى';
 }
 
 // Path: permission
@@ -1714,6 +1715,7 @@ extension on TranslationsAr {
 			'meta.tunDeviceCreateFailed' => 'فشل إنشاء محول الشبكة الافتراضي TUN',
 			'meta.test' => 'اختبار',
 			'meta.addWebsite' => 'إضافة موقع',
+			'meta.maxWebsitesReached' => 'يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',

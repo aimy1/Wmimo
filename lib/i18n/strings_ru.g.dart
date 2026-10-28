@@ -842,6 +842,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get tunDeviceCreateFailed => 'Не удалось создать виртуальный сетевой адаптер TUN';
 	@override String get test => 'Тест';
 	@override String get addWebsite => 'Добавить сайт';
+	@override String get maxWebsitesReached => 'Можно добавить не более 6 тестовых сайтов';
 }
 
 // Path: permission
@@ -1714,6 +1715,7 @@ extension on TranslationsRu {
 			'meta.tunDeviceCreateFailed' => 'Не удалось создать виртуальный сетевой адаптер TUN',
 			'meta.test' => 'Тест',
 			'meta.addWebsite' => 'Добавить сайт',
+			'meta.maxWebsitesReached' => 'Можно добавить не более 6 тестовых сайтов',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

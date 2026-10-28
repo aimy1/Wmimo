@@ -719,7 +719,8 @@
     "filteredTimeout": "Tiempos agotados filtrados",
     "tunDeviceCreateFailed": "Error al crear el adaptador de red virtual TUN",
     "test": "Probar",
-    "addWebsite": "Añadir sitio"
+    "addWebsite": "Añadir sitio",
+    "maxWebsitesReached": "Se pueden agregar hasta 6 sitios web de prueba"
   },
   "permission": {
     "camera": "Cámara",

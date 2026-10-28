@@ -2200,6 +2200,9 @@ class Translations$meta$en {
 
 	/// en: 'Add Website'
 	String get addWebsite => 'Add Website';
+
+	/// en: 'Up to 6 test websites can be added'
+	String get maxWebsitesReached => 'Up to 6 test websites can be added';
 }
 
 // Path: permission
@@ -3270,6 +3273,7 @@ extension on Translations {
 			'meta.tunDeviceCreateFailed' => 'Failed to create TUN virtual network adapter',
 			'meta.test' => 'Test',
 			'meta.addWebsite' => 'Add Website',
+			'meta.maxWebsitesReached' => 'Up to 6 test websites can be added',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

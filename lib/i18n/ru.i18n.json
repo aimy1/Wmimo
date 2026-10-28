@@ -719,7 +719,8 @@
     "filteredTimeout": "Тайм-ауты скрыты",
     "tunDeviceCreateFailed": "Не удалось создать виртуальный сетевой адаптер TUN",
     "test": "Тест",
-    "addWebsite": "Добавить сайт"
+    "addWebsite": "Добавить сайт",
+    "maxWebsitesReached": "Можно добавить не более 6 тестовых сайтов"
   },
   "permission": {
     "camera": "Камера",

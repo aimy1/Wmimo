@@ -719,7 +719,8 @@
     "filteredTimeout": "مهلت‌های تمام شده فیلتر شدند",
     "tunDeviceCreateFailed": "ایجاد آداپتور شبکه مجازی TUN انجام نشد",
     "test": "تست",
-    "addWebsite": "افزودن وب‌سایت"
+    "addWebsite": "افزودن وب‌سایت",
+    "maxWebsitesReached": "حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است"
   },
   "permission": {
     "camera": "دوربین",

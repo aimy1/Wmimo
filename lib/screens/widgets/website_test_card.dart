@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
+import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_define.dart';
 
 class WebsiteTarget {
@@ -152,6 +153,7 @@ class WebsiteTestCard extends StatefulWidget {
 }
 
 class _WebsiteTestCardState extends State<WebsiteTestCard> {
+  static const int kMaxWebsiteTargets = 6;
   late List<WebsiteTarget> _targets;
   bool _isTestingAll = false;
   Offset _lastTapPosition = Offset.zero;
@@ -165,9 +167,9 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
   void _loadTargets() {
     final saved = SettingManager.getConfig().websiteTestTargets;
     if (saved != null && saved.isNotEmpty) {
-      _targets = saved.map((m) => WebsiteTarget.fromJson(m)).toList();
+      _targets = saved.map((m) => WebsiteTarget.fromJson(m)).take(kMaxWebsiteTargets).toList();
     } else {
-      _targets = WebsiteTarget.getDefaultTargets();
+      _targets = WebsiteTarget.getDefaultTargets().take(kMaxWebsiteTargets).toList();
     }
   }
 
@@ -338,10 +340,19 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
   }
 
   void _showAddTargetDialog() {
+    final tcontext = Translations.of(context);
+    if (_targets.length >= kMaxWebsiteTargets) {
+      DialogUtils.showAlertDialog(
+        context,
+        tcontext.meta.maxWebsitesReached,
+        showCopy: false,
+        showFAQ: false,
+      );
+      return;
+    }
     final nameController = TextEditingController();
     final urlController = TextEditingController(text: 'https://');
     final iconController = TextEditingController();
-    final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -493,6 +504,10 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                     final url = urlController.text.trim();
                     final customIcon = iconController.text.trim();
                     if (name.isNotEmpty && url.startsWith('http')) {
+                      if (_targets.length >= kMaxWebsiteTargets) {
+                        Navigator.pop(ctx);
+                        return;
+                      }
                       final match = WebsiteTarget.matchBrand(name, url);
                       setState(() {
                         _targets.add(
@@ -1044,6 +1059,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     final innerBorderColor = isDark
         ? ThemeDefine.kColorDarkBorder
         : const Color(0xFFE2E8F0);
+    final isAtLimit = _targets.length >= kMaxWebsiteTargets;
 
     return Card(
       elevation: 0,
@@ -1119,7 +1135,9 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                 const SizedBox(width: 6),
                 // Add Target Button
                 Tooltip(
-                  message: tcontext.meta.addWebsite,
+                  message: isAtLimit
+                      ? tcontext.meta.maxWebsitesReached
+                      : tcontext.meta.addWebsite,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(7),
                     onTap: _showAddTargetDialog,
@@ -1133,14 +1151,14 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                             : const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(7),
                         border: Border.all(
-                          color: theme.dividerColor.withValues(alpha: 0.3),
+                          color: theme.dividerColor.withValues(alpha: isAtLimit ? 0.15 : 0.3),
                           width: 0.8,
                         ),
                       ),
                       child: Icon(
                         Icons.add_rounded,
                         size: 16,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(alpha: isAtLimit ? 0.35 : 0.7),
                       ),
                     ),
                   ),

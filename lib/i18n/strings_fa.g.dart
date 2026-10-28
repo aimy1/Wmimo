@@ -842,6 +842,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get tunDeviceCreateFailed => 'ایجاد آداپتور شبکه مجازی TUN انجام نشد';
 	@override String get test => 'تست';
 	@override String get addWebsite => 'افزودن وب‌سایت';
+	@override String get maxWebsitesReached => 'حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است';
 }
 
 // Path: permission
@@ -1714,6 +1715,7 @@ extension on TranslationsFa {
 			'meta.tunDeviceCreateFailed' => 'ایجاد آداپتور شبکه مجازی TUN انجام نشد',
 			'meta.test' => 'تست',
 			'meta.addWebsite' => 'افزودن وب‌سایت',
+			'meta.maxWebsitesReached' => 'حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

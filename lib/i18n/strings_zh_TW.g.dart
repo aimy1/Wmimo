@@ -842,6 +842,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get tunDeviceCreateFailed => 'TUN 虛擬網卡建立失敗';
 	@override String get test => '測試';
 	@override String get addWebsite => '新增網站';
+	@override String get maxWebsitesReached => '最多支援新增 6 個測試網站';
 }
 
 // Path: permission
@@ -1714,6 +1715,7 @@ extension on TranslationsZhTw {
 			'meta.tunDeviceCreateFailed' => 'TUN 虛擬網卡建立失敗',
 			'meta.test' => '測試',
 			'meta.addWebsite' => '新增網站',
+			'meta.maxWebsitesReached' => '最多支援新增 6 個測試網站',
 			'permission.camera' => '相機',
 			'permission.screen' => '螢幕錄製',
 			'permission.appQuery' => '取得應用程式列表',
