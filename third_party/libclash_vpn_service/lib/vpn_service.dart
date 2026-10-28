@@ -657,12 +657,6 @@ tcp-concurrent: $tcpConcurrent
 find-process-mode: $findProcessMode
 ''';
 
-    if (fingerprint.isNotEmpty &&
-        fingerprint != 'none' &&
-        fingerprint != 'no-overwrite') {
-      header += 'global-client-fingerprint: $fingerprint\n';
-    }
-
     if (patchJson != null && patchJson['geox-url'] is Map) {
       final geox = patchJson['geox-url'] as Map;
       final geosite = geox['geosite']?.toString();
@@ -739,8 +733,8 @@ tun:
 ''';
     }
 
-    // Filter out conflicting top-level keys from raw subscription
-    final overriddenTopLevelKeys = [
+    // Only filter top-level keys and blocks that are actively overridden by Wmimo
+    final overriddenTopLevelKeys = <String>[
       'mixed-port',
       'allow-lan',
       'mode',
@@ -752,10 +746,6 @@ tun:
       'tcp-concurrent',
       'find-process-mode',
       'global-client-fingerprint',
-      'geox-url',
-      'sniffer',
-      'ntp',
-      'tls',
       'port',
       'socks-port',
       'redir-port',
@@ -764,46 +754,52 @@ tun:
       'routing-mark',
     ];
 
+    if (patchJson != null && patchJson['geox-url'] is Map) {
+      overriddenTopLevelKeys.add('geox-url');
+    }
+    if (patchJson != null && patchJson['sniffer'] is Map && (patchJson['sniffer'] as Map)['enable'] == true) {
+      overriddenTopLevelKeys.add('sniffer');
+    }
+    if (patchJson != null && patchJson['ntp'] is Map && (patchJson['ntp'] as Map)['enable'] == true) {
+      overriddenTopLevelKeys.add('ntp');
+    }
+    if (patchJson != null && patchJson['tls'] is Map) {
+      overriddenTopLevelKeys.add('tls');
+    }
+    if (tunMode && !Platform.isAndroid) {
+      overriddenTopLevelKeys.add('tun');
+    }
+
     bool inOverriddenBlock = false;
     final List<String> resultLines = [];
-    final rawLines = profileContent.split('\n');
+    final normalizedProfile = profileContent.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+    final rawLines = normalizedProfile.split('\n');
 
     for (int i = 0; i < rawLines.length; i++) {
       final rawLine = rawLines[i];
       final trimmed = rawLine.trim();
 
-      // Check if entering a root block that we override completely (e.g. tun:)
-      if (tunMode && (trimmed.startsWith('tun:') || trimmed.startsWith('tun-') || trimmed.startsWith('"tun":') || trimmed.startsWith("'tun':"))) {
-        inOverriddenBlock = true;
-        continue;
-      }
-
-      // If we are inside an overridden block and the line is indented, skip it
-      if (inOverriddenBlock) {
-        if (rawLine.startsWith(' ') || rawLine.startsWith('\t') || trimmed.isEmpty) {
-          continue;
-        } else {
-          inOverriddenBlock = false;
-        }
-      }
-
-      // Check if it's a top-level key that we override
-      bool isOverridden = false;
-      if (!rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
+      // Check if this line is an un-indented root-level line
+      if (rawLine.isNotEmpty && !rawLine.startsWith(' ') && !rawLine.startsWith('\t')) {
+        inOverriddenBlock = false;
         for (final key in overriddenTopLevelKeys) {
           if (trimmed.startsWith('$key:') ||
               trimmed.startsWith('$key :') ||
               trimmed.startsWith('"$key":') ||
               trimmed.startsWith("'$key':") ||
               trimmed.startsWith('"$key" :') ||
-              trimmed.startsWith("'$key' :")) {
-            isOverridden = true;
+              trimmed.startsWith("'$key' :") ||
+              trimmed == '$key' ||
+              trimmed == '"$key"' ||
+              trimmed == "'$key'") {
+            inOverriddenBlock = true;
             break;
           }
         }
       }
 
-      if (isOverridden) {
+      // If we are inside an overridden block (root key and all its indented children), skip!
+      if (inOverriddenBlock) {
         continue;
       }
 
@@ -993,20 +989,55 @@ rules:
       }
     }
 
+    // Apply client-fingerprint to proxies if configured (Modern Mihomo sets it per proxy node)
+    if (fingerprint.isNotEmpty &&
+        fingerprint != 'none' &&
+        fingerprint != 'no-overwrite') {
+      final fpRegex = RegExp(r'client-fingerprint:\s*[^,}\s]+');
+      final lines = filteredLines.split('\n');
+      final newLines = <String>[];
+      bool inProxies = false;
+      for (var line in lines) {
+        final tr = line.trim();
+        if (tr.startsWith('proxies:')) {
+          inProxies = true;
+          newLines.add(line);
+          continue;
+        } else if (inProxies && tr.isNotEmpty && !line.startsWith(' ') && !line.startsWith('\t')) {
+          inProxies = false;
+        }
+
+        if (inProxies) {
+          if (fpRegex.hasMatch(line)) {
+            newLines.add(line.replaceAll(fpRegex, 'client-fingerprint: $fingerprint'));
+            continue;
+          } else if (line.contains('type:') && (line.contains('tls') || line.contains('sni:') || line.contains(': 443'))) {
+            if (line.trim().endsWith('}')) {
+              final lastBrace = line.lastIndexOf('}');
+              newLines.add('${line.substring(0, lastBrace)}, client-fingerprint: $fingerprint}');
+              continue;
+            }
+          }
+        }
+        newLines.add(line);
+      }
+      filteredLines = newLines.join('\n');
+    }
+
     // Merge custom rules from patchJson (Diversion templates & custom overwrites)
     if (patchJson != null &&
         patchJson['rules'] is List &&
         (patchJson['rules'] as List).isNotEmpty) {
       final customRules =
           (patchJson['rules'] as List).map((r) => r.toString()).toList();
-      final rulesIndex = filteredLines.indexOf('rules:');
-      if (rulesIndex != -1) {
+      final rulesRegex = RegExp(r'^rules:\s*$', multiLine: true);
+      if (rulesRegex.hasMatch(filteredLines)) {
         final rulesBuf = StringBuffer('rules:\n');
         for (var r in customRules) {
           rulesBuf.writeln('  - $r');
         }
         filteredLines =
-            filteredLines.replaceFirst('rules:\n', rulesBuf.toString());
+            filteredLines.replaceFirst(rulesRegex, rulesBuf.toString().trimRight());
       } else {
         final rulesBuf = StringBuffer('\nrules:\n');
         for (var r in customRules) {
@@ -1021,7 +1052,11 @@ rules:
         patchJson['rule-providers'] is Map &&
         (patchJson['rule-providers'] as Map).isNotEmpty) {
       final providers = patchJson['rule-providers'] as Map;
-      final provBuf = StringBuffer('\nrule-providers:\n');
+      final provRegex = RegExp(r'^rule-providers:\s*$', multiLine: true);
+      final provBuf = StringBuffer();
+      if (!provRegex.hasMatch(filteredLines)) {
+        provBuf.writeln('\nrule-providers:');
+      }
       providers.forEach((key, val) {
         if (val is Map) {
           provBuf.writeln('  $key:');
@@ -1039,7 +1074,14 @@ rules:
           });
         }
       });
-      filteredLines += provBuf.toString();
+      if (provRegex.hasMatch(filteredLines)) {
+        filteredLines = filteredLines.replaceFirst(
+          provRegex,
+          'rule-providers:\n${provBuf.toString().trimRight()}',
+        );
+      } else {
+        filteredLines += provBuf.toString();
+      }
     }
 
     final baseDir = _savedConfig?.base_dir.isNotEmpty == true
@@ -1052,7 +1094,8 @@ rules:
     } catch (_) {}
     final runtimePath = "$baseDir/runtime_active_config.yaml";
     try {
-      await File(runtimePath).writeAsString(header + '\n' + filteredLines, flush: true);
+      final combined = '${header.trimRight()}\n\n${filteredLines.trimLeft()}';
+      await File(runtimePath).writeAsString(combined, flush: true);
       return runtimePath;
     } catch (_) {
       return profileFile;
