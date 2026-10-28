@@ -843,6 +843,8 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get test => 'Тест';
 	@override String get addWebsite => 'Добавить сайт';
 	@override String get maxWebsitesReached => 'Можно добавить не более 6 тестовых сайтов';
+	@override String get sideBySideLayout => 'Параллельный макет';
+	@override String get sideBySideLayoutTips => 'Отображать карточки и подписки бок о бок на широких экранах';
 }
 
 // Path: permission
@@ -1716,6 +1718,8 @@ extension on TranslationsRu {
 			'meta.test' => 'Тест',
 			'meta.addWebsite' => 'Добавить сайт',
 			'meta.maxWebsitesReached' => 'Можно добавить не более 6 тестовых сайтов',
+			'meta.sideBySideLayout' => 'Параллельный макет',
+			'meta.sideBySideLayoutTips' => 'Отображать карточки и подписки бок о бок на широких экранах',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

@@ -843,6 +843,8 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get test => '测试';
 	@override String get addWebsite => '添加网站';
 	@override String get maxWebsitesReached => '最多支持添加 6 个测试网站';
+	@override String get sideBySideLayout => '并列排版';
+	@override String get sideBySideLayoutTips => '开启后首页卡片与订阅列表在宽屏下采用并列排版，关闭则保持单列垂直排版';
 }
 
 // Path: permission
@@ -1716,6 +1718,8 @@ extension on TranslationsZhCn {
 			'meta.test' => '测试',
 			'meta.addWebsite' => '添加网站',
 			'meta.maxWebsitesReached' => '最多支持添加 6 个测试网站',
+			'meta.sideBySideLayout' => '并列排版',
+			'meta.sideBySideLayoutTips' => '开启后首页卡片与订阅列表在宽屏下采用并列排版，关闭则保持单列垂直排版',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',

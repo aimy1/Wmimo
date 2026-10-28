@@ -720,7 +720,9 @@
     "tunDeviceCreateFailed": "TUN 仮想ネットワークアダプターの作成に失敗しました",
     "test": "テスト",
     "addWebsite": "サイトを追加",
-    "maxWebsitesReached": "最大6つのテストWebサイトを追加できます"
+    "maxWebsitesReached": "最大6つのテストWebサイトを追加できます",
+    "sideBySideLayout": "並列レイアウト",
+    "sideBySideLayoutTips": "ワイド画面でホームカードとサブスクリプションリストを並列表示します"
   },
   "permission": {
     "camera": "カメラ",

@@ -843,6 +843,8 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get test => 'テスト';
 	@override String get addWebsite => 'サイトを追加';
 	@override String get maxWebsitesReached => '最大6つのテストWebサイトを追加できます';
+	@override String get sideBySideLayout => '並列レイアウト';
+	@override String get sideBySideLayoutTips => 'ワイド画面でホームカードとサブスクリプションリストを並列表示します';
 }
 
 // Path: permission
@@ -1716,6 +1718,8 @@ extension on TranslationsJa {
 			'meta.test' => 'テスト',
 			'meta.addWebsite' => 'サイトを追加',
 			'meta.maxWebsitesReached' => '最大6つのテストWebサイトを追加できます',
+			'meta.sideBySideLayout' => '並列レイアウト',
+			'meta.sideBySideLayoutTips' => 'ワイド画面でホームカードとサブスクリプションリストを並列表示します',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

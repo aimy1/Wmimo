@@ -720,7 +720,9 @@
     "tunDeviceCreateFailed": "Не удалось создать виртуальный сетевой адаптер TUN",
     "test": "Тест",
     "addWebsite": "Добавить сайт",
-    "maxWebsitesReached": "Можно добавить не более 6 тестовых сайтов"
+    "maxWebsitesReached": "Можно добавить не более 6 тестовых сайтов",
+    "sideBySideLayout": "Параллельный макет",
+    "sideBySideLayoutTips": "Отображать карточки и подписки бок о бок на широких экранах"
   },
   "permission": {
     "camera": "Камера",

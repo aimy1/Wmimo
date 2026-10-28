@@ -843,6 +843,8 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get test => 'Probar';
 	@override String get addWebsite => 'Añadir sitio';
 	@override String get maxWebsitesReached => 'Se pueden agregar hasta 6 sitios web de prueba';
+	@override String get sideBySideLayout => 'Diseño en paralelo';
+	@override String get sideBySideLayoutTips => 'Muestra las tarjetas y suscripciones lado a lado en pantallas anchas';
 }
 
 // Path: permission
@@ -1716,6 +1718,8 @@ extension on TranslationsEs {
 			'meta.test' => 'Probar',
 			'meta.addWebsite' => 'Añadir sitio',
 			'meta.maxWebsitesReached' => 'Se pueden agregar hasta 6 sitios web de prueba',
+			'meta.sideBySideLayout' => 'Diseño en paralelo',
+			'meta.sideBySideLayoutTips' => 'Muestra las tarjetas y suscripciones lado a lado en pantallas anchas',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

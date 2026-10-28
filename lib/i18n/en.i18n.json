@@ -720,7 +720,9 @@
     "tunDeviceCreateFailed": "Failed to create TUN virtual network adapter",
     "test": "Test",
     "addWebsite": "Add Website",
-    "maxWebsitesReached": "Up to 6 test websites can be added"
+    "maxWebsitesReached": "Up to 6 test websites can be added",
+    "sideBySideLayout": "Side-by-Side Layout",
+    "sideBySideLayoutTips": "Display dashboard cards and subscription lists side by side on wide screens"
   },
   "permission": {
     "camera": "Camera",

@@ -720,7 +720,9 @@
     "tunDeviceCreateFailed": "TUN 虚拟网卡创建失败",
     "test": "测试",
     "addWebsite": "添加网站",
-    "maxWebsitesReached": "最多支持添加 6 个测试网站"
+    "maxWebsitesReached": "最多支持添加 6 个测试网站",
+    "sideBySideLayout": "并列排版",
+    "sideBySideLayoutTips": "开启后首页卡片与订阅列表在宽屏下采用并列排版，关闭则保持单列垂直排版"
   },
   "permission": {
     "camera": "摄像头",

@@ -924,6 +924,13 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
   void initState() {
     super.initState();
     _loadNodeCounts();
+    SettingManager.onSideBySideLayoutChanged.add(_onLayoutChanged);
+  }
+
+  void _onLayoutChanged() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -950,6 +957,7 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
 
   @override
   void dispose() {
+    SettingManager.onSideBySideLayoutChanged.remove(_onLayoutChanged);
     ProfileManager.save();
     super.dispose();
   }
@@ -1030,9 +1038,12 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final int crossAxisCount = constraints.maxWidth >= 1050
-            ? 3
-            : (constraints.maxWidth >= 600 ? 2 : 1);
+        final sideBySide = SettingManager.getConfig().ui.sideBySideLayout;
+        final int crossAxisCount = sideBySide
+            ? (constraints.maxWidth >= 1050
+                ? 3
+                : (constraints.maxWidth >= 600 ? 2 : 1))
+            : 1;
 
         if (crossAxisCount == 1) {
           return ListView.builder(

@@ -720,7 +720,9 @@
     "tunDeviceCreateFailed": "Error al crear el adaptador de red virtual TUN",
     "test": "Probar",
     "addWebsite": "Añadir sitio",
-    "maxWebsitesReached": "Se pueden agregar hasta 6 sitios web de prueba"
+    "maxWebsitesReached": "Se pueden agregar hasta 6 sitios web de prueba",
+    "sideBySideLayout": "Diseño en paralelo",
+    "sideBySideLayoutTips": "Muestra las tarjetas y suscripciones lado a lado en pantallas anchas"
   },
   "permission": {
     "camera": "Cámara",

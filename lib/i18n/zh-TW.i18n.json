@@ -720,7 +720,9 @@
     "tunDeviceCreateFailed": "TUN 虛擬網卡建立失敗",
     "test": "測試",
     "addWebsite": "新增網站",
-    "maxWebsitesReached": "最多支援新增 6 個測試網站"
+    "maxWebsitesReached": "最多支援新增 6 個測試網站",
+    "sideBySideLayout": "並列排版",
+    "sideBySideLayoutTips": "開啟後首頁卡片與訂閱列表在寬螢幕下採用並列排版，關閉則保持單列垂直排版"
   },
   "permission": {
     "camera": "相機",

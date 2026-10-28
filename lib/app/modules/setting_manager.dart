@@ -34,6 +34,7 @@ class SettingConfigItemUI {
   bool perAppHideSystemApp = true;
   bool perAppHideAppIcon = false;
   bool delayTestSort = false;
+  bool sideBySideLayout = true;
   Map<String, dynamic> toJson() => {
     'theme': theme,
     'auto_orientation': autoOrientation,
@@ -43,6 +44,7 @@ class SettingConfigItemUI {
     'perapp_hide_system_app': perAppHideSystemApp,
     'perapp_hide_app_icon': perAppHideAppIcon,
     'delay_test_sort': delayTestSort,
+    'side_by_side_layout': sideBySideLayout,
   };
   void fromJson(Map<String, dynamic>? map) {
     if (map == null) {
@@ -55,6 +57,7 @@ class SettingConfigItemUI {
     perAppHideSystemApp = map["perapp_hide_system_app"] ?? true;
     perAppHideAppIcon = map["perapp_hide_app_icon"] ?? false;
     delayTestSort = map["delay_test_sort"] ?? false;
+    sideBySideLayout = map["side_by_side_layout"] ?? true;
     if (Platform.isAndroid) {
       tvMode = map["tv_mode"] ?? maybeTv();
       TextFieldEx.popupEdit = tvMode;
@@ -253,6 +256,15 @@ class SettingConfig {
 }
 
 class SettingManager {
+  static final List<void Function()> onSideBySideLayoutChanged = [];
+  static void notifySideBySideLayoutChanged() {
+    for (final cb in onSideBySideLayoutChanged) {
+      try {
+        cb();
+      } catch (_) {}
+    }
+  }
+
   static bool _saving = false;
   static bool _hasPendingSave = false;
   static SettingConfig _config = SettingConfig();

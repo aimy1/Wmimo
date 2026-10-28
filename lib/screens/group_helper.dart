@@ -568,6 +568,7 @@ class GroupHelper {
               ).setTheme(setting.ui.theme, true);
               TextFieldEx.popupEdit = setting.ui.tvMode;
               await SettingManager.save();
+              SettingManager.notifySideBySideLayoutChanged();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(tcontext.meta.resetSuccess)),
@@ -662,6 +663,19 @@ class GroupHelper {
             ),
           ),
         ],
+        GroupItemOptions(
+          switchOptions: GroupItemSwitchOptions(
+            name: tcontext.meta.sideBySideLayout,
+            tips: tcontext.meta.sideBySideLayoutTips,
+            switchValue: setting.ui.sideBySideLayout,
+            onSwitch: (bool value) async {
+              setting.ui.sideBySideLayout = value;
+              await SettingManager.save();
+              SettingManager.notifySideBySideLayoutChanged();
+              setstate?.call();
+            },
+          ),
+        ),
         if (AutoUpdateManager.isSupport()) ...[
           GroupItemOptions(
             pushOptions: GroupItemPushOptions(

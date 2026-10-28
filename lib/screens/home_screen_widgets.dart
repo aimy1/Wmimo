@@ -154,7 +154,13 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     });
     ClashSettingManager.onEventModeChanged.add(_onModeChangedEvent);
     Biz.onEventProxySelected.add(_onProxySelectedEvent);
+    SettingManager.onSideBySideLayoutChanged.add(_onLayoutChangedEvent);
     _updateProxyNow();
+  }
+
+  void _onLayoutChangedEvent() {
+    if (!mounted) return;
+    setState(() {});
   }
 
   void _onModeChangedEvent() {
@@ -176,6 +182,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     _currentChangedDebounce?.cancel();
     ClashSettingManager.onEventModeChanged.remove(_onModeChangedEvent);
     Biz.onEventProxySelected.remove(_onProxySelectedEvent);
+    SettingManager.onSideBySideLayoutChanged.remove(_onLayoutChangedEvent);
     VPNService.onEventStateChanged.remove(_onStateChanged);
     AppLifecycleStateNofity.onStateResumed(hashCode, null);
     AppLifecycleStateNofity.onStatePaused(hashCode, null);
@@ -550,7 +557,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         // 首页并列排布: 网站测试 + IP 信息, 订阅配置 + 快捷工具
         LayoutBuilder(
           builder: (context, constraints) {
-            final isWide = constraints.maxWidth >= 580;
+            final sideBySide = SettingManager.getConfig().ui.sideBySideLayout;
+            final isWide = sideBySide && constraints.maxWidth >= 580;
             final websiteCard = WebsiteTestCard(
               mixedPort: ClashSettingManager.getMixedPort(),
             );

@@ -720,7 +720,9 @@
     "tunDeviceCreateFailed": "ایجاد آداپتور شبکه مجازی TUN انجام نشد",
     "test": "تست",
     "addWebsite": "افزودن وب‌سایت",
-    "maxWebsitesReached": "حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است"
+    "maxWebsitesReached": "حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است",
+    "sideBySideLayout": "طرح‌بندی موازی",
+    "sideBySideLayoutTips": "نمایش کارت‌ها و اشتراک‌ها در کنار هم در صفحه‌های عریض"
   },
   "permission": {
     "camera": "دوربین",

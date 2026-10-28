@@ -843,6 +843,8 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get test => 'اختبار';
 	@override String get addWebsite => 'إضافة موقع';
 	@override String get maxWebsitesReached => 'يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى';
+	@override String get sideBySideLayout => 'تخطيط متوازي';
+	@override String get sideBySideLayoutTips => 'عرض البطاقات والاشتراكات جنباً إلى جنب على الشاشات العريضة';
 }
 
 // Path: permission
@@ -1716,6 +1718,8 @@ extension on TranslationsAr {
 			'meta.test' => 'اختبار',
 			'meta.addWebsite' => 'إضافة موقع',
 			'meta.maxWebsitesReached' => 'يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى',
+			'meta.sideBySideLayout' => 'تخطيط متوازي',
+			'meta.sideBySideLayoutTips' => 'عرض البطاقات والاشتراكات جنباً إلى جنب على الشاشات العريضة',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',

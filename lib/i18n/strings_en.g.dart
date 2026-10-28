@@ -2203,6 +2203,12 @@ class Translations$meta$en {
 
 	/// en: 'Up to 6 test websites can be added'
 	String get maxWebsitesReached => 'Up to 6 test websites can be added';
+
+	/// en: 'Side-by-Side Layout'
+	String get sideBySideLayout => 'Side-by-Side Layout';
+
+	/// en: 'Display dashboard cards and subscription lists side by side on wide screens'
+	String get sideBySideLayoutTips => 'Display dashboard cards and subscription lists side by side on wide screens';
 }
 
 // Path: permission
@@ -3274,6 +3280,8 @@ extension on Translations {
 			'meta.test' => 'Test',
 			'meta.addWebsite' => 'Add Website',
 			'meta.maxWebsitesReached' => 'Up to 6 test websites can be added',
+			'meta.sideBySideLayout' => 'Side-by-Side Layout',
+			'meta.sideBySideLayoutTips' => 'Display dashboard cards and subscription lists side by side on wide screens',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

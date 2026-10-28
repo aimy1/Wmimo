@@ -843,6 +843,8 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get test => 'تست';
 	@override String get addWebsite => 'افزودن وب‌سایت';
 	@override String get maxWebsitesReached => 'حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است';
+	@override String get sideBySideLayout => 'طرح‌بندی موازی';
+	@override String get sideBySideLayoutTips => 'نمایش کارت‌ها و اشتراک‌ها در کنار هم در صفحه‌های عریض';
 }
 
 // Path: permission
@@ -1716,6 +1718,8 @@ extension on TranslationsFa {
 			'meta.test' => 'تست',
 			'meta.addWebsite' => 'افزودن وب‌سایت',
 			'meta.maxWebsitesReached' => 'حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است',
+			'meta.sideBySideLayout' => 'طرح‌بندی موازی',
+			'meta.sideBySideLayoutTips' => 'نمایش کارت‌ها و اشتراک‌ها در کنار هم در صفحه‌های عریض',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

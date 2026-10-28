@@ -720,7 +720,9 @@
     "tunDeviceCreateFailed": "فشل إنشاء محول الشبكة الافتراضي TUN",
     "test": "اختبار",
     "addWebsite": "إضافة موقع",
-    "maxWebsitesReached": "يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى"
+    "maxWebsitesReached": "يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى",
+    "sideBySideLayout": "تخطيط متوازي",
+    "sideBySideLayoutTips": "عرض البطاقات والاشتراكات جنباً إلى جنب على الشاشات العريضة"
   },
   "permission": {
     "camera": "الكاميرا",
