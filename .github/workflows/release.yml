@@ -47,7 +47,7 @@ jobs:
         run: |
           $pubVer = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[0]
           $pubBuild = (Get-Content "pubspec.yaml" | Select-String -Pattern '^version:\s*(\S+)').Matches.Groups[1].Value.Split('+')[1]
-          if (-not $pubBuild) { $pubBuild = "1428" }
+          if (-not $pubBuild) { $pubBuild = "1517" }
           Write-Host "Building Windows Application version $pubVer+$pubBuild..."
           flutter build windows --release --build-name=$pubVer --build-number=$pubBuild
 
@@ -203,7 +203,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1428"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
           flutter build linux --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
       - name: Package Linux Artifacts (.deb & .tar.gz)
@@ -304,7 +304,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1513"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
           flutter build linux --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
       - name: Package Linux ARM64 Artifacts
@@ -396,7 +396,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1428"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
           flutter build apk --release --split-per-abi --android-skip-build-dependency-validation --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
           flutter build apk --release --android-skip-build-dependency-validation --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
@@ -492,7 +492,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1504"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
           echo "Building macOS application version $PUBSPEC_VER+$PUBSPEC_BUILD..."
           flutter build macos --release --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
@@ -574,7 +574,7 @@ jobs:
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
-          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1504"
+          [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1517"
           echo "Building iOS application version $PUBSPEC_VER+$PUBSPEC_BUILD..."
           flutter build ios --release --no-codesign --build-name=$PUBSPEC_VER --build-number=$PUBSPEC_BUILD
 
@@ -650,7 +650,7 @@ jobs:
             BUILD_NUM=$(echo "$RAW_VER" | awk -F'.' '{if (NF>3) print $4}')
           fi
           if [ -z "$BUILD_NUM" ]; then
-            BUILD_NUM="1513"
+            BUILD_NUM="1517"
           fi
 
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT
