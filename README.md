@@ -36,7 +36,7 @@
   <p align="center">
     <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="45%" />
   </p>
-  <sub><em>18px micro-card layout system, real-time bezier traffic wave, and system-level proxy routing (Light & Dark dual themes)</em></sub>
+  <sub><em>18px micro-card layout system, website connectivity test, real-time egress IP diagnosis, and bezier traffic monitor (Light & Dark dual themes)</em></sub>
 </div>
 
 ---
@@ -56,7 +56,8 @@
   - Fine-grained traffic steering: Android Per-App Proxy filtering and Windows UWP Loopback exemption utility.
 - **Deep Real-Time Telemetry & Diagnostics**:
   - Ultra-smooth Bezier traffic wave monitor with multi-window spans (1m / 5m / 15m / 30m / 60m).
-  - Instant egress IP, geolocation, and ISP lookup card with one-tap copy and privacy masking.
+  - Website latency & connectivity test card with custom target management, smart brand favicon caching, PC right-click & mobile long-press actions.
+  - Instant egress IP, geolocation, and ISP lookup card with auto-refresh on node switch, one-tap copy, and privacy masking.
   - Subscription plan data usage progress bar with expiration countdown.
   - Built-in diagnostic toolset: Routing Rules inspection, Real-time Core Logs, Concurrent Latency Ping, and Runtime Configuration viewer.
 - **Deep Native Operating System Integration**:
