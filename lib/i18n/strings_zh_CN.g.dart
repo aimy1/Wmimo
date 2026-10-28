@@ -623,6 +623,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get lessThanOneHourAgo => '< 1小时前';
 	@override String get inUse => '使用中';
 	@override String get remoteSubscription => '远程订阅';
+	@override String get noTrafficData => '未提供用量统计';
 	@override String get localProfile => '本地文件';
 	@override String get viewYamlConfig => '查看 YAML 配置';
 	@override String get editYamlConfig => '编辑 YAML 配置';
@@ -1492,6 +1493,7 @@ extension on TranslationsZhCn {
 			'meta.lessThanOneHourAgo' => '< 1小时前',
 			'meta.inUse' => '使用中',
 			'meta.remoteSubscription' => '远程订阅',
+			'meta.noTrafficData' => '未提供用量统计',
 			'meta.localProfile' => '本地文件',
 			'meta.viewYamlConfig' => '查看 YAML 配置',
 			'meta.editYamlConfig' => '编辑 YAML 配置',
@@ -1524,9 +1526,9 @@ extension on TranslationsZhCn {
 			'meta.copyLog' => '复制日志',
 			'meta.noLogsPrompt' => '暂无日志，启动代理后将实时捕获核心日志',
 			'meta.searchLogsHint' => ' (IP, 域名, 规则, 错误...)',
-			'meta.offlinePreviewPrompt' => '离线配置预览中，开启代理后可进行分流与节点测速',
 			_ => null,
 		} ?? switch (path) {
+			'meta.offlinePreviewPrompt' => '离线配置预览中，开启代理后可进行分流与节点测速',
 			'meta.manualSelect' => '手动选择',
 			'meta.autoSelect' => '自动选择',
 			'meta.speedTestGroup' => '策略组测速',

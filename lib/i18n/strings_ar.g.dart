@@ -623,6 +623,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get lessThanOneHourAgo => 'أقل من ساعة';
 	@override String get inUse => 'قيد الاستخدام';
 	@override String get remoteSubscription => 'اشتراك عن بُعد';
+	@override String get noTrafficData => 'لا توجد إحصائيات للاستخدام';
 	@override String get localProfile => 'ملف محلي';
 	@override String get viewYamlConfig => 'عرض تكوين YAML';
 	@override String get editYamlConfig => 'تعديل تكوين YAML';
@@ -1492,6 +1493,7 @@ extension on TranslationsAr {
 			'meta.lessThanOneHourAgo' => 'أقل من ساعة',
 			'meta.inUse' => 'قيد الاستخدام',
 			'meta.remoteSubscription' => 'اشتراك عن بُعد',
+			'meta.noTrafficData' => 'لا توجد إحصائيات للاستخدام',
 			'meta.localProfile' => 'ملف محلي',
 			'meta.viewYamlConfig' => 'عرض تكوين YAML',
 			'meta.editYamlConfig' => 'تعديل تكوين YAML',
@@ -1524,9 +1526,9 @@ extension on TranslationsAr {
 			'meta.copyLog' => 'نسخ السجل',
 			'meta.noLogsPrompt' => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.',
 			'meta.searchLogsHint' => ' (IP, النطاق, القاعدة, الخطأ...)',
-			'meta.offlinePreviewPrompt' => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.offlinePreviewPrompt' => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.',
 			'meta.manualSelect' => 'اختيار يدوي',
 			'meta.autoSelect' => 'اختيار تلقائي',
 			'meta.speedTestGroup' => 'اختبار سرعة المجموعة',

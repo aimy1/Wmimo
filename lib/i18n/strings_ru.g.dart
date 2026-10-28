@@ -623,6 +623,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get lessThanOneHourAgo => '< 1 часа назад';
 	@override String get inUse => 'Используется';
 	@override String get remoteSubscription => 'Удаленная подписка';
+	@override String get noTrafficData => 'Статистика использования отсутствует';
 	@override String get localProfile => 'Локальный файл';
 	@override String get viewYamlConfig => 'Просмотреть YAML-конфиг';
 	@override String get editYamlConfig => 'Редактировать YAML-конфиг';
@@ -1492,6 +1493,7 @@ extension on TranslationsRu {
 			'meta.lessThanOneHourAgo' => '< 1 часа назад',
 			'meta.inUse' => 'Используется',
 			'meta.remoteSubscription' => 'Удаленная подписка',
+			'meta.noTrafficData' => 'Статистика использования отсутствует',
 			'meta.localProfile' => 'Локальный файл',
 			'meta.viewYamlConfig' => 'Просмотреть YAML-конфиг',
 			'meta.editYamlConfig' => 'Редактировать YAML-конфиг',
@@ -1524,9 +1526,9 @@ extension on TranslationsRu {
 			'meta.copyLog' => 'Копировать лог',
 			'meta.noLogsPrompt' => 'Логов пока нет. Логи ядра появятся после запуска прокси.',
 			'meta.searchLogsHint' => ' (IP, Домен, Правило, Ошибка...)',
-			'meta.offlinePreviewPrompt' => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.offlinePreviewPrompt' => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.',
 			'meta.manualSelect' => 'Ручной выбор',
 			'meta.autoSelect' => 'Автовыбор',
 			'meta.speedTestGroup' => 'Тест скорости группы',

@@ -623,6 +623,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get lessThanOneHourAgo => '1시간 이내';
 	@override String get inUse => '사용 중';
 	@override String get remoteSubscription => '원격 구독';
+	@override String get noTrafficData => '사용량 통계 없음';
 	@override String get localProfile => '로컬 파일';
 	@override String get viewYamlConfig => 'YAML 설정 보기';
 	@override String get editYamlConfig => 'YAML 설정 편집';
@@ -1492,6 +1493,7 @@ extension on TranslationsKo {
 			'meta.lessThanOneHourAgo' => '1시간 이내',
 			'meta.inUse' => '사용 중',
 			'meta.remoteSubscription' => '원격 구독',
+			'meta.noTrafficData' => '사용량 통계 없음',
 			'meta.localProfile' => '로컬 파일',
 			'meta.viewYamlConfig' => 'YAML 설정 보기',
 			'meta.editYamlConfig' => 'YAML 설정 편집',
@@ -1524,9 +1526,9 @@ extension on TranslationsKo {
 			'meta.copyLog' => '로그 복사',
 			'meta.noLogsPrompt' => '아직 로그가 없습니다. 프록시 시작 후 실시간 로그가 표시됩니다.',
 			'meta.searchLogsHint' => ' (IP, 도메인, 규칙, 오류...)',
-			'meta.offlinePreviewPrompt' => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.offlinePreviewPrompt' => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.',
 			'meta.manualSelect' => '수동 선택',
 			'meta.autoSelect' => '자동 선택',
 			'meta.speedTestGroup' => '그룹 속도 테스트',

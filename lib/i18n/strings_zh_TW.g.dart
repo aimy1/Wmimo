@@ -623,6 +623,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get lessThanOneHourAgo => '< 1小時前';
 	@override String get inUse => '使用中';
 	@override String get remoteSubscription => '遠端訂閱';
+	@override String get noTrafficData => '未提供用量統計';
 	@override String get localProfile => '本機檔案';
 	@override String get viewYamlConfig => '檢視 YAML 設定';
 	@override String get editYamlConfig => '編輯 YAML 設定';
@@ -1492,6 +1493,7 @@ extension on TranslationsZhTw {
 			'meta.lessThanOneHourAgo' => '< 1小時前',
 			'meta.inUse' => '使用中',
 			'meta.remoteSubscription' => '遠端訂閱',
+			'meta.noTrafficData' => '未提供用量統計',
 			'meta.localProfile' => '本機檔案',
 			'meta.viewYamlConfig' => '檢視 YAML 設定',
 			'meta.editYamlConfig' => '編輯 YAML 設定',
@@ -1524,9 +1526,9 @@ extension on TranslationsZhTw {
 			'meta.copyLog' => '複製日誌',
 			'meta.noLogsPrompt' => '暫無日誌，啟動代理後將即時捕獲核心日誌',
 			'meta.searchLogsHint' => ' (IP, 網域名稱, 規則, 錯誤...)',
-			'meta.offlinePreviewPrompt' => '離線設定預覽中，開啟代理後可進行分流與節點測速',
 			_ => null,
 		} ?? switch (path) {
+			'meta.offlinePreviewPrompt' => '離線設定預覽中，開啟代理後可進行分流與節點測速',
 			'meta.manualSelect' => '手動選擇',
 			'meta.autoSelect' => '自動選擇',
 			'meta.speedTestGroup' => '策略群組測速',

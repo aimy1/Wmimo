@@ -501,6 +501,7 @@
     "lessThanOneHourAgo": "< 1小时前",
     "inUse": "使用中",
     "remoteSubscription": "远程订阅",
+    "noTrafficData": "未提供用量统计",
     "localProfile": "本地文件",
     "viewYamlConfig": "查看 YAML 配置",
     "editYamlConfig": "编辑 YAML 配置",

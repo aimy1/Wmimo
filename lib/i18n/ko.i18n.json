@@ -501,6 +501,7 @@
     "lessThanOneHourAgo": "1시간 이내",
     "inUse": "사용 중",
     "remoteSubscription": "원격 구독",
+    "noTrafficData": "사용량 통계 없음",
     "localProfile": "로컬 파일",
     "viewYamlConfig": "YAML 설정 보기",
     "editYamlConfig": "YAML 설정 편집",

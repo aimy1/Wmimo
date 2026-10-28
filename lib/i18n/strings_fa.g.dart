@@ -623,6 +623,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get lessThanOneHourAgo => 'کمتر از ۱ ساعت پیش';
 	@override String get inUse => 'در حال استفاده';
 	@override String get remoteSubscription => 'اشتراک از راه دور';
+	@override String get noTrafficData => 'آمار مصرف ارائه نشده است';
 	@override String get localProfile => 'فایل محلی';
 	@override String get viewYamlConfig => 'مشاهده پیکربندی YAML';
 	@override String get editYamlConfig => 'ویرایش پیکربندی YAML';
@@ -1492,6 +1493,7 @@ extension on TranslationsFa {
 			'meta.lessThanOneHourAgo' => 'کمتر از ۱ ساعت پیش',
 			'meta.inUse' => 'در حال استفاده',
 			'meta.remoteSubscription' => 'اشتراک از راه دور',
+			'meta.noTrafficData' => 'آمار مصرف ارائه نشده است',
 			'meta.localProfile' => 'فایل محلی',
 			'meta.viewYamlConfig' => 'مشاهده پیکربندی YAML',
 			'meta.editYamlConfig' => 'ویرایش پیکربندی YAML',
@@ -1524,9 +1526,9 @@ extension on TranslationsFa {
 			'meta.copyLog' => 'کپی لاگ',
 			'meta.noLogsPrompt' => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.',
 			'meta.searchLogsHint' => ' (IP, دامنه, قانون, خطا...)',
-			'meta.offlinePreviewPrompt' => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.offlinePreviewPrompt' => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.',
 			'meta.manualSelect' => 'انتخاب دستی',
 			'meta.autoSelect' => 'انتخاب خودکار',
 			'meta.speedTestGroup' => 'تست سرعت گروه',

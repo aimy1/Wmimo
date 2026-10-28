@@ -1544,6 +1544,9 @@ class Translations$meta$en {
 	/// en: 'Remote Subscription'
 	String get remoteSubscription => 'Remote Subscription';
 
+	/// en: 'No usage statistics provided'
+	String get noTrafficData => 'No usage statistics provided';
+
 	/// en: 'Local File'
 	String get localProfile => 'Local File';
 
@@ -3046,6 +3049,7 @@ extension on Translations {
 			'meta.lessThanOneHourAgo' => '< 1 hour ago',
 			'meta.inUse' => 'In Use',
 			'meta.remoteSubscription' => 'Remote Subscription',
+			'meta.noTrafficData' => 'No usage statistics provided',
 			'meta.localProfile' => 'Local File',
 			'meta.viewYamlConfig' => 'View YAML Config',
 			'meta.editYamlConfig' => 'Edit YAML Config',
@@ -3078,9 +3082,9 @@ extension on Translations {
 			'meta.copyLog' => 'Copy Log',
 			'meta.noLogsPrompt' => 'No logs yet. Core logs will appear after starting proxy.',
 			'meta.searchLogsHint' => ' (IP, Domain, Rule, Error...)',
-			'meta.offlinePreviewPrompt' => 'Offline preview mode. Start proxy to enable routing and latency testing.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.offlinePreviewPrompt' => 'Offline preview mode. Start proxy to enable routing and latency testing.',
 			'meta.manualSelect' => 'Manual',
 			'meta.autoSelect' => 'Auto Select',
 			'meta.speedTestGroup' => 'Test Group Latency',

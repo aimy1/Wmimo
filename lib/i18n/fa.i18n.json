@@ -501,6 +501,7 @@
     "lessThanOneHourAgo": "کمتر از ۱ ساعت پیش",
     "inUse": "در حال استفاده",
     "remoteSubscription": "اشتراک از راه دور",
+    "noTrafficData": "آمار مصرف ارائه نشده است",
     "localProfile": "فایل محلی",
     "viewYamlConfig": "مشاهده پیکربندی YAML",
     "editYamlConfig": "ویرایش پیکربندی YAML",

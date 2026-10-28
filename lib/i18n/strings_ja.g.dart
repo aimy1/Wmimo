@@ -623,6 +623,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get lessThanOneHourAgo => '1時間以内';
 	@override String get inUse => '使用中';
 	@override String get remoteSubscription => 'リモートサブスクリプション';
+	@override String get noTrafficData => '利用統計なし';
 	@override String get localProfile => 'ローカルファイル';
 	@override String get viewYamlConfig => 'YAML設定を表示';
 	@override String get editYamlConfig => 'YAML設定を編集';
@@ -1492,6 +1493,7 @@ extension on TranslationsJa {
 			'meta.lessThanOneHourAgo' => '1時間以内',
 			'meta.inUse' => '使用中',
 			'meta.remoteSubscription' => 'リモートサブスクリプション',
+			'meta.noTrafficData' => '利用統計なし',
 			'meta.localProfile' => 'ローカルファイル',
 			'meta.viewYamlConfig' => 'YAML設定を表示',
 			'meta.editYamlConfig' => 'YAML設定を編集',
@@ -1524,9 +1526,9 @@ extension on TranslationsJa {
 			'meta.copyLog' => 'ログをコピー',
 			'meta.noLogsPrompt' => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。',
 			'meta.searchLogsHint' => ' (IP, ドメイン, ルール, エラー...)',
-			'meta.offlinePreviewPrompt' => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。',
 			_ => null,
 		} ?? switch (path) {
+			'meta.offlinePreviewPrompt' => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。',
 			'meta.manualSelect' => '手動選択',
 			'meta.autoSelect' => '自動選択',
 			'meta.speedTestGroup' => 'グループ速度テスト',

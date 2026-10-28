@@ -501,6 +501,7 @@
     "lessThanOneHourAgo": "< 1 hora",
     "inUse": "En uso",
     "remoteSubscription": "Suscripción remota",
+    "noTrafficData": "Sin estadísticas de uso",
     "localProfile": "Archivo local",
     "viewYamlConfig": "Ver configuración YAML",
     "editYamlConfig": "Editar configuración YAML",

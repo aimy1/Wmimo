@@ -623,6 +623,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get lessThanOneHourAgo => '< 1 hora';
 	@override String get inUse => 'En uso';
 	@override String get remoteSubscription => 'Suscripción remota';
+	@override String get noTrafficData => 'Sin estadísticas de uso';
 	@override String get localProfile => 'Archivo local';
 	@override String get viewYamlConfig => 'Ver configuración YAML';
 	@override String get editYamlConfig => 'Editar configuración YAML';
@@ -1492,6 +1493,7 @@ extension on TranslationsEs {
 			'meta.lessThanOneHourAgo' => '< 1 hora',
 			'meta.inUse' => 'En uso',
 			'meta.remoteSubscription' => 'Suscripción remota',
+			'meta.noTrafficData' => 'Sin estadísticas de uso',
 			'meta.localProfile' => 'Archivo local',
 			'meta.viewYamlConfig' => 'Ver configuración YAML',
 			'meta.editYamlConfig' => 'Editar configuración YAML',
@@ -1524,9 +1526,9 @@ extension on TranslationsEs {
 			'meta.copyLog' => 'Copiar registro',
 			'meta.noLogsPrompt' => 'Aún no hay registros. Aparecerán tras iniciar el proxy.',
 			'meta.searchLogsHint' => ' (IP, Dominio, Regla, Error...)',
-			'meta.offlinePreviewPrompt' => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.offlinePreviewPrompt' => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.',
 			'meta.manualSelect' => 'Selección manual',
 			'meta.autoSelect' => 'Selección automática',
 			'meta.speedTestGroup' => 'Probar velocidad de grupo',

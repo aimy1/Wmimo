@@ -501,6 +501,7 @@
     "lessThanOneHourAgo": "أقل من ساعة",
     "inUse": "قيد الاستخدام",
     "remoteSubscription": "اشتراك عن بُعد",
+    "noTrafficData": "لا توجد إحصائيات للاستخدام",
     "localProfile": "ملف محلي",
     "viewYamlConfig": "عرض تكوين YAML",
     "editYamlConfig": "تعديل تكوين YAML",

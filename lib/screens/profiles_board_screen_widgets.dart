@@ -274,6 +274,7 @@ class ProfilesBoardItem extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
+      constraints: const BoxConstraints(minHeight: 146),
       decoration: BoxDecoration(
         color: selected
             ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.12 : 0.08)
@@ -706,97 +707,134 @@ class ProfilesBoardItem extends StatelessWidget {
                 ),
 
                 // Middle Section: Traffic Progress & Stats (Clash Verge Rev style)
-                if (hasTraffic) ...[
-                  const SizedBox(height: 12),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: progress,
-                      minHeight: 5,
-                      backgroundColor: isDark
-                          ? const Color(0xFF334155)
-                          : const Color(0xFFE2E8F0),
-                      valueColor: AlwaysStoppedAnimation(
-                        progress > 0.9
-                            ? Colors.redAccent
-                            : (progress > 0.75
-                                ? Colors.orangeAccent
-                                : ThemeDefine.kColorBlue),
-                      ),
+                const SizedBox(height: 12),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: hasTraffic ? progress : 0.0,
+                    minHeight: 5,
+                    backgroundColor: isDark
+                        ? const Color(0xFF334155).withValues(alpha: hasTraffic ? 1.0 : 0.45)
+                        : const Color(0xFFE2E8F0),
+                    valueColor: AlwaysStoppedAnimation(
+                      hasTraffic
+                          ? (progress > 0.9
+                              ? Colors.redAccent
+                              : (progress > 0.75
+                                  ? Colors.orangeAccent
+                                  : ThemeDefine.kColorBlue))
+                          : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Traffic Used / Total
-                      Expanded(
-                        child: Text.rich(
-                          TextSpan(
-                            children: [
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Traffic Used / Total OR Placeholder
+                    Expanded(
+                      child: hasTraffic
+                          ? Text.rich(
                               TextSpan(
-                                text: "↑ $uploadStr  ",
-                                style: TextStyle(
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w600,
-                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "↑ $uploadStr  ",
+                                    style: TextStyle(
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.w600,
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "↓ $downloadStr  ",
+                                    style: TextStyle(
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.w600,
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "/ $totalStr",
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w700,
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              TextSpan(
-                                text: "↓ $downloadStr  ",
-                                style: TextStyle(
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w600,
-                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  setting.isRemote()
+                                      ? Icons.all_inclusive_rounded
+                                      : Icons.insert_drive_file_outlined,
+                                  size: 13,
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
                                 ),
-                              ),
-                              TextSpan(
-                                text: "/ $totalStr",
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    setting.isRemote()
+                                        ? tcontext.meta.noTrafficData
+                                        : tcontext.meta.localProfile,
+                                    style: TextStyle(
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.w500,
+                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
+                              ],
+                            ),
+                    ),
+                    const SizedBox(width: 8),
 
-                      // Expire Date
-                      if (trafficExpire != null)
-                        Tooltip(
-                          message: "${tcontext.meta.expireTime}: ${trafficExpire.item2}",
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.event_outlined,
-                                size: 12,
+                    // Expire Date
+                    if (trafficExpire != null)
+                      Tooltip(
+                        message: "${tcontext.meta.expireTime}: ${trafficExpire.item2}",
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.event_outlined,
+                              size: 12,
+                              color: trafficExpire.item1
+                                  ? Colors.redAccent
+                                  : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              trafficExpire.item2,
+                              style: TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w600,
                                 color: trafficExpire.item1
                                     ? Colors.redAccent
-                                    : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                                    : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                               ),
-                              const SizedBox(width: 3),
-                              Text(
-                                trafficExpire.item2,
-                                style: TextStyle(
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w600,
-                                  color: trafficExpire.item1
-                                      ? Colors.redAccent
-                                      : theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                    ],
-                  ),
-                ],
+                      )
+                    else if (!hasTraffic)
+                      Text(
+                        "—",
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
+                        ),
+                      ),
+                  ],
+                ),
 
                 // Bottom Metadata Row (File Name & Update Time)
                 const SizedBox(height: 10),

@@ -501,6 +501,7 @@
     "lessThanOneHourAgo": "< 1 часа назад",
     "inUse": "Используется",
     "remoteSubscription": "Удаленная подписка",
+    "noTrafficData": "Статистика использования отсутствует",
     "localProfile": "Локальный файл",
     "viewYamlConfig": "Просмотреть YAML-конфиг",
     "editYamlConfig": "Редактировать YAML-конфиг",

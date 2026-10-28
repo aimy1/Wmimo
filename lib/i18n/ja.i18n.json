@@ -501,6 +501,7 @@
     "lessThanOneHourAgo": "1時間以内",
     "inUse": "使用中",
     "remoteSubscription": "リモートサブスクリプション",
+    "noTrafficData": "利用統計なし",
     "localProfile": "ローカルファイル",
     "viewYamlConfig": "YAML設定を表示",
     "editYamlConfig": "YAML設定を編集",
