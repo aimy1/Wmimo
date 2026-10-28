@@ -28,7 +28,7 @@ class BrandVectorIcon extends StatelessWidget {
     Widget iconContent;
     Color bgColor;
 
-    if (cleanId.contains('cloudflare') || cleanId == 'cf') {
+    if (cleanId.contains('cloudflare') || cleanId == 'cf' || cleanId.contains('1.1.1.1')) {
       bgColor = const Color(0xFFF38020);
       iconContent = const _OfficialSvgWidget(
         pathData: _OfficialBrandSvgs.cloudflare,
@@ -53,17 +53,38 @@ class BrandVectorIcon extends StatelessWidget {
         scaleFactor: 0.68,
       );
     } else if (cleanId.contains('bilibili') || cleanId.contains('bili')) {
-      bgColor = const Color(0xFFFB7299);
+      bgColor = const Color(0xFF00AEEC);
       iconContent = const _OfficialSvgWidget(
         pathData: _OfficialBrandSvgs.bilibili,
         color: Colors.white,
         scaleFactor: 0.68,
+      );
+    } else if (cleanId.contains('baidu')) {
+      bgColor = const Color(0xFF2932E1);
+      iconContent = const _OfficialSvgWidget(
+        pathData: _OfficialBrandSvgs.baidu,
+        color: Colors.white,
+        scaleFactor: 0.70,
       );
     } else if (cleanId.contains('netflix')) {
       bgColor = const Color(0xFF141414);
       iconContent = const _OfficialSvgWidget(
         pathData: _OfficialBrandSvgs.netflix,
         color: Color(0xFFE50914),
+        scaleFactor: 0.65,
+      );
+    } else if (cleanId == 'x' || cleanId == 'twitter' || cleanId.contains('twitter.com') || cleanId.contains('x.com')) {
+      bgColor = const Color(0xFF000000);
+      iconContent = const _OfficialSvgWidget(
+        pathData: _OfficialBrandSvgs.x,
+        color: Colors.white,
+        scaleFactor: 0.62,
+      );
+    } else if (cleanId.contains('telegram') || cleanId.contains('t.me')) {
+      bgColor = const Color(0xFF24A1DE);
+      iconContent = const _OfficialSvgWidget(
+        pathData: _OfficialBrandSvgs.telegram,
+        color: Colors.white,
         scaleFactor: 0.65,
       );
     } else if (cleanId.contains('github')) {
@@ -101,12 +122,20 @@ class BrandVectorIcon extends StatelessWidget {
       );
     }
 
+    final bool isVeryDark = bgColor.computeLuminance() < 0.08;
+    final bool isVeryLight = bgColor.computeLuminance() > 0.85;
+
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(borderRadius),
+        border: isVeryLight
+            ? Border.all(color: Colors.black.withValues(alpha: 0.12), width: 0.8)
+            : isVeryDark
+                ? Border.all(color: Colors.white.withValues(alpha: 0.15), width: 0.8)
+                : null,
         boxShadow: isSelected
             ? [
                 BoxShadow(
@@ -144,6 +173,15 @@ class _OfficialBrandSvgs {
 
   static const String apple =
       "M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701";
+
+  static const String baidu =
+      "M9.154 0C7.71 0 6.54 1.658 6.54 3.707c0 2.051 1.171 3.71 2.615 3.71 1.446 0 2.614-1.659 2.614-3.71C11.768 1.658 10.6 0 9.154 0zm7.025.594C14.86.58 13.347 2.589 13.2 3.927c-.187 1.745.25 3.487 2.179 3.735 1.933.25 3.175-1.806 3.422-3.364.252-1.555-.995-3.364-2.362-3.674a1.218 1.218 0 0 0-.261-.03zM3.582 5.535a2.811 2.811 0 0 0-.156.008c-2.118.19-2.428 3.24-2.428 3.24-.287 1.41.686 4.425 3.297 3.864 2.617-.561 2.262-3.68 2.183-4.362-.125-1.018-1.292-2.773-2.896-2.75zm16.534 1.753c-2.308 0-2.617 2.119-2.617 3.616 0 1.43.121 3.425 2.988 3.362 2.867-.063 2.553-3.238 2.553-3.988 0-.745-.62-2.99-2.924-2.99zm-8.264 2.478c-1.424.014-2.708.925-3.323 1.947-1.118 1.868-2.863 3.05-3.112 3.363-.25.309-3.61 2.116-2.864 5.42.746 3.301 3.365 3.237 3.365 3.237s1.93.19 4.171-.31c2.24-.495 4.17.123 4.17.123s5.233 1.748 6.665-1.616c1.43-3.364-.808-5.109-.808-5.109s-2.99-2.306-4.736-4.798c-1.072-1.665-2.348-2.268-3.528-2.257zm-2.234 3.84l1.542.024v8.197H7.758c-1.47-.291-2.055-1.292-2.13-1.462-.072-.173-.488-.976-.268-2.343.635-2.049 2.447-2.196 2.447-2.196h1.81zm3.964 2.39v3.881c.096.413.612.488.612.488h1.614v-4.343h1.689v5.782h-3.915c-1.517-.39-1.59-1.465-1.59-1.465v-4.317zm-5.458 1.147c-.66.197-.978.708-1.05.928-.076.22-.247.78-.1 1.269.294 1.095 1.248 1.144 1.248 1.144h1.37v-3.34z";
+
+  static const String x =
+      "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z";
+
+  static const String telegram =
+      "M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z";
 
   static const String akamai =
       "M13.0548 0C6.384 0 .961 5.3802.961 12.0078.961 18.6354 6.3698 24 13.0548 24c.6168 0 .6454-.3572.0859-.5293-4.9349-1.5063-8.5352-6.069-8.5352-11.4629 0-5.4656 3.6725-10.0706 8.6934-11.5195C13.8153.3448 13.6716 0 13.0548 0Zm2.3242 1.8223c-5.2648 0-9.5254 4.2606-9.5254 9.5254 0 1.2193.2285 2.3818.6445 3.4433.1722.459.4454.4584.4024.0137-.0287-.3156-.0567-.6447-.0567-.9746 0-5.2648 4.2606-9.5254 9.5254-9.5254 4.9779 0 6.4698 2.2235 6.6563 2.08.2008-.1577-1.808-4.5624-7.6465-4.5624zm.4687 4.0703c-1.8622.0592-3.651.7168-5.1035 1.8554-.2582.2009-.1567.3284.1445.1993 2.4675-1.076 5.5812-1.1046 8.6368-.043 2.0514.7173 3.2413 1.7364 3.3418 1.6934.1578-.0718-1.1915-2.2226-3.6446-3.1407-1.1135-.4196-2.2576-.6-3.375-.5644z";
