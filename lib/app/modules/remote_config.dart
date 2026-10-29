@@ -87,11 +87,11 @@ class RemoteConfig {
   static const String kDefaultFaq = "https://$kDefaultHost/docs/faq.html";
 
   static const String kDefaultDownload = "https://$kDefaultHost/download.html";
-  static const String kDefaultTelegram = "https://t.me/WmimoApp";
+  static const String kDefaultTelegram = "https://t.me/wmimoapp";
   static const String kDefaultFollow = "https://github.com/aimy1/Wmimo";
   static const String kDefaultDonate = "https://$kDefaultHost/community.html";
   static const String kDefaultDoc = "https://$kDefaultHost/docs/build.html";
-  static const String kDefaultHtmlTools = "https://tools.wmimo.app/";
+  static const String kDefaultHtmlTools = "https://tools.wmimo.buzz/";
   static const String kDefaultConnect = "https://$kDefaultHost/";
 
   String latestCheck = "";

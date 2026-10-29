@@ -333,7 +333,7 @@ class _LoginStepProviderScreenState extends State<LoginStepProviderScreen> {
       return;
     }
     String bindJs = provider.bindJs.isEmpty
-        ? "https://tools.wmimo.app/assets/bind.js?v="
+        ? "https://tools.wmimo.buzz/assets/bind.js?v="
         : provider.bindJs;
     if (bindJs.isNotEmpty) {
       if (bindJs.endsWith("?v=") || bindJs.endsWith("&v=")) {

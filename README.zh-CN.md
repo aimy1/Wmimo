@@ -26,7 +26,9 @@
 
   <p align="center">
     <a href="https://github.com/aimy1/Wmimo/releases"><b>下载安装</b></a> •
+    <a href="https://wmimo.buzz"><b>官方网站</b></a> •
     <a href="#核心特性"><b>核心特性</b></a> •
+    <a href="docs/BENCHMARKS.md"><b>性能基准</b></a> •
     <a href="#快速上手"><b>快速上手</b></a> •
     <a href="#本地编译与开发"><b>本地编译</b></a> •
     <a href="https://t.me/wmimoapp"><b>官方社区</b></a>
@@ -51,7 +53,7 @@
   - 响应式自适应设计：大屏桌面自适应宽屏侧边栏，小屏移动端紧凑人体工学布局。
 - **高性能 Mihomo (Meta) 核心深度驱动**：
   - 全协议矩阵覆盖：**Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct** 等；
-  - 独立后台 Isolate 并发清洗节点与分流规则，启动过程 **零界面冻结（Zero UI Freeze）**，内存占用极低。
+  - 独立后台 Isolate 并发解析节点与策略组，保持 UI 线程流畅无卡顿（5,000 节点解析耗时仅 ~163ms，详见 [性能基准报告](docs/BENCHMARKS.md)）。
 - **智能分流路由与系统级双代理模式**：
   - 出站模式秒级切换：**规则分流 (Rule)** / **全局代理 (Global)** / **直接连接 (Direct)**；
   - 双引擎灵活调度：**TUN 虚拟网卡模式**（透明接管操作系统全量流量）与 **系统代理模式**（免提权快捷冲浪）；
@@ -69,7 +71,7 @@
   - 支持 `stable`（正式稳定通道）与 `beta`（测试预览通道）自由切换；
   - 后台静默高速下载、SHA-256 哈希完整性校验与安全原地覆盖升级。
 - **真正 100% 完整 9 国语言覆盖**：
-  - 简体中文、繁體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 全语言 705 个词条全量对齐，无任何缺失。
+  - 简体中文、繁體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 全语言 798 个词条全量镜像对齐（0 缺失键，详见 [i18n 完整性矩阵](docs/BENCHMARKS.md#2-internationalization-i18n-completeness-matrix)）。
 
 ---
 
@@ -121,6 +123,19 @@ flutter build macos --release     # macOS
 
 ---
 
+## 质量与性能基准
+
+各项架构性能与功能完整性均通过自动化测试套件持续监控与可独立复现的数据支撑：
+
+- **大体量订阅解析吞吐**: ~30,670 节点/秒（5,000 个复杂协议节点在独立后台 Isolate 中完成格式转换、去重与智能策略组归类仅耗时 ~163ms，主 UI 线程维持流畅无卡顿）。
+- **配置快速识别**: `isClashYaml` 头部试探探测算法在 1,000 节点规模下仅需 ~1.4ms。
+- **国际化完整度**: 9 种语言各 798 个词条实现 100.0% 镜像覆盖，CI 自动化测试严格校验 0 缺失键与占位符一致性。
+- **本地复现验证**: 执行 `flutter test test/benchmark_profile_scale_test.dart` 及 `flutter test test/i18n_integrity_test.dart`。
+
+完整测试基准、测试环境与复现流程请参阅 [docs/BENCHMARKS.md](docs/BENCHMARKS.md)。
+
+---
+
 ## 致谢
 
 - **[GooRingX (vowe)](https://github.com/GooRingX)**：感谢杰出的开源贡献、设计思路与灵感指导。
@@ -131,6 +146,7 @@ flutter build macos --release     # macOS
 
 ## 社区交流与反馈
 
+- **官方网站**: [wmimo.buzz](https://wmimo.buzz)
 - **Telegram 频道与交流群**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - **联系邮箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - **问题反馈与需求提案**: [提交 GitHub Issue](https://github.com/aimy1/Wmimo/issues)

@@ -26,7 +26,9 @@
 
   <p align="center">
     <a href="https://github.com/aimy1/Wmimo/releases"><b>下載安裝</b></a> •
+    <a href="https://wmimo.buzz"><b>官方网站</b></a> •
     <a href="#核心特性"><b>核心特性</b></a> •
+    <a href="docs/BENCHMARKS.md"><b>性能基准</b></a> •
     <a href="#快速上手"><b>快速上手</b></a> •
     <a href="#本地編譯與開發"><b>本地編譯</b></a> •
     <a href="https://t.me/wmimoapp"><b>官方社群</b></a>
@@ -69,7 +71,7 @@
   - 支援 `stable`（正式穩定通道）與 `beta`（測試預覽通道）自由切換；
   - 後台靜默高速下載、SHA-256 哈希完整性校驗與原地升級。
 - **真正 100% 完整 9 國語言支援**：
-  - 繁體中文、簡體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 9 種語言 705 個詞條全量對齊。
+  - 繁體中文、簡體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 9 種語言 798 個詞條全量鏡像對齊（0 缺失鍵，詳見 [i18n 完整性矩陣](docs/BENCHMARKS.md#2-internationalization-i18n-completeness-matrix)）。
 
 ---
 

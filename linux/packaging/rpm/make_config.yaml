@@ -1,13 +1,13 @@
-﻿display_name: Wmimo
+display_name: Wmimo
 summary: Wmimo
 group: Applications/Internet
 vendor: Wmimo
 packager: Wmimo
-license: Other
+license: GPL-3.0-or-later
 priority: optional
 section: x11
 essential: false
-url: https://wmimo.app
+url: https://wmimo.buzz
 icon: assets/images/app_icon_256.png
 
 keywords:

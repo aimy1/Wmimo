@@ -1,0 +1,1 @@
+This application (Wmimo) does not collect, transmit, store, or share any personal data, telemetry, or browsing activity. All network routing decisions and proxy connections are executed strictly on the local device according to user-defined configurations and selected upstream servers.

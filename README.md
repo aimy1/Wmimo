@@ -26,7 +26,9 @@
 
   <p align="center">
     <a href="https://github.com/aimy1/Wmimo/releases"><b>Download</b></a> •
+    <a href="https://wmimo.buzz"><b>Website</b></a> •
     <a href="#features"><b>Features</b></a> •
+    <a href="docs/BENCHMARKS.md"><b>Benchmarks</b></a> •
     <a href="#quick-start"><b>Quick Start</b></a> •
     <a href="#build-from-source"><b>Build</b></a> •
     <a href="https://t.me/wmimoapp"><b>Community</b></a>
@@ -51,7 +53,7 @@
   - Responsive layout: expansive Desktop Sidebar on large screens & compact ergonomic navigation on mobile devices.
 - **High-Performance Mihomo (Meta) Core**:
   - Full protocol suite: **Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct**.
-  - Asynchronous background Isolate processing for node parsing and sorting — **Zero UI Freeze** during startup.
+  - Asynchronous background Isolate processing for node parsing and sorting — non-blocking profile loading (5,000 nodes in ~163ms, see [Benchmarks](docs/BENCHMARKS.md)).
 - **Intelligent Routing & Dual-Engine Proxy**:
   - Rapid outbound mode toggling: **Rule (Split Routing)** / **Global** / **Direct**.
   - Flexible dual engine: **TUN Virtual Adapter Mode** (transparent system-wide capture) and **System Proxy Mode** (standard unprivileged routing).
@@ -69,7 +71,8 @@
   - Switch freely between `stable` (production) and `beta` (pre-release) channels.
   - Background silent download with SHA-256 hash integrity verification.
 - **True 100% Native 9-Language Parity**:
-  - Complete, seamless coverage across: 简体中文, English, 繁體中文, 日本語, 한국어, Русский, Español, العربية, فارسی.
+  - 798 translation keys synchronized across: 简体中文, English, 繁體中文, 日本語, 한국어, Русский, Español, العربية, فارسی.
+  - Validated by automated CI checks ensuring 0 missing keys and 100% placeholder parity (see [Completeness Matrix](docs/BENCHMARKS.md#2-internationalization-i18n-completeness-matrix)).
 
 ---
 
@@ -121,6 +124,19 @@ flutter build macos --release     # macOS
 
 ---
 
+## Performance & Quality Verification
+
+Wmimo's architectural efficiency and coverage are verified by reproducible automated test suites:
+
+- **Subscription Parsing Throughput**: ~30,670 nodes/s (5,000 multi-protocol nodes parsed, normalized, and classified in ~163ms via background Isolate).
+- **Format Heuristic Detection**: `isClashYaml` verifies 1,000 nodes in ~1.4ms.
+- **i18n Coverage**: 9/9 supported locales achieve 100.0% key parity (798/798 keys, 0 missing keys).
+- **Automated Verification**: Run `flutter test test/benchmark_profile_scale_test.dart` and `flutter test test/i18n_integrity_test.dart`.
+
+Full methodology, reproducible charts, and hardware specs are detailed in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+
+---
+
 ## Acknowledgements
 
 - **[GooRingX (vowe)](https://github.com/GooRingX)**: Invaluable open-source contributions, architectural insights, and design inspiration.
@@ -131,6 +147,7 @@ flutter build macos --release     # macOS
 
 ## Community & Feedback
 
+- **Official Website**: [wmimo.buzz](https://wmimo.buzz)
 - **Telegram Channel & Group**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - **Author Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - **Issue Tracker**: [Submit an Issue](https://github.com/aimy1/Wmimo/issues)
