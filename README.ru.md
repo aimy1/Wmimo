@@ -159,3 +159,4 @@ flutter build macos --release     # macOS
 
 - **Модули Rust Workspace**: Распространяются под двойной лицензией [MIT](rust/LICENSE-MIT) или [Apache-2.0](rust/LICENSE-APACHE) при автономном использовании; в составе Wmimo действует GPL-3.0.
 - **Сторонние компоненты**: См. [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) и [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
+- **Безопасность и проверка подписи**: См. [SECURITY.md](SECURITY.md) для получения отпечатков сертификата подписи Android APK (SHA-256) и инструкций по проверке подлинности.

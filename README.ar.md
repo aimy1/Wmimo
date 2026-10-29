@@ -159,3 +159,4 @@ flutter build macos --release     # macOS
 
 - **حزم مساحة عمل Rust**: مرخصة برخصة مزدوجة [MIT](rust/LICENSE-MIT) أو [Apache-2.0](rust/LICENSE-APACHE) عند استخدامها بشكل مستقل، وتخضع لـ GPL-3.0 عند توزيعها مع Wmimo.
 - **تراخيص الطرف الثالث والمكونات الأساسية**: راجع [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) و [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
+- **الأمان وشهادات التوقيع**: راجع [SECURITY.md](SECURITY.md) لمعرفة البصمة الرقمية لشهادة توقيع تطبيق Android (SHA-256) وتعليمات التحقق من سلامة الحزم.

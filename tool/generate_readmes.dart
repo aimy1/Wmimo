@@ -169,6 +169,7 @@ Wmimo is licensed under the **GNU General Public License v3.0 (GPL-3.0-or-later)
 
 - **Rust Workspace Crates**: Dual-licensed under [MIT](rust/LICENSE-MIT) OR [Apache-2.0](rust/LICENSE-APACHE) when used standalone, and GPL-3.0 when distributed with Wmimo.
 - **Third-Party & Core Licenses**: See [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) and [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
+- **Security & Signing Certificates**: See [SECURITY.md](SECURITY.md) for official Android APK signing fingerprints and release verification instructions.
 """;
 
   // ==========================================
@@ -328,6 +329,7 @@ flutter build macos --release     # macOS
 
 - **Rust Workspace 模块**: 独立作为库使用时采用 [MIT](rust/LICENSE-MIT) OR [Apache-2.0](rust/LICENSE-APACHE) 双重许可；作为 Wmimo 一部分编译分发时受 GPL-3.0 约束。
 - **第三方与核心组件许可证**: 详见 [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 以及 [组件授权架构说明](docs/LICENSES_AND_COMPONENTS.md)。
+- **安全策略与证书指纹**: 详见 [SECURITY.md](SECURITY.md) 查看官方 Android APK 签名证书指纹（SHA-256）及安装包防篡改校验指南。
 """;
 
   // ==========================================
@@ -487,6 +489,7 @@ flutter build macos --release     # macOS
 
 - **Rust Workspace 模組**: 獨立作為庫使用時採用 [MIT](rust/LICENSE-MIT) 或 [Apache-2.0](rust/LICENSE-APACHE) 雙重許可；作為 Wmimo 組合分發時受 GPL-3.0 約束。
 - **第三方與核心組件授權**: 詳見 [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 與 [組件授權架構說明](docs/LICENSES_AND_COMPONENTS.md)。
+- **安全策略與憑證指紋**: 詳見 [SECURITY.md](SECURITY.md) 查看官方 Android APK 簽名憑證指紋（SHA-256）與安裝包防偽驗證指南。
 """;
 
   // ==========================================
@@ -646,6 +649,7 @@ Wmimo のアーキテクチャ効率とカバレッジは、再現可能な自�
 
 - **Rust Workspace クレート**: 単体利用時は [MIT](rust/LICENSE-MIT) または [Apache-2.0](rust/LICENSE-APACHE) のデュアルライセンス、Wmimo とともに配布される場合は GPL-3.0 が適用されます。
 - **サードパーティおよびコアコンポーネントのライセンス**: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) および [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md) をご参照ください。
+- **セキュリティと署名証明書**: 公式 Android APK 署名証明書フィンガープリント（SHA-256）およびバイナリ検証手順については [SECURITY.md](SECURITY.md) をご覧ください。
 """;
 
   // ==========================================
@@ -805,6 +809,7 @@ Wmimo의 아키텍처 효율성과 커버리지는 독립적으로 재현 가능
 
 - **Rust Workspace 크레이트**: 독립 라이브러리로 사용 시 [MIT](rust/LICENSE-MIT) 또는 [Apache-2.0](rust/LICENSE-APACHE) 듀얼 라이선스가 적용되며, Wmimo와 함께 배포 시 GPL-3.0을 따릅니다.
 - **서드파티 및 핵심 컴포넌트 라이선스**: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 및 [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md)를 참조하십시오.
+- **보안 정책 및 서명 인증서**: 공식 Android APK 서명 인증서 지문(SHA-256) 및 릴리스 검증 가이드는 [SECURITY.md](SECURITY.md)를 참조하십시오.
 """;
 
   // ==========================================
@@ -964,6 +969,7 @@ flutter build macos --release     # macOS
 
 - **Модули Rust Workspace**: Распространяются под двойной лицензией [MIT](rust/LICENSE-MIT) или [Apache-2.0](rust/LICENSE-APACHE) при автономном использовании; в составе Wmimo действует GPL-3.0.
 - **Сторонние компоненты**: См. [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) и [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
+- **Безопасность и проверка подписи**: См. [SECURITY.md](SECURITY.md) для получения отпечатков сертификата подписи Android APK (SHA-256) и инструкций по проверке подлинности.
 """;
 
   // ==========================================
@@ -1123,6 +1129,7 @@ Este proyecto está bajo la licencia **GNU General Public License v3.0 (GPL-3.0-
 
 - **Crates del Rust Workspace**: Licencia dual [MIT](rust/LICENSE-MIT) o [Apache-2.0](rust/LICENSE-APACHE) de forma independiente; bajo GPL-3.0 cuando se distribuyen con Wmimo.
 - **Licencias de terceros y componentes**: Consulte [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) y [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
+- **Seguridad y certificados de firma**: Consulte [SECURITY.md](SECURITY.md) para ver la huella digital del certificado de firma de APK de Android (SHA-256) y las instrucciones de verificación.
 """;
 
   // ==========================================
@@ -1282,6 +1289,7 @@ flutter build macos --release     # macOS
 
 - **حزم مساحة عمل Rust**: مرخصة برخصة مزدوجة [MIT](rust/LICENSE-MIT) أو [Apache-2.0](rust/LICENSE-APACHE) عند استخدامها بشكل مستقل، وتخضع لـ GPL-3.0 عند توزيعها مع Wmimo.
 - **تراخيص الطرف الثالث والمكونات الأساسية**: راجع [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) و [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
+- **الأمان وشهادات التوقيع**: راجع [SECURITY.md](SECURITY.md) لمعرفة البصمة الرقمية لشهادة توقيع تطبيق Android (SHA-256) وتعليمات التحقق من سلامة الحزم.
 """;
 
   // ==========================================
@@ -1441,6 +1449,7 @@ flutter build macos --release     # macOS
 
 - **بسته‌های Rust Workspace**: به صورت مستقل تحت مجوز دوگانه [MIT](rust/LICENSE-MIT) یا [Apache-2.0](rust/LICENSE-APACHE) و هنگام توزیع همراه با Wmimo تحت GPL-3.0 قرار می‌گیرند.
 - **مجوزهای شخص ثالث و هسته**: به فایل‌های [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) و [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md) مراجعه فرمایید.
+- **امنیت و گواهی‌های امضا**: برای مشاهده اثرانگشت گواهی امضای نسخه اندروید (SHA-256) و دستورالعمل‌های اعتبارسنجی بسته‌ها به [SECURITY.md](SECURITY.md) مراجعه کنید.
 """;
 
   final files = {

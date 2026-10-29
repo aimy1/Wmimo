@@ -35,6 +35,7 @@ import 'package:wmimo/screens/themes.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/screens/widgets/routes.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -56,6 +57,7 @@ void main(List<String> args) async {
   linuxRotate180Fix =
       Platform.isLinux && Platform.environment["WMIMO_ROTATE_180"] == "1";
   WidgetsFlutterBinding.ensureInitialized();
+  _initLicenses();
   await LocaleSettings.useDeviceLocale();
   await VPNService.initABI();
   await RemoteConfigManager.init();
@@ -74,6 +76,34 @@ void main(List<String> args) async {
   }
 
   await run(args);
+}
+
+void _initLicenses() {
+  LicenseRegistry.addLicense(() async* {
+    yield const LicenseEntryWithLineBreaks(
+      ['Wmimo', 'Mihomo Core'],
+      '''GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+Rust Workspace Crates: Dual-licensed under MIT OR Apache-2.0.
+Core Proxy Engine: Mihomo (MetaCubeX) licensed under GPL-3.0-or-later.
+Project repository: https://github.com/aimy1/Wmimo''',
+    );
+  });
 }
 
 Future<void> run(List<String> args) async {

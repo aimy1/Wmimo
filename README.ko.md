@@ -159,3 +159,4 @@ Wmimo의 아키텍처 효율성과 커버리지는 독립적으로 재현 가능
 
 - **Rust Workspace 크레이트**: 독립 라이브러리로 사용 시 [MIT](rust/LICENSE-MIT) 또는 [Apache-2.0](rust/LICENSE-APACHE) 듀얼 라이선스가 적용되며, Wmimo와 함께 배포 시 GPL-3.0을 따릅니다.
 - **서드파티 및 핵심 컴포넌트 라이선스**: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 및 [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md)를 참조하십시오.
+- **보안 정책 및 서명 인증서**: 공식 Android APK 서명 인증서 지문(SHA-256) 및 릴리스 검증 가이드는 [SECURITY.md](SECURITY.md)를 참조하십시오.

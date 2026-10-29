@@ -37,3 +37,18 @@ If you package Wmimo for package managers (e.g. Winget, Scoop, Homebrew, AUR, Fl
 1. **Main Package License**: Declare the package license as `GPL-3.0-or-later`.
 2. **Source Code Availability**: In compliance with GPL-3.0 Section 6, any party distributing Wmimo binaries must provide access to the corresponding source code (such as a link to the GitHub repository release).
 3. **Preserve Notices**: Maintain the root `LICENSE`, `rust/LICENSE-MIT`, `rust/LICENSE-APACHE`, and `THIRDPARTY_LICENSES.md` intact in all distributions.
+
+
+---
+
+## 4. Code Signing & Release Authenticity (Certificates)
+
+To protect users against unauthorized tampering, the following digital certificate standards apply to official binary distributions:
+
+| Platform | Certificate Type | Identifier / Fingerprint | Purpose |
+|:---|:---|:---|:---|
+| **Android** | Dedicated Release Keystore (RSA 2048-bit) | **SHA-256**: `4D:29:23:87:5A:FC:F3:44:38:B2:4A:9E:AF:81:C3:40:75:46:24:11:0D:A8:D1:E5:8E:41:2B:0D:CB:8C:75:5D` | Signs official APK binaries (V1+V2 scheme) to ensure seamless updates and anti-tamper authenticity. |
+| **Windows** | Microsoft WHQL Driver Certificate | Signed by `WireGuard LLC` | Authentic signature on `wintun.dll` for unprivileged kernel TUN virtual adapter loading. |
+| **All Platforms** | Release Checksums | SHA-256 hash manifest (`*.sha256`) | Cryptographic file integrity verification on [GitHub Releases](https://github.com/aimy1/Wmimo/releases). |
+
+See [SECURITY.md](../SECURITY.md) for full fingerprint verification commands.

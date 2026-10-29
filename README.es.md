@@ -159,3 +159,4 @@ Este proyecto está bajo la licencia **GNU General Public License v3.0 (GPL-3.0-
 
 - **Crates del Rust Workspace**: Licencia dual [MIT](rust/LICENSE-MIT) o [Apache-2.0](rust/LICENSE-APACHE) de forma independiente; bajo GPL-3.0 cuando se distribuyen con Wmimo.
 - **Licencias de terceros y componentes**: Consulte [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) y [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
+- **Seguridad y certificados de firma**: Consulte [SECURITY.md](SECURITY.md) para ver la huella digital del certificado de firma de APK de Android (SHA-256) y las instrucciones de verificación.

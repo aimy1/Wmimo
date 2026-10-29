@@ -141,8 +141,9 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
     );
   }
 
-  Future<List<GroupItem>> getGroupOptions() async {
-    final tcontext = Translations.of(context);
+  Future<List<GroupItem>> getGroupOptions([BuildContext? ctx]) async {
+    final targetCtx = ctx ?? context;
+    final tcontext = Translations.of(targetCtx);
     final coreVersion = AppUtils.getCoreVersion();
     List<GroupItem> groupOptions = [];
 
@@ -208,9 +209,30 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
         ),
       ),
       GroupItemOptions(
-        textOptions: GroupItemTextOptions(
+        pushOptions: GroupItemPushOptions(
           name: tcontext.meta.openSourceLicense,
           text: "GPL-3.0",
+          onPush: () async {
+            showLicensePage(
+              context: context,
+              applicationName: AppUtils.getName(),
+              applicationVersion: AppUtils.getFormattedVersion(),
+              applicationIcon: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Image.asset(
+                  'assets/images/app_icon_256.png',
+                  width: 56,
+                  height: 56,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              applicationLegalese:
+                  'Wmimo is licensed under the GNU General Public License v3.0 (GPL-3.0-or-later).\n'
+                  'Rust workspace crates: Dual-licensed under MIT OR Apache-2.0.\n'
+                  'Mihomo core: GPL-3.0-or-later.\n'
+                  'Third-party components: BSD-3-Clause, MIT, Apache-2.0.',
+            );
+          },
         ),
       ),
     ];

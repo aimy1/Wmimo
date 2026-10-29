@@ -160,3 +160,4 @@ Wmimo is licensed under the **GNU General Public License v3.0 (GPL-3.0-or-later)
 
 - **Rust Workspace Crates**: Dual-licensed under [MIT](rust/LICENSE-MIT) OR [Apache-2.0](rust/LICENSE-APACHE) when used standalone, and GPL-3.0 when distributed with Wmimo.
 - **Third-Party & Core Licenses**: See [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) and [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
+- **Security & Signing Certificates**: See [SECURITY.md](SECURITY.md) for official Android APK signing fingerprints and release verification instructions.

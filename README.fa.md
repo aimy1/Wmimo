@@ -159,3 +159,4 @@ flutter build macos --release     # macOS
 
 - **بسته‌های Rust Workspace**: به صورت مستقل تحت مجوز دوگانه [MIT](rust/LICENSE-MIT) یا [Apache-2.0](rust/LICENSE-APACHE) و هنگام توزیع همراه با Wmimo تحت GPL-3.0 قرار می‌گیرند.
 - **مجوزهای شخص ثالث و هسته**: به فایل‌های [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) و [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md) مراجعه فرمایید.
+- **امنیت و گواهی‌های امضا**: برای مشاهده اثرانگشت گواهی امضای نسخه اندروید (SHA-256) و دستورالعمل‌های اعتبارسنجی بسته‌ها به [SECURITY.md](SECURITY.md) مراجعه کنید.

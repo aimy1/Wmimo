@@ -159,3 +159,4 @@ flutter build macos --release     # macOS
 
 - **Rust Workspace 模块**: 独立作为库使用时采用 [MIT](rust/LICENSE-MIT) OR [Apache-2.0](rust/LICENSE-APACHE) 双重许可；作为 Wmimo 一部分编译分发时受 GPL-3.0 约束。
 - **第三方与核心组件许可证**: 详见 [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 以及 [组件授权架构说明](docs/LICENSES_AND_COMPONENTS.md)。
+- **安全策略与证书指纹**: 详见 [SECURITY.md](SECURITY.md) 查看官方 Android APK 签名证书指纹（SHA-256）及安装包防篡改校验指南。

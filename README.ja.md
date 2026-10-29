@@ -159,3 +159,4 @@ Wmimo のアーキテクチャ効率とカバレッジは、再現可能な自�
 
 - **Rust Workspace クレート**: 単体利用時は [MIT](rust/LICENSE-MIT) または [Apache-2.0](rust/LICENSE-APACHE) のデュアルライセンス、Wmimo とともに配布される場合は GPL-3.0 が適用されます。
 - **サードパーティおよびコアコンポーネントのライセンス**: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) および [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md) をご参照ください。
+- **セキュリティと署名証明書**: 公式 Android APK 署名証明書フィンガープリント（SHA-256）およびバイナリ検証手順については [SECURITY.md](SECURITY.md) をご覧ください。
