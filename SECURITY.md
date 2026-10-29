@@ -85,8 +85,8 @@ Wmimo complies with all applicable open-source licenses:
 
 If you discover a security vulnerability or potential privacy leak in Wmimo, please report it responsibly:
 
-- **Primary Contact**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- **Secondary Contact**: [juzimao2333@gmail.com](mailto:juzimao2333@gmail.com)
+- **Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **Telegram Channel**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - **Encryption / Details**: Please provide a detailed description of the vulnerability, reproduction steps, and impact.
 - **Response Timeline**: We commit to acknowledging receipt within 48 hours and providing a remediation timeline or patch within 7 business days.
 
