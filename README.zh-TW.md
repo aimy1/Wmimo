@@ -13,7 +13,7 @@
   <img src="assets/images/app_icon_256.png" width="128" height="128" alt="Wmimo Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 188, 223, 0.25);" />
   <h1 align="center" style="font-weight: 800; border-bottom: none; margin-top: 12px; margin-bottom: 6px;">Wmimo</h1>
   <p align="center" style="font-size: 1.15rem; color: #57606a;"><strong>新一代現代化跨平台 Clash / Mihomo 桌面與行動端代理客戶端</strong></p>
-  <p align="center">基於 Flutter 與高效能 Mihomo (Meta) 核心傾力打造。兼具極速轉發效能、現代藝術級設計美學與全協議代理能力。</p>
+  <p align="center">基於 Flutter 與高效能 Mihomo (Meta) 核心傾力打造。兼具高速轉發效能、現代藝術級設計美學與全協議代理能力。</p>
 
   <p align="center">
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
@@ -26,9 +26,9 @@
 
   <p align="center">
     <a href="https://github.com/aimy1/Wmimo/releases"><b>下載安裝</b></a> •
-    <a href="https://wmimo.buzz"><b>官方网站</b></a> •
+    <a href="https://wmimo.buzz"><b>官方網站</b></a> •
     <a href="#核心特性"><b>核心特性</b></a> •
-    <a href="docs/BENCHMARKS.md"><b>性能基准</b></a> •
+    <a href="docs/BENCHMARKS.md"><b>效能基準</b></a> •
     <a href="#快速上手"><b>快速上手</b></a> •
     <a href="#本地編譯與開發"><b>本地編譯</b></a> •
     <a href="https://t.me/wmimoapp"><b>官方社群</b></a>
@@ -53,7 +53,7 @@
   - 響應式自適應設計：桌面端寬螢幕側邊欄，行動端單手人體工學佈局。
 - **高效能 Mihomo (Meta) 核心驅動**：
   - 全協議支援：**Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct** 等；
-  - 獨立後台 Isolate 平行處理節點與規則流，啟動過程 **零介面凍結（Zero UI Freeze）**，超低記憶體佔用。
+  - 獨立後台 Isolate 平行處理節點與規則串流，載入過程流暢無阻（5,000 節點解析耗時僅 ~163ms，詳見 [效能基準報告](docs/BENCHMARKS.md)）。
 - **智慧分流路由與系統級雙代理模式**：
   - 出站模式快速切換：**規則分流 (Rule)** / **全域代理 (Global)** / **直接連線 (Direct)**；
   - 雙引擎彈性調度：**TUN 虛擬網卡模式**（透明接管全系統流量）與 **系統代理模式**（免特權快速連線）；
@@ -86,6 +86,13 @@
 
 ## 本地編譯與開發
 
+### 環境準備
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`)
+- [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
+- 對應目標平台編譯工具鏈（Windows 需 Visual Studio 2022 C++，Linux 需 GTK3/Clang/CMake，Android 需 Android SDK）
+
+### 開發命令速查
+
 ```bash
 # 1. 複製程式碼庫
 git clone https://github.com/aimy1/Wmimo.git
@@ -116,6 +123,19 @@ flutter build macos --release     # macOS
 
 ---
 
+## 品質與效能基準
+
+各項架構效能與功能完整性均透過自動化測試套件持續監控與可獨立驗證的數據支撐：
+
+- **大體量訂閱解析吞吐**: ~30,670 節點/秒（5,000 個複雜協議節點在獨立後台 Isolate 中完成格式轉換、去重與智慧策略組歸類僅耗時 ~163ms，主 UI 執行緒維持順暢無延遲）。
+- **設定檔快速辨識**: `isClashYaml` 標頭試探探測演算法在 1,000 節點規模下僅需 ~1.4ms。
+- **國際化完整度**: 9 種語言各 798 個詞條達成 100.0% 鏡像覆蓋，CI 自動化測試嚴格驗證 0 缺失鍵與佔位符一致性。
+- **本地驗證方式**: 執行 `flutter test test/benchmark_profile_scale_test.dart` 及 `flutter test test/i18n_integrity_test.dart`。
+
+完整測試基準、測試環境與驗證流程請參閱 [docs/BENCHMARKS.md](docs/BENCHMARKS.md)。
+
+---
+
 ## 致謝
 
 - **[GooRingX (vowe)](https://github.com/GooRingX)**：感謝傑出的開源貢獻與設計指導。
@@ -126,6 +146,7 @@ flutter build macos --release     # macOS
 
 ## 社群交流與回饋
 
+- **官方網站**: [wmimo.buzz](https://wmimo.buzz)
 - **Telegram 官方頻道**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - **聯絡信箱**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - **問題回報**: [提交 GitHub Issue](https://github.com/aimy1/Wmimo/issues)

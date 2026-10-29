@@ -26,8 +26,11 @@
 
   <p align="center">
     <a href="https://github.com/aimy1/Wmimo/releases"><b>다운로드</b></a> •
+    <a href="https://wmimo.buzz"><b>공식 웹사이트</b></a> •
     <a href="#주요-기능"><b>주요 기능</b></a> •
+    <a href="docs/BENCHMARKS.md"><b>성능 벤치마크</b></a> •
     <a href="#빠른-시작"><b>빠른 시작</b></a> •
+    <a href="#소스코드-빌드"><b>소스 빌드</b></a> •
     <a href="https://t.me/wmimoapp"><b>커뮤니티</b></a>
   </p>
 
@@ -49,8 +52,8 @@
   - 라이트 모드와 깊이 있는 다크 모드를 완벽하게 지원.
   - 대화면 데스크톱 사이드바와 모바일 한 손 레이아웃 자동 적응.
 - **강력한 Mihomo (Meta) 코어 엔진**:
-  - Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard 등 전 프로토콜 지원.
-  - 백그라운드 Isolate 비동기 노드 파싱 — **시작 시 UI 멈춤 현상 제로 (Zero UI Freeze)**.
+  - Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct 등 전 프로토콜 지원.
+  - 백그라운드 Isolate 비동기 노드 파싱 및 정렬 — UI 지연 없는 논블로킹 로딩 (5,000개 노드 파싱 약 163ms 소요, [성능 벤치마크](docs/BENCHMARKS.md) 참조).
 - **스마트 라우팅 및 듀얼 프록시 엔진**:
   - 규칙 분류 (Rule) / 글로벌 (Global) / 직결 (Direct) 모드 원클릭 전환.
   - **TUN 가상 어댑터 모드** (시스템 전체 투명 캡처) 및 **시스템 프록시 모드** (간편 무권한 연결).
@@ -59,10 +62,14 @@
   - 1분/5분/15분/30분/60분 다중 시간 축 베지에 곡선 트래픽 그래프.
   - 출구 IP, 위치 및 ISP 정보 즉시 조회, 원터치 복사 및 마스킹 보안 기능.
   - 구독 플랜 데이터 사용량 진행률 및 만료일 카운트다운.
+  - 전체 진단 도구: 라우팅 규칙 검사기, 실시간 코어 콘솔 로그, 병렬 Ping 테스트, 런타임 설정 뷰어.
 - **운영체제 네이티브 깊은 통합**:
   - **Windows**: 앱 테마와 동기화되는 트레이 메뉴, 트레이 아이콘 실시간 속도 표시, `comctl32 v6` 비주얼 스타일.
   - **Android**: 백그라운드 상주 알림 (즉시 연결 끊기 버튼 탑재), 퀵 세팅 타일, 실시간 다국어 동기화.
-  - **macOS**: 메뉴바 Template 아이콘 지원.
+  - **macOS**: 메뉴바 Template 아이콘 지원 및 시스템 프록시 자동화.
+- **멀티 채널 무중단 자동 업데이트**:
+  - `stable` (안정 버전) 및 `beta` (프리뷰 버전) 채널을 자유롭게 전환.
+  - 백그라운드 무소음 고속 다운로드 및 SHA-256 해시 무결성 검증.
 - **완벽한 9개국어 네이티브 번역**:
   - 한국어, 영어, 중국어(간체/번체), 일본어, 러시아어, 스페인어, 아랍어, 페르시아어 798개 키 100% 매칭 (0 누락 키, [벤치마크](docs/BENCHMARKS.md) 참조).
 
@@ -77,14 +84,69 @@
 
 ---
 
+## 소스코드 빌드
+
+### 환경 요구사항
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`)
+- [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
+- 호스트 플랫폼 컴파일러 툴체인 (Windows: Visual Studio 2022 C++, Linux: GTK3/Clang/CMake, Android: Android SDK)
+
+### 빌드 명령어
+
+```bash
+# 1. 저장소 복제
+git clone https://github.com/aimy1/Wmimo.git
+cd Wmimo
+
+# 2. 패키지 설치 및 다국어 코드 생성
+flutter pub get
+dart run slang
+
+# 3. 플랫폼별 Mihomo 코어 다운로드
+dart run tool/download_all_cores.dart
+
+# 4. 개발 모드 실행
+flutter run
+
+# 5. 배포 바이너리 빌드
+flutter build windows --release   # Windows
+flutter build apk --release       # Android
+flutter build linux --release     # Linux
+flutter build macos --release     # macOS
+```
+
+---
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
+## 성능 및 품질 검증
+
+Wmimo의 아키텍처 효율성과 커버리지는 독립적으로 재현 가능한 자동화 테스트를 통해 검증됩니다:
+
+- **구독 파싱 처리량**: 초당 약 30,670개 노드 (5,000개 다중 프로토콜 노드를 백그라운드 Isolate에서 약 163ms 만에 파싱 및 분류).
+- **빠른 포맷 탐지**: `isClashYaml` 알고리즘으로 1,000개 노드 설정을 약 1.4ms 내에 검증.
+- **다국어 완성도**: 9개 언어 각 798개 키 100.0% 완전 일치 (0 누락 키).
+- **자동 검증 실행**: `flutter test test/benchmark_profile_scale_test.dart` 및 `flutter test test/i18n_integrity_test.dart`.
+
+상세한 벤치마크 보고서 및 테스트 환경은 [docs/BENCHMARKS.md](docs/BENCHMARKS.md)에서 확인하실 수 있습니다.
+
+---
+
+## 감사의 말
+
+- **[GooRingX (vowe)](https://github.com/GooRingX)**: 탁월한 오픈소스 기여와 설계 통찰력에 진심으로 감사드립니다.
+- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**: 강력한 코어 엔진과 전 프로토콜 지원에 감사드립니다.
+- **[Flutter](https://flutter.dev/)**: 뛰어난 크로스 플랫폼 프레임워크 지원에 감사드립니다.
+
+---
+
 ## 커뮤니티 & 문의
 
+- **공식 웹사이트**: [wmimo.buzz](https://wmimo.buzz)
 - **Telegram 공식 채널**: [t.me/wmimoapp](https://t.me/wmimoapp)
 - **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
 - **이슈 제보**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
@@ -93,4 +155,7 @@
 
 ## 라이선스
 
-이 프로젝트는 **GPL-3.0 라이선스**에 따라 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하십시오.
+이 프로젝트는 **GNU General Public License v3.0 (GPL-3.0-or-later)**에 따라 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하십시오.
+
+- **Rust Workspace 크레이트**: 독립 라이브러리로 사용 시 [MIT](rust/LICENSE-MIT) 또는 [Apache-2.0](rust/LICENSE-APACHE) 듀얼 라이선스가 적용되며, Wmimo와 함께 배포 시 GPL-3.0을 따릅니다.
+- **서드파티 및 핵심 컴포넌트 라이선스**: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 및 [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md)를 참조하십시오.
