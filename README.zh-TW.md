@@ -34,7 +34,9 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo 淺色主題" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo 深色主題" width="45%" />
+    <img src="docs/preview_light.png" alt="Wmimo 淺色主題" width="370" />
+    &nbsp;&nbsp;
+    <img src="docs/preview_dark.png" alt="Wmimo 深色主題" width="370" />
   </p>
   <sub><em>18px 極簡微卡片設計體系 · 即時平滑流量貝塞爾曲線監控 · TUN & 系統代理雙模式（淺色 & 深色原生雙主題）</em></sub>
 </div>
@@ -108,15 +110,7 @@ flutter build macos --release     # macOS
 
 ## Star 成長趨勢
 
-<div align="center">
-  <a href="https://www.star-history.com/#aimy1/Wmimo&Date">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&theme=dark&v=20261024" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" />
-      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" width="720" />
-    </picture>
-  </a>
-</div>
+[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
@@ -138,4 +132,7 @@ flutter build macos --release     # macOS
 
 ## 開源授權
 
-本專案採用 **GPL-3.0** 授權條款開源分發。詳細內容請參閱 [LICENSE](LICENSE) 檔案。
+本專案採用 **GPL-3.0-or-later** 授權條款開源分發。詳細內容請參閱 [LICENSE](LICENSE) 檔案。
+
+- **Rust Workspace 模組**: 獨立作為庫使用時採用 [MIT](rust/LICENSE-MIT) 或 [Apache-2.0](rust/LICENSE-APACHE) 雙重許可；作為 Wmimo 組合分發時受 GPL-3.0 約束。
+- **第三方與核心組件授權**: 詳見 [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 與 [組件授權架構說明](docs/LICENSES_AND_COMPONENTS.md)。

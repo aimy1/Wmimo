@@ -34,9 +34,11 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="45%" />
+    <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="370" />
+    &nbsp;&nbsp;
+    <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="370" />
   </p>
-  <sub><em>18px micro-card layout system, website connectivity test, real-time egress IP diagnosis, and bezier traffic monitor (Light & Dark dual themes)</em></sub>
+  <sub><em>18px micro-card layout system, real-time bezier traffic wave, and system-level proxy routing (Light & Dark dual themes)</em></sub>
 </div>
 
 ---
@@ -56,8 +58,7 @@
   - Fine-grained traffic steering: Android Per-App Proxy filtering and Windows UWP Loopback exemption utility.
 - **Deep Real-Time Telemetry & Diagnostics**:
   - Ultra-smooth Bezier traffic wave monitor with multi-window spans (1m / 5m / 15m / 30m / 60m).
-  - Website latency & connectivity test card with custom target management, smart brand favicon caching, PC right-click & mobile long-press actions.
-  - Instant egress IP, geolocation, and ISP lookup card with auto-refresh on node switch, one-tap copy, and privacy masking.
+  - Instant egress IP, geolocation, and ISP lookup card with one-tap copy and privacy masking.
   - Subscription plan data usage progress bar with expiration countdown.
   - Built-in diagnostic toolset: Routing Rules inspection, Real-time Core Logs, Concurrent Latency Ping, and Runtime Configuration viewer.
 - **Deep Native Operating System Integration**:
@@ -116,15 +117,7 @@ flutter build macos --release     # macOS
 
 ## Star History
 
-<div align="center">
-  <a href="https://www.star-history.com/#aimy1/Wmimo&Date">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&theme=dark&v=20261024" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" />
-      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" width="720" />
-    </picture>
-  </a>
-</div>
+[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
@@ -146,4 +139,7 @@ flutter build macos --release     # macOS
 
 ## License
 
-Wmimo is licensed under the **GNU General Public License v3.0 (GPL-3.0)**. See the [LICENSE](LICENSE) file for details.
+Wmimo is licensed under the **GNU General Public License v3.0 (GPL-3.0-or-later)**. See the [LICENSE](LICENSE) file for details.
+
+- **Rust Workspace Crates**: Dual-licensed under [MIT](rust/LICENSE-MIT) OR [Apache-2.0](rust/LICENSE-APACHE) when used standalone, and GPL-3.0 when distributed with Wmimo.
+- **Third-Party & Core Licenses**: See [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) and [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).

@@ -33,7 +33,9 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo تم روشن" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo تم تاریک" width="45%" />
+    <img src="docs/preview_light.png" alt="Wmimo تم روشن" width="370" />
+    &nbsp;&nbsp;
+    <img src="docs/preview_dark.png" alt="Wmimo تم تاریک" width="370" />
   </p>
   <sub><em>طراحی کارت‌های میکرو ۱۸ پیکسلی، نمودار روان و لحظه‌ای ترافیک و ابزارهای جامع عیب‌یابی شبکه (تم روشن و تاریک)</em></sub>
 </div>
@@ -77,15 +79,7 @@
 
 ## Star History
 
-<div align="center">
-  <a href="https://www.star-history.com/#aimy1/Wmimo&Date">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&theme=dark&v=20261024" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" />
-      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" width="720" />
-    </picture>
-  </a>
-</div>
+[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 

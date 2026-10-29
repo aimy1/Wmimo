@@ -34,9 +34,11 @@
 
   <br/>
   <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo 浅色主题" width="45%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/preview_dark.png" alt="Wmimo 深色主题" width="45%" />
+    <img src="docs/preview_light.png" alt="Wmimo 浅色主题" width="370" />
+    &nbsp;&nbsp;
+    <img src="docs/preview_dark.png" alt="Wmimo 深色主题" width="370" />
   </p>
-  <sub><em>18px 极简微卡片设计体系 · 网站连通测速与出口 IP 诊断 · 实时贝塞尔流量波形 · TUN / 系统代理双模式（浅色 & 深色原生双主题）</em></sub>
+  <sub><em>18px 极简微卡片设计体系 · 实时平滑流量贝塞尔曲线监控 · TUN & 系统代理双模式（浅色 & 深色原生双主题）</em></sub>
 </div>
 
 ---
@@ -56,8 +58,7 @@
   - 精细化应用分流：Android 分应用代理（黑白名单）与 Windows UWP Loopback 免除工具。
 - **深度实时流量监控与智能诊断套件**：
   - 仪表盘实时平滑贝塞尔流量曲线图，支持 1m / 5m / 15m / 30m / 60m 多时间跨度自如缩放；
-  - 网站连通性与延迟测试卡片，支持自定义添加/编辑/删除目标、品牌图标智能缓存、PC 右键与移动端长按快捷管理；
-  - 实时出口 IP、地理位置与 ISP 归属信息卡片，节点切换自动刷新、轻触复制与隐私脱敏保护；
+  - 实时出口 IP、地理位置与 ISP 归属信息卡片，一键测速、轻触复制与隐私脱敏保护；
   - 订阅套餐用量实时进度条与到期时间精准倒计时；
   - 全套排障套件：路由规则树查看、内核实时控制台日志、全节点并发 Ping 测速与网络连通性诊断。
 - **深度操作系统级原生融合**：
@@ -116,15 +117,7 @@ flutter build macos --release     # macOS
 
 ## Star 增长趋势
 
-<div align="center">
-  <a href="https://www.star-history.com/#aimy1/Wmimo&Date">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&theme=dark&v=20261024" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" />
-      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date&v=20261024" width="720" />
-    </picture>
-  </a>
-</div>
+[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
 ---
 
@@ -146,4 +139,7 @@ flutter build macos --release     # macOS
 
 ## 开源许可证
 
-本项目基于 **GPL-3.0** 开源许可证分发与使用。详细条款请参阅 [LICENSE](LICENSE) 文件。
+本项目基于 **GPL-3.0-or-later** 开源许可证分发与使用。详细条款请参阅 [LICENSE](LICENSE) 文件。
+
+- **Rust Workspace 模块**: 独立作为库使用时采用 [MIT](rust/LICENSE-MIT) OR [Apache-2.0](rust/LICENSE-APACHE) 双重许可；作为 Wmimo 一部分编译分发时受 GPL-3.0 约束。
+- **第三方与核心组件许可证**: 详见 [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 以及 [组件授权架构说明](docs/LICENSES_AND_COMPONENTS.md)。

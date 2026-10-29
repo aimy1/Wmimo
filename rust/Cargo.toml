@@ -14,6 +14,9 @@ members = [
 version = "0.1.0"
 edition = "2021"
 authors = ["Wmimo Team"]
+# The crates in this workspace are individually dual-licensed under MIT OR Apache-2.0.
+# When distributed as part of the Wmimo application, the combined work is governed by GPL-3.0-or-later.
+# See LICENSE-MIT, LICENSE-APACHE, and ../THIRDPARTY_LICENSES.md for details.
 license = "MIT OR Apache-2.0"
 
 [workspace.dependencies]

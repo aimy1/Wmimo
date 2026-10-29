@@ -148,7 +148,10 @@ flutter build macos --release     # macOS
 
 ## License
 
-Wmimo is licensed under the **GNU General Public License v3.0 (GPL-3.0)**. See the [LICENSE](LICENSE) file for details.
+Wmimo is licensed under the **GNU General Public License v3.0 (GPL-3.0-or-later)**. See the [LICENSE](LICENSE) file for details.
+
+- **Rust Workspace Crates**: Dual-licensed under [MIT](rust/LICENSE-MIT) OR [Apache-2.0](rust/LICENSE-APACHE) when used standalone, and GPL-3.0 when distributed with Wmimo.
+- **Third-Party & Core Licenses**: See [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) and [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
 """;
 
   // ==========================================
@@ -288,7 +291,10 @@ flutter build macos --release     # macOS
 
 ## 开源许可证
 
-本项目基于 **GPL-3.0** 开源许可证分发与使用。详细条款请参阅 [LICENSE](LICENSE) 文件。
+本项目基于 **GPL-3.0-or-later** 开源许可证分发与使用。详细条款请参阅 [LICENSE](LICENSE) 文件。
+
+- **Rust Workspace 模块**: 独立作为库使用时采用 [MIT](rust/LICENSE-MIT) OR [Apache-2.0](rust/LICENSE-APACHE) 双重许可；作为 Wmimo 一部分编译分发时受 GPL-3.0 约束。
+- **第三方与核心组件许可证**: 详见 [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 以及 [组件授权架构说明](docs/LICENSES_AND_COMPONENTS.md)。
 """;
 
   // ==========================================
@@ -421,7 +427,10 @@ flutter build macos --release     # macOS
 
 ## 開源授權
 
-本專案採用 **GPL-3.0** 授權條款開源分發。詳細內容請參閱 [LICENSE](LICENSE) 檔案。
+本專案採用 **GPL-3.0-or-later** 授權條款開源分發。詳細內容請參閱 [LICENSE](LICENSE) 檔案。
+
+- **Rust Workspace 模組**: 獨立作為庫使用時採用 [MIT](rust/LICENSE-MIT) 或 [Apache-2.0](rust/LICENSE-APACHE) 雙重許可；作為 Wmimo 組合分發時受 GPL-3.0 約束。
+- **第三方與核心組件授權**: 詳見 [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 與 [組件授權架構說明](docs/LICENSES_AND_COMPONENTS.md)。
 """;
 
   // ==========================================

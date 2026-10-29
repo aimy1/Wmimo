@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2024-2026 The Wmimo Authors.
 name: wmimo
 description: A modern, sleek cross-platform Clash/Mihomo GUI proxy client.
 homepage: https://github.com/aimy1/Wmimo
