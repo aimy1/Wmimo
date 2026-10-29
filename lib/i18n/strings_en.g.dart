@@ -2233,6 +2233,12 @@ class Translations$meta$en {
 
 	/// en: 'Reset to Default'
 	String get resetDefaultCards => 'Reset to Default';
+
+	/// en: 'Collapse All'
+	String get collapseAllCards => 'Collapse All';
+
+	/// en: 'Expand All'
+	String get expandAllCards => 'Expand All';
 }
 
 // Path: permission
@@ -3314,6 +3320,8 @@ extension on Translations {
 			'meta.cardSubscription' => 'Subscription & Quota',
 			'meta.cardQuickActions' => 'Quick Action Tools',
 			'meta.resetDefaultCards' => 'Reset to Default',
+			'meta.collapseAllCards' => 'Collapse All',
+			'meta.expandAllCards' => 'Expand All',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

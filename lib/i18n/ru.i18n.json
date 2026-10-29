@@ -730,7 +730,9 @@
     "cardIpInfo": "Информация об IP и выходе",
     "cardSubscription": "Подписка и лимиты",
     "cardQuickActions": "Быстрые инструменты",
-    "resetDefaultCards": "Сбросить по умолчанию"
+    "resetDefaultCards": "Сбросить по умолчанию",
+    "collapseAllCards": "Свернуть все",
+    "expandAllCards": "Развернуть все"
   },
   "permission": {
     "camera": "Камера",

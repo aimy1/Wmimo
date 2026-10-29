@@ -730,7 +730,9 @@
     "cardIpInfo": "IP 및 출구 정보",
     "cardSubscription": "구독 및 만료 정보",
     "cardQuickActions": "빠른 도구",
-    "resetDefaultCards": "기본값 복원"
+    "resetDefaultCards": "기본값 복원",
+    "collapseAllCards": "모두 접기",
+    "expandAllCards": "모두 펼치기"
   },
   "permission": {
     "camera": "카메라",

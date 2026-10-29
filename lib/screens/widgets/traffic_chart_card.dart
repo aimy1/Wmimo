@@ -51,6 +51,23 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
   void initState() {
     super.initState();
     _isCollapsed = SettingManager.getConfig().ui.collapseTrafficChart;
+    SettingManager.onHomeCardsChanged.add(_onHomeCardsChanged);
+  }
+
+  @override
+  void dispose() {
+    SettingManager.onHomeCardsChanged.remove(_onHomeCardsChanged);
+    super.dispose();
+  }
+
+  void _onHomeCardsChanged() {
+    if (!mounted) return;
+    final current = SettingManager.getConfig().ui.collapseTrafficChart;
+    if (_isCollapsed != current) {
+      setState(() {
+        _isCollapsed = current;
+      });
+    }
   }
 
   @override

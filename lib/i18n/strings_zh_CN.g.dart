@@ -853,6 +853,8 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get cardSubscription => '套餐与到期信息';
 	@override String get cardQuickActions => '快捷工具入口';
 	@override String get resetDefaultCards => '恢复默认卡片';
+	@override String get collapseAllCards => '全部折叠';
+	@override String get expandAllCards => '全部展开';
 }
 
 // Path: permission
@@ -1736,6 +1738,8 @@ extension on TranslationsZhCn {
 			'meta.cardSubscription' => '套餐与到期信息',
 			'meta.cardQuickActions' => '快捷工具入口',
 			'meta.resetDefaultCards' => '恢复默认卡片',
+			'meta.collapseAllCards' => '全部折叠',
+			'meta.expandAllCards' => '全部展开',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',

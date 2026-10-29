@@ -853,6 +853,8 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get cardSubscription => 'Подписка и лимиты';
 	@override String get cardQuickActions => 'Быстрые инструменты';
 	@override String get resetDefaultCards => 'Сбросить по умолчанию';
+	@override String get collapseAllCards => 'Свернуть все';
+	@override String get expandAllCards => 'Развернуть все';
 }
 
 // Path: permission
@@ -1736,6 +1738,8 @@ extension on TranslationsRu {
 			'meta.cardSubscription' => 'Подписка и лимиты',
 			'meta.cardQuickActions' => 'Быстрые инструменты',
 			'meta.resetDefaultCards' => 'Сбросить по умолчанию',
+			'meta.collapseAllCards' => 'Свернуть все',
+			'meta.expandAllCards' => 'Развернуть все',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

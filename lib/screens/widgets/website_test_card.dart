@@ -166,7 +166,24 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
   void initState() {
     super.initState();
     _isCollapsed = SettingManager.getConfig().ui.collapseWebsiteTest;
+    SettingManager.onHomeCardsChanged.add(_onHomeCardsChanged);
     _loadTargets();
+  }
+
+  @override
+  void dispose() {
+    SettingManager.onHomeCardsChanged.remove(_onHomeCardsChanged);
+    super.dispose();
+  }
+
+  void _onHomeCardsChanged() {
+    if (!mounted) return;
+    final current = SettingManager.getConfig().ui.collapseWebsiteTest;
+    if (_isCollapsed != current) {
+      setState(() {
+        _isCollapsed = current;
+      });
+    }
   }
 
   void _loadTargets() {

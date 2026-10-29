@@ -853,6 +853,8 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get cardSubscription => 'プラン・有効期限情報';
 	@override String get cardQuickActions => 'クイックツール';
 	@override String get resetDefaultCards => 'デフォルトに戻す';
+	@override String get collapseAllCards => 'すべて折りたたむ';
+	@override String get expandAllCards => 'すべて展開';
 }
 
 // Path: permission
@@ -1736,6 +1738,8 @@ extension on TranslationsJa {
 			'meta.cardSubscription' => 'プラン・有効期限情報',
 			'meta.cardQuickActions' => 'クイックツール',
 			'meta.resetDefaultCards' => 'デフォルトに戻す',
+			'meta.collapseAllCards' => 'すべて折りたたむ',
+			'meta.expandAllCards' => 'すべて展開',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

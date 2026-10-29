@@ -730,7 +730,9 @@
     "cardIpInfo": "IP・出口情報",
     "cardSubscription": "プラン・有効期限情報",
     "cardQuickActions": "クイックツール",
-    "resetDefaultCards": "デフォルトに戻す"
+    "resetDefaultCards": "デフォルトに戻す",
+    "collapseAllCards": "すべて折りたたむ",
+    "expandAllCards": "すべて展開"
   },
   "permission": {
     "camera": "カメラ",

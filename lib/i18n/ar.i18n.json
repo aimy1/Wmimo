@@ -730,7 +730,9 @@
     "cardIpInfo": "معلومات IP والمنفذ",
     "cardSubscription": "الاشتراك والحصة",
     "cardQuickActions": "أدوات سريعة",
-    "resetDefaultCards": "استعادة الافتراضي"
+    "resetDefaultCards": "استعادة الافتراضي",
+    "collapseAllCards": "طي الكل",
+    "expandAllCards": "توسيع الكل"
   },
   "permission": {
     "camera": "الكاميرا",

@@ -853,6 +853,8 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get cardSubscription => '구독 및 만료 정보';
 	@override String get cardQuickActions => '빠른 도구';
 	@override String get resetDefaultCards => '기본값 복원';
+	@override String get collapseAllCards => '모두 접기';
+	@override String get expandAllCards => '모두 펼치기';
 }
 
 // Path: permission
@@ -1736,6 +1738,8 @@ extension on TranslationsKo {
 			'meta.cardSubscription' => '구독 및 만료 정보',
 			'meta.cardQuickActions' => '빠른 도구',
 			'meta.resetDefaultCards' => '기본값 복원',
+			'meta.collapseAllCards' => '모두 접기',
+			'meta.expandAllCards' => '모두 펼치기',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

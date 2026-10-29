@@ -730,7 +730,9 @@
     "cardIpInfo": "اطلاعات IP و خروجی",
     "cardSubscription": "اشتراک و سهمیه",
     "cardQuickActions": "ابزارهای سریع",
-    "resetDefaultCards": "بازنشانی به پیش‌فرض"
+    "resetDefaultCards": "بازنشانی به پیش‌فرض",
+    "collapseAllCards": "بستن همه",
+    "expandAllCards": "باز کردن همه"
   },
   "permission": {
     "camera": "دوربین",

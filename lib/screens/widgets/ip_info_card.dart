@@ -37,6 +37,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
   void initState() {
     super.initState();
     _isCollapsed = SettingManager.getConfig().ui.collapseIpInfo;
+    SettingManager.onHomeCardsChanged.add(_onHomeCardsChanged);
     Biz.onEventProxySelected.add(_onProxyNodeChanged);
     _startAutoRefreshTimer();
     _fetchCurrentInfo();
@@ -44,10 +45,21 @@ class _IpInfoCardState extends State<IpInfoCard> {
 
   @override
   void dispose() {
+    SettingManager.onHomeCardsChanged.remove(_onHomeCardsChanged);
     Biz.onEventProxySelected.remove(_onProxyNodeChanged);
     _countdownTimer?.cancel();
     _debounceTimer?.cancel();
     super.dispose();
+  }
+
+  void _onHomeCardsChanged() {
+    if (!mounted) return;
+    final current = SettingManager.getConfig().ui.collapseIpInfo;
+    if (_isCollapsed != current) {
+      setState(() {
+        _isCollapsed = current;
+      });
+    }
   }
 
   void _startAutoRefreshTimer() {

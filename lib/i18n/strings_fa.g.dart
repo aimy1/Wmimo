@@ -853,6 +853,8 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get cardSubscription => 'اشتراک و سهمیه';
 	@override String get cardQuickActions => 'ابزارهای سریع';
 	@override String get resetDefaultCards => 'بازنشانی به پیش‌فرض';
+	@override String get collapseAllCards => 'بستن همه';
+	@override String get expandAllCards => 'باز کردن همه';
 }
 
 // Path: permission
@@ -1736,6 +1738,8 @@ extension on TranslationsFa {
 			'meta.cardSubscription' => 'اشتراک و سهمیه',
 			'meta.cardQuickActions' => 'ابزارهای سریع',
 			'meta.resetDefaultCards' => 'بازنشانی به پیش‌فرض',
+			'meta.collapseAllCards' => 'بستن همه',
+			'meta.expandAllCards' => 'باز کردن همه',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

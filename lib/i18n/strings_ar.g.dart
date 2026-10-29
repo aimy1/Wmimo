@@ -853,6 +853,8 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get cardSubscription => 'الاشتراك والحصة';
 	@override String get cardQuickActions => 'أدوات سريعة';
 	@override String get resetDefaultCards => 'استعادة الافتراضي';
+	@override String get collapseAllCards => 'طي الكل';
+	@override String get expandAllCards => 'توسيع الكل';
 }
 
 // Path: permission
@@ -1736,6 +1738,8 @@ extension on TranslationsAr {
 			'meta.cardSubscription' => 'الاشتراك والحصة',
 			'meta.cardQuickActions' => 'أدوات سريعة',
 			'meta.resetDefaultCards' => 'استعادة الافتراضي',
+			'meta.collapseAllCards' => 'طي الكل',
+			'meta.expandAllCards' => 'توسيع الكل',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',
