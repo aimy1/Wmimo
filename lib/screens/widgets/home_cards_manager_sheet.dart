@@ -306,25 +306,6 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
             _saveAndNotify();
           },
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Divider(
-            height: 1,
-            thickness: 0.8,
-            color: theme.dividerColor.withValues(alpha: 0.3),
-          ),
-        ),
-        _buildSwitchTile(
-          icon: Icons.splitscreen_rounded,
-          iconColor: const Color(0xFF64748B),
-          title: tcontext.meta.sideBySideLayout,
-          subtitle: tcontext.meta.sideBySideLayoutTips,
-          value: ui.sideBySideLayout,
-          onChanged: (val) {
-            setState(() => ui.sideBySideLayout = val);
-            _saveAndNotify(notifySideBySide: true);
-          },
-        ),
       ],
     );
   }
@@ -488,16 +469,12 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
       ui.collapseIpInfo = false;
       ui.collapseSubscription = false;
       ui.collapseQuickActions = false;
-      ui.sideBySideLayout = true;
     });
-    _saveAndNotify(notifySideBySide: true);
+    _saveAndNotify();
   }
 
-  void _saveAndNotify({bool notifySideBySide = false}) {
+  void _saveAndNotify() {
     SettingManager.save();
     SettingManager.notifyHomeCardsChanged();
-    if (notifySideBySide) {
-      SettingManager.notifySideBySideLayoutChanged();
-    }
   }
 }

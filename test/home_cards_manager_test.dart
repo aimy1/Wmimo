@@ -52,7 +52,7 @@ void main() {
       expect(find.text(t.meta.resetDefaultCards), findsOneWidget);
 
       // Verify switches
-      expect(find.byType(Switch), findsNWidgets(6)); // 5 cards + side-by-side
+      expect(find.byType(Switch), findsNWidgets(5)); // 5 dashboard cards
       expect(tester.takeException(), isNull);
     });
 
