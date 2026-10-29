@@ -55,6 +55,7 @@ import 'package:wmimo/screens/uwp_loopback_screen.dart';
 import 'package:wmimo/screens/version_update_screen.dart';
 import 'package:wmimo/screens/webview_helper.dart';
 import 'package:wmimo/screens/widgets/sheet.dart';
+import 'package:wmimo/screens/widgets/home_cards_manager_sheet.dart';
 import 'package:wmimo/screens/widgets/text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -663,6 +664,17 @@ class GroupHelper {
             ),
           ),
         ],
+        GroupItemOptions(
+          pushOptions: GroupItemPushOptions(
+            name: tcontext.meta.homeCardsManage,
+            tips: tcontext.meta.homeCardsManageTips,
+            icon: Icons.dashboard_customize_outlined,
+            onPush: () async {
+              await HomeCardsManagerSheet.show(context);
+              setstate?.call();
+            },
+          ),
+        ),
         GroupItemOptions(
           switchOptions: GroupItemSwitchOptions(
             name: tcontext.meta.sideBySideLayout,

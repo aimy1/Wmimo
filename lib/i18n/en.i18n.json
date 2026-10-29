@@ -722,7 +722,15 @@
     "addWebsite": "Add Website",
     "maxWebsitesReached": "Up to 6 test websites can be added",
     "sideBySideLayout": "Side-by-Side Layout",
-    "sideBySideLayoutTips": "Display dashboard cards and subscription lists side by side on wide screens"
+    "sideBySideLayoutTips": "Display dashboard cards and subscription lists side by side on wide screens",
+    "homeCardsManage": "Dashboard Cards",
+    "homeCardsManageTips": "Customize cards visibility on the home dashboard",
+    "cardTrafficChart": "Traffic Statistics",
+    "cardWebsiteTest": "Website Latency Test",
+    "cardIpInfo": "IP & Outbound Info",
+    "cardSubscription": "Subscription & Quota",
+    "cardQuickActions": "Quick Action Tools",
+    "resetDefaultCards": "Reset to Default"
   },
   "permission": {
     "camera": "Camera",

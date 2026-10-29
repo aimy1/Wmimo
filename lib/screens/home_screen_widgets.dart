@@ -39,6 +39,7 @@ import 'package:wmimo/screens/widgets/ip_info_card.dart';
 import 'package:wmimo/screens/widgets/segmented_elevated_button.dart';
 import 'package:wmimo/screens/widgets/traffic_chart_card.dart';
 import 'package:wmimo/screens/widgets/website_test_card.dart';
+import 'package:wmimo/screens/widgets/home_cards_manager_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:libclash_vpn_service/state.dart';
@@ -155,6 +156,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     ClashSettingManager.onEventModeChanged.add(_onModeChangedEvent);
     Biz.onEventProxySelected.add(_onProxySelectedEvent);
     SettingManager.onSideBySideLayoutChanged.add(_onLayoutChangedEvent);
+    SettingManager.onHomeCardsChanged.add(_onLayoutChangedEvent);
     _updateProxyNow();
   }
 
@@ -183,6 +185,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     ClashSettingManager.onEventModeChanged.remove(_onModeChangedEvent);
     Biz.onEventProxySelected.remove(_onProxySelectedEvent);
     SettingManager.onSideBySideLayoutChanged.remove(_onLayoutChangedEvent);
+    SettingManager.onHomeCardsChanged.remove(_onLayoutChangedEvent);
     VPNService.onEventStateChanged.remove(_onStateChanged);
     AppLifecycleStateNofity.onStateResumed(hashCode, null);
     AppLifecycleStateNofity.onStatePaused(hashCode, null);
@@ -402,6 +405,37 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                         },
                       ),
                     ),
+                    const SizedBox(width: 4),
+                    Tooltip(
+                      message: tcontext.meta.homeCardsManage,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: () async {
+                          await HomeCardsManagerSheet.show(context);
+                          if (mounted) setState(() {});
+                        },
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: (Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white
+                                    : Colors.black)
+                                .withValues(alpha: 0.05),
+                          ),
+                          child: Icon(
+                            Icons.tune_rounded,
+                            size: 16,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.65),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -543,70 +577,83 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             ),
           ),
         ),
-        const SizedBox(height: 8),
-        // 流量统计卡片
-        TrafficChartCard(
-          history: _trafficHistory,
-          isConnected: connected,
-          tickNotifier: _chartTick,
-          uploadSpeed: _uploadSpeedRaw,
-          downloadSpeed: _downloadSpeedRaw,
-          uploadTotal: _uploadTotalRaw,
-          downloadTotal: _downloadTotalRaw,
-        ),
-        // 首页并列排布: 网站测试 + IP 信息, 订阅配置 + 快捷工具
+        if (settings.ui.showTrafficChart) ...[
+          const SizedBox(height: 8),
+          // 流量统计卡片
+          TrafficChartCard(
+            history: _trafficHistory,
+            isConnected: connected,
+            tickNotifier: _chartTick,
+            uploadSpeed: _uploadSpeedRaw,
+            downloadSpeed: _downloadSpeedRaw,
+            uploadTotal: _uploadTotalRaw,
+            downloadTotal: _downloadTotalRaw,
+          ),
+        ],
+        // 首页卡片动态排布 (支持卡片显隐与宽屏双栏并列)
         LayoutBuilder(
           builder: (context, constraints) {
-            final sideBySide = SettingManager.getConfig().ui.sideBySideLayout;
+            final sideBySide = settings.ui.sideBySideLayout;
             final isWide = sideBySide && constraints.maxWidth >= 580;
-            final websiteCard = WebsiteTestCard(
-              mixedPort: ClashSettingManager.getMixedPort(),
-            );
-            final ipCard = IpInfoCard(
-              isConnected: _state == FlutterVpnServiceState.connected,
-              mixedPort: ClashSettingManager.getMixedPort(),
-            );
-            final subCard = _buildSubscriptionOrProfileCard(
-              context: context,
-              profile: currentProfile,
-              expireInfo: tranfficExpire,
-            );
-            final quickActionCard = _buildQuickActionCard(context, tcontext);
+
+            final List<Widget> activeCards = [];
+            if (settings.ui.showWebsiteTest) {
+              activeCards.add(WebsiteTestCard(
+                mixedPort: ClashSettingManager.getMixedPort(),
+              ));
+            }
+            if (settings.ui.showIpInfo) {
+              activeCards.add(IpInfoCard(
+                isConnected: _state == FlutterVpnServiceState.connected,
+                mixedPort: ClashSettingManager.getMixedPort(),
+              ));
+            }
+            if (settings.ui.showSubscription) {
+              activeCards.add(_buildSubscriptionOrProfileCard(
+                context: context,
+                profile: currentProfile,
+                expireInfo: tranfficExpire,
+              ));
+            }
+            if (settings.ui.showQuickActions) {
+              activeCards.add(_buildQuickActionCard(context, tcontext));
+            }
+
+            if (activeCards.isEmpty) {
+              return const SizedBox.shrink();
+            }
 
             if (isWide) {
+              final List<Widget> rows = [];
+              for (int i = 0; i < activeCards.length; i += 2) {
+                if (i + 1 < activeCards.length) {
+                  rows.add(Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: activeCards[i]),
+                      const SizedBox(width: 10),
+                      Expanded(child: activeCards[i + 1]),
+                    ],
+                  ));
+                } else {
+                  rows.add(activeCards[i]);
+                }
+              }
               return Column(
                 children: [
-                  const SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: websiteCard),
-                      const SizedBox(width: 10),
-                      Expanded(child: ipCard),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: subCard),
-                      const SizedBox(width: 10),
-                      Expanded(child: quickActionCard),
-                    ],
-                  ),
+                  for (final row in rows) ...[
+                    const SizedBox(height: 10),
+                    row,
+                  ],
                 ],
               );
             } else {
               return Column(
                 children: [
-                  const SizedBox(height: 10),
-                  websiteCard,
-                  const SizedBox(height: 10),
-                  ipCard,
-                  const SizedBox(height: 10),
-                  subCard,
-                  const SizedBox(height: 10),
-                  quickActionCard,
+                  for (final card in activeCards) ...[
+                    const SizedBox(height: 10),
+                    card,
+                  ],
                 ],
               );
             }
@@ -921,48 +968,71 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                       letterSpacing: 0.2,
                     ),
                   ),
+                  const Spacer(),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(6),
+                    onTap: () {
+                      setState(() {
+                        final ui = SettingManager.getConfig().ui;
+                        ui.collapseQuickActions = !ui.collapseQuickActions;
+                        SettingManager.save();
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Icon(
+                        SettingManager.getConfig().ui.collapseQuickActions
+                            ? Icons.keyboard_arrow_down_rounded
+                            : Icons.keyboard_arrow_up_rounded,
+                        size: 18,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 6),
-            Row(
-              children: [
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.policy_rounded,
-                  label: tcontext.meta.rules,
-                  onTap: _onTapRules,
-                ),
-                const SizedBox(width: 4),
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.article_outlined,
-                  label: tcontext.meta.coreLog,
-                  onTap: _onTapLogs,
-                ),
-                const SizedBox(width: 4),
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.network_check_rounded,
-                  label: tcontext.meta.networkCheck,
-                  onTap: _onTapNetCheck,
-                ),
-                const SizedBox(width: 4),
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.speed_rounded,
-                  label: tcontext.meta.speedTest,
-                  onTap: _onTapSpeedTest,
-                ),
-                const SizedBox(width: 4),
-                _buildQuickActionTile(
-                  context: context,
-                  icon: Icons.description_outlined,
-                  label: tcontext.meta.runtimeProfile,
-                  onTap: _onTapRunTimeProfile,
-                ),
-              ],
-            ),
+            if (!SettingManager.getConfig().ui.collapseQuickActions) ...[
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  _buildQuickActionTile(
+                    context: context,
+                    icon: Icons.policy_rounded,
+                    label: tcontext.meta.rules,
+                    onTap: _onTapRules,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildQuickActionTile(
+                    context: context,
+                    icon: Icons.article_outlined,
+                    label: tcontext.meta.coreLog,
+                    onTap: _onTapLogs,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildQuickActionTile(
+                    context: context,
+                    icon: Icons.network_check_rounded,
+                    label: tcontext.meta.networkCheck,
+                    onTap: _onTapNetCheck,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildQuickActionTile(
+                    context: context,
+                    icon: Icons.speed_rounded,
+                    label: tcontext.meta.speedTest,
+                    onTap: _onTapSpeedTest,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildQuickActionTile(
+                    context: context,
+                    icon: Icons.description_outlined,
+                    label: tcontext.meta.runtimeProfile,
+                    onTap: _onTapRunTimeProfile,
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
@@ -977,6 +1047,8 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+
+    final isCollapsed = SettingManager.getConfig().ui.collapseSubscription;
 
     num used = profile.upload + profile.download;
     num total = profile.total;
@@ -1019,7 +1091,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           setState(() {});
         },
         child: Container(
-          constraints: const BoxConstraints(minHeight: 102),
+          constraints: BoxConstraints(minHeight: isCollapsed ? 44 : 102),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1054,65 +1126,100 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                       color: statusColor,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: percent,
-                  minHeight: 6,
-                  backgroundColor: (isDark ? Colors.white : Colors.black)
-                      .withValues(alpha: 0.08),
-                  valueColor: AlwaysStoppedAnimation<Color>(statusColor),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                      '${tcontext.meta.remaining}: $remainingStr',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                  const SizedBox(width: 4),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(6),
+                    onTap: () {
+                      setState(() {
+                        final ui = SettingManager.getConfig().ui;
+                        ui.collapseSubscription = !ui.collapseSubscription;
+                        SettingManager.save();
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Icon(
+                        isCollapsed
+                            ? Icons.keyboard_arrow_down_rounded
+                            : Icons.keyboard_arrow_up_rounded,
+                        size: 18,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  if (expireInfo != null) ...[
-                    const SizedBox(width: 8),
-                    Tooltip(
-                      message: '${tcontext.meta.expireTime}: ${expireInfo.item2}',
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.event_outlined,
-                            size: 12,
-                            color: expireInfo.item1
-                                ? Colors.red
-                                : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                          ),
-                          const SizedBox(width: 3),
-                          Text(
-                            expireInfo.item2,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: expireInfo.item1
-                                  ? Colors.red
-                                  : theme.colorScheme.onSurface.withValues(alpha: 0.65),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
                 ],
               ),
+              if (isCollapsed) ...[
+                const SizedBox(height: 5),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(2),
+                  child: LinearProgressIndicator(
+                    value: percent,
+                    minHeight: 3,
+                    backgroundColor: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.08),
+                    valueColor: AlwaysStoppedAnimation<Color>(statusColor),
+                  ),
+                ),
+              ] else ...[
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: percent,
+                    minHeight: 6,
+                    backgroundColor: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.08),
+                    valueColor: AlwaysStoppedAnimation<Color>(statusColor),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        '${tcontext.meta.remaining}: $remainingStr',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (expireInfo != null) ...[
+                      const SizedBox(width: 8),
+                      Tooltip(
+                        message: '${tcontext.meta.expireTime}: ${expireInfo.item2}',
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.event_outlined,
+                              size: 12,
+                              color: expireInfo.item1
+                                  ? Colors.red
+                                  : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              expireInfo.item2,
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: expireInfo.item1
+                                    ? Colors.red
+                                    : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
             ],
           ),
         ),

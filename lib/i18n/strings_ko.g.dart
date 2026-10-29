@@ -845,6 +845,14 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get maxWebsitesReached => '테스트 웹사이트는 최대 6개까지 추가할 수 있습니다';
 	@override String get sideBySideLayout => '병렬 레이아웃';
 	@override String get sideBySideLayoutTips => '와이드 화면에서 홈 카드 및 구독 목록을 병렬로 표시합니다';
+	@override String get homeCardsManage => '홈 카드 관리';
+	@override String get homeCardsManageTips => '홈 화면에 표시할 카드 모듈 및 표시 상태 사용자 정의';
+	@override String get cardTrafficChart => '트래픽 통계 차트';
+	@override String get cardWebsiteTest => '웹사이트 지연 시간 테스트';
+	@override String get cardIpInfo => 'IP 및 출구 정보';
+	@override String get cardSubscription => '구독 및 만료 정보';
+	@override String get cardQuickActions => '빠른 도구';
+	@override String get resetDefaultCards => '기본값 복원';
 }
 
 // Path: permission
@@ -1720,6 +1728,14 @@ extension on TranslationsKo {
 			'meta.maxWebsitesReached' => '테스트 웹사이트는 최대 6개까지 추가할 수 있습니다',
 			'meta.sideBySideLayout' => '병렬 레이아웃',
 			'meta.sideBySideLayoutTips' => '와이드 화면에서 홈 카드 및 구독 목록을 병렬로 표시합니다',
+			'meta.homeCardsManage' => '홈 카드 관리',
+			'meta.homeCardsManageTips' => '홈 화면에 표시할 카드 모듈 및 표시 상태 사용자 정의',
+			'meta.cardTrafficChart' => '트래픽 통계 차트',
+			'meta.cardWebsiteTest' => '웹사이트 지연 시간 테스트',
+			'meta.cardIpInfo' => 'IP 및 출구 정보',
+			'meta.cardSubscription' => '구독 및 만료 정보',
+			'meta.cardQuickActions' => '빠른 도구',
+			'meta.resetDefaultCards' => '기본값 복원',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',

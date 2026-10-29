@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/biz.dart';
+import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/ip_info_helper.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -27,6 +28,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
   bool _showDirect = false;
   bool _loading = false;
   bool _maskIp = false;
+  late bool _isCollapsed;
   int _countdown = 240;
   Timer? _countdownTimer;
   Timer? _debounceTimer;
@@ -34,6 +36,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
   @override
   void initState() {
     super.initState();
+    _isCollapsed = SettingManager.getConfig().ui.collapseIpInfo;
     Biz.onEventProxySelected.add(_onProxyNodeChanged);
     _startAutoRefreshTimer();
     _fetchCurrentInfo();
@@ -288,12 +291,87 @@ class _IpInfoCardState extends State<IpInfoCard> {
                           ),
                   ),
                 ),
+                const SizedBox(width: 6),
+                InkWell(
+                  borderRadius: BorderRadius.circular(6),
+                  onTap: () {
+                    setState(() {
+                      _isCollapsed = !_isCollapsed;
+                      SettingManager.getConfig().ui.collapseIpInfo = _isCollapsed;
+                      SettingManager.save();
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(2),
+                    child: Icon(
+                      _isCollapsed
+                          ? Icons.keyboard_arrow_down_rounded
+                          : Icons.keyboard_arrow_up_rounded,
+                      size: 20,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 8),
+            if (_isCollapsed) ...[
+              const SizedBox(height: 6),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                child: Row(
+                  children: [
+                    if (currentInfo != null) ...[
+                      Text(
+                        currentInfo.flagEmoji,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        currentInfo.country.isNotEmpty
+                            ? currentInfo.country
+                            : (currentInfo.countryCode.isNotEmpty
+                                ? currentInfo.countryCode.toUpperCase()
+                                : 'Unknown'),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          _formatIp(currentInfo.ip),
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'monospace',
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ] else ...[
+                      Text(
+                        widget.isConnected ? tcontext.meta.connecting : tcontext.meta.disconnected,
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                      ),
+                      const Spacer(),
+                    ],
+                  ],
+                ),
+              ),
+            ] else ...[
+              const SizedBox(height: 8),
 
-            // 2. Body Content
-            if (_loading && currentInfo == null)
+              // 2. Body Content
+              if (_loading && currentInfo == null)
               Container(
                 constraints: const BoxConstraints(minHeight: 96),
                 width: double.infinity,
@@ -409,6 +487,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   ),
                 ),
               ),
+            ],
           ],
         ),
       ),

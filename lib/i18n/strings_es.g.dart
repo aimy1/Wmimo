@@ -845,6 +845,14 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get maxWebsitesReached => 'Se pueden agregar hasta 6 sitios web de prueba';
 	@override String get sideBySideLayout => 'Diseño en paralelo';
 	@override String get sideBySideLayoutTips => 'Muestra las tarjetas y suscripciones lado a lado en pantallas anchas';
+	@override String get homeCardsManage => 'Tarjetas del Panel';
+	@override String get homeCardsManageTips => 'Personaliza la visibilidad de las tarjetas en la pantalla principal';
+	@override String get cardTrafficChart => 'Estadísticas de Tráfico';
+	@override String get cardWebsiteTest => 'Prueba de Latencia de Sitios';
+	@override String get cardIpInfo => 'Información de IP y Salida';
+	@override String get cardSubscription => 'Suscripción y Cuota';
+	@override String get cardQuickActions => 'Herramientas Rápidas';
+	@override String get resetDefaultCards => 'Restaurar Predeterminados';
 }
 
 // Path: permission
@@ -1720,6 +1728,14 @@ extension on TranslationsEs {
 			'meta.maxWebsitesReached' => 'Se pueden agregar hasta 6 sitios web de prueba',
 			'meta.sideBySideLayout' => 'Diseño en paralelo',
 			'meta.sideBySideLayoutTips' => 'Muestra las tarjetas y suscripciones lado a lado en pantallas anchas',
+			'meta.homeCardsManage' => 'Tarjetas del Panel',
+			'meta.homeCardsManageTips' => 'Personaliza la visibilidad de las tarjetas en la pantalla principal',
+			'meta.cardTrafficChart' => 'Estadísticas de Tráfico',
+			'meta.cardWebsiteTest' => 'Prueba de Latencia de Sitios',
+			'meta.cardIpInfo' => 'Información de IP y Salida',
+			'meta.cardSubscription' => 'Suscripción y Cuota',
+			'meta.cardQuickActions' => 'Herramientas Rápidas',
+			'meta.resetDefaultCards' => 'Restaurar Predeterminados',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',

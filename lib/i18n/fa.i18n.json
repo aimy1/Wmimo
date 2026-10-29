@@ -722,7 +722,15 @@
     "addWebsite": "افزودن وب‌سایت",
     "maxWebsitesReached": "حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است",
     "sideBySideLayout": "طرح‌بندی موازی",
-    "sideBySideLayoutTips": "نمایش کارت‌ها و اشتراک‌ها در کنار هم در صفحه‌های عریض"
+    "sideBySideLayoutTips": "نمایش کارت‌ها و اشتراک‌ها در کنار هم در صفحه‌های عریض",
+    "homeCardsManage": "مدیریت کارت‌های صفحه اصلی",
+    "homeCardsManageTips": "سفارشی‌سازی نمایش کارت‌ها در صفحه اصلی",
+    "cardTrafficChart": "نمودار ترافیک",
+    "cardWebsiteTest": "تست تأخیر وب‌سایت‌ها",
+    "cardIpInfo": "اطلاعات IP و خروجی",
+    "cardSubscription": "اشتراک و سهمیه",
+    "cardQuickActions": "ابزارهای سریع",
+    "resetDefaultCards": "بازنشانی به پیش‌فرض"
   },
   "permission": {
     "camera": "دوربین",

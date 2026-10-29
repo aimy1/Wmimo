@@ -2209,6 +2209,30 @@ class Translations$meta$en {
 
 	/// en: 'Display dashboard cards and subscription lists side by side on wide screens'
 	String get sideBySideLayoutTips => 'Display dashboard cards and subscription lists side by side on wide screens';
+
+	/// en: 'Dashboard Cards'
+	String get homeCardsManage => 'Dashboard Cards';
+
+	/// en: 'Customize cards visibility on the home dashboard'
+	String get homeCardsManageTips => 'Customize cards visibility on the home dashboard';
+
+	/// en: 'Traffic Statistics'
+	String get cardTrafficChart => 'Traffic Statistics';
+
+	/// en: 'Website Latency Test'
+	String get cardWebsiteTest => 'Website Latency Test';
+
+	/// en: 'IP & Outbound Info'
+	String get cardIpInfo => 'IP & Outbound Info';
+
+	/// en: 'Subscription & Quota'
+	String get cardSubscription => 'Subscription & Quota';
+
+	/// en: 'Quick Action Tools'
+	String get cardQuickActions => 'Quick Action Tools';
+
+	/// en: 'Reset to Default'
+	String get resetDefaultCards => 'Reset to Default';
 }
 
 // Path: permission
@@ -3282,6 +3306,14 @@ extension on Translations {
 			'meta.maxWebsitesReached' => 'Up to 6 test websites can be added',
 			'meta.sideBySideLayout' => 'Side-by-Side Layout',
 			'meta.sideBySideLayoutTips' => 'Display dashboard cards and subscription lists side by side on wide screens',
+			'meta.homeCardsManage' => 'Dashboard Cards',
+			'meta.homeCardsManageTips' => 'Customize cards visibility on the home dashboard',
+			'meta.cardTrafficChart' => 'Traffic Statistics',
+			'meta.cardWebsiteTest' => 'Website Latency Test',
+			'meta.cardIpInfo' => 'IP & Outbound Info',
+			'meta.cardSubscription' => 'Subscription & Quota',
+			'meta.cardQuickActions' => 'Quick Action Tools',
+			'meta.resetDefaultCards' => 'Reset to Default',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',

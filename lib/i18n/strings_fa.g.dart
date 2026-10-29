@@ -845,6 +845,14 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get maxWebsitesReached => 'حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است';
 	@override String get sideBySideLayout => 'طرح‌بندی موازی';
 	@override String get sideBySideLayoutTips => 'نمایش کارت‌ها و اشتراک‌ها در کنار هم در صفحه‌های عریض';
+	@override String get homeCardsManage => 'مدیریت کارت‌های صفحه اصلی';
+	@override String get homeCardsManageTips => 'سفارشی‌سازی نمایش کارت‌ها در صفحه اصلی';
+	@override String get cardTrafficChart => 'نمودار ترافیک';
+	@override String get cardWebsiteTest => 'تست تأخیر وب‌سایت‌ها';
+	@override String get cardIpInfo => 'اطلاعات IP و خروجی';
+	@override String get cardSubscription => 'اشتراک و سهمیه';
+	@override String get cardQuickActions => 'ابزارهای سریع';
+	@override String get resetDefaultCards => 'بازنشانی به پیش‌فرض';
 }
 
 // Path: permission
@@ -1720,6 +1728,14 @@ extension on TranslationsFa {
 			'meta.maxWebsitesReached' => 'حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است',
 			'meta.sideBySideLayout' => 'طرح‌بندی موازی',
 			'meta.sideBySideLayoutTips' => 'نمایش کارت‌ها و اشتراک‌ها در کنار هم در صفحه‌های عریض',
+			'meta.homeCardsManage' => 'مدیریت کارت‌های صفحه اصلی',
+			'meta.homeCardsManageTips' => 'سفارشی‌سازی نمایش کارت‌ها در صفحه اصلی',
+			'meta.cardTrafficChart' => 'نمودار ترافیک',
+			'meta.cardWebsiteTest' => 'تست تأخیر وب‌سایت‌ها',
+			'meta.cardIpInfo' => 'اطلاعات IP و خروجی',
+			'meta.cardSubscription' => 'اشتراک و سهمیه',
+			'meta.cardQuickActions' => 'ابزارهای سریع',
+			'meta.resetDefaultCards' => 'بازنشانی به پیش‌فرض',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'Get Application List',

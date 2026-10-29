@@ -722,7 +722,15 @@
     "addWebsite": "サイトを追加",
     "maxWebsitesReached": "最大6つのテストWebサイトを追加できます",
     "sideBySideLayout": "並列レイアウト",
-    "sideBySideLayoutTips": "ワイド画面でホームカードとサブスクリプションリストを並列表示します"
+    "sideBySideLayoutTips": "ワイド画面でホームカードとサブスクリプションリストを並列表示します",
+    "homeCardsManage": "ホームカード管理",
+    "homeCardsManageTips": "ホーム画面に表示するカードの表示・非表示をカスタマイズします",
+    "cardTrafficChart": "トラフィック統計グラフ",
+    "cardWebsiteTest": "ウェブサイト接続テスト",
+    "cardIpInfo": "IP・出口情報",
+    "cardSubscription": "プラン・有効期限情報",
+    "cardQuickActions": "クイックツール",
+    "resetDefaultCards": "デフォルトに戻す"
   },
   "permission": {
     "camera": "カメラ",

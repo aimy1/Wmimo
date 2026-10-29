@@ -845,6 +845,14 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get maxWebsitesReached => '最多支援新增 6 個測試網站';
 	@override String get sideBySideLayout => '並列排版';
 	@override String get sideBySideLayoutTips => '開啟後首頁卡片與訂閱列表在寬螢幕下採用並列排版，關閉則保持單列垂直排版';
+	@override String get homeCardsManage => '首頁卡片管理';
+	@override String get homeCardsManageTips => '自訂首頁顯示的卡片模組與顯隱狀態';
+	@override String get cardTrafficChart => '流量統計圖表';
+	@override String get cardWebsiteTest => '網站連通測試';
+	@override String get cardIpInfo => 'IP 與出口資訊';
+	@override String get cardSubscription => '方案與到期資訊';
+	@override String get cardQuickActions => '快捷工具入口';
+	@override String get resetDefaultCards => '恢復預設卡片';
 }
 
 // Path: permission
@@ -1720,6 +1728,14 @@ extension on TranslationsZhTw {
 			'meta.maxWebsitesReached' => '最多支援新增 6 個測試網站',
 			'meta.sideBySideLayout' => '並列排版',
 			'meta.sideBySideLayoutTips' => '開啟後首頁卡片與訂閱列表在寬螢幕下採用並列排版，關閉則保持單列垂直排版',
+			'meta.homeCardsManage' => '首頁卡片管理',
+			'meta.homeCardsManageTips' => '自訂首頁顯示的卡片模組與顯隱狀態',
+			'meta.cardTrafficChart' => '流量統計圖表',
+			'meta.cardWebsiteTest' => '網站連通測試',
+			'meta.cardIpInfo' => 'IP 與出口資訊',
+			'meta.cardSubscription' => '方案與到期資訊',
+			'meta.cardQuickActions' => '快捷工具入口',
+			'meta.resetDefaultCards' => '恢復預設卡片',
 			'permission.camera' => '相機',
 			'permission.screen' => '螢幕錄製',
 			'permission.appQuery' => '取得應用程式列表',

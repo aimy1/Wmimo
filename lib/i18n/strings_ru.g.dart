@@ -845,6 +845,14 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get maxWebsitesReached => 'Можно добавить не более 6 тестовых сайтов';
 	@override String get sideBySideLayout => 'Параллельный макет';
 	@override String get sideBySideLayoutTips => 'Отображать карточки и подписки бок о бок на широких экранах';
+	@override String get homeCardsManage => 'Карточки главного экрана';
+	@override String get homeCardsManageTips => 'Настроить видимость карточек на главном экране';
+	@override String get cardTrafficChart => 'График трафика';
+	@override String get cardWebsiteTest => 'Тест задержки сайтов';
+	@override String get cardIpInfo => 'Информация об IP и выходе';
+	@override String get cardSubscription => 'Подписка и лимиты';
+	@override String get cardQuickActions => 'Быстрые инструменты';
+	@override String get resetDefaultCards => 'Сбросить по умолчанию';
 }
 
 // Path: permission
@@ -1720,6 +1728,14 @@ extension on TranslationsRu {
 			'meta.maxWebsitesReached' => 'Можно добавить не более 6 тестовых сайтов',
 			'meta.sideBySideLayout' => 'Параллельный макет',
 			'meta.sideBySideLayoutTips' => 'Отображать карточки и подписки бок о бок на широких экранах',
+			'meta.homeCardsManage' => 'Карточки главного экрана',
+			'meta.homeCardsManageTips' => 'Настроить видимость карточек на главном экране',
+			'meta.cardTrafficChart' => 'График трафика',
+			'meta.cardWebsiteTest' => 'Тест задержки сайтов',
+			'meta.cardIpInfo' => 'Информация об IP и выходе',
+			'meta.cardSubscription' => 'Подписка и лимиты',
+			'meta.cardQuickActions' => 'Быстрые инструменты',
+			'meta.resetDefaultCards' => 'Сбросить по умолчанию',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',

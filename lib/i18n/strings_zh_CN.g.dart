@@ -845,6 +845,14 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get maxWebsitesReached => '最多支持添加 6 个测试网站';
 	@override String get sideBySideLayout => '并列排版';
 	@override String get sideBySideLayoutTips => '开启后首页卡片与订阅列表在宽屏下采用并列排版，关闭则保持单列垂直排版';
+	@override String get homeCardsManage => '首页卡片管理';
+	@override String get homeCardsManageTips => '自定义首页显示的卡片模块与显隐状态';
+	@override String get cardTrafficChart => '流量统计图表';
+	@override String get cardWebsiteTest => '网站连通测试';
+	@override String get cardIpInfo => 'IP 与出口信息';
+	@override String get cardSubscription => '套餐与到期信息';
+	@override String get cardQuickActions => '快捷工具入口';
+	@override String get resetDefaultCards => '恢复默认卡片';
 }
 
 // Path: permission
@@ -1720,6 +1728,14 @@ extension on TranslationsZhCn {
 			'meta.maxWebsitesReached' => '最多支持添加 6 个测试网站',
 			'meta.sideBySideLayout' => '并列排版',
 			'meta.sideBySideLayoutTips' => '开启后首页卡片与订阅列表在宽屏下采用并列排版，关闭则保持单列垂直排版',
+			'meta.homeCardsManage' => '首页卡片管理',
+			'meta.homeCardsManageTips' => '自定义首页显示的卡片模块与显隐状态',
+			'meta.cardTrafficChart' => '流量统计图表',
+			'meta.cardWebsiteTest' => '网站连通测试',
+			'meta.cardIpInfo' => 'IP 与出口信息',
+			'meta.cardSubscription' => '套餐与到期信息',
+			'meta.cardQuickActions' => '快捷工具入口',
+			'meta.resetDefaultCards' => '恢复默认卡片',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',

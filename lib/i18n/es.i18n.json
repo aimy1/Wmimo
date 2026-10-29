@@ -722,7 +722,15 @@
     "addWebsite": "Añadir sitio",
     "maxWebsitesReached": "Se pueden agregar hasta 6 sitios web de prueba",
     "sideBySideLayout": "Diseño en paralelo",
-    "sideBySideLayoutTips": "Muestra las tarjetas y suscripciones lado a lado en pantallas anchas"
+    "sideBySideLayoutTips": "Muestra las tarjetas y suscripciones lado a lado en pantallas anchas",
+    "homeCardsManage": "Tarjetas del Panel",
+    "homeCardsManageTips": "Personaliza la visibilidad de las tarjetas en la pantalla principal",
+    "cardTrafficChart": "Estadísticas de Tráfico",
+    "cardWebsiteTest": "Prueba de Latencia de Sitios",
+    "cardIpInfo": "Información de IP y Salida",
+    "cardSubscription": "Suscripción y Cuota",
+    "cardQuickActions": "Herramientas Rápidas",
+    "resetDefaultCards": "Restaurar Predeterminados"
   },
   "permission": {
     "camera": "Cámara",

@@ -35,6 +35,16 @@ class SettingConfigItemUI {
   bool perAppHideAppIcon = false;
   bool delayTestSort = false;
   bool sideBySideLayout = true;
+  bool showTrafficChart = true;
+  bool showWebsiteTest = true;
+  bool showIpInfo = true;
+  bool showSubscription = true;
+  bool showQuickActions = true;
+  bool collapseTrafficChart = false;
+  bool collapseWebsiteTest = false;
+  bool collapseIpInfo = false;
+  bool collapseSubscription = false;
+  bool collapseQuickActions = false;
   Map<String, dynamic> toJson() => {
     'theme': theme,
     'auto_orientation': autoOrientation,
@@ -45,6 +55,16 @@ class SettingConfigItemUI {
     'perapp_hide_app_icon': perAppHideAppIcon,
     'delay_test_sort': delayTestSort,
     'side_by_side_layout': sideBySideLayout,
+    'show_traffic_chart': showTrafficChart,
+    'show_website_test': showWebsiteTest,
+    'show_ip_info': showIpInfo,
+    'show_subscription': showSubscription,
+    'show_quick_actions': showQuickActions,
+    'collapse_traffic_chart': collapseTrafficChart,
+    'collapse_website_test': collapseWebsiteTest,
+    'collapse_ip_info': collapseIpInfo,
+    'collapse_subscription': collapseSubscription,
+    'collapse_quick_actions': collapseQuickActions,
   };
   void fromJson(Map<String, dynamic>? map) {
     if (map == null) {
@@ -58,6 +78,16 @@ class SettingConfigItemUI {
     perAppHideAppIcon = map["perapp_hide_app_icon"] ?? false;
     delayTestSort = map["delay_test_sort"] ?? false;
     sideBySideLayout = map["side_by_side_layout"] ?? true;
+    showTrafficChart = map["show_traffic_chart"] ?? true;
+    showWebsiteTest = map["show_website_test"] ?? true;
+    showIpInfo = map["show_ip_info"] ?? true;
+    showSubscription = map["show_subscription"] ?? true;
+    showQuickActions = map["show_quick_actions"] ?? true;
+    collapseTrafficChart = map["collapse_traffic_chart"] ?? false;
+    collapseWebsiteTest = map["collapse_website_test"] ?? false;
+    collapseIpInfo = map["collapse_ip_info"] ?? false;
+    collapseSubscription = map["collapse_subscription"] ?? false;
+    collapseQuickActions = map["collapse_quick_actions"] ?? false;
     if (Platform.isAndroid) {
       tvMode = map["tv_mode"] ?? maybeTv();
       TextFieldEx.popupEdit = tvMode;
@@ -126,6 +156,55 @@ class SettingConfigItemWebDev {
   }
 }
 
+class SettingConfigItemWindowState {
+  double? width;
+  double? height;
+  double? x;
+  double? y;
+  bool isMaximized = false;
+
+  bool get isValid =>
+      width != null &&
+      height != null &&
+      width! >= 360 &&
+      height! >= 480;
+
+  Map<String, dynamic> toJson() => {
+    if (width != null) 'width': width,
+    if (height != null) 'height': height,
+    if (x != null) 'x': x,
+    if (y != null) 'y': y,
+    'is_maximized': isMaximized,
+  };
+
+  void fromJson(Map<String, dynamic>? map) {
+    if (map == null) {
+      return;
+    }
+    if (map['width'] is num) {
+      width = (map['width'] as num).toDouble();
+    }
+    if (map['height'] is num) {
+      height = (map['height'] as num).toDouble();
+    }
+    if (map['x'] is num) {
+      x = (map['x'] as num).toDouble();
+    }
+    if (map['y'] is num) {
+      y = (map['y'] as num).toDouble();
+    }
+    if (map['is_maximized'] is bool) {
+      isMaximized = map['is_maximized'] as bool;
+    }
+  }
+
+  static SettingConfigItemWindowState fromJsonStatic(Map<String, dynamic>? map) {
+    SettingConfigItemWindowState config = SettingConfigItemWindowState();
+    config.fromJson(map);
+    return config;
+  }
+}
+
 class SettingConfig {
   static const String kDefaultBoardUrl = "https://board.zash.run.place/";
   static const int kDefaultBoardPort = 7066;
@@ -134,6 +213,7 @@ class SettingConfig {
   String languageTag = "";
   SettingConfigItemUI ui = SettingConfigItemUI();
   SettingConfigItemWebDev webdav = SettingConfigItemWebDev();
+  SettingConfigItemWindowState window = SettingConfigItemWindowState();
   bool devMode = false;
   bool alwayOn = false;
   String logLevel = bool.fromEnvironment("dart.vm.product")
@@ -182,6 +262,7 @@ class SettingConfig {
     'auto_connect_at_boot': autoConnectAtBoot,
     'hide_vpn': hideVpn,
     'website_test_targets': websiteTestTargets,
+    'window': window,
   };
   void fromJson(Map<String, dynamic>? map) {
     if (map == null) {
@@ -227,6 +308,7 @@ class SettingConfig {
           .whereType<Map<String, dynamic>>()
           .toList();
     }
+    window = SettingConfigItemWindowState.fromJsonStatic(map["window"]);
   }
 
   String userAgent() {
@@ -259,6 +341,15 @@ class SettingManager {
   static final List<void Function()> onSideBySideLayoutChanged = [];
   static void notifySideBySideLayoutChanged() {
     for (final cb in onSideBySideLayoutChanged) {
+      try {
+        cb();
+      } catch (_) {}
+    }
+  }
+
+  static final List<void Function()> onHomeCardsChanged = [];
+  static void notifyHomeCardsChanged() {
+    for (final cb in onHomeCardsChanged) {
       try {
         cb();
       } catch (_) {}
@@ -374,8 +465,10 @@ class SettingManager {
 
   static void reset() {
     final languageTag = _config.languageTag;
+    final window = _config.window;
     _config = SettingConfig();
     _config.languageTag = languageTag;
+    _config.window = window;
   }
 
   static SettingConfig getConfig() {

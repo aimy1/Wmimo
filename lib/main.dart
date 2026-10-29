@@ -26,6 +26,7 @@ import 'package:wmimo/app/utils/node_region_helper.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/windows_version_helper.dart';
+import 'package:wmimo/app/utils/window_state_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/home_screen.dart';
 import 'package:wmimo/screens/launch_failed_screen.dart';
@@ -135,23 +136,7 @@ Future<void> run(List<String> args) async {
 
     if (PlatformUtils.isPC()) {
       await windowManager.ensureInitialized();
-      WindowOptions windowOptions = WindowOptions(
-        size: Size(800, 560),
-        minimumSize: Size(360, 480),
-        center: true,
-        backgroundColor: Colors.transparent,
-        skipTaskbar: false,
-        titleBarStyle: TitleBarStyle.hidden,
-        windowButtonVisibility: Platform.isMacOS,
-      );
-      windowManager.waitUntilReadyToShow(windowOptions, () async {
-        await windowManager.setMinimumSize(const Size(360, 480));
-        await windowManager.show();
-        await windowManager.focus();
-      });
-      await windowManager.setMinimumSize(const Size(360, 480));
-      await windowManager.show();
-      await windowManager.focus();
+      await WindowStateManager.init();
     }
 
     await AutoUpdateManager.init();
@@ -445,6 +430,7 @@ class MyAppState extends State<MyApp>
   @override
   void onWindowClose() async {
     Log.d("onWindowClose");
+    await WindowStateManager.saveImmediate();
     await SettingManager.save();
     await windowManager.hide();
     _windowVisibleForMac = false;
@@ -561,6 +547,7 @@ class MyAppState extends State<MyApp>
 
   Future<void> _quit() async {
     print(">>> _QUIT CALLED STACKTRACE:\n${StackTrace.current}");
+    await WindowStateManager.saveImmediate();
     await SettingManager.save();
     await _uninit();
     Future.delayed(const Duration(seconds: 0), () async {

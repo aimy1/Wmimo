@@ -159,11 +159,13 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
   static const int kMaxWebsiteTargets = 6;
   late List<WebsiteTarget> _targets;
   bool _isTestingAll = false;
+  late bool _isCollapsed;
   Offset _lastTapPosition = Offset.zero;
 
   @override
   void initState() {
     super.initState();
+    _isCollapsed = SettingManager.getConfig().ui.collapseWebsiteTest;
     _loadTargets();
   }
 
@@ -1060,12 +1062,34 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                     ),
                   ),
                 ),
+                const SizedBox(width: 6),
+                InkWell(
+                  borderRadius: BorderRadius.circular(6),
+                  onTap: () {
+                    setState(() {
+                      _isCollapsed = !_isCollapsed;
+                      SettingManager.getConfig().ui.collapseWebsiteTest = _isCollapsed;
+                      SettingManager.save();
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(2),
+                    child: Icon(
+                      _isCollapsed
+                          ? Icons.keyboard_arrow_down_rounded
+                          : Icons.keyboard_arrow_up_rounded,
+                      size: 20,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 8),
+            if (!_isCollapsed) ...[
+              const SizedBox(height: 8),
 
-            // 2. Content Grid / Row of Targets (with PC right-click & Mobile long-press)
-            Container(
+              // 2. Content Grid / Row of Targets (with PC right-click & Mobile long-press)
+              Container(
               constraints: const BoxConstraints(minHeight: 96),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               decoration: BoxDecoration(
@@ -1133,6 +1157,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                       },
                     ),
             ),
+            ],
           ],
         ),
       ),

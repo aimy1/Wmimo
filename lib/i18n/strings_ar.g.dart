@@ -845,6 +845,14 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get maxWebsitesReached => 'يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى';
 	@override String get sideBySideLayout => 'تخطيط متوازي';
 	@override String get sideBySideLayoutTips => 'عرض البطاقات والاشتراكات جنباً إلى جنب على الشاشات العريضة';
+	@override String get homeCardsManage => 'إدارة بطاقات الواجهة';
+	@override String get homeCardsManageTips => 'تخصيص البطاقات المعروضة في الشاشة الرئيسية';
+	@override String get cardTrafficChart => 'مخطط حركة المرور';
+	@override String get cardWebsiteTest => 'اختبار استجابة المواقع';
+	@override String get cardIpInfo => 'معلومات IP والمنفذ';
+	@override String get cardSubscription => 'الاشتراك والحصة';
+	@override String get cardQuickActions => 'أدوات سريعة';
+	@override String get resetDefaultCards => 'استعادة الافتراضي';
 }
 
 // Path: permission
@@ -1720,6 +1728,14 @@ extension on TranslationsAr {
 			'meta.maxWebsitesReached' => 'يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى',
 			'meta.sideBySideLayout' => 'تخطيط متوازي',
 			'meta.sideBySideLayoutTips' => 'عرض البطاقات والاشتراكات جنباً إلى جنب على الشاشات العريضة',
+			'meta.homeCardsManage' => 'إدارة بطاقات الواجهة',
+			'meta.homeCardsManageTips' => 'تخصيص البطاقات المعروضة في الشاشة الرئيسية',
+			'meta.cardTrafficChart' => 'مخطط حركة المرور',
+			'meta.cardWebsiteTest' => 'اختبار استجابة المواقع',
+			'meta.cardIpInfo' => 'معلومات IP والمنفذ',
+			'meta.cardSubscription' => 'الاشتراك والحصة',
+			'meta.cardQuickActions' => 'أدوات سريعة',
+			'meta.resetDefaultCards' => 'استعادة الافتراضي',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',

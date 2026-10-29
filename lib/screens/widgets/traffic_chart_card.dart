@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:wmimo/app/clash/clash_http_api.dart';
+import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
 
@@ -44,6 +45,13 @@ class TrafficChartCard extends StatefulWidget {
 class _TrafficChartCardState extends State<TrafficChartCard> {
   Offset? _hoverPosition;
   int _selectedMinutes = 10; // 5, 10, 30, 60
+  late bool _isCollapsed;
+
+  @override
+  void initState() {
+    super.initState();
+    _isCollapsed = SettingManager.getConfig().ui.collapseTrafficChart;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,12 +125,84 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                     ),
                   ],
                 ),
+                const SizedBox(width: 6),
+                InkWell(
+                  borderRadius: BorderRadius.circular(6),
+                  onTap: () {
+                    setState(() {
+                      _isCollapsed = !_isCollapsed;
+                      SettingManager.getConfig().ui.collapseTrafficChart = _isCollapsed;
+                      SettingManager.save();
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(2),
+                    child: Icon(
+                      _isCollapsed
+                          ? Icons.keyboard_arrow_down_rounded
+                          : Icons.keyboard_arrow_up_rounded,
+                      size: 20,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 8),
+            if (_isCollapsed) ...[
+              const SizedBox(height: 6),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_upward_rounded, size: 14, color: uploadColor),
+                    const SizedBox(width: 3),
+                    ValueListenableBuilder<num>(
+                      valueListenable: widget.uploadSpeed ?? ValueNotifier(0),
+                      builder: (context, val, _) => Text(
+                        "${ClashHttpApi.convertTrafficToStringDouble(val)}/s",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: uploadColor,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Icon(Icons.arrow_downward_rounded, size: 14, color: downloadColor),
+                    const SizedBox(width: 3),
+                    ValueListenableBuilder<num>(
+                      valueListenable: widget.downloadSpeed ?? ValueNotifier(0),
+                      builder: (context, val, _) => Text(
+                        "${ClashHttpApi.convertTrafficToStringDouble(val)}/s",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: downloadColor,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    ValueListenableBuilder<num>(
+                      valueListenable: widget.uploadTotal ?? ValueNotifier(0),
+                      builder: (context, upTotal, _) => ValueListenableBuilder<num>(
+                        valueListenable: widget.downloadTotal ?? ValueNotifier(0),
+                        builder: (context, downTotal, _) => Text(
+                          "↑ ${ClashHttpApi.convertTrafficToStringDouble(upTotal)}  ↓ ${ClashHttpApi.convertTrafficToStringDouble(downTotal)}",
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ] else ...[
+              const SizedBox(height: 8),
 
-            // Chart Box
-            Container(
+              // Chart Box
+              Container(
               height: 110,
               width: double.infinity,
               decoration: BoxDecoration(
@@ -320,9 +400,10 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
               ),
             ],
           ],
-        ),
+        ],
       ),
-    );
+    ),
+  );
   }
 
   Widget _buildStatItem({

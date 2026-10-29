@@ -845,6 +845,14 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get maxWebsitesReached => '最大6つのテストWebサイトを追加できます';
 	@override String get sideBySideLayout => '並列レイアウト';
 	@override String get sideBySideLayoutTips => 'ワイド画面でホームカードとサブスクリプションリストを並列表示します';
+	@override String get homeCardsManage => 'ホームカード管理';
+	@override String get homeCardsManageTips => 'ホーム画面に表示するカードの表示・非表示をカスタマイズします';
+	@override String get cardTrafficChart => 'トラフィック統計グラフ';
+	@override String get cardWebsiteTest => 'ウェブサイト接続テスト';
+	@override String get cardIpInfo => 'IP・出口情報';
+	@override String get cardSubscription => 'プラン・有効期限情報';
+	@override String get cardQuickActions => 'クイックツール';
+	@override String get resetDefaultCards => 'デフォルトに戻す';
 }
 
 // Path: permission
@@ -1720,6 +1728,14 @@ extension on TranslationsJa {
 			'meta.maxWebsitesReached' => '最大6つのテストWebサイトを追加できます',
 			'meta.sideBySideLayout' => '並列レイアウト',
 			'meta.sideBySideLayoutTips' => 'ワイド画面でホームカードとサブスクリプションリストを並列表示します',
+			'meta.homeCardsManage' => 'ホームカード管理',
+			'meta.homeCardsManageTips' => 'ホーム画面に表示するカードの表示・非表示をカスタマイズします',
+			'meta.cardTrafficChart' => 'トラフィック統計グラフ',
+			'meta.cardWebsiteTest' => 'ウェブサイト接続テスト',
+			'meta.cardIpInfo' => 'IP・出口情報',
+			'meta.cardSubscription' => 'プラン・有効期限情報',
+			'meta.cardQuickActions' => 'クイックツール',
+			'meta.resetDefaultCards' => 'デフォルトに戻す',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',

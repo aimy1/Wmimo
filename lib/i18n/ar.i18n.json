@@ -722,7 +722,15 @@
     "addWebsite": "إضافة موقع",
     "maxWebsitesReached": "يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى",
     "sideBySideLayout": "تخطيط متوازي",
-    "sideBySideLayoutTips": "عرض البطاقات والاشتراكات جنباً إلى جنب على الشاشات العريضة"
+    "sideBySideLayoutTips": "عرض البطاقات والاشتراكات جنباً إلى جنب على الشاشات العريضة",
+    "homeCardsManage": "إدارة بطاقات الواجهة",
+    "homeCardsManageTips": "تخصيص البطاقات المعروضة في الشاشة الرئيسية",
+    "cardTrafficChart": "مخطط حركة المرور",
+    "cardWebsiteTest": "اختبار استجابة المواقع",
+    "cardIpInfo": "معلومات IP والمنفذ",
+    "cardSubscription": "الاشتراك والحصة",
+    "cardQuickActions": "أدوات سريعة",
+    "resetDefaultCards": "استعادة الافتراضي"
   },
   "permission": {
     "camera": "الكاميرا",
