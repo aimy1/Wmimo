@@ -852,7 +852,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get cardIpInfo => 'Información de IP y Salida';
 	@override String get cardSubscription => 'Suscripción y Cuota';
 	@override String get cardQuickActions => 'Herramientas Rápidas';
-	@override String get resetDefaultCards => 'Restaurar Predeterminados';
+	@override String get resetDefaultCards => 'Restablecer';
 	@override String get collapseAllCards => 'Colapsar todo';
 	@override String get expandAllCards => 'Expandir todo';
 }
@@ -1737,7 +1737,7 @@ extension on TranslationsEs {
 			'meta.cardIpInfo' => 'Información de IP y Salida',
 			'meta.cardSubscription' => 'Suscripción y Cuota',
 			'meta.cardQuickActions' => 'Herramientas Rápidas',
-			'meta.resetDefaultCards' => 'Restaurar Predeterminados',
+			'meta.resetDefaultCards' => 'Restablecer',
 			'meta.collapseAllCards' => 'Colapsar todo',
 			'meta.expandAllCards' => 'Expandir todo',
 			'permission.camera' => 'Cámara',

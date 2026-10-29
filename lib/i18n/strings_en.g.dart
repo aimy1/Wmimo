@@ -2231,8 +2231,8 @@ class Translations$meta$en {
 	/// en: 'Quick Action Tools'
 	String get cardQuickActions => 'Quick Action Tools';
 
-	/// en: 'Reset to Default'
-	String get resetDefaultCards => 'Reset to Default';
+	/// en: 'Reset Defaults'
+	String get resetDefaultCards => 'Reset Defaults';
 
 	/// en: 'Collapse All'
 	String get collapseAllCards => 'Collapse All';
@@ -3319,7 +3319,7 @@ extension on Translations {
 			'meta.cardIpInfo' => 'IP & Outbound Info',
 			'meta.cardSubscription' => 'Subscription & Quota',
 			'meta.cardQuickActions' => 'Quick Action Tools',
-			'meta.resetDefaultCards' => 'Reset to Default',
+			'meta.resetDefaultCards' => 'Reset Defaults',
 			'meta.collapseAllCards' => 'Collapse All',
 			'meta.expandAllCards' => 'Expand All',
 			'permission.camera' => 'Camera',

@@ -259,7 +259,7 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
         _buildSwitchTile(
           icon: Icons.ssid_chart_rounded,
           iconColor: ThemeDefine.kColorAmber,
-          title: tcontext.meta.cardTrafficChart,
+          title: tcontext.meta.trafficStats,
           value: ui.showTrafficChart,
           onChanged: (val) {
             setState(() => ui.showTrafficChart = val);
@@ -269,7 +269,7 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
         _buildSwitchTile(
           icon: Icons.wifi_tethering_rounded,
           iconColor: ThemeDefine.kColorBlue,
-          title: tcontext.meta.cardWebsiteTest,
+          title: tcontext.meta.websiteTest,
           value: ui.showWebsiteTest,
           onChanged: (val) {
             setState(() => ui.showWebsiteTest = val);
@@ -279,7 +279,7 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
         _buildSwitchTile(
           icon: Icons.public_rounded,
           iconColor: const Color(0xFF06B6D4),
-          title: tcontext.meta.cardIpInfo,
+          title: tcontext.meta.ipInfo,
           value: ui.showIpInfo,
           onChanged: (val) {
             setState(() => ui.showIpInfo = val);
@@ -289,7 +289,7 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
         _buildSwitchTile(
           icon: Icons.donut_large_rounded,
           iconColor: ThemeDefine.kColorGreenBright,
-          title: tcontext.meta.cardSubscription,
+          title: tcontext.meta.planUsage,
           value: ui.showSubscription,
           onChanged: (val) {
             setState(() => ui.showSubscription = val);
@@ -299,7 +299,7 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
         _buildSwitchTile(
           icon: Icons.grid_view_rounded,
           iconColor: const Color(0xFF8B5CF6),
-          title: tcontext.meta.cardQuickActions,
+          title: tcontext.meta.quickActions,
           value: ui.showQuickActions,
           onChanged: (val) {
             setState(() => ui.showQuickActions = val);

@@ -852,7 +852,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get cardIpInfo => 'IP 與出口資訊';
 	@override String get cardSubscription => '方案與到期資訊';
 	@override String get cardQuickActions => '快捷工具入口';
-	@override String get resetDefaultCards => '恢復預設卡片';
+	@override String get resetDefaultCards => '恢復預設';
 	@override String get collapseAllCards => '全部折疊';
 	@override String get expandAllCards => '全部展開';
 }
@@ -1737,7 +1737,7 @@ extension on TranslationsZhTw {
 			'meta.cardIpInfo' => 'IP 與出口資訊',
 			'meta.cardSubscription' => '方案與到期資訊',
 			'meta.cardQuickActions' => '快捷工具入口',
-			'meta.resetDefaultCards' => '恢復預設卡片',
+			'meta.resetDefaultCards' => '恢復預設',
 			'meta.collapseAllCards' => '全部折疊',
 			'meta.expandAllCards' => '全部展開',
 			'permission.camera' => '相機',

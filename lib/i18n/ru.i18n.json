@@ -730,7 +730,7 @@
     "cardIpInfo": "Информация об IP и выходе",
     "cardSubscription": "Подписка и лимиты",
     "cardQuickActions": "Быстрые инструменты",
-    "resetDefaultCards": "Сбросить по умолчанию",
+    "resetDefaultCards": "Сбросить",
     "collapseAllCards": "Свернуть все",
     "expandAllCards": "Развернуть все"
   },
