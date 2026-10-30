@@ -534,6 +534,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get noFilterResults => '一致する接続がありません';
 	@override String get searchRules => 'ルールを検索 (タイプ/ペイロード/プロキシ)';
 	@override String get searchProfiles => 'プロファイルを検索 (名前/URL/備考)';
+	@override String get searchProxies => 'プロキシを検索 (名前/地域/正規表現)';
 	@override String get noMatchingProfiles => '一致するプロファイルが見つかりません';
 	@override String get rules => 'ルーティングルール';
 	@override String get clear => 'クリア';
@@ -1417,6 +1418,7 @@ extension on TranslationsJa {
 			'meta.noFilterResults' => '一致する接続がありません',
 			'meta.searchRules' => 'ルールを検索 (タイプ/ペイロード/プロキシ)',
 			'meta.searchProfiles' => 'プロファイルを検索 (名前/URL/備考)',
+			'meta.searchProxies' => 'プロキシを検索 (名前/地域/正規表現)',
 			'meta.noMatchingProfiles' => '一致するプロファイルが見つかりません',
 			'meta.rules' => 'ルーティングルール',
 			'meta.clear' => 'クリア',
@@ -1538,9 +1540,9 @@ extension on TranslationsJa {
 			'meta.copiedLogContent' => 'ログ内容をコピーしました',
 			'meta.copyLog' => 'ログをコピー',
 			'meta.noLogsPrompt' => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。',
-			'meta.searchLogsHint' => ' (IP, ドメイン, ルール, エラー...)',
 			_ => null,
 		} ?? switch (path) {
+			'meta.searchLogsHint' => ' (IP, ドメイン, ルール, エラー...)',
 			'meta.offlinePreviewPrompt' => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。',
 			'meta.manualSelect' => '手動選択',
 			'meta.autoSelect' => '自動選択',

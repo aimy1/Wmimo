@@ -412,6 +412,7 @@
     "noFilterResults": "沒有相符的連接",
     "searchRules": "搜尋規則 (類型/特徵/目標代理)",
     "searchProfiles": "搜尋設定檔 (名稱/連結/備註)",
+    "searchProxies": "搜尋節點 (名稱/地區/正則)",
     "noMatchingProfiles": "未找到相符的訂閱設定檔",
     "rules": "分流規則",
     "clear": "清除",

@@ -1277,6 +1277,9 @@ class Translations$meta$en {
 	/// en: 'Search profiles (Name/URL/Remark)'
 	String get searchProfiles => 'Search profiles (Name/URL/Remark)';
 
+	/// en: 'Search proxies (Name/Region/Regex)'
+	String get searchProxies => 'Search proxies (Name/Region/Regex)';
+
 	/// en: 'No matching profiles found'
 	String get noMatchingProfiles => 'No matching profiles found';
 
@@ -2999,6 +3002,7 @@ extension on Translations {
 			'meta.noFilterResults' => 'No matching connections',
 			'meta.searchRules' => 'Search rules (Type/Payload/Proxy)',
 			'meta.searchProfiles' => 'Search profiles (Name/URL/Remark)',
+			'meta.searchProxies' => 'Search proxies (Name/Region/Regex)',
 			'meta.noMatchingProfiles' => 'No matching profiles found',
 			'meta.rules' => 'Routing Rules',
 			'meta.clear' => 'Clear',
@@ -3120,9 +3124,9 @@ extension on Translations {
 			'meta.copiedLogContent' => 'Log content copied',
 			'meta.copyLog' => 'Copy Log',
 			'meta.noLogsPrompt' => 'No logs yet. Core logs will appear after starting proxy.',
-			'meta.searchLogsHint' => ' (IP, Domain, Rule, Error...)',
 			_ => null,
 		} ?? switch (path) {
+			'meta.searchLogsHint' => ' (IP, Domain, Rule, Error...)',
 			'meta.offlinePreviewPrompt' => 'Offline preview mode. Start proxy to enable routing and latency testing.',
 			'meta.manualSelect' => 'Manual',
 			'meta.autoSelect' => 'Auto Select',

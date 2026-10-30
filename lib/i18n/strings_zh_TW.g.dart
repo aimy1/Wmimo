@@ -534,6 +534,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get noFilterResults => '沒有相符的連接';
 	@override String get searchRules => '搜尋規則 (類型/特徵/目標代理)';
 	@override String get searchProfiles => '搜尋設定檔 (名稱/連結/備註)';
+	@override String get searchProxies => '搜尋節點 (名稱/地區/正則)';
 	@override String get noMatchingProfiles => '未找到相符的訂閱設定檔';
 	@override String get rules => '分流規則';
 	@override String get clear => '清除';
@@ -1417,6 +1418,7 @@ extension on TranslationsZhTw {
 			'meta.noFilterResults' => '沒有相符的連接',
 			'meta.searchRules' => '搜尋規則 (類型/特徵/目標代理)',
 			'meta.searchProfiles' => '搜尋設定檔 (名稱/連結/備註)',
+			'meta.searchProxies' => '搜尋節點 (名稱/地區/正則)',
 			'meta.noMatchingProfiles' => '未找到相符的訂閱設定檔',
 			'meta.rules' => '分流規則',
 			'meta.clear' => '清除',
@@ -1538,9 +1540,9 @@ extension on TranslationsZhTw {
 			'meta.copiedLogContent' => '已複製日誌內容',
 			'meta.copyLog' => '複製日誌',
 			'meta.noLogsPrompt' => '暫無日誌，啟動代理後將即時捕獲核心日誌',
-			'meta.searchLogsHint' => ' (IP, 網域名稱, 規則, 錯誤...)',
 			_ => null,
 		} ?? switch (path) {
+			'meta.searchLogsHint' => ' (IP, 網域名稱, 規則, 錯誤...)',
 			'meta.offlinePreviewPrompt' => '離線設定預覽中，開啟代理後可進行分流與節點測速',
 			'meta.manualSelect' => '手動選擇',
 			'meta.autoSelect' => '自動選擇',

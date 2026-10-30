@@ -89,8 +89,6 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final allProfiles = ProfileManager.getProfiles();
 
     final filteredProfiles = _searchKeyword.isEmpty
@@ -119,161 +117,77 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
         title: tcontext.meta.myProfiles,
         actions: [
           if (PlatformUtils.isPC())
-            Tooltip(
-              message: tcontext.meta.openProfilesDir,
-              child: IconButton(
-                onPressed: () async {
-                  final dir = await PathUtils.profilesDir();
-                  await FileUtils.openDirectory(dir);
-                },
-                icon: const Icon(
-                  Icons.folder_open_outlined,
-                  size: 22,
-                ),
-              ),
-            ),
-          Tooltip(
-            message: tcontext.meta.profilePatches,
-            child: IconButton(
+            IconButton(
+              tooltip: tcontext.meta.openProfilesDir,
               onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    settings: ProfilesPatchBoardScreen.routSettings(),
-                    builder: (context) => const ProfilesPatchBoardScreen(),
-                  ),
-                );
-                await _reloadProfiles();
+                final dir = await PathUtils.profilesDir();
+                await FileUtils.openDirectory(dir);
               },
-              icon: const Icon(
-                Icons.alt_route_rounded,
-                size: 22,
-              ),
+              icon: const Icon(Icons.folder_open_outlined),
             ),
-          ),
-          Tooltip(
-            message: tcontext.meta.backupAndSync,
-            child: IconButton(
-              onPressed: () {
-                GroupHelper.showBackupAndSync(context);
-              },
-              icon: const Icon(
-                Icons.cloud_sync_outlined,
-                size: 22,
-              ),
-            ),
-          ),
-          ProfileManager.updating.isNotEmpty
-              ? const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Center(
-                    child: SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  ),
-                )
-              : Tooltip(
-                  message: tcontext.meta.update,
-                  child: IconButton(
-                    onPressed: () async {
-                      onTapUpdateAll();
-                    },
-                    icon: const Icon(
-                      Icons.sync_rounded,
-                      size: 22,
-                    ),
-                  ),
+          IconButton(
+            tooltip: tcontext.meta.profilePatches,
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: ProfilesPatchBoardScreen.routSettings(),
+                  builder: (context) => const ProfilesPatchBoardScreen(),
                 ),
-          Tooltip(
-            message: tcontext.meta.add,
-            child: IconButton(
-              onPressed: () async {
-                onTapAdd();
-              },
-              icon: const Icon(Icons.add_rounded, size: 24),
-            ),
+              );
+              await _reloadProfiles();
+            },
+            icon: const Icon(Icons.alt_route_rounded),
+          ),
+          IconButton(
+            tooltip: tcontext.meta.backupAndSync,
+            onPressed: () {
+              GroupHelper.showBackupAndSync(context);
+            },
+            icon: const Icon(Icons.cloud_sync_outlined),
+          ),
+          IconButton(
+            tooltip: tcontext.meta.update,
+            onPressed: ProfileManager.updating.isNotEmpty
+                ? null
+                : () async {
+                    onTapUpdateAll();
+                  },
+            icon: ProfileManager.updating.isNotEmpty
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.sync_rounded),
+          ),
+          IconButton(
+            tooltip: tcontext.meta.add,
+            onPressed: () async {
+              onTapAdd();
+            },
+            icon: const Icon(Icons.add_rounded, size: 22),
           ),
         ],
       ),
       body: SafeArea(
+        top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
           child: Column(
             children: [
-              if (allProfiles.isNotEmpty || _searchKeyword.isNotEmpty) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  child: Container(
-                    height: 38,
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF262629)
-                          : const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: theme.dividerColor.withValues(alpha: 0.15),
-                        width: 0.6,
-                      ),
-                    ),
-                    child: TextField(
-                      controller: _searchController,
-                      focusNode: _searchFocusNode,
-                      decoration: InputDecoration(
-                        hintText: tcontext.meta.searchProfiles,
-                        hintStyle: TextStyle(
-                          fontSize: 12.5,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search_rounded,
-                          size: 18,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                        ),
-                        suffixIcon: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (_searchKeyword.isNotEmpty) ...[
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  '${filteredProfiles.length}/${allProfiles.length}',
-                                  style: TextStyle(
-                                    fontSize: 10.5,
-                                    fontWeight: FontWeight.w600,
-                                    color: theme.colorScheme.primary,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(16),
-                                onTap: () {
-                                  _searchController.clear();
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.all(6),
-                                  child: Icon(Icons.clear_rounded, size: 16),
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                            ],
-                          ],
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 9),
-                      ),
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: WmimoSearchBar(
+                  controller: _searchController,
+                  focusNode: _searchFocusNode,
+                  hintText: tcontext.meta.searchProfiles,
+                  badgeText: _searchKeyword.isNotEmpty
+                      ? '${filteredProfiles.length}/${allProfiles.length}'
+                      : null,
                 ),
-                const SizedBox(height: 4),
-              ],
+              ),
+              const SizedBox(height: 10),
               Expanded(
                 child: ProfilesBoardScreenWidget(
                   settings: filteredProfiles,

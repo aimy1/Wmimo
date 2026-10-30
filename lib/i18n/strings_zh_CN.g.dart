@@ -534,6 +534,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get noFilterResults => '没有匹配的连接';
 	@override String get searchRules => '搜索规则 (类型/特征/目标代理)';
 	@override String get searchProfiles => '搜索配置 (名称/链接/备注)';
+	@override String get searchProxies => '搜索节点 (名称/地区/正则)';
 	@override String get noMatchingProfiles => '未找到匹配的订阅配置';
 	@override String get rules => '分流规则';
 	@override String get clear => '清除';
@@ -1417,6 +1418,7 @@ extension on TranslationsZhCn {
 			'meta.noFilterResults' => '没有匹配的连接',
 			'meta.searchRules' => '搜索规则 (类型/特征/目标代理)',
 			'meta.searchProfiles' => '搜索配置 (名称/链接/备注)',
+			'meta.searchProxies' => '搜索节点 (名称/地区/正则)',
 			'meta.noMatchingProfiles' => '未找到匹配的订阅配置',
 			'meta.rules' => '分流规则',
 			'meta.clear' => '清除',
@@ -1538,9 +1540,9 @@ extension on TranslationsZhCn {
 			'meta.copiedLogContent' => '已复制日志内容',
 			'meta.copyLog' => '复制日志',
 			'meta.noLogsPrompt' => '暂无日志，启动代理后将实时捕获核心日志',
-			'meta.searchLogsHint' => ' (IP, 域名, 规则, 错误...)',
 			_ => null,
 		} ?? switch (path) {
+			'meta.searchLogsHint' => ' (IP, 域名, 规则, 错误...)',
 			'meta.offlinePreviewPrompt' => '离线配置预览中，开启代理后可进行分流与节点测速',
 			'meta.manualSelect' => '手动选择',
 			'meta.autoSelect' => '自动选择',

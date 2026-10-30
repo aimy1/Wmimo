@@ -534,6 +534,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get noFilterResults => '일치하는 연결 없음';
 	@override String get searchRules => '규칙 검색 (유형/페이로드/프록시)';
 	@override String get searchProfiles => '프로필 검색 (이름/URL/비고)';
+	@override String get searchProxies => '프록시 검색 (이름/지역/정규식)';
 	@override String get noMatchingProfiles => '일치하는 프로필을 찾을 수 없습니다';
 	@override String get rules => '분류 규칙';
 	@override String get clear => '지우기';
@@ -1417,6 +1418,7 @@ extension on TranslationsKo {
 			'meta.noFilterResults' => '일치하는 연결 없음',
 			'meta.searchRules' => '규칙 검색 (유형/페이로드/프록시)',
 			'meta.searchProfiles' => '프로필 검색 (이름/URL/비고)',
+			'meta.searchProxies' => '프록시 검색 (이름/지역/정규식)',
 			'meta.noMatchingProfiles' => '일치하는 프로필을 찾을 수 없습니다',
 			'meta.rules' => '분류 규칙',
 			'meta.clear' => '지우기',
@@ -1538,9 +1540,9 @@ extension on TranslationsKo {
 			'meta.copiedLogContent' => '로그 내용이 복사되었습니다',
 			'meta.copyLog' => '로그 복사',
 			'meta.noLogsPrompt' => '아직 로그가 없습니다. 프록시 시작 후 실시간 로그가 표시됩니다.',
-			'meta.searchLogsHint' => ' (IP, 도메인, 규칙, 오류...)',
 			_ => null,
 		} ?? switch (path) {
+			'meta.searchLogsHint' => ' (IP, 도메인, 규칙, 오류...)',
 			'meta.offlinePreviewPrompt' => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.',
 			'meta.manualSelect' => '수동 선택',
 			'meta.autoSelect' => '자동 선택',

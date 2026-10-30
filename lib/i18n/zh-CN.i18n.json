@@ -412,6 +412,7 @@
     "noFilterResults": "没有匹配的连接",
     "searchRules": "搜索规则 (类型/特征/目标代理)",
     "searchProfiles": "搜索配置 (名称/链接/备注)",
+    "searchProxies": "搜索节点 (名称/地区/正则)",
     "noMatchingProfiles": "未找到匹配的订阅配置",
     "rules": "分流规则",
     "clear": "清除",

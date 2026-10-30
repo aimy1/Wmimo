@@ -592,11 +592,22 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
       // Sort Menu Button
       PopupMenuButton<ConnectionSortType>(
         tooltip: tcontext.meta.sort,
+        iconSize: 20,
+        padding: EdgeInsets.zero,
+        constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
+        style: IconButton.styleFrom(
+          minimumSize: const Size(34, 34),
+          fixedSize: const Size(34, 34),
+          padding: EdgeInsets.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
         icon: Icon(
           Icons.sort_rounded,
+          size: 20,
           color: _sortType != ConnectionSortType.defaultOrder
               ? ThemeDefine.kColorBlue
-              : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+              : theme.colorScheme.onSurface.withValues(alpha: 0.85),
         ),
         onSelected: (sort) {
           HapticFeedback.selectionClick();
@@ -618,11 +629,11 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
         tooltip: _isAutoRefresh ? tcontext.meta.pause : tcontext.meta.resume,
         icon: Icon(
           _isAutoRefresh
-              ? Icons.pause_circle_outline
-              : Icons.play_circle_outline,
+              ? Icons.pause_circle_outline_rounded
+              : Icons.play_circle_outline_rounded,
           color: _isAutoRefresh
               ? ThemeDefine.kColorBlue
-              : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              : theme.colorScheme.onSurface.withValues(alpha: 0.55),
         ),
         onPressed: () {
           HapticFeedback.selectionClick();
@@ -641,11 +652,11 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
         tooltip: tcontext.meta.refresh,
         icon: _loading
             ? const SizedBox(
-                width: 18,
-                height: 18,
+                width: 16,
+                height: 16,
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
-            : const Icon(Icons.refresh),
+            : const Icon(Icons.refresh_rounded),
         onPressed: () {
           HapticFeedback.selectionClick();
           _fetchConnections();
@@ -697,7 +708,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
       body: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
           child: Column(
             children: [
               // Search bar and protocol filter
@@ -706,38 +717,9 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
                 child: Row(
                   children: [
                     Expanded(
-                      child: Container(
-                        height: 38,
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? const Color(0xFF262629)
-                              : const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            hintText: tcontext.meta.searchConnections,
-                            hintStyle: TextStyle(
-                              fontSize: 12.5,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                            ),
-                            prefixIcon: Icon(
-                              Icons.search,
-                              size: 18,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                            ),
-                            suffixIcon: _searchKeyword.isNotEmpty
-                                ? InkWell(
-                                    onTap: () => _searchController.clear(),
-                                    child: const Icon(Icons.clear, size: 16),
-                                  )
-                                : null,
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(vertical: 9),
-                          ),
-                          style: const TextStyle(fontSize: 13),
-                        ),
+                      child: WmimoSearchBar(
+                        controller: _searchController,
+                        hintText: tcontext.meta.searchConnections,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -795,30 +777,42 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
 
   Widget _buildProtocolChip(String protocol) {
     final isSelected = _selectedProtocol == protocol;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Material(
       color: isSelected
           ? ThemeDefine.kColorBlue
           : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(10),
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
         onTap: () {
           setState(() {
             _selectedProtocol = protocol;
           });
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        child: Container(
+          height: 38,
+          padding: const EdgeInsets.symmetric(horizontal: 11),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: isSelected
+                  ? ThemeDefine.kColorBlue
+                  : theme.dividerColor.withValues(alpha: 0.25),
+              width: 0.8,
+            ),
+          ),
           child: Text(
             protocol,
             style: TextStyle(
-              fontSize: 11.5,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               color: isSelected
                   ? Colors.white
-                  : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.75),
             ),
           ),
         ),

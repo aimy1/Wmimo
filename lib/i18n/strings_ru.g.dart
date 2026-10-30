@@ -534,6 +534,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get noFilterResults => 'Нет подходящих соединений';
 	@override String get searchRules => 'Поиск правил (Тип/Пейлоад/Прокси)';
 	@override String get searchProfiles => 'Поиск профилей (Имя/URL/Примечание)';
+	@override String get searchProxies => 'Поиск прокси (Имя/Регион/Regex)';
 	@override String get noMatchingProfiles => 'Подходящие профили не найдены';
 	@override String get rules => 'Правила маршрутизации';
 	@override String get clear => 'Очистить';
@@ -1417,6 +1418,7 @@ extension on TranslationsRu {
 			'meta.noFilterResults' => 'Нет подходящих соединений',
 			'meta.searchRules' => 'Поиск правил (Тип/Пейлоад/Прокси)',
 			'meta.searchProfiles' => 'Поиск профилей (Имя/URL/Примечание)',
+			'meta.searchProxies' => 'Поиск прокси (Имя/Регион/Regex)',
 			'meta.noMatchingProfiles' => 'Подходящие профили не найдены',
 			'meta.rules' => 'Правила маршрутизации',
 			'meta.clear' => 'Очистить',
@@ -1538,9 +1540,9 @@ extension on TranslationsRu {
 			'meta.copiedLogContent' => 'Содержимое лога скопировано',
 			'meta.copyLog' => 'Копировать лог',
 			'meta.noLogsPrompt' => 'Логов пока нет. Логи ядра появятся после запуска прокси.',
-			'meta.searchLogsHint' => ' (IP, Домен, Правило, Ошибка...)',
 			_ => null,
 		} ?? switch (path) {
+			'meta.searchLogsHint' => ' (IP, Домен, Правило, Ошибка...)',
 			'meta.offlinePreviewPrompt' => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.',
 			'meta.manualSelect' => 'Ручной выбор',
 			'meta.autoSelect' => 'Автовыбор',

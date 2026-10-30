@@ -174,48 +174,19 @@ class _RulesScreenState extends State<RulesScreen> with AfterLayoutMixin {
         ],
       ),
       body: SafeArea(
+        top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
           child: Column(
             children: [
-
               // Search bar and type filters
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    Container(
-                      height: 38,
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? const Color(0xFF262629)
-                            : const Color(0xFFF1F5F9),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: tcontext.meta.searchRules,
-                          hintStyle: TextStyle(
-                            fontSize: 12.5,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                          ),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: 18,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                          ),
-                          suffixIcon: _searchKeyword.isNotEmpty
-                              ? InkWell(
-                                  onTap: () => _searchController.clear(),
-                                  child: const Icon(Icons.clear, size: 16),
-                                )
-                              : null,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(vertical: 9),
-                        ),
-                        style: const TextStyle(fontSize: 13),
-                      ),
+                    WmimoSearchBar(
+                      controller: _searchController,
+                      hintText: tcontext.meta.searchRules,
                     ),
                     const SizedBox(height: 8),
                     SingleChildScrollView(

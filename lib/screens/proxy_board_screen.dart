@@ -16,14 +16,13 @@ import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/node_region_helper.dart';
-import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/add_profile_by_url_screen.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/brand_vector_icon.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class ProxyBoardScreen extends StatefulWidget {
   static RouteSettings routSettings() {
@@ -1911,7 +1910,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     return Container(
       height: 32,
-      margin: const EdgeInsets.only(top: 8, bottom: 2),
+      margin: const EdgeInsets.only(bottom: 2),
       child: Listener(
         onPointerSignal: (pointerSignal) {
           if (pointerSignal is PointerScrollEvent) {
@@ -1958,228 +1957,142 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final groups = _getProxyGroups();
     final leafNodes = _allNodes.where((n) => isRealLeafProxy(n)).toList();
 
+    final hasFilterActive =
+        _sortMode != "default" || _hideTimeoutNodes || _selectedRegionCode != "ALL";
+
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: WmimoAppBar(
+        title: tcontext.meta.proxy,
+        actions: [
+          // Running Mode Switch: [ 规则 | 全局 | 直连 ]
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: Container(
+              height: 32,
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF262629) : const Color(0xFFE2E8F0),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.all(2),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildModeButton("rule", tcontext.meta.rule),
+                  _buildModeButton("global", tcontext.meta.global),
+                  _buildModeButton("direct", tcontext.meta.direct),
+                ],
+              ),
+            ),
+          ),
+
+          // Toggle Collapse / Expand All button
+          IconButton(
+            tooltip: groups.any((g) => _isGroupExpandedByDefault(g, groups.indexOf(g)))
+                ? tcontext.meta.collapseAll
+                : tcontext.meta.expandAll,
+            onPressed: () {
+              final anyExpanded = groups.any(
+                (g) => _isGroupExpandedByDefault(g, groups.indexOf(g)),
+              );
+              setState(() {
+                for (var g in groups) {
+                  _groupExpanded[g.name] = !anyExpanded;
+                }
+              });
+            },
+            icon: Icon(
+              groups.any((g) => _isGroupExpandedByDefault(g, groups.indexOf(g)))
+                  ? Icons.unfold_less_rounded
+                  : Icons.unfold_more_rounded,
+            ),
+          ),
+
+          // Sort & Filter button
+          IconButton(
+            tooltip: tcontext.meta.sortAndFilterNodes,
+            onPressed: _showSortFilterBottomSheet,
+            style: hasFilterActive
+                ? IconButton.styleFrom(
+                    backgroundColor: ThemeDefine.kColorBlue.withValues(alpha: 0.16),
+                    foregroundColor: ThemeDefine.kColorBlue,
+                  )
+                : null,
+            icon: Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Icon(
+                  Icons.tune_rounded,
+                  color: hasFilterActive ? ThemeDefine.kColorBlue : null,
+                ),
+                if (hasFilterActive)
+                  Positioned(
+                    top: -2,
+                    right: -2,
+                    child: Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        color: ThemeDefine.kColorBlue,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+
+          // Latency Test All button
+          GestureDetector(
+            onLongPress: _showLatencyTargetBottomSheet,
+            child: IconButton(
+              tooltip:
+                  "${tcontext.meta.latencyTest} (${_activeLatencyTarget.getDisplayName(isZh)})",
+              onPressed: _nodesTesting.isNotEmpty ? null : _testAllDelay,
+              icon: _nodesTesting.isNotEmpty
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation(
+                          ThemeDefine.kColorBlue,
+                        ),
+                      ),
+                    )
+                  : const Icon(Icons.bolt_rounded),
+            ),
+          ),
+
+          // Refresh button
+          IconButton(
+            tooltip: tcontext.meta.refresh,
+            onPressed: () => _fetchProxies(showLoadingIndicator: true),
+            icon: _loading
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.refresh_rounded),
+          ),
+        ],
+      ),
       body: SafeArea(
+        top: false,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(0, PlatformUtils.isPC() ? 4 : 16, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
           child: Column(
             children: [
-              // Top Header Bar (Clash Verge Style)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    if (ModalRoute.of(context)?.canPop ?? false)
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: const SizedBox(
-                          width: 36,
-                          height: 30,
-                          child: Icon(Icons.arrow_back_ios_outlined, size: 22),
-                        ),
-                      ),
-                    Text(
-                      tcontext.meta.proxy,
-                      style: const TextStyle(
-                        fontWeight: ThemeConfig.kFontWeightTitle,
-                        fontSize: ThemeConfig.kFontSizeTitle,
-                      ),
-                    ),
-                    const Spacer(),
-
-                    // Running Mode Switch: [ 规则 | 全局 | 直连 ]
-                    Container(
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF262629) : const Color(0xFFE2E8F0),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.all(2),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _buildModeButton("rule", tcontext.meta.rule),
-                          _buildModeButton("global", tcontext.meta.global),
-                          _buildModeButton("direct", tcontext.meta.direct),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-
-                    // Toggle Collapse / Expand All button
-                    Tooltip(
-                      message: groups.any((g) => _isGroupExpandedByDefault(g, groups.indexOf(g)))
-                          ? tcontext.meta.collapseAll
-                          : tcontext.meta.expandAll,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {
-                          final anyExpanded = groups.any((g) => _isGroupExpandedByDefault(g, groups.indexOf(g)));
-                          setState(() {
-                            for (var g in groups) {
-                              _groupExpanded[g.name] = !anyExpanded;
-                            }
-                          });
-                        },
-                        child: Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            groups.any((g) => _isGroupExpandedByDefault(g, groups.indexOf(g)))
-                                ? Icons.unfold_less_rounded
-                                : Icons.unfold_more_rounded,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-
-                    // Sort & Filter button
-                    Tooltip(
-                      message: tcontext.meta.sortAndFilterNodes,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: _showSortFilterBottomSheet,
-                        child: Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: (_sortMode != "default" || _hideTimeoutNodes || _selectedRegionCode != "ALL")
-                                ? ThemeDefine.kColorBlue.withValues(alpha: 0.2)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Icon(
-                                Icons.tune_rounded,
-                                size: 20,
-                                color: (_sortMode != "default" || _hideTimeoutNodes || _selectedRegionCode != "ALL")
-                                    ? ThemeDefine.kColorBlue
-                                    : null,
-                              ),
-                              if (_sortMode != "default" || _hideTimeoutNodes || _selectedRegionCode != "ALL")
-                                Positioned(
-                                  top: 5,
-                                  right: 5,
-                                  child: Container(
-                                    width: 6,
-                                    height: 6,
-                                    decoration: const BoxDecoration(
-                                      color: ThemeDefine.kColorBlue,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-
-                    // Latency Test All button
-                    Tooltip(
-                      message: "${tcontext.meta.latencyTest} (${_activeLatencyTarget.getDisplayName(isZh)})",
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: _nodesTesting.isNotEmpty ? null : _testAllDelay,
-                        onLongPress: _showLatencyTargetBottomSheet,
-                        child: Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: _nodesTesting.isNotEmpty
-                              ? Center(
-                                  child: SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation(
-                                        ThemeDefine.kColorBlue,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : const Icon(Icons.bolt_rounded, size: 22),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-
-                    // Refresh button
-                    Tooltip(
-                      message: tcontext.meta.refresh,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () => _fetchProxies(showLoadingIndicator: true),
-                        child: SizedBox(
-                          width: 32,
-                          height: 32,
-                          child: _loading
-                              ? const Center(
-                                  child: SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
-                                  ),
-                                )
-                              : const Icon(Icons.refresh_rounded, size: 20),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-
               // Search Bar + Target Selector Chip Row
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
                     Expanded(
-                      child: Container(
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? const Color(0xFF262629)
-                              : const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            hintText: "${tcontext.meta.search} (${tcontext.meta.server}/${tcontext.meta.identifiedRegion}/Regex)",
-                            hintStyle: TextStyle(
-                              fontSize: 12.5,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                            ),
-                            prefixIcon: Icon(
-                              Icons.search,
-                              size: 18,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                            ),
-                            suffixIcon: _searchKeyword.isNotEmpty
-                                ? InkWell(
-                                    onTap: () => _searchController.clear(),
-                                    child: const Icon(Icons.clear, size: 16),
-                                  )
-                                : null,
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(vertical: 8),
-                          ),
-                          style: const TextStyle(fontSize: 13),
-                        ),
+                      child: WmimoSearchBar(
+                        controller: _searchController,
+                        hintText: tcontext.meta.searchProxies,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -2189,7 +2102,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       borderRadius: BorderRadius.circular(10),
                       onTap: _showLatencyTargetBottomSheet,
                       child: Container(
-                        height: 36,
+                        height: 38,
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: isDark
@@ -2209,20 +2122,28 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               size: 15,
                               color: ThemeDefine.kColorBlue,
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 5),
                             Text(
-                              _activeLatencyTarget.getDisplayName(isZh).replaceAll(RegExp(r'^[^\w\s\u4e00-\u9fa5]+'), '').trim(),
+                              _activeLatencyTarget
+                                  .getDisplayName(isZh)
+                                  .replaceAll(
+                                    RegExp(r'^[^\w\s\u4e00-\u9fa5]+'),
+                                    '',
+                                  )
+                                  .trim(),
                               style: TextStyle(
-                                fontSize: 11.5,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                                color: theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.85),
                               ),
                             ),
                             const SizedBox(width: 2),
                             Icon(
                               Icons.arrow_drop_down_rounded,
                               size: 18,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.5),
                             ),
                           ],
                         ),
@@ -2231,6 +2152,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
 
               // Region Filter Chips Bar
               _buildRegionFilterBar(leafNodes),

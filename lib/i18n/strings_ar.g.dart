@@ -534,6 +534,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get noFilterResults => 'لا توجد اتصالات مطابقة';
 	@override String get searchRules => 'بحث في القواعد (النوع/الحمولة/الوكيل)';
 	@override String get searchProfiles => 'البحث في الملفات الشخصية (الاسم/الرابط/الملاحظة)';
+	@override String get searchProxies => 'بحث في الوكلاء (الاسم/المنطقة/Regex)';
 	@override String get noMatchingProfiles => 'لم يتم العثور على ملفات تعريف مطابقة';
 	@override String get rules => 'قواعد التوجيه';
 	@override String get clear => 'مسح';
@@ -1417,6 +1418,7 @@ extension on TranslationsAr {
 			'meta.noFilterResults' => 'لا توجد اتصالات مطابقة',
 			'meta.searchRules' => 'بحث في القواعد (النوع/الحمولة/الوكيل)',
 			'meta.searchProfiles' => 'البحث في الملفات الشخصية (الاسم/الرابط/الملاحظة)',
+			'meta.searchProxies' => 'بحث في الوكلاء (الاسم/المنطقة/Regex)',
 			'meta.noMatchingProfiles' => 'لم يتم العثور على ملفات تعريف مطابقة',
 			'meta.rules' => 'قواعد التوجيه',
 			'meta.clear' => 'مسح',
@@ -1538,9 +1540,9 @@ extension on TranslationsAr {
 			'meta.copiedLogContent' => 'تم نسخ محتوى السجل',
 			'meta.copyLog' => 'نسخ السجل',
 			'meta.noLogsPrompt' => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.',
-			'meta.searchLogsHint' => ' (IP, النطاق, القاعدة, الخطأ...)',
 			_ => null,
 		} ?? switch (path) {
+			'meta.searchLogsHint' => ' (IP, النطاق, القاعدة, الخطأ...)',
 			'meta.offlinePreviewPrompt' => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.',
 			'meta.manualSelect' => 'اختيار يدوي',
 			'meta.autoSelect' => 'اختيار تلقائي',

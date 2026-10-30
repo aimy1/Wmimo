@@ -412,6 +412,7 @@
     "noFilterResults": "No hay conexiones coincidentes",
     "searchRules": "Buscar reglas (Tipo/Carga útil/Proxy)",
     "searchProfiles": "Buscar perfiles (Nombre/URL/Nota)",
+    "searchProxies": "Buscar proxies (Nombre/Región/Regex)",
     "noMatchingProfiles": "No se encontraron perfiles coincidentes",
     "rules": "Reglas de enrutamiento",
     "clear": "Limpiar",

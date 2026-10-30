@@ -412,6 +412,7 @@
     "noFilterResults": "一致する接続がありません",
     "searchRules": "ルールを検索 (タイプ/ペイロード/プロキシ)",
     "searchProfiles": "プロファイルを検索 (名前/URL/備考)",
+    "searchProxies": "プロキシを検索 (名前/地域/正規表現)",
     "noMatchingProfiles": "一致するプロファイルが見つかりません",
     "rules": "ルーティングルール",
     "clear": "クリア",

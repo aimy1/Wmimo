@@ -412,6 +412,7 @@
     "noFilterResults": "No matching connections",
     "searchRules": "Search rules (Type/Payload/Proxy)",
     "searchProfiles": "Search profiles (Name/URL/Remark)",
+    "searchProxies": "Search proxies (Name/Region/Regex)",
     "noMatchingProfiles": "No matching profiles found",
     "rules": "Routing Rules",
     "clear": "Clear",

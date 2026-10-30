@@ -534,6 +534,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get noFilterResults => 'No hay conexiones coincidentes';
 	@override String get searchRules => 'Buscar reglas (Tipo/Carga útil/Proxy)';
 	@override String get searchProfiles => 'Buscar perfiles (Nombre/URL/Nota)';
+	@override String get searchProxies => 'Buscar proxies (Nombre/Región/Regex)';
 	@override String get noMatchingProfiles => 'No se encontraron perfiles coincidentes';
 	@override String get rules => 'Reglas de enrutamiento';
 	@override String get clear => 'Limpiar';
@@ -1417,6 +1418,7 @@ extension on TranslationsEs {
 			'meta.noFilterResults' => 'No hay conexiones coincidentes',
 			'meta.searchRules' => 'Buscar reglas (Tipo/Carga útil/Proxy)',
 			'meta.searchProfiles' => 'Buscar perfiles (Nombre/URL/Nota)',
+			'meta.searchProxies' => 'Buscar proxies (Nombre/Región/Regex)',
 			'meta.noMatchingProfiles' => 'No se encontraron perfiles coincidentes',
 			'meta.rules' => 'Reglas de enrutamiento',
 			'meta.clear' => 'Limpiar',
@@ -1538,9 +1540,9 @@ extension on TranslationsEs {
 			'meta.copiedLogContent' => 'Contenido del registro copiado',
 			'meta.copyLog' => 'Copiar registro',
 			'meta.noLogsPrompt' => 'Aún no hay registros. Aparecerán tras iniciar el proxy.',
-			'meta.searchLogsHint' => ' (IP, Dominio, Regla, Error...)',
 			_ => null,
 		} ?? switch (path) {
+			'meta.searchLogsHint' => ' (IP, Dominio, Regla, Error...)',
 			'meta.offlinePreviewPrompt' => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.',
 			'meta.manualSelect' => 'Selección manual',
 			'meta.autoSelect' => 'Selección automática',

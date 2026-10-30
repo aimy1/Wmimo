@@ -534,6 +534,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get noFilterResults => 'اتصالی یافت نشد';
 	@override String get searchRules => 'جستجوی قوانین (نوع/محتوا/پروکسی)';
 	@override String get searchProfiles => 'جستجوی پروفایل‌ها (نام/لینک/یادداشت)';
+	@override String get searchProxies => 'جستجوی پروکسی‌ها (نام/منطقه/Regex)';
 	@override String get noMatchingProfiles => 'هیچ پروفایل متطابقی یافت نشد';
 	@override String get rules => 'قوانین مسیریابی';
 	@override String get clear => 'پاک کردن';
@@ -1417,6 +1418,7 @@ extension on TranslationsFa {
 			'meta.noFilterResults' => 'اتصالی یافت نشد',
 			'meta.searchRules' => 'جستجوی قوانین (نوع/محتوا/پروکسی)',
 			'meta.searchProfiles' => 'جستجوی پروفایل‌ها (نام/لینک/یادداشت)',
+			'meta.searchProxies' => 'جستجوی پروکسی‌ها (نام/منطقه/Regex)',
 			'meta.noMatchingProfiles' => 'هیچ پروفایل متطابقی یافت نشد',
 			'meta.rules' => 'قوانین مسیریابی',
 			'meta.clear' => 'پاک کردن',
@@ -1538,9 +1540,9 @@ extension on TranslationsFa {
 			'meta.copiedLogContent' => 'محتوای لاگ کپی شد',
 			'meta.copyLog' => 'کپی لاگ',
 			'meta.noLogsPrompt' => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.',
-			'meta.searchLogsHint' => ' (IP, دامنه, قانون, خطا...)',
 			_ => null,
 		} ?? switch (path) {
+			'meta.searchLogsHint' => ' (IP, دامنه, قانون, خطا...)',
 			'meta.offlinePreviewPrompt' => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.',
 			'meta.manualSelect' => 'انتخاب دستی',
 			'meta.autoSelect' => 'انتخاب خودکار',
