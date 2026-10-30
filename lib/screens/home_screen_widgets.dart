@@ -134,6 +134,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       ));
     }
     VPNService.onEventStateChanged.add(_onStateChanged);
+    VpnActionHandler.vpnConnect = _vpnConnect;
+    VpnActionHandler.vpnDisconnect = _vpnDisconnect;
+    VpnActionHandler.vpnReconnect = _vpnReconnect;
     AppLifecycleStateNofity.onStateResumed(hashCode, _onStateResumed);
     AppLifecycleStateNofity.onStatePaused(hashCode, _onStatePaused);
     ProfileManager.onEventCurrentChanged.add(_onCurrentChanged);
@@ -1240,6 +1243,15 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     }
   }
 
+  void _syncUiStatus() {
+    VpnActionHandler.updateUiStatus(
+      state: _state,
+      desiredConnected: _desiredConnected,
+      clearDesiredConnected: _desiredConnected == null,
+      isOperating: VPNService.isOperating || _isSwitchOperating,
+    );
+  }
+
   void _requestToggle(
     bool targetConnected, {
     required String from,
@@ -1250,6 +1262,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         _desiredConnected = targetConnected;
       });
     }
+    _syncUiStatus();
 
     _debounceToggleTimer?.cancel();
     _debounceToggleTimer = Timer(const Duration(milliseconds: 140), () {
@@ -1266,6 +1279,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     if (target == null) return;
 
     if (_isSwitchOperating) {
+      if (!target) {
+        unawaited(VPNService.stop());
+      }
       return;
     }
 
@@ -1277,11 +1293,13 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         setState(() {
           _desiredConnected = null;
         });
+        _syncUiStatus();
       }
       return;
     }
 
     _isSwitchOperating = true;
+    _syncUiStatus();
     bool ok = false;
     try {
       if (target) {
@@ -1308,6 +1326,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             _desiredConnected = null;
             _state = FlutterVpnServiceState.disconnected;
           });
+          _syncUiStatus();
         } else if (_desiredConnected != null &&
             _desiredConnected != (_state == FlutterVpnServiceState.connected)) {
           _executeToggle(from: from, background: background);
@@ -1315,6 +1334,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           setState(() {
             _desiredConnected = null;
           });
+          _syncUiStatus();
         }
       }
     }
@@ -1325,11 +1345,15 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       setState(() {
         _state = FlutterVpnServiceState.disconnecting;
       });
+      _syncUiStatus();
     }
     try {
       await VPNService.stop();
     } finally {
-      if (mounted) setState(() {});
+      if (mounted) {
+        setState(() {});
+        _syncUiStatus();
+      }
     }
   }
 
@@ -1338,6 +1362,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       setState(() {
         _state = FlutterVpnServiceState.connecting;
       });
+      _syncUiStatus();
     }
 
     // Yield execution momentarily to allow Flutter UI framework to paint the "connecting" state and switch animation
@@ -1358,6 +1383,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             _desiredConnected = null;
             _state = FlutterVpnServiceState.disconnected;
           });
+          _syncUiStatus();
         }
         return false;
       }
@@ -1375,6 +1401,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
               _desiredConnected = null;
               _state = FlutterVpnServiceState.disconnected;
             });
+            _syncUiStatus();
           }
           return false;
         }
@@ -1387,7 +1414,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       if ((Platform.isLinux || Platform.isMacOS) && isTunEnabled) {
         String? installer = await AutoUpdateManager.checkReplace();
         if (installer != null) {
-          return true;
+          if (mounted) {
+            setState(() {
+              _desiredConnected = null;
+              _state = FlutterVpnServiceState.disconnected;
+            });
+            _syncUiStatus();
+          }
+          return false;
         }
         final servicePath = PathUtils.serviceExePath();
         if (!await FlutterVpnService.isServiceAuthorized(servicePath)) {
@@ -1396,8 +1430,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           }
           String? password = await DialogUtils.showPasswordInputDialog(context);
           if (Platform.isLinux && (password == null || password.isEmpty)) {
-            setState(() {});
-            return true;
+            if (mounted) {
+              setState(() {
+                _desiredConnected = null;
+                _state = FlutterVpnServiceState.disconnected;
+              });
+              _syncUiStatus();
+            }
+            return false;
           }
           final result = await FlutterVpnService.authorizeService(
             servicePath,
@@ -1429,6 +1469,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
               _desiredConnected = null;
               _state = FlutterVpnServiceState.disconnected;
             });
+            _syncUiStatus();
           }
           return false;
         }
@@ -1444,6 +1485,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             _desiredConnected = null;
             _state = FlutterVpnServiceState.disconnected;
           });
+          _syncUiStatus();
         }
         if (err.message == "willCompleteAfterRebootInstall") {
           err.message = t.meta.willCompleteAfterRebootInstall;
@@ -1462,9 +1504,23 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         DialogUtils.showAlertDialog(context, err.message, withVersion: true);
         return false;
       }
-      return true;
+      final actualState = await VPNService.getState();
+      if (mounted) {
+        setState(() {
+          _state = actualState;
+          if (actualState == FlutterVpnServiceState.connected ||
+              actualState == FlutterVpnServiceState.disconnected) {
+            _desiredConnected = null;
+          }
+        });
+        _syncUiStatus();
+      }
+      return actualState == FlutterVpnServiceState.connected;
     } finally {
-      if (mounted) setState(() {});
+      if (mounted) {
+        setState(() {});
+        _syncUiStatus();
+      }
     }
   }
 
@@ -1490,6 +1546,10 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     Map<String, String> params,
   ) async {
     if (_state == state) {
+      _syncUiStatus();
+      if (mounted) {
+        setState(() {});
+      }
       return;
     }
     _state = state;
@@ -1513,11 +1573,11 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     } else if (state == FlutterVpnServiceState.reasserting) {
       _disconnectToCore();
     } else if (state == FlutterVpnServiceState.disconnecting) {
-      _stopStateCheckTimer();
     } else {
       _disconnectToCore();
       Biz.vpnStateChanged(false);
     }
+    _syncUiStatus();
     if (!mounted) {
       return;
     }
@@ -1605,6 +1665,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   }
 
   Future<void> _checkState() async {
+    if (_isSwitchOperating || VPNService.isOperating) {
+      return;
+    }
     var state = await VPNService.getState();
     await _onStateChanged(state, {});
   }

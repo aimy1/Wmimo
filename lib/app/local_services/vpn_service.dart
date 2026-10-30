@@ -23,6 +23,7 @@ import 'package:wmimo/app/utils/network_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
+import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:libclash_vpn_service/proxy_manager.dart';
 import 'package:libclash_vpn_service/state.dart';
@@ -50,6 +51,21 @@ class VPNService {
     void Function(FlutterVpnServiceState state, Map<String, String> params)
   >
   onEventStateChanged = [];
+
+  static void notifyStateChanged(
+    FlutterVpnServiceState state, [
+    Map<String, String> params = const {},
+  ]) {
+    VpnActionHandler.updateUiStatus(
+      state: state,
+      clearDesiredConnected: state == FlutterVpnServiceState.connected ||
+          state == FlutterVpnServiceState.disconnected,
+      isOperating: _isOperating,
+    );
+    for (var callback in List.of(onEventStateChanged)) {
+      callback(state, params);
+    }
+  }
 
   static Future<void> initABI() async {
     if (Platform.isAndroid) {
@@ -95,17 +111,16 @@ class VPNService {
       FlutterVpnServiceState state,
       Map<String, String> params,
     ) async {
+      notifyStateChanged(state, params);
+
       if (getSupportSystemProxy()) {
         if (state == FlutterVpnServiceState.disconnected) {
           bool enable = await getSystemProxyEnable();
-          if (enable) {
+          if (enable &&
+              await getState() == FlutterVpnServiceState.disconnected) {
             await FlutterVpnService.cleanSystemProxy();
           }
         }
-      }
-
-      for (var callback in onEventStateChanged) {
-        callback(state, params);
       }
     });
 
@@ -357,6 +372,7 @@ class VPNService {
       return null;
     }
     _isOperating = true;
+    VpnActionHandler.updateUiStatus(isOperating: true);
     try {
       final profile = ProfileManager.getCurrent();
       if (profile == null) {
@@ -425,6 +441,8 @@ class VPNService {
       return null;
     } finally {
       _isOperating = false;
+      final currentState = await getState();
+      notifyStateChanged(currentState);
     }
   }
 
@@ -434,6 +452,10 @@ class VPNService {
     }
     _isOperating = true;
     _cancelRequested = false;
+    VpnActionHandler.updateUiStatus(
+      state: FlutterVpnServiceState.connecting,
+      isOperating: true,
+    );
     try {
       final profile = ProfileManager.getCurrent();
       if (profile == null) {
@@ -518,6 +540,8 @@ class VPNService {
       return null;
     } finally {
       _isOperating = false;
+      final currentState = await getState();
+      notifyStateChanged(currentState);
     }
   }
 
@@ -538,6 +562,8 @@ class VPNService {
       if (!_isOperating) {
         _isOperating = false;
       }
+      final currentState = await getState();
+      notifyStateChanged(currentState);
     }
   }
 

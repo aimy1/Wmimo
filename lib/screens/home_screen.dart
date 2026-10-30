@@ -138,7 +138,29 @@ class _HomeScreenState extends State<HomeScreen>
     };
     _initUrl = widget.launchUrl;
     AutoUpdateManager.onEventCheck.add(_onAutoUpdateCheck);
+    if (!VPNService.onEventStateChanged.contains(_onStateChanged)) {
+      VPNService.onEventStateChanged.add(_onStateChanged);
+    }
+    VpnActionHandler.uiStatus.addListener(_onVpnUiStatusChanged);
+    VPNService.getState().then((state) {
+      if (!mounted) return;
+      _vpnState = state;
+      VpnActionHandler.updateUiStatus(
+        state: state,
+        isOperating: VPNService.isOperating,
+      );
+      setState(() {});
+    });
     _init();
+  }
+
+  void _onVpnUiStatusChanged() {
+    if (!mounted) return;
+    final uiState = VpnActionHandler.uiStatus.value.state;
+    if (_vpnState != uiState) {
+      _vpnState = uiState;
+    }
+    setState(() {});
   }
 
   void _onAutoUpdateCheck() {
@@ -253,7 +275,9 @@ class _HomeScreenState extends State<HomeScreen>
         title: tcontext.meta.faq,
       );
     };
-    VPNService.onEventStateChanged.add(_onStateChanged);
+    if (!VPNService.onEventStateChanged.contains(_onStateChanged)) {
+      VPNService.onEventStateChanged.add(_onStateChanged);
+    }
 
     if (Platform.isWindows || Platform.isLinux) {
       final wmimoRegisterErr = await SystemSchemeUtils.register(
@@ -288,6 +312,12 @@ class _HomeScreenState extends State<HomeScreen>
     Map<String, String> params,
   ) async {
     _vpnState = state;
+    VpnActionHandler.updateUiStatus(
+      state: state,
+      clearDesiredConnected: state == FlutterVpnServiceState.connected ||
+          state == FlutterVpnServiceState.disconnected,
+      isOperating: VPNService.isOperating,
+    );
     if (state == FlutterVpnServiceState.disconnected) {
       Biz.vpnStateChanged(false);
     } else if (state == FlutterVpnServiceState.connecting) {
@@ -299,7 +329,9 @@ class _HomeScreenState extends State<HomeScreen>
     } else if (state == FlutterVpnServiceState.disconnecting) {
     } else {}
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -317,6 +349,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
+    VPNService.onEventStateChanged.remove(_onStateChanged);
+    VpnActionHandler.uiStatus.removeListener(_onVpnUiStatusChanged);
     AutoUpdateManager.onEventCheck.remove(_onAutoUpdateCheck);
     protocolHandler.removeListener(this);
     WidgetsBinding.instance.removeObserver(this);
@@ -473,11 +507,14 @@ class _HomeScreenState extends State<HomeScreen>
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final connected = _vpnState == FlutterVpnServiceState.connected;
-    final connecting = _vpnState == FlutterVpnServiceState.connecting ||
-        _vpnState == FlutterVpnServiceState.disconnecting ||
-        _vpnState == FlutterVpnServiceState.reasserting ||
-        VPNService.isOperating;
+    final uiStatus = VpnActionHandler.uiStatus.value;
+    final effectiveStatus = VpnUiStatus(
+      state: _vpnState,
+      desiredConnected: uiStatus.desiredConnected,
+      isOperating: VPNService.isOperating || uiStatus.isOperating,
+    );
+    final connecting = effectiveStatus.isTransitioning;
+    final connected = effectiveStatus.isConnected;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
@@ -489,7 +526,7 @@ class _HomeScreenState extends State<HomeScreen>
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
-            if (connected || _vpnState == FlutterVpnServiceState.connecting) {
+            if (connected || connecting) {
               VpnActionHandler.vpnDisconnect?.call("sidebar", false);
             } else {
               VpnActionHandler.vpnConnect?.call("sidebar", false);
