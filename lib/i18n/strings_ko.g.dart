@@ -846,6 +846,8 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get maxWebsitesReached => '테스트 웹사이트는 최대 6개까지 추가할 수 있습니다';
 	@override String get sideBySideLayout => '병렬 레이아웃';
 	@override String get sideBySideLayoutTips => '와이드 화면에서 홈 카드 및 구독 목록을 병렬로 표시합니다';
+	@override String get uiAnimations => 'UI 애니메이션';
+	@override String get uiAnimationsTips => '페이지 전환, 상태 표시기 및 카드 접기에 부드러운 전환 애니메이션을 활성화합니다';
 	@override String get homeCardsManage => '홈 카드 관리';
 	@override String get homeCardsManageTips => '홈 화면에 표시할 카드 모듈 및 표시 상태 사용자 정의';
 	@override String get cardTrafficChart => '트래픽 통계 차트';
@@ -1732,6 +1734,8 @@ extension on TranslationsKo {
 			'meta.maxWebsitesReached' => '테스트 웹사이트는 최대 6개까지 추가할 수 있습니다',
 			'meta.sideBySideLayout' => '병렬 레이아웃',
 			'meta.sideBySideLayoutTips' => '와이드 화면에서 홈 카드 및 구독 목록을 병렬로 표시합니다',
+			'meta.uiAnimations' => 'UI 애니메이션',
+			'meta.uiAnimationsTips' => '페이지 전환, 상태 표시기 및 카드 접기에 부드러운 전환 애니메이션을 활성화합니다',
 			'meta.homeCardsManage' => '홈 카드 관리',
 			'meta.homeCardsManageTips' => '홈 화면에 표시할 카드 모듈 및 표시 상태 사용자 정의',
 			'meta.cardTrafficChart' => '트래픽 통계 차트',

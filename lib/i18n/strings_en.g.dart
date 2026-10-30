@@ -2212,6 +2212,8 @@ class Translations$meta$en {
 
 	/// en: 'Display dashboard cards and subscription lists side by side on wide screens'
 	String get sideBySideLayoutTips => 'Display dashboard cards and subscription lists side by side on wide screens';
+	String get uiAnimations => 'UI Animations';
+	String get uiAnimationsTips => 'Enable smooth transitions for page switching, status indicators, and card folding';
 
 	/// en: 'Dashboard Cards'
 	String get homeCardsManage => 'Dashboard Cards';
@@ -3316,6 +3318,8 @@ extension on Translations {
 			'meta.maxWebsitesReached' => 'Up to 6 test websites can be added',
 			'meta.sideBySideLayout' => 'Side-by-Side Layout',
 			'meta.sideBySideLayoutTips' => 'Display dashboard cards and subscription lists side by side on wide screens',
+			'meta.uiAnimations' => 'UI Animations',
+			'meta.uiAnimationsTips' => 'Enable smooth transitions for page switching, status indicators, and card folding',
 			'meta.homeCardsManage' => 'Dashboard Cards',
 			'meta.homeCardsManageTips' => 'Customize cards visibility on the home dashboard',
 			'meta.cardTrafficChart' => 'Traffic Statistics',

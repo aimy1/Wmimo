@@ -93,7 +93,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: AnimatedSize(
-          duration: ThemeDefine.kDurationView,
+          duration: ThemeDefine.durationView,
           curve: ThemeDefine.kCurveStandard,
           alignment: Alignment.topCenter,
           child: Column(
@@ -122,7 +122,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       AnimatedContainer(
-                        duration: ThemeDefine.kDurationState,
+                        duration: ThemeDefine.durationState,
                         width: 6,
                         height: 6,
                         decoration: BoxDecoration(
@@ -161,7 +161,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                       padding: const EdgeInsets.all(2),
                       child: AnimatedRotation(
                         turns: _isCollapsed ? 0.5 : 0.0,
-                        duration: ThemeDefine.kDurationState,
+                        duration: ThemeDefine.durationState,
                         curve: ThemeDefine.kCurveStandard,
                         child: Icon(
                           Icons.keyboard_arrow_up_rounded,

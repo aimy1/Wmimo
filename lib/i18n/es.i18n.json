@@ -724,6 +724,8 @@
     "maxWebsitesReached": "Se pueden agregar hasta 6 sitios web de prueba",
     "sideBySideLayout": "Diseño en paralelo",
     "sideBySideLayoutTips": "Muestra las tarjetas y suscripciones lado a lado en pantallas anchas",
+    "uiAnimations": "Animaciones de interfaz",
+    "uiAnimationsTips": "Activa transiciones fluidas al cambiar de página, indicadores de estado y plegar tarjetas",
     "homeCardsManage": "Tarjetas del Panel",
     "homeCardsManageTips": "Personaliza la visibilidad de las tarjetas en la pantalla principal",
     "cardTrafficChart": "Estadísticas de Tráfico",

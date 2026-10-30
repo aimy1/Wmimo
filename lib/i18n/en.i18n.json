@@ -724,6 +724,8 @@
     "maxWebsitesReached": "Up to 6 test websites can be added",
     "sideBySideLayout": "Side-by-Side Layout",
     "sideBySideLayoutTips": "Display dashboard cards and subscription lists side by side on wide screens",
+    "uiAnimations": "UI Animations",
+    "uiAnimationsTips": "Enable smooth transitions for page switching, status indicators, and card folding",
     "homeCardsManage": "Dashboard Cards",
     "homeCardsManageTips": "Customize cards visibility on the home dashboard",
     "cardTrafficChart": "Traffic Statistics",

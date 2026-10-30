@@ -846,6 +846,8 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get maxWebsitesReached => '最多支持添加 6 个测试网站';
 	@override String get sideBySideLayout => '并列排版';
 	@override String get sideBySideLayoutTips => '开启后首页卡片与订阅列表在宽屏下采用并列排版，关闭则保持单列垂直排版';
+	@override String get uiAnimations => '界面动画';
+	@override String get uiAnimationsTips => '开启后提供平滑的页面切换、状态指示与卡片折叠过渡动画';
 	@override String get homeCardsManage => '首页卡片管理';
 	@override String get homeCardsManageTips => '自定义首页显示的卡片模块与显隐状态';
 	@override String get cardTrafficChart => '流量统计图表';
@@ -1732,6 +1734,8 @@ extension on TranslationsZhCn {
 			'meta.maxWebsitesReached' => '最多支持添加 6 个测试网站',
 			'meta.sideBySideLayout' => '并列排版',
 			'meta.sideBySideLayoutTips' => '开启后首页卡片与订阅列表在宽屏下采用并列排版，关闭则保持单列垂直排版',
+			'meta.uiAnimations' => '界面动画',
+			'meta.uiAnimationsTips' => '开启后提供平滑的页面切换、状态指示与卡片折叠过渡动画',
 			'meta.homeCardsManage' => '首页卡片管理',
 			'meta.homeCardsManageTips' => '自定义首页显示的卡片模块与显隐状态',
 			'meta.cardTrafficChart' => '流量统计图表',

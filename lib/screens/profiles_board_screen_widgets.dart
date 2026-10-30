@@ -273,7 +273,7 @@ class ProfilesBoardItem extends StatelessWidget {
     }
 
     return AnimatedContainer(
-      duration: ThemeDefine.kDurationState,
+      duration: ThemeDefine.durationState,
       curve: ThemeDefine.kCurveStandard,
       margin: const EdgeInsets.only(bottom: 12),
       constraints: const BoxConstraints(minHeight: 146),
@@ -317,7 +317,7 @@ class ProfilesBoardItem extends StatelessWidget {
                   children: [
                     // Provider/Type Leading Icon
                     AnimatedContainer(
-                      duration: ThemeDefine.kDurationState,
+                      duration: ThemeDefine.durationState,
                       curve: ThemeDefine.kCurveStandard,
                       width: 38,
                       height: 38,
@@ -719,7 +719,7 @@ class ProfilesBoardItem extends StatelessWidget {
                       begin: 0.0,
                       end: hasTraffic ? progress : 0.0,
                     ),
-                    duration: const Duration(milliseconds: 500),
+                    duration: ThemeDefine.duration(const Duration(milliseconds: 500)),
                     curve: ThemeDefine.kCurveStandard,
                     builder: (context, animatedValue, _) {
                       return LinearProgressIndicator(

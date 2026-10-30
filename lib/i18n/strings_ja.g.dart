@@ -846,6 +846,8 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get maxWebsitesReached => '最大6つのテストWebサイトを追加できます';
 	@override String get sideBySideLayout => '並列レイアウト';
 	@override String get sideBySideLayoutTips => 'ワイド画面でホームカードとサブスクリプションリストを並列表示します';
+	@override String get uiAnimations => 'UIアニメーション';
+	@override String get uiAnimationsTips => 'ページ切り替え、ステータス表示、カード折りたたみのスムーズなアニメーションを有効にします';
 	@override String get homeCardsManage => 'ホームカード管理';
 	@override String get homeCardsManageTips => 'ホーム画面に表示するカードの表示・非表示をカスタマイズします';
 	@override String get cardTrafficChart => 'トラフィック統計グラフ';
@@ -1732,6 +1734,8 @@ extension on TranslationsJa {
 			'meta.maxWebsitesReached' => '最大6つのテストWebサイトを追加できます',
 			'meta.sideBySideLayout' => '並列レイアウト',
 			'meta.sideBySideLayoutTips' => 'ワイド画面でホームカードとサブスクリプションリストを並列表示します',
+			'meta.uiAnimations' => 'UIアニメーション',
+			'meta.uiAnimationsTips' => 'ページ切り替え、ステータス表示、カード折りたたみのスムーズなアニメーションを有効にします',
 			'meta.homeCardsManage' => 'ホームカード管理',
 			'meta.homeCardsManageTips' => 'ホーム画面に表示するカードの表示・非表示をカスタマイズします',
 			'meta.cardTrafficChart' => 'トラフィック統計グラフ',

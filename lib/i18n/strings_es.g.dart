@@ -846,6 +846,8 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get maxWebsitesReached => 'Se pueden agregar hasta 6 sitios web de prueba';
 	@override String get sideBySideLayout => 'Diseño en paralelo';
 	@override String get sideBySideLayoutTips => 'Muestra las tarjetas y suscripciones lado a lado en pantallas anchas';
+	@override String get uiAnimations => 'Animaciones de interfaz';
+	@override String get uiAnimationsTips => 'Activa transiciones fluidas al cambiar de página, indicadores de estado y plegar tarjetas';
 	@override String get homeCardsManage => 'Tarjetas del Panel';
 	@override String get homeCardsManageTips => 'Personaliza la visibilidad de las tarjetas en la pantalla principal';
 	@override String get cardTrafficChart => 'Estadísticas de Tráfico';
@@ -1732,6 +1734,8 @@ extension on TranslationsEs {
 			'meta.maxWebsitesReached' => 'Se pueden agregar hasta 6 sitios web de prueba',
 			'meta.sideBySideLayout' => 'Diseño en paralelo',
 			'meta.sideBySideLayoutTips' => 'Muestra las tarjetas y suscripciones lado a lado en pantallas anchas',
+			'meta.uiAnimations' => 'Animaciones de interfaz',
+			'meta.uiAnimationsTips' => 'Activa transiciones fluidas al cambiar de página, indicadores de estado y plegar tarjetas',
 			'meta.homeCardsManage' => 'Tarjetas del Panel',
 			'meta.homeCardsManageTips' => 'Personaliza la visibilidad de las tarjetas en la pantalla principal',
 			'meta.cardTrafficChart' => 'Estadísticas de Tráfico',

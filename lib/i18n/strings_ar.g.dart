@@ -846,6 +846,8 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get maxWebsitesReached => 'يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى';
 	@override String get sideBySideLayout => 'تخطيط متوازي';
 	@override String get sideBySideLayoutTips => 'عرض البطاقات والاشتراكات جنباً إلى جنب على الشاشات العريضة';
+	@override String get uiAnimations => 'رسوميات الواجهة المتحركة';
+	@override String get uiAnimationsTips => 'تفعيل الانتقالات السلسة عند تبديل الصفحات ومؤشرات الحالة وطي البطاقات';
 	@override String get homeCardsManage => 'إدارة بطاقات الواجهة';
 	@override String get homeCardsManageTips => 'تخصيص البطاقات المعروضة في الشاشة الرئيسية';
 	@override String get cardTrafficChart => 'مخطط حركة المرور';
@@ -1732,6 +1734,8 @@ extension on TranslationsAr {
 			'meta.maxWebsitesReached' => 'يمكن إضافة ما يصل إلى 6 مواقع اختبار كحد أقصى',
 			'meta.sideBySideLayout' => 'تخطيط متوازي',
 			'meta.sideBySideLayoutTips' => 'عرض البطاقات والاشتراكات جنباً إلى جنب على الشاشات العريضة',
+			'meta.uiAnimations' => 'رسوميات الواجهة المتحركة',
+			'meta.uiAnimationsTips' => 'تفعيل الانتقالات السلسة عند تبديل الصفحات ومؤشرات الحالة وطي البطاقات',
 			'meta.homeCardsManage' => 'إدارة بطاقات الواجهة',
 			'meta.homeCardsManageTips' => 'تخصيص البطاقات المعروضة في الشاشة الرئيسية',
 			'meta.cardTrafficChart' => 'مخطط حركة المرور',

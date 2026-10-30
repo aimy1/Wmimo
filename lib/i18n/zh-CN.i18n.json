@@ -724,6 +724,8 @@
     "maxWebsitesReached": "最多支持添加 6 个测试网站",
     "sideBySideLayout": "并列排版",
     "sideBySideLayoutTips": "开启后首页卡片与订阅列表在宽屏下采用并列排版，关闭则保持单列垂直排版",
+    "uiAnimations": "界面动画",
+    "uiAnimationsTips": "开启后提供平滑的页面切换、状态指示与卡片折叠过渡动画",
     "homeCardsManage": "首页卡片管理",
     "homeCardsManageTips": "自定义首页显示的卡片模块与显隐状态",
     "cardTrafficChart": "流量统计图表",

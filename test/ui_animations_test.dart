@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/animated_indexed_stack.dart';
 
@@ -24,13 +26,56 @@ class _StatefulCounterTabState extends State<_StatefulCounterTab> {
 }
 
 void main() {
-  test('ThemeDefine exposes unified motion tokens', () {
+  setUp(() {
+    SettingManager.getConfig().ui.enableAnimations = true;
+    SettingManager.notifyAnimationsChanged();
+  });
+
+  test('ThemeDefine exposes unified motion tokens and respects enableAnimations toggle', () {
     expect(ThemeDefine.kDurationMicro, const Duration(milliseconds: 150));
     expect(ThemeDefine.kDurationState, const Duration(milliseconds: 200));
     expect(ThemeDefine.kDurationView, const Duration(milliseconds: 220));
     expect(ThemeDefine.kCurveStandard, Curves.easeOutCubic);
     expect(ThemeDefine.kCurveEmphasized, Curves.easeOutQuart);
     expect(ThemeDefine.kCurveView, Curves.fastOutSlowIn);
+
+    // Enabled by default
+    expect(ThemeDefine.enableAnimations, isTrue);
+    expect(ThemeDefine.durationMicro, ThemeDefine.kDurationMicro);
+    expect(ThemeDefine.durationState, ThemeDefine.kDurationState);
+    expect(ThemeDefine.durationView, ThemeDefine.kDurationView);
+    expect(
+      ThemeDefine.duration(const Duration(milliseconds: 500)),
+      const Duration(milliseconds: 500),
+    );
+
+    // Disable via SettingManager
+    SettingManager.getConfig().ui.enableAnimations = false;
+    SettingManager.notifyAnimationsChanged();
+
+    expect(ThemeDefine.enableAnimations, isFalse);
+    expect(ThemeDefine.durationMicro, Duration.zero);
+    expect(ThemeDefine.durationState, Duration.zero);
+    expect(ThemeDefine.durationView, Duration.zero);
+    expect(
+      ThemeDefine.duration(const Duration(milliseconds: 500)),
+      Duration.zero,
+    );
+
+    // Serialization round-trip
+    final json = SettingManager.getConfig().ui.toJson();
+    expect(json['enable_animations'], isFalse);
+    final restored = SettingConfigItemUI.fromJsonStatic(json);
+    expect(restored.enableAnimations, isFalse);
+    expect(ThemeDefine.enableAnimations, isFalse);
+  });
+
+  test('All 9 locales define uiAnimations and uiAnimationsTips', () async {
+    for (final locale in AppLocale.values) {
+      final t = await locale.build();
+      expect(t.meta.uiAnimations.trim().isNotEmpty, isTrue);
+      expect(t.meta.uiAnimationsTips.trim().isNotEmpty, isTrue);
+    }
   });
 
   testWidgets(
@@ -97,19 +142,16 @@ void main() {
   );
 
   testWidgets(
-    'AnimatedIndexedStack respects MediaQuery disableAnimations',
+    'AnimatedIndexedStack skips animation when enableAnimations is false',
     (tester) async {
+      SettingManager.getConfig().ui.enableAnimations = false;
+      SettingManager.notifyAnimationsChanged();
+
       int currentIndex = 0;
       late StateSetter setHostState;
 
       await tester.pumpWidget(
         MaterialApp(
-          builder: (context, child) {
-            return MediaQuery(
-              data: MediaQuery.of(context).copyWith(disableAnimations: true),
-              child: child!,
-            );
-          },
           home: StatefulBuilder(
             builder: (context, setState) {
               setHostState = setState;

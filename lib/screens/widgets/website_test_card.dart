@@ -990,7 +990,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: AnimatedSize(
-          duration: ThemeDefine.kDurationView,
+          duration: ThemeDefine.durationView,
           curve: ThemeDefine.kCurveStandard,
           alignment: Alignment.topCenter,
           child: Column(
@@ -1097,7 +1097,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                     padding: const EdgeInsets.all(2),
                     child: AnimatedRotation(
                       turns: _isCollapsed ? 0.5 : 0.0,
-                      duration: ThemeDefine.kDurationState,
+                      duration: ThemeDefine.durationState,
                       curve: ThemeDefine.kCurveStandard,
                       child: Icon(
                         Icons.keyboard_arrow_up_rounded,
@@ -1269,7 +1269,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
     }
 
     return AnimatedSwitcher(
-      duration: ThemeDefine.kDurationMicro,
+      duration: ThemeDefine.durationMicro,
       child: badgeContent,
     );
   }

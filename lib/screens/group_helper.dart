@@ -570,6 +570,7 @@ class GroupHelper {
               TextFieldEx.popupEdit = setting.ui.tvMode;
               await SettingManager.save();
               SettingManager.notifySideBySideLayoutChanged();
+              SettingManager.notifyAnimationsChanged();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(tcontext.meta.resetSuccess)),
@@ -684,6 +685,19 @@ class GroupHelper {
               setting.ui.sideBySideLayout = value;
               await SettingManager.save();
               SettingManager.notifySideBySideLayoutChanged();
+              setstate?.call();
+            },
+          ),
+        ),
+        GroupItemOptions(
+          switchOptions: GroupItemSwitchOptions(
+            name: tcontext.meta.uiAnimations,
+            tips: tcontext.meta.uiAnimationsTips,
+            switchValue: setting.ui.enableAnimations,
+            onSwitch: (bool value) async {
+              setting.ui.enableAnimations = value;
+              await SettingManager.save();
+              SettingManager.notifyAnimationsChanged();
               setstate?.call();
             },
           ),

@@ -282,7 +282,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                       child: Row(
                         children: [
                           AnimatedContainer(
-                            duration: const Duration(milliseconds: 240),
+                            duration: ThemeDefine.duration(const Duration(milliseconds: 240)),
                             curve: ThemeDefine.kCurveStandard,
                             width: 8,
                             height: 8,
@@ -307,7 +307,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                           ),
                           const SizedBox(width: 8),
                           AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 180),
+                            duration: ThemeDefine.duration(const Duration(milliseconds: 180)),
                             switchInCurve: ThemeDefine.kCurveStandard,
                             switchOutCurve: Curves.easeInCubic,
                             transitionBuilder: (child, animation) {
@@ -388,7 +388,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: AnimatedSwitcher(
-                                      duration: const Duration(milliseconds: 180),
+                                      duration: ThemeDefine.duration(const Duration(milliseconds: 180)),
                                       switchInCurve: ThemeDefine.kCurveStandard,
                                       transitionBuilder: (child, animation) {
                                         return FadeTransition(
@@ -767,7 +767,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: AnimatedContainer(
-          duration: ThemeDefine.kDurationState,
+          duration: ThemeDefine.durationState,
           curve: ThemeDefine.kCurveStandard,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           decoration: BoxDecoration(
@@ -785,7 +785,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           child: Row(
             children: [
               AnimatedContainer(
-                duration: ThemeDefine.kDurationState,
+                duration: ThemeDefine.durationState,
                 curve: ThemeDefine.kCurveStandard,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
@@ -990,7 +990,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         child: AnimatedSize(
-          duration: ThemeDefine.kDurationView,
+          duration: ThemeDefine.durationView,
           curve: ThemeDefine.kCurveStandard,
           alignment: Alignment.topCenter,
           child: Column(
@@ -1029,7 +1029,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                         padding: const EdgeInsets.all(2),
                         child: AnimatedRotation(
                           turns: isCollapsed ? 0.5 : 0.0,
-                          duration: ThemeDefine.kDurationState,
+                          duration: ThemeDefine.durationState,
                           curve: ThemeDefine.kCurveStandard,
                           child: Icon(
                             Icons.keyboard_arrow_up_rounded,
@@ -1143,7 +1143,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           setState(() {});
         },
         child: AnimatedSize(
-          duration: ThemeDefine.kDurationView,
+          duration: ThemeDefine.durationView,
           curve: ThemeDefine.kCurveStandard,
           alignment: Alignment.topCenter,
           child: Container(
@@ -1196,7 +1196,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                         padding: const EdgeInsets.all(2),
                         child: AnimatedRotation(
                           turns: isCollapsed ? 0.5 : 0.0,
-                          duration: ThemeDefine.kDurationState,
+                          duration: ThemeDefine.durationState,
                           curve: ThemeDefine.kCurveStandard,
                           child: Icon(
                             Icons.keyboard_arrow_up_rounded,
@@ -1215,7 +1215,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     borderRadius: BorderRadius.circular(2),
                     child: TweenAnimationBuilder<double>(
                       tween: Tween<double>(begin: 0.0, end: percent),
-                      duration: const Duration(milliseconds: 500),
+                      duration: ThemeDefine.duration(const Duration(milliseconds: 500)),
                       curve: ThemeDefine.kCurveStandard,
                       builder: (context, value, _) {
                         return LinearProgressIndicator(
@@ -1234,7 +1234,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     borderRadius: BorderRadius.circular(4),
                     child: TweenAnimationBuilder<double>(
                       tween: Tween<double>(begin: 0.0, end: percent),
-                      duration: const Duration(milliseconds: 500),
+                      duration: ThemeDefine.duration(const Duration(milliseconds: 500)),
                       curve: ThemeDefine.kCurveStandard,
                       builder: (context, value, _) {
                         return LinearProgressIndicator(

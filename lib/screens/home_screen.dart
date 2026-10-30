@@ -409,7 +409,7 @@ class _HomeScreenState extends State<HomeScreen>
             }
           },
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
+            duration: ThemeDefine.duration(const Duration(milliseconds: 180)),
             curve: ThemeDefine.kCurveStandard,
             height: 40,
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -436,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen>
                     clipBehavior: Clip.none,
                     children: [
                       AnimatedSwitcher(
-                        duration: ThemeDefine.kDurationMicro,
+                        duration: ThemeDefine.durationMicro,
                         child: Icon(
                           isSelected ? selectedIcon : icon,
                           key: ValueKey<bool>(isSelected),
@@ -477,7 +477,7 @@ class _HomeScreenState extends State<HomeScreen>
                 const SizedBox(width: 11),
                 Expanded(
                   child: AnimatedDefaultTextStyle(
-                    duration: const Duration(milliseconds: 180),
+                    duration: ThemeDefine.duration(const Duration(milliseconds: 180)),
                     curve: ThemeDefine.kCurveStandard,
                     style: TextStyle(
                       fontSize: 13.5,
@@ -500,11 +500,11 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 AnimatedScale(
                   scale: isSelected ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 180),
+                  duration: ThemeDefine.duration(const Duration(milliseconds: 180)),
                   curve: ThemeDefine.kCurveEmphasized,
                   child: AnimatedOpacity(
                     opacity: isSelected ? 1.0 : 0.0,
-                    duration: ThemeDefine.kDurationMicro,
+                    duration: ThemeDefine.durationMicro,
                     child: Container(
                       width: 3,
                       height: 14,
@@ -556,7 +556,7 @@ class _HomeScreenState extends State<HomeScreen>
             }
           },
           child: AnimatedContainer(
-            duration: ThemeDefine.kDurationState,
+            duration: ThemeDefine.durationState,
             curve: ThemeDefine.kCurveStandard,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
@@ -571,7 +571,7 @@ class _HomeScreenState extends State<HomeScreen>
             child: Row(
               children: [
                 AnimatedContainer(
-                  duration: const Duration(milliseconds: 240),
+                  duration: ThemeDefine.duration(const Duration(milliseconds: 240)),
                   curve: ThemeDefine.kCurveStandard,
                   width: 8,
                   height: 8,
@@ -597,7 +597,7 @@ class _HomeScreenState extends State<HomeScreen>
                 const SizedBox(width: 8),
                 Expanded(
                   child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 180),
+                    duration: ThemeDefine.duration(const Duration(milliseconds: 180)),
                     switchInCurve: ThemeDefine.kCurveStandard,
                     switchOutCurve: Curves.easeInCubic,
                     layoutBuilder: (currentChild, previousChildren) {
@@ -634,7 +634,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
                 AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 180),
+                  duration: ThemeDefine.duration(const Duration(milliseconds: 180)),
                   transitionBuilder: (child, animation) {
                     return FadeTransition(
                       opacity: animation,
@@ -764,7 +764,7 @@ class _HomeScreenState extends State<HomeScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
+                        duration: ThemeDefine.duration(const Duration(milliseconds: 200)),
                         curve: Curves.easeOutCubic,
                         padding: EdgeInsets.symmetric(
                           horizontal: isSelected ? 16 : 0,

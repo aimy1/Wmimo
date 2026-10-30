@@ -724,6 +724,8 @@
     "maxWebsitesReached": "最大6つのテストWebサイトを追加できます",
     "sideBySideLayout": "並列レイアウト",
     "sideBySideLayoutTips": "ワイド画面でホームカードとサブスクリプションリストを並列表示します",
+    "uiAnimations": "UIアニメーション",
+    "uiAnimationsTips": "ページ切り替え、ステータス表示、カード折りたたみのスムーズなアニメーションを有効にします",
     "homeCardsManage": "ホームカード管理",
     "homeCardsManageTips": "ホーム画面に表示するカードの表示・非表示をカスタマイズします",
     "cardTrafficChart": "トラフィック統計グラフ",

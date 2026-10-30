@@ -724,6 +724,8 @@
     "maxWebsitesReached": "最多支援新增 6 個測試網站",
     "sideBySideLayout": "並列排版",
     "sideBySideLayoutTips": "開啟後首頁卡片與訂閱列表在寬螢幕下採用並列排版，關閉則保持單列垂直排版",
+    "uiAnimations": "介面動畫",
+    "uiAnimationsTips": "開啟後提供平滑的頁面切換、狀態指示與卡片摺疊過渡動畫",
     "homeCardsManage": "首頁卡片管理",
     "homeCardsManageTips": "自訂首頁顯示的卡片模組與顯隱狀態",
     "cardTrafficChart": "流量統計圖表",

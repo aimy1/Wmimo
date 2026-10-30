@@ -846,6 +846,8 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get maxWebsitesReached => 'حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است';
 	@override String get sideBySideLayout => 'طرح‌بندی موازی';
 	@override String get sideBySideLayoutTips => 'نمایش کارت‌ها و اشتراک‌ها در کنار هم در صفحه‌های عریض';
+	@override String get uiAnimations => 'انیمیشن‌های رابط کاربری';
+	@override String get uiAnimationsTips => 'فعال‌سازی انتقال‌های روان هنگام جابجایی صفحات، نشانگرهای وضعیت و جمع‌شدن کارت‌ها';
 	@override String get homeCardsManage => 'مدیریت کارت‌های صفحه اصلی';
 	@override String get homeCardsManageTips => 'سفارشی‌سازی نمایش کارت‌ها در صفحه اصلی';
 	@override String get cardTrafficChart => 'نمودار ترافیک';
@@ -1732,6 +1734,8 @@ extension on TranslationsFa {
 			'meta.maxWebsitesReached' => 'حداکثر ۶ وب‌سایت آزمایشی قابل افزودن است',
 			'meta.sideBySideLayout' => 'طرح‌بندی موازی',
 			'meta.sideBySideLayoutTips' => 'نمایش کارت‌ها و اشتراک‌ها در کنار هم در صفحه‌های عریض',
+			'meta.uiAnimations' => 'انیمیشن‌های رابط کاربری',
+			'meta.uiAnimationsTips' => 'فعال‌سازی انتقال‌های روان هنگام جابجایی صفحات، نشانگرهای وضعیت و جمع‌شدن کارت‌ها',
 			'meta.homeCardsManage' => 'مدیریت کارت‌های صفحه اصلی',
 			'meta.homeCardsManageTips' => 'سفارشی‌سازی نمایش کارت‌ها در صفحه اصلی',
 			'meta.cardTrafficChart' => 'نمودار ترافیک',

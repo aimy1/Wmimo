@@ -1737,7 +1737,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           });
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: ThemeDefine.duration(const Duration(milliseconds: 200)),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
             color: isDelayAsc
@@ -1796,7 +1796,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           });
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: ThemeDefine.duration(const Duration(milliseconds: 200)),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
             color: _hideTimeoutNodes
@@ -1865,7 +1865,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               });
             },
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+              duration: ThemeDefine.duration(const Duration(milliseconds: 200)),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: isSelected
@@ -2316,7 +2316,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       borderRadius: BorderRadius.circular(6),
       onTap: () => _changeMode(modeKey),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
+        duration: ThemeDefine.duration(const Duration(milliseconds: 160)),
         curve: ThemeDefine.kCurveStandard,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
@@ -2324,7 +2324,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           borderRadius: BorderRadius.circular(6),
         ),
         child: AnimatedDefaultTextStyle(
-          duration: const Duration(milliseconds: 160),
+          duration: ThemeDefine.duration(const Duration(milliseconds: 160)),
           curve: ThemeDefine.kCurveStandard,
           style: TextStyle(
             fontSize: 11.5,
@@ -2360,7 +2360,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           ),
         ),
         child: AnimatedSize(
-          duration: ThemeDefine.kDurationView,
+          duration: ThemeDefine.durationView,
           curve: ThemeDefine.kCurveStandard,
           alignment: Alignment.topCenter,
           child: Column(
@@ -2431,7 +2431,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 8),
                                 child: AnimatedSwitcher(
-                                  duration: ThemeDefine.kDurationMicro,
+                                  duration: ThemeDefine.durationMicro,
                                   layoutBuilder: (currentChild, previousChildren) {
                                     return Stack(
                                       alignment: AlignmentDirectional.centerStart,
@@ -2513,7 +2513,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       // Expand/Collapse Chevron
                       AnimatedRotation(
                         turns: isExpanded ? 0.0 : 0.5,
-                        duration: ThemeDefine.kDurationState,
+                        duration: ThemeDefine.durationState,
                         curve: ThemeDefine.kCurveStandard,
                         child: Icon(
                           Icons.keyboard_arrow_up_rounded,
@@ -2609,7 +2609,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             child: AnimatedSwitcher(
-              duration: ThemeDefine.kDurationMicro,
+              duration: ThemeDefine.durationMicro,
               child: isTesting
                   ? const SizedBox(
                       key: ValueKey<String>('testing'),
@@ -2655,7 +2655,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
             _showNodeDetailDialog(group, node);
           },
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 160),
+            duration: ThemeDefine.duration(const Duration(milliseconds: 160)),
             curve: ThemeDefine.kCurveStandard,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
@@ -2691,7 +2691,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       AnimatedDefaultTextStyle(
-                        duration: const Duration(milliseconds: 160),
+                        duration: ThemeDefine.duration(const Duration(milliseconds: 160)),
                         curve: ThemeDefine.kCurveStandard,
                         style: TextStyle(
                           fontSize: 12,

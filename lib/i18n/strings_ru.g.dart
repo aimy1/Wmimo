@@ -846,6 +846,8 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get maxWebsitesReached => 'Можно добавить не более 6 тестовых сайтов';
 	@override String get sideBySideLayout => 'Параллельный макет';
 	@override String get sideBySideLayoutTips => 'Отображать карточки и подписки бок о бок на широких экранах';
+	@override String get uiAnimations => 'Анимация интерфейса';
+	@override String get uiAnimationsTips => 'Плавная анимация переключения страниц, индикаторов состояния и сворачивания карточек';
 	@override String get homeCardsManage => 'Карточки главного экрана';
 	@override String get homeCardsManageTips => 'Настроить видимость карточек на главном экране';
 	@override String get cardTrafficChart => 'График трафика';
@@ -1732,6 +1734,8 @@ extension on TranslationsRu {
 			'meta.maxWebsitesReached' => 'Можно добавить не более 6 тестовых сайтов',
 			'meta.sideBySideLayout' => 'Параллельный макет',
 			'meta.sideBySideLayoutTips' => 'Отображать карточки и подписки бок о бок на широких экранах',
+			'meta.uiAnimations' => 'Анимация интерфейса',
+			'meta.uiAnimationsTips' => 'Плавная анимация переключения страниц, индикаторов состояния и сворачивания карточек',
 			'meta.homeCardsManage' => 'Карточки главного экрана',
 			'meta.homeCardsManageTips' => 'Настроить видимость карточек на главном экране',
 			'meta.cardTrafficChart' => 'График трафика',

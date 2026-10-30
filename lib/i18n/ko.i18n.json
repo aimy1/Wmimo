@@ -724,6 +724,8 @@
     "maxWebsitesReached": "테스트 웹사이트는 최대 6개까지 추가할 수 있습니다",
     "sideBySideLayout": "병렬 레이아웃",
     "sideBySideLayoutTips": "와이드 화면에서 홈 카드 및 구독 목록을 병렬로 표시합니다",
+    "uiAnimations": "UI 애니메이션",
+    "uiAnimationsTips": "페이지 전환, 상태 표시기 및 카드 접기에 부드러운 전환 애니메이션을 활성화합니다",
     "homeCardsManage": "홈 카드 관리",
     "homeCardsManageTips": "홈 화면에 표시할 카드 모듈 및 표시 상태 사용자 정의",
     "cardTrafficChart": "트래픽 통계 차트",

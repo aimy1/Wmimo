@@ -61,7 +61,8 @@ class _AnimatedIndexedStackState extends State<AnimatedIndexedStack>
     }
     if (oldWidget.index != widget.index) {
       final disableAnimations =
-          MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+          !ThemeDefine.enableAnimations ||
+          (MediaQuery.maybeDisableAnimationsOf(context) ?? false);
       if (disableAnimations) {
         _controller.value = 1.0;
       } else {

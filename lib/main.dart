@@ -289,10 +289,17 @@ class MyAppState extends State<MyApp>
     }
   }
 
+  void _onAnimationsChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _themes.addListener(_onThemeChanged);
+    SettingManager.onAnimationsChanged.add(_onAnimationsChanged);
     _themes.setTheme(SettingManager.getConfig().ui.theme, false);
     WidgetsBinding.instance.addObserver(this);
     if (PlatformUtils.isPC()) {
@@ -350,6 +357,7 @@ class MyAppState extends State<MyApp>
   @override
   void dispose() {
     _themes.removeListener(_onThemeChanged);
+    SettingManager.onAnimationsChanged.remove(_onAnimationsChanged);
     AppLifecycleStateNofity.uninit();
     WidgetsBinding.instance.removeObserver(this);
     if (PlatformUtils.isPC()) {
@@ -430,16 +438,20 @@ class MyAppState extends State<MyApp>
                       startFailedReasonDesc: startFailedReasonDesc,
                     )
                   : HomeScreen(launchUrl: schemeArg.trim()),
-              builder: SettingManager.getConfig().ui.disableFontScaler
-                  ? (context, widget) {
-                      return MediaQuery(
-                        data: MediaQuery.of(
-                          context,
-                        ).copyWith(textScaler: TextScaler.noScaling),
-                        child: widget!,
-                      );
-                    }
-                  : null,
+              builder: (context, widget) {
+                final ui = SettingManager.getConfig().ui;
+                if (!ui.disableFontScaler && ui.enableAnimations) {
+                  return widget!;
+                }
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(
+                    textScaler:
+                        ui.disableFontScaler ? TextScaler.noScaling : null,
+                    disableAnimations: !ui.enableAnimations ? true : null,
+                  ),
+                  child: widget!,
+                );
+              },
               themeMode: appTheme.themeMode(),
               theme: appTheme.themeData(context),
               darkTheme: ThemeDataDark.theme(context),

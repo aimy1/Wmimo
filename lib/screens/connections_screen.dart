@@ -791,7 +791,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
           });
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
+          duration: ThemeDefine.duration(const Duration(milliseconds: 160)),
           curve: ThemeDefine.kCurveStandard,
           height: 38,
           padding: const EdgeInsets.symmetric(horizontal: 11),
@@ -809,7 +809,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
             ),
           ),
           child: AnimatedDefaultTextStyle(
-            duration: const Duration(milliseconds: 160),
+            duration: ThemeDefine.duration(const Duration(milliseconds: 160)),
             curve: ThemeDefine.kCurveStandard,
             style: TextStyle(
               fontSize: 12,

@@ -35,6 +35,7 @@ class SettingConfigItemUI {
   bool perAppHideAppIcon = false;
   bool delayTestSort = false;
   bool sideBySideLayout = true;
+  bool enableAnimations = true;
   bool showTrafficChart = true;
   bool showWebsiteTest = true;
   bool showIpInfo = true;
@@ -55,6 +56,7 @@ class SettingConfigItemUI {
     'perapp_hide_app_icon': perAppHideAppIcon,
     'delay_test_sort': delayTestSort,
     'side_by_side_layout': sideBySideLayout,
+    'enable_animations': enableAnimations,
     'show_traffic_chart': showTrafficChart,
     'show_website_test': showWebsiteTest,
     'show_ip_info': showIpInfo,
@@ -78,6 +80,8 @@ class SettingConfigItemUI {
     perAppHideAppIcon = map["perapp_hide_app_icon"] ?? false;
     delayTestSort = map["delay_test_sort"] ?? false;
     sideBySideLayout = map["side_by_side_layout"] ?? true;
+    enableAnimations = map["enable_animations"] ?? true;
+    ThemeDefine.enableAnimations = enableAnimations;
     showTrafficChart = map["show_traffic_chart"] ?? true;
     showWebsiteTest = map["show_website_test"] ?? true;
     showIpInfo = map["show_ip_info"] ?? true;
@@ -356,6 +360,16 @@ class SettingManager {
     }
   }
 
+  static final List<void Function()> onAnimationsChanged = [];
+  static void notifyAnimationsChanged() {
+    ThemeDefine.enableAnimations = _config.ui.enableAnimations;
+    for (final cb in onAnimationsChanged) {
+      try {
+        cb();
+      } catch (_) {}
+    }
+  }
+
   static bool _saving = false;
   static bool _hasPendingSave = false;
   static SettingConfig _config = SettingConfig();
@@ -469,6 +483,7 @@ class SettingManager {
     _config = SettingConfig();
     _config.languageTag = languageTag;
     _config.window = window;
+    ThemeDefine.enableAnimations = _config.ui.enableAnimations;
   }
 
   static SettingConfig getConfig() {

@@ -846,6 +846,8 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get maxWebsitesReached => '最多支援新增 6 個測試網站';
 	@override String get sideBySideLayout => '並列排版';
 	@override String get sideBySideLayoutTips => '開啟後首頁卡片與訂閱列表在寬螢幕下採用並列排版，關閉則保持單列垂直排版';
+	@override String get uiAnimations => '介面動畫';
+	@override String get uiAnimationsTips => '開啟後提供平滑的頁面切換、狀態指示與卡片摺疊過渡動畫';
 	@override String get homeCardsManage => '首頁卡片管理';
 	@override String get homeCardsManageTips => '自訂首頁顯示的卡片模組與顯隱狀態';
 	@override String get cardTrafficChart => '流量統計圖表';
@@ -1732,6 +1734,8 @@ extension on TranslationsZhTw {
 			'meta.maxWebsitesReached' => '最多支援新增 6 個測試網站',
 			'meta.sideBySideLayout' => '並列排版',
 			'meta.sideBySideLayoutTips' => '開啟後首頁卡片與訂閱列表在寬螢幕下採用並列排版，關閉則保持單列垂直排版',
+			'meta.uiAnimations' => '介面動畫',
+			'meta.uiAnimationsTips' => '開啟後提供平滑的頁面切換、狀態指示與卡片摺疊過渡動畫',
 			'meta.homeCardsManage' => '首頁卡片管理',
 			'meta.homeCardsManageTips' => '自訂首頁顯示的卡片模組與顯隱狀態',
 			'meta.cardTrafficChart' => '流量統計圖表',

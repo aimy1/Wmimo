@@ -46,9 +46,21 @@ class ThemeDefine {
   );
 
   // Unified Motion Tokens
+  static bool enableAnimations = true;
+
   static const Duration kDurationMicro = Duration(milliseconds: 150);
   static const Duration kDurationState = Duration(milliseconds: 200);
   static const Duration kDurationView = Duration(milliseconds: 220);
+
+  static Duration get durationMicro =>
+      enableAnimations ? kDurationMicro : Duration.zero;
+  static Duration get durationState =>
+      enableAnimations ? kDurationState : Duration.zero;
+  static Duration get durationView =>
+      enableAnimations ? kDurationView : Duration.zero;
+
+  static Duration duration(Duration d) =>
+      enableAnimations ? d : Duration.zero;
 
   static const Curve kCurveStandard = Curves.easeOutCubic;
   static const Curve kCurveEmphasized = Curves.easeOutQuart;
