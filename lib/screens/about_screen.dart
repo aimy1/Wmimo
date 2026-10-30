@@ -11,9 +11,10 @@ import 'package:wmimo/screens/donate_screen.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
 import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/group_screen.dart';
+import 'package:wmimo/screens/license_screen.dart';
 import 'package:wmimo/screens/qrcode_screen.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class AboutScreen extends LasyRenderingStatefulWidget {
@@ -43,44 +44,14 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
     final tcontext = Translations.of(context);
 
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: WmimoAppBar(
+        title: tcontext.meta.about,
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (ModalRoute.of(context)?.canPop ?? false)
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: const SizedBox(
-                          width: 36,
-                          height: 30,
-                          child: Icon(Icons.arrow_back_ios_outlined, size: 22),
-                        ),
-                      )
-                    else
-                      const SizedBox(width: 36, height: 30),
-                    Expanded(
-                      child: Text(
-                        tcontext.meta.about,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: ThemeConfig.kFontWeightTitle,
-                          fontSize: ThemeConfig.kFontSizeTitle,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 36, height: 30),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -213,24 +184,20 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
           name: tcontext.meta.openSourceLicense,
           text: "GPL-3.0",
           onPush: () async {
-            showLicensePage(
-              context: context,
-              applicationName: AppUtils.getName(),
-              applicationVersion: AppUtils.getFormattedVersion(),
-              applicationIcon: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Image.asset(
-                  'assets/images/app_icon_256.png',
-                  width: 56,
-                  height: 56,
-                  fit: BoxFit.contain,
+            Navigator.push(
+              targetCtx,
+              MaterialPageRoute(
+                settings: LicenseScreen.routSettings(),
+                builder: (context) => LicenseScreen(
+                  applicationName: AppUtils.getName(),
+                  applicationVersion: AppUtils.getFormattedVersion(),
+                  applicationLegalese:
+                      'Wmimo is licensed under the GNU General Public License v3.0 (GPL-3.0-or-later).\n'
+                      'Rust workspace crates: Dual-licensed under MIT OR Apache-2.0.\n'
+                      'Mihomo core: GPL-3.0-or-later.\n'
+                      'Third-party components: BSD-3-Clause, MIT, Apache-2.0.',
                 ),
               ),
-              applicationLegalese:
-                  'Wmimo is licensed under the GNU General Public License v3.0 (GPL-3.0-or-later).\n'
-                  'Rust workspace crates: Dual-licensed under MIT OR Apache-2.0.\n'
-                  'Mihomo core: GPL-3.0-or-later.\n'
-                  'Third-party components: BSD-3-Clause, MIT, Apache-2.0.',
             );
           },
         ),
