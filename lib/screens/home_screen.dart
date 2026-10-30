@@ -18,6 +18,7 @@ import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/mobile_permission_helper.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
+import 'package:wmimo/screens/widgets/animated_indexed_stack.dart';
 import 'package:wmimo/screens/widgets/desktop_window_caption_bar.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
@@ -379,9 +380,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2.5),
       child: Material(
-        color: isSelected
-            ? activeColor.withValues(alpha: isDark ? 0.18 : 0.12)
-            : Colors.transparent,
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(10),
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
@@ -409,10 +408,15 @@ class _HomeScreenState extends State<HomeScreen>
               });
             }
           },
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: ThemeDefine.kCurveStandard,
             height: 40,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
+              color: isSelected
+                  ? activeColor.withValues(alpha: isDark ? 0.18 : 0.12)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isSelected
@@ -431,10 +435,14 @@ class _HomeScreenState extends State<HomeScreen>
                     alignment: Alignment.center,
                     clipBehavior: Clip.none,
                     children: [
-                      Icon(
-                        isSelected ? selectedIcon : icon,
-                        size: 20,
-                        color: isSelected ? activeColor : inactiveIconColor,
+                      AnimatedSwitcher(
+                        duration: ThemeDefine.kDurationMicro,
+                        child: Icon(
+                          isSelected ? selectedIcon : icon,
+                          key: ValueKey<bool>(isSelected),
+                          size: 20,
+                          color: isSelected ? activeColor : inactiveIconColor,
+                        ),
                       ),
                       if (index == 4 &&
                           AutoUpdateManager.getVersionCheck().newVersion)
@@ -468,15 +476,9 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 const SizedBox(width: 11),
                 Expanded(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    strutStyle: const StrutStyle(
-                      fontSize: 13.5,
-                      height: 1.2,
-                      forceStrutHeight: true,
-                    ),
+                  child: AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 180),
+                    curve: ThemeDefine.kCurveStandard,
                     style: TextStyle(
                       fontSize: 13.5,
                       height: 1.2,
@@ -484,17 +486,35 @@ class _HomeScreenState extends State<HomeScreen>
                           isSelected ? FontWeight.w600 : FontWeight.w500,
                       color: isSelected ? activeColor : inactiveTextColor,
                     ),
-                  ),
-                ),
-                if (isSelected)
-                  Container(
-                    width: 3,
-                    height: 14,
-                    decoration: BoxDecoration(
-                      color: activeColor,
-                      borderRadius: BorderRadius.circular(1.5),
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      strutStyle: const StrutStyle(
+                        fontSize: 13.5,
+                        height: 1.2,
+                        forceStrutHeight: true,
+                      ),
                     ),
                   ),
+                ),
+                AnimatedScale(
+                  scale: isSelected ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 180),
+                  curve: ThemeDefine.kCurveEmphasized,
+                  child: AnimatedOpacity(
+                    opacity: isSelected ? 1.0 : 0.0,
+                    duration: ThemeDefine.kDurationMicro,
+                    child: Container(
+                      width: 3,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: activeColor,
+                        borderRadius: BorderRadius.circular(1.5),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -515,6 +535,9 @@ class _HomeScreenState extends State<HomeScreen>
     );
     final connecting = effectiveStatus.isTransitioning;
     final connected = effectiveStatus.isConnected;
+    final statusText = connecting
+        ? tcontext.meta.connecting
+        : (connected ? tcontext.meta.connected : tcontext.meta.disconnected);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
@@ -532,18 +555,24 @@ class _HomeScreenState extends State<HomeScreen>
               VpnActionHandler.vpnConnect?.call("sidebar", false);
             }
           },
-          child: Container(
+          child: AnimatedContainer(
+            duration: ThemeDefine.kDurationState,
+            curve: ThemeDefine.kCurveStandard,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: theme.dividerColor.withValues(alpha: 0.4),
+                color: connected
+                    ? ThemeDefine.kColorGreenBright.withValues(alpha: 0.35)
+                    : theme.dividerColor.withValues(alpha: 0.4),
                 width: 0.8,
               ),
             ),
             child: Row(
               children: [
-                Container(
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 240),
+                  curve: ThemeDefine.kCurveStandard,
                   width: 8,
                   height: 8,
                   decoration: BoxDecoration(
@@ -562,44 +591,78 @@ class _HomeScreenState extends State<HomeScreen>
                               spreadRadius: 1.5,
                             ),
                           ]
-                        : null,
+                        : const [],
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(
-                    connecting
-                        ? tcontext.meta.connecting
-                        : (connected
-                            ? tcontext.meta.connected
-                            : tcontext.meta.disconnected),
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 180),
+                    switchInCurve: ThemeDefine.kCurveStandard,
+                    switchOutCurve: Curves.easeInCubic,
+                    layoutBuilder: (currentChild, previousChildren) {
+                      return Stack(
+                        alignment: AlignmentDirectional.centerStart,
+                        children: <Widget>[
+                          ...previousChildren,
+                          if (currentChild != null) currentChild,
+                        ],
+                      );
+                    },
+                    transitionBuilder: (child, animation) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(0, 0.25),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Text(
+                      statusText,
+                      key: ValueKey<String>(statusText),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                if (connecting)
-                  const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      color: ThemeDefine.kColorGreenBright,
-                    ),
-                  )
-                else
-                  Icon(
-                    connected
-                        ? Icons.power_settings_new_rounded
-                        : Icons.play_arrow_rounded,
-                    size: 16,
-                    color: connected
-                        ? ThemeDefine.kColorGreenBright
-                        : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                  ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 180),
+                  transitionBuilder: (child, animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: ScaleTransition(scale: animation, child: child),
+                    );
+                  },
+                  child: connecting
+                      ? const SizedBox(
+                          key: ValueKey<String>('connecting'),
+                          width: 14,
+                          height: 14,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            color: ThemeDefine.kColorGreenBright,
+                          ),
+                        )
+                      : Icon(
+                          connected
+                              ? Icons.power_settings_new_rounded
+                              : Icons.play_arrow_rounded,
+                          key: ValueKey<bool>(connected),
+                          size: 16,
+                          color: connected
+                              ? ThemeDefine.kColorGreenBright
+                              : theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.5),
+                        ),
+                ),
               ],
             ),
           ),
@@ -939,7 +1002,7 @@ class _HomeScreenState extends State<HomeScreen>
                           if (PlatformUtils.isPC())
                             const DesktopWindowCaptionBar(),
                           Expanded(
-                            child: IndexedStack(
+                            child: AnimatedIndexedStack(
                               index: _currentNavIndex,
                               children: _tabPages,
                             ),
@@ -954,7 +1017,7 @@ class _HomeScreenState extends State<HomeScreen>
                     if (PlatformUtils.isPC())
                       const DesktopWindowCaptionBar(showLeadingLogo: true),
                     Expanded(
-                      child: IndexedStack(
+                      child: AnimatedIndexedStack(
                         index: _currentNavIndex,
                         children: _tabPages,
                       ),

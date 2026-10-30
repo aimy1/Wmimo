@@ -989,10 +989,14 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
+        child: AnimatedSize(
+          duration: ThemeDefine.kDurationView,
+          curve: ThemeDefine.kCurveStandard,
+          alignment: Alignment.topCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
             // 1. Header (matches IP Info header)
             Row(
               children: [
@@ -1091,12 +1095,15 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(2),
-                    child: Icon(
-                      _isCollapsed
-                          ? Icons.keyboard_arrow_down_rounded
-                          : Icons.keyboard_arrow_up_rounded,
-                      size: 20,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    child: AnimatedRotation(
+                      turns: _isCollapsed ? 0.5 : 0.0,
+                      duration: ThemeDefine.kDurationState,
+                      curve: ThemeDefine.kCurveStandard,
+                      child: Icon(
+                        Icons.keyboard_arrow_up_rounded,
+                        size: 20,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
                     ),
                   ),
                 ),
@@ -1176,14 +1183,17 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
             ),
             ],
           ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildLatencyBadge(WebsiteTarget target, Translations tcontext) {
+    Widget badgeContent;
     if (target.isTesting) {
-      return const SizedBox(
+      badgeContent = const SizedBox(
+        key: ValueKey<String>('testing'),
         height: 16,
         child: Center(
           child: SizedBox(
@@ -1196,10 +1206,9 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
           ),
         ),
       );
-    }
-
-    if (target.latency == null) {
-      return Container(
+    } else if (target.latency == null) {
+      badgeContent = Container(
+        key: const ValueKey<String>('untested'),
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
         decoration: BoxDecoration(
           color: ThemeDefine.kColorBlue.withValues(alpha: 0.12),
@@ -1214,10 +1223,9 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
           ),
         ),
       );
-    }
-
-    if (target.latency! < 0) {
-      return Container(
+    } else if (target.latency! < 0) {
+      badgeContent = Container(
+        key: const ValueKey<String>('timeout'),
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
         decoration: BoxDecoration(
           color: Colors.redAccent.withValues(alpha: 0.12),
@@ -1232,31 +1240,37 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
           ),
         ),
       );
-    }
+    } else {
+      Color badgeColor = ThemeDefine.kColorGreenBright;
+      if (target.latency! > 800) {
+        badgeColor = Colors.orange;
+      } else if (target.latency! > 300) {
+        badgeColor = Colors.lightGreen;
+      }
 
-    Color badgeColor = ThemeDefine.kColorGreenBright;
-    if (target.latency! > 800) {
-      badgeColor = Colors.orange;
-    } else if (target.latency! > 300) {
-      badgeColor = Colors.lightGreen;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1.5),
-      decoration: BoxDecoration(
-        color: badgeColor.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        '${target.latency} ms',
-        style: TextStyle(
-          fontSize: 9.5,
-          fontWeight: FontWeight.w700,
-          color: badgeColor,
-          fontFamily: 'monospace',
+      badgeContent = Container(
+        key: ValueKey<int>(target.latency!),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1.5),
+        decoration: BoxDecoration(
+          color: badgeColor.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(4),
         ),
-        maxLines: 1,
-      ),
+        child: Text(
+          '${target.latency} ms',
+          style: TextStyle(
+            fontSize: 9.5,
+            fontWeight: FontWeight.w700,
+            color: badgeColor,
+            fontFamily: 'monospace',
+          ),
+          maxLines: 1,
+        ),
+      );
+    }
+
+    return AnimatedSwitcher(
+      duration: ThemeDefine.kDurationMicro,
+      child: badgeContent,
     );
   }
 }

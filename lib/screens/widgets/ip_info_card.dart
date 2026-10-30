@@ -198,10 +198,14 @@ class _IpInfoCardState extends State<IpInfoCard> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
+        child: AnimatedSize(
+          duration: ThemeDefine.kDurationView,
+          curve: ThemeDefine.kCurveStandard,
+          alignment: Alignment.topCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
             // 1. Card Header
             Row(
               children: [
@@ -315,12 +319,15 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(2),
-                    child: Icon(
-                      _isCollapsed
-                          ? Icons.keyboard_arrow_down_rounded
-                          : Icons.keyboard_arrow_up_rounded,
-                      size: 20,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    child: AnimatedRotation(
+                      turns: _isCollapsed ? 0.5 : 0.0,
+                      duration: ThemeDefine.kDurationState,
+                      curve: ThemeDefine.kCurveStandard,
+                      child: Icon(
+                        Icons.keyboard_arrow_up_rounded,
+                        size: 20,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
                     ),
                   ),
                 ),
@@ -501,6 +508,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
               ),
             ],
           ],
+          ),
         ),
       ),
     );

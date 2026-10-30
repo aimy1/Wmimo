@@ -272,7 +272,9 @@ class ProfilesBoardItem extends StatelessWidget {
       }
     }
 
-    return Container(
+    return AnimatedContainer(
+      duration: ThemeDefine.kDurationState,
+      curve: ThemeDefine.kCurveStandard,
       margin: const EdgeInsets.only(bottom: 12),
       constraints: const BoxConstraints(minHeight: 146),
       decoration: BoxDecoration(
@@ -314,7 +316,9 @@ class ProfilesBoardItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Provider/Type Leading Icon
-                    Container(
+                    AnimatedContainer(
+                      duration: ThemeDefine.kDurationState,
+                      curve: ThemeDefine.kCurveStandard,
                       width: 38,
                       height: 38,
                       decoration: BoxDecoration(
@@ -710,21 +714,34 @@ class ProfilesBoardItem extends StatelessWidget {
                 const SizedBox(height: 12),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: hasTraffic ? progress : 0.0,
-                    minHeight: 5,
-                    backgroundColor: isDark
-                        ? const Color(0xFF334155).withValues(alpha: hasTraffic ? 1.0 : 0.45)
-                        : const Color(0xFFE2E8F0),
-                    valueColor: AlwaysStoppedAnimation(
-                      hasTraffic
-                          ? (progress > 0.9
-                              ? Colors.redAccent
-                              : (progress > 0.75
-                                  ? Colors.orangeAccent
-                                  : ThemeDefine.kColorBlue))
-                          : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween<double>(
+                      begin: 0.0,
+                      end: hasTraffic ? progress : 0.0,
                     ),
+                    duration: const Duration(milliseconds: 500),
+                    curve: ThemeDefine.kCurveStandard,
+                    builder: (context, animatedValue, _) {
+                      return LinearProgressIndicator(
+                        value: animatedValue,
+                        minHeight: 5,
+                        backgroundColor: isDark
+                            ? const Color(0xFF334155)
+                                .withValues(alpha: hasTraffic ? 1.0 : 0.45)
+                            : const Color(0xFFE2E8F0),
+                        valueColor: AlwaysStoppedAnimation(
+                          hasTraffic
+                              ? (progress > 0.9
+                                  ? Colors.redAccent
+                                  : (progress > 0.75
+                                      ? Colors.orangeAccent
+                                      : ThemeDefine.kColorBlue))
+                              : (isDark
+                                  ? const Color(0xFF475569)
+                                  : const Color(0xFFCBD5E1)),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 6),

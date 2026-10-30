@@ -44,4 +44,13 @@ class ThemeDefine {
   static const BorderRadius kButtonBorderRadius = BorderRadius.all(
     Radius.circular(kRadiusMedium),
   );
+
+  // Unified Motion Tokens
+  static const Duration kDurationMicro = Duration(milliseconds: 150);
+  static const Duration kDurationState = Duration(milliseconds: 200);
+  static const Duration kDurationView = Duration(milliseconds: 220);
+
+  static const Curve kCurveStandard = Curves.easeOutCubic;
+  static const Curve kCurveEmphasized = Curves.easeOutQuart;
+  static const Curve kCurveView = Curves.fastOutSlowIn;
 }

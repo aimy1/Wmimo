@@ -281,7 +281,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                     Expanded(
                       child: Row(
                         children: [
-                          Container(
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 240),
+                            curve: ThemeDefine.kCurveStandard,
                             width: 8,
                             height: 8,
                             decoration: BoxDecoration(
@@ -300,20 +302,42 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                         spreadRadius: 1.5,
                                       ),
                                     ]
-                                  : null,
+                                  : const [],
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            isTransitioning
-                                ? tcontext.meta.connecting
-                                : (connected
-                                    ? tcontext.meta.connected
-                                    : tcontext.meta.disconnected),
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.2,
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 180),
+                            switchInCurve: ThemeDefine.kCurveStandard,
+                            switchOutCurve: Curves.easeInCubic,
+                            transitionBuilder: (child, animation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0, 0.25),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: Text(
+                              isTransitioning
+                                  ? tcontext.meta.connecting
+                                  : (connected
+                                      ? tcontext.meta.connected
+                                      : tcontext.meta.disconnected),
+                              key: ValueKey<String>(
+                                isTransitioning
+                                    ? 'connecting'
+                                    : (connected ? 'connected' : 'disconnected'),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.2,
+                              ),
                             ),
                           ),
                           if (isTransitioning) ...[
@@ -363,30 +387,41 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                           .withValues(alpha: 0.05),
                                       borderRadius: BorderRadius.circular(6),
                                     ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            proxyName,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 11.5,
-                                              fontWeight: FontWeight.w600,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface
-                                                  .withValues(alpha: 0.85),
-                                              fontFamilyFallback: Platform.isWindows
-                                                  ? const ['Emoji']
-                                                  : null,
+                                    child: AnimatedSwitcher(
+                                      duration: const Duration(milliseconds: 180),
+                                      switchInCurve: ThemeDefine.kCurveStandard,
+                                      transitionBuilder: (child, animation) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        );
+                                      },
+                                      child: Row(
+                                        key: ValueKey<String>(proxyName),
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              proxyName,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 11.5,
+                                                fontWeight: FontWeight.w600,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface
+                                                    .withValues(alpha: 0.85),
+                                                fontFamilyFallback: Platform.isWindows
+                                                    ? const ['Emoji']
+                                                    : null,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  )
+                                  ),
                                 );
                               },
                             ),
@@ -731,7 +766,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,
-        child: Container(
+        child: AnimatedContainer(
+          duration: ThemeDefine.kDurationState,
+          curve: ThemeDefine.kCurveStandard,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           decoration: BoxDecoration(
             color: isDark
@@ -747,7 +784,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           ),
           child: Row(
             children: [
-              Container(
+              AnimatedContainer(
+                duration: ThemeDefine.kDurationState,
+                curve: ThemeDefine.kCurveStandard,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: (isActive ? iconColor : const Color(0xFF94A3B8))
@@ -937,6 +976,7 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
 
   Widget _buildQuickActionCard(BuildContext context, Translations tcontext) {
     final theme = Theme.of(context);
+    final isCollapsed = SettingManager.getConfig().ui.collapseQuickActions;
     return Card(
       elevation: 0,
       margin: EdgeInsets.zero,
@@ -949,94 +989,103 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.grid_view_rounded,
-                    size: 17,
-                    color: ThemeDefine.kColorBlue,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    tcontext.meta.quickActions,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.2,
+        child: AnimatedSize(
+          duration: ThemeDefine.kDurationView,
+          curve: ThemeDefine.kCurveStandard,
+          alignment: Alignment.topCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.grid_view_rounded,
+                      size: 17,
+                      color: ThemeDefine.kColorBlue,
                     ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(6),
-                    onTap: () {
-                      setState(() {
-                        final ui = SettingManager.getConfig().ui;
-                        ui.collapseQuickActions = !ui.collapseQuickActions;
-                        SettingManager.save();
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: Icon(
-                        SettingManager.getConfig().ui.collapseQuickActions
-                            ? Icons.keyboard_arrow_down_rounded
-                            : Icons.keyboard_arrow_up_rounded,
-                        size: 18,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                    const SizedBox(width: 6),
+                    Text(
+                      tcontext.meta.quickActions,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.2,
                       ),
                     ),
-                  ),
-                ],
+                    const Spacer(),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(6),
+                      onTap: () {
+                        setState(() {
+                          final ui = SettingManager.getConfig().ui;
+                          ui.collapseQuickActions = !ui.collapseQuickActions;
+                          SettingManager.save();
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: AnimatedRotation(
+                          turns: isCollapsed ? 0.5 : 0.0,
+                          duration: ThemeDefine.kDurationState,
+                          curve: ThemeDefine.kCurveStandard,
+                          child: Icon(
+                            Icons.keyboard_arrow_up_rounded,
+                            size: 18,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.55),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            if (!SettingManager.getConfig().ui.collapseQuickActions) ...[
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  _buildQuickActionTile(
-                    context: context,
-                    icon: Icons.policy_rounded,
-                    label: tcontext.meta.rules,
-                    onTap: _onTapRules,
-                  ),
-                  const SizedBox(width: 4),
-                  _buildQuickActionTile(
-                    context: context,
-                    icon: Icons.article_outlined,
-                    label: tcontext.meta.coreLog,
-                    onTap: _onTapLogs,
-                  ),
-                  const SizedBox(width: 4),
-                  _buildQuickActionTile(
-                    context: context,
-                    icon: Icons.network_check_rounded,
-                    label: tcontext.meta.networkCheck,
-                    onTap: _onTapNetCheck,
-                  ),
-                  const SizedBox(width: 4),
-                  _buildQuickActionTile(
-                    context: context,
-                    icon: Icons.speed_rounded,
-                    label: tcontext.meta.speedTest,
-                    onTap: _onTapSpeedTest,
-                  ),
-                  const SizedBox(width: 4),
-                  _buildQuickActionTile(
-                    context: context,
-                    icon: Icons.description_outlined,
-                    label: tcontext.meta.runtimeProfile,
-                    onTap: _onTapRunTimeProfile,
-                  ),
-                ],
-              ),
+              if (!isCollapsed) ...[
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    _buildQuickActionTile(
+                      context: context,
+                      icon: Icons.policy_rounded,
+                      label: tcontext.meta.rules,
+                      onTap: _onTapRules,
+                    ),
+                    const SizedBox(width: 4),
+                    _buildQuickActionTile(
+                      context: context,
+                      icon: Icons.article_outlined,
+                      label: tcontext.meta.coreLog,
+                      onTap: _onTapLogs,
+                    ),
+                    const SizedBox(width: 4),
+                    _buildQuickActionTile(
+                      context: context,
+                      icon: Icons.network_check_rounded,
+                      label: tcontext.meta.networkCheck,
+                      onTap: _onTapNetCheck,
+                    ),
+                    const SizedBox(width: 4),
+                    _buildQuickActionTile(
+                      context: context,
+                      icon: Icons.speed_rounded,
+                      label: tcontext.meta.speedTest,
+                      onTap: _onTapSpeedTest,
+                    ),
+                    const SizedBox(width: 4),
+                    _buildQuickActionTile(
+                      context: context,
+                      icon: Icons.description_outlined,
+                      label: tcontext.meta.runtimeProfile,
+                      onTap: _onTapRunTimeProfile,
+                    ),
+                  ],
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -1093,137 +1142,164 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           );
           setState(() {});
         },
-        child: Container(
-          constraints: BoxConstraints(minHeight: isCollapsed ? 44 : 102),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.pie_chart_outline_rounded,
-                    size: 15,
-                    color: theme.colorScheme.primary,
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      '${tcontext.meta.planUsage}: $usedStr / $totalStr',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '${(percent * 100).toStringAsFixed(1)}%',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: statusColor,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(6),
-                    onTap: () {
-                      setState(() {
-                        final ui = SettingManager.getConfig().ui;
-                        ui.collapseSubscription = !ui.collapseSubscription;
-                        SettingManager.save();
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: Icon(
-                        isCollapsed
-                            ? Icons.keyboard_arrow_down_rounded
-                            : Icons.keyboard_arrow_up_rounded,
-                        size: 18,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              if (isCollapsed) ...[
-                const SizedBox(height: 5),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(2),
-                  child: LinearProgressIndicator(
-                    value: percent,
-                    minHeight: 3,
-                    backgroundColor: (isDark ? Colors.white : Colors.black)
-                        .withValues(alpha: 0.08),
-                    valueColor: AlwaysStoppedAnimation<Color>(statusColor),
-                  ),
-                ),
-              ] else ...[
-                const SizedBox(height: 8),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: percent,
-                    minHeight: 6,
-                    backgroundColor: (isDark ? Colors.white : Colors.black)
-                        .withValues(alpha: 0.08),
-                    valueColor: AlwaysStoppedAnimation<Color>(statusColor),
-                  ),
-                ),
-                const SizedBox(height: 8),
+        child: AnimatedSize(
+          duration: ThemeDefine.kDurationView,
+          curve: ThemeDefine.kCurveStandard,
+          alignment: Alignment.topCenter,
+          child: Container(
+            constraints: BoxConstraints(minHeight: isCollapsed ? 44 : 102),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Flexible(
+                    Icon(
+                      Icons.pie_chart_outline_rounded,
+                      size: 15,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
                       child: Text(
-                        '${tcontext.meta.remaining}: $remainingStr',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        '${tcontext.meta.planUsage}: $usedStr / $totalStr',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (expireInfo != null) ...[
-                      const SizedBox(width: 8),
-                      Tooltip(
-                        message: '${tcontext.meta.expireTime}: ${expireInfo.item2}',
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.event_outlined,
-                              size: 12,
-                              color: expireInfo.item1
-                                  ? Colors.red
-                                  : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                            ),
-                            const SizedBox(width: 3),
-                            Text(
-                              expireInfo.item2,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: expireInfo.item1
-                                    ? Colors.red
-                                    : theme.colorScheme.onSurface.withValues(alpha: 0.65),
-                              ),
-                            ),
-                          ],
+                    const SizedBox(width: 6),
+                    Text(
+                      '${(percent * 100).toStringAsFixed(1)}%',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: statusColor,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(6),
+                      onTap: () {
+                        setState(() {
+                          final ui = SettingManager.getConfig().ui;
+                          ui.collapseSubscription = !ui.collapseSubscription;
+                          SettingManager.save();
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: AnimatedRotation(
+                          turns: isCollapsed ? 0.5 : 0.0,
+                          duration: ThemeDefine.kDurationState,
+                          curve: ThemeDefine.kCurveStandard,
+                          child: Icon(
+                            Icons.keyboard_arrow_up_rounded,
+                            size: 18,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.55),
+                          ),
                         ),
                       ),
-                    ],
+                    ),
                   ],
                 ),
+                if (isCollapsed) ...[
+                  const SizedBox(height: 5),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(2),
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0.0, end: percent),
+                      duration: const Duration(milliseconds: 500),
+                      curve: ThemeDefine.kCurveStandard,
+                      builder: (context, value, _) {
+                        return LinearProgressIndicator(
+                          value: value,
+                          minHeight: 3,
+                          backgroundColor: (isDark ? Colors.white : Colors.black)
+                              .withValues(alpha: 0.08),
+                          valueColor: AlwaysStoppedAnimation<Color>(statusColor),
+                        );
+                      },
+                    ),
+                  ),
+                ] else ...[
+                  const SizedBox(height: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0.0, end: percent),
+                      duration: const Duration(milliseconds: 500),
+                      curve: ThemeDefine.kCurveStandard,
+                      builder: (context, value, _) {
+                        return LinearProgressIndicator(
+                          value: value,
+                          minHeight: 6,
+                          backgroundColor: (isDark ? Colors.white : Colors.black)
+                              .withValues(alpha: 0.08),
+                          valueColor: AlwaysStoppedAnimation<Color>(statusColor),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          '${tcontext.meta.remaining}: $remainingStr',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (expireInfo != null) ...[
+                        const SizedBox(width: 8),
+                        Tooltip(
+                          message:
+                              '${tcontext.meta.expireTime}: ${expireInfo.item2}',
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.event_outlined,
+                                size: 12,
+                                color: expireInfo.item1
+                                    ? Colors.red
+                                    : theme.colorScheme.onSurface
+                                        .withValues(alpha: 0.5),
+                              ),
+                              const SizedBox(width: 3),
+                              Text(
+                                expireInfo.item2,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: expireInfo.item1
+                                      ? Colors.red
+                                      : theme.colorScheme.onSurface
+                                          .withValues(alpha: 0.65),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

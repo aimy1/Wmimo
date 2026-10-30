@@ -2315,14 +2315,17 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     return InkWell(
       borderRadius: BorderRadius.circular(6),
       onTap: () => _changeMode(modeKey),
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        curve: ThemeDefine.kCurveStandard,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
           color: isSelected ? ThemeDefine.kColorBlue : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
         ),
-        child: Text(
-          label,
+        child: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 160),
+          curve: ThemeDefine.kCurveStandard,
           style: TextStyle(
             fontSize: 11.5,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
@@ -2330,6 +2333,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                 ? Colors.white
                 : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
           ),
+          child: Text(label),
         ),
       ),
     );
@@ -2347,197 +2351,218 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     return RepaintBoundary(
       child: Container(
         margin: const EdgeInsets.only(bottom: 14),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: theme.dividerColor.withValues(alpha: 0.4),
-          width: 0.8,
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: theme.dividerColor.withValues(alpha: 0.4),
+            width: 0.8,
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Group Header
-          InkWell(
-            borderRadius: BorderRadius.circular(12),
-            onTap: () {
-              setState(() {
-                _groupExpanded[group.name] = !isExpanded;
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              child: Row(
-                children: [
-                  // Group Name
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: (screenWidth - 220).clamp(80.0, screenWidth >= 640 ? 280.0 : 140.0),
-                    ),
-                    child: Text(
-                      group.name,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.2,
-                        fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // Group Type Badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
-                          ? ThemeDefine.kColorBlue.withValues(alpha: 0.15)
-                          : Colors.orange.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
-                          ? tcontext.meta.manualSelect
-                          : "${group.type} ${tcontext.meta.autoSelect}",
-                      style: TextStyle(
-                        color: (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
-                            ? ThemeDefine.kColorBlue
-                            : Colors.orange.shade700,
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // Currently Selected Node Badge
-                  if (group.now.isNotEmpty)
-                    Builder(
-                      builder: (context) {
-                        final flag = getFlagEmoji(group.now);
-                        final displayName = NodeRegionHelper.getDisplayNameWithoutFlag(group.now);
-                        return Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: Row(
-                              children: [
-                                Text(
-                                  flag,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontFamily: Platform.isWindows ? 'Emoji' : null,
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Flexible(
-                                  child: Text(
-                                    displayName,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: ThemeDefine.kColorBlue,
-                                      fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
+        child: AnimatedSize(
+          duration: ThemeDefine.kDurationView,
+          curve: ThemeDefine.kCurveStandard,
+          alignment: Alignment.topCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Group Header
+              InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () {
+                  setState(() {
+                    _groupExpanded[group.name] = !isExpanded;
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  child: Row(
+                    children: [
+                      // Group Name
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: (screenWidth - 220).clamp(80.0, screenWidth >= 640 ? 280.0 : 140.0),
+                        ),
+                        child: Text(
+                          group.name,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.2,
+                            fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
                           ),
-                        );
-                      },
-                    )
-                  else
-                    const Spacer(),
-
-                  // Ping this group button
-                  Tooltip(
-                    message: "${tcontext.meta.speedTestGroup} (${_activeLatencyTarget.getDisplayName(isZh)})",
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(6),
-                      onTap: () => _testGroupDelay(group),
-                      child: const Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Icon(
-                          Icons.bolt_rounded,
-                          size: 18,
-                          color: Colors.orangeAccent,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 6),
+                      const SizedBox(width: 8),
 
-                  // Node Count Badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      "${nodes.length}",
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      // Group Type Badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
+                              ? ThemeDefine.kColorBlue.withValues(alpha: 0.15)
+                              : Colors.orange.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
+                              ? tcontext.meta.manualSelect
+                              : "${group.type} ${tcontext.meta.autoSelect}",
+                          style: TextStyle(
+                            color: (group.type.toLowerCase() == "selector" || group.type.toLowerCase() == "select")
+                                ? ThemeDefine.kColorBlue
+                                : Colors.orange.shade700,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 6),
+                      const SizedBox(width: 8),
 
-                  // Expand/Collapse Chevron
-                  Icon(
-                    isExpanded
-                        ? Icons.keyboard_arrow_up_rounded
-                        : Icons.keyboard_arrow_down_rounded,
-                    size: 20,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                      // Currently Selected Node Badge
+                      if (group.now.isNotEmpty)
+                        Builder(
+                          builder: (context) {
+                            final flag = getFlagEmoji(group.now);
+                            final displayName = NodeRegionHelper.getDisplayNameWithoutFlag(group.now);
+                            return Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: AnimatedSwitcher(
+                                  duration: ThemeDefine.kDurationMicro,
+                                  layoutBuilder: (currentChild, previousChildren) {
+                                    return Stack(
+                                      alignment: AlignmentDirectional.centerStart,
+                                      children: <Widget>[
+                                        ...previousChildren,
+                                        if (currentChild != null) currentChild,
+                                      ],
+                                    );
+                                  },
+                                  child: Row(
+                                    key: ValueKey<String>(group.now),
+                                    children: [
+                                      Text(
+                                        flag,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontFamily: Platform.isWindows ? 'Emoji' : null,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Flexible(
+                                        child: Text(
+                                          displayName,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: ThemeDefine.kColorBlue,
+                                            fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      else
+                        const Spacer(),
+
+                      // Ping this group button
+                      Tooltip(
+                        message: "${tcontext.meta.speedTestGroup} (${_activeLatencyTarget.getDisplayName(isZh)})",
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(6),
+                          onTap: () => _testGroupDelay(group),
+                          child: const Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Icon(
+                              Icons.bolt_rounded,
+                              size: 18,
+                              color: Colors.orangeAccent,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+
+                      // Node Count Badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          "${nodes.length}",
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+
+                      // Expand/Collapse Chevron
+                      AnimatedRotation(
+                        turns: isExpanded ? 0.0 : 0.5,
+                        duration: ThemeDefine.kDurationState,
+                        curve: ThemeDefine.kCurveStandard,
+                        child: Icon(
+                          Icons.keyboard_arrow_up_rounded,
+                          size: 20,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
 
-          // Nodes Grid (Clash Verge Card Grid)
-          if (isExpanded && nodes.isNotEmpty) ...[
-            const Divider(height: 1, thickness: 0.6),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  // Responsive columns: 1 on small width, 2 on medium, 3 or 4 on desktop
-                  int crossAxisCount = (constraints.maxWidth / 240).floor().clamp(1, 4);
-                  final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-                  final cardExtent = (56.0 * textScale).clamp(54.0, 74.0);
+              // Nodes Grid (Clash Verge Card Grid)
+              if (isExpanded && nodes.isNotEmpty) ...[
+                const Divider(height: 1, thickness: 0.6),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Responsive columns: 1 on small width, 2 on medium, 3 or 4 on desktop
+                      int crossAxisCount = (constraints.maxWidth / 240).floor().clamp(1, 4);
+                      final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+                      final cardExtent = (56.0 * textScale).clamp(54.0, 74.0);
 
-                  return GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: nodes.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisExtent: cardExtent,
-                      crossAxisSpacing: 6,
-                      mainAxisSpacing: 6,
-                    ),
-                    itemBuilder: (context, nodeIndex) {
-                      final node = nodes[nodeIndex];
-                      final isSelected = group.now == node.name;
-                      return _buildNodeCard(group, node, isSelected);
+                      return GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: nodes.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisExtent: cardExtent,
+                          crossAxisSpacing: 6,
+                          mainAxisSpacing: 6,
+                        ),
+                        itemBuilder: (context, nodeIndex) {
+                          final node = nodes[nodeIndex];
+                          final isSelected = group.now == node.name;
+                          return _buildNodeCard(group, node, isSelected);
+                        },
+                      );
                     },
-                  );
-                },
-              ),
-            ),
-          ],
-        ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
-    ),
-  );
+    );
   }
 
   Widget _buildNodeLatencyBadge(BuildContext context, ClashProxiesNode node) {
@@ -2583,21 +2608,26 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           onTap: () => _testNodeDelay(node),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            child: isTesting
-                ? const SizedBox(
-                    width: 10,
-                    height: 10,
-                    child: CircularProgressIndicator(strokeWidth: 1.5),
-                  )
-                : Text(
-                    delayText,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'monospace',
-                      color: delayColor,
+            child: AnimatedSwitcher(
+              duration: ThemeDefine.kDurationMicro,
+              child: isTesting
+                  ? const SizedBox(
+                      key: ValueKey<String>('testing'),
+                      width: 10,
+                      height: 10,
+                      child: CircularProgressIndicator(strokeWidth: 1.5),
+                    )
+                  : Text(
+                      delayText,
+                      key: ValueKey<String>(delayText),
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'monospace',
+                        color: delayColor,
+                      ),
                     ),
-                  ),
+            ),
           ),
         );
       },
@@ -2612,110 +2642,119 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     return RepaintBoundary(
       child: Material(
-        color: isSelected
-          ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.14 : 0.08)
-          : (isDark
-              ? const Color(0xFF141416).withValues(alpha: 0.6)
-              : const Color(0xFFFFFFFF)),
-      borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
-      child: InkWell(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
-        onTap: () {
-          HapticFeedback.selectionClick();
-          _selectNode(group, node);
-        },
-        onLongPress: () {
-          HapticFeedback.mediumImpact();
-          _showNodeDetailDialog(group, node);
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
-            border: Border.all(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
+          onTap: () {
+            HapticFeedback.selectionClick();
+            _selectNode(group, node);
+          },
+          onLongPress: () {
+            HapticFeedback.mediumImpact();
+            _showNodeDetailDialog(group, node);
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 160),
+            curve: ThemeDefine.kCurveStandard,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
               color: isSelected
-                  ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.55 : 0.45)
-                  : theme.dividerColor.withValues(alpha: isDark ? 0.2 : 0.3),
-              width: isSelected ? 1.1 : 0.8,
+                  ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.14 : 0.08)
+                  : (isDark
+                      ? const Color(0xFF141416).withValues(alpha: 0.6)
+                      : const Color(0xFFFFFFFF)),
+              borderRadius: BorderRadius.circular(ThemeDefine.kRadiusSmall),
+              border: Border.all(
+                color: isSelected
+                    ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.55 : 0.45)
+                    : theme.dividerColor.withValues(alpha: isDark ? 0.2 : 0.3),
+                width: isSelected ? 1.1 : 0.8,
+              ),
             ),
-          ),
-          child: Row(
-            children: [
-              // Flag emoji
-              Text(
-                flag,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontFamily: Platform.isWindows ? 'Emoji' : null,
+            child: Row(
+              children: [
+                // Flag emoji
+                Text(
+                  flag,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontFamily: Platform.isWindows ? 'Emoji' : null,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 6),
+                const SizedBox(width: 6),
 
-              // Node Name & Protocol Tags
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      displayName,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                        color: isSelected ? ThemeDefine.kColorBlue : null,
-                        fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                // Node Name & Protocol Tags
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 160),
+                        curve: ThemeDefine.kCurveStandard,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                          color: isSelected
+                              ? ThemeDefine.kColorBlue
+                              : theme.colorScheme.onSurface,
+                          fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
+                        ),
+                        child: Text(
+                          displayName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (node.type.isNotEmpty && node.type != ClashProtocolType.selector.name)
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0.5),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                            child: Text(
-                              node.type.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 8.5,
-                                fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      if (node.type.isNotEmpty && node.type != ClashProtocolType.selector.name)
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0.5),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              child: Text(
+                                node.type.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 8.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 3),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0.5),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                            child: Text(
-                              "UDP",
-                              style: TextStyle(
-                                fontSize: 8.5,
-                                fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                            const SizedBox(width: 3),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0.5),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              child: Text(
+                                "UDP",
+                                style: TextStyle(
+                                  fontSize: 8.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                  ],
+                          ],
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 4),
+                const SizedBox(width: 4),
 
-              // Latency Badge / Test Trigger
-              _buildNodeLatencyBadge(context, node),
-            ],
+                // Latency Badge / Test Trigger
+                _buildNodeLatencyBadge(context, node),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

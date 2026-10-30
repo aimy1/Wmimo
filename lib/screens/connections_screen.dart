@@ -781,9 +781,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
     final isDark = theme.brightness == Brightness.dark;
 
     return Material(
-      color: isSelected
-          ? ThemeDefine.kColorBlue
-          : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
+      color: Colors.transparent,
       borderRadius: BorderRadius.circular(10),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
@@ -792,11 +790,16 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
             _selectedProtocol = protocol;
           });
         },
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          curve: ThemeDefine.kCurveStandard,
           height: 38,
           padding: const EdgeInsets.symmetric(horizontal: 11),
           alignment: Alignment.center,
           decoration: BoxDecoration(
+            color: isSelected
+                ? ThemeDefine.kColorBlue
+                : (isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9)),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: isSelected
@@ -805,8 +808,9 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
               width: 0.8,
             ),
           ),
-          child: Text(
-            protocol,
+          child: AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 160),
+            curve: ThemeDefine.kCurveStandard,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -814,6 +818,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
                   ? Colors.white
                   : theme.colorScheme.onSurface.withValues(alpha: 0.75),
             ),
+            child: Text(protocol),
           ),
         ),
       ),

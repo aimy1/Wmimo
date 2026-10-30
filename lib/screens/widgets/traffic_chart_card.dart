@@ -92,79 +92,87 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Card Title Header
-            Row(
-              children: [
-                Icon(
-                  Icons.ssid_chart_rounded,
-                  size: 20,
-                  color: ThemeDefine.kColorAmber,
-                ),
-                const SizedBox(width: 7),
-                Text(
-                  tcontext.meta.trafficStats,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.2,
+        child: AnimatedSize(
+          duration: ThemeDefine.kDurationView,
+          curve: ThemeDefine.kCurveStandard,
+          alignment: Alignment.topCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Card Title Header
+              Row(
+                children: [
+                  Icon(
+                    Icons.ssid_chart_rounded,
+                    size: 20,
+                    color: ThemeDefine.kColorAmber,
                   ),
-                ),
-                const Spacer(),
-                // Connection status indicator
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: widget.isConnected
-                            ? ThemeDefine.kColorGreenBright
-                            : const Color(0xFF94A3B8),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      widget.isConnected
-                          ? tcontext.meta.realtimeMonitor
-                          : tcontext.meta.disconnected,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                        color: widget.isConnected
-                            ? ThemeDefine.kColorGreenBright
-                            : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 6),
-                InkWell(
-                  borderRadius: BorderRadius.circular(6),
-                  onTap: () {
-                    setState(() {
-                      _isCollapsed = !_isCollapsed;
-                      SettingManager.getConfig().ui.collapseTrafficChart = _isCollapsed;
-                      SettingManager.save();
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Icon(
-                      _isCollapsed
-                          ? Icons.keyboard_arrow_down_rounded
-                          : Icons.keyboard_arrow_up_rounded,
-                      size: 20,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                  const SizedBox(width: 7),
+                  Text(
+                    tcontext.meta.trafficStats,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.2,
                     ),
                   ),
-                ),
-              ],
-            ),
+                  const Spacer(),
+                  // Connection status indicator
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AnimatedContainer(
+                        duration: ThemeDefine.kDurationState,
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: widget.isConnected
+                              ? ThemeDefine.kColorGreenBright
+                              : const Color(0xFF94A3B8),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        widget.isConnected
+                            ? tcontext.meta.realtimeMonitor
+                            : tcontext.meta.disconnected,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: widget.isConnected
+                              ? ThemeDefine.kColorGreenBright
+                              : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 6),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(6),
+                    onTap: () {
+                      setState(() {
+                        _isCollapsed = !_isCollapsed;
+                        SettingManager.getConfig().ui.collapseTrafficChart = _isCollapsed;
+                        SettingManager.save();
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: AnimatedRotation(
+                        turns: _isCollapsed ? 0.5 : 0.0,
+                        duration: ThemeDefine.kDurationState,
+                        curve: ThemeDefine.kCurveStandard,
+                        child: Icon(
+                          Icons.keyboard_arrow_up_rounded,
+                          size: 20,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             if (_isCollapsed) ...[
               const SizedBox(height: 6),
               Padding(
@@ -418,9 +426,10 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
             ],
           ],
         ],
+          ),
+        ),
       ),
-    ),
-  );
+    );
   }
 
   Widget _buildStatItem({
