@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/auto_update_manager.dart';
-import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/about_screen.dart';
 import 'package:wmimo/screens/group_helper.dart';
@@ -25,23 +23,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     AutoUpdateManager.onEventCheck.add(_onAutoUpdateCheck);
-    SettingManager.onAnimationsChanged.add(_onAnimationsChanged);
   }
 
   @override
   void dispose() {
     AutoUpdateManager.onEventCheck.remove(_onAutoUpdateCheck);
-    SettingManager.onAnimationsChanged.remove(_onAnimationsChanged);
     super.dispose();
   }
 
   void _onAutoUpdateCheck() {
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  void _onAnimationsChanged() {
     if (mounted) {
       setState(() {});
     }
@@ -213,51 +203,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     if (mounted) {
                       setState(() {});
                     }
-                  },
-                ),
-                const Divider(height: 1, thickness: 0.8),
-                ListTile(
-                  title: Text(
-                    tcontext.meta.uiAnimations,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  subtitle: Text(
-                    tcontext.meta.uiAnimationsTips,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.55),
-                    ),
-                  ),
-                  leading: Icon(
-                    Icons.animation_rounded,
-                    size: 22,
-                    color: primaryColor,
-                  ),
-                  trailing: Transform.scale(
-                    scale: 0.86,
-                    child: Switch.adaptive(
-                      value: SettingManager.getConfig().ui.enableAnimations,
-                      activeThumbColor: Colors.white,
-                      activeTrackColor: ThemeDefine.kColorGreenBright,
-                      onChanged: (bool value) async {
-                        HapticFeedback.selectionClick();
-                        final ui = SettingManager.getConfig().ui;
-                        ui.enableAnimations = value;
-                        await SettingManager.save();
-                        SettingManager.notifyAnimationsChanged();
-                      },
-                    ),
-                  ),
-                  minVerticalPadding: 14,
-                  onTap: () async {
-                    HapticFeedback.selectionClick();
-                    final ui = SettingManager.getConfig().ui;
-                    ui.enableAnimations = !ui.enableAnimations;
-                    await SettingManager.save();
-                    SettingManager.notifyAnimationsChanged();
                   },
                 ),
                 const Divider(height: 1, thickness: 0.8),

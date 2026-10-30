@@ -692,7 +692,6 @@ class GroupHelper {
         GroupItemOptions(
           switchOptions: GroupItemSwitchOptions(
             name: tcontext.meta.uiAnimations,
-            tips: tcontext.meta.uiAnimationsTips,
             switchValue: setting.ui.enableAnimations,
             onSwitch: (bool value) async {
               setting.ui.enableAnimations = value;
