@@ -850,16 +850,6 @@ class GroupHelper {
             name: tcontext.meta.launchAtStartup,
             switchValue: await VPNService.getLaunchAtStartup(),
             onSwitch: (bool value) async {
-              if (!VPNService.isRunAsAdmin()) {
-                DialogUtils.showAlertDialog(
-                  context,
-                  tcontext.meta.launchAtStartupRunAsAdmin,
-                  showCopy: true,
-                  showFAQ: false,
-                  withVersion: true,
-                );
-                return;
-              }
               ReturnResultError? err = await VPNService.setLaunchAtStartup(
                 value,
               );

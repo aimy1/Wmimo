@@ -7,6 +7,27 @@ abstract final class AppRegistryUtils {
   static const String _registryPath = 'Software\\Wmimo';
   static const String _registryValueNameDid = 'did';
   static const String _registryValueNameInstallDate = 'installDate';
+  static const String _registryValueNameTheme = 'Theme';
+
+  static String? getTheme() {
+    final value = getValue<String>(
+      _registryValueNameTheme,
+      RegistryValueType.string,
+    )?.trim().toLowerCase();
+    if (value == 'dark' || value == 'light' || value == 'system') {
+      return value;
+    }
+    return null;
+  }
+
+  static void saveTheme(String theme) {
+    final normalized = theme.trim().toLowerCase();
+    if (normalized == 'dark' ||
+        normalized == 'light' ||
+        normalized == 'system') {
+      setValue(_registryValueNameTheme, RegistryValueType.string, normalized);
+    }
+  }
 
   static String? getDid() {
     if (PathUtils.portableMode()) {

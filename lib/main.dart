@@ -20,6 +20,7 @@ import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/device_utils.dart';
 import 'package:wmimo/app/utils/log.dart';
+import 'package:wmimo/app/utils/native_theme_helper.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/node_region_helper.dart';
@@ -62,6 +63,7 @@ void main(List<String> args) async {
   await VPNService.initABI();
   await RemoteConfigManager.init();
   await SettingManager.init();
+  NativeThemeHelper.syncTheme(SettingManager.getConfig().ui.theme);
   if (Platform.isAndroid) {
     const platform = MethodChannel('com.wmimo.app/native_helper');
     platform.invokeMethod('setAppLocale', {
@@ -490,6 +492,7 @@ class MyAppState extends State<MyApp>
   void onWindowRestore() {
     _windowVisibleForMac = true;
     Log.d("onWindowRestore");
+    NativeThemeHelper.syncTheme(SettingManager.getConfig().ui.theme);
     AppLifecycleStateNofity.stateResumed("restore");
   }
 
@@ -507,6 +510,7 @@ class MyAppState extends State<MyApp>
   @override
   void onWindowDeviceShutdown() {
     Log.d("main.dart onWindowDeviceShutdown");
+    SettingManager.saveSync();
     _quit();
   }
 
@@ -589,6 +593,7 @@ class MyAppState extends State<MyApp>
 
   Future<void> _quit() async {
     print(">>> _QUIT CALLED STACKTRACE:\n${StackTrace.current}");
+    SettingManager.saveSync();
     await WindowStateManager.saveImmediate();
     await SettingManager.save();
     await _uninit();

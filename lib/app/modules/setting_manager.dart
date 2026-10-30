@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:wmimo/app/local_services/vpn_service.dart';
+import 'package:wmimo/app/utils/app_registry_utils.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/convert_utils.dart';
 import 'package:wmimo/app/utils/log.dart';
@@ -372,9 +373,10 @@ class SettingManager {
 
   static bool _saving = false;
   static bool _hasPendingSave = false;
+  static String _cachedSettingFilePath = "";
   static SettingConfig _config = SettingConfig();
   static Future<void> init({bool fromBackupRestore = false}) async {
-    await load();
+    await load(fromBackupRestore: fromBackupRestore);
     bool needSave = await parseConfig();
     if (needSave) {
       await save();
@@ -383,7 +385,7 @@ class SettingManager {
 
   static Future<void> uninit() async {}
   static Future<void> reload() async {
-    await load();
+    await load(fromBackupRestore: true);
   }
 
   static Future<bool> parseConfig() async {
@@ -437,26 +439,113 @@ class SettingManager {
     return save;
   }
 
-  static Future<void> load() async {
-    String filePath = await PathUtils.settingFilePath();
-    var file = File(filePath);
-    bool exists = await file.exists();
-    if (!exists) {
-      return;
-    }
-    String content = "";
-    try {
-      content = await file.readAsString();
-      if (content.isNotEmpty) {
-        var config = jsonDecode(content);
-        _config.fromJson(config);
+  /// Reads and decodes JSON configuration from [filePath], automatically
+  /// falling back to `$filePath.bak` or `$filePath.tmp` if the primary file
+  /// was truncated or corrupted during an abrupt OS reboot/shutdown.
+  static Future<Map<String, dynamic>?> readConfigMapWithFallback(
+    String filePath,
+  ) async {
+    final candidates = <String>[
+      filePath,
+      '$filePath.bak',
+      '$filePath.tmp',
+    ];
+    for (final candidate in candidates) {
+      try {
+        final file = File(candidate);
+        if (!await file.exists()) {
+          continue;
+        }
+        final content = (await file.readAsString()).trim();
+        if (content.isEmpty) {
+          continue;
+        }
+        final decoded = jsonDecode(content);
+        if (decoded is Map<String, dynamic>) {
+          if (candidate != filePath) {
+            Log.w(
+              "SettingManager.load recovered config from fallback $candidate",
+            );
+          }
+          return decoded;
+        }
+      } catch (err) {
+        Log.w("SettingManager.load exception $candidate ${err.toString()}");
       }
-    } catch (err) {
-      Log.w("SettingManager.load exception $filePath ${err.toString()}");
+    }
+    return null;
+  }
+
+  /// Writes [content] atomically to [filePath] via a temporary file and
+  /// maintains a `.bak` copy so abrupt power-off/reboot never leaves an
+  /// empty or half-written `setting.json`.
+  static Future<void> writeConfigFileAtomic(
+    String filePath,
+    String content,
+  ) async {
+    final tmpPath = '$filePath.tmp';
+    final bakPath = '$filePath.bak';
+    final tmpFile = File(tmpPath);
+    await tmpFile.writeAsString(content, flush: true);
+    try {
+      await File(bakPath).writeAsString(content, flush: true);
+    } catch (_) {}
+    try {
+      await tmpFile.rename(filePath);
+    } catch (_) {
+      await File(filePath).writeAsString(content, flush: true);
+      try {
+        if (await tmpFile.exists()) {
+          await tmpFile.delete();
+        }
+      } catch (_) {}
+    }
+  }
+
+  /// Synchronous counterpart to [writeConfigFileAtomic] for OS shutdown hooks.
+  static void writeConfigFileAtomicSync(String filePath, String content) {
+    final tmpPath = '$filePath.tmp';
+    final bakPath = '$filePath.bak';
+    final tmpFile = File(tmpPath);
+    tmpFile.writeAsStringSync(content, flush: true);
+    try {
+      File(bakPath).writeAsStringSync(content, flush: true);
+    } catch (_) {}
+    try {
+      tmpFile.renameSync(filePath);
+    } catch (_) {
+      File(filePath).writeAsStringSync(content, flush: true);
+      try {
+        if (tmpFile.existsSync()) {
+          tmpFile.deleteSync();
+        }
+      } catch (_) {}
+    }
+  }
+
+  static Future<void> load({bool fromBackupRestore = false}) async {
+    String filePath = await PathUtils.settingFilePath();
+    _cachedSettingFilePath = filePath;
+    final config = await readConfigMapWithFallback(filePath);
+    if (config != null) {
+      _config.fromJson(config);
+    }
+    if (Platform.isWindows) {
+      if (fromBackupRestore) {
+        AppRegistryUtils.saveTheme(_config.ui.theme);
+      } else {
+        final regTheme = AppRegistryUtils.getTheme();
+        if (regTheme != null && regTheme.isNotEmpty) {
+          _config.ui.theme = regTheme;
+        } else {
+          AppRegistryUtils.saveTheme(_config.ui.theme);
+        }
+      }
     }
   }
 
   static Future<void> save() async {
+    AppRegistryUtils.saveTheme(_config.ui.theme);
     if (_saving) {
       _hasPendingSave = true;
       return;
@@ -465,15 +554,33 @@ class SettingManager {
     try {
       do {
         _hasPendingSave = false;
-        String filePath = await PathUtils.settingFilePath();
+        String filePath = _cachedSettingFilePath.isNotEmpty
+            ? _cachedSettingFilePath
+            : await PathUtils.settingFilePath();
+        _cachedSettingFilePath = filePath;
         const JsonEncoder encoder = JsonEncoder.withIndent('  ');
         String content = encoder.convert(_config.toJson());
-        await File(filePath).writeAsString(content, flush: true);
+        await writeConfigFileAtomic(filePath, content);
       } while (_hasPendingSave);
     } catch (err) {
       Log.w("SettingManager.save exception: ${err.toString()}");
     } finally {
       _saving = false;
+    }
+  }
+
+  /// Synchronously persists settings and registry theme during OS shutdown/reboot.
+  static void saveSync() {
+    AppRegistryUtils.saveTheme(_config.ui.theme);
+    if (_cachedSettingFilePath.isEmpty) {
+      return;
+    }
+    try {
+      const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+      String content = encoder.convert(_config.toJson());
+      writeConfigFileAtomicSync(_cachedSettingFilePath, content);
+    } catch (err) {
+      Log.w("SettingManager.saveSync exception: ${err.toString()}");
     }
   }
 
@@ -484,6 +591,7 @@ class SettingManager {
     _config.languageTag = languageTag;
     _config.window = window;
     ThemeDefine.enableAnimations = _config.ui.enableAnimations;
+    AppRegistryUtils.saveTheme(_config.ui.theme);
   }
 
   static SettingConfig getConfig() {

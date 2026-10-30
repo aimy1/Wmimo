@@ -25,6 +25,29 @@ constexpr const wchar_t kWindowClassName[] = L"FLUTTER_RUNNER_WIN32_WINDOW";
 constexpr const wchar_t kGetPreferredBrightnessRegKey[] =
   L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
 constexpr const wchar_t kGetPreferredBrightnessRegValue[] = L"AppsUseLightTheme";
+constexpr const wchar_t kWmimoRegKey[] = L"Software\\Wmimo";
+constexpr const wchar_t kWmimoThemeRegValue[] = L"Theme";
+
+static std::string g_app_theme_mode = "system";
+
+std::string ReadSavedAppThemeMode() {
+  wchar_t buffer[32] = {0};
+  DWORD buffer_size = sizeof(buffer);
+  LSTATUS status = RegGetValueW(HKEY_CURRENT_USER, kWmimoRegKey,
+                                kWmimoThemeRegValue, RRF_RT_REG_SZ, nullptr,
+                                buffer, &buffer_size);
+  if (status == ERROR_SUCCESS) {
+    std::wstring val(buffer);
+    if (val == L"dark") {
+      return "dark";
+    } else if (val == L"light") {
+      return "light";
+    } else if (val == L"system") {
+      return "system";
+    }
+  }
+  return "";
+}
 
 // The number of Win32Window objects that currently exist.
 static int g_active_window_count = 0;
@@ -126,24 +149,40 @@ void WindowClassRegistrar::UnregisterWindowClass() {
 }
 
 void Win32Window::EnableDarkModeForApp() {
+  std::string saved_theme = ReadSavedAppThemeMode();
+  if (!saved_theme.empty()) {
+    g_app_theme_mode = saved_theme;
+  }
+
   HMODULE uxtheme_module = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
   if (!uxtheme_module) {
     return;
   }
 
-  DWORD light_mode = 1;
-  DWORD light_mode_size = sizeof(light_mode);
-  LSTATUS result = RegGetValue(HKEY_CURRENT_USER, kGetPreferredBrightnessRegKey,
-                               kGetPreferredBrightnessRegValue,
-                               RRF_RT_REG_DWORD, nullptr, &light_mode,
-                               &light_mode_size);
-  bool is_dark = (result == ERROR_SUCCESS && light_mode == 0);
+  bool is_dark = false;
+  if (g_app_theme_mode == "dark") {
+    is_dark = true;
+  } else if (g_app_theme_mode == "light") {
+    is_dark = false;
+  } else {
+    DWORD light_mode = 1;
+    DWORD light_mode_size = sizeof(light_mode);
+    LSTATUS result = RegGetValue(HKEY_CURRENT_USER, kGetPreferredBrightnessRegKey,
+                                 kGetPreferredBrightnessRegValue,
+                                 RRF_RT_REG_DWORD, nullptr, &light_mode,
+                                 &light_mode_size);
+    is_dark = (result == ERROR_SUCCESS && light_mode == 0);
+  }
 
   // Windows 10 1903 (18362) and newer (including Windows 11): ordinal 135 is SetPreferredAppMode
   auto set_preferred_app_mode = reinterpret_cast<fnSetPreferredAppMode>(
       GetProcAddress(uxtheme_module, MAKEINTRESOURCEA(135)));
   if (set_preferred_app_mode != nullptr) {
-    set_preferred_app_mode(is_dark ? PreferredAppMode::ForceDark : PreferredAppMode::AllowDark);
+    if (g_app_theme_mode == "light") {
+      set_preferred_app_mode(PreferredAppMode::ForceLight);
+    } else {
+      set_preferred_app_mode(is_dark ? PreferredAppMode::ForceDark : PreferredAppMode::AllowDark);
+    }
   } else {
     // Windows 10 1809 (17763): ordinal 135 is AllowDarkModeForApp
     auto allow_dark_mode_for_app = reinterpret_cast<fnAllowDarkModeForApp>(
@@ -353,8 +392,6 @@ bool Win32Window::OnCreate() {
 void Win32Window::OnDestroy() {
   // No-op; provided for subclasses.
 }
-
-static std::string g_app_theme_mode = "system";
 
 void Win32Window::SetAppTheme(const std::string& theme_mode) {
   g_app_theme_mode = theme_mode;

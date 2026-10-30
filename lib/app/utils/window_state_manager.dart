@@ -151,11 +151,6 @@ class WindowStateManager with WindowListener {
     });
   }
 
-  @override
-  void onWindowClose() {
-    saveImmediate();
-  }
-
   void _scheduleRecord({bool saveImmediate = false}) {
     if (!PlatformUtils.isPC() || _isApplying) return;
     _debounceTimer?.cancel();

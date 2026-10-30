@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:wmimo/app/utils/error_reporter_utils.dart';
 import 'package:wmimo/app/utils/file_utils.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
@@ -20,13 +20,15 @@ class FileLogOutput extends LogOutput {
 
   @override
   Future<void> init() async {
-    String logFilePath = await PathUtils.logFilePath();
-    if (_inProduction) {
-      await FileUtils.deletePath(logFilePath);
-    }
+    try {
+      String logFilePath = await PathUtils.logFilePath();
+      if (_inProduction) {
+        await FileUtils.deletePath(logFilePath);
+      }
 
-    _file = File(logFilePath);
-    _raf = await _file!.open(mode: FileMode.writeOnlyAppend);
+      _file = File(logFilePath);
+      _raf = await _file!.open(mode: FileMode.writeOnlyAppend);
+    } catch (_) {}
   }
 
   @override
