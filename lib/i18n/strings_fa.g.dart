@@ -138,8 +138,13 @@ class _Translations$UserAgreementScreen$fa implements Translations$UserAgreement
 
 	// Translations
 	@override String get privacyFirst => 'شرایط استفاده و حریم خصوصی';
+	@override String get subtitle => 'لطفاً قبل از استفاده از Wmimo شرایط زیر را مطالعه و با آن موافقت کنید';
 	@override String get agreeAndContinue => 'پذیرفتن و ادامه';
 	@override String get disagreeAndExit => 'عدم موافقت و خروج';
+	@override String get zeroData => 'بدون جمع‌آوری داده';
+	@override String get localExecution => 'اجرای کاملاً محلی';
+	@override String get zeroTelemetry => 'بدون تله‌متری تجاری';
+	@override String get loading => 'در حال بارگیری توافق‌نامه...';
 }
 
 // Path: NetCheckScreen
@@ -1056,8 +1061,13 @@ extension on TranslationsFa {
 			'PerAppAndroidScreen.presetApps' => 'افزودن سریع برنامه‌ها (بدون نیاز به مجوز)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'درخواست مجوز (پاپ‌آپ سیستم)',
 			'UserAgreementScreen.privacyFirst' => 'شرایط استفاده و حریم خصوصی',
+			'UserAgreementScreen.subtitle' => 'لطفاً قبل از استفاده از Wmimo شرایط زیر را مطالعه و با آن موافقت کنید',
 			'UserAgreementScreen.agreeAndContinue' => 'پذیرفتن و ادامه',
 			'UserAgreementScreen.disagreeAndExit' => 'عدم موافقت و خروج',
+			'UserAgreementScreen.zeroData' => 'بدون جمع‌آوری داده',
+			'UserAgreementScreen.localExecution' => 'اجرای کاملاً محلی',
+			'UserAgreementScreen.zeroTelemetry' => 'بدون تله‌متری تجاری',
+			'UserAgreementScreen.loading' => 'در حال بارگیری توافق‌نامه...',
 			'NetCheckScreen.title' => 'عیب‌یابی و تشخیص شبکه',
 			'NetCheckScreen.fullDiagnosticsTab' => 'عیب‌یابی کامل لینک',
 			'NetCheckScreen.advancedCheckTab' => 'بررسی پیشرفته دامنه',
@@ -1538,13 +1548,13 @@ extension on TranslationsFa {
 			'meta.autoScrollDisabled' => 'پیمایش خودکار غیرفعال است',
 			'meta.pauseLogs' => 'توقف موقت لاگ‌های زنده',
 			'meta.resumeLogs' => 'ادامه لاگ‌های زنده',
+			_ => null,
+		} ?? switch (path) {
 			'meta.scrollToLatest' => 'پیمایش به جدیدترین',
 			'meta.scrollToBottom' => 'پیمایش به پایین',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} لاگ جدید)',
 			'meta.copiedLogContent' => 'محتوای لاگ کپی شد',
 			'meta.copyLog' => 'کپی لاگ',
-			_ => null,
-		} ?? switch (path) {
 			'meta.noLogsPrompt' => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.',
 			'meta.searchLogsHint' => ' (IP, دامنه, قانون, خطا...)',
 			'meta.offlinePreviewPrompt' => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.',

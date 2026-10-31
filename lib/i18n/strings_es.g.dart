@@ -138,8 +138,13 @@ class _Translations$UserAgreementScreen$es implements Translations$UserAgreement
 
 	// Translations
 	@override String get privacyFirst => 'Términos del Servicio y Privacidad';
+	@override String get subtitle => 'Por favor, revise y acepte los siguientes términos antes de usar Wmimo';
 	@override String get agreeAndContinue => 'Aceptar y Continuar';
 	@override String get disagreeAndExit => 'Rechazar y Salir';
+	@override String get zeroData => 'Cero Recopilación de Datos';
+	@override String get localExecution => 'Ejecución Solo Local';
+	@override String get zeroTelemetry => 'Sin Telemetría Comercial';
+	@override String get loading => 'Cargando acuerdo...';
 }
 
 // Path: VersionUpdateScreen
@@ -1056,8 +1061,13 @@ extension on TranslationsEs {
 			'PerAppAndroidScreen.presetApps' => 'Añadir apps comunes (sin permisos)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'Solicitar permiso (diálogo del sistema)',
 			'UserAgreementScreen.privacyFirst' => 'Términos del Servicio y Privacidad',
+			'UserAgreementScreen.subtitle' => 'Por favor, revise y acepte los siguientes términos antes de usar Wmimo',
 			'UserAgreementScreen.agreeAndContinue' => 'Aceptar y Continuar',
 			'UserAgreementScreen.disagreeAndExit' => 'Rechazar y Salir',
+			'UserAgreementScreen.zeroData' => 'Cero Recopilación de Datos',
+			'UserAgreementScreen.localExecution' => 'Ejecución Solo Local',
+			'UserAgreementScreen.zeroTelemetry' => 'Sin Telemetría Comercial',
+			'UserAgreementScreen.loading' => 'Cargando acuerdo...',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'La nueva versión [${p}] está lista',
 			'VersionUpdateScreen.update' => 'Reiniciar para Actualizar',
 			'VersionUpdateScreen.cancel' => 'Ahora no',
@@ -1538,13 +1548,13 @@ extension on TranslationsEs {
 			'meta.autoScrollDisabled' => 'Autodesplazamiento desactivado',
 			'meta.pauseLogs' => 'Pausar registros en vivo',
 			'meta.resumeLogs' => 'Reanudar registros en vivo',
+			_ => null,
+		} ?? switch (path) {
 			'meta.scrollToLatest' => 'Desplazar al final',
 			'meta.scrollToBottom' => 'Desplazar hacia abajo',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} nuevos registros)',
 			'meta.copiedLogContent' => 'Contenido del registro copiado',
 			'meta.copyLog' => 'Copiar registro',
-			_ => null,
-		} ?? switch (path) {
 			'meta.noLogsPrompt' => 'Aún no hay registros. Aparecerán tras iniciar el proxy.',
 			'meta.searchLogsHint' => ' (IP, Dominio, Regla, Error...)',
 			'meta.offlinePreviewPrompt' => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.',

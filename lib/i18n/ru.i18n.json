@@ -33,8 +33,13 @@
   },
   "UserAgreementScreen": {
     "privacyFirst": "Пользовательское соглашение и конфиденциальность",
+    "subtitle": "Перед использованием Wmimo внимательно прочтите и примите условия",
     "agreeAndContinue": "Принять и продолжить",
-    "disagreeAndExit": "Отклонить и выйти"
+    "disagreeAndExit": "Отклонить и выйти",
+    "zeroData": "Без сбора данных",
+    "localExecution": "Только локальное исполнение",
+    "zeroTelemetry": "Без телеметрии и трекеров",
+    "loading": "Загрузка соглашения..."
   },
   "NetCheckScreen": {
     "title": "Диагностика сети",

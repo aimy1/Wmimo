@@ -138,8 +138,13 @@ class Translations$UserAgreementScreen$zh_CN implements Translations$UserAgreeme
 
 	// Translations
 	@override String get privacyFirst => '用户协议与隐私保护';
+	@override String get subtitle => '在使用 Wmimo 之前，请仔细阅读并同意以下条款';
 	@override String get agreeAndContinue => '同意并继续';
 	@override String get disagreeAndExit => '不同意并退出';
+	@override String get zeroData => '数据零收集';
+	@override String get localExecution => '纯本地独立运行';
+	@override String get zeroTelemetry => '纯净无商业遥测';
+	@override String get loading => '正在加载用户协议...';
 }
 
 // Path: NetCheckScreen
@@ -1056,8 +1061,13 @@ extension on TranslationsZhCn {
 			'PerAppAndroidScreen.presetApps' => '快捷添加常用应用 (免授权预设)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '尝试一键申请权限 (系统弹窗)',
 			'UserAgreementScreen.privacyFirst' => '用户协议与隐私保护',
+			'UserAgreementScreen.subtitle' => '在使用 Wmimo 之前，请仔细阅读并同意以下条款',
 			'UserAgreementScreen.agreeAndContinue' => '同意并继续',
 			'UserAgreementScreen.disagreeAndExit' => '不同意并退出',
+			'UserAgreementScreen.zeroData' => '数据零收集',
+			'UserAgreementScreen.localExecution' => '纯本地独立运行',
+			'UserAgreementScreen.zeroTelemetry' => '纯净无商业遥测',
+			'UserAgreementScreen.loading' => '正在加载用户协议...',
 			'NetCheckScreen.title' => '网络链路体检与诊断',
 			'NetCheckScreen.fullDiagnosticsTab' => '一键链路体检',
 			'NetCheckScreen.advancedCheckTab' => '高级单域名排查',
@@ -1538,13 +1548,13 @@ extension on TranslationsZhCn {
 			'meta.autoScrollDisabled' => '已关闭自动滚动',
 			'meta.pauseLogs' => '暂停实时日志',
 			'meta.resumeLogs' => '恢复实时日志',
+			_ => null,
+		} ?? switch (path) {
 			'meta.scrollToLatest' => '滚至最新',
 			'meta.scrollToBottom' => '滚至底部',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} 条新日志)',
 			'meta.copiedLogContent' => '已复制日志内容',
 			'meta.copyLog' => '复制日志',
-			_ => null,
-		} ?? switch (path) {
 			'meta.noLogsPrompt' => '暂无日志，启动代理后将实时捕获核心日志',
 			'meta.searchLogsHint' => ' (IP, 域名, 规则, 错误...)',
 			'meta.offlinePreviewPrompt' => '离线配置预览中，开启代理后可进行分流与节点测速',

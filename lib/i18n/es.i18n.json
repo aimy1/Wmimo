@@ -33,8 +33,13 @@
   },
   "UserAgreementScreen": {
     "privacyFirst": "Términos del Servicio y Privacidad",
+    "subtitle": "Por favor, revise y acepte los siguientes términos antes de usar Wmimo",
     "agreeAndContinue": "Aceptar y Continuar",
-    "disagreeAndExit": "Rechazar y Salir"
+    "disagreeAndExit": "Rechazar y Salir",
+    "zeroData": "Cero Recopilación de Datos",
+    "localExecution": "Ejecución Solo Local",
+    "zeroTelemetry": "Sin Telemetría Comercial",
+    "loading": "Cargando acuerdo..."
   },
   "VersionUpdateScreen": {
     "versionReady": "La nueva versión [$p] está lista",

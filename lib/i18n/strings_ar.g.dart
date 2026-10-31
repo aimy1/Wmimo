@@ -138,8 +138,13 @@ class _Translations$UserAgreementScreen$ar implements Translations$UserAgreement
 
 	// Translations
 	@override String get privacyFirst => 'شروط الخدمة وسياسة الخصوصية';
+	@override String get subtitle => 'يرجى مراجعة الشروط التالية والموافقة عليها قبل استخدام Wmimo';
 	@override String get agreeAndContinue => 'قبول ومتابعة';
 	@override String get disagreeAndExit => 'رفض والخروج';
+	@override String get zeroData => 'صفر جمع للبيانات';
+	@override String get localExecution => 'تشغيل محلي فقط';
+	@override String get zeroTelemetry => 'بدون قياس عن بعد تجاري';
+	@override String get loading => 'جاري تحميل الاتفاقية...';
 }
 
 // Path: NetCheckScreen
@@ -1056,8 +1061,13 @@ extension on TranslationsAr {
 			'PerAppAndroidScreen.presetApps' => 'إضافة سريعة للتطبيقات الشائعة (بدون إذن)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'طلب الإذن (نافذة النظام)',
 			'UserAgreementScreen.privacyFirst' => 'شروط الخدمة وسياسة الخصوصية',
+			'UserAgreementScreen.subtitle' => 'يرجى مراجعة الشروط التالية والموافقة عليها قبل استخدام Wmimo',
 			'UserAgreementScreen.agreeAndContinue' => 'قبول ومتابعة',
 			'UserAgreementScreen.disagreeAndExit' => 'رفض والخروج',
+			'UserAgreementScreen.zeroData' => 'صفر جمع للبيانات',
+			'UserAgreementScreen.localExecution' => 'تشغيل محلي فقط',
+			'UserAgreementScreen.zeroTelemetry' => 'بدون قياس عن بعد تجاري',
+			'UserAgreementScreen.loading' => 'جاري تحميل الاتفاقية...',
 			'NetCheckScreen.title' => 'فحص وتشخيص الشبكة',
 			'NetCheckScreen.fullDiagnosticsTab' => 'تشخيص كامل للمسار',
 			'NetCheckScreen.advancedCheckTab' => 'فحص متقدم للنطاق',
@@ -1538,13 +1548,13 @@ extension on TranslationsAr {
 			'meta.autoScrollDisabled' => 'التمرير التلقائي معطّل',
 			'meta.pauseLogs' => 'إيقاف السجلات مؤقتاً',
 			'meta.resumeLogs' => 'استئناف السجلات الحية',
+			_ => null,
+		} ?? switch (path) {
 			'meta.scrollToLatest' => 'التمرير إلى الأحدث',
 			'meta.scrollToBottom' => 'التمرير إلى الأسفل',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} سجلات جديدة)',
 			'meta.copiedLogContent' => 'تم نسخ محتوى السجل',
 			'meta.copyLog' => 'نسخ السجل',
-			_ => null,
-		} ?? switch (path) {
 			'meta.noLogsPrompt' => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.',
 			'meta.searchLogsHint' => ' (IP, النطاق, القاعدة, الخطأ...)',
 			'meta.offlinePreviewPrompt' => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.',

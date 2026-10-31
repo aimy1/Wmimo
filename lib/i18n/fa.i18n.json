@@ -33,8 +33,13 @@
   },
   "UserAgreementScreen": {
     "privacyFirst": "شرایط استفاده و حریم خصوصی",
+    "subtitle": "لطفاً قبل از استفاده از Wmimo شرایط زیر را مطالعه و با آن موافقت کنید",
     "agreeAndContinue": "پذیرفتن و ادامه",
-    "disagreeAndExit": "عدم موافقت و خروج"
+    "disagreeAndExit": "عدم موافقت و خروج",
+    "zeroData": "بدون جمع‌آوری داده",
+    "localExecution": "اجرای کاملاً محلی",
+    "zeroTelemetry": "بدون تله‌متری تجاری",
+    "loading": "در حال بارگیری توافق‌نامه..."
   },
   "NetCheckScreen": {
     "title": "عیب‌یابی و تشخیص شبکه",

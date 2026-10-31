@@ -33,8 +33,13 @@
   },
   "UserAgreementScreen": {
     "privacyFirst": "شروط الخدمة وسياسة الخصوصية",
+    "subtitle": "يرجى مراجعة الشروط التالية والموافقة عليها قبل استخدام Wmimo",
     "agreeAndContinue": "قبول ومتابعة",
-    "disagreeAndExit": "رفض والخروج"
+    "disagreeAndExit": "رفض والخروج",
+    "zeroData": "صفر جمع للبيانات",
+    "localExecution": "تشغيل محلي فقط",
+    "zeroTelemetry": "بدون قياس عن بعد تجاري",
+    "loading": "جاري تحميل الاتفاقية..."
   },
   "NetCheckScreen": {
     "title": "فحص وتشخيص الشبكة",

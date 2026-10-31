@@ -44,7 +44,6 @@ class _UserAgreementScreenState
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isChinese = LocaleSettings.currentLocale.languageCode.startsWith('zh');
     final bgColor = isDark ? ThemeDefine.kColorDarkBg : ThemeDefine.kColorLightBg;
 
     return PopScope(
@@ -106,7 +105,7 @@ class _UserAgreementScreenState
                               horizontal: 24,
                               vertical: 18,
                             ),
-                            child: _buildMainCard(tcontext, isDark, isChinese),
+                            child: _buildMainCard(tcontext, isDark),
                           ),
                         ),
                       ),
@@ -121,7 +120,7 @@ class _UserAgreementScreenState
     );
   }
 
-  Widget _buildMainCard(Translations tcontext, bool isDark, bool isChinese) {
+  Widget _buildMainCard(Translations tcontext, bool isDark) {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? ThemeDefine.kColorDarkCard : Colors.white,
@@ -148,13 +147,13 @@ class _UserAgreementScreenState
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Header section
-          _buildHeader(tcontext, isDark, isChinese),
+          _buildHeader(tcontext, isDark),
           const SizedBox(height: 16),
           // Scrollable Terms Body
-          _buildTermsBox(isDark, isChinese),
+          _buildTermsBox(tcontext, isDark),
           const SizedBox(height: 16),
           // Highlights Badges Row
-          _buildHighlightsRow(isDark, isChinese),
+          _buildHighlightsRow(tcontext, isDark),
           const SizedBox(height: 20),
           // Action Buttons: Disagree & Exit vs Agree & Continue
           _buildActionButtons(tcontext, isDark),
@@ -163,7 +162,7 @@ class _UserAgreementScreenState
     );
   }
 
-  Widget _buildHeader(Translations tcontext, bool isDark, bool isChinese) {
+  Widget _buildHeader(Translations tcontext, bool isDark) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -217,9 +216,7 @@ class _UserAgreementScreenState
               ),
               const SizedBox(height: 3),
               Text(
-                isChinese
-                    ? "在使用 Wmimo 之前，请仔细阅读并同意以下条款"
-                    : "Please review and accept before continuing",
+                tcontext.UserAgreementScreen.subtitle,
                 style: TextStyle(
                   fontSize: 12.5,
                   color: isDark
@@ -234,7 +231,7 @@ class _UserAgreementScreenState
     );
   }
 
-  Widget _buildTermsBox(bool isDark, bool isChinese) {
+  Widget _buildTermsBox(Translations tcontext, bool isDark) {
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -259,7 +256,7 @@ class _UserAgreementScreenState
             child: FutureBuilder<String>(
               future: getData(),
               builder: (context, snapshot) {
-                final text = snapshot.data ?? (isChinese ? "正在加载用户协议..." : "Loading agreement...");
+                final text = snapshot.data ?? tcontext.UserAgreementScreen.loading;
                 return Text(
                   text,
                   style: TextStyle(
@@ -278,24 +275,24 @@ class _UserAgreementScreenState
     );
   }
 
-  Widget _buildHighlightsRow(bool isDark, bool isChinese) {
+  Widget _buildHighlightsRow(Translations tcontext, bool isDark) {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
       children: [
         _buildHighlightBadge(
           icon: Icons.shield_outlined,
-          label: isChinese ? "数据零收集" : "Zero-Data Collection",
+          label: tcontext.UserAgreementScreen.zeroData,
           isDark: isDark,
         ),
         _buildHighlightBadge(
           icon: Icons.offline_bolt_outlined,
-          label: isChinese ? "纯本地独立运行" : "Local Execution Only",
+          label: tcontext.UserAgreementScreen.localExecution,
           isDark: isDark,
         ),
         _buildHighlightBadge(
           icon: Icons.verified_user_outlined,
-          label: isChinese ? "纯净无商业遥测" : "Zero Telemetry SDK",
+          label: tcontext.UserAgreementScreen.zeroTelemetry,
           isDark: isDark,
         ),
       ],
@@ -410,9 +407,7 @@ class _UserAgreementScreenState
     if (_res.isNotEmpty) {
       return _res;
     }
-    final isChinese = LocaleSettings.currentLocale.languageCode.startsWith('zh');
-
-    _res = await AssetsUtils.loadUserAgreement(isChinese);
+    _res = await AssetsUtils.loadUserAgreement();
     return _res;
   }
 }

@@ -138,8 +138,13 @@ class _Translations$UserAgreementScreen$ja implements Translations$UserAgreement
 
 	// Translations
 	@override String get privacyFirst => '利用規約とプライバシーポリシー';
+	@override String get subtitle => 'Wmimo をご利用になる前に、以下の規約をお読みいただきご同意ください';
 	@override String get agreeAndContinue => '同意して続行';
 	@override String get disagreeAndExit => '同意せずに終了';
+	@override String get zeroData => 'データゼロ収集';
+	@override String get localExecution => '完全ローカル独立実行';
+	@override String get zeroTelemetry => '商業テレメトリなし';
+	@override String get loading => '規約を読み込み中...';
 }
 
 // Path: NetCheckScreen
@@ -1056,8 +1061,13 @@ extension on TranslationsJa {
 			'PerAppAndroidScreen.presetApps' => 'よく使うアプリを追加 (権限不要プリセット)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '権限をリクエスト (システムダイアログ)',
 			'UserAgreementScreen.privacyFirst' => '利用規約とプライバシーポリシー',
+			'UserAgreementScreen.subtitle' => 'Wmimo をご利用になる前に、以下の規約をお読みいただきご同意ください',
 			'UserAgreementScreen.agreeAndContinue' => '同意して続行',
 			'UserAgreementScreen.disagreeAndExit' => '同意せずに終了',
+			'UserAgreementScreen.zeroData' => 'データゼロ収集',
+			'UserAgreementScreen.localExecution' => '完全ローカル独立実行',
+			'UserAgreementScreen.zeroTelemetry' => '商業テレメトリなし',
+			'UserAgreementScreen.loading' => '規約を読み込み中...',
 			'NetCheckScreen.title' => 'ネットワーク診断と修復',
 			'NetCheckScreen.fullDiagnosticsTab' => 'パイプライン診断',
 			'NetCheckScreen.advancedCheckTab' => 'ドメイン詳細クエリ',
@@ -1538,13 +1548,13 @@ extension on TranslationsJa {
 			'meta.autoScrollDisabled' => '自動スクロール無効',
 			'meta.pauseLogs' => 'リアルタイムログを一時停止',
 			'meta.resumeLogs' => 'リアルタイムログを再開',
+			_ => null,
+		} ?? switch (path) {
 			'meta.scrollToLatest' => '最新までスクロール',
 			'meta.scrollToBottom' => '最下部へスクロール',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} 件の新しいログ)',
 			'meta.copiedLogContent' => 'ログ内容をコピーしました',
 			'meta.copyLog' => 'ログをコピー',
-			_ => null,
-		} ?? switch (path) {
 			'meta.noLogsPrompt' => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。',
 			'meta.searchLogsHint' => ' (IP, ドメイン, ルール, エラー...)',
 			'meta.offlinePreviewPrompt' => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。',

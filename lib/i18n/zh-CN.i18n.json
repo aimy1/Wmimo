@@ -33,8 +33,13 @@
   },
   "UserAgreementScreen": {
     "privacyFirst": "用户协议与隐私保护",
+    "subtitle": "在使用 Wmimo 之前，请仔细阅读并同意以下条款",
     "agreeAndContinue": "同意并继续",
-    "disagreeAndExit": "不同意并退出"
+    "disagreeAndExit": "不同意并退出",
+    "zeroData": "数据零收集",
+    "localExecution": "纯本地独立运行",
+    "zeroTelemetry": "纯净无商业遥测",
+    "loading": "正在加载用户协议..."
   },
   "NetCheckScreen": {
     "title": "网络链路体检与诊断",

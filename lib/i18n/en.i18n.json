@@ -33,8 +33,13 @@
   },
   "UserAgreementScreen": {
     "privacyFirst": "Terms of Service & Privacy Policy",
+    "subtitle": "Please review and agree to the terms below to continue",
     "agreeAndContinue": "Agree & Continue",
-    "disagreeAndExit": "Disagree & Exit"
+    "disagreeAndExit": "Disagree & Exit",
+    "zeroData": "Zero-Data Collection",
+    "localExecution": "Local Execution Only",
+    "zeroTelemetry": "No Commercial Telemetry",
+    "loading": "Loading agreement..."
   },
   "VersionUpdateScreen": {
     "versionReady": "The new version[$p] is ready",

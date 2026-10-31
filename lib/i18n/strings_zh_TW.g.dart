@@ -138,8 +138,13 @@ class Translations$UserAgreementScreen$zh_TW implements Translations$UserAgreeme
 
 	// Translations
 	@override String get privacyFirst => '使用者協議與隱私保護';
+	@override String get subtitle => '在使用 Wmimo 之前，請仔細閱讀並同意以下條款';
 	@override String get agreeAndContinue => '同意並繼續';
 	@override String get disagreeAndExit => '不同意並退出';
+	@override String get zeroData => '資料零收集';
+	@override String get localExecution => '純本機獨立運行';
+	@override String get zeroTelemetry => '純淨無商業遙測';
+	@override String get loading => '正在載入使用者協議...';
 }
 
 // Path: NetCheckScreen
@@ -1056,8 +1061,13 @@ extension on TranslationsZhTw {
 			'PerAppAndroidScreen.presetApps' => '捷徑新增常用應用程式 (免授權預設)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '嘗試一鍵申請權限 (系統彈窗)',
 			'UserAgreementScreen.privacyFirst' => '使用者協議與隱私保護',
+			'UserAgreementScreen.subtitle' => '在使用 Wmimo 之前，請仔細閱讀並同意以下條款',
 			'UserAgreementScreen.agreeAndContinue' => '同意並繼續',
 			'UserAgreementScreen.disagreeAndExit' => '不同意並退出',
+			'UserAgreementScreen.zeroData' => '資料零收集',
+			'UserAgreementScreen.localExecution' => '純本機獨立運行',
+			'UserAgreementScreen.zeroTelemetry' => '純淨無商業遙測',
+			'UserAgreementScreen.loading' => '正在載入使用者協議...',
 			'NetCheckScreen.title' => '網路鏈路體檢與診斷',
 			'NetCheckScreen.fullDiagnosticsTab' => '一鍵鏈路體檢',
 			'NetCheckScreen.advancedCheckTab' => '進階單網域排查',
@@ -1538,13 +1548,13 @@ extension on TranslationsZhTw {
 			'meta.autoScrollDisabled' => '已關閉自動捲動',
 			'meta.pauseLogs' => '暫停即時日誌',
 			'meta.resumeLogs' => '恢復即時日誌',
+			_ => null,
+		} ?? switch (path) {
 			'meta.scrollToLatest' => '滾至最新',
 			'meta.scrollToBottom' => '滾至底部',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} 條新日誌)',
 			'meta.copiedLogContent' => '已複製日誌內容',
 			'meta.copyLog' => '複製日誌',
-			_ => null,
-		} ?? switch (path) {
 			'meta.noLogsPrompt' => '暫無日誌，啟動代理後將即時捕獲核心日誌',
 			'meta.searchLogsHint' => ' (IP, 網域名稱, 規則, 錯誤...)',
 			'meta.offlinePreviewPrompt' => '離線設定預覽中，開啟代理後可進行分流與節點測速',

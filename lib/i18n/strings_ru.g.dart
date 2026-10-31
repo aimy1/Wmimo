@@ -138,8 +138,13 @@ class _Translations$UserAgreementScreen$ru implements Translations$UserAgreement
 
 	// Translations
 	@override String get privacyFirst => 'Пользовательское соглашение и конфиденциальность';
+	@override String get subtitle => 'Перед использованием Wmimo внимательно прочтите и примите условия';
 	@override String get agreeAndContinue => 'Принять и продолжить';
 	@override String get disagreeAndExit => 'Отклонить и выйти';
+	@override String get zeroData => 'Без сбора данных';
+	@override String get localExecution => 'Только локальное исполнение';
+	@override String get zeroTelemetry => 'Без телеметрии и трекеров';
+	@override String get loading => 'Загрузка соглашения...';
 }
 
 // Path: NetCheckScreen
@@ -1056,8 +1061,13 @@ extension on TranslationsRu {
 			'PerAppAndroidScreen.presetApps' => 'Быстрое добавление (пресет без разрешений)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'Запросить разрешение (системный диалог)',
 			'UserAgreementScreen.privacyFirst' => 'Пользовательское соглашение и конфиденциальность',
+			'UserAgreementScreen.subtitle' => 'Перед использованием Wmimo внимательно прочтите и примите условия',
 			'UserAgreementScreen.agreeAndContinue' => 'Принять и продолжить',
 			'UserAgreementScreen.disagreeAndExit' => 'Отклонить и выйти',
+			'UserAgreementScreen.zeroData' => 'Без сбора данных',
+			'UserAgreementScreen.localExecution' => 'Только локальное исполнение',
+			'UserAgreementScreen.zeroTelemetry' => 'Без телеметрии и трекеров',
+			'UserAgreementScreen.loading' => 'Загрузка соглашения...',
 			'NetCheckScreen.title' => 'Диагностика сети',
 			'NetCheckScreen.fullDiagnosticsTab' => 'Полная диагностика',
 			'NetCheckScreen.advancedCheckTab' => 'Расширенная проверка домена',
@@ -1538,13 +1548,13 @@ extension on TranslationsRu {
 			'meta.autoScrollDisabled' => 'Автопрокрутка отключена',
 			'meta.pauseLogs' => 'Приостановить логи',
 			'meta.resumeLogs' => 'Возобновить логи',
+			_ => null,
+		} ?? switch (path) {
 			'meta.scrollToLatest' => 'К последним логам',
 			'meta.scrollToBottom' => 'Прокрутить вниз',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} новых логов)',
 			'meta.copiedLogContent' => 'Содержимое лога скопировано',
 			'meta.copyLog' => 'Копировать лог',
-			_ => null,
-		} ?? switch (path) {
 			'meta.noLogsPrompt' => 'Логов пока нет. Логи ядра появятся после запуска прокси.',
 			'meta.searchLogsHint' => ' (IP, Домен, Правило, Ошибка...)',
 			'meta.offlinePreviewPrompt' => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.',

@@ -33,8 +33,13 @@
   },
   "UserAgreementScreen": {
     "privacyFirst": "이용약관 및 개인정보 처리방침",
+    "subtitle": "Wmimo를 사용하기 전에 다음 약관을 읽고 동의해 주세요",
     "agreeAndContinue": "동의 및 계속",
-    "disagreeAndExit": "동의하지 않고 종료"
+    "disagreeAndExit": "동의하지 않고 종료",
+    "zeroData": "데이터 수집 제로",
+    "localExecution": "완전 로컬 독립 실행",
+    "zeroTelemetry": "상업용 텔레메트리 없음",
+    "loading": "약관을 불러오는 중..."
   },
   "NetCheckScreen": {
     "title": "네트워크 진단 및 복구",

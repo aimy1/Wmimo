@@ -33,8 +33,13 @@
   },
   "UserAgreementScreen": {
     "privacyFirst": "利用規約とプライバシーポリシー",
+    "subtitle": "Wmimo をご利用になる前に、以下の規約をお読みいただきご同意ください",
     "agreeAndContinue": "同意して続行",
-    "disagreeAndExit": "同意せずに終了"
+    "disagreeAndExit": "同意せずに終了",
+    "zeroData": "データゼロ収集",
+    "localExecution": "完全ローカル独立実行",
+    "zeroTelemetry": "商業テレメトリなし",
+    "loading": "規約を読み込み中..."
   },
   "NetCheckScreen": {
     "title": "ネットワーク診断と修復",

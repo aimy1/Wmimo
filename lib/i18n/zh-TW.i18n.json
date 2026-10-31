@@ -33,8 +33,13 @@
   },
   "UserAgreementScreen": {
     "privacyFirst": "使用者協議與隱私保護",
+    "subtitle": "在使用 Wmimo 之前，請仔細閱讀並同意以下條款",
     "agreeAndContinue": "同意並繼續",
-    "disagreeAndExit": "不同意並退出"
+    "disagreeAndExit": "不同意並退出",
+    "zeroData": "資料零收集",
+    "localExecution": "純本機獨立運行",
+    "zeroTelemetry": "純淨無商業遙測",
+    "loading": "正在載入使用者協議..."
   },
   "NetCheckScreen": {
     "title": "網路鏈路體檢與診斷",

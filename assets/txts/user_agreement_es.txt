@@ -1,0 +1,17 @@
+Bienvenido a Wmimo. Por favor, lea atentamente este Acuerdo de Usuario y Política de Privacidad antes de utilizar el software.
+
+1. Protección de la Privacidad y Cero Recopilación de Datos
+- Cero Recopilación: Wmimo es una herramienta de red exclusivamente local para clientes. No recopila, registra, almacena, transmite ni comparte su información de identidad personal, historial de navegación, tráfico o registros de consultas DNS.
+- Ejecución Local Exclusiva: Todas las decisiones de enrutamiento y túneles proxy se ejecutan de manera completamente independiente en su dispositivo local, sin pasar por servidores controlados por los desarrolladores.
+- Sin Telemetría Comercial: No contiene SDKs publicitarios de terceros ni componentes de seguimiento analítico.
+
+2. Normas de Cumplimiento y Responsabilidad del Usuario
+- Uso Legítimo: El usuario se compromete a utilizar este software en estricta conformidad con las leyes y normativas locales aplicables.
+- Configuraciones Propias: El software solo proporciona el marco cliente y el motor de enrutamiento local; no suministra ni vende nodos ni servicios de acceso a Internet. El usuario es responsable de añadir suscripciones legales y seguras.
+- Seguridad de Credenciales: Las configuraciones y credenciales importadas se almacenan en el almacenamiento seguro local del dispositivo.
+
+3. Licencia de Código Abierto y Descargo de Responsabilidad
+- Provisión "TAL CUAL": Este software se distribuye bajo la licencia GPL-3.0 "tal cual" (AS IS), sin garantías de ningún tipo, expresas o implícitas.
+- Limitación de Responsabilidad: Los desarrolladores no serán responsables de pérdidas o daños derivados de la indisponibilidad de proveedores externos o del uso indebido por parte del usuario.
+
+Si acepta estos términos, haga clic en "Aceptar y Continuar". Si no está de acuerdo, haga clic en "Rechazar y Salir" para cerrar la aplicación.
