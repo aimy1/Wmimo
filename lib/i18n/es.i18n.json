@@ -32,8 +32,9 @@
     "requestPermissionPopup": "Solicitar permiso (diálogo del sistema)"
   },
   "UserAgreementScreen": {
-    "privacyFirst": "Su Privacidad es lo Primero",
-    "agreeAndContinue": "Aceptar y Continuar"
+    "privacyFirst": "Términos del Servicio y Privacidad",
+    "agreeAndContinue": "Aceptar y Continuar",
+    "disagreeAndExit": "Rechazar y Salir"
   },
   "VersionUpdateScreen": {
     "versionReady": "La nueva versión [$p] está lista",

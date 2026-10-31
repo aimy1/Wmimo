@@ -137,8 +137,9 @@ class Translations$UserAgreementScreen$zh_CN implements Translations$UserAgreeme
 	final TranslationsZhCn _root; // ignore: unused_field
 
 	// Translations
-	@override String get privacyFirst => '您的隐私很重要';
-	@override String get agreeAndContinue => '接受并继续';
+	@override String get privacyFirst => '用户协议与隐私保护';
+	@override String get agreeAndContinue => '同意并继续';
+	@override String get disagreeAndExit => '不同意并退出';
 }
 
 // Path: NetCheckScreen
@@ -1054,8 +1055,9 @@ extension on TranslationsZhCn {
 			'PerAppAndroidScreen.openSystemPermission' => '前往系统权限设置页',
 			'PerAppAndroidScreen.presetApps' => '快捷添加常用应用 (免授权预设)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '尝试一键申请权限 (系统弹窗)',
-			'UserAgreementScreen.privacyFirst' => '您的隐私很重要',
-			'UserAgreementScreen.agreeAndContinue' => '接受并继续',
+			'UserAgreementScreen.privacyFirst' => '用户协议与隐私保护',
+			'UserAgreementScreen.agreeAndContinue' => '同意并继续',
+			'UserAgreementScreen.disagreeAndExit' => '不同意并退出',
 			'NetCheckScreen.title' => '网络链路体检与诊断',
 			'NetCheckScreen.fullDiagnosticsTab' => '一键链路体检',
 			'NetCheckScreen.advancedCheckTab' => '高级单域名排查',
@@ -1541,9 +1543,9 @@ extension on TranslationsZhCn {
 			'meta.newLogsCount' => ({required Object p}) => '(${p} 条新日志)',
 			'meta.copiedLogContent' => '已复制日志内容',
 			'meta.copyLog' => '复制日志',
-			'meta.noLogsPrompt' => '暂无日志，启动代理后将实时捕获核心日志',
 			_ => null,
 		} ?? switch (path) {
+			'meta.noLogsPrompt' => '暂无日志，启动代理后将实时捕获核心日志',
 			'meta.searchLogsHint' => ' (IP, 域名, 规则, 错误...)',
 			'meta.offlinePreviewPrompt' => '离线配置预览中，开启代理后可进行分流与节点测速',
 			'meta.manualSelect' => '手动选择',

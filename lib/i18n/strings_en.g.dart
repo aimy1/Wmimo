@@ -196,11 +196,14 @@ class Translations$UserAgreementScreen$en {
 
 	// Translations
 
-	/// en: 'Your Privacy Comes First'
-	String get privacyFirst => 'Your Privacy Comes First';
+	/// en: 'Terms of Service & Privacy Policy'
+	String get privacyFirst => 'Terms of Service & Privacy Policy';
 
-	/// en: 'Accept & Continue'
-	String get agreeAndContinue => 'Accept & Continue';
+	/// en: 'Agree & Continue'
+	String get agreeAndContinue => 'Agree & Continue';
+
+	/// en: 'Disagree & Exit'
+	String get disagreeAndExit => 'Disagree & Exit';
 }
 
 // Path: VersionUpdateScreen
@@ -2212,7 +2215,11 @@ class Translations$meta$en {
 
 	/// en: 'Display dashboard cards and subscription lists side by side on wide screens'
 	String get sideBySideLayoutTips => 'Display dashboard cards and subscription lists side by side on wide screens';
+
+	/// en: 'UI Animations'
 	String get uiAnimations => 'UI Animations';
+
+	/// en: 'Enable smooth transitions for page switching, status indicators, and card folding'
 	String get uiAnimationsTips => 'Enable smooth transitions for page switching, status indicators, and card folding';
 
 	/// en: 'Dashboard Cards'
@@ -2638,8 +2645,9 @@ extension on Translations {
 			'PerAppAndroidScreen.openSystemPermission' => 'Open System Permission Settings',
 			'PerAppAndroidScreen.presetApps' => 'Quick Add Common Apps (Preset)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'Request Permission (System Dialog)',
-			'UserAgreementScreen.privacyFirst' => 'Your Privacy Comes First',
-			'UserAgreementScreen.agreeAndContinue' => 'Accept & Continue',
+			'UserAgreementScreen.privacyFirst' => 'Terms of Service & Privacy Policy',
+			'UserAgreementScreen.agreeAndContinue' => 'Agree & Continue',
+			'UserAgreementScreen.disagreeAndExit' => 'Disagree & Exit',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'The new version[${p}] is ready',
 			'VersionUpdateScreen.update' => 'Restart To Update',
 			'VersionUpdateScreen.cancel' => 'Not Now',
@@ -3125,9 +3133,9 @@ extension on Translations {
 			'meta.newLogsCount' => ({required Object p}) => '(${p} new logs)',
 			'meta.copiedLogContent' => 'Log content copied',
 			'meta.copyLog' => 'Copy Log',
-			'meta.noLogsPrompt' => 'No logs yet. Core logs will appear after starting proxy.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.noLogsPrompt' => 'No logs yet. Core logs will appear after starting proxy.',
 			'meta.searchLogsHint' => ' (IP, Domain, Rule, Error...)',
 			'meta.offlinePreviewPrompt' => 'Offline preview mode. Start proxy to enable routing and latency testing.',
 			'meta.manualSelect' => 'Manual',

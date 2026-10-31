@@ -137,8 +137,9 @@ class _Translations$UserAgreementScreen$ar implements Translations$UserAgreement
 	final TranslationsAr _root; // ignore: unused_field
 
 	// Translations
-	@override String get privacyFirst => 'خصوصيتك تأتي أولا';
+	@override String get privacyFirst => 'شروط الخدمة وسياسة الخصوصية';
 	@override String get agreeAndContinue => 'قبول ومتابعة';
+	@override String get disagreeAndExit => 'رفض والخروج';
 }
 
 // Path: NetCheckScreen
@@ -1054,8 +1055,9 @@ extension on TranslationsAr {
 			'PerAppAndroidScreen.openSystemPermission' => 'الانتقال إلى إعدادات أذونات النظام',
 			'PerAppAndroidScreen.presetApps' => 'إضافة سريعة للتطبيقات الشائعة (بدون إذن)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'طلب الإذن (نافذة النظام)',
-			'UserAgreementScreen.privacyFirst' => 'خصوصيتك تأتي أولا',
+			'UserAgreementScreen.privacyFirst' => 'شروط الخدمة وسياسة الخصوصية',
 			'UserAgreementScreen.agreeAndContinue' => 'قبول ومتابعة',
+			'UserAgreementScreen.disagreeAndExit' => 'رفض والخروج',
 			'NetCheckScreen.title' => 'فحص وتشخيص الشبكة',
 			'NetCheckScreen.fullDiagnosticsTab' => 'تشخيص كامل للمسار',
 			'NetCheckScreen.advancedCheckTab' => 'فحص متقدم للنطاق',
@@ -1541,9 +1543,9 @@ extension on TranslationsAr {
 			'meta.newLogsCount' => ({required Object p}) => '(${p} سجلات جديدة)',
 			'meta.copiedLogContent' => 'تم نسخ محتوى السجل',
 			'meta.copyLog' => 'نسخ السجل',
-			'meta.noLogsPrompt' => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.noLogsPrompt' => 'لا توجد سجلات بعد. ستظهر بعد بدء البروكسي.',
 			'meta.searchLogsHint' => ' (IP, النطاق, القاعدة, الخطأ...)',
 			'meta.offlinePreviewPrompt' => 'معاينة غير متصلة. ابدأ البروكسي لتفعيل التوجيه واختبار السرعة.',
 			'meta.manualSelect' => 'اختيار يدوي',

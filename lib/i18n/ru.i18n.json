@@ -32,8 +32,9 @@
     "requestPermissionPopup": "Запросить разрешение (системный диалог)"
   },
   "UserAgreementScreen": {
-    "privacyFirst": "Ваша конфиденциальность превыше всего",
-    "agreeAndContinue": "Принять и продолжить"
+    "privacyFirst": "Пользовательское соглашение и конфиденциальность",
+    "agreeAndContinue": "Принять и продолжить",
+    "disagreeAndExit": "Отклонить и выйти"
   },
   "NetCheckScreen": {
     "title": "Диагностика сети",

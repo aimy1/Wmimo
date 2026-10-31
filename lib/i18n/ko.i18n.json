@@ -32,8 +32,9 @@
     "requestPermissionPopup": "권한 요청 (시스템 팝업)"
   },
   "UserAgreementScreen": {
-    "privacyFirst": "개인 정보 보호 우선",
-    "agreeAndContinue": "동의 및 계속"
+    "privacyFirst": "이용약관 및 개인정보 처리방침",
+    "agreeAndContinue": "동의 및 계속",
+    "disagreeAndExit": "동의하지 않고 종료"
   },
   "NetCheckScreen": {
     "title": "네트워크 진단 및 복구",

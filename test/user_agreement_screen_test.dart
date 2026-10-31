@@ -11,7 +11,7 @@ void main() {
   });
 
   testWidgets(
-    'UserAgreementScreen renders title, privacy points and agree button',
+    'UserAgreementScreen renders title, privacy points, agree button and disagree button',
     (WidgetTester tester) async {
       await tester.pumpWidget(
         TranslationProvider(
@@ -24,16 +24,17 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify Title & Subtitle
-      expect(find.text('您的隐私很重要'), findsOneWidget);
-      expect(find.text('透明、无痕、完全本地化运行'), findsOneWidget);
+      expect(find.text('用户协议与隐私保护'), findsOneWidget);
+      expect(find.text('在使用 Wmimo 之前，请仔细阅读并同意以下条款'), findsOneWidget);
 
-      // Verify Privacy points
-      expect(find.text('严格零日志'), findsOneWidget);
-      expect(find.text('完全本地执行'), findsOneWidget);
-      expect(find.text('纯净透明无遥测'), findsOneWidget);
+      // Verify Privacy highlight badges
+      expect(find.text('数据零收集'), findsOneWidget);
+      expect(find.text('纯本地独立运行'), findsOneWidget);
+      expect(find.text('纯净无商业遥测'), findsOneWidget);
 
-      // Verify Agree and Continue button
-      expect(find.text('接受并继续'), findsOneWidget);
+      // Verify Action Buttons
+      expect(find.text('不同意并退出'), findsOneWidget);
+      expect(find.text('同意并继续'), findsOneWidget);
 
       // Clear widget tree and flush popRoute delayed timer
       await tester.pumpWidget(const SizedBox.shrink());

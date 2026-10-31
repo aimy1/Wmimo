@@ -32,8 +32,9 @@
     "requestPermissionPopup": "嘗試一鍵申請權限 (系統彈窗)"
   },
   "UserAgreementScreen": {
-    "privacyFirst": "您的隱私很重要",
-    "agreeAndContinue": "接受並繼續"
+    "privacyFirst": "使用者協議與隱私保護",
+    "agreeAndContinue": "同意並繼續",
+    "disagreeAndExit": "不同意並退出"
   },
   "NetCheckScreen": {
     "title": "網路鏈路體檢與診斷",

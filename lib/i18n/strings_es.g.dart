@@ -137,8 +137,9 @@ class _Translations$UserAgreementScreen$es implements Translations$UserAgreement
 	final TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get privacyFirst => 'Su Privacidad es lo Primero';
+	@override String get privacyFirst => 'Términos del Servicio y Privacidad';
 	@override String get agreeAndContinue => 'Aceptar y Continuar';
+	@override String get disagreeAndExit => 'Rechazar y Salir';
 }
 
 // Path: VersionUpdateScreen
@@ -1054,8 +1055,9 @@ extension on TranslationsEs {
 			'PerAppAndroidScreen.openSystemPermission' => 'Abrir configuración de permisos del sistema',
 			'PerAppAndroidScreen.presetApps' => 'Añadir apps comunes (sin permisos)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'Solicitar permiso (diálogo del sistema)',
-			'UserAgreementScreen.privacyFirst' => 'Su Privacidad es lo Primero',
+			'UserAgreementScreen.privacyFirst' => 'Términos del Servicio y Privacidad',
 			'UserAgreementScreen.agreeAndContinue' => 'Aceptar y Continuar',
+			'UserAgreementScreen.disagreeAndExit' => 'Rechazar y Salir',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'La nueva versión [${p}] está lista',
 			'VersionUpdateScreen.update' => 'Reiniciar para Actualizar',
 			'VersionUpdateScreen.cancel' => 'Ahora no',
@@ -1541,9 +1543,9 @@ extension on TranslationsEs {
 			'meta.newLogsCount' => ({required Object p}) => '(${p} nuevos registros)',
 			'meta.copiedLogContent' => 'Contenido del registro copiado',
 			'meta.copyLog' => 'Copiar registro',
-			'meta.noLogsPrompt' => 'Aún no hay registros. Aparecerán tras iniciar el proxy.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.noLogsPrompt' => 'Aún no hay registros. Aparecerán tras iniciar el proxy.',
 			'meta.searchLogsHint' => ' (IP, Dominio, Regla, Error...)',
 			'meta.offlinePreviewPrompt' => 'Modo de vista previa. Inicie el proxy para habilitar enrutamiento y prueba de latencia.',
 			'meta.manualSelect' => 'Selección manual',

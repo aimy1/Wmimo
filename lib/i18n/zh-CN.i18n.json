@@ -32,8 +32,9 @@
     "requestPermissionPopup": "尝试一键申请权限 (系统弹窗)"
   },
   "UserAgreementScreen": {
-    "privacyFirst": "您的隐私很重要",
-    "agreeAndContinue": "接受并继续"
+    "privacyFirst": "用户协议与隐私保护",
+    "agreeAndContinue": "同意并继续",
+    "disagreeAndExit": "不同意并退出"
   },
   "NetCheckScreen": {
     "title": "网络链路体检与诊断",

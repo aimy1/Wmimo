@@ -137,8 +137,9 @@ class Translations$UserAgreementScreen$zh_TW implements Translations$UserAgreeme
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get privacyFirst => '您的隱私很重要';
-	@override String get agreeAndContinue => '接受並繼續';
+	@override String get privacyFirst => '使用者協議與隱私保護';
+	@override String get agreeAndContinue => '同意並繼續';
+	@override String get disagreeAndExit => '不同意並退出';
 }
 
 // Path: NetCheckScreen
@@ -1054,8 +1055,9 @@ extension on TranslationsZhTw {
 			'PerAppAndroidScreen.openSystemPermission' => '前往系統權限設定頁',
 			'PerAppAndroidScreen.presetApps' => '捷徑新增常用應用程式 (免授權預設)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '嘗試一鍵申請權限 (系統彈窗)',
-			'UserAgreementScreen.privacyFirst' => '您的隱私很重要',
-			'UserAgreementScreen.agreeAndContinue' => '接受並繼續',
+			'UserAgreementScreen.privacyFirst' => '使用者協議與隱私保護',
+			'UserAgreementScreen.agreeAndContinue' => '同意並繼續',
+			'UserAgreementScreen.disagreeAndExit' => '不同意並退出',
 			'NetCheckScreen.title' => '網路鏈路體檢與診斷',
 			'NetCheckScreen.fullDiagnosticsTab' => '一鍵鏈路體檢',
 			'NetCheckScreen.advancedCheckTab' => '進階單網域排查',
@@ -1541,9 +1543,9 @@ extension on TranslationsZhTw {
 			'meta.newLogsCount' => ({required Object p}) => '(${p} 條新日誌)',
 			'meta.copiedLogContent' => '已複製日誌內容',
 			'meta.copyLog' => '複製日誌',
-			'meta.noLogsPrompt' => '暫無日誌，啟動代理後將即時捕獲核心日誌',
 			_ => null,
 		} ?? switch (path) {
+			'meta.noLogsPrompt' => '暫無日誌，啟動代理後將即時捕獲核心日誌',
 			'meta.searchLogsHint' => ' (IP, 網域名稱, 規則, 錯誤...)',
 			'meta.offlinePreviewPrompt' => '離線設定預覽中，開啟代理後可進行分流與節點測速',
 			'meta.manualSelect' => '手動選擇',

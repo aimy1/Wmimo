@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wmimo/app/utils/assets_utils.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
@@ -22,7 +24,21 @@ class UserAgreementScreen extends LasyRenderingStatefulWidget {
 
 class _UserAgreementScreenState
     extends LasyRenderingState<UserAgreementScreen> {
+  final ScrollController _scrollController = ScrollController();
   String _res = "";
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _onDisagreeAndExit() async {
+    try {
+      await ServicesBinding.instance.exitApplication(AppExitType.required);
+    } catch (_) {}
+    exit(0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,22 +100,13 @@ class _UserAgreementScreenState
                       child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
                         child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 560),
+                          constraints: const BoxConstraints(maxWidth: 640),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 24,
-                              vertical: 20,
+                              vertical: 18,
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _buildHeader(tcontext, isDark, isChinese),
-                                const SizedBox(height: 22),
-                                _buildContentCard(isDark, isChinese),
-                                const SizedBox(height: 24),
-                                _buildConfirmButton(tcontext),
-                              ],
-                            ),
+                            child: _buildMainCard(tcontext, isDark, isChinese),
                           ),
                         ),
                       ),
@@ -114,68 +121,7 @@ class _UserAgreementScreenState
     );
   }
 
-  Widget _buildHeader(Translations tcontext, bool isDark, bool isChinese) {
-    return Column(
-      children: [
-        // App Logo Badge with glowing border
-        Container(
-          width: 64,
-          height: 64,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: isDark
-                  ? ThemeDefine.kColorBlue.withValues(alpha: 0.35)
-                  : ThemeDefine.kColorBlue.withValues(alpha: 0.25),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: ThemeDefine.kColorBlue.withValues(
-                  alpha: isDark ? 0.25 : 0.15,
-                ),
-                blurRadius: 18,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16.5),
-            child: Image.asset(
-              'assets/images/app_icon_256.png',
-              width: 64,
-              height: 64,
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.medium,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          tcontext.UserAgreementScreen.privacyFirst,
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.3,
-            color: isDark ? Colors.white : const Color(0xFF0F172A),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          isChinese ? "透明、无痕、完全本地化运行" : "Transparent, Private, Fully Local",
-          style: TextStyle(
-            fontSize: 13,
-            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildContentCard(bool isDark, bool isChinese) {
+  Widget _buildMainCard(Translations tcontext, bool isDark, bool isChinese) {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? ThemeDefine.kColorDarkCard : Colors.white,
@@ -189,133 +135,93 @@ class _UserAgreementScreenState
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withValues(alpha: 0.2)
-                : Colors.black.withValues(alpha: 0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
+                ? Colors.black.withValues(alpha: 0.25)
+                : Colors.black.withValues(alpha: 0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(22, 22, 22, 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Primary Highlight
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: ThemeDefine.kColorBlue.withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.verified_user_rounded,
-                  color: ThemeDefine.kColorBlue,
-                  size: 22,
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: FutureBuilder<String>(
-                  future: getData(),
-                  builder: (context, snapshot) {
-                    final data = snapshot.data ?? (isChinese ? "本应用 (Wmimo) 不会收集任何数据" : "This app (Wmimo) does not collect any data");
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        data,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          height: 1.45,
-                          color: isDark ? Colors.white : const Color(0xFF0F172A),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 18),
-          Divider(
-            height: 1,
-            thickness: 0.8,
-            color: isDark
-                ? ThemeDefine.kColorDarkBorder
-                : const Color(0xFFF1F5F9),
-          ),
-          const SizedBox(height: 18),
-          // Privacy Points
-          _buildPrivacyPoint(
-            icon: Icons.history_toggle_off_rounded,
-            title: isChinese ? "严格零日志" : "Strict Zero-Log Policy",
-            desc: isChinese
-                ? "本地绝不记录、更不会上传您的任何访问历史、DNS 查询或浏览隐私数据。"
-                : "No browsing history, DNS queries, or user traffic are recorded or uploaded.",
-            isDark: isDark,
-          ),
-          const SizedBox(height: 14),
-          _buildPrivacyPoint(
-            icon: Icons.memory_rounded,
-            title: isChinese ? "完全本地执行" : "Local-Only Execution",
-            desc: isChinese
-                ? "所有路由分流决策与代理隧道连接，均在您的本机环境完全自主运行。"
-                : "All routing decisions and proxy tunnels execute entirely on your local machine.",
-            isDark: isDark,
-          ),
-          const SizedBox(height: 14),
-          _buildPrivacyPoint(
-            icon: Icons.privacy_tip_outlined,
-            title: isChinese ? "纯净透明无遥测" : "Zero Telemetry & Tracking",
-            desc: isChinese
-                ? "不内嵌任何第三方商业遥测、数据分析或广告追踪 SDK，守护您的数据主权。"
-                : "Free of third-party telemetry, analytics, or advertising SDKs.",
-            isDark: isDark,
-          ),
+          // Header section
+          _buildHeader(tcontext, isDark, isChinese),
+          const SizedBox(height: 16),
+          // Scrollable Terms Body
+          _buildTermsBox(isDark, isChinese),
+          const SizedBox(height: 16),
+          // Highlights Badges Row
+          _buildHighlightsRow(isDark, isChinese),
+          const SizedBox(height: 20),
+          // Action Buttons: Disagree & Exit vs Agree & Continue
+          _buildActionButtons(tcontext, isDark),
         ],
       ),
     );
   }
 
-  Widget _buildPrivacyPoint({
-    required IconData icon,
-    required String title,
-    required String desc,
-    required bool isDark,
-  }) {
+  Widget _buildHeader(Translations tcontext, bool isDark, bool isChinese) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: Icon(
-            icon,
-            size: 18,
-            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+        // App Logo Badge
+        Container(
+          width: 46,
+          height: 46,
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isDark
+                  ? ThemeDefine.kColorBlue.withValues(alpha: 0.35)
+                  : ThemeDefine.kColorBlue.withValues(alpha: 0.25),
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: ThemeDefine.kColorBlue.withValues(
+                  alpha: isDark ? 0.22 : 0.12,
+                ),
+                blurRadius: 12,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12.5),
+            child: Image.asset(
+              'assets/images/app_icon_256.png',
+              width: 46,
+              height: 46,
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.medium,
+            ),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                tcontext.UserAgreementScreen.privacyFirst,
                 style: TextStyle(
-                  fontSize: 13.5,
-                  fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white : const Color(0xFF1E293B),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.2,
+                  color: isDark ? Colors.white : const Color(0xFF0F172A),
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Text(
-                desc,
+                isChinese
+                    ? "在使用 Wmimo 之前，请仔细阅读并同意以下条款"
+                    : "Please review and accept before continuing",
                 style: TextStyle(
                   fontSize: 12.5,
-                  height: 1.4,
                   color: isDark
                       ? const Color(0xFF94A3B8)
                       : const Color(0xFF64748B),
@@ -328,31 +234,175 @@ class _UserAgreementScreenState
     );
   }
 
-  Widget _buildConfirmButton(Translations tcontext) {
-    return SizedBox(
-      width: double.infinity,
-      height: 48,
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: ThemeDefine.kColorBlue,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
+  Widget _buildTermsBox(bool isDark, bool isChinese) {
+    return Container(
+      height: 250,
+      decoration: BoxDecoration(
+        color: isDark ? ThemeDefine.kColorDarkInner : const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isDark
+              ? ThemeDefine.kColorDarkBorder
+              : const Color(0xFFE2E8F0),
+          width: 0.9,
         ),
-        child: Text(
-          tcontext.UserAgreementScreen.agreeAndContinue,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.3,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      child: Scrollbar(
+        controller: _scrollController,
+        thumbVisibility: true,
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: FutureBuilder<String>(
+              future: getData(),
+              builder: (context, snapshot) {
+                final text = snapshot.data ?? (isChinese ? "正在加载用户协议..." : "Loading agreement...");
+                return Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    height: 1.6,
+                    color: isDark
+                        ? const Color(0xFFCBD5E1)
+                        : const Color(0xFF334155),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHighlightsRow(bool isDark, bool isChinese) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        _buildHighlightBadge(
+          icon: Icons.shield_outlined,
+          label: isChinese ? "数据零收集" : "Zero-Data Collection",
+          isDark: isDark,
+        ),
+        _buildHighlightBadge(
+          icon: Icons.offline_bolt_outlined,
+          label: isChinese ? "纯本地独立运行" : "Local Execution Only",
+          isDark: isDark,
+        ),
+        _buildHighlightBadge(
+          icon: Icons.verified_user_outlined,
+          label: isChinese ? "纯净无商业遥测" : "Zero Telemetry SDK",
+          isDark: isDark,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHighlightBadge({
+    required IconData icon,
+    required String label,
+    required bool isDark,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.12 : 0.08),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.25 : 0.20),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 13,
+            color: ThemeDefine.kColorBlue,
+          ),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w600,
+              color: isDark ? const Color(0xFFE2E8F0) : const Color(0xFF1E293B),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(Translations tcontext, bool isDark) {
+    return Row(
+      children: [
+        // Disagree & Exit
+        Expanded(
+          flex: 1,
+          child: OutlinedButton(
+            onPressed: _onDisagreeAndExit,
+            style: OutlinedButton.styleFrom(
+              foregroundColor: isDark
+                  ? const Color(0xFFF87171)
+                  : const Color(0xFFDC2626),
+              backgroundColor: isDark
+                  ? const Color(0xFF1F1414)
+                  : const Color(0xFFFEF2F2),
+              side: BorderSide(
+                color: isDark
+                    ? const Color(0xFF452222)
+                    : const Color(0xFFFECACA),
+                width: 1,
+              ),
+              elevation: 0,
+              minimumSize: const Size(0, 44),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(ThemeDefine.kRadiusMedium),
+              ),
+            ),
+            child: Text(
+              tcontext.UserAgreementScreen.disagreeAndExit,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        // Agree & Continue
+        Expanded(
+          flex: 1,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ThemeDefine.kColorBlue,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              minimumSize: const Size(0, 44),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(ThemeDefine.kRadiusMedium),
+              ),
+            ),
+            child: Text(
+              tcontext.UserAgreementScreen.agreeAndContinue,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

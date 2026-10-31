@@ -1,1 +1,17 @@
-This app (Wmimo) does not collect any data
+Welcome to Wmimo. Please carefully read this User Agreement and Privacy Policy before using this software.
+
+1. Privacy Protection & Zero-Data Collection
+- Zero Telemetry: Wmimo is a local-first client tool. It does not collect, record, store, transmit, or share any personal identity information, browsing history, web traffic, or DNS query logs.
+- Local Execution: All routing decisions, rule matching, and proxy tunnel operations execute entirely on your local device without routing through any developer-controlled servers.
+- No Trackers: Wmimo contains no third-party advertising SDKs, commercial telemetry, or behavioral tracking components.
+
+2. Terms of Use & User Responsibilities
+- Lawful Usage: You agree to use this software in strict compliance with applicable local laws and regulations. You must not use this tool for any illegal or malicious activities.
+- User-Provided Configurations: This software only provides a local client framework and routing engine. It does not provide, distribute, or sell any proxy nodes or internet access services. Users are solely responsible for acquiring and managing lawful configuration subscriptions.
+- Credential Security: All user-imported configurations and credentials are stored securely on the local device. You are responsible for safeguarding your device and configuration access.
+
+3. Open Source License & Disclaimer
+- "AS IS" Provision: This software is distributed under its open-source license on an "AS IS" basis, without warranties or conditions of any kind, either express or implied.
+- Limitation of Liability: The developers shall not be liable for any damages or losses arising from third-party node unavailability, network disruptions, or unlawful usage by the user.
+
+By clicking "Agree & Continue", you confirm that you have read, understood, and agreed to these terms. If you do not agree, please click "Disagree & Exit" to close the application.

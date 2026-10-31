@@ -32,8 +32,9 @@
     "requestPermissionPopup": "Request Permission (System Dialog)"
   },
   "UserAgreementScreen": {
-    "privacyFirst": "Your Privacy Comes First",
-    "agreeAndContinue": "Accept & Continue"
+    "privacyFirst": "Terms of Service & Privacy Policy",
+    "agreeAndContinue": "Agree & Continue",
+    "disagreeAndExit": "Disagree & Exit"
   },
   "VersionUpdateScreen": {
     "versionReady": "The new version[$p] is ready",

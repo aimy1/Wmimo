@@ -137,8 +137,9 @@ class _Translations$UserAgreementScreen$ja implements Translations$UserAgreement
 	final TranslationsJa _root; // ignore: unused_field
 
 	// Translations
-	@override String get privacyFirst => 'プライバシーを第一に';
+	@override String get privacyFirst => '利用規約とプライバシーポリシー';
 	@override String get agreeAndContinue => '同意して続行';
+	@override String get disagreeAndExit => '同意せずに終了';
 }
 
 // Path: NetCheckScreen
@@ -1054,8 +1055,9 @@ extension on TranslationsJa {
 			'PerAppAndroidScreen.openSystemPermission' => 'システム権限設定を開く',
 			'PerAppAndroidScreen.presetApps' => 'よく使うアプリを追加 (権限不要プリセット)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '権限をリクエスト (システムダイアログ)',
-			'UserAgreementScreen.privacyFirst' => 'プライバシーを第一に',
+			'UserAgreementScreen.privacyFirst' => '利用規約とプライバシーポリシー',
 			'UserAgreementScreen.agreeAndContinue' => '同意して続行',
+			'UserAgreementScreen.disagreeAndExit' => '同意せずに終了',
 			'NetCheckScreen.title' => 'ネットワーク診断と修復',
 			'NetCheckScreen.fullDiagnosticsTab' => 'パイプライン診断',
 			'NetCheckScreen.advancedCheckTab' => 'ドメイン詳細クエリ',
@@ -1541,9 +1543,9 @@ extension on TranslationsJa {
 			'meta.newLogsCount' => ({required Object p}) => '(${p} 件の新しいログ)',
 			'meta.copiedLogContent' => 'ログ内容をコピーしました',
 			'meta.copyLog' => 'ログをコピー',
-			'meta.noLogsPrompt' => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。',
 			_ => null,
 		} ?? switch (path) {
+			'meta.noLogsPrompt' => 'ログはまだありません。プロキシ起動後にリアルタイムログが表示されます。',
 			'meta.searchLogsHint' => ' (IP, ドメイン, ルール, エラー...)',
 			'meta.offlinePreviewPrompt' => 'オフラインプレビュー中。プロキシを開始してルーティングと速度テストを有効化します。',
 			'meta.manualSelect' => '手動選択',

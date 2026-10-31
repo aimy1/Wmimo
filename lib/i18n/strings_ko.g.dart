@@ -137,8 +137,9 @@ class _Translations$UserAgreementScreen$ko implements Translations$UserAgreement
 	final TranslationsKo _root; // ignore: unused_field
 
 	// Translations
-	@override String get privacyFirst => '개인 정보 보호 우선';
+	@override String get privacyFirst => '이용약관 및 개인정보 처리방침';
 	@override String get agreeAndContinue => '동의 및 계속';
+	@override String get disagreeAndExit => '동의하지 않고 종료';
 }
 
 // Path: NetCheckScreen
@@ -1054,8 +1055,9 @@ extension on TranslationsKo {
 			'PerAppAndroidScreen.openSystemPermission' => '시스템 권한 설정으로 이동',
 			'PerAppAndroidScreen.presetApps' => '자주 쓰는 앱 빠른 추가 (권한 불필요 프리셋)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '권한 요청 (시스템 팝업)',
-			'UserAgreementScreen.privacyFirst' => '개인 정보 보호 우선',
+			'UserAgreementScreen.privacyFirst' => '이용약관 및 개인정보 처리방침',
 			'UserAgreementScreen.agreeAndContinue' => '동의 및 계속',
+			'UserAgreementScreen.disagreeAndExit' => '동의하지 않고 종료',
 			'NetCheckScreen.title' => '네트워크 진단 및 복구',
 			'NetCheckScreen.fullDiagnosticsTab' => '파이프라인 진단',
 			'NetCheckScreen.advancedCheckTab' => '고급 도메인 쿼리',
@@ -1541,9 +1543,9 @@ extension on TranslationsKo {
 			'meta.newLogsCount' => ({required Object p}) => '(${p}개 새 로그)',
 			'meta.copiedLogContent' => '로그 내용이 복사되었습니다',
 			'meta.copyLog' => '로그 복사',
-			'meta.noLogsPrompt' => '아직 로그가 없습니다. 프록시 시작 후 실시간 로그가 표시됩니다.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.noLogsPrompt' => '아직 로그가 없습니다. 프록시 시작 후 실시간 로그가 표시됩니다.',
 			'meta.searchLogsHint' => ' (IP, 도메인, 규칙, 오류...)',
 			'meta.offlinePreviewPrompt' => '오프라인 미리보기 모드. 프록시를 시작하여 라우팅 및 지연 테스트를 사용합니다.',
 			'meta.manualSelect' => '수동 선택',

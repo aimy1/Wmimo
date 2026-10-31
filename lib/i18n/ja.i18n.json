@@ -32,8 +32,9 @@
     "requestPermissionPopup": "権限をリクエスト (システムダイアログ)"
   },
   "UserAgreementScreen": {
-    "privacyFirst": "プライバシーを第一に",
-    "agreeAndContinue": "同意して続行"
+    "privacyFirst": "利用規約とプライバシーポリシー",
+    "agreeAndContinue": "同意して続行",
+    "disagreeAndExit": "同意せずに終了"
   },
   "NetCheckScreen": {
     "title": "ネットワーク診断と修復",

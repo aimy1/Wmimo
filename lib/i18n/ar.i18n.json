@@ -32,8 +32,9 @@
     "requestPermissionPopup": "طلب الإذن (نافذة النظام)"
   },
   "UserAgreementScreen": {
-    "privacyFirst": "خصوصيتك تأتي أولا",
-    "agreeAndContinue": "قبول ومتابعة"
+    "privacyFirst": "شروط الخدمة وسياسة الخصوصية",
+    "agreeAndContinue": "قبول ومتابعة",
+    "disagreeAndExit": "رفض والخروج"
   },
   "NetCheckScreen": {
     "title": "فحص وتشخيص الشبكة",

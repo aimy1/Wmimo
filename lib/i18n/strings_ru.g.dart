@@ -137,8 +137,9 @@ class _Translations$UserAgreementScreen$ru implements Translations$UserAgreement
 	final TranslationsRu _root; // ignore: unused_field
 
 	// Translations
-	@override String get privacyFirst => 'Ваша конфиденциальность превыше всего';
+	@override String get privacyFirst => 'Пользовательское соглашение и конфиденциальность';
 	@override String get agreeAndContinue => 'Принять и продолжить';
+	@override String get disagreeAndExit => 'Отклонить и выйти';
 }
 
 // Path: NetCheckScreen
@@ -1054,8 +1055,9 @@ extension on TranslationsRu {
 			'PerAppAndroidScreen.openSystemPermission' => 'Открыть настройки разрешений',
 			'PerAppAndroidScreen.presetApps' => 'Быстрое добавление (пресет без разрешений)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'Запросить разрешение (системный диалог)',
-			'UserAgreementScreen.privacyFirst' => 'Ваша конфиденциальность превыше всего',
+			'UserAgreementScreen.privacyFirst' => 'Пользовательское соглашение и конфиденциальность',
 			'UserAgreementScreen.agreeAndContinue' => 'Принять и продолжить',
+			'UserAgreementScreen.disagreeAndExit' => 'Отклонить и выйти',
 			'NetCheckScreen.title' => 'Диагностика сети',
 			'NetCheckScreen.fullDiagnosticsTab' => 'Полная диагностика',
 			'NetCheckScreen.advancedCheckTab' => 'Расширенная проверка домена',
@@ -1541,9 +1543,9 @@ extension on TranslationsRu {
 			'meta.newLogsCount' => ({required Object p}) => '(${p} новых логов)',
 			'meta.copiedLogContent' => 'Содержимое лога скопировано',
 			'meta.copyLog' => 'Копировать лог',
-			'meta.noLogsPrompt' => 'Логов пока нет. Логи ядра появятся после запуска прокси.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.noLogsPrompt' => 'Логов пока нет. Логи ядра появятся после запуска прокси.',
 			'meta.searchLogsHint' => ' (IP, Домен, Правило, Ошибка...)',
 			'meta.offlinePreviewPrompt' => 'Режим предпросмотра. Запустите прокси для маршрутизации и проверки задержки.',
 			'meta.manualSelect' => 'Ручной выбор',

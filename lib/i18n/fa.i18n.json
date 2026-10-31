@@ -32,8 +32,9 @@
     "requestPermissionPopup": "درخواست مجوز (پاپ‌آپ سیستم)"
   },
   "UserAgreementScreen": {
-    "privacyFirst": "حریم‌خصوصی شما اولویت دارد",
-    "agreeAndContinue": "پذیرفتن و ادامه"
+    "privacyFirst": "شرایط استفاده و حریم خصوصی",
+    "agreeAndContinue": "پذیرفتن و ادامه",
+    "disagreeAndExit": "عدم موافقت و خروج"
   },
   "NetCheckScreen": {
     "title": "عیب‌یابی و تشخیص شبکه",

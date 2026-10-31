@@ -137,8 +137,9 @@ class _Translations$UserAgreementScreen$fa implements Translations$UserAgreement
 	final TranslationsFa _root; // ignore: unused_field
 
 	// Translations
-	@override String get privacyFirst => 'حریم‌خصوصی شما اولویت دارد';
+	@override String get privacyFirst => 'شرایط استفاده و حریم خصوصی';
 	@override String get agreeAndContinue => 'پذیرفتن و ادامه';
+	@override String get disagreeAndExit => 'عدم موافقت و خروج';
 }
 
 // Path: NetCheckScreen
@@ -1054,8 +1055,9 @@ extension on TranslationsFa {
 			'PerAppAndroidScreen.openSystemPermission' => 'رفتن به تنظیمات مجوزهای سیستم',
 			'PerAppAndroidScreen.presetApps' => 'افزودن سریع برنامه‌ها (بدون نیاز به مجوز)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'درخواست مجوز (پاپ‌آپ سیستم)',
-			'UserAgreementScreen.privacyFirst' => 'حریم‌خصوصی شما اولویت دارد',
+			'UserAgreementScreen.privacyFirst' => 'شرایط استفاده و حریم خصوصی',
 			'UserAgreementScreen.agreeAndContinue' => 'پذیرفتن و ادامه',
+			'UserAgreementScreen.disagreeAndExit' => 'عدم موافقت و خروج',
 			'NetCheckScreen.title' => 'عیب‌یابی و تشخیص شبکه',
 			'NetCheckScreen.fullDiagnosticsTab' => 'عیب‌یابی کامل لینک',
 			'NetCheckScreen.advancedCheckTab' => 'بررسی پیشرفته دامنه',
@@ -1541,9 +1543,9 @@ extension on TranslationsFa {
 			'meta.newLogsCount' => ({required Object p}) => '(${p} لاگ جدید)',
 			'meta.copiedLogContent' => 'محتوای لاگ کپی شد',
 			'meta.copyLog' => 'کپی لاگ',
-			'meta.noLogsPrompt' => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.',
 			_ => null,
 		} ?? switch (path) {
+			'meta.noLogsPrompt' => 'هنوز لاگی وجود ندارد. پس از شروع پروکسی نمایش داده می‌شود.',
 			'meta.searchLogsHint' => ' (IP, دامنه, قانون, خطا...)',
 			'meta.offlinePreviewPrompt' => 'حالت پیش‌نمایش آفلاین. برای مسیریابی و تست تأخیر پروکسی را فعال کنید.',
 			'meta.manualSelect' => 'انتخاب دستی',
