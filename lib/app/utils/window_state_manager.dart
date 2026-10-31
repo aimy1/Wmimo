@@ -81,18 +81,27 @@ class WindowStateManager with WindowListener {
             Log.w("Failed to maximize window: $e");
           }
         }
-        await windowManager.show();
-        await windowManager.focus();
+        final settings = SettingManager.getConfig();
+        if (!settings.ui.hideAfterLaunch) {
+          await windowManager.show();
+          await windowManager.focus();
+        }
       } finally {
         _isApplying = false;
       }
     }
 
+    bool readyCallbackExecuted = false;
     windowManager.waitUntilReadyToShow(windowOptions, () async {
+      readyCallbackExecuted = true;
       await applyWindowSettings();
     });
-    // Direct call fallback in case waitUntilReadyToShow completes synchronously
-    await applyWindowSettings();
+    // Fallback timer in case platform doesn't trigger waitUntilReadyToShow callback
+    Future.delayed(const Duration(milliseconds: 1200), () async {
+      if (!readyCallbackExecuted) {
+        await applyWindowSettings();
+      }
+    });
 
     windowManager.addListener(this);
   }

@@ -51,7 +51,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance,
   if (!window->Create(kWindowName, origin, size)) {
     return EXIT_FAILURE;
   }
-  window->Show();
   ::ChangeWindowMessageFilterEx(window->GetHandle(), WM_COPYDATA, MSGFLT_ALLOW,
                                 NULL);
   window->SetQuitOnClose(false);
