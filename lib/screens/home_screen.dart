@@ -235,28 +235,22 @@ class _HomeScreenState extends State<HomeScreen>
 
     String? agreement;
     try {
-      if (Platform.isIOS || Platform.isMacOS) {
-        agreement = await LocalStorage.read(userAgreementAgreedIdKey);
-      } else {
-        agreement = "true";
-      }
+      agreement = await LocalStorage.read(userAgreementAgreedIdKey);
     } catch (e) {}
 
     if (agreement != null) {
       return;
     }
-    if (Platform.isIOS || Platform.isMacOS) {
-      if (!mounted) return;
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          settings: UserAgreementScreen.routSettings(),
-          fullscreenDialog: true,
-          builder: (context) => const UserAgreementScreen(),
-        ),
-      );
-      LocalStorage.write(userAgreementAgreedIdKey, "true");
-    }
+    if (!mounted) return;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        settings: UserAgreementScreen.routSettings(),
+        fullscreenDialog: true,
+        builder: (context) => const UserAgreementScreen(),
+      ),
+    );
+    LocalStorage.write(userAgreementAgreedIdKey, "true");
   }
 
   void _init() async {

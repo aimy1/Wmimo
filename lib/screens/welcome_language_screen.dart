@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
+import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
+import 'package:wmimo/screens/widgets/desktop_window_caption_bar.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 
 class _LanguageOption {
@@ -168,30 +170,39 @@ class _WelcomeLanguageScreenState
                 ),
               ),
             ),
-            SafeArea(
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 640),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 22),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 12),
-                        _buildHeader(tcontext, isDark),
-                        const SizedBox(height: 14),
-                        // Language Selection Grid
-                        Expanded(
-                          child: _buildLanguageGrid(isDark),
+            Column(
+              children: [
+                if (PlatformUtils.isPC())
+                  const DesktopWindowCaptionBar(showLeadingLogo: true),
+                Expanded(
+                  child: SafeArea(
+                    top: !PlatformUtils.isPC(),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 640),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 22),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 12),
+                              _buildHeader(tcontext, isDark),
+                              const SizedBox(height: 14),
+                              // Language Selection Grid
+                              Expanded(
+                                child: _buildLanguageGrid(isDark),
+                              ),
+                              const SizedBox(height: 12),
+                              // Confirm Button
+                              _buildConfirmButton(tcontext),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 12),
-                        // Confirm Button
-                        _buildConfirmButton(tcontext),
-                        const SizedBox(height: 16),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
