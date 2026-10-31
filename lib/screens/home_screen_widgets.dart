@@ -179,7 +179,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     if (nodeName.isNotEmpty) {
       _proxyNow.value = nodeName;
     }
-    _updateProxyNow();
+    if (_state == FlutterVpnServiceState.connected) {
+      _updateProxyNow();
+    }
   }
 
   @override
@@ -1882,15 +1884,28 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       // Offline / disconnected fallback: load selected node from current profile
       final offlineNodes = await ProxyNodeLoader.loadCurrentProfileNodes();
       if (offlineNodes.isNotEmpty) {
-        // Look for proxy group with 'now' or first proxy
-        final groupWithSelection = offlineNodes.firstWhere(
-          (n) => n.now.isNotEmpty,
-          orElse: () => offlineNodes.first,
-        );
-        if (groupWithSelection.now.isNotEmpty) {
-          _proxyNow.value = groupWithSelection.now;
-        } else if (groupWithSelection.name.isNotEmpty) {
-          _proxyNow.value = groupWithSelection.name;
+        final groups = offlineNodes
+            .where((n) => ClashProtocolType.isGroupType(n.type))
+            .toList();
+        final primaryGroup = ClashHttpApi.findPrimaryRuleGroup(groups);
+        if (primaryGroup != null && primaryGroup.now.isNotEmpty) {
+          final chain = ClashHttpApi.getNowChain(
+            offlineNodes,
+            primaryGroup,
+            ClashSettingManager.getConfigsMode().name,
+          );
+          _proxyNow.value =
+              chain.isNotEmpty ? chain.first.name : primaryGroup.now;
+        } else {
+          final groupWithSelection = offlineNodes.firstWhere(
+            (n) => n.now.isNotEmpty,
+            orElse: () => offlineNodes.first,
+          );
+          if (groupWithSelection.now.isNotEmpty) {
+            _proxyNow.value = groupWithSelection.now;
+          } else if (groupWithSelection.name.isNotEmpty) {
+            _proxyNow.value = groupWithSelection.name;
+          }
         }
       }
     } catch (_) {

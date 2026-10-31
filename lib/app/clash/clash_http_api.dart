@@ -757,20 +757,75 @@ class ClashHttpApi {
   static List<ClashProxiesNode> getNowChain(
     List<ClashProxiesNode> proxies,
     ClashProxiesNode node,
-    String mode,
-  ) {
+    String mode, [
+    Set<String>? visited,
+  ]) {
     if (node.all.isEmpty) {
       return [node];
     }
+    visited ??= <String>{};
+    if (visited.contains(node.name)) {
+      return [node];
+    }
+    visited.add(node.name);
     for (var proxy in proxies) {
       if (proxy.name == node.now) {
-        List<ClashProxiesNode> nodes = getNowChain(proxies, proxy, mode);
+        List<ClashProxiesNode> nodes =
+            getNowChain(proxies, proxy, mode, visited);
         nodes.add(node);
         return nodes;
       }
     }
 
     return [node];
+  }
+
+  static ClashProxiesNode? findPrimaryRuleGroup(
+    List<ClashProxiesNode> groups,
+  ) {
+    if (groups.isEmpty) return null;
+    final nonGlobal = groups
+        .where((g) => g.name.toUpperCase() != "GLOBAL")
+        .toList();
+    final candidates = nonGlobal.isNotEmpty ? nonGlobal : groups;
+
+    const preferredNames = <String>{
+      'proxies',
+      'proxy',
+      '节点选择',
+      '代理',
+      '默认代理',
+      '手动选择',
+      '🚀 节点选择',
+      '🔰 节点选择',
+      '🌏 节点选择',
+    };
+    for (final g in candidates) {
+      if (preferredNames.contains(g.name.trim().toLowerCase())) {
+        return g;
+      }
+    }
+    for (final g in candidates) {
+      final lower = g.name.toLowerCase();
+      if (lower.contains('proxies') ||
+          lower.contains('节点选择') ||
+          lower.contains('默认代理') ||
+          lower.contains('手动选择')) {
+        return g;
+      }
+    }
+    for (final g in candidates) {
+      final lowerType =
+          g.type.toLowerCase().replaceAll('-', '').replaceAll('_', '');
+      final upperName = g.name.toUpperCase().trim();
+      if ((lowerType == 'selector' || lowerType == 'select') &&
+          upperName != 'DIRECT' &&
+          upperName != 'REJECT' &&
+          !upperName.contains('FINAL')) {
+        return g;
+      }
+    }
+    return candidates.first;
   }
 
   static Future<ReturnResult<List<ClashProxiesNode>>> getNowProxy(
@@ -806,12 +861,13 @@ class ClashHttpApi {
       }
     } else if (mode == ClashConfigsMode.global.name) {
       for (var proxy in proxies) {
-        if (proxy.name == "GLOBAL") {
+        if (proxy.name.toUpperCase() == "GLOBAL") {
           return ReturnResult(data: getNowChain(proxies, proxy, mode));
         }
       }
     }
-    return ReturnResult(data: getNowChain(proxies, filtered.first, mode));
+    final primaryGroup = findPrimaryRuleGroup(filtered) ?? filtered.first;
+    return ReturnResult(data: getNowChain(proxies, primaryGroup, mode));
   }
 
   static Future<ReturnResultError?> setProxiesNode(

@@ -236,6 +236,51 @@ rules:
       expect(delay, isNull);
     });
 
+    test('findPrimaryRuleGroup selects Proxies/节点选择 over alphabetical sub-groups like AI/Apple', () {
+      final groups = <ClashProxiesNode>[
+        ClashProxiesNode()
+          ..name = 'AI'
+          ..type = 'Selector',
+        ClashProxiesNode()
+          ..name = 'Apple'
+          ..type = 'Selector',
+        ClashProxiesNode()
+          ..name = 'GLOBAL'
+          ..type = 'Selector',
+        ClashProxiesNode()
+          ..name = 'Proxies'
+          ..type = 'Selector'
+          ..now = 'US 01',
+        ClashProxiesNode()
+          ..name = 'YouTube'
+          ..type = 'Selector',
+      ];
+      final primary = ClashHttpApi.findPrimaryRuleGroup(groups);
+      expect(primary, isNotNull);
+      expect(primary!.name, equals('Proxies'));
+    });
+
+    test('getNowChain resolves multi-hop group chains and guards against cycles', () {
+      final leaf = ClashProxiesNode()
+        ..name = 'US HighSpeed 01'
+        ..type = 'anytls'
+        ..all = [];
+      final proxiesGroup = ClashProxiesNode()
+        ..name = 'Proxies'
+        ..type = 'Selector'
+        ..now = 'US HighSpeed 01'
+        ..all = ['US HighSpeed 01'];
+      final youtubeGroup = ClashProxiesNode()
+        ..name = 'YouTube'
+        ..type = 'Selector'
+        ..now = 'Proxies'
+        ..all = ['Proxies', 'DIRECT'];
+      final all = [leaf, proxiesGroup, youtubeGroup];
+
+      final chain = ClashHttpApi.getNowChain(all, youtubeGroup, 'rule');
+      expect(chain.first.name, equals('US HighSpeed 01'));
+    });
+
     test('ClashProxies.fromJsonProxies parses real Clash API response after speed test', () {
       final jsonMap = {
         'proxies': {

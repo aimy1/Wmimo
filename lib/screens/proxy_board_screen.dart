@@ -89,6 +89,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   void _updateAllNodes(List<ClashProxiesNode> nodes) {
     _allNodes = nodes;
     _nodeMap = {for (var n in nodes) n.name: n};
+    _recalculateGroupDelays();
     for (var n in nodes) {
       if (_nodeLatencyNotifiers.containsKey(n.name)) {
         _nodeLatencyNotifiers[n.name]!.value =
@@ -96,6 +97,48 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       }
     }
   }
+
+  void _recalculateGroupDelays() {
+    if (_allNodes.isEmpty) return;
+    final helper = ClashProxies()..proxies = _allNodes;
+    for (final n in _allNodes) {
+      if (ClashProtocolType.isGroupType(n.type)) {
+        n.delay = helper.updateGroupDelay(n);
+        _updateNodeLatency(
+          n.name,
+          delay: n.delay,
+          isTesting: _nodesTesting.contains(n.name),
+        );
+      }
+    }
+  }
+
+  String _resolveActivePrimaryNodeName({String fallback = ""}) {
+    final groups = _allNodes
+        .where((n) => ClashProtocolType.isGroupType(n.type) && !n.hidden)
+        .toList();
+    if (groups.isEmpty) return fallback;
+
+    ClashProxiesNode? rootGroup;
+    if (_currentMode == "global") {
+      for (final g in groups) {
+        if (g.name.toUpperCase() == "GLOBAL") {
+          rootGroup = g;
+          break;
+        }
+      }
+    }
+    rootGroup ??= ClashHttpApi.findPrimaryRuleGroup(groups) ?? groups.first;
+    final chain = ClashHttpApi.getNowChain(_allNodes, rootGroup, _currentMode);
+    if (chain.isNotEmpty && chain.first.name.isNotEmpty) {
+      return chain.first.name;
+    }
+    if (rootGroup.now.isNotEmpty) {
+      return rootGroup.now;
+    }
+    return fallback;
+  }
+
   bool _isVpnStarted = false;
   String _searchKeyword = "";
   String _sortMode = "default"; // "default", "delay_asc", "name_asc", "region"
@@ -105,6 +148,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   String _currentMode = "rule"; // rule, global, direct
   final Set<String> _nodesTesting = {};
   final Map<String, bool> _groupExpanded = {};
+  final Map<String, String> _pendingGroupSelections = {};
   Timer? _debounceFetchTimer;
   bool _isFetchingProxies = false;
   bool _hasPendingFetch = false;
@@ -211,6 +255,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   }
 
   void _onProfileChanged(String id) {
+    _pendingGroupSelections.clear();
     if (mounted) {
       _debouncedFetchProxies();
     }
@@ -303,6 +348,14 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       List<ClashProxiesNode> targetNodes = [];
 
       if (started) {
+        if (_pendingGroupSelections.isNotEmpty) {
+          final pendingCopy = Map<String, String>.from(_pendingGroupSelections);
+          _pendingGroupSelections.clear();
+          for (final entry in pendingCopy.entries) {
+            await ClashHttpApi.setProxiesNode(entry.key, entry.value)
+                .catchError((_) => null);
+          }
+        }
         final result = await ClashHttpApi.getProxies();
         if (result.data != null && result.data!.isNotEmpty) {
           final groups = result.data!.where((n) {
@@ -325,6 +378,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         for (var n in targetNodes) {
           if (n.delay == null && existingDelays.containsKey(n.name)) {
             n.delay = existingDelays[n.name];
+          }
+          if (!started && _pendingGroupSelections.containsKey(n.name)) {
+            n.now = _pendingGroupSelections[n.name]!;
           }
         }
       }
@@ -376,25 +432,36 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
     setState(() {
       group.now = node.name;
+      _recalculateGroupDelays();
     });
 
-    Biz.proxySelected(node.name);
-    VPNService.updateAndroidNotificationInfo(nodeName: node.name);
-
     if (_isVpnStarted) {
+      _pendingGroupSelections.remove(group.name);
       ClashHttpApi.setProxiesNode(group.name, node.name).then((err) {
         if (err != null) {
-          ClashHttpApi.setProxiesNode("GLOBAL", node.name).then((err2) {
-            if (err2 != null) {
-              ClashHttpApi.setProxiesNode("Proxy", node.name);
-            }
-          });
+          final primary = ClashHttpApi.findPrimaryRuleGroup(
+            _allNodes
+                .where((n) => ClashProtocolType.isGroupType(n.type))
+                .toList(),
+          );
+          final fallbackGroupName = (_currentMode == "global")
+              ? "GLOBAL"
+              : (primary?.name ?? "GLOBAL");
+          if (fallbackGroupName != group.name) {
+            ClashHttpApi.setProxiesNode(fallbackGroupName, node.name)
+                .catchError((_) => null);
+          }
         }
       }).catchError((_) {});
+    } else {
+      _pendingGroupSelections[group.name] = node.name;
+    }
 
-      if (group.name != "GLOBAL") {
-        ClashHttpApi.setProxiesNode("GLOBAL", node.name).catchError((_) => null);
-      }
+    final effectiveNodeName =
+        _resolveActivePrimaryNodeName(fallback: node.name);
+    if (effectiveNodeName.isNotEmpty) {
+      Biz.proxySelected(effectiveNodeName);
+      VPNService.updateAndroidNotificationInfo(nodeName: effectiveNodeName);
     }
 
     if (mounted) {
@@ -458,6 +525,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     } finally {
       _nodesTesting.remove(node.name);
       _updateNodeLatency(node.name, isTesting: false);
+      _recalculateGroupDelays();
     }
   }
 
@@ -546,6 +614,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           }
         }
         _nodesTesting.removeAll(nodesToTest);
+        _recalculateGroupDelays();
         groupDelaySucceeded = true;
         if (mounted) setState(() {});
       }
@@ -580,6 +649,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
       final workerCount = nodesToTest.length < 16 ? nodesToTest.length : 16;
       final workers = List.generate(workerCount, (_) => worker());
       await Future.wait(workers);
+      _recalculateGroupDelays();
 
       if (mounted) {
         setState(() {});
@@ -670,6 +740,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final workerCount = allLeafNodeNames.length < 20 ? allLeafNodeNames.length : 20;
     final workers = List.generate(workerCount, (_) => worker());
     await Future.wait(workers);
+    _recalculateGroupDelays();
 
     if (mounted) {
       setState(() {});
@@ -758,6 +829,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final workerCount = targetNodes.length < 16 ? targetNodes.length : 16;
     final workers = List.generate(workerCount, (_) => worker());
     await Future.wait(workers);
+    _recalculateGroupDelays();
 
     if (mounted) {
       setState(() {});
@@ -858,19 +930,38 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     }
 
     if (_currentMode == "global") {
-      groups.sort((a, b) {
-        if (a.name.toUpperCase() == "GLOBAL") return -1;
-        if (b.name.toUpperCase() == "GLOBAL") return 1;
-        return 0;
-      });
+      final globalGroups =
+          groups.where((g) => g.name.toUpperCase() == "GLOBAL").toList();
+      if (globalGroups.isNotEmpty) {
+        return globalGroups;
+      }
+      if (leafNodes.isNotEmpty) {
+        final primary = ClashHttpApi.findPrimaryRuleGroup(groups);
+        final defaultNow = _pendingGroupSelections["GLOBAL"] ??
+            (primary != null && primary.now.isNotEmpty
+                ? primary.now
+                : leafNodes.first.name);
+        final allNames = <String>[
+          ...leafNodes.map((n) => n.name),
+          ...groups.map((g) => g.name),
+        ];
+        return [
+          ClashProxiesNode()
+            ..name = "GLOBAL"
+            ..type = "Selector"
+            ..all = allNames
+            ..now = defaultNow,
+        ];
+      }
+      return groups;
     } else {
-      groups.sort((a, b) {
-        if (a.name.toUpperCase() == "GLOBAL") return 1;
-        if (b.name.toUpperCase() == "GLOBAL") return -1;
-        return 0;
-      });
+      final nonGlobal =
+          groups.where((g) => g.name.toUpperCase() != "GLOBAL").toList();
+      if (nonGlobal.isNotEmpty) {
+        return nonGlobal;
+      }
+      return groups;
     }
-    return groups;
   }
 
   bool _isGroupExpandedByDefault(ClashProxiesNode group, int index) {
@@ -894,10 +985,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
         })
         .toList();
 
-    // 1. Region filter
+    // 1. Region filter: when a specific region is chosen, only keep real leaf nodes in that region
     if (_selectedRegionCode != "ALL") {
       list = list.where((n) {
-        if (ClashProtocolType.isGroupType(n.type)) return true;
+        if (!isRealLeafProxy(n)) return false;
         final region = NodeRegionHelper.getRegion(n.name);
         return region.code == _selectedRegionCode;
       }).toList();
@@ -906,7 +997,10 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     // 2. Hide timeout nodes filter
     if (_hideTimeoutNodes) {
       list = list.where((n) {
-        if (ClashProtocolType.isGroupType(n.type)) return true;
+        if (ClashProtocolType.isGroupType(n.type)) {
+          return n.delay == null || n.delay! >= 0;
+        }
+        if (!isRealLeafProxy(n)) return false;
         return n.delay == null || n.delay! >= 0;
       }).toList();
     }
@@ -1954,7 +2048,13 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
-    final groups = _getProxyGroups();
+    final rawGroups = _getProxyGroups();
+    final isFilteringNodes = _selectedRegionCode != "ALL" ||
+        _searchKeyword.isNotEmpty ||
+        _hideTimeoutNodes;
+    final groups = isFilteringNodes
+        ? rawGroups.where((g) => _getNodesForGroup(g).isNotEmpty).toList()
+        : rawGroups;
     final leafNodes = _allNodes.where((n) => isRealLeafProxy(n)).toList();
 
     final hasFilterActive =
@@ -2157,6 +2257,70 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               // Region Filter Chips Bar
               _buildRegionFilterBar(leafNodes),
               const SizedBox(height: 6),
+
+              // Direct Mode Notice Banner
+              if (_currentMode == "direct")
+                Container(
+                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF262629) : const Color(0xFFFFFBEB),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: ThemeDefine.kColorAmber.withValues(alpha: 0.4),
+                      width: 0.8,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.swap_horiz_rounded,
+                        size: 18,
+                        color: ThemeDefine.kColorAmber,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          isZh
+                              ? "当前为「直连」模式，所有流量直接连接，不经过下方代理节点"
+                              : "Direct mode is active. All traffic connects directly without using proxy nodes.",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? Colors.white.withValues(alpha: 0.85)
+                                : const Color(0xFF92400E),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ThemeDefine.kColorBlue,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        onPressed: () => _changeMode("rule"),
+                        child: Text(
+                          tcontext.meta.rule,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
               // Offline Status Notice Banner (when VPN not connected but groups exist)
               if (!_isVpnStarted && groups.isNotEmpty)
