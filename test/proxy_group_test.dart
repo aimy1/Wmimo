@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart' as img;
 import 'package:libclash_vpn_service/vpn_service.dart';
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
+import 'package:wmimo/app/utils/qrcode_utils.dart';
 import 'package:wmimo/app/utils/subscription_converter.dart';
+import 'package:zxing2/qrcode.dart';
 
 void main() {
   group('ClashProtocolType tests', () {
@@ -450,6 +454,90 @@ proxies:
         ProfileManager.extractSmartRemark('ss://YWVzLTEyOC1nY206cGFzc3dvcmRAMS4yLjMuNDo4Mzg4#Tokyo-SS'),
         equals('Tokyo-SS'),
       );
+    });
+  });
+
+  group('QrcodeUtils multi-pass QR recognition tests', () {
+    test('Decodes transparent-background PNG QR code that previously threw ReaderException', () async {
+      const payload = 'https://sub.example.com/api/v1/client/subscribe?token=macos_qr_test';
+      final qrcode = Encoder.encode(payload, ErrorCorrectionLevel.h);
+      final matrix = qrcode.matrix!;
+      const scale = 4;
+      // Transparent background (0, 0, 0, 0) + black modules (0, 0, 0, 255)
+      final transparentQr = img.Image(
+        width: matrix.width * scale,
+        height: matrix.height * scale,
+        numChannels: 4,
+      );
+      for (var x = 0; x < matrix.width; x++) {
+        for (var y = 0; y < matrix.height; y++) {
+          if (matrix.get(x, y) == 1) {
+            img.fillRect(
+              transparentQr,
+              x1: x * scale,
+              y1: y * scale,
+              x2: x * scale + scale,
+              y2: y * scale + scale,
+              color: img.ColorRgba8(0, 0, 0, 0xFF),
+            );
+          }
+        }
+      }
+      final pngBytes = Uint8List.fromList(img.encodePng(transparentQr));
+      final decoded = await QrcodeUtils.scanFromImageData(pngBytes);
+      expect(decoded, equals(payload));
+    });
+
+    test('Decodes QR code embedded inside a large dark window screenshot', () async {
+      const payload = 'clash://install-config?url=https%3A%2F%2Fexample.com%2Fsub.yaml';
+      final qrcode = Encoder.encode(payload, ErrorCorrectionLevel.m);
+      final matrix = qrcode.matrix!;
+      const scale = 4;
+
+      // Dark screenshot canvas (e.g. 500x400 dark window #141416)
+      final darkScreenshot = img.Image(width: 500, height: 400, numChannels: 4);
+      img.fill(darkScreenshot, color: img.ColorRgba8(0x14, 0x14, 0x16, 0xFF));
+
+      final qrWidth = matrix.width * scale;
+      final qrHeight = matrix.height * scale;
+      final offsetX = (500 - qrWidth) ~/ 2;
+      final offsetY = 30; // Placed near top of dark window
+
+      // White card behind QR
+      img.fillRect(
+        darkScreenshot,
+        x1: offsetX - 10,
+        y1: offsetY - 10,
+        x2: offsetX + qrWidth + 10,
+        y2: offsetY + qrHeight + 10,
+        color: img.ColorRgba8(0xFF, 0xFF, 0xFF, 0xFF),
+      );
+      for (var x = 0; x < matrix.width; x++) {
+        for (var y = 0; y < matrix.height; y++) {
+          if (matrix.get(x, y) == 1) {
+            img.fillRect(
+              darkScreenshot,
+              x1: offsetX + x * scale,
+              y1: offsetY + y * scale,
+              x2: offsetX + x * scale + scale,
+              y2: offsetY + y * scale + scale,
+              color: img.ColorRgba8(0, 0, 0, 0xFF),
+            );
+          }
+        }
+      }
+
+      final pngBytes = Uint8List.fromList(img.encodePng(darkScreenshot));
+      final decoded = await QrcodeUtils.scanFromImageData(pngBytes);
+      expect(decoded, equals(payload));
+    });
+
+    test('Returns null gracefully without throwing ReaderException when no QR code exists', () async {
+      final blank = img.Image(width: 200, height: 200, numChannels: 4);
+      img.fill(blank, color: img.ColorRgba8(0x18, 0x18, 0x1B, 0xFF));
+      final pngBytes = Uint8List.fromList(img.encodePng(blank));
+      final decoded = await QrcodeUtils.scanFromImageData(pngBytes);
+      expect(decoded, isNull);
     });
   });
 }

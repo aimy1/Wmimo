@@ -996,6 +996,46 @@ class _AddProfileByScanQrcodeScanScreenState
   Future<void> onPressFromClipboard() async {
     final tcontext = Translations.of(context);
     try {
+      // 1. Try reading an image from clipboard on PC/macOS first
+      if (PlatformUtils.isPC()) {
+        Uint8List? clipboardImageBytes;
+        try {
+          clipboardImageBytes =
+              await ScreenCapturer.instance.readImageFromClipboard();
+        } catch (_) {}
+
+        if (clipboardImageBytes != null && clipboardImageBytes.isNotEmpty) {
+          _resetScan();
+          _imageBytes = clipboardImageBytes;
+          _image = Image.memory(_imageBytes!);
+          _isScanning = true;
+          if (mounted) setState(() {});
+
+          final qrcode = await QrcodeUtils.scanFromImageData(_imageBytes!);
+          if (!mounted) return;
+          setState(() {
+            _isScanning = false;
+            if (qrcode == null || qrcode.isEmpty) {
+              _scanFailed = true;
+            } else {
+              _qrContent = qrcode;
+              _scanFailed = false;
+            }
+          });
+          if (qrcode != null && qrcode.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(tcontext.meta.qrcodeRecognized),
+                duration: const Duration(seconds: 1),
+              ),
+            );
+            return;
+          }
+          // If clipboard had an image without a valid QR code, also check text below
+        }
+      }
+
+      // 2. Fallback: read text URL/content from clipboard
       final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
       final text = clipboardData?.text?.trim() ?? "";
       if (text.isNotEmpty) {
@@ -1011,7 +1051,7 @@ class _AddProfileByScanQrcodeScanScreenState
             duration: const Duration(seconds: 1),
           ),
         );
-      } else {
+      } else if (!_scanFailed) {
         DialogUtils.showAlertDialog(
           context,
           tcontext.meta.qrcodeScanResultEmpty,
@@ -1154,16 +1194,43 @@ class _AddProfileByScanQrcodeScanScreenState
       }
     }
 
+    final tempCapturePath = path.join(
+      Directory.systemTemp.path,
+      'wmimo_qr_capture_${DateTime.now().millisecondsSinceEpoch}.png',
+    );
+
     CapturedData? capturedData;
     try {
       capturedData = await ScreenCapturer.instance.capture(
         mode: CaptureMode.region,
+        imagePath: tempCapturePath,
         copyToClipboard: true,
       );
     } catch (_) {}
 
-    if (capturedData != null && capturedData.imageBytes != null) {
-      _imageBytes = capturedData.imageBytes;
+    Uint8List? bytes = capturedData?.imageBytes;
+    if (bytes == null || bytes.isEmpty) {
+      final tempFile = File(tempCapturePath);
+      if (await tempFile.exists()) {
+        try {
+          bytes = await tempFile.readAsBytes();
+        } catch (_) {}
+      }
+    }
+    if (bytes == null || bytes.isEmpty) {
+      try {
+        bytes = await ScreenCapturer.instance.readImageFromClipboard();
+      } catch (_) {}
+    }
+    try {
+      final tempFile = File(tempCapturePath);
+      if (await tempFile.exists()) {
+        await tempFile.delete();
+      }
+    } catch (_) {}
+
+    if (bytes != null && bytes.isNotEmpty) {
+      _imageBytes = bytes;
       _image = Image.memory(_imageBytes!);
       _isScanning = true;
       setState(() {});
