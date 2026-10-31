@@ -13,6 +13,7 @@ import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/group_screen.dart';
 import 'package:wmimo/screens/license_screen.dart';
 import 'package:wmimo/screens/qrcode_screen.dart';
+import 'package:wmimo/screens/user_agreement_screen.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -196,6 +197,22 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
                       'Rust workspace crates: Dual-licensed under MIT OR Apache-2.0.\n'
                       'Mihomo core: GPL-3.0-or-later.\n'
                       'Third-party components: BSD-3-Clause, MIT, Apache-2.0.',
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      GroupItemOptions(
+        pushOptions: GroupItemPushOptions(
+          name: tcontext.meta.privacyPolicy,
+          onPush: () async {
+            Navigator.push(
+              targetCtx,
+              MaterialPageRoute(
+                settings: UserAgreementScreen.routSettings(),
+                builder: (context) => const UserAgreementScreen(
+                  isViewingOnly: true,
                 ),
               ),
             );

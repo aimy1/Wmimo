@@ -16,7 +16,9 @@ class UserAgreementScreen extends LasyRenderingStatefulWidget {
     return const RouteSettings(name: "UserAgreementScreen");
   }
 
-  const UserAgreementScreen({super.key});
+  final bool isViewingOnly;
+
+  const UserAgreementScreen({super.key, this.isViewingOnly = false});
 
   @override
   State<UserAgreementScreen> createState() => _UserAgreementScreenState();
@@ -47,10 +49,10 @@ class _UserAgreementScreenState
     final bgColor = isDark ? ThemeDefine.kColorDarkBg : ThemeDefine.kColorLightBg;
 
     return PopScope(
-      canPop: false,
+      canPop: widget.isViewingOnly,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        if (Platform.isAndroid || Platform.isIOS) {
+        if (!widget.isViewingOnly && (Platform.isAndroid || Platform.isIOS)) {
           MoveToBackgroundUtils.moveToBackground();
         }
       },
@@ -155,8 +157,32 @@ class _UserAgreementScreenState
           // Highlights Badges Row
           _buildHighlightsRow(tcontext, isDark),
           const SizedBox(height: 20),
-          // Action Buttons: Disagree & Exit vs Agree & Continue
-          _buildActionButtons(tcontext, isDark),
+          // Action Buttons: Disagree & Exit vs Agree & Continue (or Close when viewing only)
+          if (widget.isViewingOnly)
+            SizedBox(
+              width: double.infinity,
+              height: 44,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ThemeDefine.kColorBlue,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(ThemeDefine.kRadiusMedium),
+                  ),
+                ),
+                child: Text(
+                  tcontext.meta.close,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            )
+          else
+            _buildActionButtons(tcontext, isDark),
         ],
       ),
     );
@@ -166,6 +192,17 @@ class _UserAgreementScreenState
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        if (widget.isViewingOnly) ...[
+          IconButton(
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: isDark ? Colors.white : const Color(0xFF0F172A),
+            ),
+            tooltip: tcontext.meta.close,
+            onPressed: () => Navigator.pop(context),
+          ),
+          const SizedBox(width: 4),
+        ],
         // App Logo Badge
         Container(
           width: 46,

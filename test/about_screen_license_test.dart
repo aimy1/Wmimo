@@ -36,6 +36,13 @@ void main() {
     expect(licenseOption.pushOptions, isNotNull);
     expect(licenseOption.pushOptions!.text, 'GPL-3.0');
     expect(licenseOption.pushOptions!.onPush, isNotNull);
+
+    final privacyOption = groups
+        .expand((g) => g.options)
+        .firstWhere((o) => o.pushOptions?.name == t.meta.privacyPolicy);
+
+    expect(privacyOption.pushOptions, isNotNull);
+    expect(privacyOption.pushOptions!.onPush, isNotNull);
   });
 
   testWidgets(

@@ -97,4 +97,28 @@ void main() {
       await tester.pump(const Duration(milliseconds: 10));
     },
   );
+
+  testWidgets(
+    'UserAgreementScreen in viewing-only mode renders close button and back button',
+    (WidgetTester tester) async {
+      LocaleSettings.setLocale(AppLocale.zhCn);
+      await tester.pumpWidget(
+        TranslationProvider(
+          child: const MaterialApp(
+            home: UserAgreementScreen(isViewingOnly: true),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      // In viewing-only mode, single close button is shown, disagree/exit is NOT shown
+      expect(find.text('关闭'), findsOneWidget);
+      expect(find.text('不同意并退出'), findsNothing);
+      expect(find.byIcon(Icons.arrow_back_rounded), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(milliseconds: 10));
+    },
+  );
 }
