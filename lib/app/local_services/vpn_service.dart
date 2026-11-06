@@ -101,9 +101,16 @@ class VPNService {
       );
     }
 
+    String appPath = Platform.resolvedExecutable;
+    if (Platform.isLinux &&
+        Platform.environment['APPIMAGE'] != null &&
+        Platform.environment['APPIMAGE']!.isNotEmpty) {
+      appPath = Platform.environment['APPIMAGE']!;
+    }
+
     launchAtStartup.setup(
       appName: packageInfo.appName,
-      appPath: Platform.resolvedExecutable,
+      appPath: appPath,
       args: [AppArgs.launchStartup],
     );
 

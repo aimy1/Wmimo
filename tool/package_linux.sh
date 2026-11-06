@@ -105,6 +105,16 @@ if [ -f "$DIR/wmimo.png" ]; then
   cp "$DIR/wmimo.png" ~/.local/share/icons/hicolor/256x256/apps/wmimo.png
 fi
 sed "s|Exec=wmimo|Exec=$DIR/wmimo|g" "$DIR/wmimo.desktop" > ~/.local/share/applications/wmimo.desktop
+
+# Configure network capabilities for TUN mode
+if [ -f "$DIR/wmimoService" ]; then
+  chmod 755 "$DIR/wmimoService"
+  if command -v setcap >/dev/null 2>&1; then
+    echo "Configuring network capabilities for TUN mode (requires authorization)..."
+    pkexec setcap cap_net_admin,cap_net_bind_service=+ep "$DIR/wmimoService" 2>/dev/null || sudo setcap cap_net_admin,cap_net_bind_service=+ep "$DIR/wmimoService" 2>/dev/null || true
+  fi
+fi
+
 echo "Wmimo installed to ~/.local/share/applications/wmimo.desktop and ~/.local/bin/wmimo"
 EOF
 chmod +x "$PORTABLE_DIR/install.sh"
@@ -122,12 +132,17 @@ mkdir -p "$PKG_ROOT/opt/wmimo"
 mkdir -p "$PKG_ROOT/usr/bin"
 mkdir -p "$PKG_ROOT/usr/share/applications"
 mkdir -p "$PKG_ROOT/usr/share/icons/hicolor/256x256/apps"
+mkdir -p "$PKG_ROOT/usr/share/polkit-1/actions"
 
 cp -r "$BUNDLE_DIR"/* "$PKG_ROOT/opt/wmimo/"
 ln -sf /opt/wmimo/wmimo "$PKG_ROOT/usr/bin/wmimo"
 
 if [ -f "assets/images/app_icon_256.png" ]; then
   cp assets/images/app_icon_256.png "$PKG_ROOT/usr/share/icons/hicolor/256x256/apps/wmimo.png"
+fi
+
+if [ -f "linux/packaging/com.wmimo.policy" ]; then
+  cp linux/packaging/com.wmimo.policy "$PKG_ROOT/usr/share/polkit-1/actions/com.wmimo.policy"
 fi
 
 cat << 'EOF' > "$PKG_ROOT/usr/share/applications/wmimo.desktop"
@@ -144,6 +159,17 @@ StartupNotify=true
 MimeType=x-scheme-handler/wmimo;x-scheme-handler/clash;
 EOF
 
+AFTER_INSTALL_SCRIPT=$(mktemp)
+cat << 'EOF' > "$AFTER_INSTALL_SCRIPT"
+#!/bin/sh
+set -e
+if [ -f /opt/wmimo/wmimoService ]; then
+  chmod 755 /opt/wmimo/wmimoService
+  setcap cap_net_admin,cap_net_bind_service=+ep /opt/wmimo/wmimoService 2>/dev/null || true
+fi
+EOF
+chmod +x "$AFTER_INSTALL_SCRIPT"
+
 # ------------------------------------------------------------
 # 2. Debian / Ubuntu / Mint / Deepin Package (.deb)
 # ------------------------------------------------------------
@@ -155,12 +181,15 @@ Version: $RAW_VERSION
 Section: net
 Priority: optional
 Architecture: $DEB_ARCH
-Depends: libgtk-3-0, libayatana-appindicator3-1, libkeybinder-3.0-0, libsecret-1-0, libstdc++6
+Depends: libgtk-3-0, libayatana-appindicator3-1, libkeybinder-3.0-0, libsecret-1-0, libstdc++6, libcap2-bin
 Maintainer: Wmimo <https://github.com/aimy1/Wmimo>
 Homepage: https://github.com/aimy1/Wmimo
 Description: Modern cross-platform Clash/Mihomo GUI proxy client.
  A sleek, modern proxy GUI client crafted with Flutter and Mihomo core.
 EOF
+
+cp "$AFTER_INSTALL_SCRIPT" "$PKG_ROOT/DEBIAN/postinst"
+chmod 755 "$PKG_ROOT/DEBIAN/postinst"
 
 dpkg-deb --build "$PKG_ROOT" "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.deb"
 rm -rf "$PKG_ROOT/DEBIAN"
@@ -182,6 +211,7 @@ if command -v fpm >/dev/null 2>&1; then
     --category "Network" \
     --depends gtk3 \
     --depends libsecret \
+    --after-install "$AFTER_INSTALL_SCRIPT" \
     -C "$PKG_ROOT" \
     -p "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.rpm"
   echo "  -> Created $DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.rpm"
@@ -204,6 +234,7 @@ if command -v fpm >/dev/null 2>&1; then
       --url "https://github.com/aimy1/Wmimo" \
       --description "Modern cross-platform Clash/Mihomo GUI proxy client." \
       --category "Network" \
+      --after-install "$AFTER_INSTALL_SCRIPT" \
       -C "$PKG_ROOT" \
       -p "$DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.pkg.tar.zst" || true
     echo "  -> Created $DIST_DIR/Wmimo-Linux-${ARCH_LABEL}-$TAG.pkg.tar.zst"
@@ -213,6 +244,7 @@ if command -v fpm >/dev/null 2>&1; then
 else
   echo "  [Notice] fpm not found, skipping Pacman package generation."
 fi
+rm -f "$AFTER_INSTALL_SCRIPT"
 rm -rf "$PKG_ROOT"
 
 # ------------------------------------------------------------

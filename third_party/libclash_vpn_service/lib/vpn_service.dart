@@ -268,6 +268,13 @@ class FlutterVpnService {
         return VpnServiceResultError(500, "提权执行异常: $e");
       }
     } else if (Platform.isLinux) {
+      // 1. Try pkexec first (invokes native graphical PolicyKit authentication dialog)
+      try {
+        final res = await Process.run('pkexec', ['setcap', 'cap_net_admin,cap_net_bind_service=+ep', path]);
+        if (res.exitCode == 0) return null;
+      } catch (_) {}
+
+      // 2. If password provided, try sudo
       if (password.isNotEmpty) {
         try {
           final cmd = 'echo "$password" | sudo -S setcap cap_net_admin,cap_net_bind_service=+ep "$path" || (echo "$password" | sudo -S chown root:root "$path" && echo "$password" | sudo -S chmod +sx "$path")';
@@ -275,10 +282,6 @@ class FlutterVpnService {
           if (res.exitCode == 0) return null;
         } catch (_) {}
       }
-      try {
-        final res = await Process.run('pkexec', ['setcap', 'cap_net_admin,cap_net_bind_service=+ep', path]);
-        if (res.exitCode == 0) return null;
-      } catch (_) {}
       return VpnServiceResultError(1, "Linux 提权失败，请检查密码或执行 sudo setcap cap_net_admin,cap_net_bind_service=+ep $path");
     }
     return null;
@@ -1661,6 +1664,29 @@ rules:
         await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'httpsProxy', 'http://$host:$port']);
         await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'socksProxy', 'socks5://$host:$port']);
         await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'NoProxyFor', allLinuxBypass.join(',')]);
+        final qdbus = (await Process.run('which', ['qdbus6'])).exitCode == 0 ? 'qdbus6' : 'qdbus';
+        await Process.run(qdbus, ['org.kde.kded6', '/kded', 'org.kde.kded6.reparseConfiguration', 'kioslaverc']);
+        await Process.run(qdbus, ['org.kde.kded5', '/kded', 'org.kde.kded5.reparseConfiguration', 'kioslaverc']);
+      } catch (_) {}
+
+      // Inject into systemd user session environment so child terminals & sessions recognize proxy
+      try {
+        final bypassStr = allLinuxBypass.join(',');
+        await Process.run('systemctl', [
+          '--user',
+          'import-environment',
+          'http_proxy', 'https_proxy', 'all_proxy', 'no_proxy',
+          'HTTP_PROXY', 'HTTPS_PROXY', 'ALL_PROXY', 'NO_PROXY'
+        ], environment: {
+          'http_proxy': 'http://$host:$port',
+          'https_proxy': 'http://$host:$port',
+          'all_proxy': 'socks5://$host:$port',
+          'no_proxy': bypassStr,
+          'HTTP_PROXY': 'http://$host:$port',
+          'HTTPS_PROXY': 'http://$host:$port',
+          'ALL_PROXY': 'socks5://$host:$port',
+          'NO_PROXY': bypassStr,
+        });
       } catch (_) {}
     }
   }
@@ -1697,6 +1723,17 @@ rules:
       try {
         final kwrite = (await Process.run('which', ['kwriteconfig6'])).exitCode == 0 ? 'kwriteconfig6' : 'kwriteconfig5';
         await Process.run(kwrite, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'ProxyType', '0']);
+        final qdbus = (await Process.run('which', ['qdbus6'])).exitCode == 0 ? 'qdbus6' : 'qdbus';
+        await Process.run(qdbus, ['org.kde.kded6', '/kded', 'org.kde.kded6.reparseConfiguration', 'kioslaverc']);
+        await Process.run(qdbus, ['org.kde.kded5', '/kded', 'org.kde.kded5.reparseConfiguration', 'kioslaverc']);
+      } catch (_) {}
+      try {
+        await Process.run('systemctl', [
+          '--user',
+          'unset-environment',
+          'http_proxy', 'https_proxy', 'all_proxy', 'no_proxy',
+          'HTTP_PROXY', 'HTTPS_PROXY', 'ALL_PROXY', 'NO_PROXY'
+        ]);
       } catch (_) {}
     }
   }
@@ -1728,6 +1765,21 @@ rules:
       try {
         final res = await Process.run('gsettings', ['get', 'org.gnome.system.proxy', 'mode']);
         if (res.stdout != null && res.stdout.toString().contains('manual')) {
+          return true;
+        }
+      } catch (_) {}
+      try {
+        final kread = (await Process.run('which', ['kreadconfig6'])).exitCode == 0 ? 'kreadconfig6' : 'kreadconfig5';
+        final res = await Process.run(kread, ['--file', 'kioslaverc', '--group', 'Proxy Settings', '--key', 'ProxyType']);
+        if (res.stdout != null && res.stdout.toString().trim() == '1') {
+          return true;
+        }
+      } catch (_) {}
+      try {
+        final envRes = await Process.run('systemctl', ['--user', 'show-environment']);
+        if (envRes.stdout != null &&
+            (envRes.stdout.toString().contains('http_proxy=') ||
+                envRes.stdout.toString().contains('HTTP_PROXY='))) {
           return true;
         }
       } catch (_) {}

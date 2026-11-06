@@ -1,0 +1,10 @@
+post_install() {
+  if [ -f /opt/wmimo/wmimoService ]; then
+    chmod 755 /opt/wmimo/wmimoService
+    setcap cap_net_admin,cap_net_bind_service=+ep /opt/wmimo/wmimoService 2>/dev/null || true
+  fi
+}
+
+post_upgrade() {
+  post_install
+}

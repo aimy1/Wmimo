@@ -959,7 +959,7 @@ class MyAppState extends State<MyApp>
       final port = ClashSettingManager.getMixedPort();
       final cmd = Platform.isWindows
           ? '\$env:http_proxy="http://127.0.0.1:$port"; \$env:https_proxy="http://127.0.0.1:$port"; \$env:all_proxy="socks5://127.0.0.1:$port"'
-          : 'export http_proxy=http://127.0.0.1:$port; export https_proxy=http://127.0.0.1:$port; export all_proxy=socks5://127.0.0.1:$port';
+          : 'export http_proxy=http://127.0.0.1:$port; export https_proxy=http://127.0.0.1:$port; export all_proxy=socks5://127.0.0.1:$port; export HTTP_PROXY=http://127.0.0.1:$port; export HTTPS_PROXY=http://127.0.0.1:$port; export ALL_PROXY=socks5://127.0.0.1:$port';
       await Clipboard.setData(ClipboardData(text: cmd));
     } else if (key == kMenuCopyProxyCmdCmd) {
       final port = ClashSettingManager.getMixedPort();
@@ -969,7 +969,7 @@ class MyAppState extends State<MyApp>
     } else if (key == kMenuCopyProxyCmdBash) {
       final port = ClashSettingManager.getMixedPort();
       final cmd =
-          'export http_proxy=http://127.0.0.1:$port; export https_proxy=http://127.0.0.1:$port; export all_proxy=socks5://127.0.0.1:$port';
+          'export http_proxy=http://127.0.0.1:$port; export https_proxy=http://127.0.0.1:$port; export all_proxy=socks5://127.0.0.1:$port; export HTTP_PROXY=http://127.0.0.1:$port; export HTTPS_PROXY=http://127.0.0.1:$port; export ALL_PROXY=socks5://127.0.0.1:$port';
       await Clipboard.setData(ClipboardData(text: cmd));
     } else if (key == kMenuResetSystemProxy) {
       await VPNService.resetAndCleanSystemProxy();

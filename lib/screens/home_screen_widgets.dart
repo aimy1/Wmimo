@@ -1506,21 +1506,34 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
           if (!mounted) {
             return false;
           }
-          String? password = await DialogUtils.showPasswordInputDialog(context);
-          if (Platform.isLinux && (password == null || password.isEmpty)) {
-            if (mounted) {
-              setState(() {
-                _desiredConnected = null;
-                _state = FlutterVpnServiceState.disconnected;
-              });
-              _syncUiStatus();
-            }
-            return false;
-          }
-          final result = await FlutterVpnService.authorizeService(
+          // Try native privilege escalation first (e.g. pkexec on Linux, osascript on macOS)
+          var result = await FlutterVpnService.authorizeService(
             servicePath,
-            password ?? "",
+            "",
           );
+          if (result != null) {
+            if (!mounted) {
+              return false;
+            }
+            String? password =
+                await DialogUtils.showPasswordInputDialog(context);
+            if (Platform.isLinux && (password == null || password.isEmpty)) {
+              if (mounted) {
+                setState(() {
+                  _desiredConnected = null;
+                  _state = FlutterVpnServiceState.disconnected;
+                });
+                _syncUiStatus();
+              }
+              return false;
+            }
+            if (password != null && password.isNotEmpty) {
+              result = await FlutterVpnService.authorizeService(
+                servicePath,
+                password,
+              );
+            }
+          }
           if (result != null) {
             if (!mounted) {
               return false;
