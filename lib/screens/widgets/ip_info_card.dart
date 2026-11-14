@@ -29,7 +29,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
   bool _loading = false;
   bool _maskIp = false;
   late bool _isCollapsed;
-  int _countdown = 240;
+  final ValueNotifier<int> _countdown = ValueNotifier<int>(240);
   Timer? _countdownTimer;
   Timer? _debounceTimer;
 
@@ -49,6 +49,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
     Biz.onEventProxySelected.remove(_onProxyNodeChanged);
     _countdownTimer?.cancel();
     _debounceTimer?.cancel();
+    _countdown.dispose();
     super.dispose();
   }
 
@@ -66,22 +67,18 @@ class _IpInfoCardState extends State<IpInfoCard> {
     _countdownTimer?.cancel();
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) return;
-      setState(() {
-        if (_countdown > 1) {
-          _countdown--;
-        } else {
-          _countdown = 240;
-          _fetchCurrentInfo();
-        }
-      });
+      if (_countdown.value > 1) {
+        _countdown.value--;
+      } else {
+        _countdown.value = 240;
+        _fetchCurrentInfo();
+      }
     });
   }
 
   void _onProxyNodeChanged(String nodeName) {
     if (!mounted) return;
-    setState(() {
-      _countdown = 240;
-    });
+    _countdown.value = 240;
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 800), () {
       if (mounted) {
@@ -118,9 +115,9 @@ class _IpInfoCardState extends State<IpInfoCard> {
 
   Future<void> _fetchCurrentInfo() async {
     if (!mounted) return;
+    _countdown.value = 240;
     setState(() {
       _loading = true;
-      _countdown = 240;
     });
 
     final isProxy = _isProxyModeActive;
@@ -613,11 +610,14 @@ class _IpInfoCardState extends State<IpInfoCard> {
         ),
 
         // 4. 自动刷新倒计时
-        _buildInfoLine(
-          label: tcontext.meta.autoRefresh,
-          value: '${_countdown}s',
-          labelColor: labelColor,
-          valueColor: theme.colorScheme.primary,
+        ValueListenableBuilder<int>(
+          valueListenable: _countdown,
+          builder: (context, seconds, _) => _buildInfoLine(
+            label: tcontext.meta.autoRefresh,
+            value: '${seconds}s',
+            labelColor: labelColor,
+            valueColor: theme.colorScheme.primary,
+          ),
         ),
       ],
     );
