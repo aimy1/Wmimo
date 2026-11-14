@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
@@ -287,6 +288,7 @@ class _RulesScreenState extends State<RulesScreen> with AfterLayoutMixin {
   }
 
   Widget _buildRuleItem(Map<String, dynamic> rule, int index) {
+    final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final type = (rule['type'] ?? "").toString();
@@ -294,81 +296,102 @@ class _RulesScreenState extends State<RulesScreen> with AfterLayoutMixin {
     final proxy = (rule['proxy'] ?? "").toString();
     final typeColor = _getRuleTypeColor(type);
     final proxyColor = _getProxyColor(proxy);
+    final ruleText = payload.isNotEmpty ? "$type,$payload,$proxy" : "$type,$proxy";
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 6),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF8FAFC),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Material(
+        color: isDark ? ThemeDefine.kColorDarkCard : const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: theme.dividerColor.withValues(alpha: 0.4),
-          width: 0.8,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () {
+            HapticFeedback.selectionClick();
+            Clipboard.setData(ClipboardData(text: ruleText));
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("${tcontext.meta.copySuccess}: $ruleText"),
+                duration: const Duration(seconds: 1),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: theme.dividerColor.withValues(alpha: 0.4),
+                width: 0.8,
+              ),
+            ),
+            child: Row(
+              children: [
+                // Index badge
+                Text(
+                  "#$index",
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Rule type badge
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: typeColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    type,
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w700,
+                      color: typeColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Rule Payload
+                Expanded(
+                  child: Text(
+                    payload.isNotEmpty ? payload : "(none)",
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'monospace',
+                      color: payload.isNotEmpty
+                          ? null
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Destination Proxy
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: proxyColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    proxy,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: proxyColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          // Index badge
-          Text(
-            "#$index",
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
-            ),
-          ),
-          const SizedBox(width: 8),
-          // Rule type badge
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: typeColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(
-              type,
-              style: TextStyle(
-                fontSize: 10.5,
-                fontWeight: FontWeight.w700,
-                color: typeColor,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          // Rule Payload
-          Expanded(
-            child: Text(
-              payload.isNotEmpty ? payload : "(none)",
-              style: TextStyle(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'monospace',
-                color: payload.isNotEmpty
-                    ? null
-                    : theme.colorScheme.onSurface.withValues(alpha: 0.3),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          const SizedBox(width: 8),
-          // Destination Proxy
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            decoration: BoxDecoration(
-              color: proxyColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(
-              proxy,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: proxyColor,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
