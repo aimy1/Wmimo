@@ -265,11 +265,13 @@ class SubscriptionConverter {
       map['servername'] = sni;
     }
 
-    if (net == 'ws') {
+    if (net == 'ws' || net == 'httpupgrade') {
       map['network'] = 'ws';
       map['ws-opts'] = {
         'path': path.isNotEmpty ? path : '/',
         if (host.isNotEmpty) 'headers': {'Host': host},
+        if (net == 'httpupgrade') 'v2ray-http-upgrade': true,
+        if (net == 'httpupgrade') 'v2ray-http-upgrade-fast-open': false,
       };
     } else if (net == 'grpc') {
       map['network'] = 'grpc';
@@ -337,11 +339,13 @@ class SubscriptionConverter {
       };
     }
 
-    if (type == 'ws') {
+    if (type == 'ws' || type == 'httpupgrade') {
       map['network'] = 'ws';
       map['ws-opts'] = {
         'path': path,
         if (host.isNotEmpty) 'headers': {'Host': host},
+        if (type == 'httpupgrade') 'v2ray-http-upgrade': true,
+        if (type == 'httpupgrade') 'v2ray-http-upgrade-fast-open': false,
       };
     } else if (type == 'grpc') {
       map['network'] = 'grpc';
@@ -442,11 +446,13 @@ class SubscriptionConverter {
       if (sni.isNotEmpty) 'sni': sni,
     };
 
-    if (type == 'ws') {
+    if (type == 'ws' || type == 'httpupgrade') {
       map['network'] = 'ws';
       map['ws-opts'] = {
         'path': path,
         if (host.isNotEmpty) 'headers': {'Host': host},
+        if (type == 'httpupgrade') 'v2ray-http-upgrade': true,
+        if (type == 'httpupgrade') 'v2ray-http-upgrade-fast-open': false,
       };
     } else if (type == 'grpc') {
       map['network'] = 'grpc';

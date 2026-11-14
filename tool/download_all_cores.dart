@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:archive/archive.dart';
 
-const String kVersion = 'v1.19.33';
+const String kVersion = 'v1.19.34';
 const String kBaseUrl = 'https://github.com/MetaCubeX/mihomo/releases/download/$kVersion';
 
 final Map<String, List<String>> targets = {
@@ -229,7 +229,7 @@ Future<void> main(List<String> args) async {
       }
     } catch (_) {}
 
-    if (!lipoSuccess && !macosUniversal.existsSync()) {
+    if (!lipoSuccess && (force || !macosUniversal.existsSync())) {
       final src = (Platform.isMacOS && Platform.version.contains('x64')) ? macosAmd64 : macosArm64;
       src.copySync(macosUniversal.path);
       print('\n[macOS] Copied ${src.path} to ${macosUniversal.path}');
