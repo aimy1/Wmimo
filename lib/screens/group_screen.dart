@@ -44,8 +44,6 @@ class GroupScreen extends LasyRenderingStatefulWidget {
 
 class GroupScreenState extends LasyRenderingState<GroupScreen>
     with AfterLayoutMixin {
-  static int _adsCount = 0;
-  bool _hasAds = false;
   @override
   void initState() {
     super.initState();
@@ -53,11 +51,6 @@ class GroupScreenState extends LasyRenderingState<GroupScreen>
 
   @override
   void dispose() {
-    if (_hasAds) {
-      --GroupScreenState._adsCount;
-      _hasAds = false;
-    }
-
     super.dispose();
   }
 
