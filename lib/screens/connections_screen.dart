@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
+import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -47,6 +48,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
   Timer? _timer;
   bool _isAutoRefresh = true;
   bool _loading = false;
+  bool _isFetching = false;
   String _searchKeyword = "";
   String _selectedProtocol = "ALL"; // ALL, TCP, UDP
   ConnectionSortType _sortType = ConnectionSortType.defaultOrder;
@@ -66,17 +68,34 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
         _searchKeyword = _searchController.text.trim().toLowerCase();
       });
     });
+    AppLifecycleStateNofity.onStateResumed(hashCode, _onStateResumed);
+    AppLifecycleStateNofity.onStatePaused(hashCode, _onStatePaused);
+  }
+
+  void _onStateResumed() {
+    if (!mounted) return;
+    if (_isAutoRefresh) {
+      _startTimer();
+    }
+  }
+
+  void _onStatePaused() {
+    _stopTimer();
   }
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
     await _fetchConnections();
-    _startTimer();
+    if (!AppLifecycleStateNofity.isPaused()) {
+      _startTimer();
+    }
   }
 
   @override
   void dispose() {
     _stopTimer();
+    AppLifecycleStateNofity.onStateResumed(hashCode, null);
+    AppLifecycleStateNofity.onStatePaused(hashCode, null);
     _searchController.dispose();
     super.dispose();
   }
@@ -95,65 +114,75 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
   }
 
   Future<void> _fetchConnections({bool silent = false}) async {
-    if (!silent && mounted) {
-      setState(() {
-        _loading = true;
-      });
-    }
-
-    final started = await VPNService.getStarted();
-    if (!started) {
-      if (mounted) {
+    if (_isFetching) return;
+    if (silent && AppLifecycleStateNofity.isPaused()) return;
+    _isFetching = true;
+    try {
+      if (!silent && mounted) {
         setState(() {
-          _connections = [];
-          _loading = false;
-          _prevConnTraffic.clear();
-          _connUploadSpeeds.clear();
-          _connDownloadSpeeds.clear();
+          _loading = true;
         });
       }
-      return;
-    }
 
-    final result = await ClashHttpApi.getConnections();
-    if (!mounted) return;
-
-    if (result.error == null && result.data != null) {
-      final now = DateTime.now();
-      final data = result.data!;
-
-      // Calculate per-connection real-time speeds
-      final Map<String, num> newUpSpeeds = {};
-      final Map<String, num> newDownSpeeds = {};
-      final Map<String, _TrafficSnapshot> newSnapshots = {};
-
-      for (final conn in data.connections) {
-        if (_prevConnTraffic.containsKey(conn.id)) {
-          final prev = _prevConnTraffic[conn.id]!;
-          final dt = now.difference(prev.time).inMilliseconds / 1000.0;
-          if (dt > 0.3) {
-            final upDiff = conn.upload - prev.upload;
-            final downDiff = conn.download - prev.download;
-            newUpSpeeds[conn.id] = upDiff > 0 ? (upDiff / dt) : 0;
-            newDownSpeeds[conn.id] = downDiff > 0 ? (downDiff / dt) : 0;
-          }
+      final started = await VPNService.getStarted();
+      if (!started) {
+        if (mounted &&
+            (_connections.isNotEmpty ||
+                _loading ||
+                _prevConnTraffic.isNotEmpty)) {
+          setState(() {
+            _connections = [];
+            _loading = false;
+            _prevConnTraffic.clear();
+            _connUploadSpeeds.clear();
+            _connDownloadSpeeds.clear();
+          });
         }
-        newSnapshots[conn.id] = _TrafficSnapshot(conn.upload, conn.download, now);
+        return;
       }
 
-      setState(() {
-        _connections = data.connections;
-        _prevConnTraffic = newSnapshots;
-        _connUploadSpeeds = newUpSpeeds;
-        _connDownloadSpeeds = newDownSpeeds;
-        _loading = false;
-      });
-    } else {
-      if (!silent) {
+      final result = await ClashHttpApi.getConnections();
+      if (!mounted) return;
+
+      if (result.error == null && result.data != null) {
+        final now = DateTime.now();
+        final data = result.data!;
+
+        // Calculate per-connection real-time speeds
+        final Map<String, num> newUpSpeeds = {};
+        final Map<String, num> newDownSpeeds = {};
+        final Map<String, _TrafficSnapshot> newSnapshots = {};
+
+        for (final conn in data.connections) {
+          if (_prevConnTraffic.containsKey(conn.id)) {
+            final prev = _prevConnTraffic[conn.id]!;
+            final dt = now.difference(prev.time).inMilliseconds / 1000.0;
+            if (dt > 0.3) {
+              final upDiff = conn.upload - prev.upload;
+              final downDiff = conn.download - prev.download;
+              newUpSpeeds[conn.id] = upDiff > 0 ? (upDiff / dt) : 0;
+              newDownSpeeds[conn.id] = downDiff > 0 ? (downDiff / dt) : 0;
+            }
+          }
+          newSnapshots[conn.id] = _TrafficSnapshot(conn.upload, conn.download, now);
+        }
+
         setState(() {
+          _connections = data.connections;
+          _prevConnTraffic = newSnapshots;
+          _connUploadSpeeds = newUpSpeeds;
+          _connDownloadSpeeds = newDownSpeeds;
           _loading = false;
         });
+      } else {
+        if (!silent && mounted) {
+          setState(() {
+            _loading = false;
+          });
+        }
       }
+    } finally {
+      _isFetching = false;
     }
   }
 
