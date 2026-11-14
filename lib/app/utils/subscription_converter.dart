@@ -83,6 +83,8 @@ class SubscriptionConverter {
         return _parseHysteria(line);
       } else if (line.startsWith('tuic://')) {
         return _parseTuic(line);
+      } else if (line.startsWith('snell://')) {
+        return _parseSnell(line);
       }
     } catch (_) {}
 
@@ -352,6 +354,12 @@ class SubscriptionConverter {
       map['grpc-opts'] = {
         'grpc-service-name': params['serviceName'] ?? path,
       };
+    } else if (type == 'h2' || type == 'http') {
+      map['network'] = 'h2';
+      map['h2-opts'] = {
+        'path': path,
+        if (host.isNotEmpty) 'host': [host],
+      };
     }
 
     return map;
@@ -459,6 +467,12 @@ class SubscriptionConverter {
       map['grpc-opts'] = {
         'grpc-service-name': params['serviceName'] ?? path,
       };
+    } else if (type == 'h2' || type == 'http') {
+      map['network'] = 'h2';
+      map['h2-opts'] = {
+        'path': path,
+        if (host.isNotEmpty) 'host': [host],
+      };
     }
 
     return map;
@@ -478,6 +492,8 @@ class SubscriptionConverter {
 
     final sni = params['sni'] ?? server;
     final insecure = params['insecure'] == '1' || params['allowInsecure'] == '1';
+    final obfs = params['obfs'] ?? '';
+    final obfsPassword = params['obfs-password'] ?? '';
 
     return <String, dynamic>{
       'name': name,
@@ -486,7 +502,41 @@ class SubscriptionConverter {
       'port': port,
       if (auth.isNotEmpty) 'password': auth,
       if (sni.isNotEmpty) 'sni': sni,
+      if (obfs.isNotEmpty) 'obfs': obfs,
+      if (obfsPassword.isNotEmpty) 'obfs-password': obfsPassword,
       'skip-cert-verify': insecure,
+    };
+  }
+
+  static Map<String, dynamic>? _parseSnell(String uriStr) {
+    final uri = Uri.tryParse(uriStr);
+    if (uri == null) return null;
+
+    final psk = uri.userInfo;
+    final server = uri.host;
+    final port = uri.port > 0 ? uri.port : 443;
+    final name = uri.hasFragment ? Uri.decodeComponent(uri.fragment) : 'Snell-$server:$port';
+    final params = uri.queryParameters;
+
+    if (psk.isEmpty || server.isEmpty) return null;
+
+    final version = int.tryParse(params['version'] ?? '') ?? 4;
+    final obfs = params['obfs'] ?? '';
+    final obfsHost = params['obfs-host'] ?? params['host'] ?? '';
+
+    return <String, dynamic>{
+      'name': name,
+      'type': 'snell',
+      'server': server,
+      'port': port,
+      'psk': psk,
+      'version': version,
+      'udp': true,
+      if (obfs.isNotEmpty)
+        'obfs-opts': {
+          'mode': obfs,
+          if (obfsHost.isNotEmpty) 'host': obfsHost,
+        },
     };
   }
 
