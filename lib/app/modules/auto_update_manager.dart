@@ -58,11 +58,11 @@ class AutoUpdateCheckVersion {
     if (map == null) {
       return;
     }
-    latestCheck = map["latest_check"] ?? "";
-    newVersion = map["new_version"] ?? "";
-    version = map["version"] ?? "";
-    url = map["url"] ?? "";
-    sha256 = map["sha256"] ?? "";
+    latestCheck = map["latest_check"]?.toString() ?? "";
+    newVersion = map["new_version"] == true;
+    version = map["version"]?.toString() ?? "";
+    url = map["url"]?.toString() ?? "";
+    sha256 = map["sha256"]?.toString() ?? "";
   }
 
   static AutoUpdateCheckVersion fromJsonStatic(Map<String, dynamic>? map) {
@@ -518,9 +518,6 @@ class AutoUpdateManager {
       _checking = false;
       _activeCheckCompleter?.complete(res);
       _activeCheckCompleter = null;
-      Future.delayed(_duration, () async {
-        _check();
-      });
       return res;
     } catch (err, _) {
       Log.w("AutoUpdateManager._check exception ${err.toString()}");
@@ -532,9 +529,6 @@ class AutoUpdateManager {
       );
       _activeCheckCompleter?.complete(res);
       _activeCheckCompleter = null;
-      Future.delayed(_duration, () async {
-        _check();
-      });
       return res;
     }
   }
