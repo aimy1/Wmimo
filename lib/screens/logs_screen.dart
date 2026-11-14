@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
+import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -75,6 +76,23 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
         }
       }
     });
+    AppLifecycleStateNofity.onStateResumed(hashCode, _onStateResumed);
+    AppLifecycleStateNofity.onStatePaused(hashCode, _onStatePaused);
+  }
+
+  void _onStateResumed() {
+    if (!mounted) return;
+    if (_isStreaming && _logSubscription == null) {
+      VPNService.getStarted().then((started) {
+        if (started && mounted && _isStreaming) {
+          _connectStream();
+        }
+      });
+    }
+  }
+
+  void _onStatePaused() {
+    _stopLogStream();
   }
 
   @override
@@ -88,6 +106,8 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
   void dispose() {
     _batchUpdateTimer?.cancel();
     _reconnectTimer?.cancel();
+    AppLifecycleStateNofity.onStateResumed(hashCode, null);
+    AppLifecycleStateNofity.onStatePaused(hashCode, null);
     _stopLogStream();
     _searchController.dispose();
     _scrollController.dispose();
