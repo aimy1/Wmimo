@@ -43,9 +43,27 @@ class TrafficChartCard extends StatefulWidget {
 }
 
 class _TrafficChartCardState extends State<TrafficChartCard> {
+  static final ValueNotifier<num> _kZeroNotifier = ValueNotifier<num>(0);
+  static const List<int> _kMinuteOptions = [1, 5, 10, 15, 30, 60];
   Offset? _hoverPosition;
-  int _selectedMinutes = 10; // 5, 10, 30, 60
+  int _selectedMinutes = 10; // 1, 5, 10, 15, 30, 60
   late bool _isCollapsed;
+
+  List<TrafficDataRecord> _getVisibleHistory() {
+    if (widget.history.length <= 2) return widget.history;
+    final cutoff = DateTime.now().subtract(Duration(minutes: _selectedMinutes));
+    final filtered = widget.history.where((r) => !r.time.isBefore(cutoff)).toList();
+    if (filtered.length >= 2) return filtered;
+    final maxPoints = (_selectedMinutes * 60).clamp(10, widget.history.length);
+    return widget.history.sublist(widget.history.length - maxPoints);
+  }
+
+  void _cycleTimeRange() {
+    final idx = _kMinuteOptions.indexOf(_selectedMinutes);
+    setState(() {
+      _selectedMinutes = _kMinuteOptions[(idx + 1) % _kMinuteOptions.length];
+    });
+  }
 
   @override
   void initState() {
@@ -182,7 +200,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                     Icon(Icons.arrow_upward_rounded, size: 14, color: uploadColor),
                     const SizedBox(width: 3),
                     ValueListenableBuilder<num>(
-                      valueListenable: widget.uploadSpeed ?? ValueNotifier(0),
+                      valueListenable: widget.uploadSpeed ?? _kZeroNotifier,
                       builder: (context, val, _) => Text(
                         "${ClashHttpApi.convertTrafficToStringDouble(val)}/s",
                         style: TextStyle(
@@ -196,7 +214,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                     Icon(Icons.arrow_downward_rounded, size: 14, color: downloadColor),
                     const SizedBox(width: 3),
                     ValueListenableBuilder<num>(
-                      valueListenable: widget.downloadSpeed ?? ValueNotifier(0),
+                      valueListenable: widget.downloadSpeed ?? _kZeroNotifier,
                       builder: (context, val, _) => Text(
                         "${ClashHttpApi.convertTrafficToStringDouble(val)}/s",
                         style: TextStyle(
@@ -208,9 +226,9 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                     ),
                     const Spacer(),
                     ValueListenableBuilder<num>(
-                      valueListenable: widget.uploadTotal ?? ValueNotifier(0),
+                      valueListenable: widget.uploadTotal ?? _kZeroNotifier,
                       builder: (context, upTotal, _) => ValueListenableBuilder<num>(
-                        valueListenable: widget.downloadTotal ?? ValueNotifier(0),
+                        valueListenable: widget.downloadTotal ?? _kZeroNotifier,
                         builder: (context, downTotal, _) => Text(
                           "↑ ${ClashHttpApi.convertTrafficToStringDouble(upTotal)}  ↓ ${ClashHttpApi.convertTrafficToStringDouble(downTotal)}",
                           style: TextStyle(
@@ -270,7 +288,7 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                             child: RepaintBoundary(
                               child: CustomPaint(
                                 painter: ClashVergeChartPainter(
-                                  history: widget.history,
+                                  history: _getVisibleHistory(),
                                   uploadColor: uploadColor,
                                   downloadColor: downloadColor,
                                   isDark: isDark,
@@ -284,23 +302,41 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
                     ),
                   ),
 
-                  // Top-Left: Time range pill selector
+                  // Top-Left: Interactive time range pill selector
                   Positioned(
                     top: 8,
                     left: 44,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: (isDark ? ThemeDefine.kColorDarkElevated : const Color(0xFFE2E8F0))
-                            .withValues(alpha: 0.8),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
                         borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        tcontext.meta.chartMinutes(p: '$_selectedMinutes'),
-                        style: TextStyle(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w600,
-                          color: isDark ? Colors.white70 : Colors.black87,
+                        onTap: _cycleTimeRange,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: (isDark ? ThemeDefine.kColorDarkElevated : const Color(0xFFE2E8F0))
+                                .withValues(alpha: 0.85),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                tcontext.meta.chartMinutes(p: '$_selectedMinutes'),
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: isDark ? Colors.white70 : Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(width: 2),
+                              Icon(
+                                Icons.unfold_more_rounded,
+                                size: 12,
+                                color: isDark ? Colors.white60 : Colors.black54,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
