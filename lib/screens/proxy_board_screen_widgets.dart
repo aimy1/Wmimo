@@ -80,9 +80,9 @@ class _ProxyScreenProxiesNodeWidget
         if (node.delay! < 800) {
           color = ThemeDefine.kColorGreenBright;
         } else if (node.delay! < 1500) {
-          color = Colors.black;
+          color = ThemeDefine.kColorAmber;
         } else {
-          color = Colors.red;
+          color = ThemeDefine.kColorRed;
         }
       }
 
@@ -219,9 +219,9 @@ class _ProxyScreenProxiesNodeWidget
         if (node.delay! < 800) {
           color = ThemeDefine.kColorGreenBright;
         } else if (node.delay! < 1500) {
-          color = Colors.black;
+          color = ThemeDefine.kColorAmber;
         } else {
-          color = Colors.red;
+          color = ThemeDefine.kColorRed;
         }
       }
 
