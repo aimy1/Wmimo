@@ -774,14 +774,18 @@ class _HomeScreenState extends State<HomeScreen>
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
-                            Icon(
-                              isSelected ? item.selectedIcon : item.icon,
-                              size: 21,
-                              color: isSelected
-                                  ? ThemeDefine.kColorBlue
-                                  : (isDark
-                                      ? const Color(0xFF64748B)
-                                      : const Color(0xFF64748B)),
+                            AnimatedSwitcher(
+                              duration: ThemeDefine.durationMicro,
+                              child: Icon(
+                                isSelected ? item.selectedIcon : item.icon,
+                                key: ValueKey<bool>(isSelected),
+                                size: 21,
+                                color: isSelected
+                                    ? ThemeDefine.kColorBlue
+                                    : (isDark
+                                        ? const Color(0xFF94A3B8)
+                                        : const Color(0xFF64748B)),
+                              ),
                             ),
                             if (item.index == 4 && AutoUpdateManager.getVersionCheck().newVersion)
                               Positioned(
