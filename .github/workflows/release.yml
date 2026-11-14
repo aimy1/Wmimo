@@ -31,6 +31,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.47.9'
           cache: true
 
       - name: Install Dependencies
@@ -188,6 +189,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.47.9'
           cache: true
 
       - name: Install Flutter Dependencies
@@ -287,7 +289,7 @@ jobs:
 
       - name: Setup Flutter (ARM64)
         run: |
-          git clone https://github.com/flutter/flutter.git --depth 1 -b stable "$HOME/flutter"
+          git clone https://github.com/flutter/flutter.git --depth 1 -b 3.47.9 "$HOME/flutter"
           echo "$HOME/flutter/bin" >> $GITHUB_PATH
           "$HOME/flutter/bin/flutter" config --no-analytics
           "$HOME/flutter/bin/flutter" --version
@@ -369,6 +371,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.47.9'
           cache: true
 
       - name: Install Dependencies
@@ -463,6 +466,7 @@ jobs:
         continue-on-error: true
         with:
           channel: 'stable'
+          flutter-version: '3.47.9'
           cache: true
 
       - name: Retry Setup Flutter on network failure
@@ -470,6 +474,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.47.9'
           cache: true
 
       - name: Install Dependencies
@@ -547,6 +552,7 @@ jobs:
         continue-on-error: true
         with:
           channel: 'stable'
+          flutter-version: '3.47.9'
           cache: true
 
       - name: Retry Setup Flutter on network failure
@@ -554,6 +560,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.47.9'
           cache: true
 
       - name: Install Dependencies
