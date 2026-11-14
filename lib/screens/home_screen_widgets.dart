@@ -148,19 +148,21 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     if (!AppLifecycleStateNofity.isPaused()) {
       _onStateResumed();
     }
-    Biz.onEventInitAllFinish.add(() async {
-      if (Platform.isAndroid) {
-        if (SettingManager.getConfig().excludeFromRecent) {
-          FlutterVpnService.setExcludeFromRecents(true);
-        }
-      }
-      await _onInitAllFinish();
-    });
+    Biz.onEventInitAllFinish.add(_onInitAllFinishEvent);
     ClashSettingManager.onEventModeChanged.add(_onModeChangedEvent);
     Biz.onEventProxySelected.add(_onProxySelectedEvent);
     SettingManager.onSideBySideLayoutChanged.add(_onLayoutChangedEvent);
     SettingManager.onHomeCardsChanged.add(_onLayoutChangedEvent);
     _updateProxyNow();
+  }
+
+  Future<void> _onInitAllFinishEvent() async {
+    if (Platform.isAndroid) {
+      if (SettingManager.getConfig().excludeFromRecent) {
+        FlutterVpnService.setExcludeFromRecents(true);
+      }
+    }
+    await _onInitAllFinish();
   }
 
   void _onLayoutChangedEvent() {
@@ -187,6 +189,11 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
   @override
   void dispose() {
     _currentChangedDebounce?.cancel();
+    _timerStateChecker?.cancel();
+    _timerStateChecker = null;
+    _timerConnectToCore?.cancel();
+    _timerConnectToCore = null;
+    Biz.onEventInitAllFinish.remove(_onInitAllFinishEvent);
     ClashSettingManager.onEventModeChanged.remove(_onModeChangedEvent);
     Biz.onEventProxySelected.remove(_onProxySelectedEvent);
     SettingManager.onSideBySideLayoutChanged.remove(_onLayoutChangedEvent);
@@ -201,6 +208,15 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     BoardProviderNoticeManager.onEventCheck.remove(_onNoticeUpdate);
     BoardProviderNoticeManager.onEventReaded.remove(_onNoticeReaded);
     _debounceToggleTimer?.cancel();
+    _chartTick.dispose();
+    _trafficSpeed.dispose();
+    _trafficTotal.dispose();
+    _uploadSpeedRaw.dispose();
+    _downloadSpeedRaw.dispose();
+    _uploadTotalRaw.dispose();
+    _downloadTotalRaw.dispose();
+    _memoryRaw.dispose();
+    _proxyNow.dispose();
     _focusNodeConnect.dispose();
     super.dispose();
   }
