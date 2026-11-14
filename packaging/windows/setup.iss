@@ -6,7 +6,7 @@
 #endif
 
 #ifndef MyAppVersion
-  #define MyAppVersion "1.3.6.1522"
+  #define MyAppVersion "1.3.7.1523"
 #endif
 
 #ifndef MyAppPublisher
