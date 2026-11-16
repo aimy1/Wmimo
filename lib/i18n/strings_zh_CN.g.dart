@@ -68,6 +68,7 @@ class TranslationsZhCn with BaseTranslations<AppLocale, Translations> implements
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+	@override late final Translations$hotkeys$zh_CN hotkeys = Translations$hotkeys$zh_CN.internal(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -995,6 +996,29 @@ class Translations$profilePatchMode$zh_CN implements Translations$profilePatchMo
 	@override String get noOverwrite => '内置-不覆写';
 }
 
+// Path: hotkeys
+class Translations$hotkeys$zh_CN implements Translations$hotkeys$en {
+	Translations$hotkeys$zh_CN.internal(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '快捷键设置';
+	@override String get enableGlobal => '启用全局快捷键';
+	@override String get enableGlobalTip => '在后台或非激活状态下也可响应快捷键';
+	@override String get shortcutsList => '快捷键列表';
+	@override String get shortcutsDesc => '配置系统级全局快捷键及开关';
+	@override String get toggleWindow => '显示 / 隐藏主窗口';
+	@override String get toggleWindowTip => '在桌面与系统托盘之间快速显隐';
+	@override String get toggleProxy => '连接 / 断开代理';
+	@override String get toggleProxyTip => '一键切换核心代理网络连接状态';
+	@override String get toggleSystemProxy => '开启 / 关闭系统代理';
+	@override String get toggleSystemProxyTip => '快速开关系统网络代理设置';
+	@override String get cycleMode => '循环切换分流模式';
+	@override String get cycleModeTip => '按序轮转：规则 ➔ 全局 ➔ 直连';
+	@override String get resetDefault => '恢复默认设置';
+}
+
 // Path: main.tray
 class Translations$main$tray$zh_CN implements Translations$main$tray$en {
 	Translations$main$tray$zh_CN.internal(this._root);
@@ -1845,6 +1869,20 @@ extension on TranslationsZhCn {
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',
+			'hotkeys.title' => '快捷键设置',
+			'hotkeys.enableGlobal' => '启用全局快捷键',
+			'hotkeys.enableGlobalTip' => '在后台或非激活状态下也可响应快捷键',
+			'hotkeys.shortcutsList' => '快捷键列表',
+			'hotkeys.shortcutsDesc' => '配置系统级全局快捷键及开关',
+			'hotkeys.toggleWindow' => '显示 / 隐藏主窗口',
+			'hotkeys.toggleWindowTip' => '在桌面与系统托盘之间快速显隐',
+			'hotkeys.toggleProxy' => '连接 / 断开代理',
+			'hotkeys.toggleProxyTip' => '一键切换核心代理网络连接状态',
+			'hotkeys.toggleSystemProxy' => '开启 / 关闭系统代理',
+			'hotkeys.toggleSystemProxyTip' => '快速开关系统网络代理设置',
+			'hotkeys.cycleMode' => '循环切换分流模式',
+			'hotkeys.cycleModeTip' => '按序轮转：规则 ➔ 全局 ➔ 直连',
+			'hotkeys.resetDefault' => '恢复默认设置',
 			_ => null,
 		};
 	}

@@ -68,6 +68,7 @@ class TranslationsKo with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+	@override late final _Translations$hotkeys$ko hotkeys = _Translations$hotkeys$ko._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -995,6 +996,29 @@ class _Translations$profilePatchMode$ko implements Translations$profilePatchMode
 	@override String get noOverwrite => '내장 - 덮어쓰지 않음';
 }
 
+// Path: hotkeys
+class _Translations$hotkeys$ko implements Translations$hotkeys$en {
+	_Translations$hotkeys$ko._(this._root);
+
+	final TranslationsKo _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '단축키 설정';
+	@override String get enableGlobal => '글로벌 단축키 활성화';
+	@override String get enableGlobalTip => '백그라운드 또는 비활성 상태에서도 단축키가 작동합니다';
+	@override String get shortcutsList => '단축키 목록';
+	@override String get shortcutsDesc => '시스템 전역 단축키 및 스위치 구성';
+	@override String get toggleWindow => '기본 창 표시 / 숨기기';
+	@override String get toggleWindowTip => '바탕화면과 시스템 트레이 간 빠른 표시 전환';
+	@override String get toggleProxy => '프록시 연결 / 해제';
+	@override String get toggleProxyTip => '핵심 프록시 연결 상태를 원키로 전환';
+	@override String get toggleSystemProxy => '시스템 프록시 켜기 / 끄기';
+	@override String get toggleSystemProxyTip => '시스템 네트워크 프록시 설정을 빠르게 전환';
+	@override String get cycleMode => '라우팅 모드 순환 전환';
+	@override String get cycleModeTip => '순차 순환: 규칙 ➔ 글로벌 ➔ 직결';
+	@override String get resetDefault => '기본값 복원';
+}
+
 // Path: main.tray
 class _Translations$main$tray$ko implements Translations$main$tray$en {
 	_Translations$main$tray$ko._(this._root);
@@ -1845,6 +1869,20 @@ extension on TranslationsKo {
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',
+			'hotkeys.title' => '단축키 설정',
+			'hotkeys.enableGlobal' => '글로벌 단축키 활성화',
+			'hotkeys.enableGlobalTip' => '백그라운드 또는 비활성 상태에서도 단축키가 작동합니다',
+			'hotkeys.shortcutsList' => '단축키 목록',
+			'hotkeys.shortcutsDesc' => '시스템 전역 단축키 및 스위치 구성',
+			'hotkeys.toggleWindow' => '기본 창 표시 / 숨기기',
+			'hotkeys.toggleWindowTip' => '바탕화면과 시스템 트레이 간 빠른 표시 전환',
+			'hotkeys.toggleProxy' => '프록시 연결 / 해제',
+			'hotkeys.toggleProxyTip' => '핵심 프록시 연결 상태를 원키로 전환',
+			'hotkeys.toggleSystemProxy' => '시스템 프록시 켜기 / 끄기',
+			'hotkeys.toggleSystemProxyTip' => '시스템 네트워크 프록시 설정을 빠르게 전환',
+			'hotkeys.cycleMode' => '라우팅 모드 순환 전환',
+			'hotkeys.cycleModeTip' => '순차 순환: 규칙 ➔ 글로벌 ➔ 직결',
+			'hotkeys.resetDefault' => '기본값 복원',
 			_ => null,
 		};
 	}

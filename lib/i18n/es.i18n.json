@@ -843,5 +843,21 @@
     "ru": "Русский",
     "fa": "فارسی",
     "es": "Español"
+  },
+  "hotkeys": {
+    "title": "Ajustes de Atajos",
+    "enableGlobal": "Activar Atajos Globales",
+    "enableGlobalTip": "Responder a atajos incluso en segundo plano",
+    "shortcutsList": "Lista de Atajos",
+    "shortcutsDesc": "Configurar atajos globales a nivel de sistema",
+    "toggleWindow": "Mostrar / Ocultar Ventana",
+    "toggleWindowTip": "Alternar rápidamente entre el escritorio y la bandeja",
+    "toggleProxy": "Conectar / Desconectar Proxy",
+    "toggleProxyTip": "Alternar con una tecla la conexión del proxy",
+    "toggleSystemProxy": "Alternar Proxy del Sistema",
+    "toggleSystemProxyTip": "Activar o desactivar rápidamente el proxy del sistema",
+    "cycleMode": "Alternar Modo de Enrutamiento",
+    "cycleModeTip": "Secuencia: Regla ➔ Global ➔ Directo",
+    "resetDefault": "Restablecer por Defecto"
   }
 }

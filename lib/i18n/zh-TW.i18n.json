@@ -843,5 +843,21 @@
     "ru": "Русский",
     "fa": "فارسی",
     "es": "Español"
+  },
+  "hotkeys": {
+    "title": "快速鍵設定",
+    "enableGlobal": "啟用全域快速鍵",
+    "enableGlobalTip": "在後台或非使用中狀態下亦可響應快速鍵",
+    "shortcutsList": "快速鍵清單",
+    "shortcutsDesc": "設定系統級全域快速鍵及開關",
+    "toggleWindow": "顯示 / 隱藏主視窗",
+    "toggleWindowTip": "在桌面與系統匣之間快速顯隱",
+    "toggleProxy": "連接 / 中斷代理",
+    "toggleProxyTip": "一鍵切換核心代理連線狀態",
+    "toggleSystemProxy": "開啟 / 關閉系統代理",
+    "toggleSystemProxyTip": "快速切換系統網路代理設定",
+    "cycleMode": "循環切換分流模式",
+    "cycleModeTip": "依序輪轉：規則 ➔ 全域 ➔ 直連",
+    "resetDefault": "恢復預設設定"
   }
 }

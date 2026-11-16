@@ -39,6 +39,7 @@ import 'package:wmimo/screens/geo_assets_screen.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
 import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/group_screen.dart';
+import 'package:wmimo/screens/hotkey_settings_screen.dart';
 import 'package:wmimo/screens/language_settings_screen.dart';
 import 'package:wmimo/screens/list_add_screen.dart';
 import 'package:wmimo/screens/map_string_and_string_add_screen.dart';
@@ -943,6 +944,21 @@ class GroupHelper {
                   MaterialPageRoute(
                     settings: NetCheckScreen.routSettings(),
                     builder: (context) => const NetCheckScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
+          GroupItemOptions(
+            pushOptions: GroupItemPushOptions(
+              name: tcontext.hotkeys.title,
+              text: tcontext.hotkeys.shortcutsDesc,
+              onPush: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    settings: HotkeySettingsScreen.routSettings(),
+                    builder: (context) => const HotkeySettingsScreen(),
                   ),
                 );
               },

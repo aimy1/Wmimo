@@ -843,5 +843,21 @@
     "ru": "Русский",
     "fa": "فارسی",
     "es": "Español"
+  },
+  "hotkeys": {
+    "title": "ショートカット設定",
+    "enableGlobal": "グローバルショートカットを有効化",
+    "enableGlobalTip": "バックグラウンド時でもショートカットに反応します",
+    "shortcutsList": "ショートカット一覧",
+    "shortcutsDesc": "システム全体のショートカットキーと切り替えを設定",
+    "toggleWindow": "メインウィンドウの表示 / 非表示",
+    "toggleWindowTip": "デスクトップとシステムトレイ間の表示を素早く切り替え",
+    "toggleProxy": "プロキシの接続 / 切断",
+    "toggleProxyTip": "コアプロキシの接続状態をワンキーで切り替え",
+    "toggleSystemProxy": "システムプロキシの切り替え",
+    "toggleSystemProxyTip": "システムネットワークプロキシ設定を素早く切り替え",
+    "cycleMode": "ルーティングモードの順次切り替え",
+    "cycleModeTip": "順次切り替え：ルール ➔ グローバル ➔ 直接",
+    "resetDefault": "デフォルトに戻す"
   }
 }

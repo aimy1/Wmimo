@@ -68,6 +68,7 @@ class TranslationsAr with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+	@override late final _Translations$hotkeys$ar hotkeys = _Translations$hotkeys$ar._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -995,6 +996,29 @@ class _Translations$profilePatchMode$ar implements Translations$profilePatchMode
 	@override String get noOverwrite => 'مُدمج - غير قابل للكتابة فوقه';
 }
 
+// Path: hotkeys
+class _Translations$hotkeys$ar implements Translations$hotkeys$en {
+	_Translations$hotkeys$ar._(this._root);
+
+	final TranslationsAr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'إعدادات مفاتيح الاختصار';
+	@override String get enableGlobal => 'تمكين الاختصارات العامة';
+	@override String get enableGlobalTip => 'الاستجابة للاختصارات حتى أثناء العمل في الخلفية';
+	@override String get shortcutsList => 'قائمة الاختصارات';
+	@override String get shortcutsDesc => 'تكوين اختصارات عامة على مستوى النظام';
+	@override String get toggleWindow => 'إظهار / إخفاء النافذة الرئيسية';
+	@override String get toggleWindowTip => 'التبديل السريع بين سطح المكتب وعلبة النظام';
+	@override String get toggleProxy => 'اتصال / قطع اتصال الوكيل';
+	@override String get toggleProxyTip => 'التبديل بنقرة واحدة لحالة اتصال الوكيل';
+	@override String get toggleSystemProxy => 'تبديل وكيل النظام';
+	@override String get toggleSystemProxyTip => 'تشغيل أو إيقاف وكيل النظام بسرعة';
+	@override String get cycleMode => 'تبديل وضع التوجيه دورياً';
+	@override String get cycleModeTip => 'التبديل بالترتيب: القواعد ➔ عام ➔ مباشر';
+	@override String get resetDefault => 'استعادة الإعدادات الافتراضية';
+}
+
 // Path: main.tray
 class _Translations$main$tray$ar implements Translations$main$tray$en {
 	_Translations$main$tray$ar._(this._root);
@@ -1845,6 +1869,20 @@ extension on TranslationsAr {
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',
+			'hotkeys.title' => 'إعدادات مفاتيح الاختصار',
+			'hotkeys.enableGlobal' => 'تمكين الاختصارات العامة',
+			'hotkeys.enableGlobalTip' => 'الاستجابة للاختصارات حتى أثناء العمل في الخلفية',
+			'hotkeys.shortcutsList' => 'قائمة الاختصارات',
+			'hotkeys.shortcutsDesc' => 'تكوين اختصارات عامة على مستوى النظام',
+			'hotkeys.toggleWindow' => 'إظهار / إخفاء النافذة الرئيسية',
+			'hotkeys.toggleWindowTip' => 'التبديل السريع بين سطح المكتب وعلبة النظام',
+			'hotkeys.toggleProxy' => 'اتصال / قطع اتصال الوكيل',
+			'hotkeys.toggleProxyTip' => 'التبديل بنقرة واحدة لحالة اتصال الوكيل',
+			'hotkeys.toggleSystemProxy' => 'تبديل وكيل النظام',
+			'hotkeys.toggleSystemProxyTip' => 'تشغيل أو إيقاف وكيل النظام بسرعة',
+			'hotkeys.cycleMode' => 'تبديل وضع التوجيه دورياً',
+			'hotkeys.cycleModeTip' => 'التبديل بالترتيب: القواعد ➔ عام ➔ مباشر',
+			'hotkeys.resetDefault' => 'استعادة الإعدادات الافتراضية',
 			_ => null,
 		};
 	}

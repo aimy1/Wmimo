@@ -68,6 +68,7 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+	@override late final _Translations$hotkeys$ru hotkeys = _Translations$hotkeys$ru._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -995,6 +996,29 @@ class _Translations$profilePatchMode$ru implements Translations$profilePatchMode
 	@override String get noOverwrite => 'Встроенный - не перезаписывается';
 }
 
+// Path: hotkeys
+class _Translations$hotkeys$ru implements Translations$hotkeys$en {
+	_Translations$hotkeys$ru._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Настройки горячих клавиш';
+	@override String get enableGlobal => 'Включить глобальные клавиши';
+	@override String get enableGlobalTip => 'Реагировать на клавиши даже в фоновом режиме';
+	@override String get shortcutsList => 'Список горячих клавиш';
+	@override String get shortcutsDesc => 'Настройка глобальных системных комбинаций клавиш';
+	@override String get toggleWindow => 'Показать / скрыть окно';
+	@override String get toggleWindowTip => 'Быстрое переключение между рабочим столом и треем';
+	@override String get toggleProxy => 'Подключить / отключить прокси';
+	@override String get toggleProxyTip => 'Быстрое переключение состояния прокси-соединения';
+	@override String get toggleSystemProxy => 'Вкл. / выкл. системный прокси';
+	@override String get toggleSystemProxyTip => 'Быстрое переключение параметров системного прокси';
+	@override String get cycleMode => 'Циклическое переключение режима';
+	@override String get cycleModeTip => 'Последовательно: Правила ➔ Глобальный ➔ Прямой';
+	@override String get resetDefault => 'Сбросить по умолчанию';
+}
+
 // Path: main.tray
 class _Translations$main$tray$ru implements Translations$main$tray$en {
 	_Translations$main$tray$ru._(this._root);
@@ -1845,6 +1869,20 @@ extension on TranslationsRu {
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',
+			'hotkeys.title' => 'Настройки горячих клавиш',
+			'hotkeys.enableGlobal' => 'Включить глобальные клавиши',
+			'hotkeys.enableGlobalTip' => 'Реагировать на клавиши даже в фоновом режиме',
+			'hotkeys.shortcutsList' => 'Список горячих клавиш',
+			'hotkeys.shortcutsDesc' => 'Настройка глобальных системных комбинаций клавиш',
+			'hotkeys.toggleWindow' => 'Показать / скрыть окно',
+			'hotkeys.toggleWindowTip' => 'Быстрое переключение между рабочим столом и треем',
+			'hotkeys.toggleProxy' => 'Подключить / отключить прокси',
+			'hotkeys.toggleProxyTip' => 'Быстрое переключение состояния прокси-соединения',
+			'hotkeys.toggleSystemProxy' => 'Вкл. / выкл. системный прокси',
+			'hotkeys.toggleSystemProxyTip' => 'Быстрое переключение параметров системного прокси',
+			'hotkeys.cycleMode' => 'Циклическое переключение режима',
+			'hotkeys.cycleModeTip' => 'Последовательно: Правила ➔ Глобальный ➔ Прямой',
+			'hotkeys.resetDefault' => 'Сбросить по умолчанию',
 			_ => null,
 		};
 	}

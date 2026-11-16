@@ -843,5 +843,21 @@
     "ru": "Русский",
     "fa": "فارسی",
     "es": "Español"
+  },
+  "hotkeys": {
+    "title": "快捷键设置",
+    "enableGlobal": "启用全局快捷键",
+    "enableGlobalTip": "在后台或非激活状态下也可响应快捷键",
+    "shortcutsList": "快捷键列表",
+    "shortcutsDesc": "配置系统级全局快捷键及开关",
+    "toggleWindow": "显示 / 隐藏主窗口",
+    "toggleWindowTip": "在桌面与系统托盘之间快速显隐",
+    "toggleProxy": "连接 / 断开代理",
+    "toggleProxyTip": "一键切换核心代理网络连接状态",
+    "toggleSystemProxy": "开启 / 关闭系统代理",
+    "toggleSystemProxyTip": "快速开关系统网络代理设置",
+    "cycleMode": "循环切换分流模式",
+    "cycleModeTip": "按序轮转：规则 ➔ 全局 ➔ 直连",
+    "resetDefault": "恢复默认设置"
   }
 }

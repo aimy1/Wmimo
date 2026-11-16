@@ -68,6 +68,7 @@ class TranslationsJa with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+	@override late final _Translations$hotkeys$ja hotkeys = _Translations$hotkeys$ja._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -995,6 +996,29 @@ class _Translations$profilePatchMode$ja implements Translations$profilePatchMode
 	@override String get noOverwrite => '内蔵 - 上書きなし';
 }
 
+// Path: hotkeys
+class _Translations$hotkeys$ja implements Translations$hotkeys$en {
+	_Translations$hotkeys$ja._(this._root);
+
+	final TranslationsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'ショートカット設定';
+	@override String get enableGlobal => 'グローバルショートカットを有効化';
+	@override String get enableGlobalTip => 'バックグラウンド時でもショートカットに反応します';
+	@override String get shortcutsList => 'ショートカット一覧';
+	@override String get shortcutsDesc => 'システム全体のショートカットキーと切り替えを設定';
+	@override String get toggleWindow => 'メインウィンドウの表示 / 非表示';
+	@override String get toggleWindowTip => 'デスクトップとシステムトレイ間の表示を素早く切り替え';
+	@override String get toggleProxy => 'プロキシの接続 / 切断';
+	@override String get toggleProxyTip => 'コアプロキシの接続状態をワンキーで切り替え';
+	@override String get toggleSystemProxy => 'システムプロキシの切り替え';
+	@override String get toggleSystemProxyTip => 'システムネットワークプロキシ設定を素早く切り替え';
+	@override String get cycleMode => 'ルーティングモードの順次切り替え';
+	@override String get cycleModeTip => '順次切り替え：ルール ➔ グローバル ➔ 直接';
+	@override String get resetDefault => 'デフォルトに戻す';
+}
+
 // Path: main.tray
 class _Translations$main$tray$ja implements Translations$main$tray$en {
 	_Translations$main$tray$ja._(this._root);
@@ -1845,6 +1869,20 @@ extension on TranslationsJa {
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',
+			'hotkeys.title' => 'ショートカット設定',
+			'hotkeys.enableGlobal' => 'グローバルショートカットを有効化',
+			'hotkeys.enableGlobalTip' => 'バックグラウンド時でもショートカットに反応します',
+			'hotkeys.shortcutsList' => 'ショートカット一覧',
+			'hotkeys.shortcutsDesc' => 'システム全体のショートカットキーと切り替えを設定',
+			'hotkeys.toggleWindow' => 'メインウィンドウの表示 / 非表示',
+			'hotkeys.toggleWindowTip' => 'デスクトップとシステムトレイ間の表示を素早く切り替え',
+			'hotkeys.toggleProxy' => 'プロキシの接続 / 切断',
+			'hotkeys.toggleProxyTip' => 'コアプロキシの接続状態をワンキーで切り替え',
+			'hotkeys.toggleSystemProxy' => 'システムプロキシの切り替え',
+			'hotkeys.toggleSystemProxyTip' => 'システムネットワークプロキシ設定を素早く切り替え',
+			'hotkeys.cycleMode' => 'ルーティングモードの順次切り替え',
+			'hotkeys.cycleModeTip' => '順次切り替え：ルール ➔ グローバル ➔ 直接',
+			'hotkeys.resetDefault' => 'デフォルトに戻す',
 			_ => null,
 		};
 	}

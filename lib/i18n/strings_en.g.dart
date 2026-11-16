@@ -78,6 +78,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+	late final Translations$hotkeys$en hotkeys = Translations$hotkeys$en._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -2547,6 +2548,57 @@ class Translations$profilePatchMode$en {
 	String get noOverwrite => 'Built-in - no Overwrite';
 }
 
+// Path: hotkeys
+class Translations$hotkeys$en {
+	Translations$hotkeys$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Hotkey Settings'
+	String get title => 'Hotkey Settings';
+
+	/// en: 'Enable Global Hotkeys'
+	String get enableGlobal => 'Enable Global Hotkeys';
+
+	/// en: 'Respond to hotkeys even when in background or inactive'
+	String get enableGlobalTip => 'Respond to hotkeys even when in background or inactive';
+
+	/// en: 'Shortcuts List'
+	String get shortcutsList => 'Shortcuts List';
+
+	/// en: 'Configure system-wide global shortcuts and toggles'
+	String get shortcutsDesc => 'Configure system-wide global shortcuts and toggles';
+
+	/// en: 'Show / Hide Main Window'
+	String get toggleWindow => 'Show / Hide Main Window';
+
+	/// en: 'Quickly toggle visibility between desktop and tray'
+	String get toggleWindowTip => 'Quickly toggle visibility between desktop and tray';
+
+	/// en: 'Connect / Disconnect Proxy'
+	String get toggleProxy => 'Connect / Disconnect Proxy';
+
+	/// en: 'One-key toggle core proxy connection state'
+	String get toggleProxyTip => 'One-key toggle core proxy connection state';
+
+	/// en: 'Toggle System Proxy'
+	String get toggleSystemProxy => 'Toggle System Proxy';
+
+	/// en: 'Quickly turn system proxy on or off'
+	String get toggleSystemProxyTip => 'Quickly turn system proxy on or off';
+
+	/// en: 'Cycle Routing Mode'
+	String get cycleMode => 'Cycle Routing Mode';
+
+	/// en: 'Cycle sequentially: Rule ➔ Global ➔ Direct'
+	String get cycleModeTip => 'Cycle sequentially: Rule ➔ Global ➔ Direct';
+
+	/// en: 'Reset to Defaults'
+	String get resetDefault => 'Reset to Defaults';
+}
+
 // Path: main.tray
 class Translations$main$tray$en {
 	Translations$main$tray$en._(this._root);
@@ -3445,6 +3497,20 @@ extension on Translations {
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',
+			'hotkeys.title' => 'Hotkey Settings',
+			'hotkeys.enableGlobal' => 'Enable Global Hotkeys',
+			'hotkeys.enableGlobalTip' => 'Respond to hotkeys even when in background or inactive',
+			'hotkeys.shortcutsList' => 'Shortcuts List',
+			'hotkeys.shortcutsDesc' => 'Configure system-wide global shortcuts and toggles',
+			'hotkeys.toggleWindow' => 'Show / Hide Main Window',
+			'hotkeys.toggleWindowTip' => 'Quickly toggle visibility between desktop and tray',
+			'hotkeys.toggleProxy' => 'Connect / Disconnect Proxy',
+			'hotkeys.toggleProxyTip' => 'One-key toggle core proxy connection state',
+			'hotkeys.toggleSystemProxy' => 'Toggle System Proxy',
+			'hotkeys.toggleSystemProxyTip' => 'Quickly turn system proxy on or off',
+			'hotkeys.cycleMode' => 'Cycle Routing Mode',
+			'hotkeys.cycleModeTip' => 'Cycle sequentially: Rule ➔ Global ➔ Direct',
+			'hotkeys.resetDefault' => 'Reset to Defaults',
 			_ => null,
 		};
 	}

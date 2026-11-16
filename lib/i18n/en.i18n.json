@@ -843,5 +843,21 @@
     "ru": "Русский",
     "fa": "فارسی",
     "es": "Español"
+  },
+  "hotkeys": {
+    "title": "Hotkey Settings",
+    "enableGlobal": "Enable Global Hotkeys",
+    "enableGlobalTip": "Respond to hotkeys even when in background or inactive",
+    "shortcutsList": "Shortcuts List",
+    "shortcutsDesc": "Configure system-wide global shortcuts and toggles",
+    "toggleWindow": "Show / Hide Main Window",
+    "toggleWindowTip": "Quickly toggle visibility between desktop and tray",
+    "toggleProxy": "Connect / Disconnect Proxy",
+    "toggleProxyTip": "One-key toggle core proxy connection state",
+    "toggleSystemProxy": "Toggle System Proxy",
+    "toggleSystemProxyTip": "Quickly turn system proxy on or off",
+    "cycleMode": "Cycle Routing Mode",
+    "cycleModeTip": "Cycle sequentially: Rule ➔ Global ➔ Direct",
+    "resetDefault": "Reset to Defaults"
   }
 }

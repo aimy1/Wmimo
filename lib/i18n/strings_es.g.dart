@@ -68,6 +68,7 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+	@override late final _Translations$hotkeys$es hotkeys = _Translations$hotkeys$es._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -995,6 +996,29 @@ class _Translations$profilePatchMode$es implements Translations$profilePatchMode
 	@override String get noOverwrite => 'Integrado - sin sobrescritura';
 }
 
+// Path: hotkeys
+class _Translations$hotkeys$es implements Translations$hotkeys$en {
+	_Translations$hotkeys$es._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Ajustes de Atajos';
+	@override String get enableGlobal => 'Activar Atajos Globales';
+	@override String get enableGlobalTip => 'Responder a atajos incluso en segundo plano';
+	@override String get shortcutsList => 'Lista de Atajos';
+	@override String get shortcutsDesc => 'Configurar atajos globales a nivel de sistema';
+	@override String get toggleWindow => 'Mostrar / Ocultar Ventana';
+	@override String get toggleWindowTip => 'Alternar rápidamente entre el escritorio y la bandeja';
+	@override String get toggleProxy => 'Conectar / Desconectar Proxy';
+	@override String get toggleProxyTip => 'Alternar con una tecla la conexión del proxy';
+	@override String get toggleSystemProxy => 'Alternar Proxy del Sistema';
+	@override String get toggleSystemProxyTip => 'Activar o desactivar rápidamente el proxy del sistema';
+	@override String get cycleMode => 'Alternar Modo de Enrutamiento';
+	@override String get cycleModeTip => 'Secuencia: Regla ➔ Global ➔ Directo';
+	@override String get resetDefault => 'Restablecer por Defecto';
+}
+
 // Path: main.tray
 class _Translations$main$tray$es implements Translations$main$tray$en {
 	_Translations$main$tray$es._(this._root);
@@ -1845,6 +1869,20 @@ extension on TranslationsEs {
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',
+			'hotkeys.title' => 'Ajustes de Atajos',
+			'hotkeys.enableGlobal' => 'Activar Atajos Globales',
+			'hotkeys.enableGlobalTip' => 'Responder a atajos incluso en segundo plano',
+			'hotkeys.shortcutsList' => 'Lista de Atajos',
+			'hotkeys.shortcutsDesc' => 'Configurar atajos globales a nivel de sistema',
+			'hotkeys.toggleWindow' => 'Mostrar / Ocultar Ventana',
+			'hotkeys.toggleWindowTip' => 'Alternar rápidamente entre el escritorio y la bandeja',
+			'hotkeys.toggleProxy' => 'Conectar / Desconectar Proxy',
+			'hotkeys.toggleProxyTip' => 'Alternar con una tecla la conexión del proxy',
+			'hotkeys.toggleSystemProxy' => 'Alternar Proxy del Sistema',
+			'hotkeys.toggleSystemProxyTip' => 'Activar o desactivar rápidamente el proxy del sistema',
+			'hotkeys.cycleMode' => 'Alternar Modo de Enrutamiento',
+			'hotkeys.cycleModeTip' => 'Secuencia: Regla ➔ Global ➔ Directo',
+			'hotkeys.resetDefault' => 'Restablecer por Defecto',
 			_ => null,
 		};
 	}

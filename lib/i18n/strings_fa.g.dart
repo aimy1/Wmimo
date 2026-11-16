@@ -68,6 +68,7 @@ class TranslationsFa with BaseTranslations<AppLocale, Translations> implements T
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+	@override late final _Translations$hotkeys$fa hotkeys = _Translations$hotkeys$fa._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -995,6 +996,29 @@ class _Translations$profilePatchMode$fa implements Translations$profilePatchMode
 	@override String get noOverwrite => 'داخلی - رونویسی نشده است';
 }
 
+// Path: hotkeys
+class _Translations$hotkeys$fa implements Translations$hotkeys$en {
+	_Translations$hotkeys$fa._(this._root);
+
+	final TranslationsFa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'تنظیمات کلیدهای میانبر';
+	@override String get enableGlobal => 'فعال‌سازی کلیدهای میانبر سراسری';
+	@override String get enableGlobalTip => 'پاسخ به کلیدهای میانبر حتی در پس‌زمینه';
+	@override String get shortcutsList => 'فهرست کلیدهای میانبر';
+	@override String get shortcutsDesc => 'پیکربندی میانبرهای سراسری در سطح سیستم';
+	@override String get toggleWindow => 'نمایش / پنهان کردن پنجره اصلی';
+	@override String get toggleWindowTip => 'تغییر سریع بین دسکتاپ و سینی سیستم';
+	@override String get toggleProxy => 'اتصال / قطع اتصال پروکسی';
+	@override String get toggleProxyTip => 'تغییر وضعیت اتصال پروکسی با یک کلید';
+	@override String get toggleSystemProxy => 'روشن / خاموش کردن پروکسی سیستم';
+	@override String get toggleSystemProxyTip => 'تغییر سریع تنظیمات پروکسی شبکه سیستم';
+	@override String get cycleMode => 'تغییر دوره‌ای حالت مسیریابی';
+	@override String get cycleModeTip => 'به ترتیب: قوانین ➔ سراسری ➔ مستقیم';
+	@override String get resetDefault => 'بازنشانی به پیش‌فرض';
+}
+
 // Path: main.tray
 class _Translations$main$tray$fa implements Translations$main$tray$en {
 	_Translations$main$tray$fa._(this._root);
@@ -1845,6 +1869,20 @@ extension on TranslationsFa {
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',
+			'hotkeys.title' => 'تنظیمات کلیدهای میانبر',
+			'hotkeys.enableGlobal' => 'فعال‌سازی کلیدهای میانبر سراسری',
+			'hotkeys.enableGlobalTip' => 'پاسخ به کلیدهای میانبر حتی در پس‌زمینه',
+			'hotkeys.shortcutsList' => 'فهرست کلیدهای میانبر',
+			'hotkeys.shortcutsDesc' => 'پیکربندی میانبرهای سراسری در سطح سیستم',
+			'hotkeys.toggleWindow' => 'نمایش / پنهان کردن پنجره اصلی',
+			'hotkeys.toggleWindowTip' => 'تغییر سریع بین دسکتاپ و سینی سیستم',
+			'hotkeys.toggleProxy' => 'اتصال / قطع اتصال پروکسی',
+			'hotkeys.toggleProxyTip' => 'تغییر وضعیت اتصال پروکسی با یک کلید',
+			'hotkeys.toggleSystemProxy' => 'روشن / خاموش کردن پروکسی سیستم',
+			'hotkeys.toggleSystemProxyTip' => 'تغییر سریع تنظیمات پروکسی شبکه سیستم',
+			'hotkeys.cycleMode' => 'تغییر دوره‌ای حالت مسیریابی',
+			'hotkeys.cycleModeTip' => 'به ترتیب: قوانین ➔ سراسری ➔ مستقیم',
+			'hotkeys.resetDefault' => 'بازنشانی به پیش‌فرض',
 			_ => null,
 		};
 	}

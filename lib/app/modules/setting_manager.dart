@@ -210,6 +210,56 @@ class SettingConfigItemWindowState {
   }
 }
 
+class SettingConfigItemHotkeys {
+  bool enabled;
+  bool toggleWindow;
+  bool toggleProxy;
+  bool toggleSystemProxy;
+  bool cycleProxyMode;
+
+  SettingConfigItemHotkeys({
+    this.enabled = true,
+    this.toggleWindow = true,
+    this.toggleProxy = true,
+    this.toggleSystemProxy = true,
+    this.cycleProxyMode = true,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'enabled': enabled,
+    'toggle_window': toggleWindow,
+    'toggle_proxy': toggleProxy,
+    'toggle_system_proxy': toggleSystemProxy,
+    'cycle_proxy_mode': cycleProxyMode,
+  };
+
+  void fromJson(Map<String, dynamic>? map) {
+    if (map == null) return;
+    enabled = map['enabled'] ?? true;
+    toggleWindow = map['toggle_window'] ?? true;
+    toggleProxy = map['toggle_proxy'] ?? true;
+    toggleSystemProxy = map['toggle_system_proxy'] ?? true;
+    cycleProxyMode = map['cycle_proxy_mode'] ?? true;
+  }
+
+  factory SettingConfigItemHotkeys.fromJson(dynamic map) {
+    return fromJsonStatic(map);
+  }
+
+  static SettingConfigItemHotkeys fromJsonStatic(dynamic map) {
+    if (map is SettingConfigItemHotkeys) {
+      return map;
+    }
+    final config = SettingConfigItemHotkeys();
+    if (map is Map<String, dynamic>) {
+      config.fromJson(map);
+    } else if (map is Map) {
+      config.fromJson(Map<String, dynamic>.from(map));
+    }
+    return config;
+  }
+}
+
 class SettingConfig {
   static const String kDefaultBoardUrl = "https://board.zash.run.place/";
   static const int kDefaultBoardPort = 7066;
@@ -219,6 +269,7 @@ class SettingConfig {
   SettingConfigItemUI ui = SettingConfigItemUI();
   SettingConfigItemWebDev webdav = SettingConfigItemWebDev();
   SettingConfigItemWindowState window = SettingConfigItemWindowState();
+  SettingConfigItemHotkeys hotkeys = SettingConfigItemHotkeys();
   bool devMode = false;
   bool alwayOn = false;
   String logLevel = bool.fromEnvironment("dart.vm.product")
@@ -268,6 +319,7 @@ class SettingConfig {
     'hide_vpn': hideVpn,
     'website_test_targets': websiteTestTargets,
     'window': window,
+    'hotkeys': hotkeys,
   };
   void fromJson(Map<String, dynamic>? map) {
     if (map == null) {
@@ -277,6 +329,7 @@ class SettingConfig {
     languageTag = map["language_tag"] ?? "";
     ui = SettingConfigItemUI.fromJsonStatic(map["ui"]);
     webdav = SettingConfigItemWebDev.fromJsonStatic(map["webdav"]);
+    hotkeys = SettingConfigItemHotkeys.fromJsonStatic(map["hotkeys"]);
     alwayOn = map["alway_on"] ?? false;
     logLevel =
         map["log_level"] ??
@@ -326,6 +379,12 @@ class SettingConfig {
 
   void setUserAgent(String ua) {
     _userAgent = ua;
+  }
+
+  SettingConfig();
+
+  factory SettingConfig.fromJson(Map<String, dynamic>? map) {
+    return fromJsonStatic(map);
   }
 
   static SettingConfig fromJsonStatic(Map<String, dynamic>? map) {

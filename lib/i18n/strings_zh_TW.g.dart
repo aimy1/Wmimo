@@ -68,6 +68,7 @@ class TranslationsZhTw with BaseTranslations<AppLocale, Translations> implements
 		'fa': 'فارسی',
 		'es': 'Español',
 	};
+	@override late final Translations$hotkeys$zh_TW hotkeys = Translations$hotkeys$zh_TW.internal(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -995,6 +996,29 @@ class Translations$profilePatchMode$zh_TW implements Translations$profilePatchMo
 	@override String get noOverwrite => '內置-不覆寫';
 }
 
+// Path: hotkeys
+class Translations$hotkeys$zh_TW implements Translations$hotkeys$en {
+	Translations$hotkeys$zh_TW.internal(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '快速鍵設定';
+	@override String get enableGlobal => '啟用全域快速鍵';
+	@override String get enableGlobalTip => '在後台或非使用中狀態下亦可響應快速鍵';
+	@override String get shortcutsList => '快速鍵清單';
+	@override String get shortcutsDesc => '設定系統級全域快速鍵及開關';
+	@override String get toggleWindow => '顯示 / 隱藏主視窗';
+	@override String get toggleWindowTip => '在桌面與系統匣之間快速顯隱';
+	@override String get toggleProxy => '連接 / 中斷代理';
+	@override String get toggleProxyTip => '一鍵切換核心代理連線狀態';
+	@override String get toggleSystemProxy => '開啟 / 關閉系統代理';
+	@override String get toggleSystemProxyTip => '快速切換系統網路代理設定';
+	@override String get cycleMode => '循環切換分流模式';
+	@override String get cycleModeTip => '依序輪轉：規則 ➔ 全域 ➔ 直連';
+	@override String get resetDefault => '恢復預設設定';
+}
+
 // Path: main.tray
 class Translations$main$tray$zh_TW implements Translations$main$tray$en {
 	Translations$main$tray$zh_TW.internal(this._root);
@@ -1845,6 +1869,20 @@ extension on TranslationsZhTw {
 			'locales.ru' => 'Русский',
 			'locales.fa' => 'فارسی',
 			'locales.es' => 'Español',
+			'hotkeys.title' => '快速鍵設定',
+			'hotkeys.enableGlobal' => '啟用全域快速鍵',
+			'hotkeys.enableGlobalTip' => '在後台或非使用中狀態下亦可響應快速鍵',
+			'hotkeys.shortcutsList' => '快速鍵清單',
+			'hotkeys.shortcutsDesc' => '設定系統級全域快速鍵及開關',
+			'hotkeys.toggleWindow' => '顯示 / 隱藏主視窗',
+			'hotkeys.toggleWindowTip' => '在桌面與系統匣之間快速顯隱',
+			'hotkeys.toggleProxy' => '連接 / 中斷代理',
+			'hotkeys.toggleProxyTip' => '一鍵切換核心代理連線狀態',
+			'hotkeys.toggleSystemProxy' => '開啟 / 關閉系統代理',
+			'hotkeys.toggleSystemProxyTip' => '快速切換系統網路代理設定',
+			'hotkeys.cycleMode' => '循環切換分流模式',
+			'hotkeys.cycleModeTip' => '依序輪轉：規則 ➔ 全域 ➔ 直連',
+			'hotkeys.resetDefault' => '恢復預設設定',
 			_ => null,
 		};
 	}

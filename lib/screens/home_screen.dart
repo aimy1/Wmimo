@@ -37,11 +37,10 @@ import 'package:wmimo/screens/user_agreement_screen.dart';
 import 'package:wmimo/screens/webview_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:libclash_vpn_service/state.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:window_manager/window_manager.dart';
+import 'package:wmimo/app/utils/app_hotkey_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   static RouteSettings routSettings() {
@@ -193,19 +192,8 @@ class _HomeScreenState extends State<HomeScreen>
     });
 
     Future.delayed(const Duration(seconds: 0), () async {
-      if (Platform.isMacOS) {
-        await hotKeyManager.unregisterAll();
-        HotKey hotKey = HotKey(
-          key: PhysicalKeyboardKey.keyW,
-          modifiers: [HotKeyModifier.meta],
-          scope: HotKeyScope.inapp,
-        );
-        await hotKeyManager.register(
-          hotKey,
-          keyDownHandler: (hotKey) {
-            windowManager.hide();
-          },
-        );
+      if (PlatformUtils.isPC()) {
+        await AppHotkeyManager.init();
       }
     });
   }
@@ -344,6 +332,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
+    AppHotkeyManager.dispose();
     VPNService.onEventStateChanged.remove(_onStateChanged);
     VpnActionHandler.uiStatus.removeListener(_onVpnUiStatusChanged);
     AutoUpdateManager.onEventCheck.remove(_onAutoUpdateCheck);

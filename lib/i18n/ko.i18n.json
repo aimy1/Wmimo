@@ -843,5 +843,21 @@
     "ru": "Русский",
     "fa": "فارسی",
     "es": "Español"
+  },
+  "hotkeys": {
+    "title": "단축키 설정",
+    "enableGlobal": "글로벌 단축키 활성화",
+    "enableGlobalTip": "백그라운드 또는 비활성 상태에서도 단축키가 작동합니다",
+    "shortcutsList": "단축키 목록",
+    "shortcutsDesc": "시스템 전역 단축키 및 스위치 구성",
+    "toggleWindow": "기본 창 표시 / 숨기기",
+    "toggleWindowTip": "바탕화면과 시스템 트레이 간 빠른 표시 전환",
+    "toggleProxy": "프록시 연결 / 해제",
+    "toggleProxyTip": "핵심 프록시 연결 상태를 원키로 전환",
+    "toggleSystemProxy": "시스템 프록시 켜기 / 끄기",
+    "toggleSystemProxyTip": "시스템 네트워크 프록시 설정을 빠르게 전환",
+    "cycleMode": "라우팅 모드 순환 전환",
+    "cycleModeTip": "순차 순환: 규칙 ➔ 글로벌 ➔ 직결",
+    "resetDefault": "기본값 복원"
   }
 }
