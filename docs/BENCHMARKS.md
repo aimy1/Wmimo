@@ -39,15 +39,15 @@ Wmimo provides native localization across 9 languages. Language files are valida
 
 | Locale | Language | JSON File | Total Key Count | Missing Keys | Placeholder Parity | Completeness |
 |:---|:---|:---|:---|:---|:---|:---|
-| `zh-CN` | 简体中文 (Baseline) | `lib/i18n/zh-CN.i18n.json` | 798 | 0 | 100.0% | **100.0%** |
-| `en` | English | `lib/i18n/en.i18n.json` | 798 | 0 | 100.0% | **100.0%** |
-| `zh-TW` | 繁體中文 | `lib/i18n/zh-TW.i18n.json` | 798 | 0 | 100.0% | **100.0%** |
-| `ja` | 日本語 | `lib/i18n/ja.i18n.json` | 798 | 0 | 100.0% | **100.0%** |
-| `ko` | 한국어 | `lib/i18n/ko.i18n.json` | 798 | 0 | 100.0% | **100.0%** |
-| `ru` | Русский | `lib/i18n/ru.i18n.json` | 798 | 0 | 100.0% | **100.0%** |
-| `es` | Español | `lib/i18n/es.i18n.json` | 798 | 0 | 100.0% | **100.0%** |
-| `ar` | العربية | `lib/i18n/ar.i18n.json` | 798 | 0 | 100.0% | **100.0%** |
-| `fa` | فارسی | `lib/i18n/fa.i18n.json` | 798 | 0 | 100.0% | **100.0%** |
+| `zh-CN` | 简体中文 (Baseline) | `lib/i18n/zh-CN.i18n.json` | 847 | 0 | 100.0% | **100.0%** |
+| `en` | English | `lib/i18n/en.i18n.json` | 847 | 0 | 100.0% | **100.0%** |
+| `zh-TW` | 繁體中文 | `lib/i18n/zh-TW.i18n.json` | 847 | 0 | 100.0% | **100.0%** |
+| `ja` | 日本語 | `lib/i18n/ja.i18n.json` | 847 | 0 | 100.0% | **100.0%** |
+| `ko` | 한국어 | `lib/i18n/ko.i18n.json` | 847 | 0 | 100.0% | **100.0%** |
+| `ru` | Русский | `lib/i18n/ru.i18n.json` | 847 | 0 | 100.0% | **100.0%** |
+| `es` | Español | `lib/i18n/es.i18n.json` | 847 | 0 | 100.0% | **100.0%** |
+| `ar` | العربية | `lib/i18n/ar.i18n.json` | 847 | 0 | 100.0% | **100.0%** |
+| `fa` | فارسی | `lib/i18n/fa.i18n.json` | 847 | 0 | 100.0% | **100.0%** |
 
 *Audit result: 9/9 languages achieve 100.0% key coverage parity with 0 missing translation entries.*
 

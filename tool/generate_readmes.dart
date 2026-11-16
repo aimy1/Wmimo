@@ -67,12 +67,18 @@ $langBar
   - Rapid outbound mode toggling: **Rule (Split Routing)** / **Global** / **Direct**.
   - Flexible dual engine: **TUN Virtual Adapter Mode** (transparent system-wide capture) and **System Proxy Mode** (standard unprivileged routing).
   - Fine-grained traffic steering: Android Per-App Proxy filtering and Windows UWP Loopback exemption utility.
+- **Visual Chain Proxy (Relay Chaining) [Beta]**:
+  - Built on Mihomo native `type: relay` groups, providing two-hop topology linking (Entry Hop ➔ Exit Hop).
+  - Effortlessly unlock streaming/AI services with clean egress IPs, optimize high-speed transit, and revive blocked endpoints.
+  - Independent persistence (`chain_proxies.json`) ensuring chain rules survive automatic subscription updates.
+  - End-to-end latency testing, missing node detection alerts, and smooth hot-reload without disconnection.
 - **Deep Real-Time Telemetry & Diagnostics**:
   - Ultra-smooth Bezier traffic wave monitor with multi-window spans (1m / 5m / 15m / 30m / 60m).
   - Instant egress IP, geolocation, and ISP lookup card with one-tap copy and privacy masking.
   - Subscription plan data usage progress bar with expiration countdown.
   - Built-in diagnostic toolset: Routing Rules inspection, Real-time Core Logs, Concurrent Latency Ping, and Runtime Configuration viewer.
-- **Deep Native Operating System Integration**:
+- **Deep Native OS Integration & Global Shortcuts**:
+  - **Global Shortcuts**: Desktop environments (Windows, macOS, Linux) support configurable system-wide hotkeys (toggle window, master proxy, system proxy, and cycle outbound routing modes).
   - **Windows**: Native dark/light adaptive tray context menu, real-time download/upload speed indicator in tray, and modern `comctl32 v6` visual styling.
   - **Android**: Foreground service notification with instant disconnect action, Quick Settings Pull-Down Tile, and automatic language synchronization.
   - **macOS**: Adaptive menu bar Template icon and system proxy automation.
@@ -80,7 +86,7 @@ $langBar
   - Switch freely between `stable` (production) and `beta` (pre-release) channels.
   - Background silent download with SHA-256 hash integrity verification.
 - **True 100% Native 9-Language Parity**:
-  - 798 translation keys synchronized across: 简体中文, English, 繁體中文, 日本語, 한국어, Русский, Español, العربية, فارسی.
+  - 847 translation keys synchronized across: 简体中文, English, 繁體中文, 日本語, 한국어, Русский, Español, العربية, فارسی.
   - Validated by automated CI checks ensuring 0 missing keys and 100% placeholder parity (see [Completeness Matrix](docs/BENCHMARKS.md#2-internationalization-i18n-completeness-matrix)).
 
 ---
@@ -139,7 +145,7 @@ Wmimo's architectural efficiency and coverage are verified by reproducible autom
 
 - **Subscription Parsing Throughput**: ~30,670 nodes/s (5,000 multi-protocol nodes parsed, normalized, and classified in ~163ms via background Isolate).
 - **Format Heuristic Detection**: `isClashYaml` verifies 1,000 nodes in ~1.4ms.
-- **i18n Coverage**: 9/9 supported locales achieve 100.0% key parity (798/798 keys, 0 missing keys).
+- **i18n Coverage**: 9/9 supported locales achieve 100.0% key parity (847/847 keys, 0 missing keys).
 - **Automated Verification**: Run `flutter test test/benchmark_profile_scale_test.dart` and `flutter test test/i18n_integrity_test.dart`.
 
 Full methodology, reproducible charts, and hardware specs are detailed in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
@@ -228,12 +234,18 @@ $langBar
   - 出站模式秒级切换：**规则分流 (Rule)** / **全局代理 (Global)** / **直接连接 (Direct)**；
   - 双引擎灵活调度：**TUN 虚拟网卡模式**（透明接管操作系统全量流量）与 **系统代理模式**（免提权快捷冲浪）；
   - 精细化应用分流：Android 分应用代理（黑白名单）与 Windows UWP Loopback 免除工具。
+- **可视化链式代理 (Chain Proxy) [Beta]**：
+  - 基于 Mihomo 原生 `type: relay` 策略组，支持前置跳板节点与落地出口节点两步拓扑直连；
+  - 轻松实现流媒体与 AI 服务纯净出口解锁、跨国高速中转以及被阻断节点复活；
+  - 独立持久化存储（`chain_proxies.json`），订阅每日自动拉取更新永不丢失链式配置；
+  - 支持端到端真实链路延迟测速、失效节点预警与平滑热重载（无需断线重连）。
 - **深度实时流量监控与智能诊断套件**：
   - 仪表盘实时平滑贝塞尔流量曲线图，支持 1m / 5m / 15m / 30m / 60m 多时间跨度自如缩放；
   - 实时出口 IP、地理位置与 ISP 归属信息卡片，一键测速、轻触复制与隐私脱敏保护；
   - 订阅套餐用量实时进度条与到期时间精准倒计时；
   - 全套排障套件：路由规则树查看、内核实时控制台日志、全节点并发 Ping 测速与网络连通性诊断。
-- **深度操作系统级原生融合**：
+- **深度操作系统级原生融合与全局快捷键**：
+  - **全局热键系统**：Windows / macOS / Linux 深度支持自定义全局快捷键（窗口显隐、代理总开关、系统代理开关、出站规则/全局/直连循环切换）；
   - **Windows**：原生系统托盘右键菜单自动同步跟随 App 深浅色主题，托盘图标动态显示实时上下行网速，启用现代 `comctl32 v6` 视觉样式；
   - **Android**：前台服务通知栏常驻（带当前状态、快捷断开按钮），支持下拉状态栏 Quick Settings 快速开关磁贴，应用内多语言实时联动；
   - **macOS**：原生状态栏自适应 Template 图标支持与系统代理无缝接管。
@@ -241,7 +253,7 @@ $langBar
   - 支持 `stable`（正式稳定通道）与 `beta`（测试预览通道）自由切换；
   - 后台静默高速下载、SHA-256 哈希完整性校验与安全原地覆盖升级。
 - **真正 100% 完整 9 国语言覆盖**：
-  - 简体中文、繁體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 全语言 798 个词条全量镜像对齐（0 缺失键，详见 [i18n 完整性矩阵](docs/BENCHMARKS.md#2-internationalization-i18n-completeness-matrix)）。
+  - 简体中文、繁體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 全语言 847 个词条全量镜像对齐（0 缺失键，详见 [i18n 完整性矩阵](docs/BENCHMARKS.md#2-internationalization-i18n-completeness-matrix)）。
 
 ---
 
@@ -299,7 +311,7 @@ flutter build macos --release     # macOS
 
 - **大体量订阅解析吞吐**: ~30,670 节点/秒（5,000 个复杂协议节点在独立后台 Isolate 中完成格式转换、去重与智能策略组归类仅耗时 ~163ms，主 UI 线程维持流畅无卡顿）。
 - **配置快速识别**: `isClashYaml` 头部试探探测算法在 1,000 节点规模下仅需 ~1.4ms。
-- **国际化完整度**: 9 种语言各 798 个词条实现 100.0% 镜像覆盖，CI 自动化测试严格校验 0 缺失键与占位符一致性。
+- **国际化完整度**: 9 种语言各 847 个词条实现 100.0% 镜像覆盖，CI 自动化测试严格校验 0 缺失键与占位符一致性。
 - **本地复现验证**: 执行 `flutter test test/benchmark_profile_scale_test.dart` 及 `flutter test test/i18n_integrity_test.dart`。
 
 完整测试基准、测试环境与复现流程请参阅 [docs/BENCHMARKS.md](docs/BENCHMARKS.md)。
@@ -388,12 +400,18 @@ $langBar
   - 出站模式快速切換：**規則分流 (Rule)** / **全域代理 (Global)** / **直接連線 (Direct)**；
   - 雙引擎彈性調度：**TUN 虛擬網卡模式**（透明接管全系統流量）與 **系統代理模式**（免特權快速連線）；
   - 應用程式分流：Android 依應用程式代理（黑白名單）與 Windows UWP Loopback 免除工具。
+- **視覺化鏈式代理 (Chain Proxy) [Beta]**：
+  - 基於 Mihomo 原生 `type: relay` 策略組，支援前置跳板節點與落地出口節點兩步拓撲直連；
+  - 輕鬆實現串流媒體與 AI 服務純淨出口解鎖、跨國高速中轉以及被阻斷節點復活；
+  - 獨立持久化存儲（`chain_proxies.json`），訂閱每日自動拉取更新永不遺失鏈式設定；
+  - 支援端到端真實鏈路延遲測速、失效節點預警與平滑熱重載（無需斷線重連）。
 - **即時流量監控與智慧診斷套件**：
   - 儀表板即時平滑貝塞爾流量曲線圖，支援 1m / 5m / 15m / 30m / 60m 跨度縮放；
   - 即時出口 IP、地理位置與 ISP 歸屬資訊卡片，一鍵測速與隱私脫敏保護；
   - 訂閱套餐用量即時進度條與到期時間精準倒數；
   - 完整診斷套件：路由規則檢視、核心即時主控台日誌、全節點平行測速與網路連通性診斷。
-- **深度作業系統級原生整合**：
+- **深度作業系統級原生整合與全域快捷鍵**：
+  - **全域快捷鍵系統**：Windows / macOS / Linux 深度支援自訂全域熱鍵（視窗顯隱、代理總開關、系統代理開關、出站規則/全域/直連循環切換）；
   - **Windows**：原生系統匣右鍵選單自動同步跟隨 App 深淺色主題，系統匣圖示動態顯示即時網速，現代 `comctl32 v6` 渲染；
   - **Android**：前景服務通知欄常駐（具即時狀態與中斷按鈕），支援下拉快捷開關磁貼，多語言即時聯動；
   - **macOS**：原生選單列自適應 Template 圖示支援與系統代理自動化。
@@ -401,7 +419,7 @@ $langBar
   - 支援 `stable`（正式穩定通道）與 `beta`（測試預覽通道）自由切換；
   - 後台靜默高速下載、SHA-256 哈希完整性校驗與原地升級。
 - **真正 100% 完整 9 國語言支援**：
-  - 繁體中文、簡體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 9 種語言 798 個詞條全量鏡像對齊（0 缺失鍵，詳見 [i18n 完整性矩陣](docs/BENCHMARKS.md#2-internationalization-i18n-completeness-matrix)）。
+  - 繁體中文、簡體中文、English、日本語、한국어、Русский、Español、العربية、فارسی 9 種語言 847 個詞條全量鏡像對齊（0 缺失鍵，詳見 [i18n 完整性矩陣](docs/BENCHMARKS.md#2-internationalization-i18n-completeness-matrix)）。
 
 ---
 
@@ -459,7 +477,7 @@ flutter build macos --release     # macOS
 
 - **大體量訂閱解析吞吐**: ~30,670 節點/秒（5,000 個複雜協議節點在獨立後台 Isolate 中完成格式轉換、去重與智慧策略組歸類僅耗時 ~163ms，主 UI 執行緒維持順暢無延遲）。
 - **設定檔快速辨識**: `isClashYaml` 標頭試探探測演算法在 1,000 節點規模下僅需 ~1.4ms。
-- **國際化完整度**: 9 種語言各 798 個詞條達成 100.0% 鏡像覆蓋，CI 自動化測試嚴格驗證 0 缺失鍵與佔位符一致性。
+- **國際化完整度**: 9 種語言各 847 個詞條達成 100.0% 鏡像覆蓋，CI 自動化測試嚴格驗證 0 缺失鍵與佔位符一致性。
 - **本地驗證方式**: 執行 `flutter test test/benchmark_profile_scale_test.dart` 及 `flutter test test/i18n_integrity_test.dart`。
 
 完整測試基準、測試環境與驗證流程請參閱 [docs/BENCHMARKS.md](docs/BENCHMARKS.md)。
@@ -548,12 +566,18 @@ $langBar
   - ワンタップでルーティング切替: **ルール分流 (Rule)** / **グローバル (Global)** / **ダイレクト (Direct)**。
   - **TUN 仮想アダプターモード**（システム全体の透過プロキシ）と **システムプロキシモード**（権限不要の軽快接続）。
   - Android アプリ別プロキシ設定、Windows UWP Loopback 免除ユーティリティ。
+- **ビジュアルチェーンプロキシ (Chain Proxy) [Beta]**:
+  - Mihomo ネイティブの `type: relay` ポリシーグループを基盤に、前置ホップと出口ノードの 2 ステップ接続を提供。
+  - ストリーミングや AI サービスのクリーンな出口 IP 解除、高速中継、遮断ノードの迂回を簡単に実現。
+  - 独立した永続化（`chain_proxies.json`）により、毎日のサブスクリプション自動更新でも設定が消失しません。
+  - エンドツーエンドの実遅延測定、無効ノード警告、切断なしのスムーズなホットリロードをサポート。
 - **リアルタイムトラフィック監視と総合ネットワーク診断**:
   - 1分/5分/15分/30分/60分のマルチスパンに対応した滑らかなベジェ曲線トラフィックグラフ。
   - 出口 IP、地域、ISP 情報を瞬時に取得し、プライバシー保護のマスキングとワンタップコピーに対応。
   - サブスクリプション通信量の進捗バーと有効期限カウントダウン。
   - 充実の診断ツール: ルーティングルール検査、コアリアルタイムログ、並行Pingテスト、ランタイム設定ビューア。
-- **OSネイティブ機能とのシームレスな統合**:
+- **OSネイティブ機能とのシームレスな統合とグローバルショートカット**:
+  - **グローバルホットキー**: Windows / macOS / Linux でシステム全体のショートカットキー設定（ウィンドウ表示/非表示、マスタープロキシ、システムプロキシ、ルーティングモード切替）に対応。
   - **Windows**: アプリのテーマに自動追従するタスクトレイメニュー、トレイアイコンでのリアルタイム速度表示、`comctl32 v6` スタイル。
   - **Android**: フォアグラウンド通知によるワンタップ切断、クイック設定タイル、多言語リアルタイム同期。
   - **macOS**: メニューバーの Template アイコン対応とシステムプロキシ自動化。
@@ -561,7 +585,7 @@ $langBar
   - `stable`（安定版）と `beta`（プレビュー版）チャンネルを自由に切り替え。
   - バックグラウンドでの高速サイレントダウンロードと SHA-256 ハッシュ整合性検証。
 - **完全な 9 言語ネイティブ対応**:
-  - 簡体字中国語、繁体字中国語、英語、日本語、韓国語、ロシア語、スペイン語、アラビア語、ペルシャ語の 798 キーを完全カバー（0 欠損キー、[ベンチマーク](docs/BENCHMARKS.md) 参照）。
+  - 簡体字中国語、繁体字中国語、英語、日本語、韓国語、ロシア語、スペイン語、アラビア語、ペルシャ語の 847 キーを完全カバー（0 欠損キー、[ベンチマーク](docs/BENCHMARKS.md) 参照）。
 
 ---
 
@@ -619,7 +643,7 @@ Wmimo のアーキテクチャ効率とカバレッジは、再現可能な自�
 
 - **サブスクリプション解析スループット**: 約 30,670 ノード/秒（バックグラウンド Isolate により、5,000 個の複数プロトコルノードを約 163ms で解析・分類）。
 - **高速フォーマット判別**: `isClashYaml` による 1,000 ノード検証が約 1.4ms で完了。
-- **多言語対応の完全性**: 全 9 言語において 798/798 キーで 100.0% の一致を達成（未翻訳キー 0）。
+- **多言語対応の完全性**: 全 9 言語において 847/847 キーで 100.0% の一致を達成（未翻訳キー 0）。
 - **ローカルでの検証実行**: `flutter test test/benchmark_profile_scale_test.dart` および `flutter test test/i18n_integrity_test.dart`。
 
 検証手法の詳細およびハードウェア仕様は [docs/BENCHMARKS.md](docs/BENCHMARKS.md) をご覧ください。
@@ -708,12 +732,18 @@ $langBar
   - 규칙 분류 (Rule) / 글로벌 (Global) / 직결 (Direct) 모드 원클릭 전환.
   - **TUN 가상 어댑터 모드** (시스템 전체 투명 캡처) 및 **시스템 프록시 모드** (간편 무권한 연결).
   - Android 앱별 분할 프록시 및 Windows UWP Loopback 제외 도구.
+- **비주얼 체인 프록시 (Chain Proxy) [Beta]**:
+  - Mihomo 네이티브 `type: relay` 정책 그룹 기반, 경유 노드와 최종 출구 노드 간의 2단계 토폴로지 연결 지원.
+  - 스트리밍 및 AI 서비스용 클린 IP 확보, 초고속 경유 중계 및 차단된 노드 우회 지원.
+  - 독립적인 영구 저장소(`chain_proxies.json`)를 통해 구독 자동 갱신 시에도 체인 프록시 설정이 유실되지 않음.
+  - 종단 간 실제 레이턴시 측정, 유효하지 않은 노드 감지 경고 및 연결 끊김 없는 매끄러운 핫 리로드 지원.
 - **실시간 트래픽 원격 분석 & 종합 진단 도구**:
   - 1분/5분/15분/30분/60분 다중 시간 축 베지에 곡선 트래픽 그래프.
   - 출구 IP, 위치 및 ISP 정보 즉시 조회, 원터치 복사 및 마스킹 보안 기능.
   - 구독 플랜 데이터 사용량 진행률 및 만료일 카운트다운.
   - 전체 진단 도구: 라우팅 규칙 검사기, 실시간 코어 콘솔 로그, 병렬 Ping 테스트, 런타임 설정 뷰어.
-- **운영체제 네이티브 깊은 통합**:
+- **운영체제 네이티브 깊은 통합 & 글로벌 단축키**:
+  - **글로벌 단축키 시스템**: Windows / macOS / Linux 환경에서 시스템 전역 단축키 커스텀 지원 (창 표시/숨김, 프록시 마스터 스위치, 시스템 프록시 전환, 아웃바운드 모드 순환).
   - **Windows**: 앱 테마와 동기화되는 트레이 메뉴, 트레이 아이콘 실시간 속도 표시, `comctl32 v6` 비주얼 스타일.
   - **Android**: 백그라운드 상주 알림 (즉시 연결 끊기 버튼 탑재), 퀵 세팅 타일, 실시간 다국어 동기화.
   - **macOS**: 메뉴바 Template 아이콘 지원 및 시스템 프록시 자동화.
@@ -721,7 +751,7 @@ $langBar
   - `stable` (안정 버전) 및 `beta` (프리뷰 버전) 채널을 자유롭게 전환.
   - 백그라운드 무소음 고속 다운로드 및 SHA-256 해시 무결성 검증.
 - **완벽한 9개국어 네이티브 번역**:
-  - 한국어, 영어, 중국어(간체/번체), 일본어, 러시아어, 스페인어, 아랍어, 페르시아어 798개 키 100% 매칭 (0 누락 키, [벤치마크](docs/BENCHMARKS.md) 참조).
+  - 한국어, 영어, 중국어(간체/번체), 일본어, 러시아어, 스페인어, 아랍어, 페르시아어 847개 키 100% 매칭 (0 누락 키, [벤치마크](docs/BENCHMARKS.md) 참조).
 
 ---
 
@@ -779,7 +809,7 @@ Wmimo의 아키텍처 효율성과 커버리지는 독립적으로 재현 가능
 
 - **구독 파싱 처리량**: 초당 약 30,670개 노드 (5,000개 다중 프로토콜 노드를 백그라운드 Isolate에서 약 163ms 만에 파싱 및 분류).
 - **빠른 포맷 탐지**: `isClashYaml` 알고리즘으로 1,000개 노드 설정을 약 1.4ms 내에 검증.
-- **다국어 완성도**: 9개 언어 각 798개 키 100.0% 완전 일치 (0 누락 키).
+- **다국어 완성도**: 9개 언어 각 847개 키 100.0% 완전 일치 (0 누락 키).
 - **자동 검증 실행**: `flutter test test/benchmark_profile_scale_test.dart` 및 `flutter test test/i18n_integrity_test.dart`.
 
 상세한 벤치마크 보고서 및 테스트 환경은 [docs/BENCHMARKS.md](docs/BENCHMARKS.md)에서 확인하실 수 있습니다.
@@ -868,12 +898,18 @@ $langBar
   - Быстрое переключение: **По правилам (Rule)** / **Глобальный (Global)** / **Прямой (Direct)**.
   - **Режим TUN-адаптера** (прозрачный системный перехват) и **Системный прокси** (без прав администратора).
   - Раздельное туннелирование приложений на Android и исключение UWP на Windows.
+- **Визуальные цепочки прокси (Chain Proxy) [Beta]**:
+  - Построено на нативных группах Mihomo `type: relay`: интуитивная настройка двух узлов (Входной транзит ➔ Выходной узел).
+  - Разблокировка стриминга и ИИ-сервисов с чистых IP, оптимизация маршрутов и обход блокировок.
+  - Независимое хранение (`chain_proxies.json`) гарантирует сохранность цепочек при автоматическом обновлении подписок.
+  - Сквозной замер реальной задержки, обнаружение удаленных узлов и плавное горячее применение без разрыва соединений.
 - **Мониторинг трафика и диагностический центр**:
   - Графики трафика Безье в реальном времени (1м / 5м / 15м / 30м / 60м).
   - Карточка проверки внешнего IP, локации и провайдера в один клик с маскированием данных.
   - Счетчик расхода тарифного плана и срока действия подписки.
   - Набор инструментов диагностики: правила маршрутизации, консольные логи ядра, параллельный пинг и просмотр конфигурации.
-- **Глубокая интеграция с операционными системами**:
+- **Глубокая интеграция с ОС и глобальные горячие клавиши**:
+  - **Глобальные горячие клавиши**: Поддержка системных сочетаний клавиш на Windows, macOS и Linux (скрыть/показать окно, переключение прокси, системный прокси, переключение режимов).
   - **Windows**: Нативное меню трея подстраивается под тему приложения, динамическая индикация скорости в трее, стиль `comctl32 v6`.
   - **Android**: Уведомление службы с кнопкой отключения, плитка быстрых настроек, синхронизация языка.
   - **macOS**: Нативная иконка в строке меню Template и управление системным прокси.
@@ -881,7 +917,7 @@ $langBar
   - Свободное переключение между стабильным каналом (`stable`) и каналом предварительных версий (`beta`).
   - Фоновая тихая загрузка с проверкой целостности по хешу SHA-256.
 - **100% локализация на 9 языков**:
-  - Полное покрытие 798 ключей (0 пропусков): Русский, Английский, Китайский (упр/трад), Японский, Корейский, Испанский, Арабский, Персидский (см. [Бенчмарки](docs/BENCHMARKS.md)).
+  - Полное покрытие 847 ключей (0 пропусков): Русский, Английский, Китайский (упр/трад), Японский, Корейский, Испанский, Арабский, Персидский (см. [Бенчмарки](docs/BENCHMARKS.md)).
 
 ---
 
@@ -939,7 +975,7 @@ flutter build macos --release     # macOS
 
 - **Скорость парсинга подписок**: ~30 670 узлов/с (5 000 узлов парсятся и классифицируются за ~163 мс в фоновом Isolate).
 - **Быстрое определение формата**: `isClashYaml` проверяет 1 000 узлов всего за ~1.4 мс.
-- **Полнота локализации**: 9 языков по 798 ключей с точностью 100% (0 пропусков).
+- **Полнота локализации**: 9 языков по 847 ключей с точностью 100% (0 пропусков).
 - **Команды проверки**: `flutter test test/benchmark_profile_scale_test.dart` и `flutter test test/i18n_integrity_test.dart`.
 
 Подробная методология и аппаратные характеристики приведены в [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
@@ -1028,12 +1064,18 @@ $langBar
   - Conmutación rápida: **Por reglas (Rule)** / **Global** / **Directo (Direct)**.
   - **Modo Adaptador Virtual TUN** (captura total del sistema) y **Modo Proxy del Sistema** sin privilegios elevados.
   - Proxy por aplicación en Android y herramienta UWP Loopback en Windows.
+- **Encadenamiento visual de proxies (Chain Proxy) [Beta]**:
+  - Basado en grupos nativos `type: relay` de Mihomo, permitiendo enlazar dos saltos (Nodo de salto ➔ Nodo de salida).
+  - Desbloqueo de streaming e IA con IPs limpias, tránsito optimizado y recuperación de nodos bloqueados.
+  - Almacenamiento independiente (`chain_proxies.json`) que preserva la configuración tras actualizaciones automáticas de suscripciones.
+  - Medición de latencia de extremo a extremo, alerta de nodos ausentes y recarga en caliente sin desconexión.
 - **Telemetría en tiempo real y suite de diagnóstico**:
   - Gráfico de ondas Bézier con intervalos ajustables (1m / 5m / 15m / 30m / 60m).
   - Tarjeta de información de IP pública, ubicación y proveedor con copia rápida y modo privacidad.
   - Barra de progreso de consumo de datos y cuenta regresiva de expiración.
   - Herramientas completas: inspección de reglas, consola de logs en vivo, test Ping concurrente y visor de configuración.
-- **Integración profunda con el sistema operativo**:
+- **Integración profunda con el SO y atajos globales**:
+  - **Atajos globales**: Soporte en Windows, macOS y Linux para atajos de teclado del sistema (mostrar/ocultar ventana, interruptor principal, proxy del sistema, cambio cíclico de modos).
   - **Windows**: Menú de bandeja nativo adaptable al tema, medidor de velocidad dinámico, estilo moderno `comctl32 v6`.
   - **Android**: Notificación de servicio con desconexión rápida, mosaico de ajustes rápidos y sincronización de idiomas.
   - **macOS**: Icono de barra de menús en modo Template y control de proxy del sistema.
@@ -1041,7 +1083,7 @@ $langBar
   - Cambio flexible entre el canal estable (`stable`) y el canal de vista previa (`beta`).
   - Descarga en segundo plano con comprobación de integridad hash SHA-256.
 - **100% traducido a 9 idiomas**:
-  - Cobertura completa de 798 claves en Español, Inglés, Chino (simplificado/tradicional), Japonés, Coreano, Ruso, Árabe y Persa (0 claves faltantes, ver [Benchmarks](docs/BENCHMARKS.md)).
+  - Cobertura completa de 847 claves en Español, Inglés, Chino (simplificado/tradicional), Japonés, Coreano, Ruso, Árabe y Persa (0 claves faltantes, ver [Benchmarks](docs/BENCHMARKS.md)).
 
 ---
 
@@ -1099,7 +1141,7 @@ La eficiencia arquitectónica y la fiabilidad de Wmimo están respaldadas por pr
 
 - **Rendimiento de procesamiento de suscripciones**: ~30.670 nodos/s (5.000 nodos procesados, normalizados y clasificados en ~163 ms en Isolate de fondo).
 - **Detección heurística de formato**: `isClashYaml` verifica 1.000 nodos en aproximadamente 1,4 ms.
-- **Cobertura de internacionalización**: 9 idiomas con paridad de 798/798 claves (100% de coincidencia, 0 claves faltantes).
+- **Cobertura de internacionalización**: 9 idiomas con paridad de 847/847 claves (100% de coincidencia, 0 claves faltantes).
 - **Verificación automatizada**: Ejecute `flutter test test/benchmark_profile_scale_test.dart` y `flutter test test/i18n_integrity_test.dart`.
 
 La metodología completa, diagramas y especificaciones de hardware están en [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
@@ -1188,12 +1230,18 @@ $langBar
   - تبديل فوري لأنماط الخروج: **القواعد (Rule)** / **شامل (Global)** / **مباشر (Direct)**.
   - **وضع محول الشبكة الظاهرية TUN** (التقاط كامل للنظام) و **وضع وكيل النظام** بدون صلاحيات مرتفعة.
   - وكيل لكل تطبيق على Android وأداة UWP Loopback على Windows.
+- **سلسلة البروكسي المرئية (Chain Proxy) [Beta]**:
+  - مبني على مجموعات `type: relay` الأصلية في Mihomo لربط عقدتين متتاليتين (عقدة وسيطة ➔ عقدة خروج).
+  - فك حظر خدمات البث والذكاء الاصطناعي بعناوين IP نقية، وتسريع الاتصال عبر وسيط وتجاوز الحجب.
+  - حفظ مستقل (`chain_proxies.json`) يضمن بقاء إعدادات السلسلة دون تأثر بالتحديث التلقائي للاشتراكات.
+  - قياس فوري للكمون من البداية إلى النهاية، وتنبيهات للعقد المعطلة، وإعادة تحميل سلسة دون انقطاع.
 - **مراقبة حركة البيانات في الوقت الفعلي**:
   - رسم بياني لحركة البيانات في الوقت الفعلي مع خيارات فترات زمنية متعددة (1د / 5د / 15د / 30د / 60د).
   - بطاقة الاستعلام الفوري عن عنوان IP والموقع ومزود الخدمة مع خاصية النسخ وإخفاء الهوية.
   - شريط تقدم استهلاك الباقة والعد التنازلي لانتهاء الصلاحية.
   - أدوات تشخيص متكاملة: فحص قواعد التوجيه، سجلات النواة اللحظية، واختبار Ping المتزامن.
-- **تكامل عميق مع أنظمة التشغيل**:
+- **تكامل عميق مع أنظمة التشغيل واختصارات عامة**:
+  - **اختصارات عامة للنظام**: دعم مفاتيح الاختصار على Windows وmacOS وLinux (إظهار/إخفاء النافذة، تبديل الوكيل الرئيسي، وكيل النظام، وتبديل أوضاع التوجيه).
   - **Windows**: قائمة شريط المهام متكيفة مع مظهر التطبيق، وعرض حي لسرعة الشبكة، ودعم `comctl32 v6`.
   - **Android**: إشعار دائم مع زر قطع اتصال سريع، وبلاطة الإعدادات السريعة، وتزامن اللغة فورياً.
   - **macOS**: دعم أيقونة شريط القوائم التكيفية Template وإدارة وكيل النظام.
@@ -1201,7 +1249,7 @@ $langBar
   - التبديل المرن بين القناة المستقرة (`stable`) وقناة الإصدارات التجريبية (`beta`).
   - تنزيل صامت في الخلفية مع التحقق من سلامة التجزئة عبر SHA-256.
 - **دعم كامل لـ 9 لغات عالمية**:
-  - تغطية بنسبة 100% لـ 798 مفتاح ترجمة عبر اللغات المدعومة مع 0 مفاتيح مفقودة (راجع [docs/BENCHMARKS.md](docs/BENCHMARKS.md)).
+  - تغطية بنسبة 100% لـ 847 مفتاح ترجمة عبر اللغات المدعومة مع 0 مفاتيح مفقودة (راجع [docs/BENCHMARKS.md](docs/BENCHMARKS.md)).
 
 ---
 
@@ -1259,7 +1307,7 @@ flutter build macos --release     # macOS
 
 - **معدل معالجة الاشتراكات**: ~30,670 عقدة/ثانية (معالجة وتصنيف 5,000 عقدة متعددة البروتوكولات في حوالي 163 ملي ثانية عبر Isolate في الخلفية).
 - **الاستدلال السريع لصيغة الإعدادات**: التحقق من 1,000 عقدة عبر `isClashYaml` خلال ~1.4 ملي ثانية.
-- **تغطية اللغات**: 9 لغات بـ 798 مفتاحاً بنسبة تطابق 100% (0 مفاتيح مفقودة).
+- **تغطية اللغات**: 9 لغات بـ 847 مفتاحاً بنسبة تطابق 100% (0 مفاتيح مفقودة).
 - **أوامر الفحص الآلية**: شغّل `flutter test test/benchmark_profile_scale_test.dart` و `flutter test test/i18n_integrity_test.dart`.
 
 التقرير الكامل والمنهجية والمواصفات الفنية مفصلة في [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
@@ -1348,12 +1396,18 @@ $langBar
   - تغییر سریع حالت: **بر اساس قوانین (Rule)** / **سراسری (Global)** / **مستقیم (Direct)**.
   - انعطاف‌پذیری دوگانه: **حالت آداپتور مجازی TUN** (گرفتن کامل ترافیک سیستم) و **پروکسی سیستمی (System Proxy)** بدون نیاز به دسترسی ادمین.
   - تفکیک ترافیک برنامه‌ها در اندروید و ابزار معافیت Loopback در ویندوز.
+- **زنجیره پروکسی بصری (Chain Proxy) [Beta]**:
+  - بر پایه گروه‌های بومی `type: relay` در هسته Mihomo برای اتصال دومرحله‌ای (گره واسط ➔ گره خروجی).
+  - بازگشایی آسان سرویس‌های استریم و هوش مصنوعی با IP تمیز، بهینه‌سازی مسیر و احیای گره‌های مسدود شده.
+  - ذخیره‌سازی مستقل (`chain_proxies.json`) بدون پاک‌شدن در هنگام به‌روزرسانی خودکار اشتراک‌ها.
+  - تست پینگ سرتاسری، هشدار گره‌های نامعتبر و بارگذاری مجدد نرم بدون قطعی ارتباط.
 - **نمودار ترافیک لحظه‌ای و ابزارهای تحلیل شبکه**:
   - نمودار موجی نرم بزیه در بازه‌های مختلف (۱، ۵، ۱۵، ۳۰ و ۶۰ دقیقه).
   - کارت نمایش آی‌پی خروجی، موقعیت مکانی و رساننده اینترنت با کپی آسان و ماسک امنیتی داده‌ها.
   - نمایش میزان مصرف ترافیک و روزهای باقی‌مانده از اشتراک.
   - ابزارهای عیب‌یابی پیشرفته: بررسی قوانین مسیر، لاگ لحظه‌ای هسته، پینگ همزمان و مشاهده تنظیمات فعال.
-- **یکپارچگی عمیق با سیستم‌عامل‌ها**:
+- **یکپارچگی عمیق با سیستم‌عامل‌ها و کلیدهای میانبر سراسری**:
+  - **کلیدهای میانبر سراسری**: پشتیبانی در ویندوز، مک و لینوکس از کلیدهای میانبر سیستمی (پنهان/آشکارسازی پنجره، کلید اصلی پروکسی، پروکسی سیستم، چرخش حالت‌های مسیریابی).
   - **Windows**: منوی کلیک راست سینی ویندوز هماهنگ با تم برنامه، نمایش لحظه‌ای سرعت دانلود/آپلود در آیکون، سبک مدرن `comctl32 v6`.
   - **Android**: اعلان دائمی با دکمه قطع اتصال سریع، کاشی تنظیمات سریع (Quick Settings) و هماهنگی همزمان زبان.
   - **macOS**: پشتیبانی از آیکون نوار وضعیت Template و تنظیم خودکار پروکسی سیستم.
@@ -1361,7 +1415,7 @@ $langBar
   - جابجایی آزاد بین کانال پایدار (`stable`) و پیش‌نمایش آزمایشی (`beta`).
   - دانلود بی‌صدا در پس‌زمینه با اعتبارسنجی هش SHA-256.
 - **پوشش ۱۰۰ درصدی برای ۹ زبان**:
-  - پشتیبانی کامل از ۷۹۸ کلید در زبان‌های فارسی، انگلیسی، چینی (ساده/سنتی)، ژاپنی، کره‌ای، روسی، اسپانیایی و عربی بدون هیچ کلید مفقودی (به [معیارهای عملکرد](docs/BENCHMARKS.md) مراجعه کنید).
+  - پشتیبانی کامل از ۸۴۷ کلید در زبان‌های فارسی، انگلیسی، چینی (ساده/سنتی)، ژاپنی، کره‌ای، روسی، اسپانیایی و عربی بدون هیچ کلید مفقودی (به [معیارهای عملکرد](docs/BENCHMARKS.md) مراجعه کنید).
 
 ---
 

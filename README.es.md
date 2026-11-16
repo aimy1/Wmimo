@@ -58,12 +58,18 @@
   - Conmutación rápida: **Por reglas (Rule)** / **Global** / **Directo (Direct)**.
   - **Modo Adaptador Virtual TUN** (captura total del sistema) y **Modo Proxy del Sistema** sin privilegios elevados.
   - Proxy por aplicación en Android y herramienta UWP Loopback en Windows.
+- **Encadenamiento visual de proxies (Chain Proxy) [Beta]**:
+  - Basado en grupos nativos `type: relay` de Mihomo, permitiendo enlazar dos saltos (Nodo de salto ➔ Nodo de salida).
+  - Desbloqueo de streaming e IA con IPs limpias, tránsito optimizado y recuperación de nodos bloqueados.
+  - Almacenamiento independiente (`chain_proxies.json`) que preserva la configuración tras actualizaciones automáticas de suscripciones.
+  - Medición de latencia de extremo a extremo, alerta de nodos ausentes y recarga en caliente sin desconexión.
 - **Telemetría en tiempo real y suite de diagnóstico**:
   - Gráfico de ondas Bézier con intervalos ajustables (1m / 5m / 15m / 30m / 60m).
   - Tarjeta de información de IP pública, ubicación y proveedor con copia rápida y modo privacidad.
   - Barra de progreso de consumo de datos y cuenta regresiva de expiración.
   - Herramientas completas: inspección de reglas, consola de logs en vivo, test Ping concurrente y visor de configuración.
-- **Integración profunda con el sistema operativo**:
+- **Integración profunda con el SO y atajos globales**:
+  - **Atajos globales**: Soporte en Windows, macOS y Linux para atajos de teclado del sistema (mostrar/ocultar ventana, interruptor principal, proxy del sistema, cambio cíclico de modos).
   - **Windows**: Menú de bandeja nativo adaptable al tema, medidor de velocidad dinámico, estilo moderno `comctl32 v6`.
   - **Android**: Notificación de servicio con desconexión rápida, mosaico de ajustes rápidos y sincronización de idiomas.
   - **macOS**: Icono de barra de menús en modo Template y control de proxy del sistema.
@@ -71,7 +77,7 @@
   - Cambio flexible entre el canal estable (`stable`) y el canal de vista previa (`beta`).
   - Descarga en segundo plano con comprobación de integridad hash SHA-256.
 - **100% traducido a 9 idiomas**:
-  - Cobertura completa de 798 claves en Español, Inglés, Chino (simplificado/tradicional), Japonés, Coreano, Ruso, Árabe y Persa (0 claves faltantes, ver [Benchmarks](docs/BENCHMARKS.md)).
+  - Cobertura completa de 847 claves en Español, Inglés, Chino (simplificado/tradicional), Japonés, Coreano, Ruso, Árabe y Persa (0 claves faltantes, ver [Benchmarks](docs/BENCHMARKS.md)).
 
 ---
 
@@ -129,7 +135,7 @@ La eficiencia arquitectónica y la fiabilidad de Wmimo están respaldadas por pr
 
 - **Rendimiento de procesamiento de suscripciones**: ~30.670 nodos/s (5.000 nodos procesados, normalizados y clasificados en ~163 ms en Isolate de fondo).
 - **Detección heurística de formato**: `isClashYaml` verifica 1.000 nodos en aproximadamente 1,4 ms.
-- **Cobertura de internacionalización**: 9 idiomas con paridad de 798/798 claves (100% de coincidencia, 0 claves faltantes).
+- **Cobertura de internacionalización**: 9 idiomas con paridad de 847/847 claves (100% de coincidencia, 0 claves faltantes).
 - **Verificación automatizada**: Ejecute `flutter test test/benchmark_profile_scale_test.dart` y `flutter test test/i18n_integrity_test.dart`.
 
 La metodología completa, diagramas y especificaciones de hardware están en [docs/BENCHMARKS.md](docs/BENCHMARKS.md).

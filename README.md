@@ -58,12 +58,18 @@
   - Rapid outbound mode toggling: **Rule (Split Routing)** / **Global** / **Direct**.
   - Flexible dual engine: **TUN Virtual Adapter Mode** (transparent system-wide capture) and **System Proxy Mode** (standard unprivileged routing).
   - Fine-grained traffic steering: Android Per-App Proxy filtering and Windows UWP Loopback exemption utility.
+- **Visual Chain Proxy (Relay Chaining) [Beta]**:
+  - Built on Mihomo native `type: relay` groups, providing two-hop topology linking (Entry Hop ➔ Exit Hop).
+  - Effortlessly unlock streaming/AI services with clean egress IPs, optimize high-speed transit, and revive blocked endpoints.
+  - Independent persistence (`chain_proxies.json`) ensuring chain rules survive automatic subscription updates.
+  - End-to-end latency testing, missing node detection alerts, and smooth hot-reload without disconnection.
 - **Deep Real-Time Telemetry & Diagnostics**:
   - Ultra-smooth Bezier traffic wave monitor with multi-window spans (1m / 5m / 15m / 30m / 60m).
   - Instant egress IP, geolocation, and ISP lookup card with one-tap copy and privacy masking.
   - Subscription plan data usage progress bar with expiration countdown.
   - Built-in diagnostic toolset: Routing Rules inspection, Real-time Core Logs, Concurrent Latency Ping, and Runtime Configuration viewer.
-- **Deep Native Operating System Integration**:
+- **Deep Native OS Integration & Global Shortcuts**:
+  - **Global Shortcuts**: Desktop environments (Windows, macOS, Linux) support configurable system-wide hotkeys (toggle window, master proxy, system proxy, and cycle outbound routing modes).
   - **Windows**: Native dark/light adaptive tray context menu, real-time download/upload speed indicator in tray, and modern `comctl32 v6` visual styling.
   - **Android**: Foreground service notification with instant disconnect action, Quick Settings Pull-Down Tile, and automatic language synchronization.
   - **macOS**: Adaptive menu bar Template icon and system proxy automation.
@@ -71,7 +77,7 @@
   - Switch freely between `stable` (production) and `beta` (pre-release) channels.
   - Background silent download with SHA-256 hash integrity verification.
 - **True 100% Native 9-Language Parity**:
-  - 798 translation keys synchronized across: 简体中文, English, 繁體中文, 日本語, 한국어, Русский, Español, العربية, فارسی.
+  - 847 translation keys synchronized across: 简体中文, English, 繁體中文, 日本語, 한국어, Русский, Español, العربية, فارسی.
   - Validated by automated CI checks ensuring 0 missing keys and 100% placeholder parity (see [Completeness Matrix](docs/BENCHMARKS.md#2-internationalization-i18n-completeness-matrix)).
 
 ---
@@ -130,7 +136,7 @@ Wmimo's architectural efficiency and coverage are verified by reproducible autom
 
 - **Subscription Parsing Throughput**: ~30,670 nodes/s (5,000 multi-protocol nodes parsed, normalized, and classified in ~163ms via background Isolate).
 - **Format Heuristic Detection**: `isClashYaml` verifies 1,000 nodes in ~1.4ms.
-- **i18n Coverage**: 9/9 supported locales achieve 100.0% key parity (798/798 keys, 0 missing keys).
+- **i18n Coverage**: 9/9 supported locales achieve 100.0% key parity (847/847 keys, 0 missing keys).
 - **Automated Verification**: Run `flutter test test/benchmark_profile_scale_test.dart` and `flutter test test/i18n_integrity_test.dart`.
 
 Full methodology, reproducible charts, and hardware specs are detailed in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
