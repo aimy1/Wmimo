@@ -859,5 +859,33 @@
     "cycleMode": "Cycle Routing Mode",
     "cycleModeTip": "Cycle sequentially: Rule ➔ Global ➔ Direct",
     "resetDefault": "Reset to Defaults"
+  },
+  "chain_proxy": {
+    "title": "Chain Proxy",
+    "desc": "Cascade two nodes (Entry Relay ➔ Exit Landing) to combine low latency with residential IP unlocking.",
+    "add": "New Chain Proxy",
+    "edit": "Edit Chain Proxy",
+    "delete": "Delete",
+    "delete_confirm": "Are you sure you want to delete this chain proxy?",
+    "name": "Chain Proxy Name",
+    "name_hint": "e.g., HK Transit ➔ US Residential",
+    "hop1": "Hop 1: Entry Relay (Transit)",
+    "hop1_select_title": "Select Hop 1 Node (Entry Relay)",
+    "hop1_placeholder": "Hop 1 Node",
+    "hop2": "Hop 2: Exit Landing (Target)",
+    "hop2_select_title": "Select Hop 2 Node (Exit Landing)",
+    "hop2_placeholder": "Hop 2 Node",
+    "select_node": "Tap to select node",
+    "preview": "Topology Preview",
+    "local_device": "Device",
+    "internet": "Internet",
+    "save_success": "Chain proxy saved successfully",
+    "empty_tip": "No chain proxies yet. Tap below to create one.",
+    "test_latency": "Ping",
+    "node_missing_warning": "Some nodes do not exist in the current profile. Please update.",
+    "name_empty_warning": "Please enter a chain proxy name",
+    "hop1_empty_warning": "Please select the first hop (entry) node",
+    "hop2_empty_warning": "Please select the second hop (exit) node",
+    "hop_same_warning": "Hop 1 and Hop 2 cannot be the same node"
   }
 }

@@ -6,6 +6,7 @@ import 'package:wmimo/app/modules/board_provider_notice_manager.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
+import 'package:wmimo/app/modules/chain_proxy_manager.dart';
 import 'package:wmimo/app/modules/diversion_template_manager.dart';
 
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
@@ -31,6 +32,7 @@ class Biz {
     await ProfileManager.init();
     await ProfilePatchManager.init();
     await DiversionTemplateManager.init();
+    await ChainProxyManager.init();
     await VPNService.init();
 
     for (var callback in onEventInitFinish) {

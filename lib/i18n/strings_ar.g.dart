@@ -69,6 +69,7 @@ class TranslationsAr with BaseTranslations<AppLocale, Translations> implements T
 		'es': 'Español',
 	};
 	@override late final _Translations$hotkeys$ar hotkeys = _Translations$hotkeys$ar._(_root);
+	@override late final _Translations$chain_proxy$ar chain_proxy = _Translations$chain_proxy$ar._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -1019,6 +1020,41 @@ class _Translations$hotkeys$ar implements Translations$hotkeys$en {
 	@override String get resetDefault => 'استعادة الإعدادات الافتراضية';
 }
 
+// Path: chain_proxy
+class _Translations$chain_proxy$ar implements Translations$chain_proxy$en {
+	_Translations$chain_proxy$ar._(this._root);
+
+	final TranslationsAr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'بروكسي متسلسل';
+	@override String get desc => 'ربط عقدتين متتاليتين (نقطة العبور ➔ نقطة الخروج) للجمع بين سرعة الاستجابة وفتح المحتوى الجغرافي.';
+	@override String get add => 'إنشاء بروكسي متسلسل';
+	@override String get edit => 'تعديل البروكسي المتسلسل';
+	@override String get delete => 'حذف';
+	@override String get delete_confirm => 'هل أنت متأكد من حذف هذا البروكسي المتسلسل؟';
+	@override String get name => 'اسم البروكسي المتسلسل';
+	@override String get name_hint => 'مثال: عبور هونغ كونغ ➔ أمريكا منزلي';
+	@override String get hop1 => 'القفزة 1: نقطة العبور (المدخل)';
+	@override String get hop1_select_title => 'اختر عقدة القفزة الأولى (المدخل)';
+	@override String get hop1_placeholder => 'عقدة القفزة الأولى';
+	@override String get hop2 => 'القفزة 2: نقطة الخروج (المخرج)';
+	@override String get hop2_select_title => 'اختر عقدة القفزة الثانية (المخرج)';
+	@override String get hop2_placeholder => 'عقدة القفزة الثانية';
+	@override String get select_node => 'اضغط لاختيار عقدة';
+	@override String get preview => 'معاينة المخطط';
+	@override String get local_device => 'جهازي';
+	@override String get internet => 'الإنترنت';
+	@override String get save_success => 'تم حفظ البروكسي المتسلسل بنجاح';
+	@override String get empty_tip => 'لا يوجد بروكسي متسلسل حالياً. اضغط بالأسفل لإنشاء واحد.';
+	@override String get test_latency => 'فحص';
+	@override String get node_missing_warning => 'بعض العقد غير موجودة في الملف الحالي. يُرجى التحديث.';
+	@override String get name_empty_warning => 'يُرجى إدخال اسم للبروكسي المتسلسل';
+	@override String get hop1_empty_warning => 'يُرجى اختيار عقدة القفزة الأولى';
+	@override String get hop2_empty_warning => 'يُرجى اختيار عقدة القفزة الثانية';
+	@override String get hop_same_warning => 'لا يمكن أن تكون القفزة الأولى والثانية نفس العقدة';
+}
+
 // Path: main.tray
 class _Translations$main$tray$ar implements Translations$main$tray$en {
 	_Translations$main$tray$ar._(this._root);
@@ -1883,6 +1919,32 @@ extension on TranslationsAr {
 			'hotkeys.cycleMode' => 'تبديل وضع التوجيه دورياً',
 			'hotkeys.cycleModeTip' => 'التبديل بالترتيب: القواعد ➔ عام ➔ مباشر',
 			'hotkeys.resetDefault' => 'استعادة الإعدادات الافتراضية',
+			'chain_proxy.title' => 'بروكسي متسلسل',
+			'chain_proxy.desc' => 'ربط عقدتين متتاليتين (نقطة العبور ➔ نقطة الخروج) للجمع بين سرعة الاستجابة وفتح المحتوى الجغرافي.',
+			'chain_proxy.add' => 'إنشاء بروكسي متسلسل',
+			'chain_proxy.edit' => 'تعديل البروكسي المتسلسل',
+			'chain_proxy.delete' => 'حذف',
+			'chain_proxy.delete_confirm' => 'هل أنت متأكد من حذف هذا البروكسي المتسلسل؟',
+			'chain_proxy.name' => 'اسم البروكسي المتسلسل',
+			'chain_proxy.name_hint' => 'مثال: عبور هونغ كونغ ➔ أمريكا منزلي',
+			'chain_proxy.hop1' => 'القفزة 1: نقطة العبور (المدخل)',
+			'chain_proxy.hop1_select_title' => 'اختر عقدة القفزة الأولى (المدخل)',
+			'chain_proxy.hop1_placeholder' => 'عقدة القفزة الأولى',
+			'chain_proxy.hop2' => 'القفزة 2: نقطة الخروج (المخرج)',
+			'chain_proxy.hop2_select_title' => 'اختر عقدة القفزة الثانية (المخرج)',
+			'chain_proxy.hop2_placeholder' => 'عقدة القفزة الثانية',
+			'chain_proxy.select_node' => 'اضغط لاختيار عقدة',
+			'chain_proxy.preview' => 'معاينة المخطط',
+			'chain_proxy.local_device' => 'جهازي',
+			'chain_proxy.internet' => 'الإنترنت',
+			'chain_proxy.save_success' => 'تم حفظ البروكسي المتسلسل بنجاح',
+			'chain_proxy.empty_tip' => 'لا يوجد بروكسي متسلسل حالياً. اضغط بالأسفل لإنشاء واحد.',
+			'chain_proxy.test_latency' => 'فحص',
+			'chain_proxy.node_missing_warning' => 'بعض العقد غير موجودة في الملف الحالي. يُرجى التحديث.',
+			'chain_proxy.name_empty_warning' => 'يُرجى إدخال اسم للبروكسي المتسلسل',
+			'chain_proxy.hop1_empty_warning' => 'يُرجى اختيار عقدة القفزة الأولى',
+			'chain_proxy.hop2_empty_warning' => 'يُرجى اختيار عقدة القفزة الثانية',
+			'chain_proxy.hop_same_warning' => 'لا يمكن أن تكون القفزة الأولى والثانية نفس العقدة',
 			_ => null,
 		};
 	}

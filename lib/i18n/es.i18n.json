@@ -859,5 +859,33 @@
     "cycleMode": "Alternar Modo de Enrutamiento",
     "cycleModeTip": "Secuencia: Regla ➔ Global ➔ Directo",
     "resetDefault": "Restablecer por Defecto"
+  },
+  "chain_proxy": {
+    "title": "Proxy en cadena",
+    "desc": "Encadena dos nodos (retransmisión de entrada ➔ salida final) para combinar baja latencia y desbloqueo de servicios.",
+    "add": "Nuevo proxy en cadena",
+    "edit": "Editar proxy en cadena",
+    "delete": "Eliminar",
+    "delete_confirm": "¿Seguro que desea eliminar este proxy en cadena?",
+    "name": "Nombre del proxy en cadena",
+    "name_hint": "Ej: Tránsito HK ➔ Residencial EE.UU.",
+    "hop1": "Salto 1: Retransmisión de entrada",
+    "hop1_select_title": "Seleccionar nodo del salto 1 (Entrada)",
+    "hop1_placeholder": "Nodo del salto 1",
+    "hop2": "Salto 2: Nodo de salida",
+    "hop2_select_title": "Seleccionar nodo del salto 2 (Salida)",
+    "hop2_placeholder": "Nodo del salto 2",
+    "select_node": "Toca para seleccionar nodo",
+    "preview": "Vista previa de topología",
+    "local_device": "Dispositivo",
+    "internet": "Internet",
+    "save_success": "Proxy en cadena guardado correctamente",
+    "empty_tip": "No hay proxies en cadena. Toca abajo para crear uno.",
+    "test_latency": "Prueba",
+    "node_missing_warning": "Algunos nodos no existen en el perfil actual. Por favor actualízalos.",
+    "name_empty_warning": "Introduce un nombre para el proxy en cadena",
+    "hop1_empty_warning": "Selecciona el primer nodo (entrada)",
+    "hop2_empty_warning": "Selecciona el segundo nodo (salida)",
+    "hop_same_warning": "El salto 1 y el salto 2 no pueden ser el mismo nodo"
   }
 }

@@ -101,6 +101,7 @@ enum ClashProtocolType {
   selector(name: "Selector"),
   loadBalance(name: "LoadBalance"),
   fallback(name: "Fallback"),
+  relay(name: "Relay"),
   direct(name: "Direct"),
   compatible(name: "Compatible"),
   pass(name: "Pass"),
@@ -116,6 +117,7 @@ enum ClashProtocolType {
       ClashProtocolType.selector.name,
       ClashProtocolType.loadBalance.name,
       ClashProtocolType.fallback.name,
+      ClashProtocolType.relay.name,
       ClashProtocolType.direct.name,
       ClashProtocolType.compatible.name,
       ClashProtocolType.pass.name,
@@ -141,6 +143,7 @@ enum ClashProtocolType {
       ClashProtocolType.selector.name,
       ClashProtocolType.loadBalance.name,
       ClashProtocolType.fallback.name,
+      ClashProtocolType.relay.name,
     ];
   }
 }

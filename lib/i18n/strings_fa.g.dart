@@ -69,6 +69,7 @@ class TranslationsFa with BaseTranslations<AppLocale, Translations> implements T
 		'es': 'Español',
 	};
 	@override late final _Translations$hotkeys$fa hotkeys = _Translations$hotkeys$fa._(_root);
+	@override late final _Translations$chain_proxy$fa chain_proxy = _Translations$chain_proxy$fa._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -1019,6 +1020,41 @@ class _Translations$hotkeys$fa implements Translations$hotkeys$en {
 	@override String get resetDefault => 'بازنشانی به پیش‌فرض';
 }
 
+// Path: chain_proxy
+class _Translations$chain_proxy$fa implements Translations$chain_proxy$en {
+	_Translations$chain_proxy$fa._(this._root);
+
+	final TranslationsFa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'پروکسی زنجیره‌ای';
+	@override String get desc => 'متصل کردن دو گره به صورت متوالی (گره ورودی ➔ گره خروجی) برای دسترسی به تاخیر کم و رفع مسدودیت محتوا.';
+	@override String get add => 'افزودن پروکسی زنجیره‌ای';
+	@override String get edit => 'ویرایش پروکسی زنجیره‌ای';
+	@override String get delete => 'حذف';
+	@override String get delete_confirm => 'آیا از حذف این پروکسی زنجیره‌ای اطمینان دارید؟';
+	@override String get name => 'نام پروکسی زنجیره‌ای';
+	@override String get name_hint => 'مثال: ترانزیت هنگ‌کنگ ➔ مسکونی آمریکا';
+	@override String get hop1 => 'گام ۱: گره ترانزیت (ورودی)';
+	@override String get hop1_select_title => 'انتخاب گره گام اول (ورودی)';
+	@override String get hop1_placeholder => 'گره گام اول';
+	@override String get hop2 => 'گام ۲: گره خروجی';
+	@override String get hop2_select_title => 'انتخاب گره گام دوم (خروجی)';
+	@override String get hop2_placeholder => 'گره گام دوم';
+	@override String get select_node => 'برای انتخاب گره لمس کنید';
+	@override String get preview => 'پیش‌نمایش توپولوژی';
+	@override String get local_device => 'دستگاه من';
+	@override String get internet => 'اینترنت';
+	@override String get save_success => 'پروکسی زنجیره‌ای با موفقیت ذخیره شد';
+	@override String get empty_tip => 'هنوز پروکسی زنجیره‌ای وجود ندارد. برای افزودن دکمه زیر را بزنید.';
+	@override String get test_latency => 'تست پینگ';
+	@override String get node_missing_warning => 'برخی از گره‌ها در پروفایل فعلی یافت نشدند. لطفاً بررسی کنید.';
+	@override String get name_empty_warning => 'لطفاً نام پروکسی زنجیره‌ای را وارد کنید';
+	@override String get hop1_empty_warning => 'لطفاً گره اول (ورودی) را انتخاب کنید';
+	@override String get hop2_empty_warning => 'لطفاً گره دوم (خروجی) را انتخاب کنید';
+	@override String get hop_same_warning => 'گره اول و دوم نمی‌توانند یکسان باشند';
+}
+
 // Path: main.tray
 class _Translations$main$tray$fa implements Translations$main$tray$en {
 	_Translations$main$tray$fa._(this._root);
@@ -1883,6 +1919,32 @@ extension on TranslationsFa {
 			'hotkeys.cycleMode' => 'تغییر دوره‌ای حالت مسیریابی',
 			'hotkeys.cycleModeTip' => 'به ترتیب: قوانین ➔ سراسری ➔ مستقیم',
 			'hotkeys.resetDefault' => 'بازنشانی به پیش‌فرض',
+			'chain_proxy.title' => 'پروکسی زنجیره‌ای',
+			'chain_proxy.desc' => 'متصل کردن دو گره به صورت متوالی (گره ورودی ➔ گره خروجی) برای دسترسی به تاخیر کم و رفع مسدودیت محتوا.',
+			'chain_proxy.add' => 'افزودن پروکسی زنجیره‌ای',
+			'chain_proxy.edit' => 'ویرایش پروکسی زنجیره‌ای',
+			'chain_proxy.delete' => 'حذف',
+			'chain_proxy.delete_confirm' => 'آیا از حذف این پروکسی زنجیره‌ای اطمینان دارید؟',
+			'chain_proxy.name' => 'نام پروکسی زنجیره‌ای',
+			'chain_proxy.name_hint' => 'مثال: ترانزیت هنگ‌کنگ ➔ مسکونی آمریکا',
+			'chain_proxy.hop1' => 'گام ۱: گره ترانزیت (ورودی)',
+			'chain_proxy.hop1_select_title' => 'انتخاب گره گام اول (ورودی)',
+			'chain_proxy.hop1_placeholder' => 'گره گام اول',
+			'chain_proxy.hop2' => 'گام ۲: گره خروجی',
+			'chain_proxy.hop2_select_title' => 'انتخاب گره گام دوم (خروجی)',
+			'chain_proxy.hop2_placeholder' => 'گره گام دوم',
+			'chain_proxy.select_node' => 'برای انتخاب گره لمس کنید',
+			'chain_proxy.preview' => 'پیش‌نمایش توپولوژی',
+			'chain_proxy.local_device' => 'دستگاه من',
+			'chain_proxy.internet' => 'اینترنت',
+			'chain_proxy.save_success' => 'پروکسی زنجیره‌ای با موفقیت ذخیره شد',
+			'chain_proxy.empty_tip' => 'هنوز پروکسی زنجیره‌ای وجود ندارد. برای افزودن دکمه زیر را بزنید.',
+			'chain_proxy.test_latency' => 'تست پینگ',
+			'chain_proxy.node_missing_warning' => 'برخی از گره‌ها در پروفایل فعلی یافت نشدند. لطفاً بررسی کنید.',
+			'chain_proxy.name_empty_warning' => 'لطفاً نام پروکسی زنجیره‌ای را وارد کنید',
+			'chain_proxy.hop1_empty_warning' => 'لطفاً گره اول (ورودی) را انتخاب کنید',
+			'chain_proxy.hop2_empty_warning' => 'لطفاً گره دوم (خروجی) را انتخاب کنید',
+			'chain_proxy.hop_same_warning' => 'گره اول و دوم نمی‌توانند یکسان باشند',
 			_ => null,
 		};
 	}

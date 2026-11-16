@@ -20,6 +20,7 @@ import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/add_profile_by_url_screen.dart';
+import 'package:wmimo/screens/chain_proxy_screen.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/brand_vector_icon.dart';
 import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
@@ -2140,6 +2141,21 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   ),
               ],
             ),
+          ),
+          // Chain Proxy button
+          IconButton(
+            tooltip: "${tcontext.chain_proxy.title} (Beta)",
+            icon: const Icon(Icons.link_rounded),
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  settings: ChainProxyScreen.routSettings(),
+                  builder: (context) => const ChainProxyScreen(),
+                ),
+              );
+              _fetchProxies();
+            },
           ),
 
           // Latency Test All button

@@ -69,6 +69,7 @@ class TranslationsJa with BaseTranslations<AppLocale, Translations> implements T
 		'es': 'Español',
 	};
 	@override late final _Translations$hotkeys$ja hotkeys = _Translations$hotkeys$ja._(_root);
+	@override late final _Translations$chain_proxy$ja chain_proxy = _Translations$chain_proxy$ja._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -1019,6 +1020,41 @@ class _Translations$hotkeys$ja implements Translations$hotkeys$en {
 	@override String get resetDefault => 'デフォルトに戻す';
 }
 
+// Path: chain_proxy
+class _Translations$chain_proxy$ja implements Translations$chain_proxy$en {
+	_Translations$chain_proxy$ja._(this._root);
+
+	final TranslationsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'チェーンプロキシ';
+	@override String get desc => '2つのノードを中継（前置リレー ➔ 出口ノード）し、低遅延と地域制限解除を両立します。';
+	@override String get add => 'チェーンプロキシを作成';
+	@override String get edit => 'チェーンプロキシを編集';
+	@override String get delete => '削除';
+	@override String get delete_confirm => 'このチェーンプロキシを削除してもよろしいですか？';
+	@override String get name => 'チェーンプロキシ名';
+	@override String get name_hint => '例: 香港中継 ➔ 米国レジデンシャル';
+	@override String get hop1 => '第1ホップ: 前置リレー (入口)';
+	@override String get hop1_select_title => '第1ホップノード (前置) を選択';
+	@override String get hop1_placeholder => '第1ホップノード';
+	@override String get hop2 => '第2ホップ: 出口ノード (出口)';
+	@override String get hop2_select_title => '第2ホップノード (出口) を選択';
+	@override String get hop2_placeholder => '第2ホップノード';
+	@override String get select_node => 'ノードを選択';
+	@override String get preview => 'トポロジープレビュー';
+	@override String get local_device => '端末';
+	@override String get internet => 'インターネット';
+	@override String get save_success => 'チェーンプロキシを保存しました';
+	@override String get empty_tip => 'チェーンプロキシがありません。下のボタンから作成してください。';
+	@override String get test_latency => '測定';
+	@override String get node_missing_warning => '現在の設定に存在しないノードがあります。再指定してください。';
+	@override String get name_empty_warning => 'チェーンプロキシ名を入力してください';
+	@override String get hop1_empty_warning => '第1ホップのノードを選択してください';
+	@override String get hop2_empty_warning => '第2ホップのノードを選択してください';
+	@override String get hop_same_warning => '第1ホップと第2ホップに同じノードは指定できません';
+}
+
 // Path: main.tray
 class _Translations$main$tray$ja implements Translations$main$tray$en {
 	_Translations$main$tray$ja._(this._root);
@@ -1883,6 +1919,32 @@ extension on TranslationsJa {
 			'hotkeys.cycleMode' => 'ルーティングモードの順次切り替え',
 			'hotkeys.cycleModeTip' => '順次切り替え：ルール ➔ グローバル ➔ 直接',
 			'hotkeys.resetDefault' => 'デフォルトに戻す',
+			'chain_proxy.title' => 'チェーンプロキシ',
+			'chain_proxy.desc' => '2つのノードを中継（前置リレー ➔ 出口ノード）し、低遅延と地域制限解除を両立します。',
+			'chain_proxy.add' => 'チェーンプロキシを作成',
+			'chain_proxy.edit' => 'チェーンプロキシを編集',
+			'chain_proxy.delete' => '削除',
+			'chain_proxy.delete_confirm' => 'このチェーンプロキシを削除してもよろしいですか？',
+			'chain_proxy.name' => 'チェーンプロキシ名',
+			'chain_proxy.name_hint' => '例: 香港中継 ➔ 米国レジデンシャル',
+			'chain_proxy.hop1' => '第1ホップ: 前置リレー (入口)',
+			'chain_proxy.hop1_select_title' => '第1ホップノード (前置) を選択',
+			'chain_proxy.hop1_placeholder' => '第1ホップノード',
+			'chain_proxy.hop2' => '第2ホップ: 出口ノード (出口)',
+			'chain_proxy.hop2_select_title' => '第2ホップノード (出口) を選択',
+			'chain_proxy.hop2_placeholder' => '第2ホップノード',
+			'chain_proxy.select_node' => 'ノードを選択',
+			'chain_proxy.preview' => 'トポロジープレビュー',
+			'chain_proxy.local_device' => '端末',
+			'chain_proxy.internet' => 'インターネット',
+			'chain_proxy.save_success' => 'チェーンプロキシを保存しました',
+			'chain_proxy.empty_tip' => 'チェーンプロキシがありません。下のボタンから作成してください。',
+			'chain_proxy.test_latency' => '測定',
+			'chain_proxy.node_missing_warning' => '現在の設定に存在しないノードがあります。再指定してください。',
+			'chain_proxy.name_empty_warning' => 'チェーンプロキシ名を入力してください',
+			'chain_proxy.hop1_empty_warning' => '第1ホップのノードを選択してください',
+			'chain_proxy.hop2_empty_warning' => '第2ホップのノードを選択してください',
+			'chain_proxy.hop_same_warning' => '第1ホップと第2ホップに同じノードは指定できません',
 			_ => null,
 		};
 	}

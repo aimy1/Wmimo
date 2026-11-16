@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
+import 'package:wmimo/app/modules/chain_proxy_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/runtime/return_result.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
@@ -517,6 +518,7 @@ class ProfileManager {
         return ReturnResultError("file not exist: $filePath");
       }
       await ProxyNodeLoader.ensureProfileHasProxyGroups(filePath);
+      await ChainProxyManager.applyToProfile(filePath);
       return await validFileContentFormat(filePath);
     } catch (err) {
       return ReturnResultError(err.toString());
@@ -1156,6 +1158,7 @@ class ProfileManager {
 
       await FileUtils.append(savePath, "\n$urlComment${profile.url}\n");
       await ProxyNodeLoader.ensureProfileHasProxyGroups(savePath);
+      await ChainProxyManager.applyToProfile(savePath);
       ProxyNodeLoader.clearCache(id);
       profile.updateSubscriptionTraffic(result.data);
     }

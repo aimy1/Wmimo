@@ -79,6 +79,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 		'es': 'Español',
 	};
 	late final Translations$hotkeys$en hotkeys = Translations$hotkeys$en._(_root);
+	late final Translations$chain_proxy$en chain_proxy = Translations$chain_proxy$en._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -2599,6 +2600,93 @@ class Translations$hotkeys$en {
 	String get resetDefault => 'Reset to Defaults';
 }
 
+// Path: chain_proxy
+class Translations$chain_proxy$en {
+	Translations$chain_proxy$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Chain Proxy'
+	String get title => 'Chain Proxy';
+
+	/// en: 'Cascade two nodes (Entry Relay ➔ Exit Landing) to combine low latency with residential IP unlocking.'
+	String get desc => 'Cascade two nodes (Entry Relay ➔ Exit Landing) to combine low latency with residential IP unlocking.';
+
+	/// en: 'New Chain Proxy'
+	String get add => 'New Chain Proxy';
+
+	/// en: 'Edit Chain Proxy'
+	String get edit => 'Edit Chain Proxy';
+
+	/// en: 'Delete'
+	String get delete => 'Delete';
+
+	/// en: 'Are you sure you want to delete this chain proxy?'
+	String get delete_confirm => 'Are you sure you want to delete this chain proxy?';
+
+	/// en: 'Chain Proxy Name'
+	String get name => 'Chain Proxy Name';
+
+	/// en: 'e.g., HK Transit ➔ US Residential'
+	String get name_hint => 'e.g., HK Transit ➔ US Residential';
+
+	/// en: 'Hop 1: Entry Relay (Transit)'
+	String get hop1 => 'Hop 1: Entry Relay (Transit)';
+
+	/// en: 'Select Hop 1 Node (Entry Relay)'
+	String get hop1_select_title => 'Select Hop 1 Node (Entry Relay)';
+
+	/// en: 'Hop 1 Node'
+	String get hop1_placeholder => 'Hop 1 Node';
+
+	/// en: 'Hop 2: Exit Landing (Target)'
+	String get hop2 => 'Hop 2: Exit Landing (Target)';
+
+	/// en: 'Select Hop 2 Node (Exit Landing)'
+	String get hop2_select_title => 'Select Hop 2 Node (Exit Landing)';
+
+	/// en: 'Hop 2 Node'
+	String get hop2_placeholder => 'Hop 2 Node';
+
+	/// en: 'Tap to select node'
+	String get select_node => 'Tap to select node';
+
+	/// en: 'Topology Preview'
+	String get preview => 'Topology Preview';
+
+	/// en: 'Device'
+	String get local_device => 'Device';
+
+	/// en: 'Internet'
+	String get internet => 'Internet';
+
+	/// en: 'Chain proxy saved successfully'
+	String get save_success => 'Chain proxy saved successfully';
+
+	/// en: 'No chain proxies yet. Tap below to create one.'
+	String get empty_tip => 'No chain proxies yet. Tap below to create one.';
+
+	/// en: 'Ping'
+	String get test_latency => 'Ping';
+
+	/// en: 'Some nodes do not exist in the current profile. Please update.'
+	String get node_missing_warning => 'Some nodes do not exist in the current profile. Please update.';
+
+	/// en: 'Please enter a chain proxy name'
+	String get name_empty_warning => 'Please enter a chain proxy name';
+
+	/// en: 'Please select the first hop (entry) node'
+	String get hop1_empty_warning => 'Please select the first hop (entry) node';
+
+	/// en: 'Please select the second hop (exit) node'
+	String get hop2_empty_warning => 'Please select the second hop (exit) node';
+
+	/// en: 'Hop 1 and Hop 2 cannot be the same node'
+	String get hop_same_warning => 'Hop 1 and Hop 2 cannot be the same node';
+}
+
 // Path: main.tray
 class Translations$main$tray$en {
 	Translations$main$tray$en._(this._root);
@@ -3511,6 +3599,32 @@ extension on Translations {
 			'hotkeys.cycleMode' => 'Cycle Routing Mode',
 			'hotkeys.cycleModeTip' => 'Cycle sequentially: Rule ➔ Global ➔ Direct',
 			'hotkeys.resetDefault' => 'Reset to Defaults',
+			'chain_proxy.title' => 'Chain Proxy',
+			'chain_proxy.desc' => 'Cascade two nodes (Entry Relay ➔ Exit Landing) to combine low latency with residential IP unlocking.',
+			'chain_proxy.add' => 'New Chain Proxy',
+			'chain_proxy.edit' => 'Edit Chain Proxy',
+			'chain_proxy.delete' => 'Delete',
+			'chain_proxy.delete_confirm' => 'Are you sure you want to delete this chain proxy?',
+			'chain_proxy.name' => 'Chain Proxy Name',
+			'chain_proxy.name_hint' => 'e.g., HK Transit ➔ US Residential',
+			'chain_proxy.hop1' => 'Hop 1: Entry Relay (Transit)',
+			'chain_proxy.hop1_select_title' => 'Select Hop 1 Node (Entry Relay)',
+			'chain_proxy.hop1_placeholder' => 'Hop 1 Node',
+			'chain_proxy.hop2' => 'Hop 2: Exit Landing (Target)',
+			'chain_proxy.hop2_select_title' => 'Select Hop 2 Node (Exit Landing)',
+			'chain_proxy.hop2_placeholder' => 'Hop 2 Node',
+			'chain_proxy.select_node' => 'Tap to select node',
+			'chain_proxy.preview' => 'Topology Preview',
+			'chain_proxy.local_device' => 'Device',
+			'chain_proxy.internet' => 'Internet',
+			'chain_proxy.save_success' => 'Chain proxy saved successfully',
+			'chain_proxy.empty_tip' => 'No chain proxies yet. Tap below to create one.',
+			'chain_proxy.test_latency' => 'Ping',
+			'chain_proxy.node_missing_warning' => 'Some nodes do not exist in the current profile. Please update.',
+			'chain_proxy.name_empty_warning' => 'Please enter a chain proxy name',
+			'chain_proxy.hop1_empty_warning' => 'Please select the first hop (entry) node',
+			'chain_proxy.hop2_empty_warning' => 'Please select the second hop (exit) node',
+			'chain_proxy.hop_same_warning' => 'Hop 1 and Hop 2 cannot be the same node',
 			_ => null,
 		};
 	}

@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: unused_catch_stack, empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -271,7 +271,7 @@ class ProxyGroupTemplate {
   }
 
   static List<String> getTypes() {
-    return ["select", "url-test", "load-balance", "fallback"];
+    return ["select", "url-test", "load-balance", "fallback", "relay"];
   }
 
   static String toClashProtocolTypeString(String type) {
@@ -284,6 +284,8 @@ class ProxyGroupTemplate {
         return ClashProtocolType.loadBalance.name;
       case "fallback":
         return ClashProtocolType.fallback.name;
+      case "relay":
+        return ClashProtocolType.relay.name;
     }
     return "";
   }

@@ -859,5 +859,33 @@
     "cycleMode": "循环切换分流模式",
     "cycleModeTip": "按序轮转：规则 ➔ 全局 ➔ 直连",
     "resetDefault": "恢复默认设置"
+  },
+  "chain_proxy": {
+    "title": "链式代理",
+    "desc": "将两个节点级联中转（前置跳板 ➔ 落地出口），实现低延迟高速专线与原生住宅 IP 解锁兼得。",
+    "add": "新建链式代理",
+    "edit": "编辑链式代理",
+    "delete": "删除",
+    "delete_confirm": "确定要删除该链式代理吗？",
+    "name": "链式代理名称",
+    "name_hint": "例如：香港中转 ➔ 美国家宽",
+    "hop1": "第一跳：前置跳板 (入口)",
+    "hop1_select_title": "选择第一跳节点 (前置跳板)",
+    "hop1_placeholder": "第一跳节点",
+    "hop2": "第二跳：落地节点 (出口)",
+    "hop2_select_title": "选择第二跳节点 (落地出口)",
+    "hop2_placeholder": "第二跳节点",
+    "select_node": "点击选择节点",
+    "preview": "链路拓扑预览",
+    "local_device": "我的设备",
+    "internet": "目标网站",
+    "save_success": "链式代理保存成功",
+    "empty_tip": "暂无链式代理，点击下方按钮立即创建",
+    "test_latency": "测速",
+    "node_missing_warning": "部分节点在当前配置中不存在，请重新指定",
+    "name_empty_warning": "请输入链式代理名称",
+    "hop1_empty_warning": "请选择第一跳前置节点",
+    "hop2_empty_warning": "请选择第二跳落地节点",
+    "hop_same_warning": "第一跳与第二跳不能为同一个节点"
   }
 }

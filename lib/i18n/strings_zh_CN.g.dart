@@ -69,6 +69,7 @@ class TranslationsZhCn with BaseTranslations<AppLocale, Translations> implements
 		'es': 'Español',
 	};
 	@override late final Translations$hotkeys$zh_CN hotkeys = Translations$hotkeys$zh_CN.internal(_root);
+	@override late final Translations$chain_proxy$zh_CN chain_proxy = Translations$chain_proxy$zh_CN.internal(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -1019,6 +1020,41 @@ class Translations$hotkeys$zh_CN implements Translations$hotkeys$en {
 	@override String get resetDefault => '恢复默认设置';
 }
 
+// Path: chain_proxy
+class Translations$chain_proxy$zh_CN implements Translations$chain_proxy$en {
+	Translations$chain_proxy$zh_CN.internal(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '链式代理';
+	@override String get desc => '将两个节点级联中转（前置跳板 ➔ 落地出口），实现低延迟高速专线与原生住宅 IP 解锁兼得。';
+	@override String get add => '新建链式代理';
+	@override String get edit => '编辑链式代理';
+	@override String get delete => '删除';
+	@override String get delete_confirm => '确定要删除该链式代理吗？';
+	@override String get name => '链式代理名称';
+	@override String get name_hint => '例如：香港中转 ➔ 美国家宽';
+	@override String get hop1 => '第一跳：前置跳板 (入口)';
+	@override String get hop1_select_title => '选择第一跳节点 (前置跳板)';
+	@override String get hop1_placeholder => '第一跳节点';
+	@override String get hop2 => '第二跳：落地节点 (出口)';
+	@override String get hop2_select_title => '选择第二跳节点 (落地出口)';
+	@override String get hop2_placeholder => '第二跳节点';
+	@override String get select_node => '点击选择节点';
+	@override String get preview => '链路拓扑预览';
+	@override String get local_device => '我的设备';
+	@override String get internet => '目标网站';
+	@override String get save_success => '链式代理保存成功';
+	@override String get empty_tip => '暂无链式代理，点击下方按钮立即创建';
+	@override String get test_latency => '测速';
+	@override String get node_missing_warning => '部分节点在当前配置中不存在，请重新指定';
+	@override String get name_empty_warning => '请输入链式代理名称';
+	@override String get hop1_empty_warning => '请选择第一跳前置节点';
+	@override String get hop2_empty_warning => '请选择第二跳落地节点';
+	@override String get hop_same_warning => '第一跳与第二跳不能为同一个节点';
+}
+
 // Path: main.tray
 class Translations$main$tray$zh_CN implements Translations$main$tray$en {
 	Translations$main$tray$zh_CN.internal(this._root);
@@ -1883,6 +1919,32 @@ extension on TranslationsZhCn {
 			'hotkeys.cycleMode' => '循环切换分流模式',
 			'hotkeys.cycleModeTip' => '按序轮转：规则 ➔ 全局 ➔ 直连',
 			'hotkeys.resetDefault' => '恢复默认设置',
+			'chain_proxy.title' => '链式代理',
+			'chain_proxy.desc' => '将两个节点级联中转（前置跳板 ➔ 落地出口），实现低延迟高速专线与原生住宅 IP 解锁兼得。',
+			'chain_proxy.add' => '新建链式代理',
+			'chain_proxy.edit' => '编辑链式代理',
+			'chain_proxy.delete' => '删除',
+			'chain_proxy.delete_confirm' => '确定要删除该链式代理吗？',
+			'chain_proxy.name' => '链式代理名称',
+			'chain_proxy.name_hint' => '例如：香港中转 ➔ 美国家宽',
+			'chain_proxy.hop1' => '第一跳：前置跳板 (入口)',
+			'chain_proxy.hop1_select_title' => '选择第一跳节点 (前置跳板)',
+			'chain_proxy.hop1_placeholder' => '第一跳节点',
+			'chain_proxy.hop2' => '第二跳：落地节点 (出口)',
+			'chain_proxy.hop2_select_title' => '选择第二跳节点 (落地出口)',
+			'chain_proxy.hop2_placeholder' => '第二跳节点',
+			'chain_proxy.select_node' => '点击选择节点',
+			'chain_proxy.preview' => '链路拓扑预览',
+			'chain_proxy.local_device' => '我的设备',
+			'chain_proxy.internet' => '目标网站',
+			'chain_proxy.save_success' => '链式代理保存成功',
+			'chain_proxy.empty_tip' => '暂无链式代理，点击下方按钮立即创建',
+			'chain_proxy.test_latency' => '测速',
+			'chain_proxy.node_missing_warning' => '部分节点在当前配置中不存在，请重新指定',
+			'chain_proxy.name_empty_warning' => '请输入链式代理名称',
+			'chain_proxy.hop1_empty_warning' => '请选择第一跳前置节点',
+			'chain_proxy.hop2_empty_warning' => '请选择第二跳落地节点',
+			'chain_proxy.hop_same_warning' => '第一跳与第二跳不能为同一个节点',
 			_ => null,
 		};
 	}

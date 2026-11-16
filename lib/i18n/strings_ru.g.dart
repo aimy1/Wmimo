@@ -69,6 +69,7 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 		'es': 'Español',
 	};
 	@override late final _Translations$hotkeys$ru hotkeys = _Translations$hotkeys$ru._(_root);
+	@override late final _Translations$chain_proxy$ru chain_proxy = _Translations$chain_proxy$ru._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -1019,6 +1020,41 @@ class _Translations$hotkeys$ru implements Translations$hotkeys$en {
 	@override String get resetDefault => 'Сбросить по умолчанию';
 }
 
+// Path: chain_proxy
+class _Translations$chain_proxy$ru implements Translations$chain_proxy$en {
+	_Translations$chain_proxy$ru._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Цепочечный прокси';
+	@override String get desc => 'Каскад двух узлов (входной ретранслятор ➔ выходной узел) для объединения низкой задержки и разблокировки стриминга.';
+	@override String get add => 'Новая цепочка';
+	@override String get edit => 'Редактировать цепочку';
+	@override String get delete => 'Удалить';
+	@override String get delete_confirm => 'Вы уверены, что хотите удалить этот цепочечный прокси?';
+	@override String get name => 'Название цепочки';
+	@override String get name_hint => 'Например: Гонконг транзит ➔ США';
+	@override String get hop1 => '1-й узел: Входной транзит';
+	@override String get hop1_select_title => 'Выберите 1-й узел (Вход)';
+	@override String get hop1_placeholder => '1-й узел';
+	@override String get hop2 => '2-й узел: Выходной узел';
+	@override String get hop2_select_title => 'Выберите 2-й узел (Выход)';
+	@override String get hop2_placeholder => '2-й узел';
+	@override String get select_node => 'Нажмите для выбора';
+	@override String get preview => 'Схема топологии';
+	@override String get local_device => 'Устройство';
+	@override String get internet => 'Интернет';
+	@override String get save_success => 'Цепочечный прокси успешно сохранен';
+	@override String get empty_tip => 'Цепочечных прокси пока нет. Нажмите ниже, чтобы создать.';
+	@override String get test_latency => 'Пинг';
+	@override String get node_missing_warning => 'Некоторые узлы отсутствуют в текущем профиле. Обновите их.';
+	@override String get name_empty_warning => 'Введите название цепочки прокси';
+	@override String get hop1_empty_warning => 'Выберите первый (входной) узел';
+	@override String get hop2_empty_warning => 'Выберите второй (выходной) узел';
+	@override String get hop_same_warning => 'Первый и второй узлы не могут совпадать';
+}
+
 // Path: main.tray
 class _Translations$main$tray$ru implements Translations$main$tray$en {
 	_Translations$main$tray$ru._(this._root);
@@ -1883,6 +1919,32 @@ extension on TranslationsRu {
 			'hotkeys.cycleMode' => 'Циклическое переключение режима',
 			'hotkeys.cycleModeTip' => 'Последовательно: Правила ➔ Глобальный ➔ Прямой',
 			'hotkeys.resetDefault' => 'Сбросить по умолчанию',
+			'chain_proxy.title' => 'Цепочечный прокси',
+			'chain_proxy.desc' => 'Каскад двух узлов (входной ретранслятор ➔ выходной узел) для объединения низкой задержки и разблокировки стриминга.',
+			'chain_proxy.add' => 'Новая цепочка',
+			'chain_proxy.edit' => 'Редактировать цепочку',
+			'chain_proxy.delete' => 'Удалить',
+			'chain_proxy.delete_confirm' => 'Вы уверены, что хотите удалить этот цепочечный прокси?',
+			'chain_proxy.name' => 'Название цепочки',
+			'chain_proxy.name_hint' => 'Например: Гонконг транзит ➔ США',
+			'chain_proxy.hop1' => '1-й узел: Входной транзит',
+			'chain_proxy.hop1_select_title' => 'Выберите 1-й узел (Вход)',
+			'chain_proxy.hop1_placeholder' => '1-й узел',
+			'chain_proxy.hop2' => '2-й узел: Выходной узел',
+			'chain_proxy.hop2_select_title' => 'Выберите 2-й узел (Выход)',
+			'chain_proxy.hop2_placeholder' => '2-й узел',
+			'chain_proxy.select_node' => 'Нажмите для выбора',
+			'chain_proxy.preview' => 'Схема топологии',
+			'chain_proxy.local_device' => 'Устройство',
+			'chain_proxy.internet' => 'Интернет',
+			'chain_proxy.save_success' => 'Цепочечный прокси успешно сохранен',
+			'chain_proxy.empty_tip' => 'Цепочечных прокси пока нет. Нажмите ниже, чтобы создать.',
+			'chain_proxy.test_latency' => 'Пинг',
+			'chain_proxy.node_missing_warning' => 'Некоторые узлы отсутствуют в текущем профиле. Обновите их.',
+			'chain_proxy.name_empty_warning' => 'Введите название цепочки прокси',
+			'chain_proxy.hop1_empty_warning' => 'Выберите первый (входной) узел',
+			'chain_proxy.hop2_empty_warning' => 'Выберите второй (выходной) узел',
+			'chain_proxy.hop_same_warning' => 'Первый и второй узлы не могут совпадать',
 			_ => null,
 		};
 	}

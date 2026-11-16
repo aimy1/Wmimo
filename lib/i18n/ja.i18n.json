@@ -859,5 +859,33 @@
     "cycleMode": "ルーティングモードの順次切り替え",
     "cycleModeTip": "順次切り替え：ルール ➔ グローバル ➔ 直接",
     "resetDefault": "デフォルトに戻す"
+  },
+  "chain_proxy": {
+    "title": "チェーンプロキシ",
+    "desc": "2つのノードを中継（前置リレー ➔ 出口ノード）し、低遅延と地域制限解除を両立します。",
+    "add": "チェーンプロキシを作成",
+    "edit": "チェーンプロキシを編集",
+    "delete": "削除",
+    "delete_confirm": "このチェーンプロキシを削除してもよろしいですか？",
+    "name": "チェーンプロキシ名",
+    "name_hint": "例: 香港中継 ➔ 米国レジデンシャル",
+    "hop1": "第1ホップ: 前置リレー (入口)",
+    "hop1_select_title": "第1ホップノード (前置) を選択",
+    "hop1_placeholder": "第1ホップノード",
+    "hop2": "第2ホップ: 出口ノード (出口)",
+    "hop2_select_title": "第2ホップノード (出口) を選択",
+    "hop2_placeholder": "第2ホップノード",
+    "select_node": "ノードを選択",
+    "preview": "トポロジープレビュー",
+    "local_device": "端末",
+    "internet": "インターネット",
+    "save_success": "チェーンプロキシを保存しました",
+    "empty_tip": "チェーンプロキシがありません。下のボタンから作成してください。",
+    "test_latency": "測定",
+    "node_missing_warning": "現在の設定に存在しないノードがあります。再指定してください。",
+    "name_empty_warning": "チェーンプロキシ名を入力してください",
+    "hop1_empty_warning": "第1ホップのノードを選択してください",
+    "hop2_empty_warning": "第2ホップのノードを選択してください",
+    "hop_same_warning": "第1ホップと第2ホップに同じノードは指定できません"
   }
 }

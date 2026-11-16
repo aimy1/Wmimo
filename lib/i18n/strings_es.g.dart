@@ -69,6 +69,7 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 		'es': 'Español',
 	};
 	@override late final _Translations$hotkeys$es hotkeys = _Translations$hotkeys$es._(_root);
+	@override late final _Translations$chain_proxy$es chain_proxy = _Translations$chain_proxy$es._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -1019,6 +1020,41 @@ class _Translations$hotkeys$es implements Translations$hotkeys$en {
 	@override String get resetDefault => 'Restablecer por Defecto';
 }
 
+// Path: chain_proxy
+class _Translations$chain_proxy$es implements Translations$chain_proxy$en {
+	_Translations$chain_proxy$es._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Proxy en cadena';
+	@override String get desc => 'Encadena dos nodos (retransmisión de entrada ➔ salida final) para combinar baja latencia y desbloqueo de servicios.';
+	@override String get add => 'Nuevo proxy en cadena';
+	@override String get edit => 'Editar proxy en cadena';
+	@override String get delete => 'Eliminar';
+	@override String get delete_confirm => '¿Seguro que desea eliminar este proxy en cadena?';
+	@override String get name => 'Nombre del proxy en cadena';
+	@override String get name_hint => 'Ej: Tránsito HK ➔ Residencial EE.UU.';
+	@override String get hop1 => 'Salto 1: Retransmisión de entrada';
+	@override String get hop1_select_title => 'Seleccionar nodo del salto 1 (Entrada)';
+	@override String get hop1_placeholder => 'Nodo del salto 1';
+	@override String get hop2 => 'Salto 2: Nodo de salida';
+	@override String get hop2_select_title => 'Seleccionar nodo del salto 2 (Salida)';
+	@override String get hop2_placeholder => 'Nodo del salto 2';
+	@override String get select_node => 'Toca para seleccionar nodo';
+	@override String get preview => 'Vista previa de topología';
+	@override String get local_device => 'Dispositivo';
+	@override String get internet => 'Internet';
+	@override String get save_success => 'Proxy en cadena guardado correctamente';
+	@override String get empty_tip => 'No hay proxies en cadena. Toca abajo para crear uno.';
+	@override String get test_latency => 'Prueba';
+	@override String get node_missing_warning => 'Algunos nodos no existen en el perfil actual. Por favor actualízalos.';
+	@override String get name_empty_warning => 'Introduce un nombre para el proxy en cadena';
+	@override String get hop1_empty_warning => 'Selecciona el primer nodo (entrada)';
+	@override String get hop2_empty_warning => 'Selecciona el segundo nodo (salida)';
+	@override String get hop_same_warning => 'El salto 1 y el salto 2 no pueden ser el mismo nodo';
+}
+
 // Path: main.tray
 class _Translations$main$tray$es implements Translations$main$tray$en {
 	_Translations$main$tray$es._(this._root);
@@ -1883,6 +1919,32 @@ extension on TranslationsEs {
 			'hotkeys.cycleMode' => 'Alternar Modo de Enrutamiento',
 			'hotkeys.cycleModeTip' => 'Secuencia: Regla ➔ Global ➔ Directo',
 			'hotkeys.resetDefault' => 'Restablecer por Defecto',
+			'chain_proxy.title' => 'Proxy en cadena',
+			'chain_proxy.desc' => 'Encadena dos nodos (retransmisión de entrada ➔ salida final) para combinar baja latencia y desbloqueo de servicios.',
+			'chain_proxy.add' => 'Nuevo proxy en cadena',
+			'chain_proxy.edit' => 'Editar proxy en cadena',
+			'chain_proxy.delete' => 'Eliminar',
+			'chain_proxy.delete_confirm' => '¿Seguro que desea eliminar este proxy en cadena?',
+			'chain_proxy.name' => 'Nombre del proxy en cadena',
+			'chain_proxy.name_hint' => 'Ej: Tránsito HK ➔ Residencial EE.UU.',
+			'chain_proxy.hop1' => 'Salto 1: Retransmisión de entrada',
+			'chain_proxy.hop1_select_title' => 'Seleccionar nodo del salto 1 (Entrada)',
+			'chain_proxy.hop1_placeholder' => 'Nodo del salto 1',
+			'chain_proxy.hop2' => 'Salto 2: Nodo de salida',
+			'chain_proxy.hop2_select_title' => 'Seleccionar nodo del salto 2 (Salida)',
+			'chain_proxy.hop2_placeholder' => 'Nodo del salto 2',
+			'chain_proxy.select_node' => 'Toca para seleccionar nodo',
+			'chain_proxy.preview' => 'Vista previa de topología',
+			'chain_proxy.local_device' => 'Dispositivo',
+			'chain_proxy.internet' => 'Internet',
+			'chain_proxy.save_success' => 'Proxy en cadena guardado correctamente',
+			'chain_proxy.empty_tip' => 'No hay proxies en cadena. Toca abajo para crear uno.',
+			'chain_proxy.test_latency' => 'Prueba',
+			'chain_proxy.node_missing_warning' => 'Algunos nodos no existen en el perfil actual. Por favor actualízalos.',
+			'chain_proxy.name_empty_warning' => 'Introduce un nombre para el proxy en cadena',
+			'chain_proxy.hop1_empty_warning' => 'Selecciona el primer nodo (entrada)',
+			'chain_proxy.hop2_empty_warning' => 'Selecciona el segundo nodo (salida)',
+			'chain_proxy.hop_same_warning' => 'El salto 1 y el salto 2 no pueden ser el mismo nodo',
 			_ => null,
 		};
 	}

@@ -69,6 +69,7 @@ class TranslationsKo with BaseTranslations<AppLocale, Translations> implements T
 		'es': 'Español',
 	};
 	@override late final _Translations$hotkeys$ko hotkeys = _Translations$hotkeys$ko._(_root);
+	@override late final _Translations$chain_proxy$ko chain_proxy = _Translations$chain_proxy$ko._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -1019,6 +1020,41 @@ class _Translations$hotkeys$ko implements Translations$hotkeys$en {
 	@override String get resetDefault => '기본값 복원';
 }
 
+// Path: chain_proxy
+class _Translations$chain_proxy$ko implements Translations$chain_proxy$en {
+	_Translations$chain_proxy$ko._(this._root);
+
+	final TranslationsKo _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '체인 프록시';
+	@override String get desc => '두 노드를 중계(전치 릴레이 ➔ 착륙 출구)하여 낮은 지연 시간과 주거용 IP 잠금 해제를 모두 확보합니다.';
+	@override String get add => '체인 프록시 추가';
+	@override String get edit => '체인 프록시 편집';
+	@override String get delete => '삭제';
+	@override String get delete_confirm => '이 체인 프록시를 삭제하시겠습니까?';
+	@override String get name => '체인 프록시 이름';
+	@override String get name_hint => '예: 홍콩 중계 ➔ 미국 주거용';
+	@override String get hop1 => '1단계: 전치 릴레이 (입구)';
+	@override String get hop1_select_title => '1단계 노드(전치) 선택';
+	@override String get hop1_placeholder => '1단계 노드';
+	@override String get hop2 => '2단계: 착륙 노드 (출구)';
+	@override String get hop2_select_title => '2단계 노드(출구) 선택';
+	@override String get hop2_placeholder => '2단계 노드';
+	@override String get select_node => '노드 선택';
+	@override String get preview => '토폴로지 미리보기';
+	@override String get local_device => '내 기기';
+	@override String get internet => '인터넷';
+	@override String get save_success => '체인 프록시가 저장되었습니다';
+	@override String get empty_tip => '체인 프록시가 없습니다. 아래 버튼을 눌러 추가하세요.';
+	@override String get test_latency => '핑 테스트';
+	@override String get node_missing_warning => '현재 프로필에 없는 노드가 포함되어 있습니다. 다시 지정해 주세요.';
+	@override String get name_empty_warning => '체인 프록시 이름을 입력하세요';
+	@override String get hop1_empty_warning => '1단계 전치 노드를 선택하세요';
+	@override String get hop2_empty_warning => '2단계 착륙 노드를 선택하세요';
+	@override String get hop_same_warning => '1단계와 2단계 노드는 같을 수 없습니다';
+}
+
 // Path: main.tray
 class _Translations$main$tray$ko implements Translations$main$tray$en {
 	_Translations$main$tray$ko._(this._root);
@@ -1883,6 +1919,32 @@ extension on TranslationsKo {
 			'hotkeys.cycleMode' => '라우팅 모드 순환 전환',
 			'hotkeys.cycleModeTip' => '순차 순환: 규칙 ➔ 글로벌 ➔ 직결',
 			'hotkeys.resetDefault' => '기본값 복원',
+			'chain_proxy.title' => '체인 프록시',
+			'chain_proxy.desc' => '두 노드를 중계(전치 릴레이 ➔ 착륙 출구)하여 낮은 지연 시간과 주거용 IP 잠금 해제를 모두 확보합니다.',
+			'chain_proxy.add' => '체인 프록시 추가',
+			'chain_proxy.edit' => '체인 프록시 편집',
+			'chain_proxy.delete' => '삭제',
+			'chain_proxy.delete_confirm' => '이 체인 프록시를 삭제하시겠습니까?',
+			'chain_proxy.name' => '체인 프록시 이름',
+			'chain_proxy.name_hint' => '예: 홍콩 중계 ➔ 미국 주거용',
+			'chain_proxy.hop1' => '1단계: 전치 릴레이 (입구)',
+			'chain_proxy.hop1_select_title' => '1단계 노드(전치) 선택',
+			'chain_proxy.hop1_placeholder' => '1단계 노드',
+			'chain_proxy.hop2' => '2단계: 착륙 노드 (출구)',
+			'chain_proxy.hop2_select_title' => '2단계 노드(출구) 선택',
+			'chain_proxy.hop2_placeholder' => '2단계 노드',
+			'chain_proxy.select_node' => '노드 선택',
+			'chain_proxy.preview' => '토폴로지 미리보기',
+			'chain_proxy.local_device' => '내 기기',
+			'chain_proxy.internet' => '인터넷',
+			'chain_proxy.save_success' => '체인 프록시가 저장되었습니다',
+			'chain_proxy.empty_tip' => '체인 프록시가 없습니다. 아래 버튼을 눌러 추가하세요.',
+			'chain_proxy.test_latency' => '핑 테스트',
+			'chain_proxy.node_missing_warning' => '현재 프로필에 없는 노드가 포함되어 있습니다. 다시 지정해 주세요.',
+			'chain_proxy.name_empty_warning' => '체인 프록시 이름을 입력하세요',
+			'chain_proxy.hop1_empty_warning' => '1단계 전치 노드를 선택하세요',
+			'chain_proxy.hop2_empty_warning' => '2단계 착륙 노드를 선택하세요',
+			'chain_proxy.hop_same_warning' => '1단계와 2단계 노드는 같을 수 없습니다',
 			_ => null,
 		};
 	}
