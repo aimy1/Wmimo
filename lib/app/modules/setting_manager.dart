@@ -47,6 +47,15 @@ class SettingConfigItemUI {
   bool collapseIpInfo = false;
   bool collapseSubscription = false;
   bool collapseQuickActions = false;
+  bool maskIp = true;
+  static const List<String> kDefaultHomeCardsOrder = [
+    'traffic',
+    'web_test',
+    'ip_info',
+    'plan_usage',
+    'quick_tools',
+  ];
+  List<String> homeCardsOrder = List<String>.from(kDefaultHomeCardsOrder);
   Map<String, dynamic> toJson() => {
     'theme': theme,
     'auto_orientation': autoOrientation,
@@ -68,6 +77,8 @@ class SettingConfigItemUI {
     'collapse_ip_info': collapseIpInfo,
     'collapse_subscription': collapseSubscription,
     'collapse_quick_actions': collapseQuickActions,
+    'mask_ip': maskIp,
+    'home_cards_order': homeCardsOrder,
   };
   void fromJson(Map<String, dynamic>? map) {
     if (map == null) {
@@ -93,6 +104,21 @@ class SettingConfigItemUI {
     collapseIpInfo = map["collapse_ip_info"] ?? false;
     collapseSubscription = map["collapse_subscription"] ?? false;
     collapseQuickActions = map["collapse_quick_actions"] ?? false;
+    maskIp = map["mask_ip"] ?? true;
+    if (map["home_cards_order"] is List) {
+      final list = (map["home_cards_order"] as List)
+          .map((e) => e.toString())
+          .where((id) => kDefaultHomeCardsOrder.contains(id))
+          .toList();
+      for (final id in kDefaultHomeCardsOrder) {
+        if (!list.contains(id)) {
+          list.add(id);
+        }
+      }
+      homeCardsOrder = list;
+    } else {
+      homeCardsOrder = List<String>.from(kDefaultHomeCardsOrder);
+    }
     if (Platform.isAndroid) {
       tvMode = map["tv_mode"] ?? maybeTv();
       TextFieldEx.popupEdit = tvMode;

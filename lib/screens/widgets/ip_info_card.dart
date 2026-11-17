@@ -27,7 +27,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
   IpInfoData? _directIpInfo;
   bool _showDirect = false;
   bool _loading = false;
-  bool _maskIp = false;
+  bool _maskIp = true;
   late bool _isCollapsed;
   final ValueNotifier<int> _countdown = ValueNotifier<int>(240);
   Timer? _countdownTimer;
@@ -36,7 +36,9 @@ class _IpInfoCardState extends State<IpInfoCard> {
   @override
   void initState() {
     super.initState();
-    _isCollapsed = SettingManager.getConfig().ui.collapseIpInfo;
+    final ui = SettingManager.getConfig().ui;
+    _isCollapsed = ui.collapseIpInfo;
+    _maskIp = ui.maskIp;
     SettingManager.onHomeCardsChanged.add(_onHomeCardsChanged);
     Biz.onEventProxySelected.add(_onProxyNodeChanged);
     _startAutoRefreshTimer();
@@ -55,10 +57,11 @@ class _IpInfoCardState extends State<IpInfoCard> {
 
   void _onHomeCardsChanged() {
     if (!mounted) return;
-    final current = SettingManager.getConfig().ui.collapseIpInfo;
-    if (_isCollapsed != current) {
+    final ui = SettingManager.getConfig().ui;
+    if (_isCollapsed != ui.collapseIpInfo || _maskIp != ui.maskIp) {
       setState(() {
-        _isCollapsed = current;
+        _isCollapsed = ui.collapseIpInfo;
+        _maskIp = ui.maskIp;
       });
     }
   }
@@ -587,6 +590,8 @@ class _IpInfoCardState extends State<IpInfoCard> {
                   HapticFeedback.selectionClick();
                   setState(() {
                     _maskIp = !_maskIp;
+                    SettingManager.getConfig().ui.maskIp = _maskIp;
+                    SettingManager.save();
                   });
                 },
               ),

@@ -28,7 +28,14 @@ class BrandVectorIcon extends StatelessWidget {
     Widget iconContent;
     Color bgColor;
 
-    if (cleanId.contains('cloudflare') || cleanId == 'cf' || cleanId.contains('1.1.1.1')) {
+    if (cleanId == 'default' || cleanId.contains('setting')) {
+      bgColor = const Color(0xFF00BCDF);
+      iconContent = Icon(
+        Icons.tune_rounded,
+        color: Colors.white,
+        size: size * 0.58,
+      );
+    } else if (cleanId.contains('cloudflare') || cleanId == 'cf' || cleanId.contains('1.1.1.1')) {
       bgColor = const Color(0xFFF38020);
       iconContent = const _OfficialSvgWidget(
         pathData: _OfficialBrandSvgs.cloudflare,

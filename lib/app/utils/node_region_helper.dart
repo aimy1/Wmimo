@@ -53,52 +53,69 @@ class LatencyTestTarget {
 
   String getDisplayName(bool isZh) => isZh ? name : (nameEn.isNotEmpty ? nameEn : name);
 
-  static const List<LatencyTestTarget> presets = [
-    LatencyTestTarget(
-      id: "cloudflare",
-      name: "默认测试 (Cloudflare)",
-      nameEn: "Default (Cloudflare)",
-      icon: "⚡",
-      url: "https://cp.cloudflare.com/generate_204",
-    ),
-    LatencyTestTarget(
-      id: "google",
-      name: "YouTube / Google",
-      nameEn: "YouTube / Google",
-      icon: "🔴",
-      url: "https://www.google.com/generate_204",
-    ),
-    LatencyTestTarget(
-      id: "openai",
-      name: "OpenAI / ChatGPT",
-      nameEn: "OpenAI / ChatGPT",
-      icon: "🤖",
-      url: "https://chatgpt.com",
-    ),
-    LatencyTestTarget(
-      id: "bilibili",
-      name: "哔哩哔哩 (Bilibili)",
-      nameEn: "Bilibili",
-      icon: "📺",
-      url: "https://www.bilibili.com",
-    ),
-    LatencyTestTarget(
-      id: "netflix",
-      name: "Netflix",
-      nameEn: "Netflix",
-      icon: "🎬",
-      url: "https://www.netflix.com",
-    ),
-    LatencyTestTarget(
-      id: "github",
-      name: "GitHub",
-      nameEn: "GitHub",
-      icon: "🐙",
-      url: "https://github.com",
-    ),
-  ];
+  static LatencyTestTarget get defaultTarget => getPresets().first;
 
-  static LatencyTestTarget get defaultTarget => presets.first;
+  static LatencyTestTarget fromSettings([String? settingsUrl]) => getPresets(settingsUrl).first;
+
+  static List<LatencyTestTarget> getPresets([String? settingsUrl]) {
+    final effectiveDefaultUrl = (settingsUrl != null && settingsUrl.trim().isNotEmpty)
+        ? settingsUrl.trim()
+        : "https://www.gstatic.com/generate_204";
+
+    return [
+      LatencyTestTarget(
+        id: "default",
+        name: "默认测试 (跟随设置)",
+        nameEn: "Default (App Settings)",
+        icon: "⚙️",
+        url: effectiveDefaultUrl,
+      ),
+      const LatencyTestTarget(
+        id: "cloudflare",
+        name: "Cloudflare (1.1.1.1)",
+        nameEn: "Cloudflare (1.1.1.1)",
+        icon: "⚡",
+        url: "https://cp.cloudflare.com/generate_204",
+      ),
+      const LatencyTestTarget(
+        id: "google",
+        name: "YouTube / Google",
+        nameEn: "YouTube / Google",
+        icon: "🔴",
+        url: "https://www.google.com/generate_204",
+      ),
+      const LatencyTestTarget(
+        id: "openai",
+        name: "OpenAI / ChatGPT",
+        nameEn: "OpenAI / ChatGPT",
+        icon: "🤖",
+        url: "https://chatgpt.com",
+      ),
+      const LatencyTestTarget(
+        id: "bilibili",
+        name: "哔哩哔哩 (Bilibili)",
+        nameEn: "Bilibili",
+        icon: "📺",
+        url: "https://www.bilibili.com",
+      ),
+      const LatencyTestTarget(
+        id: "netflix",
+        name: "Netflix",
+        nameEn: "Netflix",
+        icon: "🎬",
+        url: "https://www.netflix.com",
+      ),
+      const LatencyTestTarget(
+        id: "github",
+        name: "GitHub",
+        nameEn: "GitHub",
+        icon: "🐙",
+        url: "https://github.com",
+      ),
+    ];
+  }
+
+  static List<LatencyTestTarget> get presets => getPresets();
 }
 
 class NodeRegionHelper {

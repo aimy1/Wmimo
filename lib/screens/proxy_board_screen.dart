@@ -146,6 +146,17 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   bool _hideTimeoutNodes = false;
   String _selectedRegionCode = "ALL";
   LatencyTestTarget _activeLatencyTarget = LatencyTestTarget.defaultTarget;
+
+  String _getEffectiveTestUrl() {
+    final setting = SettingManager.getConfig();
+    if (_activeLatencyTarget.id == "default") {
+      final sUrl = setting.delayTestUrl.trim();
+      return sUrl.isNotEmpty ? sUrl : "https://www.gstatic.com/generate_204";
+    }
+    return _activeLatencyTarget.url.isNotEmpty
+        ? _activeLatencyTarget.url
+        : setting.delayTestUrl;
+  }
   String _currentMode = "rule"; // rule, global, direct
   final Set<String> _nodesTesting = {};
   final Map<String, bool> _groupExpanded = {};
@@ -173,6 +184,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
   @override
   void initState() {
     super.initState();
+    final setting = SettingManager.getConfig();
+    _activeLatencyTarget = LatencyTestTarget.fromSettings(setting.delayTestUrl);
     _currentMode = ClashSettingManager.getConfigsMode().name.toLowerCase();
     if (_currentMode.isEmpty) _currentMode = "rule";
 
@@ -505,9 +518,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     _nodesTesting.add(node.name);
     _updateNodeLatency(node.name, isTesting: true);
     final setting = SettingManager.getConfig();
-    final testUrl = _activeLatencyTarget.url.isNotEmpty
-        ? _activeLatencyTarget.url
-        : setting.delayTestUrl;
+    final testUrl = _getEffectiveTestUrl();
 
     try {
       final res = await ClashHttpApi.getDelay(
@@ -587,9 +598,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     setState(() {});
 
     final setting = SettingManager.getConfig();
-    final testUrl = _activeLatencyTarget.url.isNotEmpty
-        ? _activeLatencyTarget.url
-        : setting.delayTestUrl;
+    final testUrl = _getEffectiveTestUrl();
     final timeout = Duration(milliseconds: setting.delayTestTimeout);
 
     // Try Mihomo native group delay test first (core-level batch test)
@@ -711,9 +720,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     setState(() {});
 
     final setting = SettingManager.getConfig();
-    final testUrl = _activeLatencyTarget.url.isNotEmpty
-        ? _activeLatencyTarget.url
-        : setting.delayTestUrl;
+    final testUrl = _getEffectiveTestUrl();
 
     int nextIndex = 0;
     Future<void> worker() async {
@@ -799,9 +806,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     setState(() {});
 
     final setting = SettingManager.getConfig();
-    final testUrl = _activeLatencyTarget.url.isNotEmpty
-        ? _activeLatencyTarget.url
-        : setting.delayTestUrl;
+    final testUrl = _getEffectiveTestUrl();
     final timeout = Duration(milliseconds: setting.delayTestTimeout);
 
     int nextIndex = 0;
@@ -1277,7 +1282,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    "${_activeLatencyTarget.getDisplayName(isZh)} • ${_activeLatencyTarget.url}",
+                                    "${_activeLatencyTarget.getDisplayName(isZh)} • ${_getEffectiveTestUrl()}",
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -1361,7 +1366,8 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
     final isDark = theme.brightness == Brightness.dark;
     final tcontext = Translations.of(context);
     final isZh = tcontext.$meta.locale.languageCode.startsWith('zh');
-    final presets = LatencyTestTarget.presets;
+    final setting = SettingManager.getConfig();
+    final presets = LatencyTestTarget.getPresets(setting.delayTestUrl);
     final customController = TextEditingController(
       text: _activeLatencyTarget.id == "custom" ? _activeLatencyTarget.url : "",
     );

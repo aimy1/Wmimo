@@ -76,7 +76,8 @@ void main() {
 
     test('LatencyTestTarget presets are defined correctly', () {
       expect(LatencyTestTarget.presets.length, greaterThanOrEqualTo(5));
-      expect(LatencyTestTarget.defaultTarget.id, 'cloudflare');
+      expect(LatencyTestTarget.defaultTarget.id, 'default');
+      expect(LatencyTestTarget.presets.any((t) => t.id == 'cloudflare'), isTrue);
       expect(LatencyTestTarget.presets.any((t) => t.id == 'google'), isTrue);
       expect(LatencyTestTarget.presets.any((t) => t.id == 'openai'), isTrue);
       expect(LatencyTestTarget.presets.any((t) => t.id == 'bilibili'), isTrue);
@@ -84,8 +85,8 @@ void main() {
 
     test('getDisplayName returns localized names based on isZh', () {
       final defaultTarget = LatencyTestTarget.defaultTarget;
-      expect(defaultTarget.getDisplayName(true), '默认测试 (Cloudflare)');
-      expect(defaultTarget.getDisplayName(false), 'Default (Cloudflare)');
+      expect(defaultTarget.getDisplayName(true), '默认测试 (跟随设置)');
+      expect(defaultTarget.getDisplayName(false), 'Default (App Settings)');
 
       expect(NodeRegion.all.getDisplayName(true), '全部');
       expect(NodeRegion.all.getDisplayName(false), 'All');

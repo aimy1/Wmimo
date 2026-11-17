@@ -217,31 +217,43 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
   ) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 6),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildQuickPill(
-              icon: Icons.unfold_less_rounded,
-              label: tcontext.meta.collapseAllCards,
-              onTap: _collapseAll,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: constraints.maxWidth),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildQuickPill(
+                        icon: Icons.unfold_less_rounded,
+                        label: tcontext.meta.collapseAllCards,
+                        onTap: _collapseAll,
+                      ),
+                      const SizedBox(width: 8),
+                      _buildQuickPill(
+                        icon: Icons.unfold_more_rounded,
+                        label: tcontext.meta.expandAllCards,
+                        onTap: _expandAll,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 12),
+                  _buildQuickPill(
+                    icon: Icons.refresh_rounded,
+                    label: tcontext.meta.resetDefaultCards,
+                    onTap: _resetDefaults,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(width: 8),
-            _buildQuickPill(
-              icon: Icons.unfold_more_rounded,
-              label: tcontext.meta.expandAllCards,
-              onTap: _expandAll,
-            ),
-            const SizedBox(width: 12),
-            _buildQuickPill(
-              icon: Icons.refresh_rounded,
-              label: tcontext.meta.resetDefaultCards,
-              onTap: _resetDefaults,
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -253,60 +265,129 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
     Translations tcontext,
     SettingConfigItemUI ui,
   ) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _buildSwitchTile(
-          icon: Icons.ssid_chart_rounded,
-          iconColor: ThemeDefine.kColorAmber,
-          title: tcontext.meta.trafficStats,
-          value: ui.showTrafficChart,
-          onChanged: (val) {
-            setState(() => ui.showTrafficChart = val);
-            _saveAndNotify();
-          },
-        ),
-        _buildSwitchTile(
-          icon: Icons.wifi_tethering_rounded,
-          iconColor: ThemeDefine.kColorBlue,
-          title: tcontext.meta.websiteTest,
-          value: ui.showWebsiteTest,
-          onChanged: (val) {
-            setState(() => ui.showWebsiteTest = val);
-            _saveAndNotify();
-          },
-        ),
-        _buildSwitchTile(
-          icon: Icons.public_rounded,
-          iconColor: const Color(0xFF06B6D4),
-          title: tcontext.meta.ipInfo,
-          value: ui.showIpInfo,
-          onChanged: (val) {
-            setState(() => ui.showIpInfo = val);
-            _saveAndNotify();
-          },
-        ),
-        _buildSwitchTile(
-          icon: Icons.donut_large_rounded,
-          iconColor: ThemeDefine.kColorGreenBright,
-          title: tcontext.meta.planUsage,
-          value: ui.showSubscription,
-          onChanged: (val) {
-            setState(() => ui.showSubscription = val);
-            _saveAndNotify();
-          },
-        ),
-        _buildSwitchTile(
-          icon: Icons.grid_view_rounded,
-          iconColor: const Color(0xFF8B5CF6),
-          title: tcontext.meta.quickActions,
-          value: ui.showQuickActions,
-          onChanged: (val) {
-            setState(() => ui.showQuickActions = val);
-            _saveAndNotify();
-          },
-        ),
-      ],
+    final order = ui.homeCardsOrder;
+    for (final id in SettingConfigItemUI.kDefaultHomeCardsOrder) {
+      if (!order.contains(id)) {
+        order.add(id);
+      }
+    }
+
+    return ReorderableListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      buildDefaultDragHandles: false,
+      itemCount: order.length,
+      proxyDecorator: (child, index, animation) {
+        return Material(
+          elevation: 6,
+          color: Colors.transparent,
+          shadowColor: Colors.black54,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        );
+      },
+      onReorderItem: (int oldIndex, int newIndex) {
+        HapticFeedback.selectionClick();
+        setState(() {
+          final item = order.removeAt(oldIndex);
+          order.insert(newIndex, item);
+        });
+        _saveAndNotify();
+      },
+      itemBuilder: (context, index) {
+        final id = order[index];
+        return _buildCardItem(
+          key: ValueKey(id),
+          id: id,
+          index: index,
+          context: context,
+          isDark: isDark,
+          theme: theme,
+          tcontext: tcontext,
+          ui: ui,
+        );
+      },
+    );
+  }
+
+  Widget _buildCardItem({
+    required Key key,
+    required String id,
+    required int index,
+    required BuildContext context,
+    required bool isDark,
+    required ThemeData theme,
+    required Translations tcontext,
+    required SettingConfigItemUI ui,
+  }) {
+    final IconData icon;
+    final Color iconColor;
+    final String title;
+    final bool value;
+    final ValueChanged<bool> onChanged;
+
+    switch (id) {
+      case 'traffic':
+        icon = Icons.ssid_chart_rounded;
+        iconColor = ThemeDefine.kColorAmber;
+        title = tcontext.meta.trafficStats;
+        value = ui.showTrafficChart;
+        onChanged = (val) {
+          setState(() => ui.showTrafficChart = val);
+          _saveAndNotify();
+        };
+        break;
+      case 'web_test':
+        icon = Icons.wifi_tethering_rounded;
+        iconColor = ThemeDefine.kColorBlue;
+        title = tcontext.meta.websiteTest;
+        value = ui.showWebsiteTest;
+        onChanged = (val) {
+          setState(() => ui.showWebsiteTest = val);
+          _saveAndNotify();
+        };
+        break;
+      case 'ip_info':
+        icon = Icons.public_rounded;
+        iconColor = const Color(0xFF06B6D4);
+        title = tcontext.meta.ipInfo;
+        value = ui.showIpInfo;
+        onChanged = (val) {
+          setState(() => ui.showIpInfo = val);
+          _saveAndNotify();
+        };
+        break;
+      case 'plan_usage':
+        icon = Icons.donut_large_rounded;
+        iconColor = ThemeDefine.kColorGreenBright;
+        title = tcontext.meta.planUsage;
+        value = ui.showSubscription;
+        onChanged = (val) {
+          setState(() => ui.showSubscription = val);
+          _saveAndNotify();
+        };
+        break;
+      case 'quick_tools':
+      default:
+        icon = Icons.grid_view_rounded;
+        iconColor = const Color(0xFF8B5CF6);
+        title = tcontext.meta.quickActions;
+        value = ui.showQuickActions;
+        onChanged = (val) {
+          setState(() => ui.showQuickActions = val);
+          _saveAndNotify();
+        };
+        break;
+    }
+
+    return _buildSwitchTile(
+      key: key,
+      index: index,
+      icon: icon,
+      iconColor: iconColor,
+      title: title,
+      value: value,
+      onChanged: onChanged,
     );
   }
 
@@ -324,7 +405,7 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
         borderRadius: BorderRadius.circular(8),
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5.5),
           decoration: BoxDecoration(
             color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(8),
@@ -358,6 +439,8 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
   }
 
   Widget _buildSwitchTile({
+    required Key key,
+    required int index,
     required IconData icon,
     required Color iconColor,
     required String title,
@@ -371,8 +454,9 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
     final bgColor = isDark ? ThemeDefine.kColorDarkInner : const Color(0xFFF8FAFC);
     final borderColor = theme.dividerColor.withValues(alpha: isDark ? 0.25 : 0.12);
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+    return Container(
+      key: key,
+      margin: const EdgeInsets.only(bottom: 6),
       child: Material(
         color: bgColor,
         shape: RoundedRectangleBorder(
@@ -380,50 +464,80 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
           side: BorderSide(color: borderColor, width: 0.8),
         ),
         clipBehavior: Clip.antiAlias,
-        child: ListTile(
-          dense: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-          leading: Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, size: 18, color: iconColor),
-          ),
-          title: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 13.5,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          subtitle: subtitle != null
-              ? Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: 10.5,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                  ),
-                )
-              : null,
-          trailing: Transform.scale(
-            scale: 0.82,
-            child: Switch.adaptive(
-              value: value,
-              activeTrackColor: ThemeDefine.kColorGreenBright,
-              activeThumbColor: Colors.white,
-              onChanged: (v) {
-                HapticFeedback.lightImpact();
-                onChanged(v);
-              },
-            ),
-          ),
+        child: InkWell(
           onTap: () {
             HapticFeedback.lightImpact();
             onChanged(!value);
           },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Row(
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: iconColor.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(icon, size: 18, color: iconColor),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          subtitle,
+                          style: TextStyle(
+                            fontSize: 10.5,
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                Transform.scale(
+                  scale: 0.82,
+                  child: Switch.adaptive(
+                    value: value,
+                    activeTrackColor: ThemeDefine.kColorGreenBright,
+                    activeThumbColor: Colors.white,
+                    onChanged: (v) {
+                      HapticFeedback.lightImpact();
+                      onChanged(v);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 6),
+                ReorderableDragStartListener(
+                  index: index,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.grab,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Icon(
+                        Icons.drag_indicator_rounded,
+                        size: 20,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.35),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -469,6 +583,8 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
       ui.collapseIpInfo = false;
       ui.collapseSubscription = false;
       ui.collapseQuickActions = false;
+      ui.maskIp = true;
+      ui.homeCardsOrder = List<String>.from(SettingConfigItemUI.kDefaultHomeCardsOrder);
     });
     _saveAndNotify();
   }

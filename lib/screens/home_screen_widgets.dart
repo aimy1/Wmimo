@@ -633,86 +633,104 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
             ),
           ),
         ),
-        if (settings.ui.showTrafficChart) ...[
-          const SizedBox(height: 8),
-          // 流量统计卡片
-          TrafficChartCard(
-            history: _trafficHistory,
-            isConnected: connected,
-            tickNotifier: _chartTick,
-            uploadSpeed: _uploadSpeedRaw,
-            downloadSpeed: _downloadSpeedRaw,
-            uploadTotal: _uploadTotalRaw,
-            downloadTotal: _downloadTotalRaw,
-          ),
-        ],
-        // 首页卡片动态排布 (支持卡片显隐与宽屏双栏并列)
+        // 首页卡片动态排布 (支持自定义拖拽排序、卡片显隐与宽屏双栏并列)
         LayoutBuilder(
           builder: (context, constraints) {
             final sideBySide = settings.ui.sideBySideLayout;
             final isWide = sideBySide && constraints.maxWidth >= 580;
+            final order = settings.ui.homeCardsOrder;
 
-            final List<Widget> activeCards = [];
-            if (settings.ui.showWebsiteTest) {
-              activeCards.add(WebsiteTestCard(
-                mixedPort: ClashSettingManager.getMixedPort(),
-              ));
-            }
-            if (settings.ui.showIpInfo) {
-              activeCards.add(IpInfoCard(
-                isConnected: _state == FlutterVpnServiceState.connected,
-                mixedPort: ClashSettingManager.getMixedPort(),
-              ));
-            }
-            if (settings.ui.showSubscription) {
-              activeCards.add(_buildSubscriptionOrProfileCard(
-                context: context,
-                profile: currentProfile,
-                expireInfo: tranfficExpire,
-              ));
-            }
-            if (settings.ui.showQuickActions) {
-              activeCards.add(_buildQuickActionCard(context, tcontext));
+            Widget? buildCard(String id) {
+              switch (id) {
+                case 'traffic':
+                  if (!settings.ui.showTrafficChart) return null;
+                  return TrafficChartCard(
+                    history: _trafficHistory,
+                    isConnected: connected,
+                    tickNotifier: _chartTick,
+                    uploadSpeed: _uploadSpeedRaw,
+                    downloadSpeed: _downloadSpeedRaw,
+                    uploadTotal: _uploadTotalRaw,
+                    downloadTotal: _downloadTotalRaw,
+                  );
+                case 'web_test':
+                  if (!settings.ui.showWebsiteTest) return null;
+                  return WebsiteTestCard(
+                    mixedPort: ClashSettingManager.getMixedPort(),
+                  );
+                case 'ip_info':
+                  if (!settings.ui.showIpInfo) return null;
+                  return IpInfoCard(
+                    isConnected: _state == FlutterVpnServiceState.connected,
+                    mixedPort: ClashSettingManager.getMixedPort(),
+                  );
+                case 'plan_usage':
+                  if (!settings.ui.showSubscription) return null;
+                  return _buildSubscriptionOrProfileCard(
+                    context: context,
+                    profile: currentProfile,
+                    expireInfo: tranfficExpire,
+                  );
+                case 'quick_tools':
+                  if (!settings.ui.showQuickActions) return null;
+                  return _buildQuickActionCard(context, tcontext);
+                default:
+                  return null;
+              }
             }
 
-            if (activeCards.isEmpty) {
+            final List<Widget> renderedRows = [];
+            List<Widget> pendingPair = [];
+
+            void flushPendingPair() {
+              if (pendingPair.isEmpty) return;
+              if (pendingPair.length == 1) {
+                renderedRows.add(pendingPair.first);
+              } else {
+                renderedRows.add(Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: pendingPair[0]),
+                    const SizedBox(width: 10),
+                    Expanded(child: pendingPair[1]),
+                  ],
+                ));
+              }
+              pendingPair = [];
+            }
+
+            for (final cardId in order) {
+              final cardWidget = buildCard(cardId);
+              if (cardWidget == null) continue;
+
+              if (cardId == 'traffic') {
+                if (isWide) flushPendingPair();
+                renderedRows.add(cardWidget);
+              } else {
+                if (isWide) {
+                  pendingPair.add(cardWidget);
+                  if (pendingPair.length == 2) {
+                    flushPendingPair();
+                  }
+                } else {
+                  renderedRows.add(cardWidget);
+                }
+              }
+            }
+            if (isWide) flushPendingPair();
+
+            if (renderedRows.isEmpty) {
               return const SizedBox.shrink();
             }
 
-            if (isWide) {
-              final List<Widget> rows = [];
-              for (int i = 0; i < activeCards.length; i += 2) {
-                if (i + 1 < activeCards.length) {
-                  rows.add(Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: activeCards[i]),
-                      const SizedBox(width: 10),
-                      Expanded(child: activeCards[i + 1]),
-                    ],
-                  ));
-                } else {
-                  rows.add(activeCards[i]);
-                }
-              }
-              return Column(
-                children: [
-                  for (final row in rows) ...[
-                    const SizedBox(height: 10),
-                    row,
-                  ],
+            return Column(
+              children: [
+                for (int i = 0; i < renderedRows.length; i++) ...[
+                  SizedBox(height: i == 0 ? 8 : 10),
+                  renderedRows[i],
                 ],
-              );
-            } else {
-              return Column(
-                children: [
-                  for (final card in activeCards) ...[
-                    const SizedBox(height: 10),
-                    card,
-                  ],
-                ],
-              );
-            }
+              ],
+            );
           },
         ),
       ],
