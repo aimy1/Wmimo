@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_install_referrer/flutter_install_referrer.dart';
 import 'package:wmimo/app/utils/log.dart';
+import 'package:wmimo/app/utils/platform_utils.dart';
 
 abstract final class InstallReferrerUtils {
   static InstallationAppReferrer? _referrer;
@@ -58,6 +59,10 @@ abstract final class InstallReferrerUtils {
       final channel = getBuildChannelName();
       if (channel.isNotEmpty) {
         return channel;
+      }
+
+      if (Platform.isLinux) {
+        return PlatformUtils.getLinuxPackageType(channelName: channel);
       }
 
       return Platform.operatingSystem;

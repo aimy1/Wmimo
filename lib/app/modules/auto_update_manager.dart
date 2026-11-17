@@ -72,26 +72,60 @@ class AutoUpdateCheckVersion {
   }
 
   String getExtension() {
-    String ext = "";
-    final channelName = InstallReferrerUtils.getBuildChannelName();
-    if (Platform.isAndroid) {
-      ext = ".apk";
-    } else if (Platform.isWindows) {
-      ext = ".exe";
-    } else if (Platform.isMacOS) {
-      ext = ".dmg";
-    } else if (Platform.isLinux) {
-      if (channelName.toLowerCase().contains("deb")) {
-        ext = ".deb";
-      } else if (channelName.toLowerCase().contains("rpm")) {
-        ext = ".rpm";
-      } else if (channelName.toLowerCase().contains("appimage")) {
-        ext = ".AppImage";
-      } else {
-        ext = ".deb";
+    if (url.isNotEmpty) {
+      final cleanUrl = url.split('?').first.toLowerCase();
+      if (cleanUrl.endsWith(".pkg.tar.zst")) {
+        return ".pkg.tar.zst";
+      }
+      if (cleanUrl.endsWith(".tar.gz")) {
+        return ".tar.gz";
+      }
+      if (cleanUrl.endsWith(".appimage")) {
+        return ".AppImage";
+      }
+      if (cleanUrl.endsWith(".deb")) {
+        return ".deb";
+      }
+      if (cleanUrl.endsWith(".rpm")) {
+        return ".rpm";
+      }
+      if (cleanUrl.endsWith(".apk")) {
+        return ".apk";
+      }
+      if (cleanUrl.endsWith(".dmg")) {
+        return ".dmg";
+      }
+      if (cleanUrl.endsWith(".exe")) {
+        return ".exe";
+      }
+      if (cleanUrl.endsWith(".zip")) {
+        return ".zip";
+      }
+      final ext = path.extension(cleanUrl);
+      if (ext.isNotEmpty) {
+        return ext;
       }
     }
-    return ext;
+    final channelName = InstallReferrerUtils.getBuildChannelName();
+    if (Platform.isAndroid) {
+      return ".apk";
+    } else if (Platform.isWindows) {
+      return ".exe";
+    } else if (Platform.isMacOS) {
+      return ".dmg";
+    } else if (Platform.isLinux) {
+      final linuxType =
+          PlatformUtils.getLinuxPackageType(channelName: channelName);
+      if (linuxType == "pacman") {
+        return ".pkg.tar.zst";
+      } else if (linuxType == "rpm") {
+        return ".rpm";
+      } else if (linuxType == "appimage") {
+        return ".AppImage";
+      }
+      return ".deb";
+    }
+    return "";
   }
 
   Future<String> getDownloadPath() async {
@@ -224,6 +258,23 @@ class AutoUpdateManager {
       if (content.isNotEmpty) {
         var config = jsonDecode(content);
         _versionCheck.fromJson(config);
+        if (Platform.isLinux && _versionCheck.url.isNotEmpty) {
+          final expectedType = PlatformUtils.getLinuxPackageType();
+          final urlLower = _versionCheck.url.toLowerCase();
+          final isMismatched = (expectedType == "pacman" &&
+                  !urlLower.contains(".pkg.tar.zst") &&
+                  !urlLower.contains(".pacman")) ||
+              (expectedType == "deb" && !urlLower.contains(".deb")) ||
+              (expectedType == "rpm" && !urlLower.contains(".rpm"));
+          if (isMismatched) {
+            String oldPath = await _versionCheck.getDownloadPath();
+            if (oldPath.isNotEmpty) {
+              await FileUtils.deletePath(oldPath);
+            }
+            _versionCheck.clear();
+            await save();
+          }
+        }
       }
     } catch (err, stacktrace) {}
   }
@@ -462,6 +513,7 @@ class AutoUpdateManager {
         _versionCheck.url = "";
         _versionCheck.sha256 = "";
 
+        AutoupdateItem? matchedItem;
         for (var item in items.data!) {
           if (item.platform != Platform.operatingSystem) {
             continue;
@@ -489,14 +541,31 @@ class AutoUpdateManager {
           }
 
           if (item.channels.contains("*") || item.channels.contains(channel)) {
-            if (VersionCompareUtils.compareVersion(version, item.version) < 0) {
-              _versionCheck.newVersion = true;
-              _versionCheck.version = item.version;
-              _versionCheck.url = item.url;
-              _versionCheck.sha256 = item.sha256;
-            }
-
+            matchedItem = item;
             break;
+          }
+        }
+
+        if (matchedItem == null && Platform.isLinux) {
+          for (var item in items.data!) {
+            if (item.platform != "linux" ||
+                !item.updateChannel.contains(autoUpdateChannel)) {
+              continue;
+            }
+            if (item.channels.contains("appimage")) {
+              matchedItem = item;
+              break;
+            }
+          }
+        }
+
+        if (matchedItem != null) {
+          if (VersionCompareUtils.compareVersion(version, matchedItem.version) <
+              0) {
+            _versionCheck.newVersion = true;
+            _versionCheck.version = matchedItem.version;
+            _versionCheck.url = matchedItem.url;
+            _versionCheck.sha256 = matchedItem.sha256;
           }
         }
 

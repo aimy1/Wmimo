@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:app_installer/app_installer.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/auto_update_manager.dart';
-import 'package:wmimo/app/utils/install_referrer_utils.dart';
+import 'package:wmimo/app/utils/file_utils.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
@@ -254,11 +254,34 @@ class _VersionUpdateScreenState
           return;
         }
 
-        final channelName = InstallReferrerUtils.getBuildChannelName();
-        if (channelName.toLowerCase().contains("appimage")) {
+        final lowerInstaller = installer.toLowerCase();
+        if (lowerInstaller.endsWith(".appimage")) {
           await Process.run("chmod", ["+x", installer]);
           await Process.start(installer, [], mode: ProcessStartMode.detached);
           await ServicesBinding.instance.exitApplication(AppExitType.required);
+          return;
+        }
+
+        final isPacman = lowerInstaller.endsWith(".pkg.tar.zst") ||
+            lowerInstaller.endsWith(".pacman");
+        final isRpm = lowerInstaller.endsWith(".rpm");
+        final isDeb = lowerInstaller.endsWith(".deb");
+
+        if (isDeb && !File('/usr/bin/dpkg').existsSync()) {
+          await FileUtils.deletePath(installer);
+          AutoUpdateManager.getVersionCheck().clear();
+          await AutoUpdateManager.save();
+          if (mounted) {
+            DialogUtils.showAlertDialog(
+              context,
+              "当前系统未检测到 dpkg，无法安装 .deb 软件包。\n已清除不兼容的缓存文件，请重新检查更新以获取适用于当前系统的软件包（如 pacman / AppImage）。",
+              showCopy: true,
+              showFAQ: true,
+              withVersion: true,
+            );
+          }
+          _installing = false;
+          setState(() {});
           return;
         }
 
@@ -270,12 +293,20 @@ class _VersionUpdateScreenState
         }
         final shell = Platform.environment['SHELL'] ?? 'bash';
         final arguments = ["-c"];
-        if (channelName.toLowerCase().contains("deb")) {
+        if (isPacman) {
+          arguments.add('echo "$password" | sudo -S pacman -U --noconfirm "$installer"');
+        } else if (isRpm) {
+          arguments.add('echo "$password" | sudo -S rpm -Uvh --replacepkgs "$installer"');
+        } else if (isDeb) {
           arguments.add('echo "$password" | sudo -S dpkg -i "$installer"');
-        } else if (channelName.toLowerCase().contains("rpm")) {
-          arguments.add('echo "$password" | sudo -S rpm -i "$installer"');
         } else {
-          arguments.add('echo "$password" | sudo -S dpkg -i "$installer"');
+          if (File('/usr/bin/pacman').existsSync()) {
+            arguments.add('echo "$password" | sudo -S pacman -U --noconfirm "$installer"');
+          } else if (File('/usr/bin/rpm').existsSync()) {
+            arguments.add('echo "$password" | sudo -S rpm -Uvh --replacepkgs "$installer"');
+          } else {
+            arguments.add('echo "$password" | sudo -S dpkg -i "$installer"');
+          }
         }
         final result = await Process.run(shell, arguments);
         if (result.exitCode != 0) {

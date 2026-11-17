@@ -95,8 +95,23 @@ void main() {
       } else if (Platform.isMacOS) {
         expect(ext, '.dmg');
       } else if (Platform.isLinux) {
-        expect(['.deb', '.rpm', '.AppImage'], contains(ext));
+        expect(['.pkg.tar.zst', '.deb', '.rpm', '.AppImage'], contains(ext));
       }
+    });
+
+    test('Parses extension from url correctly', () {
+      final config = AutoUpdateCheckVersion();
+      config.url = 'https://github.com/aimy1/Wmimo/releases/download/v1.3.7.1523/Wmimo-Linux-x64-v1.3.7.1523.pkg.tar.zst';
+      expect(config.getExtension(), '.pkg.tar.zst');
+
+      config.url = 'https://github.com/aimy1/Wmimo/releases/download/v1.3.7.1523/Wmimo-Linux-x64-v1.3.7.1523.deb';
+      expect(config.getExtension(), '.deb');
+
+      config.url = 'https://github.com/aimy1/Wmimo/releases/download/v1.3.7.1523/Wmimo-Linux-x64-v1.3.7.1523.rpm';
+      expect(config.getExtension(), '.rpm');
+
+      config.url = 'https://github.com/aimy1/Wmimo/releases/download/v1.3.7.1523/Wmimo-Linux-x64-v1.3.7.1523.AppImage';
+      expect(config.getExtension(), '.AppImage');
     });
   });
 

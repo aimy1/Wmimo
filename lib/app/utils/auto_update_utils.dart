@@ -216,20 +216,25 @@ abstract final class AutoupdateUtils {
             }
             item.channels = ["*"];
             list.add(item);
+          } else if ((name.endsWith(".pkg.tar.zst") || name.endsWith(".pacman")) && name.contains("linux")) {
+            item.platform = "linux";
+            item.abis = _resolveArchAbis(name);
+            item.channels = ["pacman", "arch"];
+            list.add(item);
           } else if (name.endsWith(".deb") && name.contains("linux")) {
             item.platform = "linux";
             item.abis = _resolveArchAbis(name);
-            item.channels = ["deb", "*"];
+            item.channels = ["deb"];
             list.add(item);
           } else if (name.endsWith(".rpm") && name.contains("linux")) {
             item.platform = "linux";
             item.abis = _resolveArchAbis(name);
-            item.channels = ["rpm", "*"];
+            item.channels = ["rpm"];
             list.add(item);
           } else if (name.endsWith(".appimage") && name.contains("linux")) {
             item.platform = "linux";
             item.abis = _resolveArchAbis(name);
-            item.channels = ["appimage", "*"];
+            item.channels = ["appimage"];
             list.add(item);
           }
         }
@@ -296,42 +301,56 @@ abstract final class AutoupdateUtils {
         ..platform = "linux"
         ..version = version
         ..abis = ["x86_64", "x64", "*"]
-        ..channels = ["deb", "*"]
+        ..channels = ["pacman", "arch"]
+        ..updateChannel = ["stable", "beta"]
+        ..url = "$baseUrl/Wmimo-Linux-x64-$cleanTag.pkg.tar.zst",
+      AutoupdateItem()
+        ..platform = "linux"
+        ..version = version
+        ..abis = ["arm64", "aarch64"]
+        ..channels = ["pacman", "arch"]
+        ..updateChannel = ["stable", "beta"]
+        ..url = "$baseUrl/Wmimo-Linux-arm64-$cleanTag.pkg.tar.zst",
+      AutoupdateItem()
+        ..platform = "linux"
+        ..version = version
+        ..abis = ["x86_64", "x64", "*"]
+        ..channels = ["deb"]
         ..updateChannel = ["stable", "beta"]
         ..url = "$baseUrl/Wmimo-Linux-x64-$cleanTag.deb",
       AutoupdateItem()
         ..platform = "linux"
         ..version = version
         ..abis = ["arm64", "aarch64"]
-        ..channels = ["deb", "*"]
+        ..channels = ["deb"]
         ..updateChannel = ["stable", "beta"]
         ..url = "$baseUrl/Wmimo-Linux-arm64-$cleanTag.deb",
       AutoupdateItem()
         ..platform = "linux"
         ..version = version
         ..abis = ["x86_64", "x64", "*"]
-        ..channels = ["rpm", "*"]
+        ..channels = ["rpm"]
         ..updateChannel = ["stable", "beta"]
         ..url = "$baseUrl/Wmimo-Linux-x64-$cleanTag.rpm",
       AutoupdateItem()
         ..platform = "linux"
         ..version = version
         ..abis = ["arm64", "aarch64"]
-        ..channels = ["rpm", "*"]
+        ..channels = ["rpm"]
         ..updateChannel = ["stable", "beta"]
         ..url = "$baseUrl/Wmimo-Linux-arm64-$cleanTag.rpm",
       AutoupdateItem()
         ..platform = "linux"
         ..version = version
         ..abis = ["x86_64", "x64", "*"]
-        ..channels = ["appimage", "*"]
+        ..channels = ["appimage"]
         ..updateChannel = ["stable", "beta"]
         ..url = "$baseUrl/Wmimo-Linux-x64-$cleanTag.AppImage",
       AutoupdateItem()
         ..platform = "linux"
         ..version = version
         ..abis = ["arm64", "aarch64"]
-        ..channels = ["appimage", "*"]
+        ..channels = ["appimage"]
         ..updateChannel = ["stable", "beta"]
         ..url = "$baseUrl/Wmimo-Linux-arm64-$cleanTag.AppImage",
       AutoupdateItem()
