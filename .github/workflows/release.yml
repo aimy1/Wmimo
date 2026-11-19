@@ -401,6 +401,40 @@ jobs:
             keytool -genkeypair -v -keystore android/app/wmimo.release.keystore -alias wmimo -keyalg RSA -keysize 2048 -validity 18250 -storepass wmimo -keypass wmimo -dname "CN=Wmimo, OU=Wmimo, O=Wmimo, L=Unknown, ST=Unknown, C=US"
           fi
 
+      - name: Configure Gradle Plugin Repositories
+        run: |
+          mkdir -p ~/.gradle/init.d
+          cat << 'EOF' > ~/.gradle/init.d/repositories.init.gradle
+          beforeSettings { settings ->
+              settings.pluginManagement {
+                  repositories {
+                      google()
+                      mavenCentral()
+                      gradlePluginPortal()
+                  }
+              }
+          }
+          EOF
+          FLUTTER_SDK_DIR=$(dirname $(dirname $(which flutter)))
+          if [ -d "$FLUTTER_SDK_DIR/packages/flutter_tools/gradle" ]; then
+            cat << 'EOF' > "$FLUTTER_SDK_DIR/packages/flutter_tools/gradle/settings.gradle.kts"
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          EOF
+          fi
+
       - name: Build Android APK
         run: |
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
