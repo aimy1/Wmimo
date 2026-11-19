@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:android_package_manager/android_package_manager.dart';
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
@@ -468,11 +467,7 @@ class _PerAppAndroidScreenState
                           try {
                             const platform = MethodChannel('com.wmimo.app/native_helper');
                             await platform.invokeMethod('openAppSettings');
-                          } catch (_) {
-                            AppSettings.openAppSettings(
-                              type: AppSettingsType.settings,
-                            );
-                          }
+                          } catch (_) {}
                         },
                         () {
                           _needPermission = false;
@@ -1235,11 +1230,7 @@ class _PerAppAndroidScreenState
                   try {
                     const platform = MethodChannel('com.wmimo.app/native_helper');
                     await platform.invokeMethod('openAppSettings');
-                  } catch (_) {
-                    AppSettings.openAppSettings(
-                      type: AppSettingsType.settings,
-                    );
-                  }
+                  } catch (_) {}
                 },
               ),
             ),
