@@ -203,6 +203,8 @@ jobs:
 
       - name: Build Linux Desktop Application
         run: |
+          export CFLAGS="${CFLAGS:-} -Wno-error -Wno-deprecated-declarations"
+          export CXXFLAGS="${CXXFLAGS:-} -Wno-error -Wno-deprecated-declarations"
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
           [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1"
@@ -305,6 +307,8 @@ jobs:
 
       - name: Build Linux ARM64 Desktop Application
         run: |
+          export CFLAGS="${CFLAGS:-} -Wno-error -Wno-deprecated-declarations"
+          export CXXFLAGS="${CXXFLAGS:-} -Wno-error -Wno-deprecated-declarations"
           PUBSPEC_VER=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' \r\n')
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' \r\n')
           [ -z "$PUBSPEC_BUILD" ] && PUBSPEC_BUILD="1"

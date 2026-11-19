@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack
+// ignore_for_file: unused_catch_stack
 
 import 'dart:io';
 
@@ -66,6 +66,11 @@ class BackupAndSyncUtils {
 
     final expectedFileNames = getFileNamesFromList(getZipFileNameList());
     final actualFileNames = result.data!;
+    for (final name in actualFileNames) {
+      if (name.contains("..") || name.startsWith("/") || name.startsWith("\\")) {
+        return ReturnResultError('Insecure file path detected in backup: $name');
+      }
+    }
     final intersection = expectedFileNames.toSet().intersection(
       actualFileNames.toSet(),
     );

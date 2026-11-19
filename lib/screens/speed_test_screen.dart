@@ -365,7 +365,6 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
 
   HttpClient _createHttpClient() {
     final client = HttpClient();
-    client.badCertificateCallback = (cert, host, port) => true;
     client.connectionTimeout = const Duration(seconds: 8);
     client.maxConnectionsPerHost = 20;
     if (_useProxy) {

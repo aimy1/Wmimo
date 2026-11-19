@@ -24,33 +24,42 @@ class SchemeHandler {
     }
     if (uri.isScheme(SystemSchemeUtils.getWmimoScheme()) ||
         uri.isScheme(SystemSchemeUtils.getClashScheme())) {
+      if (PlatformUtils.isPC()) {
+        await windowManager.show();
+      }
       if (uri.host == AppSchemeActions.installConfigAction()) {
         return await _installConfig(context, uri);
       } else if (uri.host == AppSchemeActions.connectAction()) {
+        if (!context.mounted) return null;
+        bool? ok = await DialogUtils.showConfirmDialog(
+          context,
+          "外部请求连接代理，是否允许？",
+        );
+        if (ok != true) return null;
         if (VpnActionHandler.vpnConnect != null) {
-          bool background = false;
-          try {
-            background = uri.queryParameters["background"] == "true";
-          } catch (err) {}
-          VpnActionHandler.vpnConnect!.call("scheme", background);
+          VpnActionHandler.vpnConnect!.call("scheme", false);
         }
         return null;
       } else if (uri.host == AppSchemeActions.disconnectAction()) {
+        if (!context.mounted) return null;
+        bool? ok = await DialogUtils.showConfirmDialog(
+          context,
+          "外部请求断开代理，是否允许？",
+        );
+        if (ok != true) return null;
         if (VpnActionHandler.vpnDisconnect != null) {
-          bool background = false;
-          try {
-            background = uri.queryParameters["background"] == "true";
-          } catch (err) {}
-          VpnActionHandler.vpnDisconnect!.call("scheme", background);
+          VpnActionHandler.vpnDisconnect!.call("scheme", false);
         }
         return null;
       } else if (uri.host == AppSchemeActions.reconnectAction()) {
+        if (!context.mounted) return null;
+        bool? ok = await DialogUtils.showConfirmDialog(
+          context,
+          "外部请求重新连接代理，是否允许？",
+        );
+        if (ok != true) return null;
         if (VpnActionHandler.vpnReconnect != null) {
-          bool background = false;
-          try {
-            background = uri.queryParameters["background"] == "true";
-          } catch (err) {}
-          VpnActionHandler.vpnReconnect!.call("scheme", background);
+          VpnActionHandler.vpnReconnect!.call("scheme", false);
         }
         return null;
       }

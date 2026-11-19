@@ -13,6 +13,10 @@ set(APPLICATION_ID "com.wmimo.app")
 # versions of CMake.
 cmake_policy(SET CMP0063 NEW)
 
+# Disable treating warnings as errors across all targets (including third-party plugins)
+# to ensure compatibility with newer Clang/GCC compilers on Ubuntu 24.04.
+add_compile_options(-Wno-error -Wno-deprecated-declarations)
+
 # Load bundled libraries from the lib/ directory relative to the binary.
 set(CMAKE_INSTALL_RPATH "$ORIGIN/lib")
 
@@ -41,7 +45,7 @@ endif()
 # of modifying this function.
 function(APPLY_STANDARD_SETTINGS TARGET)
   target_compile_features(${TARGET} PUBLIC cxx_std_14)
-  target_compile_options(${TARGET} PRIVATE -Wall -Werror)
+  target_compile_options(${TARGET} PRIVATE -Wall -Wno-error -Wno-deprecated-declarations -Wno-sometimes-uninitialized)
   target_compile_options(${TARGET} PRIVATE "$<$<NOT:$<CONFIG:Debug>>:-O3>")
   target_compile_definitions(${TARGET} PRIVATE "$<$<NOT:$<CONFIG:Debug>>:NDEBUG>")
 endfunction()

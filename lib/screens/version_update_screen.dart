@@ -285,31 +285,49 @@ class _VersionUpdateScreenState
           return;
         }
 
-        String? password = await DialogUtils.showPasswordInputDialog(context);
-        if (password == null || password.isEmpty) {
-          _installing = false;
-          setState(() {});
-          return;
-        }
-        final shell = Platform.environment['SHELL'] ?? 'bash';
-        final arguments = ["-c"];
+        List<String> installCmd;
         if (isPacman) {
-          arguments.add('echo "$password" | sudo -S pacman -U --noconfirm "$installer"');
+          installCmd = ["pacman", "-U", "--noconfirm", installer];
         } else if (isRpm) {
-          arguments.add('echo "$password" | sudo -S rpm -Uvh --replacepkgs "$installer"');
+          installCmd = ["rpm", "-Uvh", "--replacepkgs", installer];
         } else if (isDeb) {
-          arguments.add('echo "$password" | sudo -S dpkg -i "$installer"');
+          installCmd = ["dpkg", "-i", installer];
         } else {
           if (File('/usr/bin/pacman').existsSync()) {
-            arguments.add('echo "$password" | sudo -S pacman -U --noconfirm "$installer"');
+            installCmd = ["pacman", "-U", "--noconfirm", installer];
           } else if (File('/usr/bin/rpm').existsSync()) {
-            arguments.add('echo "$password" | sudo -S rpm -Uvh --replacepkgs "$installer"');
+            installCmd = ["rpm", "-Uvh", "--replacepkgs", installer];
           } else {
-            arguments.add('echo "$password" | sudo -S dpkg -i "$installer"');
+            installCmd = ["dpkg", "-i", installer];
           }
         }
-        final result = await Process.run(shell, arguments);
-        if (result.exitCode != 0) {
+
+        int exitCode = -1;
+        bool hasPkexec = File('/usr/bin/pkexec').existsSync();
+        if (hasPkexec) {
+          try {
+            final pkexecRes = await Process.run("pkexec", installCmd);
+            exitCode = pkexecRes.exitCode;
+          } catch (_) {
+            hasPkexec = false;
+          }
+        }
+
+        if (!hasPkexec) {
+          String? password = await DialogUtils.showPasswordInputDialog(context);
+          if (password == null || password.isEmpty) {
+            _installing = false;
+            setState(() {});
+            return;
+          }
+          final process = await Process.start("sudo", ["-S", ...installCmd]);
+          process.stdin.writeln(password);
+          await process.stdin.flush();
+          await process.stdin.close();
+          exitCode = await process.exitCode;
+        }
+
+        if (exitCode != 0) {
           if (!mounted) {
             _installing = false;
             setState(() {});
@@ -320,7 +338,7 @@ class _VersionUpdateScreenState
             context,
             tcontext.meta.installFailedWithCode(
               installer: installer,
-              code: result.exitCode.toString(),
+              code: exitCode.toString(),
             ),
             showCopy: true,
             showFAQ: true,

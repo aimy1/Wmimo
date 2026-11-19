@@ -28,6 +28,8 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.OBSERVE_GRANT_REVOKE_PERMISSIONS" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <permission android:name="com.wmimo.app.permission.AUTOMATION" android:protectionLevel="normal" />
+    <uses-permission android:name="com.wmimo.app.permission.AUTOMATION" />
     <!--TV-->
     <uses-feature android:name="android.software.leanback" android:required="false"/>
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
@@ -137,7 +139,8 @@
         </service>
         <receiver
             android:name=".AutomationCommandReceiver"
-            android:exported="true">
+            android:exported="true"
+            android:permission="com.wmimo.app.permission.AUTOMATION">
             <intent-filter>
                 <action android:name="com.wmimo.app.action.CONNECT" />
                 <action android:name="com.wmimo.app.action.DISCONNECT" />

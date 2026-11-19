@@ -1,4 +1,4 @@
-﻿// ignore_for_file: unused_catch_stack
+// ignore_for_file: unused_catch_stack
 
 import 'dart:io' as io;
 import 'dart:typed_data';
@@ -92,6 +92,7 @@ class ZipUtils {
     Set<String> whiteList = const {},
   }) async {
     try {
+      final canonicalDir = path.canonicalize(dir);
       final bytes = await io.File(zipPath).readAsBytes();
       final archive = ZipDecoder().decodeBytes(bytes);
       for (final file in archive) {
@@ -100,12 +101,19 @@ class ZipUtils {
             continue;
           }
         }
-        final filePath = "$dir/${file.name}";
+        final destinationPath = path.canonicalize(path.join(canonicalDir, file.name));
+        if (!destinationPath.startsWith(canonicalDir + path.separator) && destinationPath != canonicalDir) {
+          return ReturnResultError('Insecure zip entry detected: ${file.name}');
+        }
         if (file.isFile) {
           final data = file.content as List<int>;
-          await io.File(filePath).writeAsBytes(data, flush: true);
+          final parentDir = io.File(destinationPath).parent;
+          if (!await parentDir.exists()) {
+            await parentDir.create(recursive: true);
+          }
+          await io.File(destinationPath).writeAsBytes(data, flush: true);
         } else {
-          await io.Directory(filePath).create(recursive: true);
+          await io.Directory(destinationPath).create(recursive: true);
         }
       }
     } catch (err, stacktrace) {

@@ -360,7 +360,7 @@ class AutoUpdateManager {
         }
       }
       Uri? uri = Uri.tryParse(_versionCheck.url);
-      if (uri == null) {
+      if (uri == null || (!uri.isScheme("https") && !uri.isScheme("file"))) {
         return false;
       }
       _downloading = true;
@@ -392,12 +392,10 @@ class AutoUpdateManager {
       }
       if (_versionCheck.sha256.isNotEmpty) {
         final hash = await CryptoUtils.getFileSha256(downloadPath);
-        if (hash != null) {
-          if (_versionCheck.sha256 != hash) {
-            await FileUtils.deletePath(downloadPath);
-            _downloading = false;
-            return false;
-          }
+        if (hash == null || _versionCheck.sha256.trim().toLowerCase() != hash.trim().toLowerCase()) {
+          await FileUtils.deletePath(downloadPath);
+          _downloading = false;
+          return false;
         }
       }
       await _sanitizeMacOSInstaller(downloadPath);
