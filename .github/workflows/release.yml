@@ -515,6 +515,9 @@ jobs:
           flutter-version: '3.47.9'
           cache: true
 
+      - name: Disable Swift Package Manager
+        run: flutter config --no-enable-swift-package-manager
+
       - name: Install Dependencies
         run: flutter pub get
 
@@ -600,6 +603,9 @@ jobs:
           channel: 'stable'
           flutter-version: '3.47.9'
           cache: true
+
+      - name: Disable Swift Package Manager
+        run: flutter config --no-enable-swift-package-manager
 
       - name: Install Dependencies
         run: flutter pub get
