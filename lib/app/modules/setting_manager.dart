@@ -28,7 +28,7 @@ const List<String> ProxyBypassDoaminsDefault = [
 
 class SettingConfigItemUI {
   String theme = ThemeDefine.kThemeLight;
-  bool autoOrientation = maybeTv();
+  bool autoOrientation = true;
   bool disableFontScaler = false;
   bool hideAfterLaunch = false;
   bool tvMode = maybeTv();
@@ -85,7 +85,7 @@ class SettingConfigItemUI {
       return;
     }
     theme = (map["theme"] as String?)?.trim().toLowerCase() ?? "";
-    autoOrientation = map["auto_orientation"] ?? maybeTv();
+    autoOrientation = map["auto_orientation"] ?? true;
     disableFontScaler = map["disable_font_scaler"] ?? false;
     hideAfterLaunch = map["hide_after_launch"] ?? false;
     perAppHideSystemApp = map["perapp_hide_system_app"] ?? true;

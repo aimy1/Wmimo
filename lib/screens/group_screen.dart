@@ -26,6 +26,7 @@ class GroupScreen extends LasyRenderingStatefulWidget {
   final Future<bool> Function(BuildContext context)? onDone;
   final String? tipsIfNoOnDone;
   final IconData? onDoneIcon;
+  final String? onDoneTooltip;
   final Future<void> Function(BuildContext context)? onFirstLayout;
   const GroupScreen({
     super.key,
@@ -35,6 +36,7 @@ class GroupScreen extends LasyRenderingStatefulWidget {
     this.onDone,
     this.tipsIfNoOnDone,
     this.onDoneIcon,
+    this.onDoneTooltip,
     this.onFirstLayout,
   });
 
@@ -67,6 +69,7 @@ class GroupScreenState extends LasyRenderingState<GroupScreen>
     if (widget.onDone != null) {
       actions.add(
         IconButton(
+          tooltip: widget.onDoneTooltip,
           icon: Icon(
             widget.onDoneIcon ?? Icons.done_outlined,
             color: Theme.of(context).colorScheme.primary,

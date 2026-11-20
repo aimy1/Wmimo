@@ -8,9 +8,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/utils/local_storage.dart';
+import 'package:wmimo/app/utils/network_diagnostics.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -263,6 +265,23 @@ class SpeedTestScreen extends LasyRenderingStatefulWidget {
     return const RouteSettings(name: 'SpeedTestScreen');
   }
 
+  /// Computes steady mean latency & successive jitter from HTTP RTT samples,
+  /// discarding the first cold handshake sample when multiple samples exist.
+  static ({double avg, double jitter}) computePingAndJitter(
+    List<double> rawSamples,
+  ) {
+    if (rawSamples.isEmpty) return (avg: 0.0, jitter: 0.0);
+    final valid =
+        rawSamples.length > 1 ? rawSamples.sublist(1) : rawSamples;
+    final avg = valid.reduce((a, b) => a + b) / valid.length;
+    double jitterSum = 0.0;
+    for (int i = 1; i < valid.length; i++) {
+      jitterSum += (valid[i] - valid[i - 1]).abs();
+    }
+    final jitter = valid.length > 1 ? jitterSum / (valid.length - 1) : 0.0;
+    return (avg: avg, jitter: jitter);
+  }
+
   const SpeedTestScreen({super.key});
 
   @override
@@ -275,6 +294,8 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
   bool _useProxy = true;
   SpeedTestServer _currentServer = SpeedTestServer.presets.first;
   bool _isDetectingServer = false;
+  String? _resolvedProxyNode;
+  String? _errorMessage;
 
   // Realtime target bandwidth & stats
   double _targetSpeedMbps = 0.0;
@@ -283,14 +304,22 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
   double _jitterMs = 0.0;
   double _downloadFinalMbps = 0.0;
   double _uploadFinalMbps = 0.0;
+  double _peakDownloadMbps = 0.0;
+  double _peakUploadMbps = 0.0;
+
+  // Waveform samples & cached server latencies
+  final List<double> _downloadSamples = [];
+  final List<double> _uploadSamples = [];
+  final Map<String, int?> _serverLatencies = {};
 
   // History records
   final List<SpeedTestRecord> _history = [];
 
-  // Ookla-style Spring Needle Physics
-  late Ticker _ticker;
+  // On-demand spring needle ticker + localized dial notifier (zero idle rebuilds)
+  late final Ticker _ticker;
+  final ValueNotifier<int> _dialTick = ValueNotifier<int>(0);
   Duration? _lastElapsed;
-  double _needleProgress = 0.0; // 0.0 -> 1.0 (Angle fraction)
+  double _needleProgress = 0.0;
   double _targetNeedleProgress = 0.0;
   double _needleVelocity = 0.0;
 
@@ -302,9 +331,15 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
   void initState() {
     super.initState();
     _loadHistory();
-    // 60/120 FPS Physics Ticker for authentic spring needle movement
+    _refreshActiveProxyNode();
     _ticker = createTicker(_onPhysicsTick);
-    _ticker.start();
+  }
+
+  void _ensureTickerRunning() {
+    if (!_ticker.isActive && mounted) {
+      _lastElapsed = null;
+      _ticker.start();
+    }
   }
 
   void _onPhysicsTick(Duration elapsed) {
@@ -318,7 +353,6 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
 
     if (dt <= 0 || dt > 0.1) return;
 
-    // Second-order spring dynamics (Speedtest signature feel)
     const double stiffness = 160.0;
     const double damping = 20.0;
 
@@ -337,16 +371,25 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
       _needleVelocity = 0.0;
     }
 
-    // Number counter smooth follow
     final speedDiff = _targetSpeedMbps - _displaySpeedMbps;
-    if (speedDiff.abs() > 0.01) {
+    if (speedDiff.abs() > 0.05) {
       _displaySpeedMbps += speedDiff * (speedDiff > 0 ? 0.18 : 0.12);
     } else {
       _displaySpeedMbps = _targetSpeedMbps;
     }
 
-    if (mounted) {
-      setState(() {});
+    _dialTick.value++;
+
+    final settled = (_targetNeedleProgress - _needleProgress).abs() < 0.0005 &&
+        _needleVelocity.abs() < 0.0005 &&
+        (_targetSpeedMbps - _displaySpeedMbps).abs() <= 0.05;
+    if (settled) {
+      _needleProgress = _targetNeedleProgress.clamp(0.0, 1.05);
+      _needleVelocity = 0.0;
+      _displaySpeedMbps = _targetSpeedMbps;
+      _ticker.stop();
+      _lastElapsed = null;
+      _dialTick.value++;
     }
   }
 
@@ -355,12 +398,28 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     _aborted = true;
     _sampleTimer?.cancel();
     _ticker.dispose();
+    _dialTick.dispose();
     super.dispose();
   }
 
-  void _setTargetSpeed(double speedMbps) {
+  void _setTargetSpeed(double speedMbps, {double? needleOverride}) {
     _targetSpeedMbps = speedMbps;
-    _targetNeedleProgress = _speedToProgress(speedMbps);
+    _targetNeedleProgress = needleOverride ?? _speedToProgress(speedMbps);
+    _ensureTickerRunning();
+  }
+
+  Future<void> _refreshActiveProxyNode() async {
+    try {
+      final started = await VPNService.getStarted();
+      if (!started) {
+        if (mounted) setState(() => _resolvedProxyNode = null);
+        return;
+      }
+      final node = await NetworkDiagnostics.resolveActiveProxyNode();
+      if (mounted && node.isNotEmpty) {
+        setState(() => _resolvedProxyNode = node);
+      }
+    } catch (_) {}
   }
 
   HttpClient _createHttpClient() {
@@ -407,7 +466,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     } catch (_) {}
   }
 
-  Future<void> _detectBestServer() async {
+  Future<void> _detectBestServer({bool selectBest = true}) async {
     if (_phase == SpeedTestPhase.ping ||
         _phase == SpeedTestPhase.download ||
         _phase == SpeedTestPhase.upload ||
@@ -423,22 +482,32 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     double bestPing = double.infinity;
 
     try {
-      for (var server in SpeedTestServer.presets) {
-        if (!mounted) break;
-        final pingUrl = server.pingUrls.first;
-        final sw = Stopwatch()..start();
-        try {
-          final req = await client.getUrl(Uri.parse(pingUrl)).timeout(const Duration(seconds: 2));
-          final res = await req.close().timeout(const Duration(seconds: 2));
-          await res.drain<void>();
-          sw.stop();
-          final ms = sw.elapsedMicroseconds / 1000.0;
-          if (ms > 0 && ms < bestPing) {
-            bestPing = ms;
-            bestServer = server;
+      await Future.wait(
+        SpeedTestServer.presets.map((server) async {
+          final pingUrl = server.pingUrls.first;
+          final sw = Stopwatch()..start();
+          try {
+            final req = await client
+                .getUrl(Uri.parse(pingUrl))
+                .timeout(const Duration(seconds: 3));
+            final res = await req.close().timeout(const Duration(seconds: 3));
+            await res.drain<void>();
+            sw.stop();
+            final ms = sw.elapsedMilliseconds;
+            if (res.statusCode < 500 && ms > 0) {
+              _serverLatencies[server.id] = ms;
+              if (ms < bestPing) {
+                bestPing = ms.toDouble();
+                bestServer = server;
+              }
+            } else {
+              _serverLatencies[server.id] = null;
+            }
+          } catch (_) {
+            _serverLatencies[server.id] = null;
           }
-        } catch (_) {}
-      }
+        }),
+      );
     } finally {
       client.close(force: true);
     }
@@ -446,18 +515,18 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     if (mounted) {
       setState(() {
         _isDetectingServer = false;
-        if (bestServer != null) {
-          _currentServer = bestServer;
+        if (selectBest && bestServer != null) {
+          _currentServer = bestServer!;
         }
       });
-      if (bestServer != null) {
+      if (selectBest && bestServer != null) {
         final tcontext = Translations.of(context);
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
               tcontext.meta.autoSelectedBest(
-                server: bestServer.name,
+                server: bestServer!.name,
                 ping: bestPing.toStringAsFixed(0),
               ),
             ),
@@ -540,30 +609,69 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
       return;
     }
 
+    // Pre-flight check: verify VPN core + mixed port before running proxy test
+    if (_useProxy) {
+      final started = await VPNService.getStarted();
+      final mixedPort = ClashSettingManager.getMixedPort();
+      if (!mounted) return;
+      if (!started || mixedPort <= 0) {
+        final tcontext = Translations.of(context);
+        setState(() {
+          _errorMessage = tcontext.SpeedTestScreen.proxyNotRunningTip;
+        });
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(tcontext.SpeedTestScreen.proxyNotRunningTip),
+            behavior: SnackBarBehavior.floating,
+            action: SnackBarAction(
+              label: tcontext.SpeedTestScreen.switchToDirect,
+              onPressed: () {
+                if (!mounted) return;
+                setState(() {
+                  _useProxy = false;
+                  _errorMessage = null;
+                });
+                _startTest();
+              },
+            ),
+          ),
+        );
+        return;
+      }
+      await _refreshActiveProxyNode();
+      if (!mounted) return;
+    }
+
     _aborted = false;
     _setTargetSpeed(0.0);
     setState(() {
       _phase = SpeedTestPhase.ping;
+      _errorMessage = null;
       _displaySpeedMbps = 0.0;
       _pingMs = 0.0;
       _jitterMs = 0.0;
       _downloadFinalMbps = 0.0;
       _uploadFinalMbps = 0.0;
+      _peakDownloadMbps = 0.0;
+      _peakUploadMbps = 0.0;
+      _downloadSamples.clear();
+      _uploadSamples.clear();
     });
 
     try {
-      // 1. Ping & Jitter Phase (Gentle calibration sweep)
+      // 1. Ping & Jitter Phase
       await _runPingTest();
       if (_aborted || !mounted) return;
 
-      // 2. High-Capacity Download Phase
+      // 2. Multi-stream Download Phase
       setState(() {
         _phase = SpeedTestPhase.download;
       });
       await _runDownloadTest();
       if (_aborted || !mounted) return;
 
-      // 3. High-Capacity Upload Phase
+      // 3. Multi-stream Upload Phase
       setState(() {
         _phase = SpeedTestPhase.upload;
         _setTargetSpeed(0.0);
@@ -571,13 +679,23 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
       await _runUploadTest();
       if (_aborted || !mounted) return;
 
+      final noData =
+          _pingMs <= 0 && _downloadFinalMbps <= 0 && _uploadFinalMbps <= 0;
+      if (noData) {
+        _setTargetSpeed(0.0);
+        setState(() {
+          _phase = SpeedTestPhase.stopped;
+          _errorMessage = Translations.of(context).SpeedTestScreen.testFailedNoData;
+        });
+        return;
+      }
+
       // 4. Completed
       _setTargetSpeed(0.0);
       setState(() {
         _phase = SpeedTestPhase.completed;
       });
 
-      // Add to history
       final nodeName = _useProxy
           ? _getProxyNodeName()
           : Translations.of(context).SpeedTestScreen.directConnection;
@@ -599,6 +717,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
       if (!_aborted && mounted) {
         setState(() {
           _phase = SpeedTestPhase.stopped;
+          _errorMessage = e.toString();
           _setTargetSpeed(0.0);
         });
       }
@@ -609,58 +728,55 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     final pingSamples = <double>[];
     final client = _createHttpClient();
 
-    final rawUrls = _currentServer.pingUrls.isNotEmpty
+    final candidates = _currentServer.pingUrls.isNotEmpty
         ? _currentServer.pingUrls
-        : ['https://speed.cloudflare.com/__down?bytes=0', 'https://cp.cloudflare.com/generate_204'];
-    final List<String> pingUrls = [];
-    while (pingUrls.length < 6) {
-      pingUrls.addAll(rawUrls);
-    }
+        : const [
+            'https://speed.cloudflare.com/__down?bytes=0',
+            'https://cp.cloudflare.com/generate_204',
+          ];
+
+    // Use consistent host across samples so keep-alive RTT jitter isn't skewed by host switching
+    String activeUrl = candidates.first;
 
     try {
-      for (int i = 0; i < pingUrls.length; i++) {
+      for (int i = 0; i < 6; i++) {
         if (_aborted || !mounted) break;
         final stopwatch = Stopwatch()..start();
         try {
           final request = await client
-              .getUrl(Uri.parse(pingUrls[i]))
+              .getUrl(Uri.parse(activeUrl))
               .timeout(const Duration(seconds: 3));
           final response =
               await request.close().timeout(const Duration(seconds: 3));
           await response.drain<void>();
           stopwatch.stop();
           final elapsedMs = stopwatch.elapsedMicroseconds / 1000.0;
-          if (elapsedMs > 0 && elapsedMs < 4000) {
+          if (response.statusCode < 500 && elapsedMs > 0 && elapsedMs < 4000) {
             pingSamples.add(elapsedMs);
-
-            final validSamples =
-                pingSamples.length > 1 ? pingSamples.sublist(1) : pingSamples;
-            final avg =
-                validSamples.reduce((a, b) => a + b) / validSamples.length;
-
-            double jitterSum = 0;
-            for (int j = 1; j < validSamples.length; j++) {
-              jitterSum += (validSamples[j] - validSamples[j - 1]).abs();
-            }
-            final jitter = validSamples.length > 1
-                ? jitterSum / (validSamples.length - 1)
-                : 0.0;
-
+            final stats = SpeedTestScreen.computePingAndJitter(pingSamples);
             if (mounted) {
               setState(() {
-                _pingMs = avg;
-                _jitterMs = jitter;
+                _pingMs = stats.avg;
+                _jitterMs = stats.jitter;
               });
-              // Subtle needle twitch during calibration
-              _targetNeedleProgress = (i % 2 == 0) ? 0.06 : 0.02;
+              _setTargetSpeed(
+                0.0,
+                needleOverride: (i % 2 == 0) ? 0.06 : 0.02,
+              );
             }
+          } else if (i == 0 && candidates.length > 1) {
+            activeUrl = candidates[1];
           }
-        } catch (_) {}
+        } catch (_) {
+          if (i == 0 && candidates.length > 1) {
+            activeUrl = candidates[1];
+          }
+        }
         await Future.delayed(const Duration(milliseconds: 70));
       }
     } finally {
       client.close(force: true);
-      _targetNeedleProgress = 0.0;
+      _setTargetSpeed(0.0);
     }
   }
 
@@ -668,6 +784,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     final client = _createHttpClient();
     const testDuration = Duration(seconds: 8);
     const warmupDuration = Duration(milliseconds: 1500);
+    const fallbackUrl = 'https://speed.cloudflare.com/__down?bytes=25000000';
     final stopwatch = Stopwatch()..start();
 
     int totalBytes = 0;
@@ -678,6 +795,7 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     int lastSampleBytes = 0;
     int lastSampleTimeUs = 0;
     final speedHistory = <double>[];
+    String activeUrl = _currentServer.downloadUrl;
 
     final List<StreamSubscription> subscriptions = [];
     final testCompleter = Completer<void>();
@@ -689,12 +807,23 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
       () async {
         while (!testCompleter.isCompleted && !_aborted) {
           try {
+            final base = activeUrl;
             final uri = Uri.parse(
-              '${_currentServer.downloadUrl}${_currentServer.downloadUrl.contains('?') ? '&' : '?'}w=$workerId&r=${Random().nextInt(999999)}',
+              '$base${base.contains('?') ? '&' : '?'}w=$workerId&r=${Random().nextInt(999999)}',
             );
             final request =
                 await client.getUrl(uri).timeout(const Duration(seconds: 6));
-            final response = await request.close();
+            final response =
+                await request.close().timeout(const Duration(seconds: 6));
+            if (response.statusCode < 200 || response.statusCode >= 300) {
+              await response.drain<void>();
+              if (activeUrl != fallbackUrl) {
+                activeUrl = fallbackUrl;
+                continue;
+              }
+              await Future.delayed(const Duration(milliseconds: 120));
+              continue;
+            }
             final sub = response.listen(
               (chunk) {
                 totalBytes += chunk.length;
@@ -704,13 +833,15 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
             subscriptions.add(sub);
             await sub.asFuture<void>();
           } catch (_) {
+            if (totalBytes == 0 && activeUrl != fallbackUrl) {
+              activeUrl = fallbackUrl;
+            }
             await Future.delayed(const Duration(milliseconds: 80));
           }
         }
       }();
     }
 
-    // Start with initial 4 workers
     for (int i = 0; i < 4; i++) {
       launchWorker(i);
     }
@@ -753,8 +884,16 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
             recentSamples.reduce((a, b) => a + b) / recentSamples.length;
 
         _setTargetSpeed(displaySpeed);
+        if (mounted) {
+          setState(() {
+            _downloadSamples.add(displaySpeed);
+            if (_downloadSamples.length > 64) _downloadSamples.removeAt(0);
+            if (displaySpeed > _peakDownloadMbps) {
+              _peakDownloadMbps = displaySpeed;
+            }
+          });
+        }
 
-        // Adaptive worker scaling for high-bandwidth connections
         if (displaySpeed > 50 && !scaledTo8 && activeWorkers < 8) {
           scaledTo8 = true;
           for (int w = activeWorkers; w < 8; w++) {
@@ -807,9 +946,10 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
     const warmupDuration = Duration(milliseconds: 1200);
     final stopwatch = Stopwatch()..start();
 
-    final dummyData = Uint8List(2 * 1024 * 1024);
-    for (int i = 0; i < dummyData.length; i++) {
-      dummyData[i] = (i % 256);
+    // 256 KB chunk prevents 5s timeout starvation on moderate/slow uplinks
+    final uploadChunk = Uint8List(256 * 1024);
+    for (int i = 0; i < uploadChunk.length; i++) {
+      uploadChunk[i] = (i % 256);
     }
 
     int totalBytesUploaded = 0;
@@ -831,15 +971,18 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
           try {
             final request = await client
                 .postUrl(Uri.parse(_currentServer.uploadUrl))
-                .timeout(const Duration(seconds: 5));
+                .timeout(const Duration(seconds: 8));
             request.headers.set(
               HttpHeaders.contentLengthHeader,
-              dummyData.length,
+              uploadChunk.length,
             );
-            request.add(dummyData);
-            final response = await request.close();
+            request.add(uploadChunk);
+            final response =
+                await request.close().timeout(const Duration(seconds: 8));
             await response.drain<void>();
-            totalBytesUploaded += dummyData.length;
+            if (response.statusCode >= 200 && response.statusCode < 400) {
+              totalBytesUploaded += uploadChunk.length;
+            }
           } catch (_) {
             await Future.delayed(const Duration(milliseconds: 80));
           }
@@ -847,7 +990,6 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
       }();
     }
 
-    // Start with 4 upload workers
     for (int i = 0; i < 4; i++) {
       launchUploadWorker();
     }
@@ -889,6 +1031,15 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
             recentSamples.reduce((a, b) => a + b) / recentSamples.length;
 
         _setTargetSpeed(displaySpeed);
+        if (mounted) {
+          setState(() {
+            _uploadSamples.add(displaySpeed);
+            if (_uploadSamples.length > 64) _uploadSamples.removeAt(0);
+            if (displaySpeed > _peakUploadMbps) {
+              _peakUploadMbps = displaySpeed;
+            }
+          });
+        }
 
         if (displaySpeed > 30 && !scaledUpload && activeUploadWorkers < 6) {
           scaledUpload = true;
@@ -960,6 +1111,9 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
   }
 
   String _getProxyNodeName() {
+    if (_resolvedProxyNode != null && _resolvedProxyNode!.isNotEmpty) {
+      return _resolvedProxyNode!;
+    }
     final currentProfile = ProfileManager.getCurrent();
     if (currentProfile != null) {
       if (currentProfile.remark.isNotEmpty) {
@@ -1112,79 +1266,153 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 children: [
+                  if (_errorMessage != null) ...[
+                    const SizedBox(height: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 9,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF59E0B).withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: const Color(0xFFF59E0B).withValues(alpha: 0.4),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.warning_amber_rounded,
+                            size: 18,
+                            color: Color(0xFFF59E0B),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              _errorMessage!,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          if (_useProxy && !isRunning)
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _useProxy = false;
+                                  _errorMessage = null;
+                                });
+                              },
+                              child: Text(
+                                tcontext.SpeedTestScreen.switchToDirect,
+                                style: const TextStyle(
+                                  fontSize: 11.5,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+
+                  if (_phase != SpeedTestPhase.idle) ...[
+                    const SizedBox(height: 6),
+                    _buildPhaseStepper(tcontext, theme, isDark),
+                  ],
+
                   const SizedBox(height: 6),
 
-                  // The Speedtest Instrument Dial
+                  // The Speedtest Instrument Dial (isolated 60/120Hz rebuild scope)
                   Center(
                     child: SizedBox(
                       width: 270,
                       height: 270,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          RepaintBoundary(
-                            child: CustomPaint(
-                              size: const Size(270, 270),
-                              painter: _SpeedtestDialPainter(
-                                progress: _needleProgress,
-                                color: _getPhaseColor(theme),
-                                isDark: isDark,
-                                phase: _phase,
+                      child: ValueListenableBuilder<int>(
+                        valueListenable: _dialTick,
+                        builder: (context, _, __) {
+                          final phaseColor = _getPhaseColor(theme);
+                          return Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              RepaintBoundary(
+                                child: CustomPaint(
+                                  size: const Size(270, 270),
+                                  painter: _SpeedtestDialPainter(
+                                    progress: _needleProgress,
+                                    color: phaseColor,
+                                    isDark: isDark,
+                                    phase: _phase,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          // Central Digital Counter (Positioned below pivot)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 80),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  _phase == SpeedTestPhase.ping
-                                      ? (_pingMs > 0
-                                          ? _pingMs.toStringAsFixed(0)
-                                          : '--')
-                                      : (_phase == SpeedTestPhase.completed
-                                          ? _downloadFinalMbps.toStringAsFixed(1)
-                                          : (_displaySpeedMbps > 0.05
-                                              ? _displaySpeedMbps
+                              // Central Digital Counter (Positioned below pivot)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 80),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      _phase == SpeedTestPhase.ping
+                                          ? (_pingMs > 0
+                                              ? _pingMs.toStringAsFixed(0)
+                                              : '--')
+                                          : (_phase == SpeedTestPhase.completed
+                                              ? _downloadFinalMbps
                                                   .toStringAsFixed(1)
-                                              : '0.0')),
-                                  style: const TextStyle(
-                                    fontSize: 42,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: -1.2,
-                                    height: 1.0,
-                                    fontFeatures: [
-                                      FontFeature.tabularFigures(),
-                                    ],
-                                  ),
+                                              : (_displaySpeedMbps > 0.05
+                                                  ? _displaySpeedMbps
+                                                      .toStringAsFixed(1)
+                                                  : '0.0')),
+                                      style: const TextStyle(
+                                        fontSize: 42,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: -1.2,
+                                        height: 1.0,
+                                        fontFeatures: [
+                                          FontFeature.tabularFigures(),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _phase == SpeedTestPhase.ping
+                                          ? 'ms'
+                                          : 'Mbps',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                        color: (isDark
+                                                ? Colors.white
+                                                : Colors.black)
+                                            .withValues(alpha: 0.5),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _getPhaseDescription(tcontext),
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        color: phaseColor,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  _phase == SpeedTestPhase.ping ? 'ms' : 'Mbps',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w700,
-                                    color: (isDark
-                                            ? Colors.white
-                                            : Colors.black)
-                                        .withValues(alpha: 0.5),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  _getPhaseDescription(tcontext),
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600,
-                                    color: _getPhaseColor(theme),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -1296,6 +1524,9 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                       ),
                     ),
                   ),
+
+                  if (_downloadSamples.isNotEmpty || _uploadSamples.isNotEmpty)
+                    _buildRealtimeWaveformCard(tcontext, theme, isDark),
 
                   if (_phase == SpeedTestPhase.completed)
                     _buildNetworkQualityCard(theme, isDark),
@@ -1688,6 +1919,31 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
                                       ],
                                     ),
                                   ),
+                                  if (_serverLatencies.containsKey(server.id)) ...[
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: (_serverLatencies[server.id] != null
+                                                ? const Color(0xFF10B981)
+                                                : const Color(0xFFEF4444))
+                                            .withValues(alpha: 0.14),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Text(
+                                        _serverLatencies[server.id] != null
+                                            ? '${_serverLatencies[server.id]} ms'
+                                            : 'Timeout',
+                                        style: TextStyle(
+                                          fontSize: 10.5,
+                                          fontWeight: FontWeight.w700,
+                                          color: _serverLatencies[server.id] != null
+                                              ? const Color(0xFF10B981)
+                                              : const Color(0xFFEF4444),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                  ],
                                   if (isSelected)
                                     const Icon(Icons.check_circle_rounded, size: 18, color: ThemeDefine.kColorBlue),
                                 ],
@@ -1768,6 +2024,189 @@ class _SpeedTestScreenState extends LasyRenderingState<SpeedTestScreen>
           },
         );
       },
+    );
+  }
+
+  Widget _buildPhaseStepper(
+    Translations tcontext,
+    ThemeData theme,
+    bool isDark,
+  ) {
+    final stages = [
+      (
+        phase: SpeedTestPhase.ping,
+        label: tcontext.SpeedTestScreen.ping,
+        color: const Color(0xFFF59E0B),
+        done: _phase == SpeedTestPhase.download ||
+            _phase == SpeedTestPhase.upload ||
+            _phase == SpeedTestPhase.completed,
+      ),
+      (
+        phase: SpeedTestPhase.download,
+        label: tcontext.SpeedTestScreen.download,
+        color: const Color(0xFF00E5FF),
+        done: _phase == SpeedTestPhase.upload ||
+            _phase == SpeedTestPhase.completed,
+      ),
+      (
+        phase: SpeedTestPhase.upload,
+        label: tcontext.SpeedTestScreen.upload,
+        color: const Color(0xFF8B5CF6),
+        done: _phase == SpeedTestPhase.completed,
+      ),
+    ];
+
+    return Row(
+      children: stages.map((stage) {
+        final active = _phase == stage.phase;
+        final done = stage.done;
+        final accent = (active || done)
+            ? stage.color
+            : (isDark ? Colors.white24 : Colors.black26);
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  height: 3.5,
+                  decoration: BoxDecoration(
+                    color: accent,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  stage.label,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                    color: (active || done)
+                        ? accent
+                        : (isDark ? Colors.white54 : Colors.black45),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildRealtimeWaveformCard(
+    Translations tcontext,
+    ThemeData theme,
+    bool isDark,
+  ) {
+    final peakOverall = max(_peakDownloadMbps, _peakUploadMbps);
+    final avgShown = _uploadFinalMbps > 0 && _downloadFinalMbps > 0
+        ? '${_downloadFinalMbps.toStringAsFixed(1)} / ${_uploadFinalMbps.toStringAsFixed(1)} Mbps'
+        : '${peakOverall.toStringAsFixed(1)} Mbps';
+
+    return Card(
+      elevation: 0,
+      margin: const EdgeInsets.only(top: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(
+          color: theme.dividerColor.withValues(alpha: 0.28),
+          width: 0.8,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.show_chart_rounded,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  tcontext.SpeedTestScreen.realtimeSpeed,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  '${tcontext.SpeedTestScreen.peakSpeed}: ${peakOverall.toStringAsFixed(1)} Mbps',
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    color: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.55),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 68,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: _SpeedChartPainter(
+                  downloadSamples: List.of(_downloadSamples),
+                  uploadSamples: List.of(_uploadSamples),
+                  isDark: isDark,
+                ),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                _buildLegendDot(
+                  const Color(0xFF00E5FF),
+                  tcontext.SpeedTestScreen.download,
+                ),
+                const SizedBox(width: 12),
+                _buildLegendDot(
+                  const Color(0xFF8B5CF6),
+                  tcontext.SpeedTestScreen.upload,
+                ),
+                const Spacer(),
+                Text(
+                  '${tcontext.SpeedTestScreen.avgSpeed}: $avgShown',
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w600,
+                    color: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLegendDot(Color color, String label) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600),
+        ),
+      ],
     );
   }
 
@@ -2153,5 +2592,97 @@ class _SpeedtestDialPainter extends CustomPainter {
         oldDelegate.color != color ||
         oldDelegate.isDark != isDark ||
         oldDelegate.phase != phase;
+  }
+}
+
+class _SpeedChartPainter extends CustomPainter {
+  final List<double> downloadSamples;
+  final List<double> uploadSamples;
+  final bool isDark;
+
+  _SpeedChartPainter({
+    required this.downloadSamples,
+    required this.uploadSamples,
+    required this.isDark,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final gridPaint = Paint()
+      ..color = (isDark ? Colors.white : Colors.black).withValues(alpha: 0.08)
+      ..strokeWidth = 0.8;
+
+    for (final ratio in [0.25, 0.5, 0.75, 1.0]) {
+      final y = size.height * ratio;
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    }
+
+    double maxVal = 10.0;
+    for (final v in downloadSamples) {
+      if (v > maxVal) maxVal = v;
+    }
+    for (final v in uploadSamples) {
+      if (v > maxVal) maxVal = v;
+    }
+
+    _drawSeries(canvas, size, downloadSamples, maxVal, const Color(0xFF00E5FF));
+    _drawSeries(canvas, size, uploadSamples, maxVal, const Color(0xFF8B5CF6));
+  }
+
+  void _drawSeries(
+    Canvas canvas,
+    Size size,
+    List<double> samples,
+    double maxVal,
+    Color color,
+  ) {
+    if (samples.length < 2) return;
+
+    final path = Path();
+    final fillPath = Path();
+    final stepX = size.width / max(samples.length - 1, 1);
+
+    for (int i = 0; i < samples.length; i++) {
+      final x = i * stepX;
+      final normalized = (samples[i] / maxVal).clamp(0.0, 1.0);
+      final y = size.height - normalized * (size.height - 6) - 3;
+      if (i == 0) {
+        path.moveTo(x, y);
+        fillPath.moveTo(x, size.height);
+        fillPath.lineTo(x, y);
+      } else {
+        path.lineTo(x, y);
+        fillPath.lineTo(x, y);
+      }
+    }
+
+    fillPath.lineTo((samples.length - 1) * stepX, size.height);
+    fillPath.close();
+
+    final fillPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          color.withValues(alpha: 0.25),
+          color.withValues(alpha: 0.02),
+        ],
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+    canvas.drawPath(fillPath, fillPaint);
+
+    final strokePaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(path, strokePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _SpeedChartPainter oldDelegate) {
+    return oldDelegate.isDark != isDark ||
+        oldDelegate.downloadSamples.length != downloadSamples.length ||
+        oldDelegate.uploadSamples.length != uploadSamples.length;
   }
 }

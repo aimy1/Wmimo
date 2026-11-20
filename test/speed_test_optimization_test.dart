@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/speed_test_screen.dart';
 
 void main() {
@@ -90,6 +92,51 @@ void main() {
       expect(restored.downloadSpeed, record.downloadSpeed);
       expect(restored.uploadSpeed, record.uploadSpeed);
       expect(restored.isProxy, record.isProxy);
+    });
+  });
+
+  group('SpeedTestEngine & Widget Tests', () {
+    setUp(() async {
+      await LocaleSettings.setLocale(AppLocale.zhCn);
+    });
+
+    test('computePingAndJitter discards cold handshake sample when computing steady stats', () {
+      final single = SpeedTestScreen.computePingAndJitter([85.0]);
+      expect(single.avg, 85.0);
+      expect(single.jitter, 0.0);
+
+      // Cold sample 180ms should be ignored; steady [40, 50, 44] -> avg 44.67, jitter (10+6)/2 = 8
+      final multi = SpeedTestScreen.computePingAndJitter([180.0, 40.0, 50.0, 44.0]);
+      expect(multi.avg, closeTo(44.666, 0.01));
+      expect(multi.jitter, closeTo(8.0, 0.01));
+    });
+
+    testWidgets('SpeedTestScreen settles cleanly when idle without 120Hz perpetual rebuilds', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 820));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        TranslationProvider(
+          child: const MaterialApp(
+            home: SpeedTestScreen(),
+          ),
+        ),
+      );
+
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 50),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 2),
+      );
+
+      final zh = AppLocale.zhCn.buildSync();
+      expect(find.text(zh.SpeedTestScreen.title), findsOneWidget);
+      expect(find.text(zh.SpeedTestScreen.startTest), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(milliseconds: 10));
     });
   });
 }

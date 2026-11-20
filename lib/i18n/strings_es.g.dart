@@ -96,6 +96,9 @@ class _Translations$BackupAndSyncWebdavScreen$es implements Translations$BackupA
 	@override String get webdavRequired => 'No puede estar vacío';
 	@override String get webdavLoginFailed => 'Fallo al iniciar sesión:';
 	@override String get webdavListFailed => 'Fallo al obtener la lista de archivos:';
+	@override String get noBackupsYet => 'Aún no hay copias en la nube. Pulse subir arriba para crear una.';
+	@override String deleteConfirm({required Object name}) => '¿Eliminar permanentemente la copia [${name}]?';
+	@override String get backupSuccess => 'Copia de seguridad subida correctamente';
 }
 
 // Path: LaunchFailedScreen
@@ -147,6 +150,8 @@ class _Translations$UserAgreementScreen$es implements Translations$UserAgreement
 	@override String get localExecution => 'Ejecución Solo Local';
 	@override String get zeroTelemetry => 'Sin Telemetría Comercial';
 	@override String get loading => 'Cargando acuerdo...';
+	@override String get privacySubtitle => 'Política de privacidad: cero recopilación y ejecución local';
+	@override String get copied => 'Copiado al portapapeles';
 }
 
 // Path: VersionUpdateScreen
@@ -275,6 +280,8 @@ class _Translations$NetCheckScreen$es implements Translations$NetCheckScreen$en 
 	@override String get conclusionGood => 'Red generalmente normal, se detectaron advertencias o latencia menor no crítica.';
 	@override String get conclusionWarning => 'Problemas detectados en la red o proxy; use la Reparación en un clic abajo.';
 	@override String get conclusionCritical => '¡Bloqueo grave de red! Red local desconectada o núcleo proxy bloqueado.';
+	@override String valProxyTunActive({required Object mode}) => 'Adaptador virtual TUN activo (${mode})';
+	@override String fakeIpActive({required Object ip}) => 'Fake-IP activo (${ip})';
 }
 
 // Path: SpeedTestScreen
@@ -307,6 +314,10 @@ class _Translations$SpeedTestScreen$es implements Translations$SpeedTestScreen$e
 	@override String get avgSpeed => 'Velocidad media';
 	@override String get testHistory => 'Historial';
 	@override String get clearHistory => 'Borrar historial';
+	@override String get proxyNotRunningTip => 'El núcleo proxy no está activo. Conéctese primero o use el modo directo.';
+	@override String get switchToDirect => 'Modo directo';
+	@override String get testFailedNoData => 'Error en la prueba: no se pudo conectar con el servidor.';
+	@override String get activeNode => 'Nodo activo';
 }
 
 // Path: loginScreen
@@ -755,7 +766,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get copyReport => 'Copiar informe';
 	@override String get reportCopied => 'Informe copiado al portapapeles, listo para compartir';
 	@override String get gamingExperience => 'Juegos online';
-	@override String get streamingExperience => 'Streaming';
+	@override String get streamingExperience => 'Transmisión';
 	@override String get meetingExperience => 'Videoconferencias';
 	@override String get customSpeedtestUrl => 'URL de descarga personalizada (https://...)';
 	@override String get customSpeedtestSource => 'Servidor personalizado';
@@ -790,7 +801,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get all => 'Todo';
 	@override String get showAppIcon => 'Mostrar icono de aplicación';
 	@override String get proxySelection => 'Selección de proxy';
-	@override String get regionHk => '🇭🇰 Hong Kong';
+	@override String get regionHk => '🇭🇰 Hong Kong (China)';
 	@override String get regionJp => '🇯🇵 Japón';
 	@override String get regionSg => '🇸🇬 Singapur';
 	@override String get regionTw => '🇹🇼 Taiwán';
@@ -866,6 +877,27 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get resetDefaultCards => 'Restablecer';
 	@override String get collapseAllCards => 'Colapsar todo';
 	@override String get expandAllCards => 'Expandir todo';
+	@override String get sectionGeneral => 'General y Núcleo';
+	@override String get sectionRoutingTools => 'Enrutamiento, Cadena y Diagnóstico';
+	@override String get sectionData => 'Datos y Sincronización';
+	@override String get sectionSupport => 'Ayuda y Acerca de';
+	@override String get sectionAppearance => 'Apariencia y Comportamiento';
+	@override String get sectionNetworkSub => 'Prueba de velocidad y Solicitudes';
+	@override String get sectionDesktop => 'Integración de Escritorio (Inicio, Bandeja y Proxy)';
+	@override String get sectionMobile => 'Segundo plano y Permisos Móviles';
+	@override String get sectionLaunchConnect => 'Inicio y Conexión';
+	@override String get sectionUpdates => 'Actualizaciones';
+	@override String get sectionReset => 'Restablecer';
+	@override String get sectionCoreBasic => 'Escucha y Control';
+	@override String get sectionCoreRouting => 'Enrutamiento, TUN y Acceso';
+	@override String get sectionCoreRules => 'Reglas y Sobrescritura';
+	@override String get sectionCoreProtocol => 'Transporte y Protocolos';
+	@override String get sectionCoreServices => 'Servicios del Núcleo';
+	@override String get batteryOptimization => 'Optimización de Batería (Segundo Plano)';
+	@override String get batteryOptimizationExempted => 'Exento';
+	@override String get batteryOptimizationRestricted => 'Restringido (Toca para permitir)';
+	@override String get appPermissionsSettings => 'Permisos de la Aplicación';
+	@override String get previewFinalConfig => 'Vista previa de configuración final';
 }
 
 // Path: permission
@@ -1053,6 +1085,25 @@ class _Translations$chain_proxy$es implements Translations$chain_proxy$en {
 	@override String get hop1_empty_warning => 'Selecciona el primer nodo (entrada)';
 	@override String get hop2_empty_warning => 'Selecciona el segundo nodo (salida)';
 	@override String get hop_same_warning => 'El salto 1 y el salto 2 no pueden ser el mismo nodo';
+	@override String active_count({required Object active, required Object total}) => '${active} / ${total} activos';
+	@override String hop_count_badge({required Object count}) => '${count} Saltos';
+	@override String get hop_entry => 'Salto 1: Entrada';
+	@override String hop_transit({required Object index}) => 'Salto ${index}: Tránsito';
+	@override String hop_exit({required Object index}) => 'Salto ${index}: Salida Final';
+	@override String get add_transit_hop => 'Añadir salto intermedio';
+	@override String get swap_hops => 'Intercambiar saltos adyacentes';
+	@override String get remove_hop => 'Eliminar salto';
+	@override String get reset_name => 'Autonombrar según saltos';
+	@override String get use_now => 'Usar ahora';
+	@override String switched_to_chain({required Object group, required Object name}) => 'Se cambió "${group}" a "${name}"';
+	@override String get enable_before_use => 'Active primero este proxy en cadena';
+	@override String get enable_before_test => 'Active primero este proxy en cadena antes de probar latencia';
+	@override String get hop_duplicate_warning => 'No se pueden seleccionar nodos duplicados en la misma cadena';
+	@override String get hop_group_not_exit_warning => 'Los saltos intermedios y de salida deben ser nodos concretos, no grupos';
+	@override String get picker_entry_hint => 'El salto de entrada admite tanto nodos como grupos de políticas';
+	@override String get picker_node_only_hint => 'Los saltos intermedios y de salida solo admiten nodos concretos';
+	@override String get hops_label => 'Secuencia de saltos (Arrastra para reordenar)';
+	@override String get all_nodes => 'Todos';
 }
 
 // Path: main.tray
@@ -1104,6 +1155,9 @@ extension on TranslationsEs {
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'No puede estar vacío',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'Fallo al iniciar sesión:',
 			'BackupAndSyncWebdavScreen.webdavListFailed' => 'Fallo al obtener la lista de archivos:',
+			'BackupAndSyncWebdavScreen.noBackupsYet' => 'Aún no hay copias en la nube. Pulse subir arriba para crear una.',
+			'BackupAndSyncWebdavScreen.deleteConfirm' => ({required Object name}) => '¿Eliminar permanentemente la copia [${name}]?',
+			'BackupAndSyncWebdavScreen.backupSuccess' => 'Copia de seguridad subida correctamente',
 			'LaunchFailedScreen.invalidProcess' => 'La aplicación no pudo iniciarse [Nombre de proceso no válido], por favor reinstale la aplicación en un directorio separado',
 			'LaunchFailedScreen.invalidProfile' => 'La aplicación no pudo iniciarse [Fallo al acceder al perfil], por favor reinstale la aplicación',
 			'LaunchFailedScreen.invalidVersion' => 'La aplicación no pudo iniciarse [Versión no válida], por favor reinstale la aplicación',
@@ -1128,6 +1182,8 @@ extension on TranslationsEs {
 			'UserAgreementScreen.localExecution' => 'Ejecución Solo Local',
 			'UserAgreementScreen.zeroTelemetry' => 'Sin Telemetría Comercial',
 			'UserAgreementScreen.loading' => 'Cargando acuerdo...',
+			'UserAgreementScreen.privacySubtitle' => 'Política de privacidad: cero recopilación y ejecución local',
+			'UserAgreementScreen.copied' => 'Copiado al portapapeles',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'La nueva versión [${p}] está lista',
 			'VersionUpdateScreen.update' => 'Reiniciar para Actualizar',
 			'VersionUpdateScreen.cancel' => 'Ahora no',
@@ -1238,6 +1294,8 @@ extension on TranslationsEs {
 			'NetCheckScreen.conclusionGood' => 'Red generalmente normal, se detectaron advertencias o latencia menor no crítica.',
 			'NetCheckScreen.conclusionWarning' => 'Problemas detectados en la red o proxy; use la Reparación en un clic abajo.',
 			'NetCheckScreen.conclusionCritical' => '¡Bloqueo grave de red! Red local desconectada o núcleo proxy bloqueado.',
+			'NetCheckScreen.valProxyTunActive' => ({required Object mode}) => 'Adaptador virtual TUN activo (${mode})',
+			'NetCheckScreen.fakeIpActive' => ({required Object ip}) => 'Fake-IP activo (${ip})',
 			'SpeedTestScreen.title' => 'Test de velocidad',
 			'SpeedTestScreen.startTest' => 'Iniciar prueba',
 			'SpeedTestScreen.stopTest' => 'Detener',
@@ -1261,6 +1319,10 @@ extension on TranslationsEs {
 			'SpeedTestScreen.avgSpeed' => 'Velocidad media',
 			'SpeedTestScreen.testHistory' => 'Historial',
 			'SpeedTestScreen.clearHistory' => 'Borrar historial',
+			'SpeedTestScreen.proxyNotRunningTip' => 'El núcleo proxy no está activo. Conéctese primero o use el modo directo.',
+			'SpeedTestScreen.switchToDirect' => 'Modo directo',
+			'SpeedTestScreen.testFailedNoData' => 'Error en la prueba: no se pudo conectar con el servidor.',
+			'SpeedTestScreen.activeNode' => 'Nodo activo',
 			'loginScreen.login' => 'Iniciar sesión',
 			'loginScreen.register' => 'Registrar cuenta',
 			'loginScreen.forgotPassword' => 'Olvidé mi contraseña',
@@ -1597,6 +1659,8 @@ extension on TranslationsEs {
 			'meta.nodeSelected' => ({required Object p}) => 'Nodo seleccionado: ${p}',
 			'meta.startingCoreAndTesting' => 'Iniciando núcleo y probando latencia...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} min',
+			_ => null,
+		} ?? switch (path) {
 			'meta.chartUpload' => 'Subida',
 			'meta.chartDownload' => 'Descarga',
 			'meta.author' => 'Autor',
@@ -1608,8 +1672,6 @@ extension on TranslationsEs {
 			'meta.autoScrollDisabled' => 'Autodesplazamiento desactivado',
 			'meta.pauseLogs' => 'Pausar registros en vivo',
 			'meta.resumeLogs' => 'Reanudar registros en vivo',
-			_ => null,
-		} ?? switch (path) {
 			'meta.scrollToLatest' => 'Desplazar al final',
 			'meta.scrollToBottom' => 'Desplazar hacia abajo',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} nuevos registros)',
@@ -1707,7 +1769,7 @@ extension on TranslationsEs {
 			'meta.copyReport' => 'Copiar informe',
 			'meta.reportCopied' => 'Informe copiado al portapapeles, listo para compartir',
 			'meta.gamingExperience' => 'Juegos online',
-			'meta.streamingExperience' => 'Streaming',
+			'meta.streamingExperience' => 'Transmisión',
 			'meta.meetingExperience' => 'Videoconferencias',
 			'meta.customSpeedtestUrl' => 'URL de descarga personalizada (https://...)',
 			'meta.customSpeedtestSource' => 'Servidor personalizado',
@@ -1742,7 +1804,7 @@ extension on TranslationsEs {
 			'meta.all' => 'Todo',
 			'meta.showAppIcon' => 'Mostrar icono de aplicación',
 			'meta.proxySelection' => 'Selección de proxy',
-			'meta.regionHk' => '🇭🇰 Hong Kong',
+			'meta.regionHk' => '🇭🇰 Hong Kong (China)',
 			'meta.regionJp' => '🇯🇵 Japón',
 			'meta.regionSg' => '🇸🇬 Singapur',
 			'meta.regionTw' => '🇹🇼 Taiwán',
@@ -1818,6 +1880,27 @@ extension on TranslationsEs {
 			'meta.resetDefaultCards' => 'Restablecer',
 			'meta.collapseAllCards' => 'Colapsar todo',
 			'meta.expandAllCards' => 'Expandir todo',
+			'meta.sectionGeneral' => 'General y Núcleo',
+			'meta.sectionRoutingTools' => 'Enrutamiento, Cadena y Diagnóstico',
+			'meta.sectionData' => 'Datos y Sincronización',
+			'meta.sectionSupport' => 'Ayuda y Acerca de',
+			'meta.sectionAppearance' => 'Apariencia y Comportamiento',
+			'meta.sectionNetworkSub' => 'Prueba de velocidad y Solicitudes',
+			'meta.sectionDesktop' => 'Integración de Escritorio (Inicio, Bandeja y Proxy)',
+			'meta.sectionMobile' => 'Segundo plano y Permisos Móviles',
+			'meta.sectionLaunchConnect' => 'Inicio y Conexión',
+			'meta.sectionUpdates' => 'Actualizaciones',
+			'meta.sectionReset' => 'Restablecer',
+			'meta.sectionCoreBasic' => 'Escucha y Control',
+			'meta.sectionCoreRouting' => 'Enrutamiento, TUN y Acceso',
+			'meta.sectionCoreRules' => 'Reglas y Sobrescritura',
+			'meta.sectionCoreProtocol' => 'Transporte y Protocolos',
+			'meta.sectionCoreServices' => 'Servicios del Núcleo',
+			'meta.batteryOptimization' => 'Optimización de Batería (Segundo Plano)',
+			'meta.batteryOptimizationExempted' => 'Exento',
+			'meta.batteryOptimizationRestricted' => 'Restringido (Toca para permitir)',
+			'meta.appPermissionsSettings' => 'Permisos de la Aplicación',
+			'meta.previewFinalConfig' => 'Vista previa de configuración final',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',
@@ -1945,6 +2028,25 @@ extension on TranslationsEs {
 			'chain_proxy.hop1_empty_warning' => 'Selecciona el primer nodo (entrada)',
 			'chain_proxy.hop2_empty_warning' => 'Selecciona el segundo nodo (salida)',
 			'chain_proxy.hop_same_warning' => 'El salto 1 y el salto 2 no pueden ser el mismo nodo',
+			'chain_proxy.active_count' => ({required Object active, required Object total}) => '${active} / ${total} activos',
+			'chain_proxy.hop_count_badge' => ({required Object count}) => '${count} Saltos',
+			'chain_proxy.hop_entry' => 'Salto 1: Entrada',
+			'chain_proxy.hop_transit' => ({required Object index}) => 'Salto ${index}: Tránsito',
+			'chain_proxy.hop_exit' => ({required Object index}) => 'Salto ${index}: Salida Final',
+			'chain_proxy.add_transit_hop' => 'Añadir salto intermedio',
+			'chain_proxy.swap_hops' => 'Intercambiar saltos adyacentes',
+			'chain_proxy.remove_hop' => 'Eliminar salto',
+			'chain_proxy.reset_name' => 'Autonombrar según saltos',
+			'chain_proxy.use_now' => 'Usar ahora',
+			'chain_proxy.switched_to_chain' => ({required Object group, required Object name}) => 'Se cambió "${group}" a "${name}"',
+			'chain_proxy.enable_before_use' => 'Active primero este proxy en cadena',
+			'chain_proxy.enable_before_test' => 'Active primero este proxy en cadena antes de probar latencia',
+			'chain_proxy.hop_duplicate_warning' => 'No se pueden seleccionar nodos duplicados en la misma cadena',
+			'chain_proxy.hop_group_not_exit_warning' => 'Los saltos intermedios y de salida deben ser nodos concretos, no grupos',
+			'chain_proxy.picker_entry_hint' => 'El salto de entrada admite tanto nodos como grupos de políticas',
+			'chain_proxy.picker_node_only_hint' => 'Los saltos intermedios y de salida solo admiten nodos concretos',
+			'chain_proxy.hops_label' => 'Secuencia de saltos (Arrastra para reordenar)',
+			'chain_proxy.all_nodes' => 'Todos',
 			_ => null,
 		};
 	}

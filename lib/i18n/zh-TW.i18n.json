@@ -9,7 +9,10 @@
     "webdavServerUrl": "伺服器地址",
     "webdavRequired": "不能為空",
     "webdavLoginFailed": "登入失敗:",
-    "webdavListFailed": "取得檔案清單失敗:"
+    "webdavListFailed": "取得檔案清單失敗:",
+    "noBackupsYet": "暫無雲端備份，點擊右上角上傳圖示立即建立備份",
+    "deleteConfirm": "確定要永久刪除雲端備份 [$name] 嗎？",
+    "backupSuccess": "備份已成功上傳"
   },
   "LaunchFailedScreen": {
     "invalidProcess": "應用程式啟動失敗 [無效的處理程序名稱]，請重新安裝應用程式至獨立目錄",
@@ -39,7 +42,9 @@
     "zeroData": "資料零收集",
     "localExecution": "純本機獨立運行",
     "zeroTelemetry": "純淨無商業遙測",
-    "loading": "正在載入使用者協議..."
+    "loading": "正在載入使用者協議...",
+    "privacySubtitle": "資料零蒐集與純本機執行保護政策",
+    "copied": "已複製到剪貼簿"
   },
   "NetCheckScreen": {
     "title": "網路鏈路體檢與診斷",
@@ -148,7 +153,9 @@
     "conclusionPerfect": "全線路極佳！所有網路節點與代理設定均正常暢通。",
     "conclusionGood": "線路基本正常，檢測到部分非致命延遲或警告，建議查看詳情。",
     "conclusionWarning": "檢測到部分網路或代理環節異常，請使用下方【一鍵修復】恢復。",
-    "conclusionCritical": "嚴重網路受阻！本地網路未連線或代理核心遭遇阻斷。"
+    "conclusionCritical": "嚴重網路受阻！本地網路未連線或代理核心遭遇阻斷。",
+    "valProxyTunActive": "TUN 虛擬網卡接管中 ($mode)",
+    "fakeIpActive": "Fake-IP 已啟用 ($ip)"
   },
   "SpeedTestScreen": {
     "title": "網路測速",
@@ -173,7 +180,11 @@
     "peakSpeed": "峰值速率",
     "avgSpeed": "平均速率",
     "testHistory": "測速歷史",
-    "clearHistory": "清空歷史"
+    "clearHistory": "清空歷史",
+    "proxyNotRunningTip": "代理服務尚未啟動，請先連線或切換為直連模式",
+    "switchToDirect": "切至直連",
+    "testFailedNoData": "測速失敗：無法連通當前測速伺服器，請檢查網路或切換線路",
+    "activeNode": "目前出口節點"
   },
   "VersionUpdateScreen": {
     "versionReady": "新版本[$p]已就緒",
@@ -741,7 +752,28 @@
     "cardQuickActions": "快捷工具入口",
     "resetDefaultCards": "恢復預設",
     "collapseAllCards": "全部折疊",
-    "expandAllCards": "全部展開"
+    "expandAllCards": "全部展開",
+    "sectionGeneral": "常規與核心",
+    "sectionRoutingTools": "規則、鏈式與診斷",
+    "sectionData": "資料與同步",
+    "sectionSupport": "說明與關於",
+    "sectionAppearance": "外觀與互動",
+    "sectionNetworkSub": "測速與訂閱請求",
+    "sectionDesktop": "桌面端整合（啟動、匣與系統代理）",
+    "sectionMobile": "行動端背景保活與系統權限",
+    "sectionLaunchConnect": "啟動與連線",
+    "sectionUpdates": "版本更新",
+    "sectionReset": "恢復預設",
+    "sectionCoreBasic": "基礎監聽與驗證",
+    "sectionCoreRouting": "路由、TUN 與區域網路存取",
+    "sectionCoreRules": "規則範本與設定覆寫",
+    "sectionCoreProtocol": "傳輸連線與協定",
+    "sectionCoreServices": "內建核心元件",
+    "batteryOptimization": "背景省電豁免（防止系統清除）",
+    "batteryOptimizationExempted": "已豁免限制",
+    "batteryOptimizationRestricted": "未豁免（點擊授權）",
+    "appPermissionsSettings": "系統應用程式權限設定",
+    "previewFinalConfig": "預覽最終產生的核心設定"
   },
   "permission": {
     "camera": "相機",
@@ -862,11 +894,11 @@
   },
   "chain_proxy": {
     "title": "鏈式代理",
-    "desc": "將兩個節點級聯中轉（前置跳板 ➔ 落地出口），實現低延遲高速專線與原生住宅 IP 解鎖兼得。",
-    "add": "新建鏈式代理",
+    "desc": "透過 dialer-proxy 將 2 跳以上節點級聯轉發（前置入口 ➔ 中轉 ➔ 落地出口），兼顧低延遲與原生 IP 解鎖，啟用後自動注入主選擇策略組。",
+    "add": "新增鏈式代理",
     "edit": "編輯鏈式代理",
     "delete": "刪除",
-    "delete_confirm": "確定要刪除該鏈式代理嗎？",
+    "delete_confirm": "確定要刪除此鏈式代理嗎？",
     "name": "鏈式代理名稱",
     "name_hint": "例如：香港中轉 ➔ 美國家寬",
     "hop1": "第一跳：前置跳板 (入口)",
@@ -877,15 +909,34 @@
     "hop2_placeholder": "第二跳節點",
     "select_node": "點擊選擇節點",
     "preview": "鏈路拓撲預覽",
-    "local_device": "我的設備",
+    "local_device": "我的裝置",
     "internet": "目標網站",
-    "save_success": "鏈式代理保存成功",
-    "empty_tip": "暫無鏈式代理，點擊下方按鈕立即創建",
+    "save_success": "鏈式代理已儲存並同步到策略組",
+    "empty_tip": "暫無鏈式代理，點擊上方按鈕立即建立",
     "test_latency": "測速",
-    "node_missing_warning": "部分節點在當前配置中不存在，請重新指定",
+    "node_missing_warning": "部分節點在目前設定中不存在，已安全跳過注入以防核心報錯",
     "name_empty_warning": "請輸入鏈式代理名稱",
-    "hop1_empty_warning": "請選擇第一跳前置節點",
-    "hop2_empty_warning": "請選擇第二跳落地節點",
-    "hop_same_warning": "第一跳與第二跳不能為同一個節點"
+    "hop1_empty_warning": "請選擇前置入口節點",
+    "hop2_empty_warning": "請選擇落地出口節點",
+    "hop_same_warning": "同一鏈路中不能重複選擇相同的節點",
+    "active_count": "已啟用 $active / $total 條",
+    "hop_count_badge": "$count 跳",
+    "hop_entry": "第 1 跳：前置入口",
+    "hop_transit": "第 $index 跳：中轉跳板",
+    "hop_exit": "第 $index 跳：落地出口",
+    "add_transit_hop": "新增中轉節點",
+    "swap_hops": "互換相鄰節點",
+    "remove_hop": "移除此跳",
+    "reset_name": "依節點自動命名",
+    "use_now": "設為目前",
+    "switched_to_chain": "已在「$group」中切換至「$name」",
+    "enable_before_use": "請先開啟此鏈式代理後再套用",
+    "enable_before_test": "請先開啟此鏈式代理後再測速",
+    "hop_duplicate_warning": "同一鏈式代理中不能重複選擇相同節點",
+    "hop_group_not_exit_warning": "中轉與落地節點必須為具體代理節點，不能使用策略組",
+    "picker_entry_hint": "支援選擇具體代理節點或策略組作為前置入口",
+    "picker_node_only_hint": "中轉與落地跳僅支援選擇具體代理節點",
+    "hops_label": "鏈路節點編排（支援拖曳調序 / 一鍵互換）",
+    "all_nodes": "全部"
   }
 }

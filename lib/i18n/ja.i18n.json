@@ -9,7 +9,10 @@
     "webdavServerUrl": "サーバーURL",
     "webdavRequired": "空にすることはできません",
     "webdavLoginFailed": "ログインに失敗しました:",
-    "webdavListFailed": "ファイルリストの取得に失敗しました:"
+    "webdavListFailed": "ファイルリストの取得に失敗しました:",
+    "noBackupsYet": "クラウドバックアップがありません。右上のアイコンから作成できます。",
+    "deleteConfirm": "クラウドバックアップ [$name] を完全に削除しますか？",
+    "backupSuccess": "バックアップをアップロードしました"
   },
   "LaunchFailedScreen": {
     "invalidProcess": "アプリの起動に失敗しました [無効なプロセス名]。アプリを別のディレクトリに再インストールしてください",
@@ -39,7 +42,9 @@
     "zeroData": "データゼロ収集",
     "localExecution": "完全ローカル独立実行",
     "zeroTelemetry": "商業テレメトリなし",
-    "loading": "規約を読み込み中..."
+    "loading": "規約を読み込み中...",
+    "privacySubtitle": "データ収集ゼロ・ローカル完結型プライバシーポリシー",
+    "copied": "クリップボードにコピーしました"
   },
   "NetCheckScreen": {
     "title": "ネットワーク診断と修復",
@@ -148,7 +153,9 @@
     "conclusionPerfect": "全ルート良好！すべてのネットワークノードとプロキシ設定が正常です。",
     "conclusionGood": "全ルート概ね正常です。軽微な遅延や警告が検出されました。詳細をご確認ください。",
     "conclusionWarning": "一部のネットワークまたはプロキシに異常が検出されました。下の【一括修復】をお試しください。",
-    "conclusionCritical": "重大なネットワーク遮断！ローカル回線が切断されているか、コアが阻害されています。"
+    "conclusionCritical": "重大なネットワーク遮断！ローカル回線が切断されているか、コアが阻害されています。",
+    "valProxyTunActive": "TUN 仮想NICで接続中 ($mode)",
+    "fakeIpActive": "Fake-IP 有効 ($ip)"
   },
   "SpeedTestScreen": {
     "title": "スピードテスト",
@@ -173,7 +180,11 @@
     "peakSpeed": "ピーク速度",
     "avgSpeed": "平均速度",
     "testHistory": "テスト履歴",
-    "clearHistory": "履歴をクリア"
+    "clearHistory": "履歴をクリア",
+    "proxyNotRunningTip": "プロキシコアが起動していません。先に接続するか直接接続に切り替えてください。",
+    "switchToDirect": "直結に切替",
+    "testFailedNoData": "速度測定に失敗しました。ネットワークやサーバーを確認してください。",
+    "activeNode": "現在の出力ノード"
   },
   "VersionUpdateScreen": {
     "versionReady": "新しいバージョン [$p] の準備ができました",
@@ -741,7 +752,28 @@
     "cardQuickActions": "クイックツール",
     "resetDefaultCards": "デフォルトに戻す",
     "collapseAllCards": "すべて折りたたむ",
-    "expandAllCards": "すべて展開"
+    "expandAllCards": "すべて展開",
+    "sectionGeneral": "一般・コア",
+    "sectionRoutingTools": "ルール・チェーン・診断",
+    "sectionData": "データと同期",
+    "sectionSupport": "ヘルプと情報",
+    "sectionAppearance": "外観と操作",
+    "sectionNetworkSub": "速度テストと通信",
+    "sectionDesktop": "デスクトップ連携（起動・トレイ・プロキシ）",
+    "sectionMobile": "モバイル常駐と権限",
+    "sectionLaunchConnect": "起動と接続",
+    "sectionUpdates": "アップデート",
+    "sectionReset": "リセット",
+    "sectionCoreBasic": "ポートと制御",
+    "sectionCoreRouting": "ルーティング・TUN・LAN",
+    "sectionCoreRules": "ルールと上書き",
+    "sectionCoreProtocol": "通信とプロトコル",
+    "sectionCoreServices": "コアサービス",
+    "batteryOptimization": "バッテリー最適化の除外（バックグラウンド維持）",
+    "batteryOptimizationExempted": "除外済み",
+    "batteryOptimizationRestricted": "制限あり（タップして許可）",
+    "appPermissionsSettings": "システムアプリ権限設定",
+    "previewFinalConfig": "最終コア設定をプレビュー"
   },
   "permission": {
     "camera": "カメラ",
@@ -862,7 +894,7 @@
   },
   "chain_proxy": {
     "title": "チェーンプロキシ",
-    "desc": "2つのノードを中継（前置リレー ➔ 出口ノード）し、低遅延と地域制限解除を両立します。",
+    "desc": "dialer-proxy で2ホップ以上のノードを連結（入口 ➔ 中継 ➔ 出口）し、低遅延とネイティブIPを両立。有効時は選択グループへ自動追加されます。",
     "add": "チェーンプロキシを作成",
     "edit": "チェーンプロキシを編集",
     "delete": "削除",
@@ -879,13 +911,32 @@
     "preview": "トポロジープレビュー",
     "local_device": "端末",
     "internet": "インターネット",
-    "save_success": "チェーンプロキシを保存しました",
-    "empty_tip": "チェーンプロキシがありません。下のボタンから作成してください。",
+    "save_success": "保存して選択グループに同期しました",
+    "empty_tip": "チェーンプロキシがありません。上のボタンから作成してください。",
     "test_latency": "測定",
-    "node_missing_warning": "現在の設定に存在しないノードがあります。再指定してください。",
+    "node_missing_warning": "現在の設定に存在しないノードがあるため、安全のためスキップされました。",
     "name_empty_warning": "チェーンプロキシ名を入力してください",
-    "hop1_empty_warning": "第1ホップのノードを選択してください",
-    "hop2_empty_warning": "第2ホップのノードを選択してください",
-    "hop_same_warning": "第1ホップと第2ホップに同じノードは指定できません"
+    "hop1_empty_warning": "入口ノードを選択してください",
+    "hop2_empty_warning": "出口ノードを選択してください",
+    "hop_same_warning": "同じチェーン内で同一ノードは指定できません",
+    "active_count": "$active / $total 有効",
+    "hop_count_badge": "$count ホップ",
+    "hop_entry": "第1ホップ: 入口リレー",
+    "hop_transit": "第$indexホップ: 中継",
+    "hop_exit": "第$indexホップ: 出口",
+    "add_transit_hop": "中継ホップを追加",
+    "swap_hops": "隣接ホップを入れ替え",
+    "remove_hop": "ホップを削除",
+    "reset_name": "ホップ名から自動命名",
+    "use_now": "今すぐ使用",
+    "switched_to_chain": "「$group」を「$name」に切り替えました",
+    "enable_before_use": "先にこのチェーンプロキシを有効にしてください",
+    "enable_before_test": "遅延測定の前にこのチェーンプロキシを有効にしてください",
+    "hop_duplicate_warning": "同じチェーン内で重複したノードは選択できません",
+    "hop_group_not_exit_warning": "中継・出口ホップにはグループではなく具体的なノードを指定してください",
+    "picker_entry_hint": "入口ホップは個別ノードとポリシーグループの両方に対応しています",
+    "picker_node_only_hint": "中継・出口ホップは具体的なプロキシノードのみ選択できます",
+    "hops_label": "ホップ構成（ドラッグ並べ替え / 入れ替え可）",
+    "all_nodes": "すべて"
   }
 }

@@ -9,7 +9,10 @@
     "webdavServerUrl": "عنوان URL الخادم",
     "webdavRequired": "لايمكن ان يكون فارغا",
     "webdavLoginFailed": "فشل تسجيل الدخول:",
-    "webdavListFailed": "فشل في الحصول على قائمة الملفات:"
+    "webdavListFailed": "فشل في الحصول على قائمة الملفات:",
+    "noBackupsYet": "لا توجد نسخ احتياطية سحابية بعد. اضغط على رفع أعلاه للإنشاء.",
+    "deleteConfirm": "هل تريد حذف النسخة الاحتياطية [$name] نهائياً؟",
+    "backupSuccess": "تم رفع النسخة الاحتياطية بنجاح"
   },
   "LaunchFailedScreen": {
     "invalidProcess": "فشل التطبيق في البدء [اسم عملية غير صالح] ، يرجى إعادة تثبيت التطبيق إلى دليل منفصل",
@@ -39,7 +42,9 @@
     "zeroData": "صفر جمع للبيانات",
     "localExecution": "تشغيل محلي فقط",
     "zeroTelemetry": "بدون قياس عن بعد تجاري",
-    "loading": "جاري تحميل الاتفاقية..."
+    "loading": "جاري تحميل الاتفاقية...",
+    "privacySubtitle": "سياسة الخصوصية: عدم جمع البيانات والتنفيذ المحلي",
+    "copied": "تم النسخ إلى الحافظة"
   },
   "NetCheckScreen": {
     "title": "فحص وتشخيص الشبكة",
@@ -148,7 +153,9 @@
     "conclusionPerfect": "حالة الشبكة ممتازة! جميع العقد وإعدادات البروكسي تعمل بانسيابية تامة.",
     "conclusionGood": "الشبكة جيدة بشكل عام، تم اكتشاف بعض التأخير البسيط، يرجى مراجعة التفاصيل.",
     "conclusionWarning": "تم اكتشاف خلل في أجزاء من الشبكة أو البروكسي، يرجى استخدام [الإصلاح التلقائي] أدناه.",
-    "conclusionCritical": "انقطاع حاد في الشبكة! الشبكة المحلية غير متصلة أو تم حظر نواة البروكسي."
+    "conclusionCritical": "انقطاع حاد في الشبكة! الشبكة المحلية غير متصلة أو تم حظر نواة البروكسي.",
+    "valProxyTunActive": "محول TUN الافتراضي نشط ($mode)",
+    "fakeIpActive": "Fake-IP نشط ($ip)"
   },
   "SpeedTestScreen": {
     "title": "اختبار السرعة",
@@ -173,7 +180,11 @@
     "peakSpeed": "السرعة القصوى",
     "avgSpeed": "متوسط السرعة",
     "testHistory": "سجل الاختبارات",
-    "clearHistory": "مسح السجل"
+    "clearHistory": "مسح السجل",
+    "proxyNotRunningTip": "نواة الوكيل غير قيد التشغيل. اتصل أولاً أو بدّل إلى الوضع المباشر.",
+    "switchToDirect": "اتصال مباشر",
+    "testFailedNoData": "فشل اختبار السرعة: تعذر الوصول إلى الخادم.",
+    "activeNode": "العقدة النشطة"
   },
   "VersionUpdateScreen": {
     "versionReady": "الإصدار الجديد [$p] جاهز",
@@ -425,8 +436,8 @@
     "copySuccess": "تم النسخ",
     "alwayOnVPN": "اتصال مفتوح دائمًا",
     "disableFontScaler": "تعطيل تحجيم الخط(يسري مفعوله بعد إعادة التشغيل)",
-    "autoOrientation": "Rotate with the screen",
-    "restartTakesEffect": "Restart takes effect",
+    "autoOrientation": "تدوير تلقائي مع الشاشة",
+    "restartTakesEffect": "يسري بعد إعادة التشغيل",
     "reconnectTakesEffect": "سيتم تطبيقه بعد إعادة الاتصال.",
     "runtimeProfile": "تكوين وقت التشغيل",
     "willCompleteAfterRebootInstall": "يرجى إعادة تشغيل جهازك لإكمال تثبيت توسيع النظام",
@@ -741,7 +752,28 @@
     "cardQuickActions": "أدوات سريعة",
     "resetDefaultCards": "استعادة الافتراضي",
     "collapseAllCards": "طي الكل",
-    "expandAllCards": "توسيع الكل"
+    "expandAllCards": "توسيع الكل",
+    "sectionGeneral": "عام والنواة",
+    "sectionRoutingTools": "التوجيه والسلسلة والتشخيص",
+    "sectionData": "البيانات والمزامنة",
+    "sectionSupport": "المساعدة وحول التطبيق",
+    "sectionAppearance": "المظهر والسلوك",
+    "sectionNetworkSub": "اختبار السرعة والطلبات",
+    "sectionDesktop": "تكامل سطح المكتب (بدء التشغيل وشريط المهام والوكيل)",
+    "sectionMobile": "إبقاء العمل بالخلفية والأذونات",
+    "sectionLaunchConnect": "التشغيل والاتصال",
+    "sectionUpdates": "التحديثات",
+    "sectionReset": "إعادة التعيين",
+    "sectionCoreBasic": "الاستماع والتحكم",
+    "sectionCoreRouting": "التوجيه وTUN والوصول",
+    "sectionCoreRules": "القواعد والاستبدال",
+    "sectionCoreProtocol": "النقل والبروتوكولات",
+    "sectionCoreServices": "خدمات النواة",
+    "batteryOptimization": "تحسين البطارية (العمل بالخلفية)",
+    "batteryOptimizationExempted": "مستثنى",
+    "batteryOptimizationRestricted": "مقيّد (اضغط للسماح)",
+    "appPermissionsSettings": "أذونات التطبيق في النظام",
+    "previewFinalConfig": "معاينة التكوين النهائي للنواة"
   },
   "permission": {
     "camera": "الكاميرا",
@@ -886,6 +918,25 @@
     "name_empty_warning": "يُرجى إدخال اسم للبروكسي المتسلسل",
     "hop1_empty_warning": "يُرجى اختيار عقدة القفزة الأولى",
     "hop2_empty_warning": "يُرجى اختيار عقدة القفزة الثانية",
-    "hop_same_warning": "لا يمكن أن تكون القفزة الأولى والثانية نفس العقدة"
+    "hop_same_warning": "لا يمكن أن تكون القفزة الأولى والثانية نفس العقدة",
+    "active_count": "$active / $total نشط",
+    "hop_count_badge": "$count قفزات",
+    "hop_entry": "القفزة 1: مرحّل الدخول",
+    "hop_transit": "القفزة $index: العبور",
+    "hop_exit": "القفزة $index: مخرج الخروج",
+    "add_transit_hop": "إضافة قفزة عبور",
+    "swap_hops": "تبديل القفزات المتجاورة",
+    "remove_hop": "إزالة قفزة",
+    "reset_name": "تسمية تلقائية حسب القفزات",
+    "use_now": "استخدام الآن",
+    "switched_to_chain": "تم تبديل \"$group\" إلى \"$name\"",
+    "enable_before_use": "يرجى تفعيل هذا الوكيل المتسلسل أولاً",
+    "enable_before_test": "يرجى تفعيل هذا الوكيل المتسلسل قبل اختبار زمن الوصول",
+    "hop_duplicate_warning": "لا يمكن اختيار عقد مكررة في نفس السلسلة",
+    "hop_group_not_exit_warning": "يجب أن تكون قفزات العبور والخروج عقداً فعلية وليس مجموعات سياسات",
+    "picker_entry_hint": "تدعم قفزة الدخول العقد الفعلية ومجموعات السياسات",
+    "picker_node_only_hint": "تدعم قفزات العبور والخروج العقد الفعلية فقط",
+    "hops_label": "تسلسل القفزات (اسحب للترتيب / بدّل)",
+    "all_nodes": "الكل"
   }
 }

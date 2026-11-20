@@ -94,57 +94,64 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
     }
 
     // Mobile Bottom Sheet
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          width: double.infinity,
-          constraints: BoxConstraints(
-            maxWidth: 520,
-            maxHeight: MediaQuery.of(context).size.height * 0.85,
-          ),
-          decoration: BoxDecoration(
-            color: cardBg,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: isDark ? 0.5 : 0.15),
-                blurRadius: 24,
-                offset: const Offset(0, -4),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => Navigator.of(context).pop(),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: GestureDetector(
+          onTap: () {},
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: double.infinity,
+              constraints: BoxConstraints(
+                maxWidth: 520,
+                maxHeight: MediaQuery.of(context).size.height * 0.85,
               ),
-            ],
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: SafeArea(
-            top: false,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Drag handle
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 10, bottom: 4),
-                    width: 36,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF475569)
-                          : const Color(0xFFCBD5E1),
-                      borderRadius: BorderRadius.circular(2),
+              decoration: BoxDecoration(
+                color: cardBg,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.5 : 0.15),
+                    blurRadius: 24,
+                    offset: const Offset(0, -4),
+                  ),
+                ],
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Drag handle
+                    Center(
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 10, bottom: 4),
+                        width: 36,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? const Color(0xFF475569)
+                              : const Color(0xFFCBD5E1),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
                     ),
-                  ),
+                    _buildHeader(context, isDark, theme, tcontext),
+                    const Divider(height: 1, thickness: 0.8),
+                    _buildQuickActionsRow(context, isDark, theme, tcontext, ui),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                        child: _buildTilesList(context, isDark, theme, tcontext, ui),
+                      ),
+                    ),
+                  ],
                 ),
-                _buildHeader(context, isDark, theme, tcontext),
-                const Divider(height: 1, thickness: 0.8),
-                _buildQuickActionsRow(context, isDark, theme, tcontext, ui),
-                Flexible(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-                    child: _buildTilesList(context, isDark, theme, tcontext, ui),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -159,7 +166,7 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
     Translations tcontext,
   ) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 14, 12, 12),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 12),
       child: Row(
         children: [
           Container(
@@ -197,11 +204,6 @@ class _HomeCardsManagerSheetState extends State<HomeCardsManagerSheet> {
                 ),
               ],
             ),
-          ),
-          IconButton(
-            tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-            icon: const Icon(Icons.close_rounded, size: 20),
-            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       ),

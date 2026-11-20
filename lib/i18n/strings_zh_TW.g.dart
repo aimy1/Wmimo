@@ -96,6 +96,9 @@ class Translations$BackupAndSyncWebdavScreen$zh_TW implements Translations$Backu
 	@override String get webdavRequired => '不能為空';
 	@override String get webdavLoginFailed => '登入失敗:';
 	@override String get webdavListFailed => '取得檔案清單失敗:';
+	@override String get noBackupsYet => '暫無雲端備份，點擊右上角上傳圖示立即建立備份';
+	@override String deleteConfirm({required Object name}) => '確定要永久刪除雲端備份 [${name}] 嗎？';
+	@override String get backupSuccess => '備份已成功上傳';
 }
 
 // Path: LaunchFailedScreen
@@ -147,6 +150,8 @@ class Translations$UserAgreementScreen$zh_TW implements Translations$UserAgreeme
 	@override String get localExecution => '純本機獨立運行';
 	@override String get zeroTelemetry => '純淨無商業遙測';
 	@override String get loading => '正在載入使用者協議...';
+	@override String get privacySubtitle => '資料零蒐集與純本機執行保護政策';
+	@override String get copied => '已複製到剪貼簿';
 }
 
 // Path: NetCheckScreen
@@ -263,6 +268,8 @@ class Translations$NetCheckScreen$zh_TW implements Translations$NetCheckScreen$e
 	@override String get conclusionGood => '線路基本正常，檢測到部分非致命延遲或警告，建議查看詳情。';
 	@override String get conclusionWarning => '檢測到部分網路或代理環節異常，請使用下方【一鍵修復】恢復。';
 	@override String get conclusionCritical => '嚴重網路受阻！本地網路未連線或代理核心遭遇阻斷。';
+	@override String valProxyTunActive({required Object mode}) => 'TUN 虛擬網卡接管中 (${mode})';
+	@override String fakeIpActive({required Object ip}) => 'Fake-IP 已啟用 (${ip})';
 }
 
 // Path: SpeedTestScreen
@@ -295,6 +302,10 @@ class Translations$SpeedTestScreen$zh_TW implements Translations$SpeedTestScreen
 	@override String get avgSpeed => '平均速率';
 	@override String get testHistory => '測速歷史';
 	@override String get clearHistory => '清空歷史';
+	@override String get proxyNotRunningTip => '代理服務尚未啟動，請先連線或切換為直連模式';
+	@override String get switchToDirect => '切至直連';
+	@override String get testFailedNoData => '測速失敗：無法連通當前測速伺服器，請檢查網路或切換線路';
+	@override String get activeNode => '目前出口節點';
 }
 
 // Path: VersionUpdateScreen
@@ -866,6 +877,27 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get resetDefaultCards => '恢復預設';
 	@override String get collapseAllCards => '全部折疊';
 	@override String get expandAllCards => '全部展開';
+	@override String get sectionGeneral => '常規與核心';
+	@override String get sectionRoutingTools => '規則、鏈式與診斷';
+	@override String get sectionData => '資料與同步';
+	@override String get sectionSupport => '說明與關於';
+	@override String get sectionAppearance => '外觀與互動';
+	@override String get sectionNetworkSub => '測速與訂閱請求';
+	@override String get sectionDesktop => '桌面端整合（啟動、匣與系統代理）';
+	@override String get sectionMobile => '行動端背景保活與系統權限';
+	@override String get sectionLaunchConnect => '啟動與連線';
+	@override String get sectionUpdates => '版本更新';
+	@override String get sectionReset => '恢復預設';
+	@override String get sectionCoreBasic => '基礎監聽與驗證';
+	@override String get sectionCoreRouting => '路由、TUN 與區域網路存取';
+	@override String get sectionCoreRules => '規則範本與設定覆寫';
+	@override String get sectionCoreProtocol => '傳輸連線與協定';
+	@override String get sectionCoreServices => '內建核心元件';
+	@override String get batteryOptimization => '背景省電豁免（防止系統清除）';
+	@override String get batteryOptimizationExempted => '已豁免限制';
+	@override String get batteryOptimizationRestricted => '未豁免（點擊授權）';
+	@override String get appPermissionsSettings => '系統應用程式權限設定';
+	@override String get previewFinalConfig => '預覽最終產生的核心設定';
 }
 
 // Path: permission
@@ -1028,11 +1060,11 @@ class Translations$chain_proxy$zh_TW implements Translations$chain_proxy$en {
 
 	// Translations
 	@override String get title => '鏈式代理';
-	@override String get desc => '將兩個節點級聯中轉（前置跳板 ➔ 落地出口），實現低延遲高速專線與原生住宅 IP 解鎖兼得。';
-	@override String get add => '新建鏈式代理';
+	@override String get desc => '透過 dialer-proxy 將 2 跳以上節點級聯轉發（前置入口 ➔ 中轉 ➔ 落地出口），兼顧低延遲與原生 IP 解鎖，啟用後自動注入主選擇策略組。';
+	@override String get add => '新增鏈式代理';
 	@override String get edit => '編輯鏈式代理';
 	@override String get delete => '刪除';
-	@override String get delete_confirm => '確定要刪除該鏈式代理嗎？';
+	@override String get delete_confirm => '確定要刪除此鏈式代理嗎？';
 	@override String get name => '鏈式代理名稱';
 	@override String get name_hint => '例如：香港中轉 ➔ 美國家寬';
 	@override String get hop1 => '第一跳：前置跳板 (入口)';
@@ -1043,16 +1075,35 @@ class Translations$chain_proxy$zh_TW implements Translations$chain_proxy$en {
 	@override String get hop2_placeholder => '第二跳節點';
 	@override String get select_node => '點擊選擇節點';
 	@override String get preview => '鏈路拓撲預覽';
-	@override String get local_device => '我的設備';
+	@override String get local_device => '我的裝置';
 	@override String get internet => '目標網站';
-	@override String get save_success => '鏈式代理保存成功';
-	@override String get empty_tip => '暫無鏈式代理，點擊下方按鈕立即創建';
+	@override String get save_success => '鏈式代理已儲存並同步到策略組';
+	@override String get empty_tip => '暫無鏈式代理，點擊上方按鈕立即建立';
 	@override String get test_latency => '測速';
-	@override String get node_missing_warning => '部分節點在當前配置中不存在，請重新指定';
+	@override String get node_missing_warning => '部分節點在目前設定中不存在，已安全跳過注入以防核心報錯';
 	@override String get name_empty_warning => '請輸入鏈式代理名稱';
-	@override String get hop1_empty_warning => '請選擇第一跳前置節點';
-	@override String get hop2_empty_warning => '請選擇第二跳落地節點';
-	@override String get hop_same_warning => '第一跳與第二跳不能為同一個節點';
+	@override String get hop1_empty_warning => '請選擇前置入口節點';
+	@override String get hop2_empty_warning => '請選擇落地出口節點';
+	@override String get hop_same_warning => '同一鏈路中不能重複選擇相同的節點';
+	@override String active_count({required Object active, required Object total}) => '已啟用 ${active} / ${total} 條';
+	@override String hop_count_badge({required Object count}) => '${count} 跳';
+	@override String get hop_entry => '第 1 跳：前置入口';
+	@override String hop_transit({required Object index}) => '第 ${index} 跳：中轉跳板';
+	@override String hop_exit({required Object index}) => '第 ${index} 跳：落地出口';
+	@override String get add_transit_hop => '新增中轉節點';
+	@override String get swap_hops => '互換相鄰節點';
+	@override String get remove_hop => '移除此跳';
+	@override String get reset_name => '依節點自動命名';
+	@override String get use_now => '設為目前';
+	@override String switched_to_chain({required Object group, required Object name}) => '已在「${group}」中切換至「${name}」';
+	@override String get enable_before_use => '請先開啟此鏈式代理後再套用';
+	@override String get enable_before_test => '請先開啟此鏈式代理後再測速';
+	@override String get hop_duplicate_warning => '同一鏈式代理中不能重複選擇相同節點';
+	@override String get hop_group_not_exit_warning => '中轉與落地節點必須為具體代理節點，不能使用策略組';
+	@override String get picker_entry_hint => '支援選擇具體代理節點或策略組作為前置入口';
+	@override String get picker_node_only_hint => '中轉與落地跳僅支援選擇具體代理節點';
+	@override String get hops_label => '鏈路節點編排（支援拖曳調序 / 一鍵互換）';
+	@override String get all_nodes => '全部';
 }
 
 // Path: main.tray
@@ -1104,6 +1155,9 @@ extension on TranslationsZhTw {
 			'BackupAndSyncWebdavScreen.webdavRequired' => '不能為空',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => '登入失敗:',
 			'BackupAndSyncWebdavScreen.webdavListFailed' => '取得檔案清單失敗:',
+			'BackupAndSyncWebdavScreen.noBackupsYet' => '暫無雲端備份，點擊右上角上傳圖示立即建立備份',
+			'BackupAndSyncWebdavScreen.deleteConfirm' => ({required Object name}) => '確定要永久刪除雲端備份 [${name}] 嗎？',
+			'BackupAndSyncWebdavScreen.backupSuccess' => '備份已成功上傳',
 			'LaunchFailedScreen.invalidProcess' => '應用程式啟動失敗 [無效的處理程序名稱]，請重新安裝應用程式至獨立目錄',
 			'LaunchFailedScreen.invalidProfile' => '應用啟動失敗[訪問設定檔失敗],請重新安裝應用',
 			'LaunchFailedScreen.invalidVersion' => '應用啟動失敗[無效版本],請重新安裝應用',
@@ -1128,6 +1182,8 @@ extension on TranslationsZhTw {
 			'UserAgreementScreen.localExecution' => '純本機獨立運行',
 			'UserAgreementScreen.zeroTelemetry' => '純淨無商業遙測',
 			'UserAgreementScreen.loading' => '正在載入使用者協議...',
+			'UserAgreementScreen.privacySubtitle' => '資料零蒐集與純本機執行保護政策',
+			'UserAgreementScreen.copied' => '已複製到剪貼簿',
 			'NetCheckScreen.title' => '網路鏈路體檢與診斷',
 			'NetCheckScreen.fullDiagnosticsTab' => '一鍵鏈路體檢',
 			'NetCheckScreen.advancedCheckTab' => '進階單網域排查',
@@ -1235,6 +1291,8 @@ extension on TranslationsZhTw {
 			'NetCheckScreen.conclusionGood' => '線路基本正常，檢測到部分非致命延遲或警告，建議查看詳情。',
 			'NetCheckScreen.conclusionWarning' => '檢測到部分網路或代理環節異常，請使用下方【一鍵修復】恢復。',
 			'NetCheckScreen.conclusionCritical' => '嚴重網路受阻！本地網路未連線或代理核心遭遇阻斷。',
+			'NetCheckScreen.valProxyTunActive' => ({required Object mode}) => 'TUN 虛擬網卡接管中 (${mode})',
+			'NetCheckScreen.fakeIpActive' => ({required Object ip}) => 'Fake-IP 已啟用 (${ip})',
 			'SpeedTestScreen.title' => '網路測速',
 			'SpeedTestScreen.startTest' => '開始測速',
 			'SpeedTestScreen.stopTest' => '停止測速',
@@ -1258,6 +1316,10 @@ extension on TranslationsZhTw {
 			'SpeedTestScreen.avgSpeed' => '平均速率',
 			'SpeedTestScreen.testHistory' => '測速歷史',
 			'SpeedTestScreen.clearHistory' => '清空歷史',
+			'SpeedTestScreen.proxyNotRunningTip' => '代理服務尚未啟動，請先連線或切換為直連模式',
+			'SpeedTestScreen.switchToDirect' => '切至直連',
+			'SpeedTestScreen.testFailedNoData' => '測速失敗：無法連通當前測速伺服器，請檢查網路或切換線路',
+			'SpeedTestScreen.activeNode' => '目前出口節點',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '新版本[${p}]已就緒',
 			'VersionUpdateScreen.update' => '重新啟動更新',
 			'VersionUpdateScreen.cancel' => '暫不更新',
@@ -1597,6 +1659,8 @@ extension on TranslationsZhTw {
 			'meta.nodeSelected' => ({required Object p}) => '已選擇節點: ${p}',
 			'meta.startingCoreAndTesting' => '正在啟動代理核心並測速...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} 分鐘',
+			_ => null,
+		} ?? switch (path) {
 			'meta.chartUpload' => '上傳',
 			'meta.chartDownload' => '下載',
 			'meta.author' => '作者',
@@ -1608,8 +1672,6 @@ extension on TranslationsZhTw {
 			'meta.autoScrollDisabled' => '已關閉自動捲動',
 			'meta.pauseLogs' => '暫停即時日誌',
 			'meta.resumeLogs' => '恢復即時日誌',
-			_ => null,
-		} ?? switch (path) {
 			'meta.scrollToLatest' => '滾至最新',
 			'meta.scrollToBottom' => '滾至底部',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} 條新日誌)',
@@ -1818,6 +1880,27 @@ extension on TranslationsZhTw {
 			'meta.resetDefaultCards' => '恢復預設',
 			'meta.collapseAllCards' => '全部折疊',
 			'meta.expandAllCards' => '全部展開',
+			'meta.sectionGeneral' => '常規與核心',
+			'meta.sectionRoutingTools' => '規則、鏈式與診斷',
+			'meta.sectionData' => '資料與同步',
+			'meta.sectionSupport' => '說明與關於',
+			'meta.sectionAppearance' => '外觀與互動',
+			'meta.sectionNetworkSub' => '測速與訂閱請求',
+			'meta.sectionDesktop' => '桌面端整合（啟動、匣與系統代理）',
+			'meta.sectionMobile' => '行動端背景保活與系統權限',
+			'meta.sectionLaunchConnect' => '啟動與連線',
+			'meta.sectionUpdates' => '版本更新',
+			'meta.sectionReset' => '恢復預設',
+			'meta.sectionCoreBasic' => '基礎監聽與驗證',
+			'meta.sectionCoreRouting' => '路由、TUN 與區域網路存取',
+			'meta.sectionCoreRules' => '規則範本與設定覆寫',
+			'meta.sectionCoreProtocol' => '傳輸連線與協定',
+			'meta.sectionCoreServices' => '內建核心元件',
+			'meta.batteryOptimization' => '背景省電豁免（防止系統清除）',
+			'meta.batteryOptimizationExempted' => '已豁免限制',
+			'meta.batteryOptimizationRestricted' => '未豁免（點擊授權）',
+			'meta.appPermissionsSettings' => '系統應用程式權限設定',
+			'meta.previewFinalConfig' => '預覽最終產生的核心設定',
 			'permission.camera' => '相機',
 			'permission.screen' => '螢幕錄製',
 			'permission.appQuery' => '取得應用程式列表',
@@ -1920,11 +2003,11 @@ extension on TranslationsZhTw {
 			'hotkeys.cycleModeTip' => '依序輪轉：規則 ➔ 全域 ➔ 直連',
 			'hotkeys.resetDefault' => '恢復預設設定',
 			'chain_proxy.title' => '鏈式代理',
-			'chain_proxy.desc' => '將兩個節點級聯中轉（前置跳板 ➔ 落地出口），實現低延遲高速專線與原生住宅 IP 解鎖兼得。',
-			'chain_proxy.add' => '新建鏈式代理',
+			'chain_proxy.desc' => '透過 dialer-proxy 將 2 跳以上節點級聯轉發（前置入口 ➔ 中轉 ➔ 落地出口），兼顧低延遲與原生 IP 解鎖，啟用後自動注入主選擇策略組。',
+			'chain_proxy.add' => '新增鏈式代理',
 			'chain_proxy.edit' => '編輯鏈式代理',
 			'chain_proxy.delete' => '刪除',
-			'chain_proxy.delete_confirm' => '確定要刪除該鏈式代理嗎？',
+			'chain_proxy.delete_confirm' => '確定要刪除此鏈式代理嗎？',
 			'chain_proxy.name' => '鏈式代理名稱',
 			'chain_proxy.name_hint' => '例如：香港中轉 ➔ 美國家寬',
 			'chain_proxy.hop1' => '第一跳：前置跳板 (入口)',
@@ -1935,16 +2018,35 @@ extension on TranslationsZhTw {
 			'chain_proxy.hop2_placeholder' => '第二跳節點',
 			'chain_proxy.select_node' => '點擊選擇節點',
 			'chain_proxy.preview' => '鏈路拓撲預覽',
-			'chain_proxy.local_device' => '我的設備',
+			'chain_proxy.local_device' => '我的裝置',
 			'chain_proxy.internet' => '目標網站',
-			'chain_proxy.save_success' => '鏈式代理保存成功',
-			'chain_proxy.empty_tip' => '暫無鏈式代理，點擊下方按鈕立即創建',
+			'chain_proxy.save_success' => '鏈式代理已儲存並同步到策略組',
+			'chain_proxy.empty_tip' => '暫無鏈式代理，點擊上方按鈕立即建立',
 			'chain_proxy.test_latency' => '測速',
-			'chain_proxy.node_missing_warning' => '部分節點在當前配置中不存在，請重新指定',
+			'chain_proxy.node_missing_warning' => '部分節點在目前設定中不存在，已安全跳過注入以防核心報錯',
 			'chain_proxy.name_empty_warning' => '請輸入鏈式代理名稱',
-			'chain_proxy.hop1_empty_warning' => '請選擇第一跳前置節點',
-			'chain_proxy.hop2_empty_warning' => '請選擇第二跳落地節點',
-			'chain_proxy.hop_same_warning' => '第一跳與第二跳不能為同一個節點',
+			'chain_proxy.hop1_empty_warning' => '請選擇前置入口節點',
+			'chain_proxy.hop2_empty_warning' => '請選擇落地出口節點',
+			'chain_proxy.hop_same_warning' => '同一鏈路中不能重複選擇相同的節點',
+			'chain_proxy.active_count' => ({required Object active, required Object total}) => '已啟用 ${active} / ${total} 條',
+			'chain_proxy.hop_count_badge' => ({required Object count}) => '${count} 跳',
+			'chain_proxy.hop_entry' => '第 1 跳：前置入口',
+			'chain_proxy.hop_transit' => ({required Object index}) => '第 ${index} 跳：中轉跳板',
+			'chain_proxy.hop_exit' => ({required Object index}) => '第 ${index} 跳：落地出口',
+			'chain_proxy.add_transit_hop' => '新增中轉節點',
+			'chain_proxy.swap_hops' => '互換相鄰節點',
+			'chain_proxy.remove_hop' => '移除此跳',
+			'chain_proxy.reset_name' => '依節點自動命名',
+			'chain_proxy.use_now' => '設為目前',
+			'chain_proxy.switched_to_chain' => ({required Object group, required Object name}) => '已在「${group}」中切換至「${name}」',
+			'chain_proxy.enable_before_use' => '請先開啟此鏈式代理後再套用',
+			'chain_proxy.enable_before_test' => '請先開啟此鏈式代理後再測速',
+			'chain_proxy.hop_duplicate_warning' => '同一鏈式代理中不能重複選擇相同節點',
+			'chain_proxy.hop_group_not_exit_warning' => '中轉與落地節點必須為具體代理節點，不能使用策略組',
+			'chain_proxy.picker_entry_hint' => '支援選擇具體代理節點或策略組作為前置入口',
+			'chain_proxy.picker_node_only_hint' => '中轉與落地跳僅支援選擇具體代理節點',
+			'chain_proxy.hops_label' => '鏈路節點編排（支援拖曳調序 / 一鍵互換）',
+			'chain_proxy.all_nodes' => '全部',
 			_ => null,
 		};
 	}

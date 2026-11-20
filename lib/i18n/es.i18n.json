@@ -9,7 +9,10 @@
     "webdavServerUrl": "URL del Servidor",
     "webdavRequired": "No puede estar vacío",
     "webdavLoginFailed": "Fallo al iniciar sesión:",
-    "webdavListFailed": "Fallo al obtener la lista de archivos:"
+    "webdavListFailed": "Fallo al obtener la lista de archivos:",
+    "noBackupsYet": "Aún no hay copias en la nube. Pulse subir arriba para crear una.",
+    "deleteConfirm": "¿Eliminar permanentemente la copia [$name]?",
+    "backupSuccess": "Copia de seguridad subida correctamente"
   },
   "LaunchFailedScreen": {
     "invalidProcess": "La aplicación no pudo iniciarse [Nombre de proceso no válido], por favor reinstale la aplicación en un directorio separado",
@@ -39,7 +42,9 @@
     "zeroData": "Cero Recopilación de Datos",
     "localExecution": "Ejecución Solo Local",
     "zeroTelemetry": "Sin Telemetría Comercial",
-    "loading": "Cargando acuerdo..."
+    "loading": "Cargando acuerdo...",
+    "privacySubtitle": "Política de privacidad: cero recopilación y ejecución local",
+    "copied": "Copiado al portapapeles"
   },
   "VersionUpdateScreen": {
     "versionReady": "La nueva versión [$p] está lista",
@@ -153,7 +158,9 @@
     "conclusionPerfect": "¡Excelente! Todos los nodos y configuraciones proxy funcionan correctamente.",
     "conclusionGood": "Red generalmente normal, se detectaron advertencias o latencia menor no crítica.",
     "conclusionWarning": "Problemas detectados en la red o proxy; use la Reparación en un clic abajo.",
-    "conclusionCritical": "¡Bloqueo grave de red! Red local desconectada o núcleo proxy bloqueado."
+    "conclusionCritical": "¡Bloqueo grave de red! Red local desconectada o núcleo proxy bloqueado.",
+    "valProxyTunActive": "Adaptador virtual TUN activo ($mode)",
+    "fakeIpActive": "Fake-IP activo ($ip)"
   },
   "SpeedTestScreen": {
     "title": "Test de velocidad",
@@ -178,7 +185,11 @@
     "peakSpeed": "Velocidad máxima",
     "avgSpeed": "Velocidad media",
     "testHistory": "Historial",
-    "clearHistory": "Borrar historial"
+    "clearHistory": "Borrar historial",
+    "proxyNotRunningTip": "El núcleo proxy no está activo. Conéctese primero o use el modo directo.",
+    "switchToDirect": "Modo directo",
+    "testFailedNoData": "Error en la prueba: no se pudo conectar con el servidor.",
+    "activeNode": "Nodo activo"
   },
   "loginScreen": {
     "login": "Iniciar sesión",
@@ -631,7 +642,7 @@
     "copyReport": "Copiar informe",
     "reportCopied": "Informe copiado al portapapeles, listo para compartir",
     "gamingExperience": "Juegos online",
-    "streamingExperience": "Streaming",
+    "streamingExperience": "Transmisión",
     "meetingExperience": "Videoconferencias",
     "customSpeedtestUrl": "URL de descarga personalizada (https://...)",
     "customSpeedtestSource": "Servidor personalizado",
@@ -666,7 +677,7 @@
     "all": "Todo",
     "showAppIcon": "Mostrar icono de aplicación",
     "proxySelection": "Selección de proxy",
-    "regionHk": "🇭🇰 Hong Kong",
+    "regionHk": "🇭🇰 Hong Kong (China)",
     "regionJp": "🇯🇵 Japón",
     "regionSg": "🇸🇬 Singapur",
     "regionTw": "🇹🇼 Taiwán",
@@ -741,7 +752,28 @@
     "cardQuickActions": "Herramientas Rápidas",
     "resetDefaultCards": "Restablecer",
     "collapseAllCards": "Colapsar todo",
-    "expandAllCards": "Expandir todo"
+    "expandAllCards": "Expandir todo",
+    "sectionGeneral": "General y Núcleo",
+    "sectionRoutingTools": "Enrutamiento, Cadena y Diagnóstico",
+    "sectionData": "Datos y Sincronización",
+    "sectionSupport": "Ayuda y Acerca de",
+    "sectionAppearance": "Apariencia y Comportamiento",
+    "sectionNetworkSub": "Prueba de velocidad y Solicitudes",
+    "sectionDesktop": "Integración de Escritorio (Inicio, Bandeja y Proxy)",
+    "sectionMobile": "Segundo plano y Permisos Móviles",
+    "sectionLaunchConnect": "Inicio y Conexión",
+    "sectionUpdates": "Actualizaciones",
+    "sectionReset": "Restablecer",
+    "sectionCoreBasic": "Escucha y Control",
+    "sectionCoreRouting": "Enrutamiento, TUN y Acceso",
+    "sectionCoreRules": "Reglas y Sobrescritura",
+    "sectionCoreProtocol": "Transporte y Protocolos",
+    "sectionCoreServices": "Servicios del Núcleo",
+    "batteryOptimization": "Optimización de Batería (Segundo Plano)",
+    "batteryOptimizationExempted": "Exento",
+    "batteryOptimizationRestricted": "Restringido (Toca para permitir)",
+    "appPermissionsSettings": "Permisos de la Aplicación",
+    "previewFinalConfig": "Vista previa de configuración final"
   },
   "permission": {
     "camera": "Cámara",
@@ -886,6 +918,25 @@
     "name_empty_warning": "Introduce un nombre para el proxy en cadena",
     "hop1_empty_warning": "Selecciona el primer nodo (entrada)",
     "hop2_empty_warning": "Selecciona el segundo nodo (salida)",
-    "hop_same_warning": "El salto 1 y el salto 2 no pueden ser el mismo nodo"
+    "hop_same_warning": "El salto 1 y el salto 2 no pueden ser el mismo nodo",
+    "active_count": "$active / $total activos",
+    "hop_count_badge": "$count Saltos",
+    "hop_entry": "Salto 1: Entrada",
+    "hop_transit": "Salto $index: Tránsito",
+    "hop_exit": "Salto $index: Salida Final",
+    "add_transit_hop": "Añadir salto intermedio",
+    "swap_hops": "Intercambiar saltos adyacentes",
+    "remove_hop": "Eliminar salto",
+    "reset_name": "Autonombrar según saltos",
+    "use_now": "Usar ahora",
+    "switched_to_chain": "Se cambió \"$group\" a \"$name\"",
+    "enable_before_use": "Active primero este proxy en cadena",
+    "enable_before_test": "Active primero este proxy en cadena antes de probar latencia",
+    "hop_duplicate_warning": "No se pueden seleccionar nodos duplicados en la misma cadena",
+    "hop_group_not_exit_warning": "Los saltos intermedios y de salida deben ser nodos concretos, no grupos",
+    "picker_entry_hint": "El salto de entrada admite tanto nodos como grupos de políticas",
+    "picker_node_only_hint": "Los saltos intermedios y de salida solo admiten nodos concretos",
+    "hops_label": "Secuencia de saltos (Arrastra para reordenar)",
+    "all_nodes": "Todos"
   }
 }

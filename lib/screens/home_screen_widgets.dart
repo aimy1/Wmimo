@@ -537,17 +537,26 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                 // Clash Verge 风格开关: 系统代理 (PC) / 分应用代理 (Android) & TUN 模式
                 Row(
                   children: [
-                    // 系统代理 (PC端) 或 分应用代理 (Android端)
-                    Expanded(
-                      child: Platform.isAndroid
-                          ? _buildClashVergeModeSwitch(
+                    // 系统代理 (仅 PC 端) 或 分应用代理 (Android 端)
+                    if (Platform.isAndroid) ...[
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
+                            final perapp = ClashSettingManager.getConfig().Extension?.Tun.perApp;
+                            final enabled = perapp?.Enable == true;
+                            final isWhitelist = perapp?.WhiteList ?? false;
+                            final count = perapp?.PackageIds?.length ?? 0;
+                            final modeText = isWhitelist
+                                ? tcontext.meta.proxySelectedMode
+                                : tcontext.meta.bypassSelectedMode;
+                            return _buildClashVergeModeSwitch(
                               context: context,
                               icon: Icons.apps_rounded,
                               iconColor: ThemeDefine.kColorBlue,
                               title: tcontext.PerAppAndroidScreen.title,
-                              isActive: ClashSettingManager.getConfig().Extension?.Tun.perApp.Enable == true,
-                              subtitle: (ClashSettingManager.getConfig().Extension?.Tun.perApp.Enable == true)
-                                  ? "${ClashSettingManager.getConfig().Extension?.Tun.perApp.PackageIds?.length ?? 0} ${tcontext.meta.selectedOnly}"
+                              isActive: enabled,
+                              subtitle: enabled
+                                  ? "$modeText · $count"
                                   : tcontext.meta.disable,
                               onTap: () async {
                                 await Navigator.push(
@@ -570,36 +579,43 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
                                 setState(() {});
                               },
                               onChanged: (bool value) async {
-                                var perapp = ClashSettingManager.getConfig().Extension?.Tun.perApp;
                                 if (perapp != null) {
                                   perapp.Enable = value;
                                   await ClashSettingManager.save();
                                   setState(() {});
                                   if (_state == FlutterVpnServiceState.connected) {
-                                    VpnActionHandler.vpnReconnect?.call("perapp", false);
+                                    final applied = await VPNService.updateAndroidPerApp();
+                                    if (!applied) {
+                                      VpnActionHandler.vpnReconnect?.call("perapp", false);
+                                    }
                                   }
                                 }
                               },
-                            )
-                          : _buildClashVergeModeSwitch(
-                              context: context,
-                              icon: Icons.laptop_windows_rounded,
-                              iconColor: ThemeDefine.kColorBlue,
-                              title: tcontext.meta.systemProxy,
-                              isActive: SettingManager.getConfig().autoSetSystemProxy,
-                              onChanged: (bool value) async {
-                                SettingManager.getConfig().autoSetSystemProxy = value;
-                                SettingManager.save();
-                                if (PlatformUtils.isPC()) {
-                                  if (_state == FlutterVpnServiceState.connected) {
-                                    await VPNService.setSystemProxy(value);
-                                  }
-                                }
-                                setState(() {});
-                              },
-                            ),
-                    ),
-                    const SizedBox(width: 8),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ] else if (PlatformUtils.isPC()) ...[
+                      Expanded(
+                        child: _buildClashVergeModeSwitch(
+                          context: context,
+                          icon: Icons.laptop_windows_rounded,
+                          iconColor: ThemeDefine.kColorBlue,
+                          title: tcontext.meta.systemProxy,
+                          isActive: SettingManager.getConfig().autoSetSystemProxy,
+                          onChanged: (bool value) async {
+                            SettingManager.getConfig().autoSetSystemProxy = value;
+                            SettingManager.save();
+                            if (_state == FlutterVpnServiceState.connected) {
+                              await VPNService.setSystemProxy(value);
+                            }
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
                     // TUN 模式
                     Expanded(
                       child: _buildClashVergeModeSwitch(

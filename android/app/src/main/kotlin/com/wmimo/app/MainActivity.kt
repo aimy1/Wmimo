@@ -115,11 +115,20 @@ class MainActivity : FlutterActivity() {
                 "hasAppListPermission" -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         try {
-                            val granted = ContextCompat.checkSelfPermission(
-                                this,
-                                "com.android.permission.GET_INSTALLED_APPS"
-                            ) == PackageManager.PERMISSION_GRANTED
-                            result.success(granted)
+                            val permInfo = try {
+                                packageManager.getPermissionInfo("com.android.permission.GET_INSTALLED_APPS", 0)
+                            } catch (_: Throwable) {
+                                null
+                            }
+                            if (permInfo == null) {
+                                result.success(true)
+                            } else {
+                                val granted = ContextCompat.checkSelfPermission(
+                                    this,
+                                    "com.android.permission.GET_INSTALLED_APPS"
+                                ) == PackageManager.PERMISSION_GRANTED
+                                result.success(granted)
+                            }
                         } catch (_: Throwable) {
                             result.success(true)
                         }
@@ -176,11 +185,11 @@ class MainActivity : FlutterActivity() {
                             } catch (_: Throwable) {}
                         }
                     }
-                    mainHandler.postDelayed(watchdog, 2500)
+                    mainHandler.postDelayed(watchdog, 4500)
 
                     Thread {
                         try {
-                            // Method 1: Direct getInstalledApplications (fastest, 1 IPC call, <20ms)
+                            // Method 1: Direct getInstalledApplications (fastest, 1 IPC call)
                             var allApps: List<ApplicationInfo> = try {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                     pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0))
@@ -223,60 +232,58 @@ class MainActivity : FlutterActivity() {
                                 ))
                             }
 
-                            // Method 2: If getInstalledApplications returned nothing (restricted by OEM), query launcher activities
-                            if (list.isEmpty()) {
-                                try {
-                                    val launcherIntent = Intent(Intent.ACTION_MAIN).apply {
-                                        addCategory(Intent.CATEGORY_LAUNCHER)
+                            // Method 2: Always merge launcher activities so OEM-restricted Method 1 still surfaces user apps
+                            try {
+                                val launcherIntent = Intent(Intent.ACTION_MAIN).apply {
+                                    addCategory(Intent.CATEGORY_LAUNCHER)
+                                }
+                                var launcherApps: List<ResolveInfo> = try {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(0))
+                                    } else {
+                                        @Suppress("DEPRECATION")
+                                        pm.queryIntentActivities(launcherIntent, 0)
                                     }
-                                    var launcherApps: List<ResolveInfo> = try {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                            pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(0))
+                                } catch (_: Throwable) {
+                                    emptyList()
+                                }
+
+                                if (launcherApps.isEmpty()) {
+                                    try {
+                                        launcherApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                            pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
                                         } else {
                                             @Suppress("DEPRECATION")
-                                            pm.queryIntentActivities(launcherIntent, 0)
+                                            pm.queryIntentActivities(launcherIntent, PackageManager.MATCH_ALL)
                                         }
+                                    } catch (_: Throwable) {}
+                                }
+
+                                for (resolveInfo in launcherApps) {
+                                    val actInfo = resolveInfo.activityInfo ?: continue
+                                    val pkg = actInfo.packageName ?: continue
+                                    if (pkg == packageName || seenPackages.contains(pkg)) continue
+                                    seenPackages.add(pkg)
+
+                                    val label = try {
+                                        resolveInfo.loadLabel(pm)?.toString() ?: actInfo.loadLabel(pm)?.toString() ?: pkg
                                     } catch (_: Throwable) {
-                                        emptyList()
+                                        pkg
                                     }
+                                    val appFlags = actInfo.applicationInfo?.flags ?: 0
+                                    val isSystem = (appFlags and ApplicationInfo.FLAG_SYSTEM) != 0
 
-                                    if (launcherApps.isEmpty()) {
-                                        try {
-                                            launcherApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                                pm.queryIntentActivities(launcherIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong()))
-                                            } else {
-                                                @Suppress("DEPRECATION")
-                                                pm.queryIntentActivities(launcherIntent, PackageManager.MATCH_ALL)
-                                            }
-                                        } catch (_: Throwable) {}
-                                    }
+                                    list.add(mapOf(
+                                        "packageName" to pkg,
+                                        "name" to label,
+                                        "isSystem" to isSystem,
+                                        "flags" to appFlags
+                                    ))
+                                }
+                            } catch (_: Throwable) {}
 
-                                    for (resolveInfo in launcherApps) {
-                                        val actInfo = resolveInfo.activityInfo ?: continue
-                                        val pkg = actInfo.packageName ?: continue
-                                        if (pkg == packageName || seenPackages.contains(pkg)) continue
-                                        seenPackages.add(pkg)
-
-                                        val label = try {
-                                            resolveInfo.loadLabel(pm)?.toString() ?: actInfo.loadLabel(pm)?.toString() ?: pkg
-                                        } catch (_: Throwable) {
-                                            pkg
-                                        }
-                                        val appFlags = actInfo.applicationInfo?.flags ?: 0
-                                        val isSystem = (appFlags and ApplicationInfo.FLAG_SYSTEM) != 0
-
-                                        list.add(mapOf(
-                                            "packageName" to pkg,
-                                            "name" to label,
-                                            "isSystem" to isSystem,
-                                            "flags" to appFlags
-                                        ))
-                                    }
-                                } catch (_: Throwable) {}
-                            }
-
-                            // Method 3: Final fallback to getInstalledPackages
-                            if (list.isEmpty()) {
+                            // Method 3: Fallback to getInstalledPackages if combined result is still tiny
+                            if (list.size < 5) {
                                 try {
                                     var packages: List<PackageInfo> = try {
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -462,7 +469,10 @@ class MainActivity : FlutterActivity() {
                     val disconnect = call.argument<String>("notificationDisconnect")
                     val perAppEnable = call.argument<Boolean>("perAppEnable") ?: false
                     val perAppWhitelist = call.argument<Boolean>("perAppWhitelist") ?: false
-                    val perAppPackages = call.argument<List<String>>("perAppPackages") ?: emptyList()
+                    val perAppPackages = (call.argument<List<String>>("perAppPackages") ?: emptyList())
+                        .map { it.trim() }
+                        .filter { it.isNotEmpty() }
+                        .distinct()
 
                     val intent = Intent(this, WmimoVpnService::class.java).apply {
                         action = WmimoVpnService.ACTION_START

@@ -232,9 +232,22 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
     } catch (_) {}
   }
 
-  // --- Domain Check Methods (Preserved) ---
+  static String _normalizeDomainInput(String raw) {
+    var trimmed = raw.trim();
+    if (trimmed.contains('://')) {
+      trimmed = Uri.tryParse(trimmed)?.host ?? trimmed;
+    } else if (trimmed.contains('/')) {
+      trimmed = trimmed.split('/').first;
+    }
+    if (trimmed.contains(':')) {
+      trimmed = trimmed.split(':').first;
+    }
+    return trimmed.trim();
+  }
+
+  // --- Domain Check Methods ---
   Future<void> _startDomainCheck() async {
-    final domain = _domainController.text.trim();
+    final domain = _normalizeDomainInput(_domainController.text);
     final tcontext = Translations.of(context);
     if (domain.isEmpty) {
       setState(() {
@@ -243,6 +256,9 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
         _proxyHttpResult = '';
       });
       return;
+    }
+    if (domain != _domainController.text.trim()) {
+      _domainController.text = domain;
     }
 
     setState(() {
@@ -253,53 +269,62 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
       _routeTableResult = tcontext.NetCheckScreen.checking;
     });
 
-    final dnsResult = await _checkDns(domain, tcontext);
+    await Future.wait<void>([
+      () async {
+        final dnsResult = await _checkDns(domain, tcontext);
+        if (!mounted) return;
+        setState(() {
+          _dnsResult = dnsResult;
+        });
+      }(),
+      () async {
+        String directResult = "";
+        final result = await ClashHttpApi.getConfigs();
+        if (result.error != null) {
+          directResult = result.error!.message;
+        } else if (result.data!.tun.enable) {
+          directResult = await _checkHttpDirect(domain, tcontext);
+        } else {
+          directResult = tcontext.NetCheckScreen.tunNotEnabled;
+        }
+        if (!mounted) return;
+        setState(() {
+          _directHttpResult = directResult;
+        });
+      }(),
+      () async {
+        final proxyResult = await _checkHttpWithMixPort(domain, tcontext);
+        if (!mounted) return;
+        setState(() {
+          _proxyHttpResult = proxyResult;
+        });
+      }(),
+      if (!Platform.isIOS)
+        () async {
+          final routeTableResult = await SystemUtils.getRouteTable();
+          if (!mounted) return;
+          setState(() {
+            _routeTableResult = routeTableResult;
+          });
+        }(),
+    ]);
+
     if (!mounted) return;
-    setState(() {
-      _dnsResult = dnsResult;
-    });
-
-    String directResult = "";
-    final result = await ClashHttpApi.getConfigs();
-    if (result.error != null) {
-      directResult = result.error!.message;
-    } else {
-      final configs = result.data!;
-      if (configs.tun.enable) {
-        directResult = await _checkHttpDirect(domain, tcontext);
-      } else {
-        directResult = tcontext.NetCheckScreen.tunNotEnabled;
-      }
-    }
-
-    if (!mounted) return;
-    setState(() {
-      _directHttpResult = directResult;
-    });
-
-    final proxyResult = await _checkHttpWithMixPort(domain, tcontext);
-    if (!mounted) return;
-    setState(() {
-      _proxyHttpResult = proxyResult;
-    });
-
-    if (!Platform.isIOS) {
-      final routeTableResult = await SystemUtils.getRouteTable();
-      if (!mounted) return;
-      setState(() {
-        _routeTableResult = routeTableResult;
-      });
-    }
-
     setState(() {
       _domainChecking = false;
     });
   }
 
   Future<String> _checkDns(String domain, Translations tcontext) async {
-    final aResult = await ClashHttpApi.dnsQuery(domain, queryType: 'A');
-    final aaaaResult = await ClashHttpApi.dnsQuery(domain, queryType: 'AAAA');
-    final lines = <String>[];
+    final sw = Stopwatch()..start();
+    final results = await Future.wait([
+      ClashHttpApi.dnsQuery(domain, queryType: 'A'),
+      ClashHttpApi.dnsQuery(domain, queryType: 'AAAA'),
+    ]);
+    sw.stop();
+    final aResult = results[0];
+    final aaaaResult = results[1];
+    final lines = <String>['Elapsed: ${sw.elapsedMilliseconds}ms'];
 
     if (aResult.error == null) {
       final aList = aResult.data ?? [];
@@ -307,7 +332,9 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
         lines.add('A: <empty>');
       } else {
         for (var i in aList) {
-          if (NetworkUtils.isPublicIp(i)) {
+          if (NetworkDiagnostics.isFakeIp(i)) {
+            lines.add('A: $i [Fake-IP]');
+          } else if (NetworkUtils.isPublicIp(i)) {
             lines.add('A: $i');
           } else {
             lines.add('A: $i [${tcontext.NetCheckScreen.suspectedPollution}]');
@@ -354,10 +381,11 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
   }) async {
     HttpClient? client;
     String step = "";
+    final sw = Stopwatch()..start();
     try {
       final uri = Uri(scheme: 'https', host: domain, path: '/');
       client = HttpClient();
-      const timeout = Duration(seconds: 15);
+      const timeout = Duration(seconds: 10);
       client.connectionTimeout = timeout;
 
       if (proxyPort == null) {
@@ -368,25 +396,28 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
 
       step = "getUrl";
       final request = await client.getUrl(uri).timeout(timeout);
+      request.followRedirects = false;
       request.headers.set(
         HttpHeaders.userAgentHeader,
         HttpUtils.getUserAgent(),
       );
       step = "close";
       final response = await request.close().timeout(timeout);
+      await response.drain<void>();
+      sw.stop();
 
       final statusLine =
-          'HTTP Status:${response.statusCode} ${response.reasonPhrase}'.trim();
+          'HTTP Status: ${response.statusCode} ${response.reasonPhrase}'.trim();
+      final elapsedLine = 'Latency: ${sw.elapsedMilliseconds}ms';
 
-      if (response.statusCode == 200) {
-        final lines = [tcontext.NetCheckScreen.success, 'HTTP Status: 200'];
-        return lines.join('\n');
+      if (response.statusCode >= 200 && response.statusCode < 400) {
+        return [tcontext.NetCheckScreen.success, statusLine, elapsedLine].join('\n');
       }
 
-      final lines = [tcontext.NetCheckScreen.failed, statusLine];
-      return lines.join('\n');
+      return [tcontext.NetCheckScreen.failed, statusLine, elapsedLine].join('\n');
     } catch (err) {
-      return '$step: ${err.toString()}';
+      sw.stop();
+      return '$step (${sw.elapsedMilliseconds}ms): ${err.toString()}';
     } finally {
       client?.close(force: true);
     }
@@ -606,6 +637,11 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
     final score = _diagnosticReport?.healthScore ?? 100;
     final scoreColor = _getScoreColor(score);
     final hasIssues = _diagnosticReport?.hasIssues ?? false;
+    final completedSteps = _diagnosticSteps
+        .where((s) =>
+            s.status != DiagnosticStatus.idle &&
+            s.status != DiagnosticStatus.checking)
+        .length;
 
     return Card(
       elevation: 0,
@@ -692,7 +728,7 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
                       const SizedBox(height: 6),
                       Text(
                         _diagnosing
-                            ? tcontext.NetCheckScreen.checking
+                            ? "${tcontext.NetCheckScreen.checking} ($completedSteps/${_diagnosticSteps.length})"
                             : (hasIssues
                                 ? tcontext.NetCheckScreen.issueFound(
                                     count: _diagnosticReport!.issueCount,
@@ -1117,43 +1153,76 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
   // TAB 2: 高级单域名排查
   // ==========================================
   Widget _buildAdvancedCheckTab(Translations tcontext, bool isDark) {
+    const presetDomains = [
+      'cloudflare.com',
+      'github.com',
+      'google.com',
+      'baidu.com',
+    ];
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextField(
-            controller: _domainController,
-            decoration: InputDecoration(
-              labelText: tcontext.NetCheckScreen.domainLabel,
-              hintText: 'example.com',
-              border: const OutlineInputBorder(),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () => _domainController.clear(),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _domainController,
+                  decoration: InputDecoration(
+                    labelText: tcontext.NetCheckScreen.domainLabel,
+                    hintText: 'example.com',
+                    border: const OutlineInputBorder(),
+                    isDense: true,
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () => _domainController.clear(),
+                    ),
+                  ),
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (_) => _startDomainCheck(),
+                ),
               ),
-            ),
-            textInputAction: TextInputAction.done,
-            onSubmitted: (_) => _startDomainCheck(),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: ThemeDefine.kButtonBorderRadius,
+                  ),
+                ),
+                onPressed: _domainChecking ? null : _startDomainCheck,
+                child: _domainChecking
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(tcontext.NetCheckScreen.checkButton),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            runSpacing: 4,
+            children: presetDomains
+                .map(
+                  (d) => ActionChip(
+                    label: Text(d, style: const TextStyle(fontSize: 11.5)),
+                    visualDensity: VisualDensity.compact,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    onPressed: _domainChecking
+                        ? null
+                        : () {
+                            _domainController.text = d;
+                            _startDomainCheck();
+                          },
+                  ),
+                )
+                .toList(),
           ),
           const SizedBox(height: 12),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: ThemeDefine.kButtonBorderRadius,
-              ),
-            ),
-            onPressed: _domainChecking ? null : _startDomainCheck,
-            child: _domainChecking
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : Text(tcontext.NetCheckScreen.checkButton),
-          ),
-          const SizedBox(height: 14),
           Expanded(
             child: ListView(
               children: [

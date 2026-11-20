@@ -116,10 +116,7 @@ class WmimoVpnService : VpnService() {
     }
 
     private fun startVpn() {
-        if (isRunning) return
         try {
-            startForeground(NOTIFICATION_ID, createNotification())
-
             val builder = Builder()
                 .setSession("Wmimo")
                 .setMtu(1500)
@@ -127,23 +124,27 @@ class WmimoVpnService : VpnService() {
                 .addDnsServer("223.5.5.5")
                 .addDnsServer("1.1.1.1")
 
-            // On Android 10+ (API 29+), set direct system HTTP proxy to Mihomo mixed-port
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                try {
-                    builder.setHttpProxy(ProxyInfo.buildDirectProxy("127.0.0.1", mixedPort))
-                } catch (_: Exception) {}
-            }
+            var applyHttpProxy = true
 
             // Apply Per-App routing configuration
-            if (perAppEnable && perAppPackages.isNotEmpty()) {
+            if (perAppEnable) {
                 if (perAppWhitelist) {
-                    // Whitelist mode: ONLY route selected applications through the VPN
+                    // Whitelist mode: ONLY route valid selected applications through the VPN
+                    var allowedCount = 0
                     for (pkg in perAppPackages) {
                         if (pkg.isNotEmpty() && pkg != packageName) {
                             try {
                                 builder.addAllowedApplication(pkg)
+                                allowedCount++
                             } catch (_: Exception) {}
                         }
+                    }
+                    if (allowedCount == 0) {
+                        // Empty whitelist must NOT fall back to proxying all apps
+                        applyHttpProxy = false
+                        try {
+                            builder.addDisallowedApplication(packageName)
+                        } catch (_: Exception) {}
                     }
                 } else {
                     // Blacklist mode: Bypass selected applications, and always bypass Wmimo itself
@@ -165,11 +166,33 @@ class WmimoVpnService : VpnService() {
                 } catch (_: Exception) {}
             }
 
-            vpnInterface = builder.establish()
-            isRunning = true
-            isServiceRunning = true
+            // On Android 10+ (API 29+), set direct system HTTP proxy to Mihomo mixed-port
+            if (applyHttpProxy && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                try {
+                    builder.setHttpProxy(ProxyInfo.buildDirectProxy("127.0.0.1", mixedPort))
+                } catch (_: Exception) {}
+            }
+
+            if (!isRunning) {
+                startForeground(NOTIFICATION_ID, createNotification())
+            }
+
+            val oldInterface = vpnInterface
+            val newInterface = builder.establish()
+            if (newInterface != null) {
+                vpnInterface = newInterface
+                try {
+                    oldInterface?.close()
+                } catch (_: Exception) {}
+                isRunning = true
+                isServiceRunning = true
+            } else if (!isRunning) {
+                stopVpn()
+            }
         } catch (e: Exception) {
-            stopVpn()
+            if (!isRunning) {
+                stopVpn()
+            }
         }
     }
 

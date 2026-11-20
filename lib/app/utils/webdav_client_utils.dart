@@ -88,6 +88,7 @@ class WebdavClientUtils {
       final names = <String>[];
       for (final item in list) {
         if (item.isDir) continue;
+        if (!item.name.toLowerCase().endsWith('.zip')) continue;
         names.add(item.name);
       }
       return ReturnResult(data: names);

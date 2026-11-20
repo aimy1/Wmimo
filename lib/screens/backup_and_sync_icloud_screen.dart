@@ -130,22 +130,46 @@ class _BackupAndSyncIcloudScreenState
 
   Widget _loadListView() {
     if (_loading) {
-      return const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 26,
-            height: 26,
-            child: RepaintBoundary(child: CircularProgressIndicator()),
+      return const Center(
+        child: SizedBox(
+          width: 28,
+          height: 28,
+          child: RepaintBoundary(child: CircularProgressIndicator(strokeWidth: 2.5)),
+        ),
+      );
+    }
+    final tcontext = Translations.of(context);
+    if (_fileList.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.cloud_off_outlined,
+                size: 44,
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.35),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                tcontext.BackupAndSyncWebdavScreen.noBackupsYet,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 13.5,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       );
     }
     Size windowSize = MediaQuery.of(context).size;
     return Scrollbar(
       thumbVisibility: true,
       child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         itemCount: _fileList.length,
         itemBuilder: (BuildContext context, int index) {
           var current = _fileList[index];
@@ -164,67 +188,40 @@ class _BackupAndSyncIcloudScreenState
       child: Material(
         borderRadius: ThemeDefine.kBorderRadius,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           width: double.infinity,
-          height: 66,
           child: Row(
             children: [
-              Row(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  current,
-                                  style: TextStyle(
-                                    fontSize: ThemeConfig.kFontSizeGroupItem,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          InkWell(
-                            onTap: () {
-                              onTapDownload(current);
-                            },
-                            child: const SizedBox(
-                              width: 30,
-                              height: ThemeConfig.kListItemHeight2,
-                              child: Icon(
-                                Icons.cloud_download_outlined,
-                                size: 26,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          InkWell(
-                            onTap: () {
-                              onTapDelete(current);
-                            },
-                            child: const SizedBox(
-                              width: 30,
-                              height: ThemeConfig.kListItemHeight2,
-                              child: Icon(
-                                Icons.remove_circle_outlined,
-                                size: 26,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+              Icon(
+                Icons.inventory_2_outlined,
+                size: 20,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  current,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ThemeConfig.kFontSizeGroupItem,
                   ),
-                ],
+                ),
+              ),
+              const SizedBox(width: 6),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: const Icon(Icons.cloud_download_outlined, size: 22),
+                onPressed: _uploading ? null : () => onTapDownload(current),
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: const Icon(
+                  Icons.remove_circle_outlined,
+                  size: 22,
+                  color: Colors.red,
+                ),
+                onPressed: _uploading ? null : () => onTapDelete(current),
               ),
             ],
           ),
@@ -280,6 +277,8 @@ class _BackupAndSyncIcloudScreenState
         return;
       }
       if (error != null) {
+        _uploading = false;
+        setState(() {});
         DialogUtils.showAlertDialog(
           context,
           error.message,
@@ -310,6 +309,13 @@ class _BackupAndSyncIcloudScreenState
         );
         return;
       }
+      final tcontext = Translations.of(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(tcontext.BackupAndSyncWebdavScreen.backupSuccess),
+          duration: const Duration(seconds: 2),
+        ),
+      );
       await list();
     } catch (err, stacktrace) {
       if (!mounted) {
@@ -333,9 +339,10 @@ class _BackupAndSyncIcloudScreenState
       context,
       tcontext.meta.rewriteConfirm,
     );
-    if (ok != true) {
+    if (ok != true || !mounted) {
       return;
     }
+    DialogUtils.showLoadingDialog(context, text: "");
     String dir = await PathUtils.cacheDir();
     String filePath = path.join(dir, BackupAndSyncUtils.getZipFileName());
     ReturnResultError? error = await ICloudUtils.download(
@@ -343,9 +350,13 @@ class _BackupAndSyncIcloudScreenState
       localPath: filePath,
     );
     if (!mounted) {
+      await FileUtils.deletePath(filePath);
       return;
     }
+    Navigator.pop(context);
     if (error != null) {
+      await FileUtils.deletePath(filePath);
+      if (!mounted) return;
       DialogUtils.showAlertDialog(
         context,
         error.message,
@@ -360,6 +371,14 @@ class _BackupAndSyncIcloudScreenState
   }
 
   Future<void> onTapDelete(String filename) async {
+    final tcontext = Translations.of(context);
+    final ok = await DialogUtils.showConfirmDialog(
+      context,
+      tcontext.BackupAndSyncWebdavScreen.deleteConfirm(name: filename),
+    );
+    if (ok != true || !mounted) {
+      return;
+    }
     var error = await ICloudUtils.delete(filename);
     if (!mounted) {
       return;

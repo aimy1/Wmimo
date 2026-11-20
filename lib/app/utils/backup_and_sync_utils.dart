@@ -29,23 +29,26 @@ class BackupAndSyncUtils {
     return path.join(dir, getZipFileName());
   }
 
+  static const String chainProxiesFileName = 'chain_proxies.json';
+
   static List<Tuple2<String, bool>> getZipFileNameList() {
     final profiles = ProfileManager.getProfiles();
     final profilePatchs = ProfilePatchManager.getProfilePatchs();
     var list = [
-      Tuple2(PathUtils.serviceCoreSettingFileName(), true),
+      Tuple2(PathUtils.serviceCoreSettingFileName(), false),
       Tuple2(PathUtils.settingFileName(), true),
       Tuple2(PathUtils.profilesFileName(), true),
-      Tuple2(PathUtils.profilePatchsFileName(), true),
-      Tuple2(PathUtils.diversionTemplateFileName(), true),
-      Tuple2(PathUtils.providersConfigFileName(), true),
-      Tuple2(PathUtils.boardSessionFileName(), true),
+      Tuple2(PathUtils.profilePatchsFileName(), false),
+      Tuple2(PathUtils.diversionTemplateFileName(), false),
+      Tuple2(PathUtils.providersConfigFileName(), false),
+      Tuple2(PathUtils.boardSessionFileName(), false),
+      const Tuple2(chainProxiesFileName, false),
     ];
     if (profiles.isNotEmpty) {
       list.add(Tuple2(PathUtils.profilesName(), true));
     }
     if (profilePatchs.isNotEmpty) {
-      list.add(Tuple2(PathUtils.profilePatchsName(), true));
+      list.add(Tuple2(PathUtils.profilePatchsName(), false));
     }
 
     return list;
@@ -67,13 +70,17 @@ class BackupAndSyncUtils {
     final expectedFileNames = getFileNamesFromList(getZipFileNameList());
     final actualFileNames = result.data!;
     for (final name in actualFileNames) {
-      if (name.contains("..") || name.startsWith("/") || name.startsWith("\\")) {
+      if (name.contains("..") ||
+          name.startsWith("/") ||
+          name.startsWith("\\") ||
+          name.contains(":")) {
         return ReturnResultError('Insecure file path detected in backup: $name');
       }
     }
-    final intersection = expectedFileNames.toSet().intersection(
-      actualFileNames.toSet(),
-    );
+    final normalizedActual = actualFileNames
+        .map((n) => n.split(RegExp(r'[\\/]')).first)
+        .toSet();
+    final intersection = expectedFileNames.toSet().intersection(normalizedActual);
 
     if (intersection.isEmpty) {
       return ReturnResultError('backup zip file is not compatible');

@@ -96,6 +96,9 @@ class _Translations$BackupAndSyncWebdavScreen$fa implements Translations$BackupA
 	@override String get webdavRequired => 'نمی‌تواند خالی باشد';
 	@override String get webdavLoginFailed => 'ورود ناموفق بود:';
 	@override String get webdavListFailed => 'دریافت لیست فایل ناموفق بود:';
+	@override String get noBackupsYet => 'هنوز نسخه پشتیبان ابری وجود ندارد. برای ساخت، نماد بارگذاری را بزنید.';
+	@override String deleteConfirm({required Object name}) => 'آیا نسخه پشتیبان ابری [${name}] برای همیشه حذف شود؟';
+	@override String get backupSuccess => 'نسخه پشتیبان با موفقیت بارگذاری شد';
 }
 
 // Path: LaunchFailedScreen
@@ -147,6 +150,8 @@ class _Translations$UserAgreementScreen$fa implements Translations$UserAgreement
 	@override String get localExecution => 'اجرای کاملاً محلی';
 	@override String get zeroTelemetry => 'بدون تله‌متری تجاری';
 	@override String get loading => 'در حال بارگیری توافق‌نامه...';
+	@override String get privacySubtitle => 'سیاست حریم خصوصی: عدم جمع‌آوری داده و اجرای محلی';
+	@override String get copied => 'در کلیپ‌بورد کپی شد';
 }
 
 // Path: NetCheckScreen
@@ -263,6 +268,8 @@ class _Translations$NetCheckScreen$fa implements Translations$NetCheckScreen$en 
 	@override String get conclusionGood => 'مسیر نسبتاً طبیعی است، تأخیرهای جزئی یا هشدارهایی شناسایی شده است.';
 	@override String get conclusionWarning => 'اشکالاتی در مسیر شبکه یا پروکسی شناسایی شد؛ لطفاً از دکمه [تعمیر هوشمند] زیر استفاده کنید.';
 	@override String get conclusionCritical => 'انسداد شدید شبکه! شبکه محلی متصل نیست یا هسته پروکسی مسدود شده است.';
+	@override String valProxyTunActive({required Object mode}) => 'آداپتور مجازی TUN فعال است (${mode})';
+	@override String fakeIpActive({required Object ip}) => 'Fake-IP فعال است (${ip})';
 }
 
 // Path: SpeedTestScreen
@@ -295,6 +302,10 @@ class _Translations$SpeedTestScreen$fa implements Translations$SpeedTestScreen$e
 	@override String get avgSpeed => 'میانگین سرعت';
 	@override String get testHistory => 'تاریخچه تست';
 	@override String get clearHistory => 'پاک کردن تاریخچه';
+	@override String get proxyNotRunningTip => 'هسته پروکسی در حال اجرا نیست. ابتدا متصل شوید یا حالت مستقیم را انتخاب کنید.';
+	@override String get switchToDirect => 'حالت مستقیم';
+	@override String get testFailedNoData => 'آزمایش سرعت ناموفق بود: اتصال به سرور برقرار نشد.';
+	@override String get activeNode => 'گره خروجی فعال';
 }
 
 // Path: VersionUpdateScreen
@@ -587,7 +598,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get coreOverwrite => 'بازنویسی هسته';
 	@override String get iCloud => 'iCloud';
 	@override String get webdav => 'Webdav';
-	@override String get lanSync => 'LAN Sync';
+	@override String get lanSync => 'همگام‌سازی شبکه محلی';
 	@override String get lanSyncNotQuitTips => 'قبل از تکمیل همگام‌سازی از این قسمت خارج نشوید';
 	@override String get deviceNoSpace => 'فضای خالی کافی ندارید';
 	@override String get hideSystemApp => 'برنامه های سیستم را مخفی کنید';
@@ -866,6 +877,27 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get resetDefaultCards => 'بازنشانی پیش‌فرض';
 	@override String get collapseAllCards => 'بستن همه';
 	@override String get expandAllCards => 'باز کردن همه';
+	@override String get sectionGeneral => 'عمومی و هسته';
+	@override String get sectionRoutingTools => 'مسیریابی، زنجیره و عیب‌یابی';
+	@override String get sectionData => 'داده‌ها و همگام‌سازی';
+	@override String get sectionSupport => 'راهنما و درباره ما';
+	@override String get sectionAppearance => 'ظاهر و رفتار';
+	@override String get sectionNetworkSub => 'تست سرعت و درخواست‌ها';
+	@override String get sectionDesktop => 'یکپارچه‌سازی دسکتاپ (اجرای خودکار، سینی و پروکسی)';
+	@override String get sectionMobile => 'اجرای پس‌زمینه و مجوزهای موبایل';
+	@override String get sectionLaunchConnect => 'شروع و اتصال';
+	@override String get sectionUpdates => 'به‌روزرسانی‌ها';
+	@override String get sectionReset => 'بازنشانی';
+	@override String get sectionCoreBasic => 'پورت‌ها و کنترل';
+	@override String get sectionCoreRouting => 'مسیریابی، TUN و دسترسی';
+	@override String get sectionCoreRules => 'قوانین و بازنویسی';
+	@override String get sectionCoreProtocol => 'انتقال و پروتکل‌ها';
+	@override String get sectionCoreServices => 'سرویس‌های هسته';
+	@override String get batteryOptimization => 'بهینه‌سازی باتری (اجرای پس‌زمینه)';
+	@override String get batteryOptimizationExempted => 'معاف شده';
+	@override String get batteryOptimizationRestricted => 'محدود شده (برای مجوز لمس کنید)';
+	@override String get appPermissionsSettings => 'مجوزهای سیستمی برنامه';
+	@override String get previewFinalConfig => 'پیش‌نمایش پیکربندی نهایی هسته';
 }
 
 // Path: permission
@@ -877,7 +909,7 @@ class _Translations$permission$fa implements Translations$permission$en {
 	// Translations
 	@override String get camera => 'دوربین';
 	@override String get screen => 'ضبط صفحه';
-	@override String get appQuery => 'Get Application List';
+	@override String get appQuery => 'دریافت فهرست برنامه‌ها';
 	@override String request({required Object p}) => 'مجوزهای [${p}] را فعال کنید';
 	@override String requestNeed({required Object p}) => 'لطفاً مجوز [${p}] را فعال کنید';
 }
@@ -1053,6 +1085,25 @@ class _Translations$chain_proxy$fa implements Translations$chain_proxy$en {
 	@override String get hop1_empty_warning => 'لطفاً گره اول (ورودی) را انتخاب کنید';
 	@override String get hop2_empty_warning => 'لطفاً گره دوم (خروجی) را انتخاب کنید';
 	@override String get hop_same_warning => 'گره اول و دوم نمی‌توانند یکسان باشند';
+	@override String active_count({required Object active, required Object total}) => '${active} / ${total} فعال';
+	@override String hop_count_badge({required Object count}) => '${count} گام';
+	@override String get hop_entry => 'گام ۱: رله ورودی';
+	@override String hop_transit({required Object index}) => 'گام ${index}: میانی';
+	@override String hop_exit({required Object index}) => 'گام ${index}: گره خروجی';
+	@override String get add_transit_hop => 'افزودن گام میانی';
+	@override String get swap_hops => 'جابه‌جایی گام‌های مجاور';
+	@override String get remove_hop => 'حذف گام';
+	@override String get reset_name => 'نام‌گذاری خودکار از گام‌ها';
+	@override String get use_now => 'استفاده فوری';
+	@override String switched_to_chain({required Object group, required Object name}) => '«${group}» به «${name}» تغییر یافت';
+	@override String get enable_before_use => 'لطفاً ابتدا این پروکسی زنجیره‌ای را فعال کنید';
+	@override String get enable_before_test => 'لطفاً پیش از تست تأخیر، این پروکسی زنجیره‌ای را فعال کنید';
+	@override String get hop_duplicate_warning => 'امکان انتخاب گره‌های تکراری در یک زنجیره وجود ندارد';
+	@override String get hop_group_not_exit_warning => 'گام‌های میانی و خروجی باید گره واقعی باشند نه گروه سیاست';
+	@override String get picker_entry_hint => 'گام ورودی از گره‌ها و گروه‌های سیاست پشتیبانی می‌کند';
+	@override String get picker_node_only_hint => 'گام‌های میانی و خروجی فقط از گره‌های واقعی پشتیبانی می‌کنند';
+	@override String get hops_label => 'ترتیب گام‌ها (بکشید یا جابه‌جا کنید)';
+	@override String get all_nodes => 'همه';
 }
 
 // Path: main.tray
@@ -1104,6 +1155,9 @@ extension on TranslationsFa {
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'نمی‌تواند خالی باشد',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'ورود ناموفق بود:',
 			'BackupAndSyncWebdavScreen.webdavListFailed' => 'دریافت لیست فایل ناموفق بود:',
+			'BackupAndSyncWebdavScreen.noBackupsYet' => 'هنوز نسخه پشتیبان ابری وجود ندارد. برای ساخت، نماد بارگذاری را بزنید.',
+			'BackupAndSyncWebdavScreen.deleteConfirm' => ({required Object name}) => 'آیا نسخه پشتیبان ابری [${name}] برای همیشه حذف شود؟',
+			'BackupAndSyncWebdavScreen.backupSuccess' => 'نسخه پشتیبان با موفقیت بارگذاری شد',
 			'LaunchFailedScreen.invalidProcess' => 'اجرای نرم‌افزار ناموفق بود [نام‌ اجرایی پروسه نامعتبر]، لطفا مجدد نرم‌افزار را در دایرکتوری دیگری نصب کنید',
 			'LaunchFailedScreen.invalidProfile' => 'اجرای نرم‌افزار ناموفق بود [دسترسی به پروفایل ناموفق بود]، لطفا مجدد نرم افزار را نصب کنید',
 			'LaunchFailedScreen.invalidVersion' => 'اجرای نرم‌افزار ناموفق بود [ورژن نامعتبر]، لطفا مجدد نرم‌افزار را نصب کنید',
@@ -1128,6 +1182,8 @@ extension on TranslationsFa {
 			'UserAgreementScreen.localExecution' => 'اجرای کاملاً محلی',
 			'UserAgreementScreen.zeroTelemetry' => 'بدون تله‌متری تجاری',
 			'UserAgreementScreen.loading' => 'در حال بارگیری توافق‌نامه...',
+			'UserAgreementScreen.privacySubtitle' => 'سیاست حریم خصوصی: عدم جمع‌آوری داده و اجرای محلی',
+			'UserAgreementScreen.copied' => 'در کلیپ‌بورد کپی شد',
 			'NetCheckScreen.title' => 'عیب‌یابی و تشخیص شبکه',
 			'NetCheckScreen.fullDiagnosticsTab' => 'عیب‌یابی کامل لینک',
 			'NetCheckScreen.advancedCheckTab' => 'بررسی پیشرفته دامنه',
@@ -1235,6 +1291,8 @@ extension on TranslationsFa {
 			'NetCheckScreen.conclusionGood' => 'مسیر نسبتاً طبیعی است، تأخیرهای جزئی یا هشدارهایی شناسایی شده است.',
 			'NetCheckScreen.conclusionWarning' => 'اشکالاتی در مسیر شبکه یا پروکسی شناسایی شد؛ لطفاً از دکمه [تعمیر هوشمند] زیر استفاده کنید.',
 			'NetCheckScreen.conclusionCritical' => 'انسداد شدید شبکه! شبکه محلی متصل نیست یا هسته پروکسی مسدود شده است.',
+			'NetCheckScreen.valProxyTunActive' => ({required Object mode}) => 'آداپتور مجازی TUN فعال است (${mode})',
+			'NetCheckScreen.fakeIpActive' => ({required Object ip}) => 'Fake-IP فعال است (${ip})',
 			'SpeedTestScreen.title' => 'تست سرعت',
 			'SpeedTestScreen.startTest' => 'شروع تست',
 			'SpeedTestScreen.stopTest' => 'توقف',
@@ -1258,6 +1316,10 @@ extension on TranslationsFa {
 			'SpeedTestScreen.avgSpeed' => 'میانگین سرعت',
 			'SpeedTestScreen.testHistory' => 'تاریخچه تست',
 			'SpeedTestScreen.clearHistory' => 'پاک کردن تاریخچه',
+			'SpeedTestScreen.proxyNotRunningTip' => 'هسته پروکسی در حال اجرا نیست. ابتدا متصل شوید یا حالت مستقیم را انتخاب کنید.',
+			'SpeedTestScreen.switchToDirect' => 'حالت مستقیم',
+			'SpeedTestScreen.testFailedNoData' => 'آزمایش سرعت ناموفق بود: اتصال به سرور برقرار نشد.',
+			'SpeedTestScreen.activeNode' => 'گره خروجی فعال',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'نسخه جدید [${p}] آماده است',
 			'VersionUpdateScreen.update' => 'راه‌اندازی مجدد برای به‌روزرسانی',
 			'VersionUpdateScreen.cancel' => 'الان‌ نه',
@@ -1537,7 +1599,7 @@ extension on TranslationsFa {
 			'meta.coreOverwrite' => 'بازنویسی هسته',
 			'meta.iCloud' => 'iCloud',
 			'meta.webdav' => 'Webdav',
-			'meta.lanSync' => 'LAN Sync',
+			'meta.lanSync' => 'همگام‌سازی شبکه محلی',
 			'meta.lanSyncNotQuitTips' => 'قبل از تکمیل همگام‌سازی از این قسمت خارج نشوید',
 			'meta.deviceNoSpace' => 'فضای خالی کافی ندارید',
 			'meta.hideSystemApp' => 'برنامه های سیستم را مخفی کنید',
@@ -1597,6 +1659,8 @@ extension on TranslationsFa {
 			'meta.nodeSelected' => ({required Object p}) => 'گره انتخاب شده: ${p}',
 			'meta.startingCoreAndTesting' => 'در حال شروع هسته و تست سرعت...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} دقیقه',
+			_ => null,
+		} ?? switch (path) {
 			'meta.chartUpload' => 'آپلود',
 			'meta.chartDownload' => 'دانلود',
 			'meta.author' => 'سازنده',
@@ -1608,8 +1672,6 @@ extension on TranslationsFa {
 			'meta.autoScrollDisabled' => 'پیمایش خودکار غیرفعال است',
 			'meta.pauseLogs' => 'توقف موقت لاگ‌های زنده',
 			'meta.resumeLogs' => 'ادامه لاگ‌های زنده',
-			_ => null,
-		} ?? switch (path) {
 			'meta.scrollToLatest' => 'پیمایش به جدیدترین',
 			'meta.scrollToBottom' => 'پیمایش به پایین',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} لاگ جدید)',
@@ -1818,9 +1880,30 @@ extension on TranslationsFa {
 			'meta.resetDefaultCards' => 'بازنشانی پیش‌فرض',
 			'meta.collapseAllCards' => 'بستن همه',
 			'meta.expandAllCards' => 'باز کردن همه',
+			'meta.sectionGeneral' => 'عمومی و هسته',
+			'meta.sectionRoutingTools' => 'مسیریابی، زنجیره و عیب‌یابی',
+			'meta.sectionData' => 'داده‌ها و همگام‌سازی',
+			'meta.sectionSupport' => 'راهنما و درباره ما',
+			'meta.sectionAppearance' => 'ظاهر و رفتار',
+			'meta.sectionNetworkSub' => 'تست سرعت و درخواست‌ها',
+			'meta.sectionDesktop' => 'یکپارچه‌سازی دسکتاپ (اجرای خودکار، سینی و پروکسی)',
+			'meta.sectionMobile' => 'اجرای پس‌زمینه و مجوزهای موبایل',
+			'meta.sectionLaunchConnect' => 'شروع و اتصال',
+			'meta.sectionUpdates' => 'به‌روزرسانی‌ها',
+			'meta.sectionReset' => 'بازنشانی',
+			'meta.sectionCoreBasic' => 'پورت‌ها و کنترل',
+			'meta.sectionCoreRouting' => 'مسیریابی، TUN و دسترسی',
+			'meta.sectionCoreRules' => 'قوانین و بازنویسی',
+			'meta.sectionCoreProtocol' => 'انتقال و پروتکل‌ها',
+			'meta.sectionCoreServices' => 'سرویس‌های هسته',
+			'meta.batteryOptimization' => 'بهینه‌سازی باتری (اجرای پس‌زمینه)',
+			'meta.batteryOptimizationExempted' => 'معاف شده',
+			'meta.batteryOptimizationRestricted' => 'محدود شده (برای مجوز لمس کنید)',
+			'meta.appPermissionsSettings' => 'مجوزهای سیستمی برنامه',
+			'meta.previewFinalConfig' => 'پیش‌نمایش پیکربندی نهایی هسته',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
-			'permission.appQuery' => 'Get Application List',
+			'permission.appQuery' => 'دریافت فهرست برنامه‌ها',
 			'permission.request' => ({required Object p}) => 'مجوزهای [${p}] را فعال کنید',
 			'permission.requestNeed' => ({required Object p}) => 'لطفاً مجوز [${p}] را فعال کنید',
 			'tls.insecure' => 'رد شدن از تأیید گواهی',
@@ -1945,6 +2028,25 @@ extension on TranslationsFa {
 			'chain_proxy.hop1_empty_warning' => 'لطفاً گره اول (ورودی) را انتخاب کنید',
 			'chain_proxy.hop2_empty_warning' => 'لطفاً گره دوم (خروجی) را انتخاب کنید',
 			'chain_proxy.hop_same_warning' => 'گره اول و دوم نمی‌توانند یکسان باشند',
+			'chain_proxy.active_count' => ({required Object active, required Object total}) => '${active} / ${total} فعال',
+			'chain_proxy.hop_count_badge' => ({required Object count}) => '${count} گام',
+			'chain_proxy.hop_entry' => 'گام ۱: رله ورودی',
+			'chain_proxy.hop_transit' => ({required Object index}) => 'گام ${index}: میانی',
+			'chain_proxy.hop_exit' => ({required Object index}) => 'گام ${index}: گره خروجی',
+			'chain_proxy.add_transit_hop' => 'افزودن گام میانی',
+			'chain_proxy.swap_hops' => 'جابه‌جایی گام‌های مجاور',
+			'chain_proxy.remove_hop' => 'حذف گام',
+			'chain_proxy.reset_name' => 'نام‌گذاری خودکار از گام‌ها',
+			'chain_proxy.use_now' => 'استفاده فوری',
+			'chain_proxy.switched_to_chain' => ({required Object group, required Object name}) => '«${group}» به «${name}» تغییر یافت',
+			'chain_proxy.enable_before_use' => 'لطفاً ابتدا این پروکسی زنجیره‌ای را فعال کنید',
+			'chain_proxy.enable_before_test' => 'لطفاً پیش از تست تأخیر، این پروکسی زنجیره‌ای را فعال کنید',
+			'chain_proxy.hop_duplicate_warning' => 'امکان انتخاب گره‌های تکراری در یک زنجیره وجود ندارد',
+			'chain_proxy.hop_group_not_exit_warning' => 'گام‌های میانی و خروجی باید گره واقعی باشند نه گروه سیاست',
+			'chain_proxy.picker_entry_hint' => 'گام ورودی از گره‌ها و گروه‌های سیاست پشتیبانی می‌کند',
+			'chain_proxy.picker_node_only_hint' => 'گام‌های میانی و خروجی فقط از گره‌های واقعی پشتیبانی می‌کنند',
+			'chain_proxy.hops_label' => 'ترتیب گام‌ها (بکشید یا جابه‌جا کنید)',
+			'chain_proxy.all_nodes' => 'همه',
 			_ => null,
 		};
 	}

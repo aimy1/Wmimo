@@ -96,6 +96,9 @@ class _Translations$BackupAndSyncWebdavScreen$ru implements Translations$BackupA
 	@override String get webdavRequired => 'Не может быть пустым';
 	@override String get webdavLoginFailed => 'Ошибка входа:';
 	@override String get webdavListFailed => 'Не удалось получить список файлов:';
+	@override String get noBackupsYet => 'Резервных копий пока нет. Нажмите значок загрузки выше.';
+	@override String deleteConfirm({required Object name}) => 'Удалить облачную копию [${name}] навсегда?';
+	@override String get backupSuccess => 'Резервная копия успешно загружена';
 }
 
 // Path: LaunchFailedScreen
@@ -147,6 +150,8 @@ class _Translations$UserAgreementScreen$ru implements Translations$UserAgreement
 	@override String get localExecution => 'Только локальное исполнение';
 	@override String get zeroTelemetry => 'Без телеметрии и трекеров';
 	@override String get loading => 'Загрузка соглашения...';
+	@override String get privacySubtitle => 'Политика конфиденциальности: без сбора данных и локальная работа';
+	@override String get copied => 'Скопировано в буфер обмена';
 }
 
 // Path: NetCheckScreen
@@ -263,6 +268,8 @@ class _Translations$NetCheckScreen$ru implements Translations$NetCheckScreen$en 
 	@override String get conclusionGood => 'Сеть в норме, обнаружены незначительные задержки или предупреждения.';
 	@override String get conclusionWarning => 'Обнаружены проблемы в сети или прокси; используйте «Быстрое исправление» ниже.';
 	@override String get conclusionCritical => 'Серьезный сбой сети! Локальная сеть отключена или ядро заблокировано.';
+	@override String valProxyTunActive({required Object mode}) => 'TUN-адаптер активен (${mode})';
+	@override String fakeIpActive({required Object ip}) => 'Fake-IP активен (${ip})';
 }
 
 // Path: SpeedTestScreen
@@ -295,6 +302,10 @@ class _Translations$SpeedTestScreen$ru implements Translations$SpeedTestScreen$e
 	@override String get avgSpeed => 'Средняя скорость';
 	@override String get testHistory => 'История тестов';
 	@override String get clearHistory => 'Очистить историю';
+	@override String get proxyNotRunningTip => 'Ядро прокси не запущено. Подключитесь или выберите прямой режим.';
+	@override String get switchToDirect => 'Прямой режим';
+	@override String get testFailedNoData => 'Ошибка теста: не удалось подключиться к серверу.';
+	@override String get activeNode => 'Активный узел';
 }
 
 // Path: VersionUpdateScreen
@@ -381,7 +392,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get cancel => 'Закрыть';
 	@override String get faq => 'Часто задаваемые вопросы (FAQ)';
 	@override String get doc => 'документ';
-	@override String get htmlTools => 'HTML Toolset';
+	@override String get htmlTools => 'Инструменты HTML';
 	@override String get download => 'Скачать';
 	@override String get loading => 'Загрузка...';
 	@override String get days => 'дни';
@@ -866,6 +877,27 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get resetDefaultCards => 'Сбросить';
 	@override String get collapseAllCards => 'Свернуть все';
 	@override String get expandAllCards => 'Развернуть все';
+	@override String get sectionGeneral => 'Общие и Ядро';
+	@override String get sectionRoutingTools => 'Маршрутизация, Цепочки и Диагностика';
+	@override String get sectionData => 'Данные и Синхронизация';
+	@override String get sectionSupport => 'Справка и О программе';
+	@override String get sectionAppearance => 'Внешний вид и Поведение';
+	@override String get sectionNetworkSub => 'Тест скорости и Запросы';
+	@override String get sectionDesktop => 'Интеграция с ПК (Автозапуск, Трей и Прокси)';
+	@override String get sectionMobile => 'Фоновая работа и Разрешения';
+	@override String get sectionLaunchConnect => 'Запуск и Подключение';
+	@override String get sectionUpdates => 'Обновления';
+	@override String get sectionReset => 'Сброс';
+	@override String get sectionCoreBasic => 'Порты и Управление';
+	@override String get sectionCoreRouting => 'Маршрутизация, TUN и Доступ';
+	@override String get sectionCoreRules => 'Правила и Переопределения';
+	@override String get sectionCoreProtocol => 'Транспорт и Протоколы';
+	@override String get sectionCoreServices => 'Службы Ядра';
+	@override String get batteryOptimization => 'Оптимизация батареи (Работа в фоне)';
+	@override String get batteryOptimizationExempted => 'В исключениях';
+	@override String get batteryOptimizationRestricted => 'Ограничено (Нажмите для разрешения)';
+	@override String get appPermissionsSettings => 'Системные разрешения';
+	@override String get previewFinalConfig => 'Предпросмотр итоговой конфигурации ядра';
 }
 
 // Path: permission
@@ -1053,6 +1085,25 @@ class _Translations$chain_proxy$ru implements Translations$chain_proxy$en {
 	@override String get hop1_empty_warning => 'Выберите первый (входной) узел';
 	@override String get hop2_empty_warning => 'Выберите второй (выходной) узел';
 	@override String get hop_same_warning => 'Первый и второй узлы не могут совпадать';
+	@override String active_count({required Object active, required Object total}) => 'Активно ${active} / ${total}';
+	@override String hop_count_badge({required Object count}) => 'Узлов: ${count}';
+	@override String get hop_entry => 'Узел 1: Входной ретранслятор';
+	@override String hop_transit({required Object index}) => 'Узел ${index}: Транзит';
+	@override String hop_exit({required Object index}) => 'Узел ${index}: Выходной узел';
+	@override String get add_transit_hop => 'Добавить транзитный узел';
+	@override String get swap_hops => 'Поменять соседние узлы местами';
+	@override String get remove_hop => 'Удалить узел';
+	@override String get reset_name => 'Назвать по цепочке узлов';
+	@override String get use_now => 'Применить сейчас';
+	@override String switched_to_chain({required Object group, required Object name}) => '«${group}» переключена на «${name}»';
+	@override String get enable_before_use => 'Сначала включите эту цепочку прокси';
+	@override String get enable_before_test => 'Сначала включите эту цепочку прокси для замера задержки';
+	@override String get hop_duplicate_warning => 'Нельзя выбирать одинаковые узлы в одной цепочке';
+	@override String get hop_group_not_exit_warning => 'Транзитные и выходные шаги должны быть конкретными узлами, а не группами';
+	@override String get picker_entry_hint => 'Входной шаг поддерживает и узлы, и группы политик';
+	@override String get picker_node_only_hint => 'Транзитные и выходные шаги поддерживают только конкретные узлы';
+	@override String get hops_label => 'Порядок переходов (перетащите или поменяйте)';
+	@override String get all_nodes => 'Все';
 }
 
 // Path: main.tray
@@ -1104,6 +1155,9 @@ extension on TranslationsRu {
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'Не может быть пустым',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'Ошибка входа:',
 			'BackupAndSyncWebdavScreen.webdavListFailed' => 'Не удалось получить список файлов:',
+			'BackupAndSyncWebdavScreen.noBackupsYet' => 'Резервных копий пока нет. Нажмите значок загрузки выше.',
+			'BackupAndSyncWebdavScreen.deleteConfirm' => ({required Object name}) => 'Удалить облачную копию [${name}] навсегда?',
+			'BackupAndSyncWebdavScreen.backupSuccess' => 'Резервная копия успешно загружена',
 			'LaunchFailedScreen.invalidProcess' => 'Не удалось запустить приложение [Неверное имя процесса], переустановите приложение в отдельную папку',
 			'LaunchFailedScreen.invalidProfile' => 'Не удалось запустить приложение [Не удалось получить доступ к профилю], переустановите приложение',
 			'LaunchFailedScreen.invalidVersion' => 'Не удалось запустить приложение [Неверная версия], переустановите приложение',
@@ -1128,6 +1182,8 @@ extension on TranslationsRu {
 			'UserAgreementScreen.localExecution' => 'Только локальное исполнение',
 			'UserAgreementScreen.zeroTelemetry' => 'Без телеметрии и трекеров',
 			'UserAgreementScreen.loading' => 'Загрузка соглашения...',
+			'UserAgreementScreen.privacySubtitle' => 'Политика конфиденциальности: без сбора данных и локальная работа',
+			'UserAgreementScreen.copied' => 'Скопировано в буфер обмена',
 			'NetCheckScreen.title' => 'Диагностика сети',
 			'NetCheckScreen.fullDiagnosticsTab' => 'Полная диагностика',
 			'NetCheckScreen.advancedCheckTab' => 'Расширенная проверка домена',
@@ -1235,6 +1291,8 @@ extension on TranslationsRu {
 			'NetCheckScreen.conclusionGood' => 'Сеть в норме, обнаружены незначительные задержки или предупреждения.',
 			'NetCheckScreen.conclusionWarning' => 'Обнаружены проблемы в сети или прокси; используйте «Быстрое исправление» ниже.',
 			'NetCheckScreen.conclusionCritical' => 'Серьезный сбой сети! Локальная сеть отключена или ядро заблокировано.',
+			'NetCheckScreen.valProxyTunActive' => ({required Object mode}) => 'TUN-адаптер активен (${mode})',
+			'NetCheckScreen.fakeIpActive' => ({required Object ip}) => 'Fake-IP активен (${ip})',
 			'SpeedTestScreen.title' => 'Тест скорости',
 			'SpeedTestScreen.startTest' => 'Начать тест',
 			'SpeedTestScreen.stopTest' => 'Остановить',
@@ -1258,6 +1316,10 @@ extension on TranslationsRu {
 			'SpeedTestScreen.avgSpeed' => 'Средняя скорость',
 			'SpeedTestScreen.testHistory' => 'История тестов',
 			'SpeedTestScreen.clearHistory' => 'Очистить историю',
+			'SpeedTestScreen.proxyNotRunningTip' => 'Ядро прокси не запущено. Подключитесь или выберите прямой режим.',
+			'SpeedTestScreen.switchToDirect' => 'Прямой режим',
+			'SpeedTestScreen.testFailedNoData' => 'Ошибка теста: не удалось подключиться к серверу.',
+			'SpeedTestScreen.activeNode' => 'Активный узел',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'Новая версия [${p}] доступна',
 			'VersionUpdateScreen.update' => 'Перезапустить',
 			'VersionUpdateScreen.cancel' => 'Не сейчас',
@@ -1331,7 +1393,7 @@ extension on TranslationsRu {
 			'meta.cancel' => 'Закрыть',
 			'meta.faq' => 'Часто задаваемые вопросы (FAQ)',
 			'meta.doc' => 'документ',
-			'meta.htmlTools' => 'HTML Toolset',
+			'meta.htmlTools' => 'Инструменты HTML',
 			'meta.download' => 'Скачать',
 			'meta.loading' => 'Загрузка...',
 			'meta.days' => 'дни',
@@ -1597,6 +1659,8 @@ extension on TranslationsRu {
 			'meta.nodeSelected' => ({required Object p}) => 'Выбран узел: ${p}',
 			'meta.startingCoreAndTesting' => 'Запуск ядра и проверка задержки...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} мин',
+			_ => null,
+		} ?? switch (path) {
 			'meta.chartUpload' => 'Отдача',
 			'meta.chartDownload' => 'Загрузка',
 			'meta.author' => 'Автор',
@@ -1608,8 +1672,6 @@ extension on TranslationsRu {
 			'meta.autoScrollDisabled' => 'Автопрокрутка отключена',
 			'meta.pauseLogs' => 'Приостановить логи',
 			'meta.resumeLogs' => 'Возобновить логи',
-			_ => null,
-		} ?? switch (path) {
 			'meta.scrollToLatest' => 'К последним логам',
 			'meta.scrollToBottom' => 'Прокрутить вниз',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} новых логов)',
@@ -1818,6 +1880,27 @@ extension on TranslationsRu {
 			'meta.resetDefaultCards' => 'Сбросить',
 			'meta.collapseAllCards' => 'Свернуть все',
 			'meta.expandAllCards' => 'Развернуть все',
+			'meta.sectionGeneral' => 'Общие и Ядро',
+			'meta.sectionRoutingTools' => 'Маршрутизация, Цепочки и Диагностика',
+			'meta.sectionData' => 'Данные и Синхронизация',
+			'meta.sectionSupport' => 'Справка и О программе',
+			'meta.sectionAppearance' => 'Внешний вид и Поведение',
+			'meta.sectionNetworkSub' => 'Тест скорости и Запросы',
+			'meta.sectionDesktop' => 'Интеграция с ПК (Автозапуск, Трей и Прокси)',
+			'meta.sectionMobile' => 'Фоновая работа и Разрешения',
+			'meta.sectionLaunchConnect' => 'Запуск и Подключение',
+			'meta.sectionUpdates' => 'Обновления',
+			'meta.sectionReset' => 'Сброс',
+			'meta.sectionCoreBasic' => 'Порты и Управление',
+			'meta.sectionCoreRouting' => 'Маршрутизация, TUN и Доступ',
+			'meta.sectionCoreRules' => 'Правила и Переопределения',
+			'meta.sectionCoreProtocol' => 'Транспорт и Протоколы',
+			'meta.sectionCoreServices' => 'Службы Ядра',
+			'meta.batteryOptimization' => 'Оптимизация батареи (Работа в фоне)',
+			'meta.batteryOptimizationExempted' => 'В исключениях',
+			'meta.batteryOptimizationRestricted' => 'Ограничено (Нажмите для разрешения)',
+			'meta.appPermissionsSettings' => 'Системные разрешения',
+			'meta.previewFinalConfig' => 'Предпросмотр итоговой конфигурации ядра',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',
@@ -1945,6 +2028,25 @@ extension on TranslationsRu {
 			'chain_proxy.hop1_empty_warning' => 'Выберите первый (входной) узел',
 			'chain_proxy.hop2_empty_warning' => 'Выберите второй (выходной) узел',
 			'chain_proxy.hop_same_warning' => 'Первый и второй узлы не могут совпадать',
+			'chain_proxy.active_count' => ({required Object active, required Object total}) => 'Активно ${active} / ${total}',
+			'chain_proxy.hop_count_badge' => ({required Object count}) => 'Узлов: ${count}',
+			'chain_proxy.hop_entry' => 'Узел 1: Входной ретранслятор',
+			'chain_proxy.hop_transit' => ({required Object index}) => 'Узел ${index}: Транзит',
+			'chain_proxy.hop_exit' => ({required Object index}) => 'Узел ${index}: Выходной узел',
+			'chain_proxy.add_transit_hop' => 'Добавить транзитный узел',
+			'chain_proxy.swap_hops' => 'Поменять соседние узлы местами',
+			'chain_proxy.remove_hop' => 'Удалить узел',
+			'chain_proxy.reset_name' => 'Назвать по цепочке узлов',
+			'chain_proxy.use_now' => 'Применить сейчас',
+			'chain_proxy.switched_to_chain' => ({required Object group, required Object name}) => '«${group}» переключена на «${name}»',
+			'chain_proxy.enable_before_use' => 'Сначала включите эту цепочку прокси',
+			'chain_proxy.enable_before_test' => 'Сначала включите эту цепочку прокси для замера задержки',
+			'chain_proxy.hop_duplicate_warning' => 'Нельзя выбирать одинаковые узлы в одной цепочке',
+			'chain_proxy.hop_group_not_exit_warning' => 'Транзитные и выходные шаги должны быть конкретными узлами, а не группами',
+			'chain_proxy.picker_entry_hint' => 'Входной шаг поддерживает и узлы, и группы политик',
+			'chain_proxy.picker_node_only_hint' => 'Транзитные и выходные шаги поддерживают только конкретные узлы',
+			'chain_proxy.hops_label' => 'Порядок переходов (перетащите или поменяйте)',
+			'chain_proxy.all_nodes' => 'Все',
 			_ => null,
 		};
 	}

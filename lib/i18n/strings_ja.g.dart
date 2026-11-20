@@ -96,6 +96,9 @@ class _Translations$BackupAndSyncWebdavScreen$ja implements Translations$BackupA
 	@override String get webdavRequired => '空にすることはできません';
 	@override String get webdavLoginFailed => 'ログインに失敗しました:';
 	@override String get webdavListFailed => 'ファイルリストの取得に失敗しました:';
+	@override String get noBackupsYet => 'クラウドバックアップがありません。右上のアイコンから作成できます。';
+	@override String deleteConfirm({required Object name}) => 'クラウドバックアップ [${name}] を完全に削除しますか？';
+	@override String get backupSuccess => 'バックアップをアップロードしました';
 }
 
 // Path: LaunchFailedScreen
@@ -147,6 +150,8 @@ class _Translations$UserAgreementScreen$ja implements Translations$UserAgreement
 	@override String get localExecution => '完全ローカル独立実行';
 	@override String get zeroTelemetry => '商業テレメトリなし';
 	@override String get loading => '規約を読み込み中...';
+	@override String get privacySubtitle => 'データ収集ゼロ・ローカル完結型プライバシーポリシー';
+	@override String get copied => 'クリップボードにコピーしました';
 }
 
 // Path: NetCheckScreen
@@ -263,6 +268,8 @@ class _Translations$NetCheckScreen$ja implements Translations$NetCheckScreen$en 
 	@override String get conclusionGood => '全ルート概ね正常です。軽微な遅延や警告が検出されました。詳細をご確認ください。';
 	@override String get conclusionWarning => '一部のネットワークまたはプロキシに異常が検出されました。下の【一括修復】をお試しください。';
 	@override String get conclusionCritical => '重大なネットワーク遮断！ローカル回線が切断されているか、コアが阻害されています。';
+	@override String valProxyTunActive({required Object mode}) => 'TUN 仮想NICで接続中 (${mode})';
+	@override String fakeIpActive({required Object ip}) => 'Fake-IP 有効 (${ip})';
 }
 
 // Path: SpeedTestScreen
@@ -295,6 +302,10 @@ class _Translations$SpeedTestScreen$ja implements Translations$SpeedTestScreen$e
 	@override String get avgSpeed => '平均速度';
 	@override String get testHistory => 'テスト履歴';
 	@override String get clearHistory => '履歴をクリア';
+	@override String get proxyNotRunningTip => 'プロキシコアが起動していません。先に接続するか直接接続に切り替えてください。';
+	@override String get switchToDirect => '直結に切替';
+	@override String get testFailedNoData => '速度測定に失敗しました。ネットワークやサーバーを確認してください。';
+	@override String get activeNode => '現在の出力ノード';
 }
 
 // Path: VersionUpdateScreen
@@ -866,6 +877,27 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get resetDefaultCards => 'デフォルトに戻す';
 	@override String get collapseAllCards => 'すべて折りたたむ';
 	@override String get expandAllCards => 'すべて展開';
+	@override String get sectionGeneral => '一般・コア';
+	@override String get sectionRoutingTools => 'ルール・チェーン・診断';
+	@override String get sectionData => 'データと同期';
+	@override String get sectionSupport => 'ヘルプと情報';
+	@override String get sectionAppearance => '外観と操作';
+	@override String get sectionNetworkSub => '速度テストと通信';
+	@override String get sectionDesktop => 'デスクトップ連携（起動・トレイ・プロキシ）';
+	@override String get sectionMobile => 'モバイル常駐と権限';
+	@override String get sectionLaunchConnect => '起動と接続';
+	@override String get sectionUpdates => 'アップデート';
+	@override String get sectionReset => 'リセット';
+	@override String get sectionCoreBasic => 'ポートと制御';
+	@override String get sectionCoreRouting => 'ルーティング・TUN・LAN';
+	@override String get sectionCoreRules => 'ルールと上書き';
+	@override String get sectionCoreProtocol => '通信とプロトコル';
+	@override String get sectionCoreServices => 'コアサービス';
+	@override String get batteryOptimization => 'バッテリー最適化の除外（バックグラウンド維持）';
+	@override String get batteryOptimizationExempted => '除外済み';
+	@override String get batteryOptimizationRestricted => '制限あり（タップして許可）';
+	@override String get appPermissionsSettings => 'システムアプリ権限設定';
+	@override String get previewFinalConfig => '最終コア設定をプレビュー';
 }
 
 // Path: permission
@@ -1028,7 +1060,7 @@ class _Translations$chain_proxy$ja implements Translations$chain_proxy$en {
 
 	// Translations
 	@override String get title => 'チェーンプロキシ';
-	@override String get desc => '2つのノードを中継（前置リレー ➔ 出口ノード）し、低遅延と地域制限解除を両立します。';
+	@override String get desc => 'dialer-proxy で2ホップ以上のノードを連結（入口 ➔ 中継 ➔ 出口）し、低遅延とネイティブIPを両立。有効時は選択グループへ自動追加されます。';
 	@override String get add => 'チェーンプロキシを作成';
 	@override String get edit => 'チェーンプロキシを編集';
 	@override String get delete => '削除';
@@ -1045,14 +1077,33 @@ class _Translations$chain_proxy$ja implements Translations$chain_proxy$en {
 	@override String get preview => 'トポロジープレビュー';
 	@override String get local_device => '端末';
 	@override String get internet => 'インターネット';
-	@override String get save_success => 'チェーンプロキシを保存しました';
-	@override String get empty_tip => 'チェーンプロキシがありません。下のボタンから作成してください。';
+	@override String get save_success => '保存して選択グループに同期しました';
+	@override String get empty_tip => 'チェーンプロキシがありません。上のボタンから作成してください。';
 	@override String get test_latency => '測定';
-	@override String get node_missing_warning => '現在の設定に存在しないノードがあります。再指定してください。';
+	@override String get node_missing_warning => '現在の設定に存在しないノードがあるため、安全のためスキップされました。';
 	@override String get name_empty_warning => 'チェーンプロキシ名を入力してください';
-	@override String get hop1_empty_warning => '第1ホップのノードを選択してください';
-	@override String get hop2_empty_warning => '第2ホップのノードを選択してください';
-	@override String get hop_same_warning => '第1ホップと第2ホップに同じノードは指定できません';
+	@override String get hop1_empty_warning => '入口ノードを選択してください';
+	@override String get hop2_empty_warning => '出口ノードを選択してください';
+	@override String get hop_same_warning => '同じチェーン内で同一ノードは指定できません';
+	@override String active_count({required Object active, required Object total}) => '${active} / ${total} 有効';
+	@override String hop_count_badge({required Object count}) => '${count} ホップ';
+	@override String get hop_entry => '第1ホップ: 入口リレー';
+	@override String hop_transit({required Object index}) => '第${index}ホップ: 中継';
+	@override String hop_exit({required Object index}) => '第${index}ホップ: 出口';
+	@override String get add_transit_hop => '中継ホップを追加';
+	@override String get swap_hops => '隣接ホップを入れ替え';
+	@override String get remove_hop => 'ホップを削除';
+	@override String get reset_name => 'ホップ名から自動命名';
+	@override String get use_now => '今すぐ使用';
+	@override String switched_to_chain({required Object group, required Object name}) => '「${group}」を「${name}」に切り替えました';
+	@override String get enable_before_use => '先にこのチェーンプロキシを有効にしてください';
+	@override String get enable_before_test => '遅延測定の前にこのチェーンプロキシを有効にしてください';
+	@override String get hop_duplicate_warning => '同じチェーン内で重複したノードは選択できません';
+	@override String get hop_group_not_exit_warning => '中継・出口ホップにはグループではなく具体的なノードを指定してください';
+	@override String get picker_entry_hint => '入口ホップは個別ノードとポリシーグループの両方に対応しています';
+	@override String get picker_node_only_hint => '中継・出口ホップは具体的なプロキシノードのみ選択できます';
+	@override String get hops_label => 'ホップ構成（ドラッグ並べ替え / 入れ替え可）';
+	@override String get all_nodes => 'すべて';
 }
 
 // Path: main.tray
@@ -1104,6 +1155,9 @@ extension on TranslationsJa {
 			'BackupAndSyncWebdavScreen.webdavRequired' => '空にすることはできません',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'ログインに失敗しました:',
 			'BackupAndSyncWebdavScreen.webdavListFailed' => 'ファイルリストの取得に失敗しました:',
+			'BackupAndSyncWebdavScreen.noBackupsYet' => 'クラウドバックアップがありません。右上のアイコンから作成できます。',
+			'BackupAndSyncWebdavScreen.deleteConfirm' => ({required Object name}) => 'クラウドバックアップ [${name}] を完全に削除しますか？',
+			'BackupAndSyncWebdavScreen.backupSuccess' => 'バックアップをアップロードしました',
 			'LaunchFailedScreen.invalidProcess' => 'アプリの起動に失敗しました [無効なプロセス名]。アプリを別のディレクトリに再インストールしてください',
 			'LaunchFailedScreen.invalidProfile' => 'アプリの起動に失敗しました [プロファイルへのアクセスに失敗]。アプリを再インストールしてください',
 			'LaunchFailedScreen.invalidVersion' => 'アプリの起動に失敗しました [無効なバージョン]。アプリを再インストールしてください',
@@ -1128,6 +1182,8 @@ extension on TranslationsJa {
 			'UserAgreementScreen.localExecution' => '完全ローカル独立実行',
 			'UserAgreementScreen.zeroTelemetry' => '商業テレメトリなし',
 			'UserAgreementScreen.loading' => '規約を読み込み中...',
+			'UserAgreementScreen.privacySubtitle' => 'データ収集ゼロ・ローカル完結型プライバシーポリシー',
+			'UserAgreementScreen.copied' => 'クリップボードにコピーしました',
 			'NetCheckScreen.title' => 'ネットワーク診断と修復',
 			'NetCheckScreen.fullDiagnosticsTab' => 'パイプライン診断',
 			'NetCheckScreen.advancedCheckTab' => 'ドメイン詳細クエリ',
@@ -1235,6 +1291,8 @@ extension on TranslationsJa {
 			'NetCheckScreen.conclusionGood' => '全ルート概ね正常です。軽微な遅延や警告が検出されました。詳細をご確認ください。',
 			'NetCheckScreen.conclusionWarning' => '一部のネットワークまたはプロキシに異常が検出されました。下の【一括修復】をお試しください。',
 			'NetCheckScreen.conclusionCritical' => '重大なネットワーク遮断！ローカル回線が切断されているか、コアが阻害されています。',
+			'NetCheckScreen.valProxyTunActive' => ({required Object mode}) => 'TUN 仮想NICで接続中 (${mode})',
+			'NetCheckScreen.fakeIpActive' => ({required Object ip}) => 'Fake-IP 有効 (${ip})',
 			'SpeedTestScreen.title' => 'スピードテスト',
 			'SpeedTestScreen.startTest' => 'テスト開始',
 			'SpeedTestScreen.stopTest' => '停止',
@@ -1258,6 +1316,10 @@ extension on TranslationsJa {
 			'SpeedTestScreen.avgSpeed' => '平均速度',
 			'SpeedTestScreen.testHistory' => 'テスト履歴',
 			'SpeedTestScreen.clearHistory' => '履歴をクリア',
+			'SpeedTestScreen.proxyNotRunningTip' => 'プロキシコアが起動していません。先に接続するか直接接続に切り替えてください。',
+			'SpeedTestScreen.switchToDirect' => '直結に切替',
+			'SpeedTestScreen.testFailedNoData' => '速度測定に失敗しました。ネットワークやサーバーを確認してください。',
+			'SpeedTestScreen.activeNode' => '現在の出力ノード',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '新しいバージョン [${p}] の準備ができました',
 			'VersionUpdateScreen.update' => '再起動して更新',
 			'VersionUpdateScreen.cancel' => '今はしない',
@@ -1597,6 +1659,8 @@ extension on TranslationsJa {
 			'meta.nodeSelected' => ({required Object p}) => '選択されたノード: ${p}',
 			'meta.startingCoreAndTesting' => 'コアを起動してレイテンシをテスト中...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} 分',
+			_ => null,
+		} ?? switch (path) {
 			'meta.chartUpload' => 'アップロード',
 			'meta.chartDownload' => 'ダウンロード',
 			'meta.author' => '作成者',
@@ -1608,8 +1672,6 @@ extension on TranslationsJa {
 			'meta.autoScrollDisabled' => '自動スクロール無効',
 			'meta.pauseLogs' => 'リアルタイムログを一時停止',
 			'meta.resumeLogs' => 'リアルタイムログを再開',
-			_ => null,
-		} ?? switch (path) {
 			'meta.scrollToLatest' => '最新までスクロール',
 			'meta.scrollToBottom' => '最下部へスクロール',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} 件の新しいログ)',
@@ -1818,6 +1880,27 @@ extension on TranslationsJa {
 			'meta.resetDefaultCards' => 'デフォルトに戻す',
 			'meta.collapseAllCards' => 'すべて折りたたむ',
 			'meta.expandAllCards' => 'すべて展開',
+			'meta.sectionGeneral' => '一般・コア',
+			'meta.sectionRoutingTools' => 'ルール・チェーン・診断',
+			'meta.sectionData' => 'データと同期',
+			'meta.sectionSupport' => 'ヘルプと情報',
+			'meta.sectionAppearance' => '外観と操作',
+			'meta.sectionNetworkSub' => '速度テストと通信',
+			'meta.sectionDesktop' => 'デスクトップ連携（起動・トレイ・プロキシ）',
+			'meta.sectionMobile' => 'モバイル常駐と権限',
+			'meta.sectionLaunchConnect' => '起動と接続',
+			'meta.sectionUpdates' => 'アップデート',
+			'meta.sectionReset' => 'リセット',
+			'meta.sectionCoreBasic' => 'ポートと制御',
+			'meta.sectionCoreRouting' => 'ルーティング・TUN・LAN',
+			'meta.sectionCoreRules' => 'ルールと上書き',
+			'meta.sectionCoreProtocol' => '通信とプロトコル',
+			'meta.sectionCoreServices' => 'コアサービス',
+			'meta.batteryOptimization' => 'バッテリー最適化の除外（バックグラウンド維持）',
+			'meta.batteryOptimizationExempted' => '除外済み',
+			'meta.batteryOptimizationRestricted' => '制限あり（タップして許可）',
+			'meta.appPermissionsSettings' => 'システムアプリ権限設定',
+			'meta.previewFinalConfig' => '最終コア設定をプレビュー',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',
@@ -1920,7 +2003,7 @@ extension on TranslationsJa {
 			'hotkeys.cycleModeTip' => '順次切り替え：ルール ➔ グローバル ➔ 直接',
 			'hotkeys.resetDefault' => 'デフォルトに戻す',
 			'chain_proxy.title' => 'チェーンプロキシ',
-			'chain_proxy.desc' => '2つのノードを中継（前置リレー ➔ 出口ノード）し、低遅延と地域制限解除を両立します。',
+			'chain_proxy.desc' => 'dialer-proxy で2ホップ以上のノードを連結（入口 ➔ 中継 ➔ 出口）し、低遅延とネイティブIPを両立。有効時は選択グループへ自動追加されます。',
 			'chain_proxy.add' => 'チェーンプロキシを作成',
 			'chain_proxy.edit' => 'チェーンプロキシを編集',
 			'chain_proxy.delete' => '削除',
@@ -1937,14 +2020,33 @@ extension on TranslationsJa {
 			'chain_proxy.preview' => 'トポロジープレビュー',
 			'chain_proxy.local_device' => '端末',
 			'chain_proxy.internet' => 'インターネット',
-			'chain_proxy.save_success' => 'チェーンプロキシを保存しました',
-			'chain_proxy.empty_tip' => 'チェーンプロキシがありません。下のボタンから作成してください。',
+			'chain_proxy.save_success' => '保存して選択グループに同期しました',
+			'chain_proxy.empty_tip' => 'チェーンプロキシがありません。上のボタンから作成してください。',
 			'chain_proxy.test_latency' => '測定',
-			'chain_proxy.node_missing_warning' => '現在の設定に存在しないノードがあります。再指定してください。',
+			'chain_proxy.node_missing_warning' => '現在の設定に存在しないノードがあるため、安全のためスキップされました。',
 			'chain_proxy.name_empty_warning' => 'チェーンプロキシ名を入力してください',
-			'chain_proxy.hop1_empty_warning' => '第1ホップのノードを選択してください',
-			'chain_proxy.hop2_empty_warning' => '第2ホップのノードを選択してください',
-			'chain_proxy.hop_same_warning' => '第1ホップと第2ホップに同じノードは指定できません',
+			'chain_proxy.hop1_empty_warning' => '入口ノードを選択してください',
+			'chain_proxy.hop2_empty_warning' => '出口ノードを選択してください',
+			'chain_proxy.hop_same_warning' => '同じチェーン内で同一ノードは指定できません',
+			'chain_proxy.active_count' => ({required Object active, required Object total}) => '${active} / ${total} 有効',
+			'chain_proxy.hop_count_badge' => ({required Object count}) => '${count} ホップ',
+			'chain_proxy.hop_entry' => '第1ホップ: 入口リレー',
+			'chain_proxy.hop_transit' => ({required Object index}) => '第${index}ホップ: 中継',
+			'chain_proxy.hop_exit' => ({required Object index}) => '第${index}ホップ: 出口',
+			'chain_proxy.add_transit_hop' => '中継ホップを追加',
+			'chain_proxy.swap_hops' => '隣接ホップを入れ替え',
+			'chain_proxy.remove_hop' => 'ホップを削除',
+			'chain_proxy.reset_name' => 'ホップ名から自動命名',
+			'chain_proxy.use_now' => '今すぐ使用',
+			'chain_proxy.switched_to_chain' => ({required Object group, required Object name}) => '「${group}」を「${name}」に切り替えました',
+			'chain_proxy.enable_before_use' => '先にこのチェーンプロキシを有効にしてください',
+			'chain_proxy.enable_before_test' => '遅延測定の前にこのチェーンプロキシを有効にしてください',
+			'chain_proxy.hop_duplicate_warning' => '同じチェーン内で重複したノードは選択できません',
+			'chain_proxy.hop_group_not_exit_warning' => '中継・出口ホップにはグループではなく具体的なノードを指定してください',
+			'chain_proxy.picker_entry_hint' => '入口ホップは個別ノードとポリシーグループの両方に対応しています',
+			'chain_proxy.picker_node_only_hint' => '中継・出口ホップは具体的なプロキシノードのみ選択できます',
+			'chain_proxy.hops_label' => 'ホップ構成（ドラッグ並べ替え / 入れ替え可）',
+			'chain_proxy.all_nodes' => 'すべて',
 			_ => null,
 		};
 	}

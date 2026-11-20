@@ -122,6 +122,15 @@ class Translations$BackupAndSyncWebdavScreen$en {
 
 	/// en: 'Failed to get file list:'
 	String get webdavListFailed => 'Failed to get file list:';
+
+	/// en: 'No cloud backups yet. Tap upload above to create one.'
+	String get noBackupsYet => 'No cloud backups yet. Tap upload above to create one.';
+
+	/// en: 'Permanently delete cloud backup [$name]?'
+	String deleteConfirm({required Object name}) => 'Permanently delete cloud backup [${name}]?';
+
+	/// en: 'Backup uploaded successfully'
+	String get backupSuccess => 'Backup uploaded successfully';
 }
 
 // Path: LaunchFailedScreen
@@ -221,6 +230,12 @@ class Translations$UserAgreementScreen$en {
 
 	/// en: 'Loading agreement...'
 	String get loading => 'Loading agreement...';
+
+	/// en: 'Zero data collection & local execution privacy policy'
+	String get privacySubtitle => 'Zero data collection & local execution privacy policy';
+
+	/// en: 'Copied to clipboard'
+	String get copied => 'Copied to clipboard';
 }
 
 // Path: VersionUpdateScreen
@@ -569,6 +584,12 @@ class Translations$NetCheckScreen$en {
 
 	/// en: 'Severe network blockage! Local network disconnected or proxy core blocked.'
 	String get conclusionCritical => 'Severe network blockage! Local network disconnected or proxy core blocked.';
+
+	/// en: 'TUN virtual adapter active ($mode)'
+	String valProxyTunActive({required Object mode}) => 'TUN virtual adapter active (${mode})';
+
+	/// en: 'Fake-IP active ($ip)'
+	String fakeIpActive({required Object ip}) => 'Fake-IP active (${ip})';
 }
 
 // Path: SpeedTestScreen
@@ -647,6 +668,18 @@ class Translations$SpeedTestScreen$en {
 
 	/// en: 'Clear History'
 	String get clearHistory => 'Clear History';
+
+	/// en: 'Proxy core is not running. Connect first or switch to Direct mode.'
+	String get proxyNotRunningTip => 'Proxy core is not running. Connect first or switch to Direct mode.';
+
+	/// en: 'Use Direct'
+	String get switchToDirect => 'Use Direct';
+
+	/// en: 'Speed test failed: unable to reach server. Check network or switch server.'
+	String get testFailedNoData => 'Speed test failed: unable to reach server. Check network or switch server.';
+
+	/// en: 'Active Exit Node'
+	String get activeNode => 'Active Exit Node';
 }
 
 // Path: loginScreen
@@ -2268,6 +2301,69 @@ class Translations$meta$en {
 
 	/// en: 'Expand All'
 	String get expandAllCards => 'Expand All';
+
+	/// en: 'General & Core'
+	String get sectionGeneral => 'General & Core';
+
+	/// en: 'Routing, Chain & Diagnostics'
+	String get sectionRoutingTools => 'Routing, Chain & Diagnostics';
+
+	/// en: 'Data & Sync'
+	String get sectionData => 'Data & Sync';
+
+	/// en: 'Help & About'
+	String get sectionSupport => 'Help & About';
+
+	/// en: 'Appearance & Behavior'
+	String get sectionAppearance => 'Appearance & Behavior';
+
+	/// en: 'Speedtest & Requests'
+	String get sectionNetworkSub => 'Speedtest & Requests';
+
+	/// en: 'Desktop Integration (Startup, Tray & Proxy)'
+	String get sectionDesktop => 'Desktop Integration (Startup, Tray & Proxy)';
+
+	/// en: 'Mobile Keep-Alive & Permissions'
+	String get sectionMobile => 'Mobile Keep-Alive & Permissions';
+
+	/// en: 'Startup & Connection'
+	String get sectionLaunchConnect => 'Startup & Connection';
+
+	/// en: 'Updates'
+	String get sectionUpdates => 'Updates';
+
+	/// en: 'Reset'
+	String get sectionReset => 'Reset';
+
+	/// en: 'Listeners & Control'
+	String get sectionCoreBasic => 'Listeners & Control';
+
+	/// en: 'Routing, TUN & Access'
+	String get sectionCoreRouting => 'Routing, TUN & Access';
+
+	/// en: 'Rules & Overwrite'
+	String get sectionCoreRules => 'Rules & Overwrite';
+
+	/// en: 'Transport & Protocols'
+	String get sectionCoreProtocol => 'Transport & Protocols';
+
+	/// en: 'Core Services'
+	String get sectionCoreServices => 'Core Services';
+
+	/// en: 'Battery Optimization (Keep-Alive)'
+	String get batteryOptimization => 'Battery Optimization (Keep-Alive)';
+
+	/// en: 'Exempted'
+	String get batteryOptimizationExempted => 'Exempted';
+
+	/// en: 'Restricted (Tap to allow)'
+	String get batteryOptimizationRestricted => 'Restricted (Tap to allow)';
+
+	/// en: 'System App Permissions'
+	String get appPermissionsSettings => 'System App Permissions';
+
+	/// en: 'Preview final core configuration'
+	String get previewFinalConfig => 'Preview final core configuration';
 }
 
 // Path: permission
@@ -2611,8 +2707,8 @@ class Translations$chain_proxy$en {
 	/// en: 'Chain Proxy'
 	String get title => 'Chain Proxy';
 
-	/// en: 'Cascade two nodes (Entry Relay ➔ Exit Landing) to combine low latency with residential IP unlocking.'
-	String get desc => 'Cascade two nodes (Entry Relay ➔ Exit Landing) to combine low latency with residential IP unlocking.';
+	/// en: 'Cascade 2+ nodes (Entry Relay ➔ Transit ➔ Exit) via dialer-proxy to combine low latency with residential IP unlocking, and auto-sync into selector groups.'
+	String get desc => 'Cascade 2+ nodes (Entry Relay ➔ Transit ➔ Exit) via dialer-proxy to combine low latency with residential IP unlocking, and auto-sync into selector groups.';
 
 	/// en: 'New Chain Proxy'
 	String get add => 'New Chain Proxy';
@@ -2662,29 +2758,86 @@ class Translations$chain_proxy$en {
 	/// en: 'Internet'
 	String get internet => 'Internet';
 
-	/// en: 'Chain proxy saved successfully'
-	String get save_success => 'Chain proxy saved successfully';
+	/// en: 'Chain proxy saved & synced to selector groups'
+	String get save_success => 'Chain proxy saved & synced to selector groups';
 
-	/// en: 'No chain proxies yet. Tap below to create one.'
-	String get empty_tip => 'No chain proxies yet. Tap below to create one.';
+	/// en: 'No chain proxies yet. Tap above to create one.'
+	String get empty_tip => 'No chain proxies yet. Tap above to create one.';
 
 	/// en: 'Ping'
 	String get test_latency => 'Ping';
 
-	/// en: 'Some nodes do not exist in the current profile. Please update.'
-	String get node_missing_warning => 'Some nodes do not exist in the current profile. Please update.';
+	/// en: 'Some hops do not exist in the current profile and were skipped safely.'
+	String get node_missing_warning => 'Some hops do not exist in the current profile and were skipped safely.';
 
 	/// en: 'Please enter a chain proxy name'
 	String get name_empty_warning => 'Please enter a chain proxy name';
 
-	/// en: 'Please select the first hop (entry) node'
-	String get hop1_empty_warning => 'Please select the first hop (entry) node';
+	/// en: 'Please select the entry node'
+	String get hop1_empty_warning => 'Please select the entry node';
 
-	/// en: 'Please select the second hop (exit) node'
-	String get hop2_empty_warning => 'Please select the second hop (exit) node';
+	/// en: 'Please select the exit node'
+	String get hop2_empty_warning => 'Please select the exit node';
 
-	/// en: 'Hop 1 and Hop 2 cannot be the same node'
-	String get hop_same_warning => 'Hop 1 and Hop 2 cannot be the same node';
+	/// en: 'Hops in the same chain cannot repeat the same node'
+	String get hop_same_warning => 'Hops in the same chain cannot repeat the same node';
+
+	/// en: '$active / $total active'
+	String active_count({required Object active, required Object total}) => '${active} / ${total} active';
+
+	/// en: '$count Hops'
+	String hop_count_badge({required Object count}) => '${count} Hops';
+
+	/// en: 'Hop 1: Entry Relay'
+	String get hop_entry => 'Hop 1: Entry Relay';
+
+	/// en: 'Hop $index: Transit'
+	String hop_transit({required Object index}) => 'Hop ${index}: Transit';
+
+	/// en: 'Hop $index: Exit Landing'
+	String hop_exit({required Object index}) => 'Hop ${index}: Exit Landing';
+
+	/// en: 'Add Transit Hop'
+	String get add_transit_hop => 'Add Transit Hop';
+
+	/// en: 'Swap adjacent hops'
+	String get swap_hops => 'Swap adjacent hops';
+
+	/// en: 'Remove hop'
+	String get remove_hop => 'Remove hop';
+
+	/// en: 'Auto-name from hops'
+	String get reset_name => 'Auto-name from hops';
+
+	/// en: 'Use Now'
+	String get use_now => 'Use Now';
+
+	/// en: 'Switched "$group" to "$name"'
+	String switched_to_chain({required Object group, required Object name}) => 'Switched "${group}" to "${name}"';
+
+	/// en: 'Please enable this chain proxy first'
+	String get enable_before_use => 'Please enable this chain proxy first';
+
+	/// en: 'Please enable this chain proxy before testing latency'
+	String get enable_before_test => 'Please enable this chain proxy before testing latency';
+
+	/// en: 'Cannot select duplicate nodes in the same chain'
+	String get hop_duplicate_warning => 'Cannot select duplicate nodes in the same chain';
+
+	/// en: 'Transit and exit hops must be concrete proxy nodes, not policy groups'
+	String get hop_group_not_exit_warning => 'Transit and exit hops must be concrete proxy nodes, not policy groups';
+
+	/// en: 'Entry hop supports both proxy nodes and policy groups'
+	String get picker_entry_hint => 'Entry hop supports both proxy nodes and policy groups';
+
+	/// en: 'Transit and exit hops only support concrete proxy nodes'
+	String get picker_node_only_hint => 'Transit and exit hops only support concrete proxy nodes';
+
+	/// en: 'Hop Sequence (Drag to reorder / Swap)'
+	String get hops_label => 'Hop Sequence (Drag to reorder / Swap)';
+
+	/// en: 'All'
+	String get all_nodes => 'All';
 }
 
 // Path: main.tray
@@ -2784,6 +2937,9 @@ extension on Translations {
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'Can not be empty',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'Login failed:',
 			'BackupAndSyncWebdavScreen.webdavListFailed' => 'Failed to get file list:',
+			'BackupAndSyncWebdavScreen.noBackupsYet' => 'No cloud backups yet. Tap upload above to create one.',
+			'BackupAndSyncWebdavScreen.deleteConfirm' => ({required Object name}) => 'Permanently delete cloud backup [${name}]?',
+			'BackupAndSyncWebdavScreen.backupSuccess' => 'Backup uploaded successfully',
 			'LaunchFailedScreen.invalidProcess' => 'The app failed to start [Invalid process name], please reinstall the app to a separate directory',
 			'LaunchFailedScreen.invalidProfile' => 'The app failed to start [Failed to access the profile], please reinstall the app',
 			'LaunchFailedScreen.invalidVersion' => 'The app failed to start [Invalid version], please reinstall the app',
@@ -2808,6 +2964,8 @@ extension on Translations {
 			'UserAgreementScreen.localExecution' => 'Local Execution Only',
 			'UserAgreementScreen.zeroTelemetry' => 'No Commercial Telemetry',
 			'UserAgreementScreen.loading' => 'Loading agreement...',
+			'UserAgreementScreen.privacySubtitle' => 'Zero data collection & local execution privacy policy',
+			'UserAgreementScreen.copied' => 'Copied to clipboard',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'The new version[${p}] is ready',
 			'VersionUpdateScreen.update' => 'Restart To Update',
 			'VersionUpdateScreen.cancel' => 'Not Now',
@@ -2918,6 +3076,8 @@ extension on Translations {
 			'NetCheckScreen.conclusionGood' => 'Pipeline generally normal, minor non-critical latency or warnings detected.',
 			'NetCheckScreen.conclusionWarning' => 'Issues detected in network or proxy pipeline; please use One-Click Repair below.',
 			'NetCheckScreen.conclusionCritical' => 'Severe network blockage! Local network disconnected or proxy core blocked.',
+			'NetCheckScreen.valProxyTunActive' => ({required Object mode}) => 'TUN virtual adapter active (${mode})',
+			'NetCheckScreen.fakeIpActive' => ({required Object ip}) => 'Fake-IP active (${ip})',
 			'SpeedTestScreen.title' => 'Speed Test',
 			'SpeedTestScreen.startTest' => 'Start Test',
 			'SpeedTestScreen.stopTest' => 'Stop Test',
@@ -2941,6 +3101,10 @@ extension on Translations {
 			'SpeedTestScreen.avgSpeed' => 'Avg Speed',
 			'SpeedTestScreen.testHistory' => 'History',
 			'SpeedTestScreen.clearHistory' => 'Clear History',
+			'SpeedTestScreen.proxyNotRunningTip' => 'Proxy core is not running. Connect first or switch to Direct mode.',
+			'SpeedTestScreen.switchToDirect' => 'Use Direct',
+			'SpeedTestScreen.testFailedNoData' => 'Speed test failed: unable to reach server. Check network or switch server.',
+			'SpeedTestScreen.activeNode' => 'Active Exit Node',
 			'loginScreen.login' => 'Login',
 			'loginScreen.register' => 'Register Account',
 			'loginScreen.forgotPassword' => 'Forgot Password',
@@ -3277,6 +3441,8 @@ extension on Translations {
 			'meta.nodeSelected' => ({required Object p}) => 'Selected node: ${p}',
 			'meta.startingCoreAndTesting' => 'Starting core and testing latency...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} min',
+			_ => null,
+		} ?? switch (path) {
 			'meta.chartUpload' => 'Upload',
 			'meta.chartDownload' => 'Download',
 			'meta.author' => 'Author',
@@ -3288,8 +3454,6 @@ extension on Translations {
 			'meta.autoScrollDisabled' => 'Auto-scroll disabled',
 			'meta.pauseLogs' => 'Pause live logs',
 			'meta.resumeLogs' => 'Resume live logs',
-			_ => null,
-		} ?? switch (path) {
 			'meta.scrollToLatest' => 'Scroll to latest',
 			'meta.scrollToBottom' => 'Scroll to bottom',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} new logs)',
@@ -3498,6 +3662,27 @@ extension on Translations {
 			'meta.resetDefaultCards' => 'Reset Defaults',
 			'meta.collapseAllCards' => 'Collapse All',
 			'meta.expandAllCards' => 'Expand All',
+			'meta.sectionGeneral' => 'General & Core',
+			'meta.sectionRoutingTools' => 'Routing, Chain & Diagnostics',
+			'meta.sectionData' => 'Data & Sync',
+			'meta.sectionSupport' => 'Help & About',
+			'meta.sectionAppearance' => 'Appearance & Behavior',
+			'meta.sectionNetworkSub' => 'Speedtest & Requests',
+			'meta.sectionDesktop' => 'Desktop Integration (Startup, Tray & Proxy)',
+			'meta.sectionMobile' => 'Mobile Keep-Alive & Permissions',
+			'meta.sectionLaunchConnect' => 'Startup & Connection',
+			'meta.sectionUpdates' => 'Updates',
+			'meta.sectionReset' => 'Reset',
+			'meta.sectionCoreBasic' => 'Listeners & Control',
+			'meta.sectionCoreRouting' => 'Routing, TUN & Access',
+			'meta.sectionCoreRules' => 'Rules & Overwrite',
+			'meta.sectionCoreProtocol' => 'Transport & Protocols',
+			'meta.sectionCoreServices' => 'Core Services',
+			'meta.batteryOptimization' => 'Battery Optimization (Keep-Alive)',
+			'meta.batteryOptimizationExempted' => 'Exempted',
+			'meta.batteryOptimizationRestricted' => 'Restricted (Tap to allow)',
+			'meta.appPermissionsSettings' => 'System App Permissions',
+			'meta.previewFinalConfig' => 'Preview final core configuration',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',
@@ -3600,7 +3785,7 @@ extension on Translations {
 			'hotkeys.cycleModeTip' => 'Cycle sequentially: Rule ➔ Global ➔ Direct',
 			'hotkeys.resetDefault' => 'Reset to Defaults',
 			'chain_proxy.title' => 'Chain Proxy',
-			'chain_proxy.desc' => 'Cascade two nodes (Entry Relay ➔ Exit Landing) to combine low latency with residential IP unlocking.',
+			'chain_proxy.desc' => 'Cascade 2+ nodes (Entry Relay ➔ Transit ➔ Exit) via dialer-proxy to combine low latency with residential IP unlocking, and auto-sync into selector groups.',
 			'chain_proxy.add' => 'New Chain Proxy',
 			'chain_proxy.edit' => 'Edit Chain Proxy',
 			'chain_proxy.delete' => 'Delete',
@@ -3617,14 +3802,33 @@ extension on Translations {
 			'chain_proxy.preview' => 'Topology Preview',
 			'chain_proxy.local_device' => 'Device',
 			'chain_proxy.internet' => 'Internet',
-			'chain_proxy.save_success' => 'Chain proxy saved successfully',
-			'chain_proxy.empty_tip' => 'No chain proxies yet. Tap below to create one.',
+			'chain_proxy.save_success' => 'Chain proxy saved & synced to selector groups',
+			'chain_proxy.empty_tip' => 'No chain proxies yet. Tap above to create one.',
 			'chain_proxy.test_latency' => 'Ping',
-			'chain_proxy.node_missing_warning' => 'Some nodes do not exist in the current profile. Please update.',
+			'chain_proxy.node_missing_warning' => 'Some hops do not exist in the current profile and were skipped safely.',
 			'chain_proxy.name_empty_warning' => 'Please enter a chain proxy name',
-			'chain_proxy.hop1_empty_warning' => 'Please select the first hop (entry) node',
-			'chain_proxy.hop2_empty_warning' => 'Please select the second hop (exit) node',
-			'chain_proxy.hop_same_warning' => 'Hop 1 and Hop 2 cannot be the same node',
+			'chain_proxy.hop1_empty_warning' => 'Please select the entry node',
+			'chain_proxy.hop2_empty_warning' => 'Please select the exit node',
+			'chain_proxy.hop_same_warning' => 'Hops in the same chain cannot repeat the same node',
+			'chain_proxy.active_count' => ({required Object active, required Object total}) => '${active} / ${total} active',
+			'chain_proxy.hop_count_badge' => ({required Object count}) => '${count} Hops',
+			'chain_proxy.hop_entry' => 'Hop 1: Entry Relay',
+			'chain_proxy.hop_transit' => ({required Object index}) => 'Hop ${index}: Transit',
+			'chain_proxy.hop_exit' => ({required Object index}) => 'Hop ${index}: Exit Landing',
+			'chain_proxy.add_transit_hop' => 'Add Transit Hop',
+			'chain_proxy.swap_hops' => 'Swap adjacent hops',
+			'chain_proxy.remove_hop' => 'Remove hop',
+			'chain_proxy.reset_name' => 'Auto-name from hops',
+			'chain_proxy.use_now' => 'Use Now',
+			'chain_proxy.switched_to_chain' => ({required Object group, required Object name}) => 'Switched "${group}" to "${name}"',
+			'chain_proxy.enable_before_use' => 'Please enable this chain proxy first',
+			'chain_proxy.enable_before_test' => 'Please enable this chain proxy before testing latency',
+			'chain_proxy.hop_duplicate_warning' => 'Cannot select duplicate nodes in the same chain',
+			'chain_proxy.hop_group_not_exit_warning' => 'Transit and exit hops must be concrete proxy nodes, not policy groups',
+			'chain_proxy.picker_entry_hint' => 'Entry hop supports both proxy nodes and policy groups',
+			'chain_proxy.picker_node_only_hint' => 'Transit and exit hops only support concrete proxy nodes',
+			'chain_proxy.hops_label' => 'Hop Sequence (Drag to reorder / Swap)',
+			'chain_proxy.all_nodes' => 'All',
 			_ => null,
 		};
 	}

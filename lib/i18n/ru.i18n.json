@@ -9,7 +9,10 @@
     "webdavServerUrl": "Адрес сервера",
     "webdavRequired": "Не может быть пустым",
     "webdavLoginFailed": "Ошибка входа:",
-    "webdavListFailed": "Не удалось получить список файлов:"
+    "webdavListFailed": "Не удалось получить список файлов:",
+    "noBackupsYet": "Резервных копий пока нет. Нажмите значок загрузки выше.",
+    "deleteConfirm": "Удалить облачную копию [$name] навсегда?",
+    "backupSuccess": "Резервная копия успешно загружена"
   },
   "LaunchFailedScreen": {
     "invalidProcess": "Не удалось запустить приложение [Неверное имя процесса], переустановите приложение в отдельную папку",
@@ -39,7 +42,9 @@
     "zeroData": "Без сбора данных",
     "localExecution": "Только локальное исполнение",
     "zeroTelemetry": "Без телеметрии и трекеров",
-    "loading": "Загрузка соглашения..."
+    "loading": "Загрузка соглашения...",
+    "privacySubtitle": "Политика конфиденциальности: без сбора данных и локальная работа",
+    "copied": "Скопировано в буфер обмена"
   },
   "NetCheckScreen": {
     "title": "Диагностика сети",
@@ -148,7 +153,9 @@
     "conclusionPerfect": "Сеть в отличном состоянии! Все узлы и настройки прокси работают исправно.",
     "conclusionGood": "Сеть в норме, обнаружены незначительные задержки или предупреждения.",
     "conclusionWarning": "Обнаружены проблемы в сети или прокси; используйте «Быстрое исправление» ниже.",
-    "conclusionCritical": "Серьезный сбой сети! Локальная сеть отключена или ядро заблокировано."
+    "conclusionCritical": "Серьезный сбой сети! Локальная сеть отключена или ядро заблокировано.",
+    "valProxyTunActive": "TUN-адаптер активен ($mode)",
+    "fakeIpActive": "Fake-IP активен ($ip)"
   },
   "SpeedTestScreen": {
     "title": "Тест скорости",
@@ -173,7 +180,11 @@
     "peakSpeed": "Пиковая скорость",
     "avgSpeed": "Средняя скорость",
     "testHistory": "История тестов",
-    "clearHistory": "Очистить историю"
+    "clearHistory": "Очистить историю",
+    "proxyNotRunningTip": "Ядро прокси не запущено. Подключитесь или выберите прямой режим.",
+    "switchToDirect": "Прямой режим",
+    "testFailedNoData": "Ошибка теста: не удалось подключиться к серверу.",
+    "activeNode": "Активный узел"
   },
   "VersionUpdateScreen": {
     "versionReady": "Новая версия [$p] доступна",
@@ -257,7 +268,7 @@
     "cancel": "Закрыть",
     "faq": "Часто задаваемые вопросы (FAQ)",
     "doc": "документ",
-    "htmlTools": "HTML Toolset",
+    "htmlTools": "Инструменты HTML",
     "download": "Скачать",
     "loading": "Загрузка...",
     "days": "дни",
@@ -741,7 +752,28 @@
     "cardQuickActions": "Быстрые инструменты",
     "resetDefaultCards": "Сбросить",
     "collapseAllCards": "Свернуть все",
-    "expandAllCards": "Развернуть все"
+    "expandAllCards": "Развернуть все",
+    "sectionGeneral": "Общие и Ядро",
+    "sectionRoutingTools": "Маршрутизация, Цепочки и Диагностика",
+    "sectionData": "Данные и Синхронизация",
+    "sectionSupport": "Справка и О программе",
+    "sectionAppearance": "Внешний вид и Поведение",
+    "sectionNetworkSub": "Тест скорости и Запросы",
+    "sectionDesktop": "Интеграция с ПК (Автозапуск, Трей и Прокси)",
+    "sectionMobile": "Фоновая работа и Разрешения",
+    "sectionLaunchConnect": "Запуск и Подключение",
+    "sectionUpdates": "Обновления",
+    "sectionReset": "Сброс",
+    "sectionCoreBasic": "Порты и Управление",
+    "sectionCoreRouting": "Маршрутизация, TUN и Доступ",
+    "sectionCoreRules": "Правила и Переопределения",
+    "sectionCoreProtocol": "Транспорт и Протоколы",
+    "sectionCoreServices": "Службы Ядра",
+    "batteryOptimization": "Оптимизация батареи (Работа в фоне)",
+    "batteryOptimizationExempted": "В исключениях",
+    "batteryOptimizationRestricted": "Ограничено (Нажмите для разрешения)",
+    "appPermissionsSettings": "Системные разрешения",
+    "previewFinalConfig": "Предпросмотр итоговой конфигурации ядра"
   },
   "permission": {
     "camera": "Камера",
@@ -886,6 +918,25 @@
     "name_empty_warning": "Введите название цепочки прокси",
     "hop1_empty_warning": "Выберите первый (входной) узел",
     "hop2_empty_warning": "Выберите второй (выходной) узел",
-    "hop_same_warning": "Первый и второй узлы не могут совпадать"
+    "hop_same_warning": "Первый и второй узлы не могут совпадать",
+    "active_count": "Активно $active / $total",
+    "hop_count_badge": "Узлов: $count",
+    "hop_entry": "Узел 1: Входной ретранслятор",
+    "hop_transit": "Узел $index: Транзит",
+    "hop_exit": "Узел $index: Выходной узел",
+    "add_transit_hop": "Добавить транзитный узел",
+    "swap_hops": "Поменять соседние узлы местами",
+    "remove_hop": "Удалить узел",
+    "reset_name": "Назвать по цепочке узлов",
+    "use_now": "Применить сейчас",
+    "switched_to_chain": "«$group» переключена на «$name»",
+    "enable_before_use": "Сначала включите эту цепочку прокси",
+    "enable_before_test": "Сначала включите эту цепочку прокси для замера задержки",
+    "hop_duplicate_warning": "Нельзя выбирать одинаковые узлы в одной цепочке",
+    "hop_group_not_exit_warning": "Транзитные и выходные шаги должны быть конкретными узлами, а не группами",
+    "picker_entry_hint": "Входной шаг поддерживает и узлы, и группы политик",
+    "picker_node_only_hint": "Транзитные и выходные шаги поддерживают только конкретные узлы",
+    "hops_label": "Порядок переходов (перетащите или поменяйте)",
+    "all_nodes": "Все"
   }
 }

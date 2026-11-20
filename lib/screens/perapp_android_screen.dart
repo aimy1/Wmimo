@@ -1,18 +1,19 @@
-// ignore_for_file: unused_catch_stack
+// ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
 
 import 'package:android_package_manager/android_package_manager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/package_manager_android.dart';
+import 'package:wmimo/app/utils/vpn_action_handler.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
-import 'package:wmimo/screens/group_item_creator.dart';
-import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
@@ -32,12 +33,19 @@ class _PerAppAndroidScreenState
     extends LasyRenderingState<PerAppAndroidScreen>
     with WidgetsBindingObserver {
   bool _loading = true;
+  bool _applying = false;
+  bool _hasAppListPermission = true;
+  bool _needPermission = false;
+
   final List<PackageInfoEx> _applicationInfoList = [];
   final _searchController = TextEditingController();
   List<PackageInfoEx> _searchedData = [];
-  bool _needPermission = false;
   String _selectedCategory = 'all'; // 'all', 'user', 'system', 'selected'
   Timer? _loadingTimeoutTimer;
+
+  late bool _initialEnable;
+  late bool _initialWhitelist;
+  late Set<String> _initialPackages;
 
   static const List<Map<String, String>> _commonProxyPresets = [
     {'name': 'Telegram', 'pkg': 'org.telegram.messenger'},
@@ -60,10 +68,14 @@ class _PerAppAndroidScreenState
 
   @override
   void initState() {
-    _loading = true;
-    WidgetsBinding.instance.addObserver(this);
-    getInstalledPackages();
     super.initState();
+    _captureInitialSnapshot();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        getInstalledPackages();
+      }
+    });
   }
 
   @override
@@ -76,9 +88,26 @@ class _PerAppAndroidScreenState
     super.dispose();
   }
 
+  void _captureInitialSnapshot() {
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    _initialEnable = perapp.Enable == true;
+    _initialWhitelist = perapp.WhiteList == true;
+    _initialPackages = (perapp.PackageIds ?? const []).toSet();
+  }
+
+  bool get _isDirty {
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final currEnable = perapp.Enable == true;
+    final currWhitelist = perapp.WhiteList == true;
+    final currPackages = (perapp.PackageIds ?? const []).toSet();
+    return currEnable != _initialEnable ||
+        currWhitelist != _initialWhitelist ||
+        !setEquals(currPackages, _initialPackages);
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && _needPermission) {
+    if (state == AppLifecycleState.resumed && (!_hasAppListPermission || _needPermission)) {
       getInstalledPackages();
     }
   }
@@ -90,18 +119,31 @@ class _PerAppAndroidScreenState
             0);
   }
 
+  bool _isRemovedApp(PackageInfoEx app) =>
+      app.name == PackageManagerAndroid.kRemoved;
+
   int _getSelectedCount() {
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     return perapp.PackageIds?.length ?? 0;
   }
 
+  int _getRemovedSelectedCount() {
+    final removedSet = _applicationInfoList
+        .where(_isRemovedApp)
+        .map((e) => e.info.packageName)
+        .whereType<String>()
+        .toSet();
+    final selected = ClashSettingManager.getConfig().Extension!.Tun.perApp.PackageIds ?? [];
+    return selected.where(removedSet.contains).length;
+  }
+
   void _applyFilter() {
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     final search = _searchController.text.trim().toLowerCase();
     final selectedSet = perapp.PackageIds?.toSet() ?? {};
 
     _searchedData = _applicationInfoList.where((app) {
-      if (_selectedCategory == 'user' && _isSystemApp(app)) {
+      if (_selectedCategory == 'user' && (_isSystemApp(app) || _isRemovedApp(app))) {
         return false;
       }
       if (_selectedCategory == 'system' && !_isSystemApp(app)) {
@@ -113,8 +155,8 @@ class _PerAppAndroidScreenState
       }
 
       if (search.isNotEmpty) {
-        String name = app.name.toLowerCase();
-        String pkgName = (app.info.packageName ?? "").toLowerCase();
+        final name = app.name.toLowerCase();
+        final pkgName = (app.info.packageName ?? "").toLowerCase();
         if (!name.contains(search) && !pkgName.contains(search)) {
           return false;
         }
@@ -125,21 +167,13 @@ class _PerAppAndroidScreenState
     setState(() {});
   }
 
-  void _loadSearch(String? textVal) {
-    _applyFilter();
-  }
-
-  void _clearSearch() {
-    _searchController.clear();
-    _applyFilter();
-  }
-
   void _selectAllCurrent() {
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     perapp.PackageIds ??= [];
-    for (var app in _searchedData) {
+    for (final app in _searchedData) {
+      if (_isRemovedApp(app)) continue;
       final pkg = app.info.packageName;
-      if (pkg != null && !perapp.PackageIds!.contains(pkg)) {
+      if (pkg != null && pkg.isNotEmpty && !perapp.PackageIds!.contains(pkg)) {
         perapp.PackageIds!.add(pkg);
       }
     }
@@ -148,7 +182,7 @@ class _PerAppAndroidScreenState
   }
 
   void _deselectAllCurrent() {
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     perapp.PackageIds ??= [];
     final toRemove = _searchedData
         .map((e) => e.info.packageName)
@@ -160,12 +194,13 @@ class _PerAppAndroidScreenState
   }
 
   void _invertSelectionCurrent() {
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     perapp.PackageIds ??= [];
     final currentSelected = perapp.PackageIds!.toSet();
-    for (var app in _searchedData) {
+    for (final app in _searchedData) {
+      if (_isRemovedApp(app)) continue;
       final pkg = app.info.packageName;
-      if (pkg != null) {
+      if (pkg != null && pkg.isNotEmpty) {
         if (currentSelected.contains(pkg)) {
           perapp.PackageIds!.remove(pkg);
         } else {
@@ -177,9 +212,55 @@ class _PerAppAndroidScreenState
     _applyFilter();
   }
 
+  void _cleanupRemovedPackages() {
+    final removedSet = _applicationInfoList
+        .where(_isRemovedApp)
+        .map((e) => e.info.packageName)
+        .whereType<String>()
+        .toSet();
+    if (removedSet.isEmpty) return;
+
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    perapp.PackageIds?.removeWhere(removedSet.contains);
+    _applicationInfoList.removeWhere(_isRemovedApp);
+    ClashSettingManager.save();
+    _applyFilter();
+  }
+
+  Future<void> _applyRulesLive({bool showFeedback = true}) async {
+    if (_applying) return;
+    setState(() => _applying = true);
+    try {
+      await ClashSettingManager.save();
+      final applied = await VPNService.updateAndroidPerApp();
+      if (!applied && await VPNService.getStarted()) {
+        VpnActionHandler.vpnReconnect?.call("perapp", false);
+      }
+      _captureInitialSnapshot();
+      if (showFeedback && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("分应用代理规则已平滑生效"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _applying = false);
+      }
+    }
+  }
+
+  Future<void> _applyIfConnectedOnExit() async {
+    if (_isDirty && await VPNService.getStarted()) {
+      await _applyRulesLive(showFeedback: false);
+    }
+  }
+
   Future<void> getInstalledPackages() async {
     _loadingTimeoutTimer?.cancel();
-    _loadingTimeoutTimer = Timer(const Duration(milliseconds: 2500), () {
+    _loadingTimeoutTimer = Timer(const Duration(milliseconds: 3500), () {
       if (mounted && _loading) {
         setState(() {
           _loading = false;
@@ -192,31 +273,26 @@ class _PerAppAndroidScreenState
 
     _applicationInfoList.clear();
     _searchedData.clear();
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     _loading = true;
     setState(() {});
     try {
+      _hasAppListPermission = await PackageManagerAndroid.hasAppListPermission();
       final packages = await PackageManagerAndroid.getInstalledPackages(
-        onValid: (PackageInfo info) {
-          if (info.packageName == AppUtils.getId()) {
-            return false;
-          }
-          return true;
-        },
+        onValid: (PackageInfo info) => info.packageName != AppUtils.getId(),
       );
 
       _loadingTimeoutTimer?.cancel();
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
+
       _needPermission = packages.isEmpty;
       if (_needPermission) {
         if (perapp.PackageIds != null && perapp.PackageIds!.isNotEmpty) {
-          for (var papp in perapp.PackageIds!) {
-            PackageInfoEx info = PackageInfoEx();
-            info.info = PackageInfoImpl(papp);
-            info.name = papp;
-            info.icon = null;
+          for (final papp in perapp.PackageIds!) {
+            final info = PackageInfoEx()
+              ..info = PackageInfoImpl(papp)
+              ..name = papp
+              ..icon = null;
             _applicationInfoList.add(info);
           }
           _selectedCategory = 'all';
@@ -224,30 +300,30 @@ class _PerAppAndroidScreenState
         }
         return;
       }
-      List<PackageInfoEx> notExists = [];
-      List<PackageInfoEx> added = [];
-      List<PackageInfoEx> notAdded = [];
-      Set<String> exists = {};
 
-      for (var app in packages) {
+      final List<PackageInfoEx> notExists = [];
+      final List<PackageInfoEx> added = [];
+      final List<PackageInfoEx> notAdded = [];
+      final Set<String> exists = {};
+
+      for (final app in packages) {
         final pkg = app.info.packageName;
         if (pkg == null || pkg.isEmpty) continue;
         exists.add(pkg);
-        if (perapp.PackageIds != null &&
-            perapp.PackageIds!.contains(pkg)) {
+        if (perapp.PackageIds != null && perapp.PackageIds!.contains(pkg)) {
           added.add(app);
         } else {
           notAdded.add(app);
         }
       }
-      if (perapp.PackageIds != null) {
-        for (var papp in perapp.PackageIds!) {
-          if (!exists.contains(papp)) {
-            PackageInfoEx info = PackageInfoEx();
-            info.info = PackageInfoImpl(papp);
-            info.name = PackageManagerAndroid.kRemoved;
-            info.icon = null;
 
+      if (perapp.PackageIds != null) {
+        for (final papp in perapp.PackageIds!) {
+          if (!exists.contains(papp)) {
+            final info = PackageInfoEx()
+              ..info = PackageInfoImpl(papp)
+              ..name = PackageManagerAndroid.kRemoved
+              ..icon = null;
             notExists.add(info);
           }
         }
@@ -256,11 +332,10 @@ class _PerAppAndroidScreenState
       notExists.sort(PackageManagerAndroid.sortByName);
       added.sort(PackageManagerAndroid.sortByName);
       notAdded.sort(PackageManagerAndroid.sortByName);
-      _applicationInfoList.addAll(notExists);
-      _applicationInfoList.addAll(added);
-      _applicationInfoList.addAll(notAdded);
-
-      _selectedCategory = 'all';
+      _applicationInfoList
+        ..addAll(notExists)
+        ..addAll(added)
+        ..addAll(notAdded);
 
       _applyFilter();
     } catch (_) {
@@ -284,44 +359,52 @@ class _PerAppAndroidScreenState
     );
   }
 
+  Future<void> _openSystemPermissionSettings() async {
+    try {
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      await platform.invokeMethod('openAppSettings');
+    } catch (_) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
 
     final allCount = _applicationInfoList.length;
-    final userCount = _applicationInfoList.where((a) => !_isSystemApp(a)).length;
-    final systemCount = _applicationInfoList.where((a) => _isSystemApp(a)).length;
+    final userCount = _applicationInfoList
+        .where((a) => !_isSystemApp(a) && !_isRemovedApp(a))
+        .length;
+    final systemCount = _applicationInfoList.where(_isSystemApp).length;
     final selectedCount = _getSelectedCount();
+    final removedCount = _getRemovedSelectedCount();
 
-    return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          unawaited(_applyIfConnectedOnExit());
+        }
+      },
+      child: Scaffold(
+        appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+        body: SafeArea(
           child: Column(
             children: [
-              // Top Navigation Bar
+              // Compact Top Navigation Bar with always-accessible Presets & Manual Add
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.fromLTRB(4, 10, 4, 4),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(20),
-                      onTap: () => Navigator.pop(context),
-                      child: const SizedBox(
-                        width: 44,
-                        height: 36,
-                        child: Icon(Icons.arrow_back_ios_outlined, size: 22),
-                      ),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      onPressed: () => Navigator.pop(context),
                     ),
                     Expanded(
                       child: Text(
                         tcontext.PerAppAndroidScreen.title,
-                        textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: ThemeConfig.kFontWeightTitle,
@@ -329,65 +412,113 @@ class _PerAppAndroidScreenState
                         ),
                       ),
                     ),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(20),
-                      onTap: onTapMore,
-                      child: Tooltip(
-                        message: tcontext.meta.more,
-                        child: const SizedBox(
-                          width: 44,
-                          height: 36,
-                          child: Icon(Icons.more_vert_outlined, size: 26),
-                        ),
-                      ),
+                    IconButton(
+                      tooltip: tcontext.PerAppAndroidScreen.presetApps,
+                      icon: const Icon(Icons.auto_awesome_outlined, size: 21),
+                      onPressed: _showPresetAppsDialog,
+                    ),
+                    IconButton(
+                      tooltip: tcontext.PerAppAndroidScreen.manualAddPackage,
+                      icon: const Icon(Icons.add_circle_outline_rounded, size: 21),
+                      onPressed: _showManualAddDialog,
+                    ),
+                    IconButton(
+                      tooltip: tcontext.meta.more,
+                      icon: const Icon(Icons.more_vert_outlined, size: 22),
+                      onPressed: onTapMore,
                     ),
                   ],
                 ),
               ),
 
-              // Enable switch options
-              FutureBuilder(
-                future: getGroupOptions(),
-                builder: (BuildContext context, AsyncSnapshot<List<GroupItem>> snapshot) {
-                  List<GroupItem> data = snapshot.hasData ? snapshot.data! : [];
-                  return Column(
-                    children: GroupItemCreator.createGroups(context, data),
+              // Unified Compact Control Card (Enable + Whitelist/Blacklist Segmented Switch)
+              _buildCompactControlCard(context, perapp.Enable == true, perapp.WhiteList == true, selectedCount),
+
+              // Live VPN Sync Prompt when dirty and connected
+              ValueListenableBuilder<VpnUiStatus>(
+                valueListenable: VpnActionHandler.uiStatus,
+                builder: (context, status, _) {
+                  if (!status.isConnected || !_isDirty) {
+                    return const SizedBox.shrink();
+                  }
+                  return Container(
+                    margin: const EdgeInsets.fromLTRB(16, 4, 16, 2),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                    decoration: BoxDecoration(
+                      color: ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.18 : 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: ThemeDefine.kColorBlue.withValues(alpha: 0.35),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.sync_rounded, size: 16, color: ThemeDefine.kColorBlue),
+                        const SizedBox(width: 8),
+                        const Expanded(
+                          child: Text(
+                            "分流规则已变更，应用后立即生效",
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: _applying ? null : () => _applyRulesLive(),
+                          style: TextButton.styleFrom(
+                            backgroundColor: ThemeDefine.kColorBlue,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                          ),
+                          child: Text(
+                            _applying ? "..." : "立即应用",
+                            style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
 
-              // Dual-mode selector card (Whitelist / Blacklist)
-              if (perapp.Enable == true) ...[
-                _buildModeSelector(context),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 2),
+              // Non-blocking partial permission warning banner when launcher apps are shown
+              if (!_needPermission && !_hasAppListPermission)
+                Container(
+                  margin: const EdgeInsets.fromLTRB(16, 4, 16, 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withValues(alpha: isDark ? 0.16 : 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.orange.withValues(alpha: 0.35)),
+                  ),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.info_outline_rounded,
-                        size: 13,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
+                      const Icon(Icons.warning_amber_rounded, size: 16, color: Colors.orange),
+                      const SizedBox(width: 8),
+                      const Expanded(
                         child: Text(
-                          tcontext.meta.coreSettingTips,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                          ),
+                          "读取应用列表权限受限，当前仅展示部分可见应用",
+                          style: TextStyle(fontSize: 11.5, color: Colors.orange),
                         ),
+                      ),
+                      TextButton(
+                        onPressed: _openSystemPermissionSettings,
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text("去授权", style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
                 ),
-              ],
 
               // Search Bar
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                height: 40,
-                width: double.infinity,
+                margin: const EdgeInsets.fromLTRB(16, 6, 16, 4),
+                height: 38,
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9),
                   borderRadius: BorderRadius.circular(10),
@@ -399,19 +530,19 @@ class _PerAppAndroidScreenState
                 child: TextField(
                   controller: _searchController,
                   textInputAction: TextInputAction.search,
-                  onChanged: _loadSearch,
+                  onChanged: (_) => _applyFilter(),
                   textAlignVertical: TextAlignVertical.center,
                   style: const TextStyle(fontSize: 13),
                   decoration: InputDecoration(
                     isDense: true,
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 9, horizontal: 8),
                     prefixIcon: Icon(
                       Icons.search_rounded,
-                      size: 19,
+                      size: 18,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
-                    prefixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 38),
+                    prefixIconConstraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                     hintText: "${tcontext.meta.search} (应用名 / 包名)",
                     hintStyle: TextStyle(
                       fontSize: 12.5,
@@ -420,7 +551,10 @@ class _PerAppAndroidScreenState
                     suffixIcon: _searchController.text.isNotEmpty
                         ? InkWell(
                             borderRadius: BorderRadius.circular(20),
-                            onTap: _clearSearch,
+                            onTap: () {
+                              _searchController.clear();
+                              _applyFilter();
+                            },
                             child: Icon(
                               Icons.cancel_rounded,
                               size: 17,
@@ -428,16 +562,17 @@ class _PerAppAndroidScreenState
                             ),
                           )
                         : null,
-                    suffixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 38),
+                    suffixIconConstraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                   ),
                 ),
               ),
 
               // Category Filter Chips
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: Row(
+              SizedBox(
+                height: 38,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   children: [
                     _buildFilterChip("all", "${tcontext.meta.all} ($allCount)"),
                     const SizedBox(width: 8),
@@ -450,25 +585,16 @@ class _PerAppAndroidScreenState
                 ),
               ),
 
-              // Batch Action Shortcuts Row
-              _buildActionShortcuts(context),
+              // Compact Batch Action Row
+              _buildActionShortcuts(context, selectedCount, removedCount),
 
-              const SizedBox(height: 4),
-
-              // Application list view
+              // Application list or full permission guide
               Expanded(
                 child: _needPermission
                     ? createNeedPermission(
                         context,
-                        tcontext.permission.request(
-                          p: tcontext.permission.appQuery,
-                        ),
-                        () async {
-                          try {
-                            const platform = MethodChannel('com.wmimo.app/native_helper');
-                            await platform.invokeMethod('openAppSettings');
-                          } catch (_) {}
-                        },
+                        tcontext.permission.request(p: tcontext.permission.appQuery),
+                        _openSystemPermissionSettings,
                         () {
                           _needPermission = false;
                           getInstalledPackages();
@@ -483,164 +609,173 @@ class _PerAppAndroidScreenState
     );
   }
 
-  Widget _buildModeSelector(BuildContext context) {
+  Widget _buildCompactControlCard(
+    BuildContext context,
+    bool enabled,
+    bool isWhitelist,
+    int selectedCount,
+  ) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
-    final isWhitelist = perapp.WhiteList ?? false;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF262629) : const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: theme.dividerColor.withValues(alpha: 0.15),
-          width: 1,
         ),
       ),
-      child: Row(
+      child: Column(
         children: [
-          // Whitelist: Only Proxy Selected
-          Expanded(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(8),
-              onTap: () {
-                setState(() {
-                  perapp.WhiteList = true;
-                });
-                ClashSettingManager.save();
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                decoration: BoxDecoration(
-                  color: isWhitelist
-                      ? ThemeDefine.kColorBlue.withValues(alpha: 0.12)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: isWhitelist
-                        ? ThemeDefine.kColorBlue
-                        : theme.dividerColor.withValues(alpha: 0.2),
-                    width: isWhitelist ? 1.5 : 1,
+          Row(
+            children: [
+              Icon(
+                Icons.apps_rounded,
+                size: 18,
+                color: enabled ? ThemeDefine.kColorBlue : Colors.grey,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  tcontext.meta.enable,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+              ),
+              Switch.adaptive(
+                value: enabled,
+                activeThumbColor: Colors.white,
+                activeTrackColor: ThemeDefine.kColorBlue,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                onChanged: (bool value) {
+                  setState(() {
+                    perapp.Enable = value;
+                  });
+                  ClashSettingManager.save();
+                },
+              ),
+            ],
+          ),
+          if (enabled) ...[
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildModeSegment(
+                    context: context,
+                    selected: isWhitelist,
+                    activeColor: ThemeDefine.kColorBlue,
+                    icon: Icons.playlist_add_check_circle_rounded,
+                    title: tcontext.meta.proxySelectedMode,
+                    subtitle: tcontext.meta.proxySelectedModeDesc,
+                    onTap: () {
+                      setState(() => perapp.WhiteList = true);
+                      ClashSettingManager.save();
+                    },
                   ),
                 ),
-                child: Column(
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildModeSegment(
+                    context: context,
+                    selected: !isWhitelist,
+                    activeColor: ThemeDefine.kColorGreenBright,
+                    icon: Icons.remove_circle_outline_rounded,
+                    title: tcontext.meta.bypassSelectedMode,
+                    subtitle: tcontext.meta.bypassSelectedModeDesc,
+                    onTap: () {
+                      setState(() => perapp.WhiteList = false);
+                      ClashSettingManager.save();
+                    },
+                  ),
+                ),
+              ],
+            ),
+            if (isWhitelist && selectedCount == 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Row(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.playlist_add_check_circle_rounded,
-                          size: 16,
-                          color: isWhitelist
-                              ? ThemeDefine.kColorBlue
-                              : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                        ),
-                        const SizedBox(width: 4),
-                        Flexible(
-                          child: Text(
-                            tcontext.meta.proxySelectedMode,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: isWhitelist ? FontWeight.bold : FontWeight.w500,
-                              color: isWhitelist
-                                  ? ThemeDefine.kColorBlue
-                                  : theme.colorScheme.onSurface.withValues(alpha: 0.8),
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      tcontext.meta.proxySelectedModeDesc,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                    const Icon(Icons.info_outline_rounded, size: 13, color: Colors.orange),
+                    const SizedBox(width: 5),
+                    const Expanded(
+                      child: Text(
+                        "白名单为空时不会代理任何应用，请至少勾选 1 个应用",
+                        style: TextStyle(fontSize: 11, color: Colors.orange),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          // Blacklist: Bypass Selected
-          Expanded(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(8),
-              onTap: () {
-                setState(() {
-                  perapp.WhiteList = false;
-                });
-                ClashSettingManager.save();
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                decoration: BoxDecoration(
-                  color: !isWhitelist
-                      ? ThemeDefine.kColorGreenBright.withValues(alpha: 0.12)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: !isWhitelist
-                        ? ThemeDefine.kColorGreenBright
-                        : theme.dividerColor.withValues(alpha: 0.2),
-                    width: !isWhitelist ? 1.5 : 1,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.remove_circle_outline_rounded,
-                          size: 16,
-                          color: !isWhitelist
-                              ? ThemeDefine.kColorGreenBright
-                              : theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                        ),
-                        const SizedBox(width: 4),
-                        Flexible(
-                          child: Text(
-                            tcontext.meta.bypassSelectedMode,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: !isWhitelist ? FontWeight.bold : FontWeight.w500,
-                              color: !isWhitelist
-                                  ? ThemeDefine.kColorGreenBright
-                                  : theme.colorScheme.onSurface.withValues(alpha: 0.8),
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      tcontext.meta.bypassSelectedModeDesc,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildModeSegment({
+    required BuildContext context,
+    required bool selected,
+    required Color activeColor,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+        decoration: BoxDecoration(
+          color: selected ? activeColor.withValues(alpha: 0.12) : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: selected ? activeColor : theme.dividerColor.withValues(alpha: 0.2),
+            width: selected ? 1.4 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 15,
+              color: selected ? activeColor : theme.colorScheme.onSurface.withValues(alpha: 0.5),
+            ),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: selected ? FontWeight.bold : FontWeight.w500,
+                      color: selected ? activeColor : theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 9.5,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -652,7 +787,7 @@ class _PerAppAndroidScreenState
       label: Text(
         label,
         style: TextStyle(
-          fontSize: 12,
+          fontSize: 11.5,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           color: isSelected
               ? ThemeDefine.kColorBlue
@@ -662,6 +797,7 @@ class _PerAppAndroidScreenState
       selected: isSelected,
       selectedColor: ThemeDefine.kColorBlue.withValues(alpha: 0.15),
       backgroundColor: theme.colorScheme.surface,
+      visualDensity: VisualDensity.compact,
       side: BorderSide(
         color: isSelected
             ? ThemeDefine.kColorBlue
@@ -669,6 +805,7 @@ class _PerAppAndroidScreenState
         width: isSelected ? 1.2 : 0.8,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      showCheckmark: false,
       onSelected: (val) {
         if (val) {
           setState(() {
@@ -680,7 +817,11 @@ class _PerAppAndroidScreenState
     );
   }
 
-  Widget _buildActionShortcuts(BuildContext context) {
+  Widget _buildActionShortcuts(
+    BuildContext context,
+    int selectedCount,
+    int removedCount,
+  ) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     return Padding(
@@ -688,37 +829,57 @@ class _PerAppAndroidScreenState
       child: Row(
         children: [
           Text(
-            "${tcontext.meta.selectedOnly}: ${_getSelectedCount()}",
+            "${tcontext.meta.selectedOnly}: $selectedCount",
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
             ),
           ),
+          if (removedCount > 0) ...[
+            const SizedBox(width: 8),
+            InkWell(
+              onTap: _cleanupRemovedPackages,
+              borderRadius: BorderRadius.circular(6),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.red.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  "清理 $removedCount 个失效项",
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              ),
+            ),
+          ],
           const Spacer(),
           TextButton(
             style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             onPressed: _searchedData.isEmpty ? null : _selectAllCurrent,
             child: Text(tcontext.meta.selectAll, style: const TextStyle(fontSize: 12)),
           ),
-          const SizedBox(width: 4),
           TextButton(
             style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             onPressed: _searchedData.isEmpty ? null : _deselectAllCurrent,
             child: Text(tcontext.meta.deselectAll, style: const TextStyle(fontSize: 12)),
           ),
-          const SizedBox(width: 4),
           TextButton(
             style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
@@ -768,8 +929,7 @@ class _PerAppAndroidScreenState
     return ListView.separated(
       itemCount: _searchedData.length,
       itemBuilder: (BuildContext context, int index) {
-        PackageInfoEx current = _searchedData[index];
-        return createWidget(current);
+        return createWidget(_searchedData[index]);
       },
       separatorBuilder: (BuildContext context, int index) {
         return const Divider(height: 1, thickness: 0.3);
@@ -778,10 +938,11 @@ class _PerAppAndroidScreenState
   }
 
   Widget createWidget(PackageInfoEx current) {
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
-    final isSelected = perapp.PackageIds != null &&
-        perapp.PackageIds!.contains(current.info.packageName);
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final pkg = current.info.packageName ?? '';
+    final isSelected = perapp.PackageIds != null && perapp.PackageIds!.contains(pkg);
     final isSystem = _isSystemApp(current);
+    final isRemoved = _isRemovedApp(current);
     final theme = Theme.of(context);
 
     return Material(
@@ -790,34 +951,40 @@ class _PerAppAndroidScreenState
         onTap: () {
           perapp.PackageIds ??= [];
           if (!isSelected) {
-            perapp.PackageIds!.add(current.info.packageName!);
+            perapp.PackageIds!.add(pkg);
           } else {
-            perapp.PackageIds!.remove(current.info.packageName!);
+            perapp.PackageIds!.remove(pkg);
           }
           ClashSettingManager.save();
           setState(() {});
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
           width: double.infinity,
           child: Row(
             children: [
               SizedBox(
-                width: 44,
-                height: 44,
-                child: FutureBuilder(
-                  future: getInstalledPackageIcon(current.info.packageName!),
-                  builder: (BuildContext context, AsyncSnapshot<Image?> snapshot) {
-                    if (!snapshot.hasData || snapshot.data == null) {
-                      return Icon(
-                        isSystem ? Icons.settings_applications_rounded : Icons.android_rounded,
-                        size: 36,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                      );
-                    }
-                    return snapshot.data!;
-                  },
-                ),
+                width: 40,
+                height: 40,
+                child: isRemoved
+                    ? Icon(
+                        Icons.delete_sweep_outlined,
+                        size: 28,
+                        color: Colors.redAccent.withValues(alpha: 0.7),
+                      )
+                    : FutureBuilder(
+                        future: getInstalledPackageIcon(pkg),
+                        builder: (BuildContext context, AsyncSnapshot<Image?> snapshot) {
+                          if (!snapshot.hasData || snapshot.data == null) {
+                            return Icon(
+                              isSystem ? Icons.settings_applications_rounded : Icons.android_rounded,
+                              size: 32,
+                              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                            );
+                          }
+                          return snapshot.data!;
+                        },
+                      ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -829,16 +996,34 @@ class _PerAppAndroidScreenState
                       children: [
                         Flexible(
                           child: Text(
-                            current.name,
+                            isRemoved ? pkg : current.name,
                             style: TextStyle(
                               fontSize: ThemeConfig.kFontSizeGroupItem,
                               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                              color: isRemoved ? theme.colorScheme.onSurface.withValues(alpha: 0.6) : null,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (isSystem) ...[
+                        if (isRemoved) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                            decoration: BoxDecoration(
+                              color: Colors.red.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Text(
+                              "已卸载",
+                              style: TextStyle(
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                          ),
+                        ] else if (isSystem) ...[
                           const SizedBox(width: 6),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
@@ -858,9 +1043,9 @@ class _PerAppAndroidScreenState
                         ],
                       ],
                     ),
-                    if (current.name != current.info.packageName && current.info.packageName != null)
+                    if (!isRemoved && current.name != pkg)
                       Text(
-                        current.info.packageName!,
+                        pkg,
                         style: TextStyle(
                           fontSize: 11,
                           color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -877,9 +1062,11 @@ class _PerAppAndroidScreenState
                 onChanged: (bool? value) {
                   perapp.PackageIds ??= [];
                   if (value == true) {
-                    perapp.PackageIds!.add(current.info.packageName!);
+                    if (!perapp.PackageIds!.contains(pkg)) {
+                      perapp.PackageIds!.add(pkg);
+                    }
                   } else {
-                    perapp.PackageIds!.remove(current.info.packageName!);
+                    perapp.PackageIds!.remove(pkg);
                   }
                   ClashSettingManager.save();
                   setState(() {});
@@ -892,30 +1079,11 @@ class _PerAppAndroidScreenState
     );
   }
 
-  Future<List<GroupItem>> getGroupOptions() async {
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
-    final tcontext = Translations.of(context);
-
-    List<GroupItemOptions> options = [
-      GroupItemOptions(
-        switchOptions: GroupItemSwitchOptions(
-          name: tcontext.meta.enable,
-          switchValue: perapp.Enable,
-          onSwitch: (bool value) async {
-            perapp.Enable = value;
-            ClashSettingManager.save();
-            setState(() {});
-          },
-        ),
-      ),
-    ];
-
-    return [GroupItem(options: options)];
-  }
-
   void onTapMore() {
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     final tcontext = Translations.of(context);
+    final removedCount = _getRemovedSelectedCount();
+
     showMenu(
       context: context,
       position: const RelativeRect.fromLTRB(1, 40, 10, 0),
@@ -926,26 +1094,18 @@ class _PerAppAndroidScreenState
           onTap: () async {
             perapp.PackageIds ??= [];
             try {
-              ClipboardData? data = await Clipboard.getData("text/plain");
-              if (data == null || data.text == null || data.text!.isEmpty) {
-                return;
-              }
-              List<String> list = data.text!.split("\n");
-              if (list.isEmpty) {
-                return;
-              }
-              for (var app in list) {
+              final data = await Clipboard.getData("text/plain");
+              if (data == null || data.text == null || data.text!.isEmpty) return;
+              for (var app in data.text!.split("\n")) {
                 app = app.trim();
                 if (app.isNotEmpty && !perapp.PackageIds!.contains(app)) {
                   perapp.PackageIds!.add(app);
                 }
               }
               ClashSettingManager.save();
-              _applyFilter();
+              getInstalledPackages();
             } catch (err) {
-              if (!mounted) {
-                return;
-              }
+              if (!mounted) return;
               DialogUtils.showAlertDialog(
                 context,
                 err.toString(),
@@ -962,15 +1122,10 @@ class _PerAppAndroidScreenState
           onTap: () async {
             perapp.PackageIds ??= [];
             try {
-              if (perapp.PackageIds!.isEmpty) {
-                return;
-              }
-              String content = perapp.PackageIds!.join("\n");
-              await Clipboard.setData(ClipboardData(text: content));
+              if (perapp.PackageIds!.isEmpty) return;
+              await Clipboard.setData(ClipboardData(text: perapp.PackageIds!.join("\n")));
             } catch (err) {
-              if (!mounted) {
-                return;
-              }
+              if (!mounted) return;
               DialogUtils.showAlertDialog(
                 context,
                 err.toString(),
@@ -995,6 +1150,12 @@ class _PerAppAndroidScreenState
             setState(() {});
           },
         ),
+        if (removedCount > 0)
+          PopupMenuItem(
+            value: 4,
+            child: Text("清理失效包名 ($removedCount)"),
+            onTap: _cleanupRemovedPackages,
+          ),
       ],
     );
   }
@@ -1037,10 +1198,10 @@ class _PerAppAndroidScreenState
                 final text = controller.text.trim();
                 if (text.isNotEmpty) {
                   final parts = text.split(RegExp(r'[\s,\n;]+'));
-                  var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+                  final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
                   perapp.PackageIds ??= [];
                   int added = 0;
-                  for (var p in parts) {
+                  for (final p in parts) {
                     final clean = p.trim();
                     if (clean.isNotEmpty && !perapp.PackageIds!.contains(clean)) {
                       perapp.PackageIds!.add(clean);
@@ -1064,7 +1225,7 @@ class _PerAppAndroidScreenState
 
   void _showPresetAppsDialog() {
     final tcontext = Translations.of(context);
-    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+    final perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
     perapp.PackageIds ??= [];
     final selectedPkgs = perapp.PackageIds!.toSet();
 
@@ -1111,8 +1272,8 @@ class _PerAppAndroidScreenState
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    var perapp = ClashSettingManager.getConfig().Extension!.Tun.perApp;
-                    perapp.PackageIds = selectedPkgs.toList();
+                    final target = ClashSettingManager.getConfig().Extension!.Tun.perApp;
+                    target.PackageIds = selectedPkgs.toList();
                     ClashSettingManager.save();
                     Navigator.pop(ctx);
                     getInstalledPackages();
@@ -1159,10 +1320,7 @@ class _PerAppAndroidScreenState
             Text(
               text,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
@@ -1175,16 +1333,12 @@ class _PerAppAndroidScreenState
               ),
             ),
             const SizedBox(height: 16),
-
-            // Step guide container
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: theme.dividerColor.withValues(alpha: 0.1),
-                ),
+                border: Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1219,24 +1373,15 @@ class _PerAppAndroidScreenState
               ),
             ),
             const SizedBox(height: 20),
-
-            // Button 1: Jump to system permission settings (Primary for HyperOS)
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.settings_outlined, size: 18),
                 label: Text(tcontext.PerAppAndroidScreen.openSystemPermission),
-                onPressed: () async {
-                  try {
-                    const platform = MethodChannel('com.wmimo.app/native_helper');
-                    await platform.invokeMethod('openAppSettings');
-                  } catch (_) {}
-                },
+                onPressed: onPermission,
               ),
             ),
             const SizedBox(height: 10),
-
-            // Button 2: Quick add presets (No permission needed!)
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
@@ -1246,8 +1391,6 @@ class _PerAppAndroidScreenState
               ),
             ),
             const SizedBox(height: 10),
-
-            // Button 3: Manual input package names
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
@@ -1257,8 +1400,6 @@ class _PerAppAndroidScreenState
               ),
             ),
             const SizedBox(height: 10),
-
-            // Button 4: System permission popup fallback
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
@@ -1278,14 +1419,13 @@ class _PerAppAndroidScreenState
               ),
             ),
             const SizedBox(height: 12),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (selectedCount > 0)
                   Text(
                     "已配置 $selectedCount 个分流应用",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: ThemeDefine.kColorBlue,
@@ -1295,7 +1435,7 @@ class _PerAppAndroidScreenState
                 TextButton.icon(
                   icon: const Icon(Icons.refresh_outlined, size: 16),
                   label: Text(tcontext.meta.refresh),
-                  onPressed: () async {
+                  onPressed: () {
                     _needPermission = false;
                     onRefresh();
                   },

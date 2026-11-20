@@ -717,6 +717,20 @@ class VPNService {
     return restart(timeout);
   }
 
+  /// Applies updated Android per-app proxy configuration live when VPN is running.
+  static Future<bool> updateAndroidPerApp() async {
+    if (!Platform.isAndroid) return false;
+    final perApp = ClashSettingManager.getConfig().Extension?.Tun.perApp;
+    final enable = perApp?.Enable ?? false;
+    final whitelist = perApp?.WhiteList ?? false;
+    final packages = List<String>.from(perApp?.PackageIds ?? const []);
+    return FlutterVpnService.updateAndroidPerApp(
+      enable: enable,
+      whitelist: whitelist,
+      packages: packages,
+    );
+  }
+
   static String getLaunchAtStartupTaskName() {
     return "${AppUtils.getName()} Autorun";
   }

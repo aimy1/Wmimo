@@ -17,8 +17,13 @@ class UserAgreementScreen extends LasyRenderingStatefulWidget {
   }
 
   final bool isViewingOnly;
+  final bool isPrivacyPolicy;
 
-  const UserAgreementScreen({super.key, this.isViewingOnly = false});
+  const UserAgreementScreen({
+    super.key,
+    this.isViewingOnly = false,
+    this.isPrivacyPolicy = false,
+  });
 
   @override
   State<UserAgreementScreen> createState() => _UserAgreementScreenState();
@@ -159,27 +164,60 @@ class _UserAgreementScreenState
           const SizedBox(height: 20),
           // Action Buttons: Disagree & Exit vs Agree & Continue (or Close when viewing only)
           if (widget.isViewingOnly)
-            SizedBox(
-              width: double.infinity,
-              height: 44,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ThemeDefine.kColorBlue,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(ThemeDefine.kRadiusMedium),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      final text = await getData();
+                      await Clipboard.setData(ClipboardData(text: text));
+                      if (!mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(tcontext.UserAgreementScreen.copied),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.copy_rounded, size: 17),
+                    label: Text(
+                      tcontext.meta.copy,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, 44),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(ThemeDefine.kRadiusMedium),
+                      ),
+                    ),
                   ),
                 ),
-                child: Text(
-                  tcontext.meta.close,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ThemeDefine.kColorBlue,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      minimumSize: const Size(0, 44),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(ThemeDefine.kRadiusMedium),
+                      ),
+                    ),
+                    child: Text(
+                      tcontext.meta.close,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             )
           else
             _buildActionButtons(tcontext, isDark),
@@ -243,7 +281,9 @@ class _UserAgreementScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                tcontext.UserAgreementScreen.privacyFirst,
+                widget.isPrivacyPolicy
+                    ? tcontext.meta.privacyPolicy
+                    : tcontext.UserAgreementScreen.privacyFirst,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -253,7 +293,9 @@ class _UserAgreementScreenState
               ),
               const SizedBox(height: 3),
               Text(
-                tcontext.UserAgreementScreen.subtitle,
+                widget.isPrivacyPolicy
+                    ? tcontext.UserAgreementScreen.privacySubtitle
+                    : tcontext.UserAgreementScreen.subtitle,
                 style: TextStyle(
                   fontSize: 12.5,
                   color: isDark
@@ -269,8 +311,12 @@ class _UserAgreementScreenState
   }
 
   Widget _buildTermsBox(Translations tcontext, bool isDark) {
+    final screenH = MediaQuery.of(context).size.height;
+    final boxHeight = widget.isViewingOnly
+        ? (screenH * 0.45).clamp(240.0, 440.0)
+        : 250.0;
     return Container(
-      height: 250,
+      height: boxHeight,
       decoration: BoxDecoration(
         color: isDark ? ThemeDefine.kColorDarkInner : const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(12),
@@ -444,7 +490,9 @@ class _UserAgreementScreenState
     if (_res.isNotEmpty) {
       return _res;
     }
-    _res = await AssetsUtils.loadUserAgreement();
+    _res = widget.isPrivacyPolicy
+        ? await AssetsUtils.loadPrivacyPolicy()
+        : await AssetsUtils.loadUserAgreement();
     return _res;
   }
 }

@@ -96,6 +96,9 @@ class _Translations$BackupAndSyncWebdavScreen$ar implements Translations$BackupA
 	@override String get webdavRequired => 'لايمكن ان يكون فارغا';
 	@override String get webdavLoginFailed => 'فشل تسجيل الدخول:';
 	@override String get webdavListFailed => 'فشل في الحصول على قائمة الملفات:';
+	@override String get noBackupsYet => 'لا توجد نسخ احتياطية سحابية بعد. اضغط على رفع أعلاه للإنشاء.';
+	@override String deleteConfirm({required Object name}) => 'هل تريد حذف النسخة الاحتياطية [${name}] نهائياً؟';
+	@override String get backupSuccess => 'تم رفع النسخة الاحتياطية بنجاح';
 }
 
 // Path: LaunchFailedScreen
@@ -147,6 +150,8 @@ class _Translations$UserAgreementScreen$ar implements Translations$UserAgreement
 	@override String get localExecution => 'تشغيل محلي فقط';
 	@override String get zeroTelemetry => 'بدون قياس عن بعد تجاري';
 	@override String get loading => 'جاري تحميل الاتفاقية...';
+	@override String get privacySubtitle => 'سياسة الخصوصية: عدم جمع البيانات والتنفيذ المحلي';
+	@override String get copied => 'تم النسخ إلى الحافظة';
 }
 
 // Path: NetCheckScreen
@@ -263,6 +268,8 @@ class _Translations$NetCheckScreen$ar implements Translations$NetCheckScreen$en 
 	@override String get conclusionGood => 'الشبكة جيدة بشكل عام، تم اكتشاف بعض التأخير البسيط، يرجى مراجعة التفاصيل.';
 	@override String get conclusionWarning => 'تم اكتشاف خلل في أجزاء من الشبكة أو البروكسي، يرجى استخدام [الإصلاح التلقائي] أدناه.';
 	@override String get conclusionCritical => 'انقطاع حاد في الشبكة! الشبكة المحلية غير متصلة أو تم حظر نواة البروكسي.';
+	@override String valProxyTunActive({required Object mode}) => 'محول TUN الافتراضي نشط (${mode})';
+	@override String fakeIpActive({required Object ip}) => 'Fake-IP نشط (${ip})';
 }
 
 // Path: SpeedTestScreen
@@ -295,6 +302,10 @@ class _Translations$SpeedTestScreen$ar implements Translations$SpeedTestScreen$e
 	@override String get avgSpeed => 'متوسط السرعة';
 	@override String get testHistory => 'سجل الاختبارات';
 	@override String get clearHistory => 'مسح السجل';
+	@override String get proxyNotRunningTip => 'نواة الوكيل غير قيد التشغيل. اتصل أولاً أو بدّل إلى الوضع المباشر.';
+	@override String get switchToDirect => 'اتصال مباشر';
+	@override String get testFailedNoData => 'فشل اختبار السرعة: تعذر الوصول إلى الخادم.';
+	@override String get activeNode => 'العقدة النشطة';
 }
 
 // Path: VersionUpdateScreen
@@ -549,8 +560,8 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get copySuccess => 'تم النسخ';
 	@override String get alwayOnVPN => 'اتصال مفتوح دائمًا';
 	@override String get disableFontScaler => 'تعطيل تحجيم الخط(يسري مفعوله بعد إعادة التشغيل)';
-	@override String get autoOrientation => 'Rotate with the screen';
-	@override String get restartTakesEffect => 'Restart takes effect';
+	@override String get autoOrientation => 'تدوير تلقائي مع الشاشة';
+	@override String get restartTakesEffect => 'يسري بعد إعادة التشغيل';
 	@override String get reconnectTakesEffect => 'سيتم تطبيقه بعد إعادة الاتصال.';
 	@override String get runtimeProfile => 'تكوين وقت التشغيل';
 	@override String get willCompleteAfterRebootInstall => 'يرجى إعادة تشغيل جهازك لإكمال تثبيت توسيع النظام';
@@ -866,6 +877,27 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get resetDefaultCards => 'استعادة الافتراضي';
 	@override String get collapseAllCards => 'طي الكل';
 	@override String get expandAllCards => 'توسيع الكل';
+	@override String get sectionGeneral => 'عام والنواة';
+	@override String get sectionRoutingTools => 'التوجيه والسلسلة والتشخيص';
+	@override String get sectionData => 'البيانات والمزامنة';
+	@override String get sectionSupport => 'المساعدة وحول التطبيق';
+	@override String get sectionAppearance => 'المظهر والسلوك';
+	@override String get sectionNetworkSub => 'اختبار السرعة والطلبات';
+	@override String get sectionDesktop => 'تكامل سطح المكتب (بدء التشغيل وشريط المهام والوكيل)';
+	@override String get sectionMobile => 'إبقاء العمل بالخلفية والأذونات';
+	@override String get sectionLaunchConnect => 'التشغيل والاتصال';
+	@override String get sectionUpdates => 'التحديثات';
+	@override String get sectionReset => 'إعادة التعيين';
+	@override String get sectionCoreBasic => 'الاستماع والتحكم';
+	@override String get sectionCoreRouting => 'التوجيه وTUN والوصول';
+	@override String get sectionCoreRules => 'القواعد والاستبدال';
+	@override String get sectionCoreProtocol => 'النقل والبروتوكولات';
+	@override String get sectionCoreServices => 'خدمات النواة';
+	@override String get batteryOptimization => 'تحسين البطارية (العمل بالخلفية)';
+	@override String get batteryOptimizationExempted => 'مستثنى';
+	@override String get batteryOptimizationRestricted => 'مقيّد (اضغط للسماح)';
+	@override String get appPermissionsSettings => 'أذونات التطبيق في النظام';
+	@override String get previewFinalConfig => 'معاينة التكوين النهائي للنواة';
 }
 
 // Path: permission
@@ -1053,6 +1085,25 @@ class _Translations$chain_proxy$ar implements Translations$chain_proxy$en {
 	@override String get hop1_empty_warning => 'يُرجى اختيار عقدة القفزة الأولى';
 	@override String get hop2_empty_warning => 'يُرجى اختيار عقدة القفزة الثانية';
 	@override String get hop_same_warning => 'لا يمكن أن تكون القفزة الأولى والثانية نفس العقدة';
+	@override String active_count({required Object active, required Object total}) => '${active} / ${total} نشط';
+	@override String hop_count_badge({required Object count}) => '${count} قفزات';
+	@override String get hop_entry => 'القفزة 1: مرحّل الدخول';
+	@override String hop_transit({required Object index}) => 'القفزة ${index}: العبور';
+	@override String hop_exit({required Object index}) => 'القفزة ${index}: مخرج الخروج';
+	@override String get add_transit_hop => 'إضافة قفزة عبور';
+	@override String get swap_hops => 'تبديل القفزات المتجاورة';
+	@override String get remove_hop => 'إزالة قفزة';
+	@override String get reset_name => 'تسمية تلقائية حسب القفزات';
+	@override String get use_now => 'استخدام الآن';
+	@override String switched_to_chain({required Object group, required Object name}) => 'تم تبديل "${group}" إلى "${name}"';
+	@override String get enable_before_use => 'يرجى تفعيل هذا الوكيل المتسلسل أولاً';
+	@override String get enable_before_test => 'يرجى تفعيل هذا الوكيل المتسلسل قبل اختبار زمن الوصول';
+	@override String get hop_duplicate_warning => 'لا يمكن اختيار عقد مكررة في نفس السلسلة';
+	@override String get hop_group_not_exit_warning => 'يجب أن تكون قفزات العبور والخروج عقداً فعلية وليس مجموعات سياسات';
+	@override String get picker_entry_hint => 'تدعم قفزة الدخول العقد الفعلية ومجموعات السياسات';
+	@override String get picker_node_only_hint => 'تدعم قفزات العبور والخروج العقد الفعلية فقط';
+	@override String get hops_label => 'تسلسل القفزات (اسحب للترتيب / بدّل)';
+	@override String get all_nodes => 'الكل';
 }
 
 // Path: main.tray
@@ -1104,6 +1155,9 @@ extension on TranslationsAr {
 			'BackupAndSyncWebdavScreen.webdavRequired' => 'لايمكن ان يكون فارغا',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => 'فشل تسجيل الدخول:',
 			'BackupAndSyncWebdavScreen.webdavListFailed' => 'فشل في الحصول على قائمة الملفات:',
+			'BackupAndSyncWebdavScreen.noBackupsYet' => 'لا توجد نسخ احتياطية سحابية بعد. اضغط على رفع أعلاه للإنشاء.',
+			'BackupAndSyncWebdavScreen.deleteConfirm' => ({required Object name}) => 'هل تريد حذف النسخة الاحتياطية [${name}] نهائياً؟',
+			'BackupAndSyncWebdavScreen.backupSuccess' => 'تم رفع النسخة الاحتياطية بنجاح',
 			'LaunchFailedScreen.invalidProcess' => 'فشل التطبيق في البدء [اسم عملية غير صالح] ، يرجى إعادة تثبيت التطبيق إلى دليل منفصل',
 			'LaunchFailedScreen.invalidProfile' => 'فشل التطبيق في البدء [فشل في الوصول إلى الملف الشخصي] ، يرجى إعادة تثبيت التطبيق',
 			'LaunchFailedScreen.invalidVersion' => 'فشل التطبيق في بدء [إصدار غير صالح] ، يرجى إعادة تثبيت التطبيق',
@@ -1128,6 +1182,8 @@ extension on TranslationsAr {
 			'UserAgreementScreen.localExecution' => 'تشغيل محلي فقط',
 			'UserAgreementScreen.zeroTelemetry' => 'بدون قياس عن بعد تجاري',
 			'UserAgreementScreen.loading' => 'جاري تحميل الاتفاقية...',
+			'UserAgreementScreen.privacySubtitle' => 'سياسة الخصوصية: عدم جمع البيانات والتنفيذ المحلي',
+			'UserAgreementScreen.copied' => 'تم النسخ إلى الحافظة',
 			'NetCheckScreen.title' => 'فحص وتشخيص الشبكة',
 			'NetCheckScreen.fullDiagnosticsTab' => 'تشخيص كامل للمسار',
 			'NetCheckScreen.advancedCheckTab' => 'فحص متقدم للنطاق',
@@ -1235,6 +1291,8 @@ extension on TranslationsAr {
 			'NetCheckScreen.conclusionGood' => 'الشبكة جيدة بشكل عام، تم اكتشاف بعض التأخير البسيط، يرجى مراجعة التفاصيل.',
 			'NetCheckScreen.conclusionWarning' => 'تم اكتشاف خلل في أجزاء من الشبكة أو البروكسي، يرجى استخدام [الإصلاح التلقائي] أدناه.',
 			'NetCheckScreen.conclusionCritical' => 'انقطاع حاد في الشبكة! الشبكة المحلية غير متصلة أو تم حظر نواة البروكسي.',
+			'NetCheckScreen.valProxyTunActive' => ({required Object mode}) => 'محول TUN الافتراضي نشط (${mode})',
+			'NetCheckScreen.fakeIpActive' => ({required Object ip}) => 'Fake-IP نشط (${ip})',
 			'SpeedTestScreen.title' => 'اختبار السرعة',
 			'SpeedTestScreen.startTest' => 'بدء الاختبار',
 			'SpeedTestScreen.stopTest' => 'إيقاف',
@@ -1258,6 +1316,10 @@ extension on TranslationsAr {
 			'SpeedTestScreen.avgSpeed' => 'متوسط السرعة',
 			'SpeedTestScreen.testHistory' => 'سجل الاختبارات',
 			'SpeedTestScreen.clearHistory' => 'مسح السجل',
+			'SpeedTestScreen.proxyNotRunningTip' => 'نواة الوكيل غير قيد التشغيل. اتصل أولاً أو بدّل إلى الوضع المباشر.',
+			'SpeedTestScreen.switchToDirect' => 'اتصال مباشر',
+			'SpeedTestScreen.testFailedNoData' => 'فشل اختبار السرعة: تعذر الوصول إلى الخادم.',
+			'SpeedTestScreen.activeNode' => 'العقدة النشطة',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'الإصدار الجديد [${p}] جاهز',
 			'VersionUpdateScreen.update' => 'أعد التشغيل للتحديث',
 			'VersionUpdateScreen.cancel' => 'ليس الآن',
@@ -1499,8 +1561,8 @@ extension on TranslationsAr {
 			'meta.copySuccess' => 'تم النسخ',
 			'meta.alwayOnVPN' => 'اتصال مفتوح دائمًا',
 			'meta.disableFontScaler' => 'تعطيل تحجيم الخط(يسري مفعوله بعد إعادة التشغيل)',
-			'meta.autoOrientation' => 'Rotate with the screen',
-			'meta.restartTakesEffect' => 'Restart takes effect',
+			'meta.autoOrientation' => 'تدوير تلقائي مع الشاشة',
+			'meta.restartTakesEffect' => 'يسري بعد إعادة التشغيل',
 			'meta.reconnectTakesEffect' => 'سيتم تطبيقه بعد إعادة الاتصال.',
 			'meta.runtimeProfile' => 'تكوين وقت التشغيل',
 			'meta.willCompleteAfterRebootInstall' => 'يرجى إعادة تشغيل جهازك لإكمال تثبيت توسيع النظام',
@@ -1597,6 +1659,8 @@ extension on TranslationsAr {
 			'meta.nodeSelected' => ({required Object p}) => 'العقدة المحددة: ${p}',
 			'meta.startingCoreAndTesting' => 'جارٍ تشغيل النواة واختبار السرعة...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} دقيقة',
+			_ => null,
+		} ?? switch (path) {
 			'meta.chartUpload' => 'رفع',
 			'meta.chartDownload' => 'تنزيل',
 			'meta.author' => 'المؤلف',
@@ -1608,8 +1672,6 @@ extension on TranslationsAr {
 			'meta.autoScrollDisabled' => 'التمرير التلقائي معطّل',
 			'meta.pauseLogs' => 'إيقاف السجلات مؤقتاً',
 			'meta.resumeLogs' => 'استئناف السجلات الحية',
-			_ => null,
-		} ?? switch (path) {
 			'meta.scrollToLatest' => 'التمرير إلى الأحدث',
 			'meta.scrollToBottom' => 'التمرير إلى الأسفل',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} سجلات جديدة)',
@@ -1818,6 +1880,27 @@ extension on TranslationsAr {
 			'meta.resetDefaultCards' => 'استعادة الافتراضي',
 			'meta.collapseAllCards' => 'طي الكل',
 			'meta.expandAllCards' => 'توسيع الكل',
+			'meta.sectionGeneral' => 'عام والنواة',
+			'meta.sectionRoutingTools' => 'التوجيه والسلسلة والتشخيص',
+			'meta.sectionData' => 'البيانات والمزامنة',
+			'meta.sectionSupport' => 'المساعدة وحول التطبيق',
+			'meta.sectionAppearance' => 'المظهر والسلوك',
+			'meta.sectionNetworkSub' => 'اختبار السرعة والطلبات',
+			'meta.sectionDesktop' => 'تكامل سطح المكتب (بدء التشغيل وشريط المهام والوكيل)',
+			'meta.sectionMobile' => 'إبقاء العمل بالخلفية والأذونات',
+			'meta.sectionLaunchConnect' => 'التشغيل والاتصال',
+			'meta.sectionUpdates' => 'التحديثات',
+			'meta.sectionReset' => 'إعادة التعيين',
+			'meta.sectionCoreBasic' => 'الاستماع والتحكم',
+			'meta.sectionCoreRouting' => 'التوجيه وTUN والوصول',
+			'meta.sectionCoreRules' => 'القواعد والاستبدال',
+			'meta.sectionCoreProtocol' => 'النقل والبروتوكولات',
+			'meta.sectionCoreServices' => 'خدمات النواة',
+			'meta.batteryOptimization' => 'تحسين البطارية (العمل بالخلفية)',
+			'meta.batteryOptimizationExempted' => 'مستثنى',
+			'meta.batteryOptimizationRestricted' => 'مقيّد (اضغط للسماح)',
+			'meta.appPermissionsSettings' => 'أذونات التطبيق في النظام',
+			'meta.previewFinalConfig' => 'معاينة التكوين النهائي للنواة',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',
@@ -1945,6 +2028,25 @@ extension on TranslationsAr {
 			'chain_proxy.hop1_empty_warning' => 'يُرجى اختيار عقدة القفزة الأولى',
 			'chain_proxy.hop2_empty_warning' => 'يُرجى اختيار عقدة القفزة الثانية',
 			'chain_proxy.hop_same_warning' => 'لا يمكن أن تكون القفزة الأولى والثانية نفس العقدة',
+			'chain_proxy.active_count' => ({required Object active, required Object total}) => '${active} / ${total} نشط',
+			'chain_proxy.hop_count_badge' => ({required Object count}) => '${count} قفزات',
+			'chain_proxy.hop_entry' => 'القفزة 1: مرحّل الدخول',
+			'chain_proxy.hop_transit' => ({required Object index}) => 'القفزة ${index}: العبور',
+			'chain_proxy.hop_exit' => ({required Object index}) => 'القفزة ${index}: مخرج الخروج',
+			'chain_proxy.add_transit_hop' => 'إضافة قفزة عبور',
+			'chain_proxy.swap_hops' => 'تبديل القفزات المتجاورة',
+			'chain_proxy.remove_hop' => 'إزالة قفزة',
+			'chain_proxy.reset_name' => 'تسمية تلقائية حسب القفزات',
+			'chain_proxy.use_now' => 'استخدام الآن',
+			'chain_proxy.switched_to_chain' => ({required Object group, required Object name}) => 'تم تبديل "${group}" إلى "${name}"',
+			'chain_proxy.enable_before_use' => 'يرجى تفعيل هذا الوكيل المتسلسل أولاً',
+			'chain_proxy.enable_before_test' => 'يرجى تفعيل هذا الوكيل المتسلسل قبل اختبار زمن الوصول',
+			'chain_proxy.hop_duplicate_warning' => 'لا يمكن اختيار عقد مكررة في نفس السلسلة',
+			'chain_proxy.hop_group_not_exit_warning' => 'يجب أن تكون قفزات العبور والخروج عقداً فعلية وليس مجموعات سياسات',
+			'chain_proxy.picker_entry_hint' => 'تدعم قفزة الدخول العقد الفعلية ومجموعات السياسات',
+			'chain_proxy.picker_node_only_hint' => 'تدعم قفزات العبور والخروج العقد الفعلية فقط',
+			'chain_proxy.hops_label' => 'تسلسل القفزات (اسحب للترتيب / بدّل)',
+			'chain_proxy.all_nodes' => 'الكل',
 			_ => null,
 		};
 	}

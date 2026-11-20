@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wmimo/app/utils/assets_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/about_screen.dart';
 import 'package:wmimo/screens/license_screen.dart';
+import 'package:wmimo/screens/user_agreement_screen.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -81,7 +83,7 @@ void main() {
         child: MaterialApp(
           home: LicenseScreen(
             applicationName: 'Wmimo',
-            applicationVersion: 'v1.3.9.1525',
+            applicationVersion: 'v1.4.0.1526',
             initialPackages: samplePackages,
           ),
         ),
@@ -91,7 +93,7 @@ void main() {
 
     // Summary banner & badges
     expect(find.text('Wmimo'), findsOneWidget);
-    expect(find.text('v1.3.9.1525'), findsOneWidget);
+    expect(find.text('v1.4.0.1526'), findsOneWidget);
     expect(
       find.text('GNU General Public License v3.0 (GPL-3.0-or-later)'),
       findsOneWidget,
@@ -121,5 +123,52 @@ void main() {
 
     expect(find.text('1/2'), findsWidgets);
     expect(find.text('abseil-cpp'), findsWidgets);
+  });
+
+  group('Privacy Policy UI tests', () {
+    setUp(() async {
+      await LocaleSettings.setLocale(AppLocale.zhCn);
+    });
+
+    testWidgets(
+        'Privacy Policy viewing mode renders localized header, copy action, and loads privacy policy asset path',
+        (WidgetTester tester) async {
+      for (final locale in AppLocale.values) {
+        expect(AssetsUtils.privacyPolicyPath(locale), startsWith('assets/txts/privacy_policy_'));
+        expect(AssetsUtils.userAgreementPath(locale), startsWith('assets/txts/user_agreement_'));
+      }
+      expect(
+        AssetsUtils.privacyPolicyPath(AppLocale.zhCn),
+        'assets/txts/privacy_policy_cn.txt',
+      );
+      expect(
+        AssetsUtils.privacyPolicyPath(AppLocale.en),
+        'assets/txts/privacy_policy_en.txt',
+      );
+
+      await tester.binding.setSurfaceSize(const Size(420, 840));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        TranslationProvider(
+          child: const MaterialApp(
+            home: UserAgreementScreen(
+              isViewingOnly: true,
+              isPrivacyPolicy: true,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final zh = AppLocale.zhCn.buildSync();
+      expect(find.text(zh.meta.privacyPolicy), findsOneWidget);
+      expect(find.text(zh.UserAgreementScreen.privacySubtitle), findsOneWidget);
+      expect(find.text(zh.meta.copy), findsOneWidget);
+      expect(find.text(zh.meta.close), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(milliseconds: 10));
+    });
   });
 }

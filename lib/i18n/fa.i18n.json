@@ -9,7 +9,10 @@
     "webdavServerUrl": "آدرس URL سرور",
     "webdavRequired": "نمی‌تواند خالی باشد",
     "webdavLoginFailed": "ورود ناموفق بود:",
-    "webdavListFailed": "دریافت لیست فایل ناموفق بود:"
+    "webdavListFailed": "دریافت لیست فایل ناموفق بود:",
+    "noBackupsYet": "هنوز نسخه پشتیبان ابری وجود ندارد. برای ساخت، نماد بارگذاری را بزنید.",
+    "deleteConfirm": "آیا نسخه پشتیبان ابری [$name] برای همیشه حذف شود؟",
+    "backupSuccess": "نسخه پشتیبان با موفقیت بارگذاری شد"
   },
   "LaunchFailedScreen": {
     "invalidProcess": "اجرای نرم‌افزار ناموفق بود [نام‌ اجرایی پروسه نامعتبر]، لطفا مجدد نرم‌افزار را در دایرکتوری دیگری نصب کنید",
@@ -39,7 +42,9 @@
     "zeroData": "بدون جمع‌آوری داده",
     "localExecution": "اجرای کاملاً محلی",
     "zeroTelemetry": "بدون تله‌متری تجاری",
-    "loading": "در حال بارگیری توافق‌نامه..."
+    "loading": "در حال بارگیری توافق‌نامه...",
+    "privacySubtitle": "سیاست حریم خصوصی: عدم جمع‌آوری داده و اجرای محلی",
+    "copied": "در کلیپ‌بورد کپی شد"
   },
   "NetCheckScreen": {
     "title": "عیب‌یابی و تشخیص شبکه",
@@ -148,7 +153,9 @@
     "conclusionPerfect": "مسیر شبکه عالی است! تمامی نودها و تنظیمات پروکسی کاملاً فعال و روان هستند.",
     "conclusionGood": "مسیر نسبتاً طبیعی است، تأخیرهای جزئی یا هشدارهایی شناسایی شده است.",
     "conclusionWarning": "اشکالاتی در مسیر شبکه یا پروکسی شناسایی شد؛ لطفاً از دکمه [تعمیر هوشمند] زیر استفاده کنید.",
-    "conclusionCritical": "انسداد شدید شبکه! شبکه محلی متصل نیست یا هسته پروکسی مسدود شده است."
+    "conclusionCritical": "انسداد شدید شبکه! شبکه محلی متصل نیست یا هسته پروکسی مسدود شده است.",
+    "valProxyTunActive": "آداپتور مجازی TUN فعال است ($mode)",
+    "fakeIpActive": "Fake-IP فعال است ($ip)"
   },
   "SpeedTestScreen": {
     "title": "تست سرعت",
@@ -173,7 +180,11 @@
     "peakSpeed": "اوج سرعت",
     "avgSpeed": "میانگین سرعت",
     "testHistory": "تاریخچه تست",
-    "clearHistory": "پاک کردن تاریخچه"
+    "clearHistory": "پاک کردن تاریخچه",
+    "proxyNotRunningTip": "هسته پروکسی در حال اجرا نیست. ابتدا متصل شوید یا حالت مستقیم را انتخاب کنید.",
+    "switchToDirect": "حالت مستقیم",
+    "testFailedNoData": "آزمایش سرعت ناموفق بود: اتصال به سرور برقرار نشد.",
+    "activeNode": "گره خروجی فعال"
   },
   "VersionUpdateScreen": {
     "versionReady": "نسخه جدید [$p] آماده است",
@@ -463,7 +474,7 @@
     "coreOverwrite": "بازنویسی هسته",
     "iCloud": "iCloud",
     "webdav": "Webdav",
-    "lanSync": "LAN Sync",
+    "lanSync": "همگام‌سازی شبکه محلی",
     "lanSyncNotQuitTips": "قبل از تکمیل همگام‌سازی از این قسمت خارج نشوید",
     "deviceNoSpace": "فضای خالی کافی ندارید",
     "hideSystemApp": "برنامه های سیستم را مخفی کنید",
@@ -741,12 +752,33 @@
     "cardQuickActions": "ابزارهای سریع",
     "resetDefaultCards": "بازنشانی پیش‌فرض",
     "collapseAllCards": "بستن همه",
-    "expandAllCards": "باز کردن همه"
+    "expandAllCards": "باز کردن همه",
+    "sectionGeneral": "عمومی و هسته",
+    "sectionRoutingTools": "مسیریابی، زنجیره و عیب‌یابی",
+    "sectionData": "داده‌ها و همگام‌سازی",
+    "sectionSupport": "راهنما و درباره ما",
+    "sectionAppearance": "ظاهر و رفتار",
+    "sectionNetworkSub": "تست سرعت و درخواست‌ها",
+    "sectionDesktop": "یکپارچه‌سازی دسکتاپ (اجرای خودکار، سینی و پروکسی)",
+    "sectionMobile": "اجرای پس‌زمینه و مجوزهای موبایل",
+    "sectionLaunchConnect": "شروع و اتصال",
+    "sectionUpdates": "به‌روزرسانی‌ها",
+    "sectionReset": "بازنشانی",
+    "sectionCoreBasic": "پورت‌ها و کنترل",
+    "sectionCoreRouting": "مسیریابی، TUN و دسترسی",
+    "sectionCoreRules": "قوانین و بازنویسی",
+    "sectionCoreProtocol": "انتقال و پروتکل‌ها",
+    "sectionCoreServices": "سرویس‌های هسته",
+    "batteryOptimization": "بهینه‌سازی باتری (اجرای پس‌زمینه)",
+    "batteryOptimizationExempted": "معاف شده",
+    "batteryOptimizationRestricted": "محدود شده (برای مجوز لمس کنید)",
+    "appPermissionsSettings": "مجوزهای سیستمی برنامه",
+    "previewFinalConfig": "پیش‌نمایش پیکربندی نهایی هسته"
   },
   "permission": {
     "camera": "دوربین",
     "screen": "ضبط صفحه",
-    "appQuery": "Get Application List",
+    "appQuery": "دریافت فهرست برنامه‌ها",
     "request": "مجوزهای [$p] را فعال کنید",
     "requestNeed": "لطفاً مجوز [$p] را فعال کنید"
   },
@@ -886,6 +918,25 @@
     "name_empty_warning": "لطفاً نام پروکسی زنجیره‌ای را وارد کنید",
     "hop1_empty_warning": "لطفاً گره اول (ورودی) را انتخاب کنید",
     "hop2_empty_warning": "لطفاً گره دوم (خروجی) را انتخاب کنید",
-    "hop_same_warning": "گره اول و دوم نمی‌توانند یکسان باشند"
+    "hop_same_warning": "گره اول و دوم نمی‌توانند یکسان باشند",
+    "active_count": "$active / $total فعال",
+    "hop_count_badge": "$count گام",
+    "hop_entry": "گام ۱: رله ورودی",
+    "hop_transit": "گام $index: میانی",
+    "hop_exit": "گام $index: گره خروجی",
+    "add_transit_hop": "افزودن گام میانی",
+    "swap_hops": "جابه‌جایی گام‌های مجاور",
+    "remove_hop": "حذف گام",
+    "reset_name": "نام‌گذاری خودکار از گام‌ها",
+    "use_now": "استفاده فوری",
+    "switched_to_chain": "«$group» به «$name» تغییر یافت",
+    "enable_before_use": "لطفاً ابتدا این پروکسی زنجیره‌ای را فعال کنید",
+    "enable_before_test": "لطفاً پیش از تست تأخیر، این پروکسی زنجیره‌ای را فعال کنید",
+    "hop_duplicate_warning": "امکان انتخاب گره‌های تکراری در یک زنجیره وجود ندارد",
+    "hop_group_not_exit_warning": "گام‌های میانی و خروجی باید گره واقعی باشند نه گروه سیاست",
+    "picker_entry_hint": "گام ورودی از گره‌ها و گروه‌های سیاست پشتیبانی می‌کند",
+    "picker_node_only_hint": "گام‌های میانی و خروجی فقط از گره‌های واقعی پشتیبانی می‌کنند",
+    "hops_label": "ترتیب گام‌ها (بکشید یا جابه‌جا کنید)",
+    "all_nodes": "همه"
   }
 }

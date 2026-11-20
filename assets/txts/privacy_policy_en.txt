@@ -1,1 +1,21 @@
-This application (Wmimo) does not collect, transmit, store, or share any personal data, telemetry, or browsing activity. All network routing decisions and proxy connections are executed strictly on the local device according to user-defined configurations and selected upstream servers.
+Wmimo Privacy Policy
+
+Thank you for using Wmimo. We are committed to protecting your privacy and keeping your network configuration and traffic strictly under your control.
+
+1. Zero Data Collection
+- No Personal Data Collected: Wmimo is a strictly local network client. We do not collect, record, upload, sell, or share personal identifiers, IP addresses, locations, subscription URLs, or proxy credentials.
+- No Browsing or DNS Logging Off-Device: All traffic routing, rule matching, DNS resolution (including DoH/DoT and Fake-IP), speed tests, and link diagnostics execute locally on your device and are never transmitted to developer-operated servers.
+- No Telemetry or Ad SDKs: Wmimo contains zero commercial analytics, tracking, telemetry SDKs, or advertising libraries.
+
+2. Local Storage, Credentials & Cloud Backups
+- Protected Local Storage: Imported subscriptions, diversion templates, profile patches, chain proxy configs (Beta), and test history remain inside your device's application data directory.
+- User-Controlled Backup & Sync: When you invoke Backup & Sync (WebDAV, iCloud Drive, or local ZIP export), backup archives are sent exclusively to the private storage endpoint or local location you specify. You are responsible for safeguarding your WebDAV credentials and exported ZIP backups.
+- Third-Party Nodes: Wmimo does not provide or operate proxy servers or subscriptions. Any third-party servers you configure remain governed by those providers' policies.
+
+3. Permissions Used
+- Network & VPN / TUN Access: Required to establish local tunnel interfaces and route traffic as configured.
+- Installed Applications List (Android Per-App Proxy only): Read locally only when configuring Per-App Proxy allowlist/blocklist rules; never transmitted off-device.
+- Storage / File Access (On-Demand): Used solely when importing or exporting configuration archives and diagnostic reports.
+
+4. Open-Source Transparency
+Wmimo is released under GNU General Public License v3.0 (GPL-3.0) using the Mihomo core. You can audit the full source code at github.com/aimy1/Wmimo.

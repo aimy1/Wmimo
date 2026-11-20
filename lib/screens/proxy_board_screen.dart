@@ -12,6 +12,7 @@ import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/biz.dart';
+import 'package:wmimo/app/modules/chain_proxy_manager.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
@@ -2151,7 +2152,44 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           // Chain Proxy button
           IconButton(
             tooltip: "${tcontext.chain_proxy.title} (Beta)",
-            icon: const Icon(Icons.link_rounded),
+            icon: Builder(
+              builder: (context) {
+                final enabledChains = ChainProxyManager.enabledCount;
+                return Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  children: [
+                    Icon(
+                      Icons.link_rounded,
+                      color: enabledChains > 0 ? ThemeDefine.kColorBlue : null,
+                    ),
+                    if (enabledChains > 0)
+                      Positioned(
+                        top: -4,
+                        right: -6,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                          constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
+                          decoration: BoxDecoration(
+                            color: ThemeDefine.kColorBlue,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            enabledChains > 9 ? "9+" : "$enabledChains",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                              height: 1.1,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
             onPressed: () async {
               await Navigator.push(
                 context,
@@ -2160,6 +2198,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                   builder: (context) => const ChainProxyScreen(),
                 ),
               );
+              if (mounted) {
+                setState(() {});
+              }
               _fetchProxies();
             },
           ),

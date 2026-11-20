@@ -250,18 +250,43 @@ class FlutterVpnService {
     return true;
   }
 
+  /// Runs [executable] with [args] via `sudo -S`, piping [password] over stdin
+  /// instead of invoking a shell (`sh -c`), preventing command injection and
+  /// avoiding password exposure in process arguments.
+  static Future<int> _runWithSudo(
+    String password,
+    String executable,
+    List<String> args,
+  ) async {
+    final process = await Process.start('sudo', ['-S', '-k', executable, ...args]);
+    unawaited(process.stdout.drain<void>());
+    unawaited(process.stderr.drain<void>());
+    try {
+      process.stdin.writeln(password);
+      await process.stdin.flush();
+      await process.stdin.close();
+    } catch (_) {}
+    return process.exitCode;
+  }
+
   static Future<VpnServiceResultError?> authorizeService(String path, String password) async {
     if (Platform.isMacOS) {
       if (password.isNotEmpty) {
         try {
-          final cmd = 'echo "$password" | sudo -S chown root:admin "$path" && echo "$password" | sudo -S chmod +sx "$path"';
-          final res = await Process.run('sh', ['-c', cmd]);
-          if (res.exitCode == 0) return null;
+          if (await _runWithSudo(password, 'chown', ['root:admin', path]) == 0 &&
+              await _runWithSudo(password, 'chmod', ['+sx', path]) == 0) {
+            return null;
+          }
         } catch (_) {}
       }
       try {
-        final script = 'do shell script "chown root:admin \\"$path\\" && chmod +sx \\"$path\\"" with administrator privileges';
-        final res = await Process.run('osascript', ['-e', script]);
+        const script =
+            'do shell script "chown root:admin " & quoted form of (system attribute "WMIMO_SERVICE_PATH") & " && chmod +sx " & quoted form of (system attribute "WMIMO_SERVICE_PATH") with administrator privileges';
+        final res = await Process.run(
+          'osascript',
+          ['-e', script],
+          environment: {'WMIMO_SERVICE_PATH': path},
+        );
         if (res.exitCode == 0) return null;
         return VpnServiceResultError(res.exitCode, res.stderr.toString().trim().isNotEmpty ? res.stderr.toString().trim() : "macOS 提权授权被取消或失败");
       } catch (e) {
@@ -274,12 +299,16 @@ class FlutterVpnService {
         if (res.exitCode == 0) return null;
       } catch (_) {}
 
-      // 2. If password provided, try sudo
+      // 2. If password provided, try sudo via stdin without shell interpolation
       if (password.isNotEmpty) {
         try {
-          final cmd = 'echo "$password" | sudo -S setcap cap_net_admin,cap_net_bind_service=+ep "$path" || (echo "$password" | sudo -S chown root:root "$path" && echo "$password" | sudo -S chmod +sx "$path")';
-          final res = await Process.run('sh', ['-c', cmd]);
-          if (res.exitCode == 0) return null;
+          if (await _runWithSudo(password, 'setcap', ['cap_net_admin,cap_net_bind_service=+ep', path]) == 0) {
+            return null;
+          }
+          if (await _runWithSudo(password, 'chown', ['root:root', path]) == 0 &&
+              await _runWithSudo(password, 'chmod', ['+sx', path]) == 0) {
+            return null;
+          }
         } catch (_) {}
       }
       return VpnServiceResultError(1, "Linux 提权失败，请检查密码或执行 sudo setcap cap_net_admin,cap_net_bind_service=+ep $path");
@@ -1463,6 +1492,38 @@ rules:
       _notifyState(FlutterVpnServiceState.disconnected);
     } finally {
       _isOperating = false;
+    }
+  }
+
+  /// Updates Android VPN per-app routing live without restarting the Mihomo core process.
+  static Future<bool> updateAndroidPerApp({
+    required bool enable,
+    required bool whitelist,
+    required List<String> packages,
+  }) async {
+    final cleaned = packages.map((e) => e.trim()).where((e) => e.isNotEmpty).toSet().toList();
+    if (_savedConfig != null) {
+      _savedConfig!.per_app_enable = enable;
+      _savedConfig!.per_app_whitelist = whitelist;
+      _savedConfig!.per_app_packages = cleaned;
+    }
+    if (!Platform.isAndroid || _state != FlutterVpnServiceState.connected) {
+      return false;
+    }
+    try {
+      final mixedPort = _savedConfig?.mixed_port ?? 7890;
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      await platform.invokeMethod('startVpnService', {
+        'mixedPort': mixedPort,
+        'notificationContent': _savedConfig?.notification_content,
+        'notificationDisconnect': _savedConfig?.notification_disconnect,
+        'perAppEnable': enable,
+        'perAppWhitelist': whitelist,
+        'perAppPackages': cleaned,
+      });
+      return true;
+    } catch (_) {
+      return false;
     }
   }
 

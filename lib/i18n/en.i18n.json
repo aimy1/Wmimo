@@ -9,7 +9,10 @@
     "webdavServerUrl": "Server Url",
     "webdavRequired": "Can not be empty",
     "webdavLoginFailed": "Login failed:",
-    "webdavListFailed": "Failed to get file list:"
+    "webdavListFailed": "Failed to get file list:",
+    "noBackupsYet": "No cloud backups yet. Tap upload above to create one.",
+    "deleteConfirm": "Permanently delete cloud backup [$name]?",
+    "backupSuccess": "Backup uploaded successfully"
   },
   "LaunchFailedScreen": {
     "invalidProcess": "The app failed to start [Invalid process name], please reinstall the app to a separate directory",
@@ -39,7 +42,9 @@
     "zeroData": "Zero-Data Collection",
     "localExecution": "Local Execution Only",
     "zeroTelemetry": "No Commercial Telemetry",
-    "loading": "Loading agreement..."
+    "loading": "Loading agreement...",
+    "privacySubtitle": "Zero data collection & local execution privacy policy",
+    "copied": "Copied to clipboard"
   },
   "VersionUpdateScreen": {
     "versionReady": "The new version[$p] is ready",
@@ -153,7 +158,9 @@
     "conclusionPerfect": "Pipeline excellent! All network nodes and proxy configs are fully operational.",
     "conclusionGood": "Pipeline generally normal, minor non-critical latency or warnings detected.",
     "conclusionWarning": "Issues detected in network or proxy pipeline; please use One-Click Repair below.",
-    "conclusionCritical": "Severe network blockage! Local network disconnected or proxy core blocked."
+    "conclusionCritical": "Severe network blockage! Local network disconnected or proxy core blocked.",
+    "valProxyTunActive": "TUN virtual adapter active ($mode)",
+    "fakeIpActive": "Fake-IP active ($ip)"
   },
   "SpeedTestScreen": {
     "title": "Speed Test",
@@ -178,7 +185,11 @@
     "peakSpeed": "Peak Speed",
     "avgSpeed": "Avg Speed",
     "testHistory": "History",
-    "clearHistory": "Clear History"
+    "clearHistory": "Clear History",
+    "proxyNotRunningTip": "Proxy core is not running. Connect first or switch to Direct mode.",
+    "switchToDirect": "Use Direct",
+    "testFailedNoData": "Speed test failed: unable to reach server. Check network or switch server.",
+    "activeNode": "Active Exit Node"
   },
   "loginScreen": {
     "login": "Login",
@@ -741,7 +752,28 @@
     "cardQuickActions": "Quick Action Tools",
     "resetDefaultCards": "Reset Defaults",
     "collapseAllCards": "Collapse All",
-    "expandAllCards": "Expand All"
+    "expandAllCards": "Expand All",
+    "sectionGeneral": "General & Core",
+    "sectionRoutingTools": "Routing, Chain & Diagnostics",
+    "sectionData": "Data & Sync",
+    "sectionSupport": "Help & About",
+    "sectionAppearance": "Appearance & Behavior",
+    "sectionNetworkSub": "Speedtest & Requests",
+    "sectionDesktop": "Desktop Integration (Startup, Tray & Proxy)",
+    "sectionMobile": "Mobile Keep-Alive & Permissions",
+    "sectionLaunchConnect": "Startup & Connection",
+    "sectionUpdates": "Updates",
+    "sectionReset": "Reset",
+    "sectionCoreBasic": "Listeners & Control",
+    "sectionCoreRouting": "Routing, TUN & Access",
+    "sectionCoreRules": "Rules & Overwrite",
+    "sectionCoreProtocol": "Transport & Protocols",
+    "sectionCoreServices": "Core Services",
+    "batteryOptimization": "Battery Optimization (Keep-Alive)",
+    "batteryOptimizationExempted": "Exempted",
+    "batteryOptimizationRestricted": "Restricted (Tap to allow)",
+    "appPermissionsSettings": "System App Permissions",
+    "previewFinalConfig": "Preview final core configuration"
   },
   "permission": {
     "camera": "Camera",
@@ -862,7 +894,7 @@
   },
   "chain_proxy": {
     "title": "Chain Proxy",
-    "desc": "Cascade two nodes (Entry Relay ➔ Exit Landing) to combine low latency with residential IP unlocking.",
+    "desc": "Cascade 2+ nodes (Entry Relay ➔ Transit ➔ Exit) via dialer-proxy to combine low latency with residential IP unlocking, and auto-sync into selector groups.",
     "add": "New Chain Proxy",
     "edit": "Edit Chain Proxy",
     "delete": "Delete",
@@ -879,13 +911,32 @@
     "preview": "Topology Preview",
     "local_device": "Device",
     "internet": "Internet",
-    "save_success": "Chain proxy saved successfully",
-    "empty_tip": "No chain proxies yet. Tap below to create one.",
+    "save_success": "Chain proxy saved & synced to selector groups",
+    "empty_tip": "No chain proxies yet. Tap above to create one.",
     "test_latency": "Ping",
-    "node_missing_warning": "Some nodes do not exist in the current profile. Please update.",
+    "node_missing_warning": "Some hops do not exist in the current profile and were skipped safely.",
     "name_empty_warning": "Please enter a chain proxy name",
-    "hop1_empty_warning": "Please select the first hop (entry) node",
-    "hop2_empty_warning": "Please select the second hop (exit) node",
-    "hop_same_warning": "Hop 1 and Hop 2 cannot be the same node"
+    "hop1_empty_warning": "Please select the entry node",
+    "hop2_empty_warning": "Please select the exit node",
+    "hop_same_warning": "Hops in the same chain cannot repeat the same node",
+    "active_count": "$active / $total active",
+    "hop_count_badge": "$count Hops",
+    "hop_entry": "Hop 1: Entry Relay",
+    "hop_transit": "Hop $index: Transit",
+    "hop_exit": "Hop $index: Exit Landing",
+    "add_transit_hop": "Add Transit Hop",
+    "swap_hops": "Swap adjacent hops",
+    "remove_hop": "Remove hop",
+    "reset_name": "Auto-name from hops",
+    "use_now": "Use Now",
+    "switched_to_chain": "Switched \"$group\" to \"$name\"",
+    "enable_before_use": "Please enable this chain proxy first",
+    "enable_before_test": "Please enable this chain proxy before testing latency",
+    "hop_duplicate_warning": "Cannot select duplicate nodes in the same chain",
+    "hop_group_not_exit_warning": "Transit and exit hops must be concrete proxy nodes, not policy groups",
+    "picker_entry_hint": "Entry hop supports both proxy nodes and policy groups",
+    "picker_node_only_hint": "Transit and exit hops only support concrete proxy nodes",
+    "hops_label": "Hop Sequence (Drag to reorder / Swap)",
+    "all_nodes": "All"
   }
 }

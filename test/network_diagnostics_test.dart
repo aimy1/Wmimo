@@ -154,7 +154,35 @@ void main() {
         expect(tr.NetCheckScreen.conclusionGood.isNotEmpty, isTrue);
         expect(tr.NetCheckScreen.conclusionWarning.isNotEmpty, isTrue);
         expect(tr.NetCheckScreen.conclusionCritical.isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.valProxyTunActive(mode: 'rule').isNotEmpty, isTrue);
+        expect(tr.NetCheckScreen.fakeIpActive(ip: '198.18.0.1').isNotEmpty, isTrue);
       }
+    });
+
+    test('Virtual interface and Fake-IP detectors distinguish TUN from physical NICs', () {
+      expect(NetworkDiagnostics.isVirtualInterfaceName('utun3'), isTrue);
+      expect(NetworkDiagnostics.isVirtualInterfaceName('tun0'), isTrue);
+      expect(NetworkDiagnostics.isVirtualInterfaceName('wintun'), isTrue);
+      expect(NetworkDiagnostics.isVirtualInterfaceName('eth0'), isFalse);
+      expect(NetworkDiagnostics.isVirtualInterfaceName('en0'), isFalse);
+      expect(NetworkDiagnostics.isVirtualInterfaceName('wlan0'), isFalse);
+
+      expect(NetworkDiagnostics.isFakeIp('198.18.0.12'), isTrue);
+      expect(NetworkDiagnostics.isFakeIp('198.19.255.1'), isTrue);
+      expect(NetworkDiagnostics.isFakeIp('192.168.1.10'), isFalse);
+      expect(NetworkDiagnostics.isFakeIp('223.5.5.5'), isFalse);
+    });
+
+    test('calculateHealthScore weights failed and warning steps consistently', () {
+      final steps = NetworkDiagnostics.initialSteps();
+      steps[0] = steps[0].copyWith(status: DiagnosticStatus.healthy);
+      steps[1] = steps[1].copyWith(status: DiagnosticStatus.warning);
+      steps[2] = steps[2].copyWith(status: DiagnosticStatus.failed);
+      steps[3] = steps[3].copyWith(status: DiagnosticStatus.healthy);
+      steps[4] = steps[4].copyWith(status: DiagnosticStatus.healthy);
+
+      // 100 - 10 (warning) - 25 (core failed) = 65
+      expect(NetworkDiagnostics.calculateHealthScore(steps), 65);
     });
   });
 }

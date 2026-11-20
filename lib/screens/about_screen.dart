@@ -213,6 +213,7 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
                 settings: UserAgreementScreen.routSettings(),
                 builder: (context) => const UserAgreementScreen(
                   isViewingOnly: true,
+                  isPrivacyPolicy: true,
                 ),
               ),
             );

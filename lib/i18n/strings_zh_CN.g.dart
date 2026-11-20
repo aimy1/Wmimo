@@ -96,6 +96,9 @@ class Translations$BackupAndSyncWebdavScreen$zh_CN implements Translations$Backu
 	@override String get webdavRequired => '不能为空';
 	@override String get webdavLoginFailed => '登录失败:';
 	@override String get webdavListFailed => '获取文件列表失败:';
+	@override String get noBackupsYet => '暂无云端备份，点击右上角上传图标立即创建备份';
+	@override String deleteConfirm({required Object name}) => '确定要永久删除云端备份 [${name}] 吗？';
+	@override String get backupSuccess => '备份已成功上传';
 }
 
 // Path: LaunchFailedScreen
@@ -147,6 +150,8 @@ class Translations$UserAgreementScreen$zh_CN implements Translations$UserAgreeme
 	@override String get localExecution => '纯本地独立运行';
 	@override String get zeroTelemetry => '纯净无商业遥测';
 	@override String get loading => '正在加载用户协议...';
+	@override String get privacySubtitle => '数据零收集与纯本地执行保护政策';
+	@override String get copied => '已复制到剪贴板';
 }
 
 // Path: NetCheckScreen
@@ -263,6 +268,8 @@ class Translations$NetCheckScreen$zh_CN implements Translations$NetCheckScreen$e
 	@override String get conclusionGood => '链路基本正常，检测到部分非致命延迟或警告，建议查看详情。';
 	@override String get conclusionWarning => '检测到部分网络或代理环节异常，请使用下方【一键修复】恢复。';
 	@override String get conclusionCritical => '严重网络受阻！本地网络未连通或代理内核遭遇阻断。';
+	@override String valProxyTunActive({required Object mode}) => 'TUN 虚拟网卡接管中 (${mode})';
+	@override String fakeIpActive({required Object ip}) => 'Fake-IP 已激活 (${ip})';
 }
 
 // Path: SpeedTestScreen
@@ -295,6 +302,10 @@ class Translations$SpeedTestScreen$zh_CN implements Translations$SpeedTestScreen
 	@override String get avgSpeed => '平均速率';
 	@override String get testHistory => '测速历史';
 	@override String get clearHistory => '清空历史';
+	@override String get proxyNotRunningTip => '代理服务尚未启动，请先连接或切换为直连模式';
+	@override String get switchToDirect => '切至直连';
+	@override String get testFailedNoData => '测速失败：无法连通当前测速服务器，请检查网络或切换线路';
+	@override String get activeNode => '当前出口节点';
 }
 
 // Path: VersionUpdateScreen
@@ -866,6 +877,27 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get resetDefaultCards => '恢复默认';
 	@override String get collapseAllCards => '全部折叠';
 	@override String get expandAllCards => '全部展开';
+	@override String get sectionGeneral => '常规与内核';
+	@override String get sectionRoutingTools => '规则、链式与诊断';
+	@override String get sectionData => '数据与同步';
+	@override String get sectionSupport => '帮助与关于';
+	@override String get sectionAppearance => '外观与交互';
+	@override String get sectionNetworkSub => '测速与订阅请求';
+	@override String get sectionDesktop => '桌面端集成（启动、托盘与系统代理）';
+	@override String get sectionMobile => '移动端后台保活与系统权限';
+	@override String get sectionLaunchConnect => '启动与连接';
+	@override String get sectionUpdates => '版本更新';
+	@override String get sectionReset => '恢复默认';
+	@override String get sectionCoreBasic => '基础监听与鉴权';
+	@override String get sectionCoreRouting => '路由、TUN 与局域网接入';
+	@override String get sectionCoreRules => '规则模板与配置覆写';
+	@override String get sectionCoreProtocol => '传输连接与协议';
+	@override String get sectionCoreServices => '内置核心组件';
+	@override String get batteryOptimization => '后台电池优化豁免（防杀后台）';
+	@override String get batteryOptimizationExempted => '已豁免限制';
+	@override String get batteryOptimizationRestricted => '未豁免（点击授权）';
+	@override String get appPermissionsSettings => '系统应用权限设置';
+	@override String get previewFinalConfig => '预览最终生成的内核配置';
 }
 
 // Path: permission
@@ -1028,7 +1060,7 @@ class Translations$chain_proxy$zh_CN implements Translations$chain_proxy$en {
 
 	// Translations
 	@override String get title => '链式代理';
-	@override String get desc => '将两个节点级联中转（前置跳板 ➔ 落地出口），实现低延迟高速专线与原生住宅 IP 解锁兼得。';
+	@override String get desc => '通过 dialer-proxy 将 2 跳及以上节点级联转发（前置入口 ➔ 中转 ➔ 落地出口），兼顾低延迟与原生 IP 解锁，开启后自动注入主选择策略组。';
 	@override String get add => '新建链式代理';
 	@override String get edit => '编辑链式代理';
 	@override String get delete => '删除';
@@ -1045,14 +1077,33 @@ class Translations$chain_proxy$zh_CN implements Translations$chain_proxy$en {
 	@override String get preview => '链路拓扑预览';
 	@override String get local_device => '我的设备';
 	@override String get internet => '目标网站';
-	@override String get save_success => '链式代理保存成功';
-	@override String get empty_tip => '暂无链式代理，点击下方按钮立即创建';
+	@override String get save_success => '链式代理已保存并同步到策略组';
+	@override String get empty_tip => '暂无链式代理，点击上方按钮立即创建';
 	@override String get test_latency => '测速';
-	@override String get node_missing_warning => '部分节点在当前配置中不存在，请重新指定';
+	@override String get node_missing_warning => '部分节点在当前配置中不存在，已安全跳过注入以防内核报错';
 	@override String get name_empty_warning => '请输入链式代理名称';
-	@override String get hop1_empty_warning => '请选择第一跳前置节点';
-	@override String get hop2_empty_warning => '请选择第二跳落地节点';
-	@override String get hop_same_warning => '第一跳与第二跳不能为同一个节点';
+	@override String get hop1_empty_warning => '请选择前置入口节点';
+	@override String get hop2_empty_warning => '请选择落地出口节点';
+	@override String get hop_same_warning => '同一链路中不能重复选择相同的节点';
+	@override String active_count({required Object active, required Object total}) => '已启用 ${active} / ${total} 条';
+	@override String hop_count_badge({required Object count}) => '${count} 跳';
+	@override String get hop_entry => '第 1 跳：前置入口';
+	@override String hop_transit({required Object index}) => '第 ${index} 跳：中转跳板';
+	@override String hop_exit({required Object index}) => '第 ${index} 跳：落地出口';
+	@override String get add_transit_hop => '添加中转节点';
+	@override String get swap_hops => '互换相邻节点';
+	@override String get remove_hop => '移除此跳';
+	@override String get reset_name => '按节点自动命名';
+	@override String get use_now => '设为当前';
+	@override String switched_to_chain({required Object group, required Object name}) => '已在「${group}」中切换至「${name}」';
+	@override String get enable_before_use => '请先开启该链式代理后再应用';
+	@override String get enable_before_test => '请先开启该链式代理后再测速';
+	@override String get hop_duplicate_warning => '同一链式代理中不能重复选择相同节点';
+	@override String get hop_group_not_exit_warning => '中转与落地节点必须为具体代理节点，不能使用策略组';
+	@override String get picker_entry_hint => '支持选择具体代理节点或策略组作为前置入口';
+	@override String get picker_node_only_hint => '中转与落地跳仅支持选择具体代理节点';
+	@override String get hops_label => '链路节点编排（支持拖拽调序 / 一键互换）';
+	@override String get all_nodes => '全部';
 }
 
 // Path: main.tray
@@ -1104,6 +1155,9 @@ extension on TranslationsZhCn {
 			'BackupAndSyncWebdavScreen.webdavRequired' => '不能为空',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => '登录失败:',
 			'BackupAndSyncWebdavScreen.webdavListFailed' => '获取文件列表失败:',
+			'BackupAndSyncWebdavScreen.noBackupsYet' => '暂无云端备份，点击右上角上传图标立即创建备份',
+			'BackupAndSyncWebdavScreen.deleteConfirm' => ({required Object name}) => '确定要永久删除云端备份 [${name}] 吗？',
+			'BackupAndSyncWebdavScreen.backupSuccess' => '备份已成功上传',
 			'LaunchFailedScreen.invalidProcess' => '应用启动失败[无效的进程名称],请重新安装应用到独立目录',
 			'LaunchFailedScreen.invalidProfile' => '应用启动失败[访问配置文件失败],请重新安装应用',
 			'LaunchFailedScreen.invalidVersion' => '应用启动失败[无效版本],请重新安装应用',
@@ -1128,6 +1182,8 @@ extension on TranslationsZhCn {
 			'UserAgreementScreen.localExecution' => '纯本地独立运行',
 			'UserAgreementScreen.zeroTelemetry' => '纯净无商业遥测',
 			'UserAgreementScreen.loading' => '正在加载用户协议...',
+			'UserAgreementScreen.privacySubtitle' => '数据零收集与纯本地执行保护政策',
+			'UserAgreementScreen.copied' => '已复制到剪贴板',
 			'NetCheckScreen.title' => '网络链路体检与诊断',
 			'NetCheckScreen.fullDiagnosticsTab' => '一键链路体检',
 			'NetCheckScreen.advancedCheckTab' => '高级单域名排查',
@@ -1235,6 +1291,8 @@ extension on TranslationsZhCn {
 			'NetCheckScreen.conclusionGood' => '链路基本正常，检测到部分非致命延迟或警告，建议查看详情。',
 			'NetCheckScreen.conclusionWarning' => '检测到部分网络或代理环节异常，请使用下方【一键修复】恢复。',
 			'NetCheckScreen.conclusionCritical' => '严重网络受阻！本地网络未连通或代理内核遭遇阻断。',
+			'NetCheckScreen.valProxyTunActive' => ({required Object mode}) => 'TUN 虚拟网卡接管中 (${mode})',
+			'NetCheckScreen.fakeIpActive' => ({required Object ip}) => 'Fake-IP 已激活 (${ip})',
 			'SpeedTestScreen.title' => '网络测速',
 			'SpeedTestScreen.startTest' => '开始测速',
 			'SpeedTestScreen.stopTest' => '停止测速',
@@ -1258,6 +1316,10 @@ extension on TranslationsZhCn {
 			'SpeedTestScreen.avgSpeed' => '平均速率',
 			'SpeedTestScreen.testHistory' => '测速历史',
 			'SpeedTestScreen.clearHistory' => '清空历史',
+			'SpeedTestScreen.proxyNotRunningTip' => '代理服务尚未启动，请先连接或切换为直连模式',
+			'SpeedTestScreen.switchToDirect' => '切至直连',
+			'SpeedTestScreen.testFailedNoData' => '测速失败：无法连通当前测速服务器，请检查网络或切换线路',
+			'SpeedTestScreen.activeNode' => '当前出口节点',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '新版本[${p}]已就绪',
 			'VersionUpdateScreen.update' => '重启更新',
 			'VersionUpdateScreen.cancel' => '暂不更新',
@@ -1597,6 +1659,8 @@ extension on TranslationsZhCn {
 			'meta.nodeSelected' => ({required Object p}) => '已选择节点: ${p}',
 			'meta.startingCoreAndTesting' => '正在启动代理内核并测速...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} 分钟',
+			_ => null,
+		} ?? switch (path) {
 			'meta.chartUpload' => '上传',
 			'meta.chartDownload' => '下载',
 			'meta.author' => '作者',
@@ -1608,8 +1672,6 @@ extension on TranslationsZhCn {
 			'meta.autoScrollDisabled' => '已关闭自动滚动',
 			'meta.pauseLogs' => '暂停实时日志',
 			'meta.resumeLogs' => '恢复实时日志',
-			_ => null,
-		} ?? switch (path) {
 			'meta.scrollToLatest' => '滚至最新',
 			'meta.scrollToBottom' => '滚至底部',
 			'meta.newLogsCount' => ({required Object p}) => '(${p} 条新日志)',
@@ -1818,6 +1880,27 @@ extension on TranslationsZhCn {
 			'meta.resetDefaultCards' => '恢复默认',
 			'meta.collapseAllCards' => '全部折叠',
 			'meta.expandAllCards' => '全部展开',
+			'meta.sectionGeneral' => '常规与内核',
+			'meta.sectionRoutingTools' => '规则、链式与诊断',
+			'meta.sectionData' => '数据与同步',
+			'meta.sectionSupport' => '帮助与关于',
+			'meta.sectionAppearance' => '外观与交互',
+			'meta.sectionNetworkSub' => '测速与订阅请求',
+			'meta.sectionDesktop' => '桌面端集成（启动、托盘与系统代理）',
+			'meta.sectionMobile' => '移动端后台保活与系统权限',
+			'meta.sectionLaunchConnect' => '启动与连接',
+			'meta.sectionUpdates' => '版本更新',
+			'meta.sectionReset' => '恢复默认',
+			'meta.sectionCoreBasic' => '基础监听与鉴权',
+			'meta.sectionCoreRouting' => '路由、TUN 与局域网接入',
+			'meta.sectionCoreRules' => '规则模板与配置覆写',
+			'meta.sectionCoreProtocol' => '传输连接与协议',
+			'meta.sectionCoreServices' => '内置核心组件',
+			'meta.batteryOptimization' => '后台电池优化豁免（防杀后台）',
+			'meta.batteryOptimizationExempted' => '已豁免限制',
+			'meta.batteryOptimizationRestricted' => '未豁免（点击授权）',
+			'meta.appPermissionsSettings' => '系统应用权限设置',
+			'meta.previewFinalConfig' => '预览最终生成的内核配置',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',
@@ -1920,7 +2003,7 @@ extension on TranslationsZhCn {
 			'hotkeys.cycleModeTip' => '按序轮转：规则 ➔ 全局 ➔ 直连',
 			'hotkeys.resetDefault' => '恢复默认设置',
 			'chain_proxy.title' => '链式代理',
-			'chain_proxy.desc' => '将两个节点级联中转（前置跳板 ➔ 落地出口），实现低延迟高速专线与原生住宅 IP 解锁兼得。',
+			'chain_proxy.desc' => '通过 dialer-proxy 将 2 跳及以上节点级联转发（前置入口 ➔ 中转 ➔ 落地出口），兼顾低延迟与原生 IP 解锁，开启后自动注入主选择策略组。',
 			'chain_proxy.add' => '新建链式代理',
 			'chain_proxy.edit' => '编辑链式代理',
 			'chain_proxy.delete' => '删除',
@@ -1937,14 +2020,33 @@ extension on TranslationsZhCn {
 			'chain_proxy.preview' => '链路拓扑预览',
 			'chain_proxy.local_device' => '我的设备',
 			'chain_proxy.internet' => '目标网站',
-			'chain_proxy.save_success' => '链式代理保存成功',
-			'chain_proxy.empty_tip' => '暂无链式代理，点击下方按钮立即创建',
+			'chain_proxy.save_success' => '链式代理已保存并同步到策略组',
+			'chain_proxy.empty_tip' => '暂无链式代理，点击上方按钮立即创建',
 			'chain_proxy.test_latency' => '测速',
-			'chain_proxy.node_missing_warning' => '部分节点在当前配置中不存在，请重新指定',
+			'chain_proxy.node_missing_warning' => '部分节点在当前配置中不存在，已安全跳过注入以防内核报错',
 			'chain_proxy.name_empty_warning' => '请输入链式代理名称',
-			'chain_proxy.hop1_empty_warning' => '请选择第一跳前置节点',
-			'chain_proxy.hop2_empty_warning' => '请选择第二跳落地节点',
-			'chain_proxy.hop_same_warning' => '第一跳与第二跳不能为同一个节点',
+			'chain_proxy.hop1_empty_warning' => '请选择前置入口节点',
+			'chain_proxy.hop2_empty_warning' => '请选择落地出口节点',
+			'chain_proxy.hop_same_warning' => '同一链路中不能重复选择相同的节点',
+			'chain_proxy.active_count' => ({required Object active, required Object total}) => '已启用 ${active} / ${total} 条',
+			'chain_proxy.hop_count_badge' => ({required Object count}) => '${count} 跳',
+			'chain_proxy.hop_entry' => '第 1 跳：前置入口',
+			'chain_proxy.hop_transit' => ({required Object index}) => '第 ${index} 跳：中转跳板',
+			'chain_proxy.hop_exit' => ({required Object index}) => '第 ${index} 跳：落地出口',
+			'chain_proxy.add_transit_hop' => '添加中转节点',
+			'chain_proxy.swap_hops' => '互换相邻节点',
+			'chain_proxy.remove_hop' => '移除此跳',
+			'chain_proxy.reset_name' => '按节点自动命名',
+			'chain_proxy.use_now' => '设为当前',
+			'chain_proxy.switched_to_chain' => ({required Object group, required Object name}) => '已在「${group}」中切换至「${name}」',
+			'chain_proxy.enable_before_use' => '请先开启该链式代理后再应用',
+			'chain_proxy.enable_before_test' => '请先开启该链式代理后再测速',
+			'chain_proxy.hop_duplicate_warning' => '同一链式代理中不能重复选择相同节点',
+			'chain_proxy.hop_group_not_exit_warning' => '中转与落地节点必须为具体代理节点，不能使用策略组',
+			'chain_proxy.picker_entry_hint' => '支持选择具体代理节点或策略组作为前置入口',
+			'chain_proxy.picker_node_only_hint' => '中转与落地跳仅支持选择具体代理节点',
+			'chain_proxy.hops_label' => '链路节点编排（支持拖拽调序 / 一键互换）',
+			'chain_proxy.all_nodes' => '全部',
 			_ => null,
 		};
 	}

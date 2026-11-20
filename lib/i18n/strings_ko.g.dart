@@ -96,6 +96,9 @@ class _Translations$BackupAndSyncWebdavScreen$ko implements Translations$BackupA
 	@override String get webdavRequired => '비워둘 수 없습니다';
 	@override String get webdavLoginFailed => '로그인 실패:';
 	@override String get webdavListFailed => '파일 목록을 가져오지 못했습니다:';
+	@override String get noBackupsYet => '클라우드 백업이 없습니다. 상단 업로드 아이콘을 눌러 생성하세요.';
+	@override String deleteConfirm({required Object name}) => '클라우드 백업 [${name}]을(를) 영구 삭제하시겠습니까?';
+	@override String get backupSuccess => '백업이 성공적으로 업로드되었습니다';
 }
 
 // Path: LaunchFailedScreen
@@ -147,6 +150,8 @@ class _Translations$UserAgreementScreen$ko implements Translations$UserAgreement
 	@override String get localExecution => '완전 로컬 독립 실행';
 	@override String get zeroTelemetry => '상업용 텔레메트리 없음';
 	@override String get loading => '약관을 불러오는 중...';
+	@override String get privacySubtitle => '데이터 수집 제로 및 로컬 실행 개인정보 처리방침';
+	@override String get copied => '클립보드에 복사되었습니다';
 }
 
 // Path: NetCheckScreen
@@ -263,6 +268,8 @@ class _Translations$NetCheckScreen$ko implements Translations$NetCheckScreen$en 
 	@override String get conclusionGood => '네트워크가 대체로 정상입니다. 경미한 지연이나 경고가 감지되었으니 상세 정보를 확인하세요.';
 	@override String get conclusionWarning => '일부 네트워크 또는 프록시에 이상이 감지되었습니다. 아래의 [원클릭 복구]를 이용해 보세요.';
 	@override String get conclusionCritical => '심각한 네트워크 차단! 로컬 네트워크가 끊겼거나 프록시 코어가 차단되었습니다.';
+	@override String valProxyTunActive({required Object mode}) => 'TUN 가상 어댑터 활성화됨 (${mode})';
+	@override String fakeIpActive({required Object ip}) => 'Fake-IP 활성화 (${ip})';
 }
 
 // Path: SpeedTestScreen
@@ -295,6 +302,10 @@ class _Translations$SpeedTestScreen$ko implements Translations$SpeedTestScreen$e
 	@override String get avgSpeed => '평균 속도';
 	@override String get testHistory => '측정 기록';
 	@override String get clearHistory => '기록 삭제';
+	@override String get proxyNotRunningTip => '프록시 코어가 실행 중이 아닙니다. 먼저 연결하거나 직접 연결로 전환하세요.';
+	@override String get switchToDirect => '직접 연결';
+	@override String get testFailedNoData => '속도 측정 실패: 서버에 연결할 수 없습니다.';
+	@override String get activeNode => '현재 출구 노드';
 }
 
 // Path: VersionUpdateScreen
@@ -866,6 +877,27 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get resetDefaultCards => '기본값 복원';
 	@override String get collapseAllCards => '모두 접기';
 	@override String get expandAllCards => '모두 펼치기';
+	@override String get sectionGeneral => '일반 및 코어';
+	@override String get sectionRoutingTools => '규칙, 체인 및 진단';
+	@override String get sectionData => '데이터 및 동기화';
+	@override String get sectionSupport => '도움말 및 정보';
+	@override String get sectionAppearance => '화면 및 동작';
+	@override String get sectionNetworkSub => '속도 측정 및 요청';
+	@override String get sectionDesktop => '데스크톱 통합 (시작, 트레이 및 프록시)';
+	@override String get sectionMobile => '모바일 백그라운드 유지 및 권한';
+	@override String get sectionLaunchConnect => '시작 및 연결';
+	@override String get sectionUpdates => '업데이트';
+	@override String get sectionReset => '초기화';
+	@override String get sectionCoreBasic => '리스너 및 제어';
+	@override String get sectionCoreRouting => '라우팅, TUN 및 LAN';
+	@override String get sectionCoreRules => '규칙 및 덮어쓰기';
+	@override String get sectionCoreProtocol => '전송 및 프로토콜';
+	@override String get sectionCoreServices => '코어 서비스';
+	@override String get batteryOptimization => '배터리 최적화 제외 (백그라운드 유지)';
+	@override String get batteryOptimizationExempted => '제외됨';
+	@override String get batteryOptimizationRestricted => '제한됨 (눌러서 허용)';
+	@override String get appPermissionsSettings => '시스템 앱 권한 설정';
+	@override String get previewFinalConfig => '최종 코어 설정 미리보기';
 }
 
 // Path: permission
@@ -1028,31 +1060,50 @@ class _Translations$chain_proxy$ko implements Translations$chain_proxy$en {
 
 	// Translations
 	@override String get title => '체인 프록시';
-	@override String get desc => '두 노드를 중계(전치 릴레이 ➔ 착륙 출구)하여 낮은 지연 시간과 주거용 IP 잠금 해제를 모두 확보합니다.';
+	@override String get desc => 'dialer-proxy로 2개 이상의 노드를 연결(진입 ➔ 경유 ➔ 출구)하여 낮은 지연 시간과 로컬 IP를 동시에 확보하고 선택 그룹에 자동 동기화합니다.';
 	@override String get add => '체인 프록시 추가';
 	@override String get edit => '체인 프록시 편집';
 	@override String get delete => '삭제';
 	@override String get delete_confirm => '이 체인 프록시를 삭제하시겠습니까?';
 	@override String get name => '체인 프록시 이름';
-	@override String get name_hint => '예: 홍콩 중계 ➔ 미국 주거용';
-	@override String get hop1 => '1단계: 전치 릴레이 (입구)';
-	@override String get hop1_select_title => '1단계 노드(전치) 선택';
-	@override String get hop1_placeholder => '1단계 노드';
-	@override String get hop2 => '2단계: 착륙 노드 (출구)';
-	@override String get hop2_select_title => '2단계 노드(출구) 선택';
-	@override String get hop2_placeholder => '2단계 노드';
+	@override String get name_hint => '예: 홍콩 경유 ➔ 미국 가정용';
+	@override String get hop1 => '1홉: 진입 릴레이';
+	@override String get hop1_select_title => '1홉 노드(진입) 선택';
+	@override String get hop1_placeholder => '1홉 노드';
+	@override String get hop2 => '2홉: 출구 노드';
+	@override String get hop2_select_title => '2홉 노드(출구) 선택';
+	@override String get hop2_placeholder => '2홉 노드';
 	@override String get select_node => '노드 선택';
 	@override String get preview => '토폴로지 미리보기';
 	@override String get local_device => '내 기기';
 	@override String get internet => '인터넷';
-	@override String get save_success => '체인 프록시가 저장되었습니다';
-	@override String get empty_tip => '체인 프록시가 없습니다. 아래 버튼을 눌러 추가하세요.';
-	@override String get test_latency => '핑 테스트';
-	@override String get node_missing_warning => '현재 프로필에 없는 노드가 포함되어 있습니다. 다시 지정해 주세요.';
+	@override String get save_success => '저장 및 정책 그룹 동기화 완료';
+	@override String get empty_tip => '체인 프록시가 없습니다. 상단 버튼을 눌러 생성하세요.';
+	@override String get test_latency => '지연 테스트';
+	@override String get node_missing_warning => '현재 프로필에 없는 노드가 포함되어 안전하게 건너뛰었습니다.';
 	@override String get name_empty_warning => '체인 프록시 이름을 입력하세요';
-	@override String get hop1_empty_warning => '1단계 전치 노드를 선택하세요';
-	@override String get hop2_empty_warning => '2단계 착륙 노드를 선택하세요';
-	@override String get hop_same_warning => '1단계와 2단계 노드는 같을 수 없습니다';
+	@override String get hop1_empty_warning => '진입 노드를 선택하세요';
+	@override String get hop2_empty_warning => '출구 노드를 선택하세요';
+	@override String get hop_same_warning => '같은 체인에 동일한 노드를 중복 선택할 수 없습니다';
+	@override String active_count({required Object active, required Object total}) => '${active} / ${total} 활성화';
+	@override String hop_count_badge({required Object count}) => '${count} 홉';
+	@override String get hop_entry => '1홉: 진입 릴레이';
+	@override String hop_transit({required Object index}) => '${index}홉: 경유 노드';
+	@override String hop_exit({required Object index}) => '${index}홉: 출구 노드';
+	@override String get add_transit_hop => '경유 홉 추가';
+	@override String get swap_hops => '인접 노드 맞바꾸기';
+	@override String get remove_hop => '홉 제거';
+	@override String get reset_name => '노드 이름으로 자동 설정';
+	@override String get use_now => '바로 사용';
+	@override String switched_to_chain({required Object group, required Object name}) => '"${group}"을 "${name}"(으)로 전환했습니다';
+	@override String get enable_before_use => '먼저 이 체인 프록시를 활성화하세요';
+	@override String get enable_before_test => '지연 테스트 전에 먼저 체인 프록시를 활성화하세요';
+	@override String get hop_duplicate_warning => '동일 체인 내에 중복 노드를 선택할 수 없습니다';
+	@override String get hop_group_not_exit_warning => '경유 및 출구 홉은 정책 그룹이 아닌 실제 프록시 노드여야 합니다';
+	@override String get picker_entry_hint => '진입 홉은 프록시 노드와 정책 그룹 모두 지원합니다';
+	@override String get picker_node_only_hint => '경유 및 출구 홉은 실제 프록시 노드만 선택 가능합니다';
+	@override String get hops_label => '홉 구성 (드래그 정렬 / 맞바꾸기 지원)';
+	@override String get all_nodes => '전체';
 }
 
 // Path: main.tray
@@ -1104,6 +1155,9 @@ extension on TranslationsKo {
 			'BackupAndSyncWebdavScreen.webdavRequired' => '비워둘 수 없습니다',
 			'BackupAndSyncWebdavScreen.webdavLoginFailed' => '로그인 실패:',
 			'BackupAndSyncWebdavScreen.webdavListFailed' => '파일 목록을 가져오지 못했습니다:',
+			'BackupAndSyncWebdavScreen.noBackupsYet' => '클라우드 백업이 없습니다. 상단 업로드 아이콘을 눌러 생성하세요.',
+			'BackupAndSyncWebdavScreen.deleteConfirm' => ({required Object name}) => '클라우드 백업 [${name}]을(를) 영구 삭제하시겠습니까?',
+			'BackupAndSyncWebdavScreen.backupSuccess' => '백업이 성공적으로 업로드되었습니다',
 			'LaunchFailedScreen.invalidProcess' => '앱 시작 실패 [유효하지 않은 프로세스 이름], 앱을 별도의 디렉토리에 다시 설치하십시오',
 			'LaunchFailedScreen.invalidProfile' => '앱 시작 실패 [프로필 액세스 실패], 앱을 다시 설치하십시오',
 			'LaunchFailedScreen.invalidVersion' => '앱 시작 실패 [유효하지 않은 버전], 앱을 다시 설치하십시오',
@@ -1128,6 +1182,8 @@ extension on TranslationsKo {
 			'UserAgreementScreen.localExecution' => '완전 로컬 독립 실행',
 			'UserAgreementScreen.zeroTelemetry' => '상업용 텔레메트리 없음',
 			'UserAgreementScreen.loading' => '약관을 불러오는 중...',
+			'UserAgreementScreen.privacySubtitle' => '데이터 수집 제로 및 로컬 실행 개인정보 처리방침',
+			'UserAgreementScreen.copied' => '클립보드에 복사되었습니다',
 			'NetCheckScreen.title' => '네트워크 진단 및 복구',
 			'NetCheckScreen.fullDiagnosticsTab' => '파이프라인 진단',
 			'NetCheckScreen.advancedCheckTab' => '고급 도메인 쿼리',
@@ -1235,6 +1291,8 @@ extension on TranslationsKo {
 			'NetCheckScreen.conclusionGood' => '네트워크가 대체로 정상입니다. 경미한 지연이나 경고가 감지되었으니 상세 정보를 확인하세요.',
 			'NetCheckScreen.conclusionWarning' => '일부 네트워크 또는 프록시에 이상이 감지되었습니다. 아래의 [원클릭 복구]를 이용해 보세요.',
 			'NetCheckScreen.conclusionCritical' => '심각한 네트워크 차단! 로컬 네트워크가 끊겼거나 프록시 코어가 차단되었습니다.',
+			'NetCheckScreen.valProxyTunActive' => ({required Object mode}) => 'TUN 가상 어댑터 활성화됨 (${mode})',
+			'NetCheckScreen.fakeIpActive' => ({required Object ip}) => 'Fake-IP 활성화 (${ip})',
 			'SpeedTestScreen.title' => '속도 측정',
 			'SpeedTestScreen.startTest' => '측정 시작',
 			'SpeedTestScreen.stopTest' => '중지',
@@ -1258,6 +1316,10 @@ extension on TranslationsKo {
 			'SpeedTestScreen.avgSpeed' => '평균 속도',
 			'SpeedTestScreen.testHistory' => '측정 기록',
 			'SpeedTestScreen.clearHistory' => '기록 삭제',
+			'SpeedTestScreen.proxyNotRunningTip' => '프록시 코어가 실행 중이 아닙니다. 먼저 연결하거나 직접 연결로 전환하세요.',
+			'SpeedTestScreen.switchToDirect' => '직접 연결',
+			'SpeedTestScreen.testFailedNoData' => '속도 측정 실패: 서버에 연결할 수 없습니다.',
+			'SpeedTestScreen.activeNode' => '현재 출구 노드',
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '새 버전 [${p}]이 준비되었습니다',
 			'VersionUpdateScreen.update' => '업데이트를 위해 재시작',
 			'VersionUpdateScreen.cancel' => '나중에',
@@ -1597,6 +1659,8 @@ extension on TranslationsKo {
 			'meta.nodeSelected' => ({required Object p}) => '선택된 노드: ${p}',
 			'meta.startingCoreAndTesting' => '코어를 시작하고 지연 속도를 측정하는 중...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} 분',
+			_ => null,
+		} ?? switch (path) {
 			'meta.chartUpload' => '업로드',
 			'meta.chartDownload' => '다운로드',
 			'meta.author' => '작성자',
@@ -1608,8 +1672,6 @@ extension on TranslationsKo {
 			'meta.autoScrollDisabled' => '자동 스크롤 꺼짐',
 			'meta.pauseLogs' => '실시간 로그 일시 중지',
 			'meta.resumeLogs' => '실시간 로그 재개',
-			_ => null,
-		} ?? switch (path) {
 			'meta.scrollToLatest' => '최신으로 스크롤',
 			'meta.scrollToBottom' => '맨 아래로 스크롤',
 			'meta.newLogsCount' => ({required Object p}) => '(${p}개 새 로그)',
@@ -1818,6 +1880,27 @@ extension on TranslationsKo {
 			'meta.resetDefaultCards' => '기본값 복원',
 			'meta.collapseAllCards' => '모두 접기',
 			'meta.expandAllCards' => '모두 펼치기',
+			'meta.sectionGeneral' => '일반 및 코어',
+			'meta.sectionRoutingTools' => '규칙, 체인 및 진단',
+			'meta.sectionData' => '데이터 및 동기화',
+			'meta.sectionSupport' => '도움말 및 정보',
+			'meta.sectionAppearance' => '화면 및 동작',
+			'meta.sectionNetworkSub' => '속도 측정 및 요청',
+			'meta.sectionDesktop' => '데스크톱 통합 (시작, 트레이 및 프록시)',
+			'meta.sectionMobile' => '모바일 백그라운드 유지 및 권한',
+			'meta.sectionLaunchConnect' => '시작 및 연결',
+			'meta.sectionUpdates' => '업데이트',
+			'meta.sectionReset' => '초기화',
+			'meta.sectionCoreBasic' => '리스너 및 제어',
+			'meta.sectionCoreRouting' => '라우팅, TUN 및 LAN',
+			'meta.sectionCoreRules' => '규칙 및 덮어쓰기',
+			'meta.sectionCoreProtocol' => '전송 및 프로토콜',
+			'meta.sectionCoreServices' => '코어 서비스',
+			'meta.batteryOptimization' => '배터리 최적화 제외 (백그라운드 유지)',
+			'meta.batteryOptimizationExempted' => '제외됨',
+			'meta.batteryOptimizationRestricted' => '제한됨 (눌러서 허용)',
+			'meta.appPermissionsSettings' => '시스템 앱 권한 설정',
+			'meta.previewFinalConfig' => '최종 코어 설정 미리보기',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',
@@ -1920,31 +2003,50 @@ extension on TranslationsKo {
 			'hotkeys.cycleModeTip' => '순차 순환: 규칙 ➔ 글로벌 ➔ 직결',
 			'hotkeys.resetDefault' => '기본값 복원',
 			'chain_proxy.title' => '체인 프록시',
-			'chain_proxy.desc' => '두 노드를 중계(전치 릴레이 ➔ 착륙 출구)하여 낮은 지연 시간과 주거용 IP 잠금 해제를 모두 확보합니다.',
+			'chain_proxy.desc' => 'dialer-proxy로 2개 이상의 노드를 연결(진입 ➔ 경유 ➔ 출구)하여 낮은 지연 시간과 로컬 IP를 동시에 확보하고 선택 그룹에 자동 동기화합니다.',
 			'chain_proxy.add' => '체인 프록시 추가',
 			'chain_proxy.edit' => '체인 프록시 편집',
 			'chain_proxy.delete' => '삭제',
 			'chain_proxy.delete_confirm' => '이 체인 프록시를 삭제하시겠습니까?',
 			'chain_proxy.name' => '체인 프록시 이름',
-			'chain_proxy.name_hint' => '예: 홍콩 중계 ➔ 미국 주거용',
-			'chain_proxy.hop1' => '1단계: 전치 릴레이 (입구)',
-			'chain_proxy.hop1_select_title' => '1단계 노드(전치) 선택',
-			'chain_proxy.hop1_placeholder' => '1단계 노드',
-			'chain_proxy.hop2' => '2단계: 착륙 노드 (출구)',
-			'chain_proxy.hop2_select_title' => '2단계 노드(출구) 선택',
-			'chain_proxy.hop2_placeholder' => '2단계 노드',
+			'chain_proxy.name_hint' => '예: 홍콩 경유 ➔ 미국 가정용',
+			'chain_proxy.hop1' => '1홉: 진입 릴레이',
+			'chain_proxy.hop1_select_title' => '1홉 노드(진입) 선택',
+			'chain_proxy.hop1_placeholder' => '1홉 노드',
+			'chain_proxy.hop2' => '2홉: 출구 노드',
+			'chain_proxy.hop2_select_title' => '2홉 노드(출구) 선택',
+			'chain_proxy.hop2_placeholder' => '2홉 노드',
 			'chain_proxy.select_node' => '노드 선택',
 			'chain_proxy.preview' => '토폴로지 미리보기',
 			'chain_proxy.local_device' => '내 기기',
 			'chain_proxy.internet' => '인터넷',
-			'chain_proxy.save_success' => '체인 프록시가 저장되었습니다',
-			'chain_proxy.empty_tip' => '체인 프록시가 없습니다. 아래 버튼을 눌러 추가하세요.',
-			'chain_proxy.test_latency' => '핑 테스트',
-			'chain_proxy.node_missing_warning' => '현재 프로필에 없는 노드가 포함되어 있습니다. 다시 지정해 주세요.',
+			'chain_proxy.save_success' => '저장 및 정책 그룹 동기화 완료',
+			'chain_proxy.empty_tip' => '체인 프록시가 없습니다. 상단 버튼을 눌러 생성하세요.',
+			'chain_proxy.test_latency' => '지연 테스트',
+			'chain_proxy.node_missing_warning' => '현재 프로필에 없는 노드가 포함되어 안전하게 건너뛰었습니다.',
 			'chain_proxy.name_empty_warning' => '체인 프록시 이름을 입력하세요',
-			'chain_proxy.hop1_empty_warning' => '1단계 전치 노드를 선택하세요',
-			'chain_proxy.hop2_empty_warning' => '2단계 착륙 노드를 선택하세요',
-			'chain_proxy.hop_same_warning' => '1단계와 2단계 노드는 같을 수 없습니다',
+			'chain_proxy.hop1_empty_warning' => '진입 노드를 선택하세요',
+			'chain_proxy.hop2_empty_warning' => '출구 노드를 선택하세요',
+			'chain_proxy.hop_same_warning' => '같은 체인에 동일한 노드를 중복 선택할 수 없습니다',
+			'chain_proxy.active_count' => ({required Object active, required Object total}) => '${active} / ${total} 활성화',
+			'chain_proxy.hop_count_badge' => ({required Object count}) => '${count} 홉',
+			'chain_proxy.hop_entry' => '1홉: 진입 릴레이',
+			'chain_proxy.hop_transit' => ({required Object index}) => '${index}홉: 경유 노드',
+			'chain_proxy.hop_exit' => ({required Object index}) => '${index}홉: 출구 노드',
+			'chain_proxy.add_transit_hop' => '경유 홉 추가',
+			'chain_proxy.swap_hops' => '인접 노드 맞바꾸기',
+			'chain_proxy.remove_hop' => '홉 제거',
+			'chain_proxy.reset_name' => '노드 이름으로 자동 설정',
+			'chain_proxy.use_now' => '바로 사용',
+			'chain_proxy.switched_to_chain' => ({required Object group, required Object name}) => '"${group}"을 "${name}"(으)로 전환했습니다',
+			'chain_proxy.enable_before_use' => '먼저 이 체인 프록시를 활성화하세요',
+			'chain_proxy.enable_before_test' => '지연 테스트 전에 먼저 체인 프록시를 활성화하세요',
+			'chain_proxy.hop_duplicate_warning' => '동일 체인 내에 중복 노드를 선택할 수 없습니다',
+			'chain_proxy.hop_group_not_exit_warning' => '경유 및 출구 홉은 정책 그룹이 아닌 실제 프록시 노드여야 합니다',
+			'chain_proxy.picker_entry_hint' => '진입 홉은 프록시 노드와 정책 그룹 모두 지원합니다',
+			'chain_proxy.picker_node_only_hint' => '경유 및 출구 홉은 실제 프록시 노드만 선택 가능합니다',
+			'chain_proxy.hops_label' => '홉 구성 (드래그 정렬 / 맞바꾸기 지원)',
+			'chain_proxy.all_nodes' => '전체',
 			_ => null,
 		};
 	}

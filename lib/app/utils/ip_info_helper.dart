@@ -200,30 +200,37 @@ class IpInfoHelper {
       }
     } catch (_) {}
 
-    // 4. Try ip-api.com as fallback
+    // 4. Try ipinfo.io as HTTPS fallback
     try {
-      final data = await _fetchFromUrl('http://ip-api.com/json', proxyPort);
-      if (data != null && data['query'] != null) {
+      final data = await _fetchFromUrl('https://ipinfo.io/json', proxyPort);
+      if (data != null && data['ip'] != null) {
         double? lat;
         double? lon;
-        if (data['lat'] != null) lat = double.tryParse(data['lat'].toString());
-        if (data['lon'] != null) lon = double.tryParse(data['lon'].toString());
-        final asnNum = _formatAsn(data['as']);
-        final ispName = data['isp']?.toString() ?? '';
-        final orgName = data['org']?.toString() ?? ispName;
+        final loc = data['loc']?.toString() ?? '';
+        if (loc.contains(',')) {
+          final coords = loc.split(',');
+          if (coords.length >= 2) {
+            lat = double.tryParse(coords[0].trim());
+            lon = double.tryParse(coords[1].trim());
+          }
+        }
+        final rawOrg = data['org']?.toString() ?? '';
+        final asnNum = _formatAsn(rawOrg);
+        final orgName = rawOrg.replaceFirst(RegExp(r'^AS\d+\s*', caseSensitive: false), '').trim();
+        final countryCode = data['country']?.toString() ?? '';
 
         return IpInfoData(
-          ip: data['query']?.toString() ?? '',
-          country: data['country']?.toString() ?? '',
-          countryCode: data['countryCode']?.toString() ?? '',
-          region: data['regionName']?.toString() ?? (data['region']?.toString() ?? ''),
+          ip: data['ip']?.toString() ?? '',
+          country: countryCode,
+          countryCode: countryCode,
+          region: data['region']?.toString() ?? '',
           city: data['city']?.toString() ?? '',
-          isp: ispName.isNotEmpty ? ispName : orgName,
-          org: orgName.isNotEmpty ? orgName : ispName,
+          isp: orgName,
+          org: orgName,
           asn: asnNum,
           timezone: data['timezone']?.toString() ?? '',
           timezoneUtc: '',
-          postal: data['zip']?.toString() ?? '',
+          postal: data['postal']?.toString() ?? '',
           latitude: lat,
           longitude: lon,
           isProxy: isProxy,

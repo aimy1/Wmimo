@@ -5,6 +5,7 @@ import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/app/runtime/return_result.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 
@@ -129,48 +130,48 @@ class NetworkDiagnostics {
     ];
   }
 
-  /// Runs the full 5-level diagnostics pipeline sequentially
-  static Future<DiagnosticReport> runDiagnostics({
-    Translations? translations,
-    void Function(DiagnosticStepResult step)? onStepUpdate,
-  }) async {
-    final tr = translations ?? t;
-    final startTime = DateTime.now();
-    final steps = initialSteps(tr);
+  /// Returns true if [name] looks like a virtual/tunnel network interface
+  /// created by VPN/TUN engines rather than a physical LAN/Wi-Fi adapter.
+  static bool isVirtualInterfaceName(String name) {
+    final lower = name.toLowerCase();
+    return lower.startsWith('tun') ||
+        lower.startsWith('utun') ||
+        lower.startsWith('ppp') ||
+        lower.startsWith('wg') ||
+        lower.contains('mihomo') ||
+        lower.contains('sing-box') ||
+        lower.contains('wintun') ||
+        lower == 'lo' ||
+        lower == 'lo0';
+  }
 
-    // Step 1: Physical Network & Gateway
-    steps[0].status = DiagnosticStatus.checking;
-    onStepUpdate?.call(steps[0]);
-    steps[0] = await _checkPhysicalNetwork(steps[0], tr);
-    onStepUpdate?.call(steps[0]);
+  /// Returns true if [ip] falls in the standard Fake-IP CIDR range (198.18.0.0/15).
+  static bool isFakeIp(String ip) {
+    return ip.startsWith('198.18.') || ip.startsWith('198.19.');
+  }
 
-    // Step 2: DNS Resolution
-    steps[1].status = DiagnosticStatus.checking;
-    onStepUpdate?.call(steps[1]);
-    steps[1] = await _checkDnsResolution(steps[1], tr);
-    onStepUpdate?.call(steps[1]);
+  /// Resolves the active proxy chain label and leaf node name via Mihomo REST API.
+  static Future<String> resolveActiveProxyNode({String? mode}) async {
+    final effectiveMode = mode ??
+        (await ClashHttpApi.getConfigs()).data?.mode ??
+        'rule';
+    final nowRes = await ClashHttpApi.getNowProxy(effectiveMode);
+    if (nowRes.error == null && nowRes.data != null && nowRes.data!.isNotEmpty) {
+      return nowRes.data!.last.name;
+    }
+    final proxiesRes = await ClashHttpApi.getProxies();
+    if (proxiesRes.error == null && proxiesRes.data != null) {
+      for (final p in proxiesRes.data!) {
+        if (p.now.isNotEmpty) {
+          return p.now;
+        }
+      }
+    }
+    return 'GLOBAL';
+  }
 
-    // Step 3: Core & Port
-    steps[2].status = DiagnosticStatus.checking;
-    onStepUpdate?.call(steps[2]);
-    steps[2] = await _checkCoreAndPort(steps[2], tr);
-    onStepUpdate?.call(steps[2]);
-
-    // Step 4: System Proxy
-    steps[3].status = DiagnosticStatus.checking;
-    onStepUpdate?.call(steps[3]);
-    steps[3] = await _checkSystemProxy(steps[3], tr);
-    onStepUpdate?.call(steps[3]);
-
-    // Step 5: Internet Handshake
-    steps[4].status = DiagnosticStatus.checking;
-    onStepUpdate?.call(steps[4]);
-    steps[4] = await _checkInternetHandshake(steps[4], tr);
-    onStepUpdate?.call(steps[4]);
-
-    final duration = DateTime.now().difference(startTime);
-
-    // Calculate score
+  /// Computes health score [0..100] from finished diagnostic steps.
+  static int calculateHealthScore(List<DiagnosticStepResult> steps) {
     int score = 100;
     for (final s in steps) {
       if (s.status == DiagnosticStatus.failed) {
@@ -187,7 +188,83 @@ class NetworkDiagnostics {
         score -= 10;
       }
     }
-    if (score < 0) score = 0;
+    return score < 0 ? 0 : score;
+  }
+
+  /// Runs the full 5-level diagnostics pipeline using concurrent phases
+  /// while streaming step-by-step UI updates.
+  static Future<DiagnosticReport> runDiagnostics({
+    Translations? translations,
+    void Function(DiagnosticStepResult step)? onStepUpdate,
+  }) async {
+    final tr = translations ?? t;
+    final startTime = DateTime.now();
+    final steps = initialSteps(tr);
+
+    void emitChecking(int index) {
+      steps[index].status = DiagnosticStatus.checking;
+      onStepUpdate?.call(steps[index]);
+    }
+
+    // Phase A: Run independent checks concurrently (Physical NIC, DNS, Core/Port)
+    emitChecking(0);
+    emitChecking(1);
+    emitChecking(2);
+
+    final coreStarted = await VPNService.getStarted();
+    ClashConfigs? coreConfig;
+
+    final phaseA = await Future.wait<void>([
+      _checkPhysicalNetwork(steps[0], tr).then((res) {
+        steps[0] = res;
+        onStepUpdate?.call(res);
+      }),
+      _checkDnsResolution(steps[1], tr, isStarted: coreStarted).then((res) {
+        steps[1] = res;
+        onStepUpdate?.call(res);
+      }),
+      () async {
+        final cfgRes = coreStarted ? await ClashHttpApi.getConfigs() : null;
+        coreConfig = cfgRes?.data;
+        final res = await _checkCoreAndPort(
+          steps[2],
+          tr,
+          isStarted: coreStarted,
+          preloadedConfigResult: cfgRes,
+        );
+        steps[2] = res;
+        onStepUpdate?.call(res);
+      }(),
+    ]);
+    assert(phaseA.length == 3);
+
+    // Phase B: Run proxy alignment & WAN handshake concurrently using core state
+    emitChecking(3);
+    emitChecking(4);
+
+    await Future.wait<void>([
+      _checkSystemProxy(
+        steps[3],
+        tr,
+        isCoreRunning: coreStarted,
+        coreConfig: coreConfig,
+      ).then((res) {
+        steps[3] = res;
+        onStepUpdate?.call(res);
+      }),
+      _checkInternetHandshake(
+        steps[4],
+        tr,
+        isCoreRunning: coreStarted,
+        mode: coreConfig?.mode,
+      ).then((res) {
+        steps[4] = res;
+        onStepUpdate?.call(res);
+      }),
+    ]);
+
+    final duration = DateTime.now().difference(startTime);
+    final score = calculateHealthScore(steps);
 
     String conclusion;
     if (score == 100) {
@@ -209,6 +286,35 @@ class NetworkDiagnostics {
     );
   }
 
+  /// Races TCP port-53 handshakes concurrently and returns the fastest target latency in ms.
+  static Future<int?> _probeFastestGateway(List<String> targets) async {
+    final completer = Completer<int?>();
+    int remaining = targets.length;
+    for (final targetIp in targets) {
+      () async {
+        final socketSw = Stopwatch()..start();
+        try {
+          final socket = await Socket.connect(
+            targetIp,
+            53,
+            timeout: const Duration(milliseconds: 1500),
+          );
+          socket.destroy();
+          socketSw.stop();
+          if (!completer.isCompleted) {
+            completer.complete(socketSw.elapsedMilliseconds);
+          }
+        } catch (_) {
+          remaining--;
+          if (remaining == 0 && !completer.isCompleted) {
+            completer.complete(null);
+          }
+        }
+      }();
+    }
+    return completer.future;
+  }
+
   /// 1. Physical Network & Gateway
   static Future<DiagnosticStepResult> _checkPhysicalNetwork(
     DiagnosticStepResult base,
@@ -221,17 +327,23 @@ class NetworkDiagnostics {
         type: InternetAddressType.IPv4,
       );
 
-      final validIps = <String>[];
+      final physicalIps = <String>[];
+      final virtualIps = <String>[];
       for (final iface in interfaces) {
         for (final addr in iface.addresses) {
           final ip = addr.address;
-          if (!ip.startsWith('127.') && !ip.startsWith('169.254.')) {
-            validIps.add("${iface.name}: $ip");
+          if (ip.startsWith('127.') || ip.startsWith('169.254.')) continue;
+          final label = "${iface.name}: $ip";
+          if (isVirtualInterfaceName(iface.name) || isFakeIp(ip)) {
+            virtualIps.add(label);
+          } else {
+            physicalIps.add(label);
           }
         }
       }
 
-      if (validIps.isEmpty) {
+      final allIps = [...physicalIps, ...virtualIps];
+      if (allIps.isEmpty) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
           value: tr.NetCheckScreen.valNicNone,
@@ -241,29 +353,21 @@ class NetworkDiagnostics {
         );
       }
 
-      // Test socket connectivity to public IP on DNS port 53 (very fast TCP/Socket handshake)
-      bool gatewayReachable = false;
-      int latency = 0;
-      for (final targetIp in ['223.5.5.5', '114.114.114.114', '1.1.1.1']) {
-        try {
-          final socketSw = Stopwatch()..start();
-          final socket = await Socket.connect(targetIp, 53, timeout: const Duration(milliseconds: 1500));
-          socket.destroy();
-          socketSw.stop();
-          gatewayReachable = true;
-          latency = socketSw.elapsedMilliseconds;
-          break;
-        } catch (_) {}
-      }
+      final primaryNic = physicalIps.isNotEmpty ? physicalIps.first : virtualIps.first;
+      final latency = await _probeFastestGateway(const [
+        '223.5.5.5',
+        '114.114.114.114',
+        '1.1.1.1',
+      ]);
 
       sw.stop();
       final totalMs = sw.elapsedMilliseconds;
 
-      if (!gatewayReachable) {
+      if (latency == null) {
         return base.copyWith(
           status: DiagnosticStatus.warning,
           value: tr.NetCheckScreen.valNicGatewayTimeout,
-          detail: "${validIps.join('\n')}\nGateway probe timed out (${totalMs}ms)",
+          detail: "${allIps.join('\n')}\nGateway probe timed out (${totalMs}ms)",
           issue: tr.NetCheckScreen.issueNicGatewayUnreachable,
           suggestion: tr.NetCheckScreen.suggestNicGateway,
           latencyMs: totalMs,
@@ -272,8 +376,8 @@ class NetworkDiagnostics {
 
       return base.copyWith(
         status: DiagnosticStatus.healthy,
-        value: tr.NetCheckScreen.valNicNormal(p: validIps.first),
-        detail: "${validIps.join('\n')}\nGateway latency: ${latency}ms",
+        value: tr.NetCheckScreen.valNicNormal(p: primaryNic),
+        detail: "${allIps.join('\n')}\nFastest probe latency: ${latency}ms",
         latencyMs: latency,
       );
     } catch (e) {
@@ -292,15 +396,20 @@ class NetworkDiagnostics {
   /// 2. DNS Resolution & Fake-IP Engine
   static Future<DiagnosticStepResult> _checkDnsResolution(
     DiagnosticStepResult base,
-    Translations tr,
-  ) async {
+    Translations tr, {
+    required bool isStarted,
+  }) async {
     final sw = Stopwatch()..start();
     try {
       final lookupSw = Stopwatch()..start();
-      final addresses = await InternetAddress.lookup('dns.alidns.com')
+      final addressesFuture = InternetAddress.lookup('dns.alidns.com')
           .timeout(const Duration(seconds: 3));
-      lookupSw.stop();
+      final coreDnsFuture = isStarted
+          ? ClashHttpApi.dnsQuery('cp.cloudflare.com', queryType: 'A')
+          : Future.value(null);
 
+      final addresses = await addressesFuture;
+      lookupSw.stop();
       final dnsLatency = lookupSw.elapsedMilliseconds;
 
       if (addresses.isEmpty) {
@@ -316,21 +425,25 @@ class NetworkDiagnostics {
         );
       }
 
-      // Also check Mihomo internal DNS if core is started
+      final coreQuery = await coreDnsFuture;
       String coreDnsInfo = "";
-      final isStarted = await VPNService.getStarted();
-      if (isStarted) {
-        final query = await ClashHttpApi.dnsQuery('cp.cloudflare.com', queryType: 'A');
-        if (query.error == null && query.data != null && query.data!.isNotEmpty) {
-          coreDnsInfo = "Core DNS: ${query.data!.join(', ')}";
-        }
+      if (coreQuery != null && coreQuery.error == null && coreQuery.data != null && coreQuery.data!.isNotEmpty) {
+        coreDnsInfo = "Core DNS: ${coreQuery.data!.join(', ')}";
       }
 
+      final primaryIp = addresses.first.address;
+      final fakeIp = isFakeIp(primaryIp);
       sw.stop();
+
       return base.copyWith(
         status: dnsLatency > 800 ? DiagnosticStatus.warning : DiagnosticStatus.healthy,
-        value: tr.NetCheckScreen.valDnsNormal(p: addresses.first.address),
-        detail: "DNS latency: ${dnsLatency}ms\nAddresses: ${addresses.map((a) => a.address).join(', ')}${coreDnsInfo.isNotEmpty ? '\n$coreDnsInfo' : ''}",
+        value: fakeIp
+            ? tr.NetCheckScreen.fakeIpActive(ip: primaryIp)
+            : tr.NetCheckScreen.valDnsNormal(p: primaryIp),
+        detail: "DNS latency: ${dnsLatency}ms\n"
+            "Addresses: ${addresses.map((a) => a.address).join(', ')}\n"
+            "Fake-IP active: $fakeIp"
+            "${coreDnsInfo.isNotEmpty ? '\n$coreDnsInfo' : ''}",
         latencyMs: dnsLatency,
         suggestion: dnsLatency > 800 ? tr.NetCheckScreen.suggestDnsSlow : null,
       );
@@ -352,32 +465,40 @@ class NetworkDiagnostics {
   /// 3. Mihomo Core Process & Port Listening
   static Future<DiagnosticStepResult> _checkCoreAndPort(
     DiagnosticStepResult base,
-    Translations tr,
-  ) async {
+    Translations tr, {
+    required bool isStarted,
+    ReturnResult<ClashConfigs>? preloadedConfigResult,
+  }) async {
     final sw = Stopwatch()..start();
     try {
-      final isStarted = await VPNService.getStarted();
       final mixedPort = ClashSettingManager.getMixedPort();
       final apiPort = ClashSettingManager.getControlPort();
 
-      // Test port sockets
-      bool mixedPortOpen = false;
-      try {
-        final sock = await Socket.connect('127.0.0.1', mixedPort, timeout: const Duration(milliseconds: 600));
-        sock.destroy();
-        mixedPortOpen = true;
-      } catch (_) {}
+      // Probe both local ports concurrently
+      Future<bool> probeLocalPort(int port) async {
+        if (port <= 0) return false;
+        try {
+          final sock = await Socket.connect(
+            '127.0.0.1',
+            port,
+            timeout: const Duration(milliseconds: 600),
+          );
+          sock.destroy();
+          return true;
+        } catch (_) {
+          return false;
+        }
+      }
 
-      bool apiPortOpen = false;
-      try {
-        final sock = await Socket.connect('127.0.0.1', apiPort, timeout: const Duration(milliseconds: 600));
-        sock.destroy();
-        apiPortOpen = true;
-      } catch (_) {}
+      final portResults = await Future.wait([
+        probeLocalPort(mixedPort),
+        probeLocalPort(apiPort),
+      ]);
+      final mixedPortOpen = portResults[0];
+      final apiPortOpen = portResults[1];
 
       sw.stop();
 
-      // Scenario A: Core not started by Wmimo, but ports are occupied by another app
       if (!isStarted && (mixedPortOpen || apiPortOpen)) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
@@ -394,7 +515,6 @@ class NetworkDiagnostics {
         );
       }
 
-      // Scenario B: Core not started
       if (!isStarted) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
@@ -411,8 +531,7 @@ class NetworkDiagnostics {
         );
       }
 
-      // Scenario C: Core is supposed to be running, verify API responsiveness
-      final configResult = await ClashHttpApi.getConfigs();
+      final configResult = preloadedConfigResult ?? await ClashHttpApi.getConfigs();
       if (configResult.error != null) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
@@ -454,21 +573,46 @@ class NetworkDiagnostics {
     }
   }
 
-  /// 4. System Proxy Alignment & Zombie Proxy Check
+  /// 4. Proxy / TUN Alignment & Zombie Proxy Check
   static Future<DiagnosticStepResult> _checkSystemProxy(
     DiagnosticStepResult base,
-    Translations tr,
-  ) async {
+    Translations tr, {
+    required bool isCoreRunning,
+    ClashConfigs? coreConfig,
+  }) async {
     final sw = Stopwatch()..start();
     try {
-      final isCoreRunning = await VPNService.getStarted();
+      final isMobile = Platform.isAndroid || Platform.isIOS;
+      final tunEnabled = coreConfig?.tun.enable ?? false;
+
+      // Mobile or Desktop TUN mode routes via virtual interface instead of OS HTTP proxy
+      if (isCoreRunning && (isMobile || tunEnabled)) {
+        sw.stop();
+        final modeLabel = coreConfig?.mode ?? 'rule';
+        return base.copyWith(
+          status: DiagnosticStatus.healthy,
+          value: tr.NetCheckScreen.valProxyTunActive(mode: modeLabel),
+          detail: "TUN active: ${isMobile ? 'Mobile VPNService' : 'Desktop TUN'}\nMode: $modeLabel",
+          latencyMs: sw.elapsedMilliseconds,
+        );
+      }
+
+      if (isMobile) {
+        sw.stop();
+        return base.copyWith(
+          status: DiagnosticStatus.healthy,
+          value: tr.NetCheckScreen.valProxyDisabled,
+          detail: "Mobile VPN stopped (Direct system network)",
+          latencyMs: sw.elapsedMilliseconds,
+        );
+      }
+
       final autoSetExpected = SettingManager.getConfig().autoSetSystemProxy;
       final actualEnabled = await VPNService.getSystemProxyEnable();
       final mixedPort = ClashSettingManager.getMixedPort();
 
       sw.stop();
 
-      // Case A: Zombie residual system proxy (Core stopped, but OS proxy still ON!)
       if (!isCoreRunning && actualEnabled) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
@@ -482,7 +626,6 @@ class NetworkDiagnostics {
         );
       }
 
-      // Case B: User wants system proxy, but it failed to apply or was overridden
       if (isCoreRunning && autoSetExpected && !actualEnabled) {
         return base.copyWith(
           status: DiagnosticStatus.failed,
@@ -499,7 +642,6 @@ class NetworkDiagnostics {
         );
       }
 
-      // Case C: Matched & Healthy
       if (actualEnabled) {
         return base.copyWith(
           status: DiagnosticStatus.healthy,
@@ -507,14 +649,14 @@ class NetworkDiagnostics {
           detail: "System proxy: 127.0.0.1:$mixedPort\nAuto-set: $autoSetExpected\nActive: true",
           latencyMs: sw.elapsedMilliseconds,
         );
-      } else {
-        return base.copyWith(
-          status: DiagnosticStatus.healthy,
-          value: tr.NetCheckScreen.valProxyDisabled,
-          detail: "System proxy disabled (Direct/TUN/Manual)",
-          latencyMs: sw.elapsedMilliseconds,
-        );
       }
+
+      return base.copyWith(
+        status: DiagnosticStatus.healthy,
+        value: tr.NetCheckScreen.valProxyDisabled,
+        detail: "System proxy disabled (Direct/TUN/Manual)",
+        latencyMs: sw.elapsedMilliseconds,
+      );
     } catch (e) {
       sw.stop();
       return base.copyWith(
@@ -530,15 +672,16 @@ class NetworkDiagnostics {
     }
   }
 
-  /// 5. Proxy Node & Internet Handshake (Cloudflare 204)
+  /// 5. Proxy Node & Internet Handshake (Cloudflare 204 with gstatic fallback)
   static Future<DiagnosticStepResult> _checkInternetHandshake(
     DiagnosticStepResult base,
-    Translations tr,
-  ) async {
+    Translations tr, {
+    required bool isCoreRunning,
+    String? mode,
+  }) async {
     final sw = Stopwatch()..start();
     try {
-      final isStarted = await VPNService.getStarted();
-      if (!isStarted) {
+      if (!isCoreRunning) {
         sw.stop();
         return base.copyWith(
           status: DiagnosticStatus.warning,
@@ -548,26 +691,26 @@ class NetworkDiagnostics {
         );
       }
 
-      // Find active proxy node
-      final proxiesRes = await ClashHttpApi.getProxies();
-      String activeNode = "GLOBAL";
-      if (proxiesRes.error == null && proxiesRes.data != null) {
-        final proxies = proxiesRes.data!;
-        for (final p in proxies) {
-          if (p.name == "GLOBAL" || p.name == "Proxy" || p.name == "节点选择") {
-            if (p.now.isNotEmpty) {
-              activeNode = p.now;
-              break;
-            }
-          }
-        }
-      }
+      final activeNode = await resolveActiveProxyNode(mode: mode);
+      const targets = [
+        'https://cp.cloudflare.com/generate_204',
+        'https://www.gstatic.com/generate_204',
+      ];
 
-      final delayRes = await ClashHttpApi.getDelay(
+      String testedTarget = targets.first;
+      var delayRes = await ClashHttpApi.getDelay(
         activeNode,
-        url: 'https://cp.cloudflare.com/generate_204',
+        url: testedTarget,
         timeout: const Duration(seconds: 4),
       );
+      if (delayRes.error != null || delayRes.data == null || delayRes.data! <= 0) {
+        testedTarget = targets.last;
+        delayRes = await ClashHttpApi.getDelay(
+          activeNode,
+          url: testedTarget,
+          timeout: const Duration(seconds: 4),
+        );
+      }
 
       sw.stop();
 
@@ -576,7 +719,7 @@ class NetworkDiagnostics {
         return base.copyWith(
           status: DiagnosticStatus.failed,
           value: tr.NetCheckScreen.valHandshakeFailed(node: activeNode, err: errMsg),
-          detail: "Target: https://cp.cloudflare.com/generate_204\nNode: $activeNode\nError: $errMsg",
+          detail: "Target: $testedTarget\nNode: $activeNode\nError: $errMsg",
           issue: tr.NetCheckScreen.issueHandshakeBlocked,
           suggestion: tr.NetCheckScreen.suggestHandshakeSwitch,
           latencyMs: sw.elapsedMilliseconds,
@@ -589,7 +732,7 @@ class NetworkDiagnostics {
       return base.copyWith(
         status: isWarning ? DiagnosticStatus.warning : DiagnosticStatus.healthy,
         value: tr.NetCheckScreen.valHandshakeNormal(node: activeNode, delay: delay.toString()),
-        detail: "Target: Cloudflare Anycast (generate_204)\nNode: $activeNode\nRoundtrip: ${delay}ms",
+        detail: "Target: $testedTarget\nNode: $activeNode\nRoundtrip: ${delay}ms",
         suggestion: isWarning ? tr.NetCheckScreen.suggestHandshakeSlow(delay: delay.toString()) : null,
         latencyMs: delay,
       );

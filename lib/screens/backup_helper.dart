@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:wmimo/app/local_services/vpn_service.dart';
+import 'package:wmimo/app/modules/chain_proxy_manager.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
@@ -31,20 +32,24 @@ class BackupHelper {
     try {
       for (var file in fileList) {
         var filePath = path.join(dir, file.item1);
-        if (file.item2) {
-          final d = Directory(filePath);
-          final f = File(filePath);
-          bool fexist = await f.exists();
-          bool dexist = await d.exists() && (await d.list().length > 0);
-          if (!fexist && !dexist) {
-            if (!context.mounted) {
-              return ReturnResultError("$filePath not exist");
-            }
-            final tcontext = Translations.of(context);
-            return ReturnResultError(tcontext.meta.fileNotExist(p: filePath));
+        final d = Directory(filePath);
+        final f = File(filePath);
+        bool fexist = await f.exists();
+        bool dexist = await d.exists() && (await d.list().length > 0);
+        if (!fexist && !dexist) {
+          if (!file.item2) {
+            continue;
           }
-          zipFileList.add(filePath);
+          if (!context.mounted) {
+            return ReturnResultError("$filePath not exist");
+          }
+          final tcontext = Translations.of(context);
+          return ReturnResultError(tcontext.meta.fileNotExist(p: filePath));
         }
+        zipFileList.add(filePath);
+      }
+      if (zipFileList.isEmpty) {
+        return ReturnResultError('No configuration files found to backup');
       }
       var error = await ZipUtils.zip(zipFileList, zipPath);
       return error;
@@ -58,6 +63,23 @@ class BackupHelper {
     if (result != null) {
       return result;
     }
+
+    // Verify full extraction in staging dir before wiping active configs
+    final cacheRoot = await PathUtils.cacheDir();
+    final stagingDir = path.join(
+      cacheRoot,
+      'restore_stage_${DateTime.now().microsecondsSinceEpoch}',
+    );
+    try {
+      await Directory(stagingDir).create(recursive: true);
+      final stageError = await ZipUtils.unzip(zipPath, stagingDir);
+      if (stageError != null) {
+        return stageError;
+      }
+    } finally {
+      await FileUtils.deletePath(stagingDir);
+    }
+
     await VPNService.stop();
     await ProfileManager.removeAllProfile();
     await ProfilePatchManager.removeAllProfile();
@@ -72,6 +94,7 @@ class BackupHelper {
     await ProfileManager.reload();
     await ProfilePatchManager.reload();
     await DiversionTemplateManager.reload();
+    await ChainProxyManager.load();
     return null;
   }
 

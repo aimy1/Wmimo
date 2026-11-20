@@ -1,0 +1,21 @@
+Política de Privacidad de Wmimo
+
+Gracias por usar Wmimo. Nos comprometemos a proteger su privacidad y a mantener la configuración de red y el tráfico completamente bajo su control.
+
+1. Cero recopilación de datos
+- Sin datos personales: Wmimo es un cliente de red estrictamente local. No recopilamos, registramos, subimos, vendemos ni compartimos identificadores personales, direcciones IP, ubicaciones, enlaces de suscripción ni credenciales.
+- Sin envío de historial ni DNS: todo el enrutamiento, coincidencia de reglas, resolución DNS (incluyendo DoH/DoT y Fake-IP), pruebas de velocidad y diagnósticos se ejecutan localmente en su dispositivo.
+- Sin telemetría ni publicidad: la aplicación no incluye SDKs de análisis comercial, seguimiento ni bibliotecas publicitarias.
+
+2. Almacenamiento local y copias de seguridad
+- Almacenamiento protegido: suscripciones importadas, plantillas, parches, proxy en cadena (Beta) e historial permanecen únicamente en el directorio de datos local de su dispositivo.
+- Copias de seguridad bajo control del usuario: al utilizar WebDAV, iCloud Drive o exportación ZIP local, los archivos se envían únicamente a la ruta privada o almacenamiento elegido por usted. Proteja adecuadamente sus credenciales de WebDAV y archivos ZIP.
+- Proveedores externos: Wmimo no opera servidores proxy ni suscripciones; los nodos de terceros configurados por usted se rigen por las políticas de cada proveedor.
+
+3. Permisos utilizados
+- Red y VPN / TUN: necesarios para crear la interfaz de túnel local y enrutar el tráfico.
+- Lista de aplicaciones instaladas (solo Proxy por App en Android): se consulta únicamente de forma local al seleccionar reglas y nunca se transmite fuera del dispositivo.
+- Almacenamiento (bajo demanda): utilizado solo para importar/exportar copias de seguridad ZIP y reportes.
+
+4. Transparencia de código abierto
+Wmimo se distribuye bajo la licencia GNU General Public License v3.0 (GPL-3.0) utilizando el núcleo Mihomo. Puede auditar el código completo en github.com/aimy1/Wmimo.
