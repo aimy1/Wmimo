@@ -140,45 +140,42 @@ String _renderReadme(_ReadmeSpec s) {
 ---
 
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="112" height="112" alt="Wmimo Logo" />
+  <img src="assets/images/app_icon_256.png" width="96" height="96" alt="Wmimo Logo" />
   <h1>Wmimo</h1>
   <p><strong>${s.tagline}</strong></p>
   <p>${s.subtitle}</p>
 
   <p>
+    <a href="https://github.com/aimy1/Wmimo/stargazers"><img src="https://img.shields.io/github/stars/aimy1/Wmimo?color=F59E0B&label=Stars&logo=github&style=flat-square" alt="Stars" /></a>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
     <a href="https://github.com/aimy1/Wmimo/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="CI Build" /></a>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
-    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo Core" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-%3E%3D3.35-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
-    <a href="#sec-platforms"><img src="https://img.shields.io/badge/Platforms-Win%20%7C%20macOS%20%7C%20Linux%20%7C%20Android%20%7C%20iOS-0EA5E9?style=flat-square" alt="Platforms" /></a>
-    <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/i18n-9%20Locales%20%C2%B7%20898%20Keys-10B981?style=flat-square" alt="i18n" /></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&label=Downloads" alt="Downloads" /></a>
+    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-green?style=flat-square" alt="License" /></a>
     <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-%40wmimoapp-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
   </p>
 
   <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>${s.navDownloads}</b></a> •
-    <a href="#sec-platforms"><b>${s.navPlatforms}</b></a> •
-    <a href="#sec-features"><b>${s.navFeatures}</b></a> •
-    <a href="#sec-architecture"><b>${s.navArchitecture}</b></a> •
-    <a href="#sec-quickstart"><b>${s.navQuickStart}</b></a> •
-    <a href="#sec-build"><b>${s.navBuild}</b></a> •
-    <a href="#sec-security"><b>${s.navSecurity}</b></a> •
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>${s.navDownloads}</b></a> ·
+    <a href="#sec-platforms"><b>${s.navPlatforms}</b></a> ·
+    <a href="#sec-features"><b>${s.navFeatures}</b></a> ·
+    <a href="#sec-quickstart"><b>${s.navQuickStart}</b></a> ·
+    <a href="#sec-build"><b>${s.navBuild}</b></a> ·
+    <a href="#sec-security"><b>${s.navSecurity}</b></a> ·
     <a href="#sec-community"><b>${s.navCommunity}</b></a>
   </p>
 </div>
 
 | ${s.lightCaption} | ${s.darkCaption} |
 | :---: | :---: |
-| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="380" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="380" /> |
+| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="360" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="360" /> |
 
 <p align="center"><sub><em>${s.previewNote}</em></sub></p>
 
 ---
 ''');
 
-  // 1. Supported Platforms & Release Artifacts
+  // 1. Supported Platforms & Release Packages
   b.writeln('<a id="sec-platforms"></a>\n');
   b.writeln('## ${s.platformsTitle}\n');
   b.writeln(
@@ -189,7 +186,7 @@ String _renderReadme(_ReadmeSpec s) {
   );
   b.writeln('\n> ${s.platformReleaseNote}\n\n---\n');
 
-  // 2. Core Features & Capabilities Matrix
+  // 2. Core Features (Single Concise Table)
   b.writeln('<a id="sec-features"></a>\n');
   b.writeln('## ${s.featuresTitle}\n');
   b.writeln(
@@ -198,28 +195,9 @@ String _renderReadme(_ReadmeSpec s) {
       s.featureMatrix.map((r) => [r.$1, r.$2]).toList(),
     ),
   );
-  b.writeln();
-  for (final group in s.featureDetails) {
-    b.writeln('### ${group.$1}\n');
-    for (final bullet in group.$2) {
-      b.writeln('- $bullet');
-    }
-    b.writeln();
-  }
-  b.writeln('---\n');
-
-  // 3. Tech Stack & Project Structure
-  b.writeln('<a id="sec-architecture"></a>\n');
-  b.writeln('## ${s.archTitle}\n');
-  b.writeln(
-    _renderTable(
-      [s.colLayer, s.colTech, s.colPath],
-      s.archRows.map((r) => [r.$1, r.$2, r.$3]).toList(),
-    ),
-  );
   b.writeln('\n---\n');
 
-  // 4. Quick Start & Platform Tips
+  // 3. Quick Start & Platform Tips
   b.writeln('<a id="sec-quickstart"></a>\n');
   b.writeln('## ${s.quickStartTitle}\n');
   for (int i = 0; i < s.quickSteps.length; i++) {
@@ -231,76 +209,54 @@ String _renderReadme(_ReadmeSpec s) {
   }
   b.writeln('\n</details>\n\n---\n');
 
-  // 5. Build from Source
+  // 4. Build from Source
   b.writeln('<a id="sec-build"></a>\n');
   b.writeln('## ${s.buildTitle}\n');
-  b.writeln('### ${s.prereqHeading}\n');
   for (final p in s.prereqs) {
     b.writeln('- $p');
   }
-  b.writeln('\n### ${s.commandsHeading}\n');
+  b.writeln();
   b.writeln('''```bash
-# 1. Clone repository
-git clone https://github.com/aimy1/Wmimo.git
-cd Wmimo
-
-# 2. Fetch dependencies & generate i18n bindings
-flutter pub get
-dart run slang
-
-# 3. Download prebuilt Mihomo cores
+git clone https://github.com/aimy1/Wmimo.git && cd Wmimo
+flutter pub get && dart run slang
 dart run tool/download_all_cores.dart
-
-# 4. Run development build
 flutter run
-
-# 5. Build release artifacts
-flutter build windows --release
-flutter build macos --release
-flutter build linux --release
-flutter build apk --release
+# Release: flutter build {windows|macos|linux|apk} --release
 ```
 
 ---
 ''');
 
-  // 6. Benchmarks & Quality Verification
-  b.writeln('<a id="sec-benchmarks"></a>\n');
+  // 5. Benchmarks & Star History
   b.writeln('## ${s.benchmarksTitle}\n');
   for (final item in s.benchmarkBullets) {
     b.writeln('- $item');
   }
-  b.writeln('\n${s.benchmarksLinkText}\n');
-  b.writeln('<details>\n<summary><b>${s.starHistoryHeading}</b></summary>\n');
-  b.writeln(
-    '[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)\n',
-  );
-  b.writeln('</details>\n\n---\n');
+  b.writeln('\n${s.benchmarksLinkText}\n\n---\n');
 
-  // 7. Security, Privacy & License
+  b.writeln('## ${s.starHistoryHeading}\n');
+  b.writeln(
+    '[![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)\n\n---\n',
+  );
+
+  // 6. Security, License & Community
   b.writeln('<a id="sec-security"></a>\n');
   b.writeln('## ${s.securityTitle}\n');
   for (final item in s.securityBullets) {
     b.writeln('- $item');
   }
-  b.writeln('\n### ${s.licenseTitle}\n');
-  b.writeln('${s.licenseIntro}\n');
+  b.writeln('- ${s.licenseIntro}');
   for (final l in s.licenseBullets) {
     b.writeln('- $l');
   }
   b.writeln('\n---\n');
 
-  // 8. Acknowledgements & Community
   b.writeln('<a id="sec-community"></a>\n');
-  b.writeln('## ${s.ackTitle}\n');
-  for (final a in s.ackBullets) {
-    b.writeln('- $a');
-  }
-  b.writeln('\n## ${s.communityTitle}\n');
-  b.writeln('- **${s.labelWebsite}**: [wmimo.buzz](https://wmimo.buzz)');
-  b.writeln('- **${s.labelTelegram}**: [t.me/wmimoapp](https://t.me/wmimoapp)');
-  b.writeln('- **${s.labelEmail}**: [aisaniya@proton.me](mailto:aisaniya@proton.me)');
-  b.writeln('- **${s.labelIssues}**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)');
+  b.writeln('## ${s.communityTitle}\n');
+  b.writeln(
+    '- **${s.labelWebsite}**: [wmimo.buzz](https://wmimo.buzz) · **${s.labelTelegram}**: [t.me/wmimoapp](https://t.me/wmimoapp) · **${s.labelEmail}**: [aisaniya@proton.me](mailto:aisaniya@proton.me) · **${s.labelIssues}**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)',
+  );
+  b.writeln('\n**${s.ackTitle}**: ${s.ackBullets.join(' · ')}');
 
   return b.toString();
 }

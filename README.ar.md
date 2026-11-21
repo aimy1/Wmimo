@@ -7,38 +7,35 @@
 ---
 
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="112" height="112" alt="Wmimo Logo" />
+  <img src="assets/images/app_icon_256.png" width="96" height="96" alt="Wmimo Logo" />
   <h1>Wmimo</h1>
   <p><strong>عميل وكيل Clash / Mihomo متعدد المنصات من الجيل الجديد</strong></p>
   <p>مبني باستخدام Flutter ونواة Mihomo (v1.19.34). تنفيذ محلي بالكامل بدون تتبع، مع وكيل متسلسل متعدد القفزات، وتشخيص متزامن للشبكة، واختبار سرعة برسم بياني حي.</p>
 
   <p>
+    <a href="https://github.com/aimy1/Wmimo/stargazers"><img src="https://img.shields.io/github/stars/aimy1/Wmimo?color=F59E0B&label=Stars&logo=github&style=flat-square" alt="Stars" /></a>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
     <a href="https://github.com/aimy1/Wmimo/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="CI Build" /></a>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
-    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo Core" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-%3E%3D3.35-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
-    <a href="#sec-platforms"><img src="https://img.shields.io/badge/Platforms-Win%20%7C%20macOS%20%7C%20Linux%20%7C%20Android%20%7C%20iOS-0EA5E9?style=flat-square" alt="Platforms" /></a>
-    <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/i18n-9%20Locales%20%C2%B7%20898%20Keys-10B981?style=flat-square" alt="i18n" /></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&label=Downloads" alt="Downloads" /></a>
+    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-green?style=flat-square" alt="License" /></a>
     <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-%40wmimoapp-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
   </p>
 
   <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>التحميل</b></a> •
-    <a href="#sec-platforms"><b>المنصات</b></a> •
-    <a href="#sec-features"><b>المميزات</b></a> •
-    <a href="#sec-architecture"><b>البنية</b></a> •
-    <a href="#sec-quickstart"><b>البدء السريع</b></a> •
-    <a href="#sec-build"><b>البناء</b></a> •
-    <a href="#sec-security"><b>الأمان والترخيص</b></a> •
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>التحميل</b></a> ·
+    <a href="#sec-platforms"><b>المنصات</b></a> ·
+    <a href="#sec-features"><b>المميزات</b></a> ·
+    <a href="#sec-quickstart"><b>البدء السريع</b></a> ·
+    <a href="#sec-build"><b>البناء</b></a> ·
+    <a href="#sec-security"><b>الأمان والترخيص</b></a> ·
     <a href="#sec-community"><b>المجتمع</b></a>
   </p>
 </div>
 
 | الوضع الفاتح | الوضع الداكن |
 | :---: | :---: |
-| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="380" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="380" /> |
+| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="360" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="360" /> |
 
 <p align="center"><sub><em>تصميم بطاقات 18px · رسم بياني حي لحركة البيانات · محرك مزدوج TUN ووكيل النظام</em></sub></p>
 
@@ -75,25 +72,6 @@
 | **الواجهة والمراقبة** | الوضع الفاتح والداكن، إدارة بطاقات الرئيسية، تدوير الشاشة مفعّل افتراضياً، إخفاء عنوان IP |
 | **الخصوصية و9 لغات** | بدون أي حزم تتبع أو إعلانات؛ **9 لغات × 898 مفتاحاً (100%)** مع 9 سياسات خصوصية مترجمة |
 
-### التوجيه والنسخ الآمن
-
-- **المحرك المزدوج**: التبديل الفوري بين القواعد والشامل والمباشر عبر TUN أو وكيل النظام.
-- **الاستعادة الآمنة**: فحص سلامة الأرشيف في مجلد مؤقت قبل استبدال الإعدادات الحالية.
-
----
-
-<a id="sec-architecture"></a>
-
-## البنية التقنية للمشروع
-
-| الطبقة | الدور والتقنية | المسار |
-| :--- | :--- | :--- |
-| **الواجهة والشاشات** | Flutter (`>= 3.35.0`)، بطاقات، رسوم Canvas | [`lib/screens/`](lib/screens/) |
-| **المنطق والإدارة** | مديرو الإعدادات والسلاسل والاشتراكات | [`lib/app/`](lib/app/) |
-| **VPN والطبقة الأصلية** | وسيط الخدمة، Android Kotlin (`WmimoVpnService.kt`) | [`third_party/libclash_vpn_service/`](third_party/libclash_vpn_service/), [`android/`](android/) |
-| **حزم Rust** | وحدات أصلية عالية الأداء | [`rust/`](rust/) |
-| **الترجمة والوثائق** | Slang (9 لغات × 898 مفتاحاً) والسياسات | [`lib/i18n/`](lib/i18n/), [`assets/txts/`](assets/txts/) |
-
 ---
 
 <a id="sec-quickstart"></a>
@@ -119,38 +97,18 @@
 
 ## البناء من المصدر
 
-### المتطلبات
-
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`) و[Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
 - أدوات بناء المنصة (VS 2022 C++ / Xcode / GTK3 & CMake / Android SDK)
 
-### الأوامر
-
 ```bash
-# 1. Clone repository
-git clone https://github.com/aimy1/Wmimo.git
-cd Wmimo
-
-# 2. Fetch dependencies & generate i18n bindings
-flutter pub get
-dart run slang
-
-# 3. Download prebuilt Mihomo cores
+git clone https://github.com/aimy1/Wmimo.git && cd Wmimo
+flutter pub get && dart run slang
 dart run tool/download_all_cores.dart
-
-# 4. Run development build
 flutter run
-
-# 5. Build release artifacts
-flutter build windows --release
-flutter build macos --release
-flutter build linux --release
-flutter build apk --release
+# Release: flutter build {windows|macos|linux|apk} --release
 ```
 
 ---
-
-<a id="sec-benchmarks"></a>
 
 ## معايير الأداء والتحقق
 
@@ -159,12 +117,11 @@ flutter build apk --release
 
 تفاصيل الاختبارات: [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
-<details>
-<summary><b>تاريخ النجوم (Star History)</b></summary>
+---
+
+## تاريخ النجوم (Star History)
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
-
-</details>
 
 ---
 
@@ -174,11 +131,7 @@ flutter build apk --release
 
 - **عدم جمع البيانات**: [assets/txts/privacy_policy_ar.txt](assets/txts/privacy_policy_ar.txt)
 - **التحقق من البصمات**: [SECURITY.md](SECURITY.md)
-
-### الترخيص
-
-مرخص بموجب **GNU General Public License v3.0 (GPL-3.0-or-later)** ([LICENSE](LICENSE)).
-
+- مرخص بموجب **GNU General Public License v3.0 (GPL-3.0-or-later)** ([LICENSE](LICENSE)).
 - حزم Rust: [MIT](rust/LICENSE-MIT) أو [Apache-2.0](rust/LICENSE-APACHE) منفردة، وGPL-3.0 ضمن Wmimo.
 - مكونات الطرف الثالث: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md)، [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md)
 
@@ -186,15 +139,8 @@ flutter build apk --release
 
 <a id="sec-community"></a>
 
-## شكر وتقدير
-
-- **[GooRingX (vowe)](https://github.com/GooRingX)**
-- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**
-- **[Flutter](https://flutter.dev/)**
-
 ## المجتمع والدعم
 
-- **الموقع الرسمي**: [wmimo.buzz](https://wmimo.buzz)
-- **قناة Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- **البريد الإلكتروني**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- **الإبلاغ عن المشكلات**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **الموقع الرسمي**: [wmimo.buzz](https://wmimo.buzz) · **قناة Telegram**: [t.me/wmimoapp](https://t.me/wmimoapp) · **البريد الإلكتروني**: [aisaniya@proton.me](mailto:aisaniya@proton.me) · **الإبلاغ عن المشكلات**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+
+**شكر وتقدير**: **[GooRingX (vowe)](https://github.com/GooRingX)** · **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** · **[Flutter](https://flutter.dev/)**

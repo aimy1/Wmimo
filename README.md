@@ -7,38 +7,35 @@
 ---
 
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="112" height="112" alt="Wmimo Logo" />
+  <img src="assets/images/app_icon_256.png" width="96" height="96" alt="Wmimo Logo" />
   <h1>Wmimo</h1>
   <p><strong>Next-Generation Cross-Platform Clash / Mihomo GUI Proxy Client</strong></p>
   <p>Built with Flutter & Mihomo Core (v1.19.34). Designed for zero telemetry, multi-hop chaining, real-time diagnostics, and native OS integration across desktop and mobile.</p>
 
   <p>
+    <a href="https://github.com/aimy1/Wmimo/stargazers"><img src="https://img.shields.io/github/stars/aimy1/Wmimo?color=F59E0B&label=Stars&logo=github&style=flat-square" alt="Stars" /></a>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
     <a href="https://github.com/aimy1/Wmimo/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="CI Build" /></a>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
-    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo Core" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-%3E%3D3.35-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
-    <a href="#sec-platforms"><img src="https://img.shields.io/badge/Platforms-Win%20%7C%20macOS%20%7C%20Linux%20%7C%20Android%20%7C%20iOS-0EA5E9?style=flat-square" alt="Platforms" /></a>
-    <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/i18n-9%20Locales%20%C2%B7%20898%20Keys-10B981?style=flat-square" alt="i18n" /></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&label=Downloads" alt="Downloads" /></a>
+    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-green?style=flat-square" alt="License" /></a>
     <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-%40wmimoapp-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
   </p>
 
   <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>Download</b></a> •
-    <a href="#sec-platforms"><b>Platforms</b></a> •
-    <a href="#sec-features"><b>Features</b></a> •
-    <a href="#sec-architecture"><b>Architecture</b></a> •
-    <a href="#sec-quickstart"><b>Quick Start</b></a> •
-    <a href="#sec-build"><b>Build</b></a> •
-    <a href="#sec-security"><b>Security & License</b></a> •
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>Download</b></a> ·
+    <a href="#sec-platforms"><b>Platforms</b></a> ·
+    <a href="#sec-features"><b>Features</b></a> ·
+    <a href="#sec-quickstart"><b>Quick Start</b></a> ·
+    <a href="#sec-build"><b>Build</b></a> ·
+    <a href="#sec-security"><b>Security & License</b></a> ·
     <a href="#sec-community"><b>Community</b></a>
   </p>
 </div>
 
 | Light Mode | Dark Mode |
 | :---: | :---: |
-| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="380" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="380" /> |
+| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="360" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="360" /> |
 
 <p align="center"><sub><em>18px micro-card dashboard, live Bezier throughput graph, dual TUN / System Proxy engines, and customizable home cards</em></sub></p>
 
@@ -75,33 +72,6 @@
 | **Micro-Card UI & Telemetry** | Light & OLED Dark themes, customizable Home Cards Manager, Auto-Orientation enabled by default, multi-span Bezier traffic wave (`1m–60m`), egress IP/Geo/ISP with privacy masking |
 | **Privacy & Localization** | Zero telemetry/analytics SDKs, strict local execution, **9 languages × 898 keys (100% parity)** plus dedicated 9-language Privacy Policy & User Agreement views |
 
-### Routing, Chain Proxy & Diagnostics
-
-- **Outbound Modes & Dual Engine**: Instant switching between **Rule**, **Global**, and **Direct** over either **TUN Mode** or unprivileged **System Proxy Mode**.
-- **Multi-Hop Chain Proxy `[Beta]`**: Link policy groups or individual relays into arbitrary multi-hop `dialer-proxy` topologies with real-time enabled badge on the Proxy Board.
-- **Concurrent Diagnostics & Speed Test**: Diagnose DNS pollution, Fake-IP, port conflicts, zombie OS proxies, and live multi-stream download/upload curves with steady Ping/Jitter calibration.
-
-### OS Integration, Settings & Backup Safety
-
-- **Platform-Tailored Settings**: Consolidated 4-section hierarchy separating Desktop tools (Global Hotkeys, data folder shortcut) and Mobile controls (Android Battery Optimization Keep-Alive, System App Permissions, live Per-App Proxy).
-- **Safe Atomic Backup & Restore**: Archives profiles, patches, diversion templates, settings, and `chain_proxies.json`; extracts to a temporary staging directory to verify archive integrity before touching active configs.
-- **Multi-Channel Updates**: Switch between `stable` and `beta` channels with SHA-256 package verification.
-
----
-
-<a id="sec-architecture"></a>
-
-## Architecture & Project Layout
-
-| Layer | Technology / Responsibility | Location |
-| :--- | :--- | :--- |
-| **UI & Screens** | Flutter (`>= 3.35.0`), micro-card dashboard, Canvas charts, responsive Desktop/Mobile shell | [`lib/screens/`](lib/screens/) |
-| **App Modules & State** | Config managers (`SettingManager`, `ChainProxyManager`, `ProfileManager`), Isolate parser | [`lib/app/`](lib/app/) |
-| **VPN & Native Bridge** | Cross-platform service wrapper, Android Kotlin (`WmimoVpnService.kt`), macOS/Linux elevation | [`third_party/libclash_vpn_service/`](third_party/libclash_vpn_service/), [`android/`](android/) |
-| **Rust Crates** | Native performance/utility workspace crates | [`rust/`](rust/) |
-| **i18n & Legal Assets** | Slang-generated strongly typed translations (9 locales × 898 keys) & policy documents | [`lib/i18n/`](lib/i18n/), [`assets/txts/`](assets/txts/) |
-| **CI, Packaging & Benchmarks** | Multi-platform release pipeline, Arch/Windows installers, automated test suites | [`.github/workflows/release.yml`](.github/workflows/release.yml), [`test/`](test/) |
-
 ---
 
 <a id="sec-quickstart"></a>
@@ -128,38 +98,18 @@
 
 ## Build from Source
 
-### Prerequisites
-
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`) & [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
 - Platform toolchains: Visual Studio 2022 C++ (Windows), Xcode (macOS/iOS), GTK3/Clang/CMake/Ninja (Linux), Android SDK & NDK (Android)
 
-### Commands
-
 ```bash
-# 1. Clone repository
-git clone https://github.com/aimy1/Wmimo.git
-cd Wmimo
-
-# 2. Fetch dependencies & generate i18n bindings
-flutter pub get
-dart run slang
-
-# 3. Download prebuilt Mihomo cores
+git clone https://github.com/aimy1/Wmimo.git && cd Wmimo
+flutter pub get && dart run slang
 dart run tool/download_all_cores.dart
-
-# 4. Run development build
 flutter run
-
-# 5. Build release artifacts
-flutter build windows --release
-flutter build macos --release
-flutter build linux --release
-flutter build apk --release
+# Release: flutter build {windows|macos|linux|apk} --release
 ```
 
 ---
-
-<a id="sec-benchmarks"></a>
 
 ## Performance & Automated Verification
 
@@ -170,12 +120,11 @@ flutter build apk --release
 
 Full benchmark methodology & hardware details: [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
-<details>
-<summary><b>Star History</b></summary>
+---
+
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
-
-</details>
 
 ---
 
@@ -185,11 +134,7 @@ Full benchmark methodology & hardware details: [docs/BENCHMARKS.md](docs/BENCHMA
 
 - **Zero Data Collection**: Strictly local execution; zero analytics, crash telemetry, or ad SDKs. Read full terms in [assets/txts/privacy_policy_en.txt](assets/txts/privacy_policy_en.txt).
 - **Artifact Authenticity**: Verify official Android APK SHA-256 certificate fingerprints and WHQL Wintun notices in [SECURITY.md](SECURITY.md).
-
-### License
-
-Licensed under the **GNU General Public License v3.0 (GPL-3.0-or-later)**. See [LICENSE](LICENSE).
-
+- Licensed under the **GNU General Public License v3.0 (GPL-3.0-or-later)**. See [LICENSE](LICENSE).
 - **Rust Workspace Crates**: Dual-licensed under [MIT](rust/LICENSE-MIT) OR [Apache-2.0](rust/LICENSE-APACHE) standalone, and GPL-3.0 when distributed as part of Wmimo.
 - **Third-Party & Core Components**: See [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) and [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
 
@@ -197,15 +142,8 @@ Licensed under the **GNU General Public License v3.0 (GPL-3.0-or-later)**. See [
 
 <a id="sec-community"></a>
 
-## Acknowledgements
-
-- **[GooRingX (vowe)](https://github.com/GooRingX)** — architectural insights and open-source inspiration.
-- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** — high-performance core routing & protocol engine.
-- **[Flutter](https://flutter.dev/)** — cross-platform UI framework.
-
 ## Community & Feedback
 
-- **Official Website**: [wmimo.buzz](https://wmimo.buzz)
-- **Telegram Channel**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- **Author Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- **Issue Tracker**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **Official Website**: [wmimo.buzz](https://wmimo.buzz) · **Telegram Channel**: [t.me/wmimoapp](https://t.me/wmimoapp) · **Author Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me) · **Issue Tracker**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+
+**Acknowledgements**: **[GooRingX (vowe)](https://github.com/GooRingX)** — architectural insights and open-source inspiration. · **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** — high-performance core routing & protocol engine. · **[Flutter](https://flutter.dev/)** — cross-platform UI framework.

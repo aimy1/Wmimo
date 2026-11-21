@@ -7,38 +7,35 @@
 ---
 
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="112" height="112" alt="Wmimo Logo" />
+  <img src="assets/images/app_icon_256.png" width="96" height="96" alt="Wmimo Logo" />
   <h1>Wmimo</h1>
   <p><strong>차세대 크로스 플랫폼 Clash / Mihomo GUI 프록시 클라이언트</strong></p>
   <p>Flutter와 Mihomo 코어(v1.19.34) 기반으로 제작되었습니다. 데이터 수집 제로 원칙과 멀티홉 체인 프록시, 병렬 네트워크 진단, 실시간 파형 속도 측정을 제공합니다.</p>
 
   <p>
+    <a href="https://github.com/aimy1/Wmimo/stargazers"><img src="https://img.shields.io/github/stars/aimy1/Wmimo?color=F59E0B&label=Stars&logo=github&style=flat-square" alt="Stars" /></a>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
     <a href="https://github.com/aimy1/Wmimo/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="CI Build" /></a>
-    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
-    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo Core" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-%3E%3D3.35-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
-    <a href="#sec-platforms"><img src="https://img.shields.io/badge/Platforms-Win%20%7C%20macOS%20%7C%20Linux%20%7C%20Android%20%7C%20iOS-0EA5E9?style=flat-square" alt="Platforms" /></a>
-    <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/i18n-9%20Locales%20%C2%B7%20898%20Keys-10B981?style=flat-square" alt="i18n" /></a>
+    <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&label=Downloads" alt="Downloads" /></a>
+    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-green?style=flat-square" alt="License" /></a>
     <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-%40wmimoapp-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
   </p>
 
   <p>
-    <a href="https://github.com/aimy1/Wmimo/releases"><b>다운로드</b></a> •
-    <a href="#sec-platforms"><b>지원 플랫폼</b></a> •
-    <a href="#sec-features"><b>핵심 기능</b></a> •
-    <a href="#sec-architecture"><b>아키텍처</b></a> •
-    <a href="#sec-quickstart"><b>빠른 시작</b></a> •
-    <a href="#sec-build"><b>소스 빌드</b></a> •
-    <a href="#sec-security"><b>보안 및 라이선스</b></a> •
+    <a href="https://github.com/aimy1/Wmimo/releases"><b>다운로드</b></a> ·
+    <a href="#sec-platforms"><b>지원 플랫폼</b></a> ·
+    <a href="#sec-features"><b>핵심 기능</b></a> ·
+    <a href="#sec-quickstart"><b>빠른 시작</b></a> ·
+    <a href="#sec-build"><b>소스 빌드</b></a> ·
+    <a href="#sec-security"><b>보안 및 라이선스</b></a> ·
     <a href="#sec-community"><b>커뮤니티</b></a>
   </p>
 </div>
 
 | 라이트 모드 | 다크 모드 |
 | :---: | :---: |
-| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="380" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="380" /> |
+| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="360" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="360" /> |
 
 <p align="center"><sub><em>18px 마이크로 카드 대시보드 · 실시간 베지어 트래픽 차트 · TUN / 시스템 프록시 듀얼 엔진</em></sub></p>
 
@@ -75,25 +72,6 @@
 | **UI 및 모니터링** | 라이트/다크 테마, 홈 카드 관리, 화면 회전 기본 활성화, 1m–60m 트래픽 차트, 출구 IP 마스킹 |
 | **개인정보 및 9개 언어** | 텔레메트리/광고 SDK 제로, **9개 언어 × 898개 키 100% 일치** 및 9개 언어 개인정보 처리방침 |
 
-### 라우팅 · 진단 · 백업 안정성
-
-- **이중 프록시 엔진**: Rule / Global / Direct 모드와 TUN / 시스템 프록시 즉각 전환.
-- **원자적 복원 검증**: 백업 복원 시 임시 폴더에서 압축 해제를 먼저 검증한 뒤 기존 설정을 안전하게 교체합니다.
-
----
-
-<a id="sec-architecture"></a>
-
-## 아키텍처 및 프로젝트 구조
-
-| 계층 | 역할 | 경로 |
-| :--- | :--- | :--- |
-| **UI 및 화면** | Flutter (`>= 3.35.0`), 마이크로 카드 UI, Canvas 차트 | [`lib/screens/`](lib/screens/) |
-| **모듈 및 상태** | 설정/체인/프로필 관리자, Isolate 파서 | [`lib/app/`](lib/app/) |
-| **VPN 및 네이티브** | 서비스 브리지, Android Kotlin (`WmimoVpnService.kt`) | [`third_party/libclash_vpn_service/`](third_party/libclash_vpn_service/), [`android/`](android/) |
-| **Rust 크레이트** | 네이티브 유틸리티 워크스페이스 | [`rust/`](rust/) |
-| **i18n 및 정책** | Slang 번역(9언어 × 898키) 및 개인정보 처리방침 | [`lib/i18n/`](lib/i18n/), [`assets/txts/`](assets/txts/) |
-
 ---
 
 <a id="sec-quickstart"></a>
@@ -119,38 +97,18 @@
 
 ## 소스에서 빌드
 
-### 필수 환경
-
 - [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`) & [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
 - 플랫폼별 빌드 도구 (VS 2022 C++ / Xcode / GTK3 & CMake / Android SDK)
 
-### 빌드 명령어
-
 ```bash
-# 1. Clone repository
-git clone https://github.com/aimy1/Wmimo.git
-cd Wmimo
-
-# 2. Fetch dependencies & generate i18n bindings
-flutter pub get
-dart run slang
-
-# 3. Download prebuilt Mihomo cores
+git clone https://github.com/aimy1/Wmimo.git && cd Wmimo
+flutter pub get && dart run slang
 dart run tool/download_all_cores.dart
-
-# 4. Run development build
 flutter run
-
-# 5. Build release artifacts
-flutter build windows --release
-flutter build macos --release
-flutter build linux --release
-flutter build apk --release
+# Release: flutter build {windows|macos|linux|apk} --release
 ```
 
 ---
-
-<a id="sec-benchmarks"></a>
 
 ## 성능 벤치마크 및 검증
 
@@ -159,12 +117,11 @@ flutter build apk --release
 
 자세한 방법론: [docs/BENCHMARKS.md](docs/BENCHMARKS.md)
 
-<details>
-<summary><b>Star 히스토리</b></summary>
+---
+
+## Star 히스토리
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
-
-</details>
 
 ---
 
@@ -174,11 +131,7 @@ flutter build apk --release
 
 - **데이터 수집 제로**: [assets/txts/privacy_policy_ko.txt](assets/txts/privacy_policy_ko.txt)
 - **인증서 및 서명 검증**: [SECURITY.md](SECURITY.md)
-
-### 라이선스
-
-**GNU General Public License v3.0 (GPL-3.0-or-later)** ([LICENSE](LICENSE)).
-
+- **GNU General Public License v3.0 (GPL-3.0-or-later)** ([LICENSE](LICENSE)).
 - Rust 크레이트: 단독 [MIT](rust/LICENSE-MIT) / [Apache-2.0](rust/LICENSE-APACHE), Wmimo 배포 시 GPL-3.0.
 - 서드파티 고지: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md), [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md)
 
@@ -186,15 +139,8 @@ flutter build apk --release
 
 <a id="sec-community"></a>
 
-## 감사의 말
-
-- **[GooRingX (vowe)](https://github.com/GooRingX)**
-- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**
-- **[Flutter](https://flutter.dev/)**
-
 ## 커뮤니티 및 피드백
 
-- **공식 웹사이트**: [wmimo.buzz](https://wmimo.buzz)
-- **Telegram 채널**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- **이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- **이슈 트래커**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+- **공식 웹사이트**: [wmimo.buzz](https://wmimo.buzz) · **Telegram 채널**: [t.me/wmimoapp](https://t.me/wmimoapp) · **이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me) · **이슈 트래커**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
+
+**감사의 말**: **[GooRingX (vowe)](https://github.com/GooRingX)** · **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)** · **[Flutter](https://flutter.dev/)**
