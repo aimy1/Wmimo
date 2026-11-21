@@ -1809,62 +1809,23 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
           Row(
             children: [
               Expanded(
-                child: Container(
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? ThemeDefine.kColorDarkInner
-                        : const Color(0xFFF8FAFC),
-                    borderRadius: BorderRadius.circular(11),
-                    border: Border.all(
-                      color: isDark
-                          ? ThemeDefine.kColorDarkBorder
-                          : const Color(0xFFCBD5E1),
-                      width: 0.8,
-                    ),
-                  ),
-                  child: TextField(
-                    controller: _domainController,
-                    style: const TextStyle(
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'monospace',
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'example.com',
-                      labelText: tcontext.NetCheckScreen.domainLabel,
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      prefixIcon: const Icon(
-                        Icons.language_rounded,
-                        size: 18,
-                        color: ThemeDefine.kColorBlue,
-                      ),
-                      suffixIcon: _domainController.text.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.close_rounded, size: 16),
-                              onPressed: () {
-                                setState(() {
-                                  _domainController.clear();
-                                });
-                              },
-                            )
-                          : null,
-                      border: InputBorder.none,
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 11,
-                      ),
-                    ),
-                    textInputAction: TextInputAction.search,
-                    onChanged: (_) => setState(() {}),
-                    onSubmitted: (_) => _startDomainCheck(),
-                  ),
+                child: WmimoSearchBar(
+                  controller: _domainController,
+                  hintText: 'example.com (${tcontext.NetCheckScreen.domainLabel})',
+                  prefixIcon: Icons.language_rounded,
+                  textInputAction: TextInputAction.search,
+                  onChanged: (_) => setState(() {}),
+                  onSubmitted: (_) => _startDomainCheck(),
+                  onClear: () {
+                    setState(() {
+                      _domainController.clear();
+                    });
+                  },
                 ),
               ),
               const SizedBox(width: 10),
               SizedBox(
-                height: 42,
+                height: 38,
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ThemeDefine.kColorBlue,
@@ -1872,7 +1833,7 @@ class _NetCheckScreenState extends LasyRenderingState<NetCheckScreen>
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(11),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   onPressed: _domainChecking ? null : _startDomainCheck,

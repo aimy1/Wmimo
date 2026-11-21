@@ -5,6 +5,7 @@ import 'package:wmimo/app/utils/uwp_loopback_helper.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class UwpLoopbackScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -159,44 +160,14 @@ class _UwpLoopbackScreenState extends LasyRenderingState<UwpLoopbackScreen> {
           // Search Bar
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 6),
-            child: Container(
-              height: 40,
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: theme.dividerColor.withValues(alpha: 0.2),
-                  width: 0.8,
-                ),
-              ),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: "${tcontext.meta.search} (App / Moniker)",
-                  hintStyle: TextStyle(
-                    fontSize: 13,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                  ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 18,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                  ),
-                  suffixIcon: _searchKeyword.isNotEmpty
-                      ? InkWell(
-                          onTap: () {
-                            _searchController.clear();
-                            setState(() => _searchKeyword = "");
-                          },
-                          child: const Icon(Icons.clear, size: 16),
-                        )
-                      : null,
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                ),
-                style: const TextStyle(fontSize: 13),
-                onChanged: (val) => setState(() => _searchKeyword = val.trim()),
-              ),
+            child: WmimoSearchBar(
+              controller: _searchController,
+              hintText: "${tcontext.meta.search} (App / Moniker)",
+              onChanged: (val) => setState(() => _searchKeyword = val.trim()),
+              onClear: () {
+                _searchController.clear();
+                setState(() => _searchKeyword = "");
+              },
             ),
           ),
 

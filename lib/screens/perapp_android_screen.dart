@@ -17,6 +17,7 @@ import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class PerAppAndroidScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -516,54 +517,17 @@ class _PerAppAndroidScreenState
                 ),
 
               // Search Bar
-              Container(
-                margin: const EdgeInsets.fromLTRB(16, 6, 16, 4),
-                height: 38,
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF262629) : const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: theme.dividerColor.withValues(alpha: 0.15),
-                    width: 0.8,
-                  ),
-                ),
-                child: TextField(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 6, 16, 4),
+                child: WmimoSearchBar(
                   controller: _searchController,
+                  hintText: "${tcontext.meta.search} (应用名 / 包名)",
                   textInputAction: TextInputAction.search,
                   onChanged: (_) => _applyFilter(),
-                  textAlignVertical: TextAlignVertical.center,
-                  style: const TextStyle(fontSize: 13),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 9, horizontal: 8),
-                    prefixIcon: Icon(
-                      Icons.search_rounded,
-                      size: 18,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                    ),
-                    prefixIconConstraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-                    hintText: "${tcontext.meta.search} (应用名 / 包名)",
-                    hintStyle: TextStyle(
-                      fontSize: 12.5,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                    ),
-                    suffixIcon: _searchController.text.isNotEmpty
-                        ? InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () {
-                              _searchController.clear();
-                              _applyFilter();
-                            },
-                            child: Icon(
-                              Icons.cancel_rounded,
-                              size: 17,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
-                            ),
-                          )
-                        : null,
-                    suffixIconConstraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-                  ),
+                  onClear: () {
+                    _searchController.clear();
+                    _applyFilter();
+                  },
                 ),
               ),
 

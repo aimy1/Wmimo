@@ -204,13 +204,17 @@ class WmimoAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-/// Standardized 38px search input bar used across Proxy, Profiles, Connections, and Rules screens.
+/// Standardized 38px search input bar used across all searchable screens and dialogs.
 class WmimoSearchBar extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode? focusNode;
   final String hintText;
   final String? badgeText;
   final VoidCallback? onClear;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final IconData prefixIcon;
+  final TextInputAction? textInputAction;
 
   const WmimoSearchBar({
     super.key,
@@ -219,6 +223,10 @@ class WmimoSearchBar extends StatelessWidget {
     this.focusNode,
     this.badgeText,
     this.onClear,
+    this.onChanged,
+    this.onSubmitted,
+    this.prefixIcon = Icons.search_rounded,
+    this.textInputAction,
   });
 
   @override
@@ -243,6 +251,9 @@ class WmimoSearchBar extends StatelessWidget {
           child: TextField(
             controller: controller,
             focusNode: focusNode,
+            textInputAction: textInputAction,
+            onChanged: onChanged,
+            onSubmitted: onSubmitted,
             textAlignVertical: TextAlignVertical.center,
             style: const TextStyle(
               fontSize: 13,
@@ -257,7 +268,7 @@ class WmimoSearchBar extends StatelessWidget {
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.42),
               ),
               prefixIcon: Icon(
-                Icons.search_rounded,
+                prefixIcon,
                 size: 18,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
@@ -294,7 +305,14 @@ class WmimoSearchBar extends StatelessWidget {
                         ],
                         InkWell(
                           borderRadius: BorderRadius.circular(16),
-                          onTap: onClear ?? () => controller.clear(),
+                          onTap: () {
+                            if (onClear != null) {
+                              onClear!();
+                            } else {
+                              controller.clear();
+                              onChanged?.call('');
+                            }
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(6),
                             child: Icon(

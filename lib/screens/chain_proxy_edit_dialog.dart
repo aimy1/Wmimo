@@ -8,6 +8,7 @@ import 'package:wmimo/app/utils/node_region_helper.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_define.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class ChainProxyEditDialog extends StatefulWidget {
   final ChainProxyItem? initialItem;
@@ -801,29 +802,14 @@ class _ChainNodePickerDialogState extends State<_ChainNodePickerDialog> {
                 ),
               ),
               const SizedBox(height: 10),
-              TextField(
+              WmimoSearchBar(
                 controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: tcontext.meta.searchProxies,
-                  prefixIcon: const Icon(Icons.search_rounded, size: 20),
-                  suffixIcon: _searchController.text.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear_rounded, size: 18),
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() {});
-                          },
-                        )
-                      : null,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: isDark ? Colors.white24 : Colors.black12),
-                  ),
-                  filled: true,
-                  fillColor: isDark ? Colors.grey[900] : const Color(0xFFF1F5F9),
-                ),
+                hintText: tcontext.meta.searchProxies,
                 onChanged: (_) => setState(() {}),
+                onClear: () {
+                  _searchController.clear();
+                  setState(() {});
+                },
               ),
               if (_regions.length > 2) ...[
                 const SizedBox(height: 10),

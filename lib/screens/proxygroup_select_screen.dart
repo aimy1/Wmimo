@@ -9,7 +9,7 @@ import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
-import 'package:wmimo/screens/widgets/text_field.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class ProxyGroupScreenScreen extends LasyRenderingStatefulWidget {
@@ -78,6 +78,7 @@ class _ProxyGroupScreenScreenState
 
   @override
   void dispose() {
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -141,30 +142,14 @@ class _ProxyGroupScreenScreenState
                 ),
               ),
               const SizedBox(height: 10),
-
-              Container(
-                margin: const EdgeInsets.only(top: 10),
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                height: 44,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  borderRadius: ThemeDefine.kBorderRadius,
-                ),
-                child: TextFieldEx(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: WmimoSearchBar(
                   controller: _searchController,
+                  hintText: tcontext.meta.search,
                   textInputAction: TextInputAction.done,
                   onChanged: _loadSearch,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    icon: Icon(Icons.search_outlined),
-                    hintText: tcontext.meta.search,
-                    suffixIcon: _searchController.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear_outlined),
-                            onPressed: _clearSearch,
-                          )
-                        : null,
-                  ),
+                  onClear: _clearSearch,
                 ),
               ),
               const SizedBox(height: 10),

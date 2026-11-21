@@ -633,38 +633,10 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    Container(
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? const Color(0xFF262629)
-                            : const Color(0xFFF1F5F9),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: "${tcontext.meta.search}${tcontext.meta.searchLogsHint}",
-                          hintStyle: TextStyle(
-                            fontSize: 12,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                          ),
-                          prefixIcon: Icon(
-                            Icons.search_rounded,
-                            size: 18,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                          ),
-                          suffixIcon: _searchKeyword.isNotEmpty
-                              ? InkWell(
-                                  onTap: () => _searchController.clear(),
-                                  child: const Icon(Icons.clear, size: 16),
-                                )
-                              : null,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(vertical: 8),
-                        ),
-                        style: const TextStyle(fontSize: 12.5),
-                      ),
+                    WmimoSearchBar(
+                      controller: _searchController,
+                      hintText:
+                          "${tcontext.meta.search}${tcontext.meta.searchLogsHint}",
                     ),
                     const SizedBox(height: 8),
 
