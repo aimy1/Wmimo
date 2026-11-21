@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, use_build_context_synchronously, empty_catches, unused_catch_stack
+// ignore_for_file: prefer_interpolation_to_compose_strings, use_build_context_synchronously, empty_catches
 
 import 'dart:async';
 import 'dart:io';

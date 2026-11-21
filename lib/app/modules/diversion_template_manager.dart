@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -367,7 +367,7 @@ class DiversionTemplateManager {
     String content = encoder.convert(_diversionTemplates);
     try {
       await File(filePath).writeAsString(content, flush: true);
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w(
         "DiversionTemplateManager.save exception  $filePath ${err.toString()}",
       );
@@ -386,7 +386,7 @@ class DiversionTemplateManager {
           var config = jsonDecode(content);
           _diversionTemplates.fromJson(config);
         }
-      } catch (err, stacktrace) {
+      } catch (err) {
         Log.w("DiversionTemplateManager.load exception ${err.toString()} ");
       }
     } else {

@@ -1,4 +1,4 @@
-// ignore_for_file: empty_catches, unused_catch_stack
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 
@@ -317,7 +317,7 @@ class _BackupAndSyncIcloudScreenState
         ),
       );
       await list();
-    } catch (err, stacktrace) {
+    } catch (err) {
       if (!mounted) {
         return;
       }

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unused_catch_stack
+// ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
 
@@ -250,7 +250,7 @@ class _AddProfilePatchByImportFromFileScreenState
           setState(() {});
         }
       }
-    } catch (err, stacktrace) {
+    } catch (err) {
       if (!mounted) {
         return;
       }

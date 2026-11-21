@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: empty_catches
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wmimo/app/utils/log.dart';
@@ -11,7 +11,7 @@ class SecureStorageUtils {
     String? value;
     try {
       value = await SecureStorage.read(key);
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w(
         'SecureStorageUtilsSecureStorageUtils read exception ${err.toString()}',
       );

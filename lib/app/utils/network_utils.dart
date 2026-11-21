@@ -1,4 +1,4 @@
-// ignore_for_file: empty_catches, unused_catch_stack
+// ignore_for_file: empty_catches
 
 import 'dart:io';
 
@@ -264,7 +264,7 @@ class NetworkUtils {
         }
         listenPort = serverSocket.port;
         break;
-      } catch (err, stacktrace) {}
+      } catch (err) {}
     }
     for (var sock in sockets) {
       try {

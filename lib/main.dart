@@ -1,4 +1,4 @@
-// ignore_for_file: empty_catches, unused_catch_stack
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 import 'dart:io';
@@ -186,7 +186,7 @@ Future<void> run(List<String> args) async {
         SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
       }
     }
-  } catch (err, stacktrace) {
+  } catch (err) {
     startFailedReason = StartFailedReason.exception;
     startFailedReasonDesc = err.toString();
     String cmdline = args.toString();
@@ -194,7 +194,7 @@ Future<void> run(List<String> args) async {
   }
   try {
     await FastCachedImageConfig.init(subDir: AppUtils.getName());
-  } catch (err, stacktrace) {
+  } catch (err) {
     Log.w("FastCachedImageConfig.init() exception: ${err.toString()}");
   }
   if (Platform.isAndroid) {
@@ -592,7 +592,6 @@ class MyAppState extends State<MyApp>
   }
 
   Future<void> _quit() async {
-    print(">>> _QUIT CALLED STACKTRACE:\n${StackTrace.current}");
     SettingManager.saveSync();
     await WindowStateManager.saveImmediate();
     await SettingManager.save();

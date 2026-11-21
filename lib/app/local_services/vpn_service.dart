@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -337,7 +337,7 @@ class VPNService {
               reinstall = true;
             }
           }
-        } catch (err, stacktrace) {
+        } catch (err) {
           Log.w("VPNService.prepareConfig exception ${err.toString()}");
         }
       }
@@ -399,7 +399,7 @@ class VPNService {
         if (reinstall) {
           await uninstall();
         }
-      } catch (err, stacktrace) {
+      } catch (err) {
         return ReturnResultError(err.toString());
       }
       var setting = SettingManager.getConfig();
@@ -481,7 +481,7 @@ class VPNService {
         if (reinstall) {
           await uninstall();
         }
-      } catch (err, stacktrace) {
+      } catch (err) {
         return ReturnResultError(err.toString());
       }
       if (_cancelRequested) {
@@ -753,7 +753,7 @@ class VPNService {
           await FlutterVpnService.autoStartDelete(getLaunchAtStartupTaskName());
           await launchAtStartup.disable();
         }
-      } catch (err, stacktrace) {
+      } catch (err) {
         return ReturnResultError(err.toString());
       }
     }
@@ -771,7 +771,7 @@ class VPNService {
           }
         }
         return await launchAtStartup.isEnabled();
-      } catch (err, stacktrace) {
+      } catch (err) {
         return false;
       }
     }

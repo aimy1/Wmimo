@@ -1,4 +1,4 @@
-// ignore_for_file: empty_catches, unused_catch_stack
+// ignore_for_file: empty_catches
 
 import 'dart:io';
 

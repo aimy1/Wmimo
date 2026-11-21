@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -265,7 +265,7 @@ class ProfilePatchManager {
     String content = encoder.convert(_config);
     try {
       await File(filePath).writeAsString(content, flush: true);
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w("ProfilePatchManager.save exception ${err.toString()} ");
     }
     _saving = false;
@@ -295,7 +295,7 @@ class ProfilePatchManager {
             }
           }
         }
-      } catch (err, stacktrace) {
+      } catch (err) {
         Log.w("ProfilePatchManager.load exception ${err.toString()} ");
       }
     } else {

@@ -1,4 +1,4 @@
-// ignore_for_file: empty_catches, unused_catch_stack
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -163,7 +163,7 @@ class BoardProviderNoticeLoadAndCheck {
         notice.fromJson(config);
         return notice;
       }
-    } catch (err, stacktrace) {}
+    } catch (err) {}
     return BoardProviderNotice();
   }
 
@@ -190,7 +190,7 @@ class BoardProviderNoticeLoadAndCheck {
       if (!await FileUtils.validJsonFile(filePath)) {
         await File(filePath).writeAsString(content, flush: true);
       }
-    } catch (err, stacktrace) {
+    } catch (err) {
       ErrorReporterUtils.tryReportNoSpace(err.toString());
     }
   }
@@ -249,7 +249,7 @@ class BoardProviderNoticeLoadAndCheck {
       RawNoticeItem? gnotice;
       try {
         gnotice = await NoticeUtils.parseNotice(result.data!.item2);
-      } catch (err, _) {
+      } catch (err) {
         Log.i('WmimoUtils parseNotice exception ${err.toString()}');
         _duration = const Duration(hours: 1);
         save();
@@ -284,7 +284,7 @@ class BoardProviderNoticeLoadAndCheck {
       Future.delayed(const Duration(milliseconds: 300), () async {
         checkUpdate?.call();
       });
-    } catch (err, _) {
+    } catch (err) {
       _checking = false;
       Log.w("BoardProviderNoticeManager._check exception ${err.toString()}");
     }

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: empty_catches
 
 import "dart:io";
 
@@ -88,7 +88,7 @@ class PathUtils {
           _portableMode = true;
           return _profileDir;
         }
-      } catch (err, stacktrace) {}
+      } catch (err) {}
     }
 
     _profileDir = await profileDirNonPortable();

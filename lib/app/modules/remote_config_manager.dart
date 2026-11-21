@@ -76,7 +76,7 @@ class RemoteConfigManager {
         var config = jsonDecode(content);
         _config.fromJson(config);
       }
-    } catch (err, stacktrace) {}
+    } catch (err) {}
   }
 
   static void _saveConfig() async {
@@ -88,7 +88,7 @@ class RemoteConfigManager {
       if (!await FileUtils.validJsonFile(filePath)) {
         await File(filePath).writeAsString(content, flush: true);
       }
-    } catch (err, stacktrace) {}
+    } catch (err) {}
   }
 
   static Future<void> _check() async {
@@ -124,7 +124,7 @@ class RemoteConfigManager {
           callback();
         }
       });
-    } catch (err, _) {
+    } catch (err) {
       Log.w("RemoteConfigManager._check exception ${err.toString()}");
     }
 

@@ -1,4 +1,3 @@
-// ignore_for_file: unused_catch_stack
 
 import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/app_utils.dart';

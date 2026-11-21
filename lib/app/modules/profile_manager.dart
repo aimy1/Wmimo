@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -425,7 +425,7 @@ class ProfileManager {
     String content = encoder.convert(_config);
     try {
       await File(filePath).writeAsString(content, flush: true);
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w("ProfileManager.save exception  $filePath ${err.toString()}");
     }
     _saving = false;
@@ -442,7 +442,7 @@ class ProfileManager {
           var config = jsonDecode(content);
           _config.fromJson(config);
         }
-      } catch (err, stacktrace) {
+      } catch (err) {
         Log.w("ProfileManager.load exception ${err.toString()} ");
       }
     } else {

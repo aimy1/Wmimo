@@ -1,4 +1,3 @@
-// ignore_for_file: unused_catch_stack
 
 import 'dart:io';
 import 'dart:ui';
@@ -350,7 +349,7 @@ class _VersionUpdateScreenState
         }
         await ServicesBinding.instance.exitApplication(AppExitType.required);
       }
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w("VersionUpdateScreen.checkReplace exception ${err.toString()}");
       _installing = false;
       if (!mounted) {

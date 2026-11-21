@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 import 'dart:io';
@@ -240,7 +240,7 @@ class GroupHelper {
         }
         await BackupHelper.backupRestoreFromZip(context, filePath);
       }
-    } catch (err, stacktrace) {
+    } catch (err) {
       if (!context.mounted) {
         return;
       }
@@ -329,7 +329,7 @@ class GroupHelper {
           }
         }
       }
-    } catch (err, stacktrace) {
+    } catch (err) {
       if (!exist && created) {
         await dir!.delete();
       }
@@ -407,7 +407,7 @@ class GroupHelper {
           }
         }
       }
-    } catch (err, stacktrace) {
+    } catch (err) {
       if (!context.mounted) {
         return;
       }
@@ -2190,14 +2190,6 @@ class GroupHelper {
             },
           ),
         ),
-        /*GroupItemOptions(
-            textFormFieldOptions: GroupItemTextFieldOptions(
-                name: "ASN",
-                text: ruleset.AsnUrl,
-                textWidthPercent: 0.6,
-                onChanged: (String value) {
-                  ruleset.AsnUrl = value;
-                })),*/
       ];
 
       return [GroupItem(options: options)];

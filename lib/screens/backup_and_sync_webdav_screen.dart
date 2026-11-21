@@ -1,4 +1,4 @@
-// ignore_for_file: empty_catches, unused_catch_stack
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 
@@ -311,9 +311,6 @@ class _BackupAndSyncWebdavScreenState
       if (result.error == null) {
         break;
       }
-      /*if (WebdavClientUtils.isInnerError(result.error!.message)) {
-        break;
-      }*/
     }
     if (!mounted) {
       return;
@@ -434,7 +431,7 @@ class _BackupAndSyncWebdavScreenState
         ),
       );
       await list();
-    } catch (err, stacktrace) {
+    } catch (err) {
       if (!mounted) {
         return;
       }

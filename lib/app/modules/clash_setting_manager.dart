@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -325,7 +325,7 @@ class ClashSettingManager {
     String content = encoder.convert(map);
     try {
       await File(filePath).writeAsString(content, flush: true);
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w("ClashSettingManager.save exception  $filePath ${err.toString()}");
     }
   }
@@ -496,7 +496,7 @@ class ClashSettingManager {
     String filePath = await PathUtils.serviceCorePatchFinalPath();
     try {
       await File(filePath).writeAsString(result.data!, flush: true);
-    } catch (err, stacktrace) {
+    } catch (err) {
       return ReturnResultError(err.toString());
     }
     return null;
@@ -512,7 +512,7 @@ class ClashSettingManager {
         if (content.isNotEmpty) {
           await _load(content);
         }
-      } catch (err, stacktrace) {
+      } catch (err) {
         Log.w("ClashSettingManager.load exception ${err.toString()} ");
       }
     } else {
@@ -533,7 +533,7 @@ class ClashSettingManager {
     try {
       var config = jsonDecode(content);
       setting = RawConfig.fromJson(config);
-    } catch (err, stacktrace) {
+    } catch (err) {
       Log.w("ClashSettingManager.load exception ${err.toString()} ");
       _setting = defaultConfig();
       await save();

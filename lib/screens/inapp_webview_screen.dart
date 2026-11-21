@@ -275,33 +275,6 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
           : InAppWebViewScreen._defaultUserAgent,
       useShouldOverrideUrlLoading: true,
     );
-    /* _contextMenu = ContextMenu(
-        menuItems: [
-          ContextMenuItem(
-              id: 1,
-              title: "Special",
-              action: () async {
-                print("Menu item Special clicked!");
-                print(await webViewController?.getSelectedText());
-                await webViewController?.clearFocus();
-              })
-        ],
-        settings: ContextMenuSettings(hideDefaultSystemContextMenuItems: false),
-        onCreateContextMenu: (hitTestResult) async {
-          print("onCreateContextMenu");
-          print(hitTestResult.extra);
-          print(await webViewController?.getSelectedText());
-        },
-        onHideContextMenu: () {
-          print("onHideContextMenu");
-        },
-        onContextMenuActionItemClicked: (contextMenuItemClicked) async {
-          var id = contextMenuItemClicked.id;
-          print("onContextMenuActionItemClicked: " +
-              id.toString() +
-              " " +
-              contextMenuItemClicked.title);
-        });*/
 
     _pullToRefreshController =
         ![
@@ -547,10 +520,6 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
                                                     },
                                                 onLoadStart:
                                                     (controller, url) async {
-                                                      /* controller
-                                                    .injectJavascriptFileFromUrl(
-                                                        urlFile: WebUri(
-                                                            "https://github.githubassets.com/assets/global-copilot-menu-11ae0289e00d.js"));*/
                                                       _url = url.toString();
                                                     },
                                                 onPermissionRequest:
@@ -722,7 +691,7 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
                                                       consoleMessage,
                                                     ) {
                                                       if (kDebugMode) {
-                                                        print(consoleMessage);
+                                                        debugPrint(consoleMessage.toString());
                                                       }
                                                     },
                                               )
@@ -805,54 +774,6 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
     if (!widget.setJSWindowObject) {
       return;
     }
-    /*
-    window.wmimo.callHandler('close').then(function(result) {
-        console.log(result);
-        return result;
-    }).catch(function() {
-        var event = new Event('error');
-        self.dispatchEvent(event);
-        if (self.onerror != null) {
-          self.onerror(event);
-        }
-    });
-    window.wmimo.callHandler('version').then(function(result) {
-        console.log(result);
-        return result;
-    }).catch(function() {
-        var event = new Event('error');
-        self.dispatchEvent(event);
-        if (self.onerror != null) {
-          self.onerror(event);
-        }
-    });
-    window.wmimo.callHandler('openUrl', 'wmimo://install-config?url=...').then(function(result) {
-        console.log(result);
-        return result;
-    }).catch(function() {
-        var event = new Event('error');
-        self.dispatchEvent(event);
-        if (self.onerror != null) {
-          self.onerror(event);
-        }
-    });
-     window.wmimo.callHandler('openUrl', 'wmimo://disconnect').then(function(result) {
-        console.log(result);
-        return result;
-    }).catch(function() {
-        var event = new Event('error');
-        self.dispatchEvent(event);
-        if (self.onerror != null) {
-          self.onerror(event);
-        }
-    });
-    */
-    /*_webViewController?.addJavaScriptHandler(
-      handlerName: '*',
-      callback: (arguments) async {
-        return "Unimplemented";
-      },
-    );*/
     _webViewController?.addJavaScriptHandler(
       handlerName: 'close',
       callback: (arguments) async {
@@ -865,21 +786,6 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
         return AppUtils.getBuildinVersion();
       },
     );
-    /*_webViewController?.addJavaScriptHandler(
-      handlerName: 'openUrl',
-      callback: (arguments) async {
-        if (arguments.length != 1) {
-          return "arguments length != 1";
-        }
-        try {
-          String url = arguments[0] as String;
-          ReturnResultError? err = await SchemeHandler.handle(context, url);
-          return err != null ? err.message : "";
-        } catch (err) {
-          return err.toString();
-        }
-      },
-    );*/
     widget.javaScriptHandlers.forEach((key, value) {
       _webViewController?.addJavaScriptHandler(
         handlerName: key,

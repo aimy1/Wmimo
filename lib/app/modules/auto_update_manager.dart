@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_stack, empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -276,7 +276,7 @@ class AutoUpdateManager {
           }
         }
       }
-    } catch (err, stacktrace) {}
+    } catch (err) {}
   }
 
   static Future<void> save() async {
@@ -288,7 +288,7 @@ class AutoUpdateManager {
       if (!await FileUtils.validJsonFile(filePath)) {
         await File(filePath).writeAsString(content, flush: true);
       }
-    } catch (err, stacktrace) {
+    } catch (err) {
       ErrorReporterUtils.tryReportNoSpace(err.toString());
     }
   }
@@ -442,7 +442,7 @@ class AutoUpdateManager {
           "AutoUpdateManager._sanitizeMacOSInstaller fallback failed, path=$downloadPath, quarantineExit=${delQuarantine.exitCode}, provenanceExit=${delProvenance.exitCode}",
         );
       }
-    } catch (err, _) {
+    } catch (err) {
       Log.w(
         "AutoUpdateManager._sanitizeMacOSInstaller exception ${err.toString()}",
       );
@@ -586,7 +586,7 @@ class AutoUpdateManager {
       _activeCheckCompleter?.complete(res);
       _activeCheckCompleter = null;
       return res;
-    } catch (err, _) {
+    } catch (err) {
       Log.w("AutoUpdateManager._check exception ${err.toString()}");
       _checking = false;
       final res = AutoUpdateCheckResult(

@@ -1,4 +1,3 @@
-// ignore_for_file: unused_catch_stack
 
 import 'dart:io' as io;
 import 'dart:typed_data';
@@ -23,7 +22,7 @@ class ZipUtils {
 
       final zipBytes = ZipEncoder().encodeBytes(archive);
       return ReturnResult(data: zipBytes);
-    } catch (err, stacktrace) {
+    } catch (err) {
       return ReturnResult(error: ReturnResultError(err.toString()));
     }
   }
@@ -56,7 +55,7 @@ class ZipUtils {
       }
       final zipBytes = ZipEncoder().encodeBytes(archive);
       return ReturnResult(data: zipBytes);
-    } catch (err, stacktrace) {
+    } catch (err) {
       return ReturnResult(error: ReturnResultError(err.toString()));
     }
   }
@@ -80,7 +79,7 @@ class ZipUtils {
       }
       encoder.close();
       return null;
-    } catch (err, stacktrace) {
+    } catch (err) {
       await FileUtils.deletePath(zipPath);
       return ReturnResultError(err.toString());
     }
@@ -116,7 +115,7 @@ class ZipUtils {
           await io.Directory(destinationPath).create(recursive: true);
         }
       }
-    } catch (err, stacktrace) {
+    } catch (err) {
       return ReturnResultError(err.toString());
     }
 
@@ -134,7 +133,7 @@ class ZipUtils {
         }
       }
       return ReturnResult(data: filelist);
-    } catch (err, stacktrace) {
+    } catch (err) {
       return ReturnResult(error: ReturnResultError(err.toString()));
     }
   }

@@ -13,7 +13,7 @@ abstract final class ICloudUtils {
     try {
       var result = await ICloudStorage.gather(containerId: _containerId);
       return ReturnResult(data: result);
-    } catch (err, stacktrace) {
+    } catch (err) {
       return ReturnResult(error: ReturnResultError(err.toString()));
     }
   }
@@ -61,7 +61,7 @@ abstract final class ICloudUtils {
           );
         },
       );
-    } catch (err, stacktrace) {
+    } catch (err) {
       if (!completer.isCompleted) {
         completer.complete(ReturnResultError(err.toString()));
       }
@@ -77,7 +77,7 @@ abstract final class ICloudUtils {
         relativePath: relativePath,
       );
       return null;
-    } catch (err, stacktrace) {
+    } catch (err) {
       return ReturnResultError(err.toString());
     }
   }
@@ -101,7 +101,7 @@ abstract final class ICloudUtils {
           );
         },
       );
-    } catch (err, stacktrace) {
+    } catch (err) {
       completer.complete(ReturnResultError(err.toString()));
     }
     return completer.future;
