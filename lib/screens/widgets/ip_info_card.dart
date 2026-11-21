@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/biz.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/ip_info_helper.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -28,6 +29,7 @@ class _IpInfoCardState extends State<IpInfoCard> {
   bool _showDirect = false;
   bool _loading = false;
   bool _maskIp = true;
+  bool _isTabActive = true;
   late bool _isCollapsed;
   final ValueNotifier<int> _countdown = ValueNotifier<int>(240);
   Timer? _countdownTimer;
@@ -43,6 +45,13 @@ class _IpInfoCardState extends State<IpInfoCard> {
     Biz.onEventProxySelected.add(_onProxyNodeChanged);
     _startAutoRefreshTimer();
     _fetchCurrentInfo();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // ignore: deprecated_member_use
+    _isTabActive = TickerMode.of(context);
   }
 
   @override
@@ -69,7 +78,12 @@ class _IpInfoCardState extends State<IpInfoCard> {
   void _startAutoRefreshTimer() {
     _countdownTimer?.cancel();
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) return;
+      if (!mounted ||
+          !_isTabActive ||
+          AppLifecycleStateNofity.isPaused() ||
+          _loading) {
+        return;
+      }
       if (_countdown.value > 1) {
         _countdown.value--;
       } else {

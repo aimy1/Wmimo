@@ -27,7 +27,7 @@ const List<String> ProxyBypassDoaminsDefault = [
 ];
 
 class SettingConfigItemUI {
-  String theme = ThemeDefine.kThemeLight;
+  String theme = ThemeDefine.kThemeSystem;
   bool autoOrientation = true;
   bool disableFontScaler = false;
   bool hideAfterLaunch = false;
@@ -138,7 +138,7 @@ class SettingConfigItemUI {
         break;
 
       default:
-        theme = ThemeDefine.kThemeLight;
+        theme = ThemeDefine.kThemeSystem;
         break;
     }
   }

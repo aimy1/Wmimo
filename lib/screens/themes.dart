@@ -8,7 +8,7 @@ import 'package:wmimo/screens/theme_data_light.dart';
 import 'package:wmimo/screens/theme_define.dart';
 
 class Themes with ChangeNotifier {
-  String _theme = '';
+  String _theme = ThemeDefine.kThemeSystem;
   void setTheme(String theme, bool notify) {
     switch (theme) {
       case ThemeDefine.kThemeSystem:
@@ -68,7 +68,7 @@ class Themes with ChangeNotifier {
       case ThemeDefine.kThemeDark:
         return ThemeMode.dark;
     }
-    return ThemeMode.light;
+    return ThemeMode.system;
   }
 
   ThemeData themeData(BuildContext context) {
@@ -83,7 +83,9 @@ class Themes with ChangeNotifier {
       case ThemeDefine.kThemeDark:
         return ThemeDataDark.theme(context);
     }
-    return ThemeDataLight.theme(context);
+    return brightness == Brightness.dark
+        ? ThemeDataDark.theme(context)
+        : ThemeDataLight.theme(context);
   }
 
   Brightness? getStatusBarBrightness(BuildContext context) {

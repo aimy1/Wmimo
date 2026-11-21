@@ -49,6 +49,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
   bool _isAutoRefresh = true;
   bool _loading = false;
   bool _isFetching = false;
+  bool _isTabActive = true;
   String _searchKeyword = "";
   String _selectedProtocol = "ALL"; // ALL, TCP, UDP
   ConnectionSortType _sortType = ConnectionSortType.defaultOrder;
@@ -84,8 +85,23 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // ignore: deprecated_member_use
+    final active = TickerMode.of(context);
+    if (_isTabActive != active) {
+      _isTabActive = active;
+      if (active && _isAutoRefresh) {
+        _fetchConnections(silent: true);
+      }
+    }
+  }
+
+  @override
   FutureOr<void> afterFirstLayout(BuildContext context) async {
-    await _fetchConnections();
+    if (_isTabActive) {
+      await _fetchConnections();
+    }
     if (!AppLifecycleStateNofity.isPaused()) {
       _startTimer();
     }
@@ -115,7 +131,7 @@ class _ConnectionsScreenState extends State<ConnectionsScreen>
 
   Future<void> _fetchConnections({bool silent = false}) async {
     if (_isFetching) return;
-    if (silent && AppLifecycleStateNofity.isPaused()) return;
+    if (silent && (!_isTabActive || AppLifecycleStateNofity.isPaused())) return;
     _isFetching = true;
     try {
       if (!silent && mounted) {

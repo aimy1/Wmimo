@@ -58,6 +58,8 @@ void main(List<String> args) async {
   linuxRotate180Fix =
       Platform.isLinux && Platform.environment["WMIMO_ROTATE_180"] == "1";
   WidgetsFlutterBinding.ensureInitialized();
+  PaintingBinding.instance.imageCache.maximumSize = 150;
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 30 << 20;
   _initLicenses();
   await LocaleSettings.useDeviceLocale();
   await VPNService.initABI();

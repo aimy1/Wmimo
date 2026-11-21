@@ -9,6 +9,18 @@ import 'package:wmimo/screens/themes.dart';
 import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 void main() {
+  test('Default theme is system across SettingConfigItemUI and Themes', () {
+    final defaultUi = SettingConfigItemUI();
+    expect(defaultUi.theme, ThemeDefine.kThemeSystem);
+
+    final emptyJsonUi = SettingConfigItemUI.fromJsonStatic({});
+    expect(emptyJsonUi.theme, ThemeDefine.kThemeSystem);
+
+    final themes = Themes();
+    expect(themes.theme(), ThemeDefine.kThemeSystem);
+    expect(themes.themeMode(), ThemeMode.system);
+  });
+
   test('Theme serialization and deserialization', () {
     var config = SettingConfig();
     config.ui.theme = ThemeDefine.kThemeDark;

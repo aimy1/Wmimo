@@ -525,6 +525,9 @@ class _TrafficChartCardState extends State<TrafficChartCard> {
 }
 
 class ClashVergeChartPainter extends CustomPainter {
+  static final DateFormat _kTimeFormatter = DateFormat("HH:mm");
+  static final DateFormat _kExactTimeFormatter = DateFormat("HH:mm:ss");
+
   final List<TrafficDataRecord> history;
   final Color uploadColor;
   final Color downloadColor;
@@ -614,7 +617,8 @@ class ClashVergeChartPainter extends CustomPainter {
       // Draw Download (Blue) Curve & Fill
       _drawCurve(
         canvas: canvas,
-        history: history.map((p) => p.download).toList(),
+        history: history,
+        isUpload: false,
         stepX: stepX,
         leftPadding: leftPadding,
         topPadding: topPadding,
@@ -627,7 +631,8 @@ class ClashVergeChartPainter extends CustomPainter {
       // Draw Upload (Orange) Curve & Fill
       _drawCurve(
         canvas: canvas,
-        history: history.map((p) => p.upload).toList(),
+        history: history,
+        isUpload: true,
         stepX: stepX,
         leftPadding: leftPadding,
         topPadding: topPadding,
@@ -638,12 +643,11 @@ class ClashVergeChartPainter extends CustomPainter {
       );
 
       // 3. Draw X-Axis Time Ticks
-      final timeFormatter = DateFormat("HH:mm");
       final tickCount = 4;
       for (int i = 0; i < tickCount; i++) {
         final ratio = i / (tickCount - 1);
         final dataIndex = (ratio * (history.length - 1)).round().clamp(0, history.length - 1);
-        final timeStr = timeFormatter.format(history[dataIndex].time);
+        final timeStr = _kTimeFormatter.format(history[dataIndex].time);
         final x = leftPadding + (ratio * chartWidth);
 
         textPainter.text = TextSpan(
@@ -700,8 +704,7 @@ class ClashVergeChartPainter extends CustomPainter {
         canvas.drawCircle(Offset(snapX, downY), 1.5, Paint()..color = Colors.white);
 
         // Tooltip Card
-        final exactTimeFormatter = DateFormat("HH:mm:ss");
-        final timeExact = exactTimeFormatter.format(point.time);
+        final timeExact = _kExactTimeFormatter.format(point.time);
 
         final tipTitle = TextSpan(
           text: "$timeExact\n",
@@ -764,7 +767,8 @@ class ClashVergeChartPainter extends CustomPainter {
 
   void _drawCurve({
     required Canvas canvas,
-    required List<double> history,
+    required List<TrafficDataRecord> history,
+    required bool isUpload,
     required double stepX,
     required double leftPadding,
     required double topPadding,
@@ -779,7 +783,8 @@ class ClashVergeChartPainter extends CustomPainter {
     final fillPath = Path();
 
     final firstX = leftPadding;
-    final firstY = getY(history.first);
+    final firstVal = isUpload ? history.first.upload : history.first.download;
+    final firstY = getY(firstVal);
 
     path.moveTo(firstX, firstY);
     fillPath.moveTo(firstX, topPadding + chartHeight);
@@ -787,9 +792,11 @@ class ClashVergeChartPainter extends CustomPainter {
 
     for (int i = 1; i < history.length; i++) {
       final prevX = leftPadding + ((i - 1) * stepX);
-      final prevY = getY(history[i - 1]);
+      final prevVal = isUpload ? history[i - 1].upload : history[i - 1].download;
+      final prevY = getY(prevVal);
       final currX = leftPadding + (i * stepX);
-      final currY = getY(history[i]);
+      final currVal = isUpload ? history[i].upload : history[i].download;
+      final currY = getY(currVal);
 
       final midX = (prevX + currX) / 2;
       path.cubicTo(midX, prevY, midX, currY, currX, currY);
@@ -823,5 +830,16 @@ class ClashVergeChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant ClashVergeChartPainter oldDelegate) => true;
+  bool shouldRepaint(covariant ClashVergeChartPainter oldDelegate) {
+    if (oldDelegate.isDark != isDark ||
+        oldDelegate.uploadColor != uploadColor ||
+        oldDelegate.downloadColor != downloadColor ||
+        oldDelegate.hoverPosition != hoverPosition ||
+        oldDelegate.history.length != history.length) {
+      return true;
+    }
+    if (history.isEmpty) return false;
+    return oldDelegate.history.last.time != history.last.time ||
+        oldDelegate.history.first.time != history.first.time;
+  }
 }

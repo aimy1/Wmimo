@@ -5,6 +5,7 @@ import 'package:wmimo/app/utils/log.dart';
 class CoreWatchdog {
   static bool _userWantsConnected = false;
   static bool _isWatchdogEnabled = true;
+  static bool _isChecking = false;
   static Timer? _watchdogTimer;
   static int _consecutiveCrashes = 0;
   static const int _maxRetries = 3;
@@ -21,26 +22,31 @@ class CoreWatchdog {
   static void init() {
     _watchdogTimer?.cancel();
     _watchdogTimer = Timer.periodic(const Duration(seconds: 4), (timer) async {
-      if (!_isWatchdogEnabled || !_userWantsConnected) return;
+      if (!_isWatchdogEnabled || !_userWantsConnected || _isChecking) return;
       if (VPNService.isOperating) return;
 
-      final isRunning = await VPNService.getStarted();
-      if (!isRunning && _userWantsConnected) {
-        if (_consecutiveCrashes >= _maxRetries) {
-          Log.w("CoreWatchdog: Max crash recovery retries reached ($_maxRetries), stopping auto-recovery");
-          _userWantsConnected = false;
-          return;
-        }
+      _isChecking = true;
+      try {
+        final isRunning = await VPNService.getStarted();
+        if (!isRunning && _userWantsConnected) {
+          if (_consecutiveCrashes >= _maxRetries) {
+            Log.w("CoreWatchdog: Max crash recovery retries reached ($_maxRetries), stopping auto-recovery");
+            _userWantsConnected = false;
+            return;
+          }
 
-        _consecutiveCrashes++;
-        Log.w("CoreWatchdog: Detected unexpected core termination! Auto-recovering (attempt $_consecutiveCrashes/$_maxRetries)...");
-        try {
-          await VPNService.start(const Duration(seconds: 20));
-        } catch (e) {
-          Log.e("CoreWatchdog: Recovery attempt failed: $e");
+          _consecutiveCrashes++;
+          Log.w("CoreWatchdog: Detected unexpected core termination! Auto-recovering (attempt $_consecutiveCrashes/$_maxRetries)...");
+          try {
+            await VPNService.start(const Duration(seconds: 20));
+          } catch (e) {
+            Log.e("CoreWatchdog: Recovery attempt failed: $e");
+          }
+        } else if (isRunning) {
+          _consecutiveCrashes = 0;
         }
-      } else if (isRunning) {
-        _consecutiveCrashes = 0;
+      } finally {
+        _isChecking = false;
       }
     });
     Log.i("CoreWatchdog: Initialized core watchdog service");

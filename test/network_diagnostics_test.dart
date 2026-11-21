@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wmimo/app/utils/network_diagnostics.dart';
 import 'package:wmimo/i18n/strings.g.dart';
+import 'package:wmimo/screens/net_check_screen.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -184,6 +187,71 @@ void main() {
       // 100 - 10 (warning) - 25 (core failed) = 65
       expect(NetworkDiagnostics.calculateHealthScore(steps), 65);
     });
+
+    test('NetCheckScreen.normalizeDomainInput strips schemes, ports, and paths', () {
+      expect(
+        NetCheckScreen.normalizeDomainInput('  https://www.github.com:443/aimy1/Wmimo '),
+        'www.github.com',
+      );
+      expect(
+        NetCheckScreen.normalizeDomainInput('cloudflare.com/cdn-cgi/trace'),
+        'cloudflare.com',
+      );
+      expect(
+        NetCheckScreen.normalizeDomainInput('1.1.1.1:53'),
+        '1.1.1.1',
+      );
+    });
+  });
+
+  group('NetCheckScreen Redesigned UI Tests', () {
+    setUp(() async {
+      await LocaleSettings.setLocale(AppLocale.zhCn);
+    });
+
+    testWidgets(
+      'Renders WmimoAppBar, segmented tabs, 5-stage topology strip, and domain probe workbench',
+      (tester) async {
+        await tester.pumpWidget(
+          TranslationProvider(
+            child: const MaterialApp(
+              home: NetCheckScreen(autoStart: false),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // 1. Unified WmimoAppBar with localized title
+        expect(find.byType(WmimoAppBar), findsOneWidget);
+        expect(find.text('网络链路体检与诊断'), findsOneWidget);
+
+        // 2. Segmented TabBar with both diagnostic modes
+        expect(find.text('一键链路体检'), findsOneWidget);
+        expect(find.text('高级单域名排查'), findsOneWidget);
+
+        // 3. 5-stage topology pipeline short names & numbered step cards
+        expect(find.text('网卡'), findsOneWidget);
+        expect(find.text('DNS'), findsOneWidget);
+        expect(find.text('内核'), findsOneWidget);
+        expect(find.text('代理'), findsOneWidget);
+        expect(find.text('公网'), findsOneWidget);
+        expect(find.text('01'), findsOneWidget);
+        expect(find.text('02'), findsOneWidget);
+        expect(find.text('03'), findsOneWidget);
+
+        // 4. Switch to Advanced Domain Probe tab
+        await tester.tap(find.text('高级单域名排查'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('cloudflare.com'), findsWidgets);
+        expect(find.text('github.com'), findsOneWidget);
+        expect(find.text('google.com'), findsOneWidget);
+        expect(find.text('1. DNS查询'), findsOneWidget);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump(const Duration(milliseconds: 10));
+      },
+    );
   });
 }
 

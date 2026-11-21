@@ -1687,8 +1687,9 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     Map<String, String> params,
   ) async {
     if (_state == state) {
+      final prevStatus = VpnActionHandler.uiStatus.value;
       _syncUiStatus();
-      if (mounted) {
+      if (mounted && prevStatus != VpnActionHandler.uiStatus.value) {
         setState(() {});
       }
       return;
@@ -1832,46 +1833,68 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
     }
   }
 
-  Future<void> _updateConnections() async {
-    String connections = await FlutterVpnService.clashiApiConnections(false);
-    String tranffic = await FlutterVpnService.clashiApiTraffic();
+  bool _isUpdatingConnections = false;
+  String _lastNotifiedTrafficTotal = "";
+  String _lastNotifiedTrafficSpeed = "";
 
-    String trafficTotalNew = "";
-    String trafficSpeedNew = "";
+  Future<void> _updateConnections() async {
+    if (_isUpdatingConnections) return;
+    _isUpdatingConnections = true;
     try {
-      var obj = jsonDecode(connections);
-      ClashConnections body = ClashConnections();
-      body.fromJson(obj, false);
-      _uploadTotalRaw.value = body.uploadTotal;
-      _downloadTotalRaw.value = body.downloadTotal;
-      _memoryRaw.value = body.memory;
-      trafficTotalNew =
-          "↑ ${ClashHttpApi.convertTrafficToStringDouble(body.uploadTotal)}  ↓ ${ClashHttpApi.convertTrafficToStringDouble(body.downloadTotal)} ";
-    } catch (err) {}
-    try {
-      var obj = jsonDecode(tranffic);
-      ClashTraffic traffic = ClashTraffic();
-      traffic.fromJson(obj);
-      _uploadSpeedRaw.value = traffic.upload;
-      _downloadSpeedRaw.value = traffic.download;
-      _trafficHistory.add(TrafficDataRecord(
-        time: DateTime.now(),
-        upload: traffic.upload.toDouble(),
-        download: traffic.download.toDouble(),
-      ));
-      if (_trafficHistory.length > 600) {
-        _trafficHistory.removeAt(0);
+      final results = await Future.wait<String>([
+        FlutterVpnService.clashiApiConnections(false),
+        FlutterVpnService.clashiApiTraffic(),
+      ]);
+      final String connections = results[0];
+      final String tranffic = results[1];
+
+      String trafficTotalNew = "";
+      String trafficSpeedNew = "";
+      try {
+        var obj = jsonDecode(connections);
+        ClashConnections body = ClashConnections();
+        body.fromJson(obj, false);
+        _uploadTotalRaw.value = body.uploadTotal;
+        _downloadTotalRaw.value = body.downloadTotal;
+        _memoryRaw.value = body.memory;
+        trafficTotalNew =
+            "↑ ${ClashHttpApi.convertTrafficToStringDouble(body.uploadTotal)}  ↓ ${ClashHttpApi.convertTrafficToStringDouble(body.downloadTotal)} ";
+      } catch (err) {}
+      try {
+        var obj = jsonDecode(tranffic);
+        ClashTraffic traffic = ClashTraffic();
+        traffic.fromJson(obj);
+        _uploadSpeedRaw.value = traffic.upload;
+        _downloadSpeedRaw.value = traffic.download;
+        _trafficHistory.add(TrafficDataRecord(
+          time: DateTime.now(),
+          upload: traffic.upload.toDouble(),
+          download: traffic.download.toDouble(),
+        ));
+        if (_trafficHistory.length > 600) {
+          _trafficHistory.removeAt(0);
+        }
+        trafficSpeedNew =
+            "↑ ${ClashHttpApi.convertTrafficToStringDouble(traffic.upload)}/s  ↓ ${ClashHttpApi.convertTrafficToStringDouble(traffic.download)}/s";
+      } catch (err) {}
+      if (_lastNotifiedTrafficTotal != trafficTotalNew ||
+          _lastNotifiedTrafficSpeed != trafficSpeedNew) {
+        _lastNotifiedTrafficTotal = trafficTotalNew;
+        _lastNotifiedTrafficSpeed = trafficSpeedNew;
+        Biz.trafficChanged(trafficTotalNew, trafficSpeedNew);
       }
-      trafficSpeedNew =
-          "↑ ${ClashHttpApi.convertTrafficToStringDouble(traffic.upload)}/s  ↓ ${ClashHttpApi.convertTrafficToStringDouble(traffic.download)}/s";
-    } catch (err) {}
-    Biz.trafficChanged(trafficTotalNew, trafficSpeedNew);
-    if (AppLifecycleStateNofity.isPaused()) {
-      return;
+      if (AppLifecycleStateNofity.isPaused()) {
+        return;
+      }
+      _trafficTotal.value = trafficTotalNew;
+      _trafficSpeed.value = trafficSpeedNew;
+      final uiConfig = SettingManager.getConfig().ui;
+      if (uiConfig.showTrafficChart && !uiConfig.collapseTrafficChart) {
+        _chartTick.value++;
+      }
+    } finally {
+      _isUpdatingConnections = false;
     }
-    _trafficTotal.value = trafficTotalNew;
-    _trafficSpeed.value = trafficSpeedNew;
-    _chartTick.value++;
   }
 
   Future<void> _connectToCore() async {
