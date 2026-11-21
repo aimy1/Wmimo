@@ -1,5 +1,3 @@
-# Wmimo
-
 <div align="center">
 
 [**简体中文**](README.zh-CN.md) | [**English**](README.md) | [**繁體中文**](README.zh-TW.md) | [**日本語**](README.ja.md) | [**한국어**](README.ko.md) | [**Русский**](README.ru.md) | [**Español**](README.es.md) | [**العربية**](README.ar.md) | [**فارسی**](README.fa.md)
@@ -8,161 +6,195 @@
 
 ---
 
-
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="128" height="128" alt="Wmimo Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 188, 223, 0.25);" />
-  <h1 align="center" style="font-weight: 800; border-bottom: none; margin-top: 12px; margin-bottom: 6px;">Wmimo</h1>
-  <p align="center" style="font-size: 1.15rem; color: #57606a;"><strong>Современный кроссплатформенный клиент Clash / Mihomo нового поколения</strong></p>
-  <p align="center">Создан на базе Flutter и ядра Mihomo. Обеспечивает высокую скорость, элегантный дизайн и поддержку всех современных протоколов.</p>
+  <img src="assets/images/app_icon_256.png" width="112" height="112" alt="Wmimo Logo" />
+  <h1>Wmimo</h1>
+  <p><strong>Кроссплатформенный GUI-клиент Clash / Mihomo нового поколения</strong></p>
+  <p>Построен на Flutter и ядре Mihomo (v1.19.34). Нулевая телеметрия, многошаговые цепочки прокси, параллельная диагностика и замер скорости с живым графиком.</p>
 
-  <p align="center">
+  <p>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="Build" /></a>
+    <a href="https://github.com/aimy1/Wmimo/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="CI Build" /></a>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
-    <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
+    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo Core" /></a>
+    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-%3E%3D3.35-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
+    <a href="#sec-platforms"><img src="https://img.shields.io/badge/Platforms-Win%20%7C%20macOS%20%7C%20Linux%20%7C%20Android%20%7C%20iOS-0EA5E9?style=flat-square" alt="Platforms" /></a>
+    <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/i18n-9%20Locales%20%C2%B7%20898%20Keys-10B981?style=flat-square" alt="i18n" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-%40wmimoapp-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
   </p>
 
-  <p align="center">
+  <p>
     <a href="https://github.com/aimy1/Wmimo/releases"><b>Скачать</b></a> •
-    <a href="https://wmimo.buzz"><b>Веб-сайт</b></a> •
-    <a href="#возможности"><b>Возможности</b></a> •
-    <a href="docs/BENCHMARKS.md"><b>Бенчмарки</b></a> •
-    <a href="#быстрый-старт"><b>Быстрый старт</b></a> •
-    <a href="#сборка-из-исходного-кода"><b>Сборка</b></a> •
-    <a href="https://t.me/wmimoapp"><b>Сообщество</b></a>
+    <a href="#sec-platforms"><b>Платформы</b></a> •
+    <a href="#sec-features"><b>Возможности</b></a> •
+    <a href="#sec-architecture"><b>Архитектура</b></a> •
+    <a href="#sec-quickstart"><b>Быстрый старт</b></a> •
+    <a href="#sec-build"><b>Сборка</b></a> •
+    <a href="#sec-security"><b>Безопасность</b></a> •
+    <a href="#sec-community"><b>Сообщество</b></a>
   </p>
-
-  <br/>
-  <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo Светлая тема" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo Темная тема" width="370" />
-  </p>
-  <sub><em>Эстетика микро-карточек 18px, плавный график трафика Безье и диагностика сети (Светлая и Темная темы)</em></sub>
 </div>
 
----
+| Светлая тема | Тёмная тема |
+| :---: | :---: |
+| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="380" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="380" /> |
 
-## Возможности
-
-- **Эстетичный интерфейс и нативная смена тем**:
-  - Закругления карточек 18px и фирменный акцентный циан.
-  - Плавное и чистое переключение между светлой и глубокой темной темами.
-  - Адаптивный интерфейс для больших мониторов и смартфонов.
-- **Ядро Mihomo (Meta) с полной поддержкой протоколов**:
-  - Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct.
-  - Парсинг и сортировка узлов в фоновом Isolate — плавная неблокирующая загрузка (5 000 узлов за ~163 мс, см. [Бенчмарки](docs/BENCHMARKS.md)).
-- **Интеллектуальная маршрутизация и два режима работы**:
-  - Быстрое переключение: **По правилам (Rule)** / **Глобальный (Global)** / **Прямой (Direct)**.
-  - **Режим TUN-адаптера** (прозрачный системный перехват) и **Системный прокси** (без прав администратора).
-  - Раздельное туннелирование приложений на Android и исключение UWP на Windows.
-- **Визуальные цепочки прокси (Chain Proxy) [Beta]**:
-  - Построено на нативных группах Mihomo `type: relay`: интуитивная настройка двух узлов (Входной транзит ➔ Выходной узел).
-  - Разблокировка стриминга и ИИ-сервисов с чистых IP, оптимизация маршрутов и обход блокировок.
-  - Независимое хранение (`chain_proxies.json`) гарантирует сохранность цепочек при автоматическом обновлении подписок.
-  - Сквозной замер реальной задержки, обнаружение удаленных узлов и плавное горячее применение без разрыва соединений.
-- **Мониторинг трафика и диагностический центр**:
-  - Графики трафика Безье в реальном времени (1м / 5м / 15м / 30м / 60м).
-  - Карточка проверки внешнего IP, локации и провайдера в один клик с маскированием данных.
-  - Счетчик расхода тарифного плана и срока действия подписки.
-  - Набор инструментов диагностики: правила маршрутизации, консольные логи ядра, параллельный пинг и просмотр конфигурации.
-- **Глубокая интеграция с ОС и глобальные горячие клавиши**:
-  - **Глобальные горячие клавиши**: Поддержка системных сочетаний клавиш на Windows, macOS и Linux (скрыть/показать окно, переключение прокси, системный прокси, переключение режимов).
-  - **Windows**: Нативное меню трея подстраивается под тему приложения, динамическая индикация скорости в трее, стиль `comctl32 v6`.
-  - **Android**: Уведомление службы с кнопкой отключения, плитка быстрых настроек, синхронизация языка.
-  - **macOS**: Нативная иконка в строке меню Template и управление системным прокси.
-- **Многоканальное автоматическое обновление**:
-  - Свободное переключение между стабильным каналом (`stable`) и каналом предварительных версий (`beta`).
-  - Фоновая тихая загрузка с проверкой целостности по хешу SHA-256.
-- **100% локализация на 9 языков**:
-  - Полное покрытие 847 ключей (0 пропусков): Русский, Английский, Китайский (упр/трад), Японский, Корейский, Испанский, Арабский, Персидский (см. [Бенчмарки](docs/BENCHMARKS.md)).
+<p align="center"><sub><em>Карточный интерфейс 18px · График трафика Безье · Двойной движок TUN / Системный прокси</em></sub></p>
 
 ---
+
+<a id="sec-platforms"></a>
+
+## Поддерживаемые платформы и релизы
+
+| Платформа | Архитектура | Форматы сборок | Ключевые возможности |
+| :--- | :--- | :--- | :--- |
+| **Windows** | `x64`, `arm64` | Установщик (`.exe`), Portable (`.zip`) | Системный прокси без прав, Wintun WHQL TUN (Админ), UWP Loopback, трей со скоростью, горячие клавиши |
+| **macOS** | `Universal` (`arm64` + `x64`) | `.dmg`, Portable (`.zip`) | Безопасная авторизация сервиса/TUN, адаптивная иконка меню, iCloud Drive, глобальные клавиши |
+| **Linux** | `x64`, `arm64` | `.deb`, `.rpm`, `.AppImage`, Arch `PKGBUILD` (`wmimo-bin`), `.tar.gz` | `setcap` / TUN, системный прокси, GTK3 интерфейс, глобальные горячие клавиши |
+| **Android** | `arm64-v8a`, `armeabi-v7a`, `x86_64` | Раздельные ABI и Universal `.apk` | Горячее переключение прокси по приложениям без рестарта ядра, контроль оптимизации батареи, плитка QS |
+| **iOS** | `arm64` | Неподписанный `.ipa` (TrollStore / Sideload) | Network Extension VPN и синхронизация iCloud Drive ([docs/APPLE_DEVELOPMENT.md](docs/APPLE_DEVELOPMENT.md)) |
+
+> Скачивайте релизы на [GitHub Releases](https://github.com/aimy1/Wmimo/releases) и проверяйте подписи APK (SHA-256) / Wintun по [SECURITY.md](SECURITY.md).
+
+---
+
+<a id="sec-features"></a>
+
+## Ключевые возможности
+
+| Модуль | Описание |
+| :--- | :--- |
+| **Ядро Mihomo (`v1.19.34`)** | SS, VMess, VLESS Reality, Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH • Парсинг в Isolate (`5 000` узлов за `~163 мс`) |
+| **Многошаговые цепочки `[Beta]`** | Оркестрация **`dialer-proxy`** (вход ➔ транзит... ➔ выход), перетаскивание шагов, защита от дублей, хранение в `chain_proxies.json` |
+| **Прокси по приложениям (Android)** | Защита от утечки при пустом белом списке, горячая смена интерфейса VPN без перезапуска ядра, пресеты приложений |
+| **Диагностика (`NetCheck`)** | 5-этапный параллельный конвейер (фильтрация TUN-адаптеров, проверка DNS и Fake-IP, порты, прокси/TUN, рукопожатие) + автоисправление |
+| **Тест скорости (`SpeedTest`)** | Многопоточная загрузка/отдача HTTP, точный Ping/Jitter, живой график скорости, оценки сценариев и задержки серверов |
+| **Резервное копирование** | WebDAV, iCloud Drive, локальный/URL `.zip`, включая `chain_proxies.json`, предварительная распаковка в буфер и защита от Zip-Slip |
+| **UI и телеметрия** | Светлая/тёмная темы, менеджер карточек главной страницы, автоповорот включён по умолчанию, маска IP |
+| **Приватность и 9 языков** | Ноль трекеров и рекламных SDK, **9 языков × 898 ключей (100%)** и 9 локализованных политик конфиденциальности |
+
+### Маршрутизация и надёжность
+
+- **Двойной движок**: мгновенное переключение Rule / Global / Direct в режимах TUN и системного прокси.
+- **Атомарное восстановление**: проверка архива во временной папке перед заменой рабочих конфигураций.
+
+---
+
+<a id="sec-architecture"></a>
+
+## Архитектура и структура кода
+
+| Уровень | Назначение | Каталог |
+| :--- | :--- | :--- |
+| **UI и экраны** | Flutter (`>= 3.35.0`), карточки, Canvas-графики | [`lib/screens/`](lib/screens/) |
+| **Логика и состояние** | Менеджеры настроек/цепочек/профилей, парсер Isolate | [`lib/app/`](lib/app/) |
+| **VPN и нативный слой** | Обёртка сервиса, Android Kotlin (`WmimoVpnService.kt`) | [`third_party/libclash_vpn_service/`](third_party/libclash_vpn_service/), [`android/`](android/) |
+| **Rust Crates** | Нативные модули рабочего пространства | [`rust/`](rust/) |
+| **i18n и документы** | Slang (9 языков × 898 ключей) и политики конфиденциальности | [`lib/i18n/`](lib/i18n/), [`assets/txts/`](assets/txts/) |
+
+---
+
+<a id="sec-quickstart"></a>
 
 ## Быстрый старт
 
-1. **Скачать**: Перейдите в [Релизы](https://github.com/aimy1/Wmimo/releases) и скачайте нужный файл.
-2. **Импорт**: В разделе «Подписки» вставьте ссылку на подписку Clash/Mihomo.
-3. **Подключение**: Включите тумблер на главном экране.
-   - *Совет для Windows*: Для **TUN-режима** запускайте Wmimo от имени администратора; для повседневного использования отлично подходит **Системный прокси**.
+1. **Установка**: скачайте сборку для вашей ОС с [GitHub Releases](https://github.com/aimy1/Wmimo/releases).
+2. **Импорт профиля**: добавьте ссылку подписки или YAML-файл в разделе подписок.
+3. **Подключение**: активируйте главный переключатель на главном экране.
+
+<details>
+<summary><b>Советы по платформам (Windows / Android / macOS и Linux / iOS)</b></summary>
+
+- **Windows**: Системный прокси работает без прав администратора; для TUN запустите от имени администратора. Для портативного режима создайте папку `portable`.
+- **Android**: Рекомендуется исключить Wmimo из оптимизации батареи; изменения правил по приложениям применяются на лету.
+- **iOS**: Распространяется как неподписанный `.ipa` ([docs/APPLE_DEVELOPMENT.md](docs/APPLE_DEVELOPMENT.md)).
+
+</details>
 
 ---
 
-## Сборка из исходного кода
+<a id="sec-build"></a>
+
+## Сборка из исходников
 
 ### Требования
-- [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`)
-- [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
-- Инструменты компиляции (Windows: Visual Studio 2022 C++, Linux: GTK3/Clang/CMake, Android: Android SDK)
 
-### Команды для сборки
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`) и [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
+- Инструменты сборки платформы (VS 2022 C++ / Xcode / GTK3 & CMake / Android SDK)
+
+### Команды
 
 ```bash
-# 1. Клонирование репозитория
+# 1. Clone repository
 git clone https://github.com/aimy1/Wmimo.git
 cd Wmimo
 
-# 2. Установка зависимостей и генерация файлов локализации
+# 2. Fetch dependencies & generate i18n bindings
 flutter pub get
 dart run slang
 
-# 3. Загрузка ядер Mihomo для всех платформ
+# 3. Download prebuilt Mihomo cores
 dart run tool/download_all_cores.dart
 
-# 4. Запуск в режиме разработки
+# 4. Run development build
 flutter run
 
-# 5. Сборка релизных пакетов
-flutter build windows --release   # Windows
-flutter build apk --release       # Android
-flutter build linux --release     # Linux
-flutter build macos --release     # macOS
+# 5. Build release artifacts
+flutter build windows --release
+flutter build macos --release
+flutter build linux --release
+flutter build apk --release
 ```
 
 ---
 
-## Star History
+<a id="sec-benchmarks"></a>
+
+## Производительность и тесты
+
+- **Парсинг подписок**: `~30 670 узлов/с` (`5 000` узлов за `~163 мс` в Isolate).
+- **Покрытие i18n**: **9/9 языков × 898 ключей = 100.0%** ([docs/BENCHMARKS.md](docs/BENCHMARKS.md)).
+
+Подробный отчёт: [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+
+<details>
+<summary><b>История звёзд (Star History)</b></summary>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
----
-
-## Производительность и контроль качества
-
-Архитектурная эффективность и стабильность Wmimo подтверждены автоматическими тестами:
-
-- **Скорость парсинга подписок**: ~30 670 узлов/с (5 000 узлов парсятся и классифицируются за ~163 мс в фоновом Isolate).
-- **Быстрое определение формата**: `isClashYaml` проверяет 1 000 узлов всего за ~1.4 мс.
-- **Полнота локализации**: 9 языков по 847 ключей с точностью 100% (0 пропусков).
-- **Команды проверки**: `flutter test test/benchmark_profile_scale_test.dart` и `flutter test test/i18n_integrity_test.dart`.
-
-Подробная методология и аппаратные характеристики приведены в [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+</details>
 
 ---
+
+<a id="sec-security"></a>
+
+## Безопасность, приватность и лицензия
+
+- **Нулевой сбор данных**: [assets/txts/privacy_policy_ru.txt](assets/txts/privacy_policy_ru.txt)
+- **Проверка отпечатков**: [SECURITY.md](SECURITY.md)
+
+### Лицензия
+
+**GNU General Public License v3.0 (GPL-3.0-or-later)** ([LICENSE](LICENSE)).
+
+- Rust Crates: [MIT](rust/LICENSE-MIT) / [Apache-2.0](rust/LICENSE-APACHE) отдельно, GPL-3.0 в составе Wmimo.
+- Сторонние компоненты: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md), [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md)
+
+---
+
+<a id="sec-community"></a>
 
 ## Благодарности
 
-- **[GooRingX (vowe)](https://github.com/GooRingX)**: Огромная благодарность за вклад в открытый исходный код, архитектуру и дизайн.
-- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**: Спасибо за высокопроизводительное универсальное ядро.
-- **[Flutter](https://flutter.dev/)**: Спасибо команде за современный кроссплатформенный фреймворк.
-
----
+- **[GooRingX (vowe)](https://github.com/GooRingX)**
+- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**
+- **[Flutter](https://flutter.dev/)**
 
 ## Сообщество
 
 - **Официальный сайт**: [wmimo.buzz](https://wmimo.buzz)
 - **Telegram-канал**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- **Email**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- **Сообщить об ошибке**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
-
----
-
-## Лицензия
-
-Проект распространяется под лицензией **GNU General Public License v3.0 (GPL-3.0-or-later)**. Подробности в файле [LICENSE](LICENSE).
-
-- **Модули Rust Workspace**: Распространяются под двойной лицензией [MIT](rust/LICENSE-MIT) или [Apache-2.0](rust/LICENSE-APACHE) при автономном использовании; в составе Wmimo действует GPL-3.0.
-- **Сторонние компоненты**: См. [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) и [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md).
-- **Безопасность и проверка подписи**: См. [SECURITY.md](SECURITY.md) для получения отпечатков сертификата подписи Android APK (SHA-256) и инструкций по проверке подлинности.
+- **Почта автора**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **Трекер задач**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)

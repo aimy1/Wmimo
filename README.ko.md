@@ -1,5 +1,3 @@
-# Wmimo
-
 <div align="center">
 
 [**简体中文**](README.zh-CN.md) | [**English**](README.md) | [**繁體中文**](README.zh-TW.md) | [**日本語**](README.ja.md) | [**한국어**](README.ko.md) | [**Русский**](README.ru.md) | [**Español**](README.es.md) | [**العربية**](README.ar.md) | [**فارسی**](README.fa.md)
@@ -8,161 +6,195 @@
 
 ---
 
-
 <div align="center">
-  <img src="assets/images/app_icon_256.png" width="128" height="128" alt="Wmimo Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 188, 223, 0.25);" />
-  <h1 align="center" style="font-weight: 800; border-bottom: none; margin-top: 12px; margin-bottom: 6px;">Wmimo</h1>
-  <p align="center" style="font-size: 1.15rem; color: #57606a;"><strong>차세대 크로스 플랫폼 Clash / Mihomo GUI 프록시 클라이언트</strong></p>
-  <p align="center">Flutter와 초고성능 Mihomo 코어로 제작되었습니다. 최고의 속도, 우아한 모던 디자인 및 완벽한 프로토콜 호환성을 선사합니다.</p>
+  <img src="assets/images/app_icon_256.png" width="112" height="112" alt="Wmimo Logo" />
+  <h1>Wmimo</h1>
+  <p><strong>차세대 크로스 플랫폼 Clash / Mihomo GUI 프록시 클라이언트</strong></p>
+  <p>Flutter와 Mihomo 코어(v1.19.34) 기반으로 제작되었습니다. 데이터 수집 제로 원칙과 멀티홉 체인 프록시, 병렬 네트워크 진단, 실시간 파형 속도 측정을 제공합니다.</p>
 
-  <p align="center">
+  <p>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/v/release/aimy1/Wmimo?color=00BCDF&label=Release&logo=github&style=flat-square" alt="Release" /></a>
-    <a href="https://github.com/aimy1/Wmimo/actions"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="Build" /></a>
+    <a href="https://github.com/aimy1/Wmimo/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/aimy1/Wmimo/release.yml?style=flat-square&logo=githubactions&label=Build&color=2ea44f" alt="CI Build" /></a>
     <a href="https://github.com/aimy1/Wmimo/releases"><img src="https://img.shields.io/github/downloads/aimy1/Wmimo/total?color=7952d2&style=flat-square&logo=gitlfs&label=Downloads" alt="Downloads" /></a>
-    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
-    <a href="https://github.com/aimy1/Wmimo/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-green?style=flat-square" alt="License" /></a>
-    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
+    <a href="https://github.com/MetaCubeX/mihomo"><img src="https://img.shields.io/badge/Mihomo-v1.19.34-FF6B6B?style=flat-square" alt="Mihomo Core" /></a>
+    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-%3E%3D3.35-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" /></a>
+    <a href="#sec-platforms"><img src="https://img.shields.io/badge/Platforms-Win%20%7C%20macOS%20%7C%20Linux%20%7C%20Android%20%7C%20iOS-0EA5E9?style=flat-square" alt="Platforms" /></a>
+    <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/i18n-9%20Locales%20%C2%B7%20898%20Keys-10B981?style=flat-square" alt="i18n" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-green?style=flat-square" alt="License" /></a>
+    <a href="https://t.me/wmimoapp"><img src="https://img.shields.io/badge/Telegram-%40wmimoapp-2CA5E0?style=flat-square&logo=telegram&logoColor=white" alt="Telegram" /></a>
   </p>
 
-  <p align="center">
+  <p>
     <a href="https://github.com/aimy1/Wmimo/releases"><b>다운로드</b></a> •
-    <a href="https://wmimo.buzz"><b>공식 웹사이트</b></a> •
-    <a href="#주요-기능"><b>주요 기능</b></a> •
-    <a href="docs/BENCHMARKS.md"><b>성능 벤치마크</b></a> •
-    <a href="#빠른-시작"><b>빠른 시작</b></a> •
-    <a href="#소스코드-빌드"><b>소스 빌드</b></a> •
-    <a href="https://t.me/wmimoapp"><b>커뮤니티</b></a>
+    <a href="#sec-platforms"><b>지원 플랫폼</b></a> •
+    <a href="#sec-features"><b>핵심 기능</b></a> •
+    <a href="#sec-architecture"><b>아키텍처</b></a> •
+    <a href="#sec-quickstart"><b>빠른 시작</b></a> •
+    <a href="#sec-build"><b>소스 빌드</b></a> •
+    <a href="#sec-security"><b>보안 및 라이선스</b></a> •
+    <a href="#sec-community"><b>커뮤니티</b></a>
   </p>
-
-  <br/>
-  <p align="center">
-    <img src="docs/preview_light.png" alt="Wmimo 라이트 모드" width="370" />
-    &nbsp;&nbsp;
-    <img src="docs/preview_dark.png" alt="Wmimo 다크 모드" width="370" />
-  </p>
-  <sub><em>세련된 18px 마이크로 카드 UI, 부드러운 실시간 베지에 트래픽 그래프, 종합 네트워크 진단 (라이트 & 다크 듀얼 테마)</em></sub>
 </div>
 
----
+| 라이트 모드 | 다크 모드 |
+| :---: | :---: |
+| <img src="docs/preview_light.png" alt="Wmimo Light Theme" width="380" /> | <img src="docs/preview_dark.png" alt="Wmimo Dark Theme" width="380" /> |
 
-## 주요 기능
-
-- **아티잔 마이크로 카드 디자인 & 네이티브 듀얼 테마**:
-  - 18px 곡률 마이크로 카드와 감각적인 시안 블루 컬러의 절제된 미학.
-  - 라이트 모드와 깊이 있는 다크 모드를 완벽하게 지원.
-  - 대화면 데스크톱 사이드바와 모바일 한 손 레이아웃 자동 적응.
-- **강력한 Mihomo (Meta) 코어 엔진**:
-  - Shadowsocks, VMess, VLESS (Reality), Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH, Direct 등 전 프로토콜 지원.
-  - 백그라운드 Isolate 비동기 노드 파싱 및 정렬 — UI 지연 없는 논블로킹 로딩 (5,000개 노드 파싱 약 163ms 소요, [성능 벤치마크](docs/BENCHMARKS.md) 참조).
-- **스마트 라우팅 및 듀얼 프록시 엔진**:
-  - 규칙 분류 (Rule) / 글로벌 (Global) / 직결 (Direct) 모드 원클릭 전환.
-  - **TUN 가상 어댑터 모드** (시스템 전체 투명 캡처) 및 **시스템 프록시 모드** (간편 무권한 연결).
-  - Android 앱별 분할 프록시 및 Windows UWP Loopback 제외 도구.
-- **비주얼 체인 프록시 (Chain Proxy) [Beta]**:
-  - Mihomo 네이티브 `type: relay` 정책 그룹 기반, 경유 노드와 최종 출구 노드 간의 2단계 토폴로지 연결 지원.
-  - 스트리밍 및 AI 서비스용 클린 IP 확보, 초고속 경유 중계 및 차단된 노드 우회 지원.
-  - 독립적인 영구 저장소(`chain_proxies.json`)를 통해 구독 자동 갱신 시에도 체인 프록시 설정이 유실되지 않음.
-  - 종단 간 실제 레이턴시 측정, 유효하지 않은 노드 감지 경고 및 연결 끊김 없는 매끄러운 핫 리로드 지원.
-- **실시간 트래픽 원격 분석 & 종합 진단 도구**:
-  - 1분/5분/15분/30분/60분 다중 시간 축 베지에 곡선 트래픽 그래프.
-  - 출구 IP, 위치 및 ISP 정보 즉시 조회, 원터치 복사 및 마스킹 보안 기능.
-  - 구독 플랜 데이터 사용량 진행률 및 만료일 카운트다운.
-  - 전체 진단 도구: 라우팅 규칙 검사기, 실시간 코어 콘솔 로그, 병렬 Ping 테스트, 런타임 설정 뷰어.
-- **운영체제 네이티브 깊은 통합 & 글로벌 단축키**:
-  - **글로벌 단축키 시스템**: Windows / macOS / Linux 환경에서 시스템 전역 단축키 커스텀 지원 (창 표시/숨김, 프록시 마스터 스위치, 시스템 프록시 전환, 아웃바운드 모드 순환).
-  - **Windows**: 앱 테마와 동기화되는 트레이 메뉴, 트레이 아이콘 실시간 속도 표시, `comctl32 v6` 비주얼 스타일.
-  - **Android**: 백그라운드 상주 알림 (즉시 연결 끊기 버튼 탑재), 퀵 세팅 타일, 실시간 다국어 동기화.
-  - **macOS**: 메뉴바 Template 아이콘 지원 및 시스템 프록시 자동화.
-- **멀티 채널 무중단 자동 업데이트**:
-  - `stable` (안정 버전) 및 `beta` (프리뷰 버전) 채널을 자유롭게 전환.
-  - 백그라운드 무소음 고속 다운로드 및 SHA-256 해시 무결성 검증.
-- **완벽한 9개국어 네이티브 번역**:
-  - 한국어, 영어, 중국어(간체/번체), 일본어, 러시아어, 스페인어, 아랍어, 페르시아어 847개 키 100% 매칭 (0 누락 키, [벤치마크](docs/BENCHMARKS.md) 참조).
+<p align="center"><sub><em>18px 마이크로 카드 대시보드 · 실시간 베지어 트래픽 차트 · TUN / 시스템 프록시 듀얼 엔진</em></sub></p>
 
 ---
+
+<a id="sec-platforms"></a>
+
+## 지원 플랫폼 및 릴리스 패키지
+
+| 플랫폼 | 아키텍처 | 배포 형식 | 주요 OS 통합 기능 |
+| :--- | :--- | :--- | :--- |
+| **Windows** | `x64`, `arm64` | 설치 파일(`.exe`), 포터블(`.zip`) | 비권한 시스템 프록시, WHQL Wintun TUN, UWP 루프백, 트레이 속도 및 테마 동기화, 전역 단축키 |
+| **macOS** | `Universal` (`arm64` + `x64`) | `.dmg`, 포터블(`.zip`) | 안전한 서비스 권한 상승/TUN, 적응형 메뉴 막대 아이콘, iCloud Drive 동기화, 전역 단축키 |
+| **Linux** | `x64`, `arm64` | `.deb`, `.rpm`, `.AppImage`, Arch `PKGBUILD` (`wmimo-bin`), `.tar.gz` | `setcap` / 서비스 TUN, 시스템 프록시, GTK3 데스크톱 통합, 전역 단축키 |
+| **Android** | `arm64-v8a`, `armeabi-v7a`, `x86_64` | ABI 분할 APK 및 유니버설 `.apk` | 무중단 앱별 프록시 핫스왑, 배터리 최적화 제외 확인, 빠른 설정 타일, 포그라운드 알림 |
+| **iOS** | `arm64` | 미서명 `.ipa` (TrollStore / 사이드로딩) | Network Extension VPN 및 iCloud 동기화 ([Apple 개발 가이드](docs/APPLE_DEVELOPMENT.md)) |
+
+> [GitHub Releases](https://github.com/aimy1/Wmimo/releases)에서 다운로드하고 [SECURITY.md](SECURITY.md)에서 APK SHA-256 지문을 확인하세요.
+
+---
+
+<a id="sec-features"></a>
+
+## 핵심 기능 매트릭스
+
+| 모듈 | 핵심 기능 |
+| :--- | :--- |
+| **Mihomo 라우팅 코어** | `v1.19.34` • SS, VMess, VLESS Reality, Trojan, Hysteria 1/2, TUIC v5, WireGuard, SSH • Isolate YAML 파서 (`5,000`개 노드 `~163 ms`) |
+| **멀티홉 체인 프록시 `[Beta]`** | **`dialer-proxy`** 기반 다단계 홉 구성, 드래그/스왑 순서 변경, 중복 검사, 구독 업데이트에도 유지되는 `chain_proxies.json` |
+| **모바일 앱별 프록시** | 빈 화이트리스트 누수 차단, 코어 재시작 없는 실시간 핫스왑, Launcher 통합 검색 및 무권한 프리셋 |
+| **네트워크 진단 (`NetCheck`)** | 2단계 5항목 병렬 진단(가상 TUN 제외, DNS/Fake-IP 점검, 포트, 프록시/TUN, 출구 204 핸드셰이크) + 도메인 검사 + 원클릭 자동 복구 |
+| **속도 측정 (`SpeedTest`)** | 다중 스트림 HTTP 속도 측정, 안정적 Ping/Jitter, 실시간 송수신 파형 그래프, 시나리오 등급, CDN 지연시간 배지 |
+| **백업 및 동기화** | WebDAV, iCloud Drive, 로컬/URL `.zip` 백업(체인 프록시 포함, 임시 스테이징 검증 및 Zip-Slip 차단) |
+| **UI 및 모니터링** | 라이트/다크 테마, 홈 카드 관리, 화면 회전 기본 활성화, 1m–60m 트래픽 차트, 출구 IP 마스킹 |
+| **개인정보 및 9개 언어** | 텔레메트리/광고 SDK 제로, **9개 언어 × 898개 키 100% 일치** 및 9개 언어 개인정보 처리방침 |
+
+### 라우팅 · 진단 · 백업 안정성
+
+- **이중 프록시 엔진**: Rule / Global / Direct 모드와 TUN / 시스템 프록시 즉각 전환.
+- **원자적 복원 검증**: 백업 복원 시 임시 폴더에서 압축 해제를 먼저 검증한 뒤 기존 설정을 안전하게 교체합니다.
+
+---
+
+<a id="sec-architecture"></a>
+
+## 아키텍처 및 프로젝트 구조
+
+| 계층 | 역할 | 경로 |
+| :--- | :--- | :--- |
+| **UI 및 화면** | Flutter (`>= 3.35.0`), 마이크로 카드 UI, Canvas 차트 | [`lib/screens/`](lib/screens/) |
+| **모듈 및 상태** | 설정/체인/프로필 관리자, Isolate 파서 | [`lib/app/`](lib/app/) |
+| **VPN 및 네이티브** | 서비스 브리지, Android Kotlin (`WmimoVpnService.kt`) | [`third_party/libclash_vpn_service/`](third_party/libclash_vpn_service/), [`android/`](android/) |
+| **Rust 크레이트** | 네이티브 유틸리티 워크스페이스 | [`rust/`](rust/) |
+| **i18n 및 정책** | Slang 번역(9언어 × 898키) 및 개인정보 처리방침 | [`lib/i18n/`](lib/i18n/), [`assets/txts/`](assets/txts/) |
+
+---
+
+<a id="sec-quickstart"></a>
 
 ## 빠른 시작
 
-1. **다운로드**: [Releases 페이지](https://github.com/aimy1/Wmimo/releases)에서 사용 중인 OS에 맞는 패키지를 다운로드합니다.
-2. **구독 가져오기**: '구독 관리'에서 Clash/Mihomo 링크를 붙여넣거나 로컬 YAML 파일을 불러옵니다.
-3. **연결**: '홈' 화면에서 스위치를 켜면 즉시 보안 프록시 통신이 시작됩니다.
-   - *Windows 팁*: **TUN 모드**를 사용하려면 앱을 마우스 우클릭 후 【관리자 권한으로 실행】하십시오. 일반 웹서핑은 **시스템 프록시 모드**로도 충분합니다.
+1. **다운로드**: [GitHub Releases](https://github.com/aimy1/Wmimo/releases)에서 OS 설치 파일을 받습니다.
+2. **구독 가져오기**: 구독 메뉴에 Clash/Mihomo 링크 또는 로컬 YAML을 추가합니다.
+3. **연결**: 홈 상단 스위치를 켜서 라우팅을 시작합니다.
+
+<details>
+<summary><b>플랫폼별 팁 (Windows / Android / macOS·Linux / iOS)</b></summary>
+
+- **Windows**: 일반 브라우징은 시스템 프록시, TUN 모드는 관리자 권한 실행이 필요합니다. `portable` 폴더 생성 시 포터블 모드로 동작합니다.
+- **Android**: 배터리 최적화 제외 설정을 권장하며, 앱별 프록시는 연결 중에도 즉시 핫스왑 적용됩니다.
+- **iOS**: 미서명 `.ipa`로 배포됩니다([docs/APPLE_DEVELOPMENT.md](docs/APPLE_DEVELOPMENT.md)).
+
+</details>
 
 ---
 
-## 소스코드 빌드
+<a id="sec-build"></a>
 
-### 환경 요구사항
-- [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`)
-- [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
-- 호스트 플랫폼 컴파일러 툴체인 (Windows: Visual Studio 2022 C++, Linux: GTK3/Clang/CMake, Android: Android SDK)
+## 소스에서 빌드
+
+### 필수 환경
+
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) (`>= 3.35.0`) & [Dart SDK](https://dart.dev/get-dart) (`>= 3.12.2`)
+- 플랫폼별 빌드 도구 (VS 2022 C++ / Xcode / GTK3 & CMake / Android SDK)
 
 ### 빌드 명령어
 
 ```bash
-# 1. 저장소 복제
+# 1. Clone repository
 git clone https://github.com/aimy1/Wmimo.git
 cd Wmimo
 
-# 2. 패키지 설치 및 다국어 코드 생성
+# 2. Fetch dependencies & generate i18n bindings
 flutter pub get
 dart run slang
 
-# 3. 플랫폼별 Mihomo 코어 다운로드
+# 3. Download prebuilt Mihomo cores
 dart run tool/download_all_cores.dart
 
-# 4. 개발 모드 실행
+# 4. Run development build
 flutter run
 
-# 5. 배포 바이너리 빌드
-flutter build windows --release   # Windows
-flutter build apk --release       # Android
-flutter build linux --release     # Linux
-flutter build macos --release     # macOS
+# 5. Build release artifacts
+flutter build windows --release
+flutter build macos --release
+flutter build linux --release
+flutter build apk --release
 ```
 
 ---
 
-## Star History
+<a id="sec-benchmarks"></a>
+
+## 성능 벤치마크 및 검증
+
+- **구독 파싱**: `~30,670 노드/초` (백그라운드 Isolate에서 `5,000` 노드 `~163 ms` 처리).
+- **국제화 커버리지**: **9개 언어 × 898개 키 = 100.0%** ([docs/BENCHMARKS.md](docs/BENCHMARKS.md)).
+
+자세한 방법론: [docs/BENCHMARKS.md](docs/BENCHMARKS.md)
+
+<details>
+<summary><b>Star 히스토리</b></summary>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aimy1/Wmimo&type=Date)](https://star-history.com/#aimy1/Wmimo&Date)
 
----
-
-## 성능 및 품질 검증
-
-Wmimo의 아키텍처 효율성과 커버리지는 독립적으로 재현 가능한 자동화 테스트를 통해 검증됩니다:
-
-- **구독 파싱 처리량**: 초당 약 30,670개 노드 (5,000개 다중 프로토콜 노드를 백그라운드 Isolate에서 약 163ms 만에 파싱 및 분류).
-- **빠른 포맷 탐지**: `isClashYaml` 알고리즘으로 1,000개 노드 설정을 약 1.4ms 내에 검증.
-- **다국어 완성도**: 9개 언어 각 847개 키 100.0% 완전 일치 (0 누락 키).
-- **자동 검증 실행**: `flutter test test/benchmark_profile_scale_test.dart` 및 `flutter test test/i18n_integrity_test.dart`.
-
-상세한 벤치마크 보고서 및 테스트 환경은 [docs/BENCHMARKS.md](docs/BENCHMARKS.md)에서 확인하실 수 있습니다.
+</details>
 
 ---
+
+<a id="sec-security"></a>
+
+## 보안, 개인정보 및 라이선스
+
+- **데이터 수집 제로**: [assets/txts/privacy_policy_ko.txt](assets/txts/privacy_policy_ko.txt)
+- **인증서 및 서명 검증**: [SECURITY.md](SECURITY.md)
+
+### 라이선스
+
+**GNU General Public License v3.0 (GPL-3.0-or-later)** ([LICENSE](LICENSE)).
+
+- Rust 크레이트: 단독 [MIT](rust/LICENSE-MIT) / [Apache-2.0](rust/LICENSE-APACHE), Wmimo 배포 시 GPL-3.0.
+- 서드파티 고지: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md), [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md)
+
+---
+
+<a id="sec-community"></a>
 
 ## 감사의 말
 
-- **[GooRingX (vowe)](https://github.com/GooRingX)**: 탁월한 오픈소스 기여와 설계 통찰력에 진심으로 감사드립니다.
-- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**: 강력한 코어 엔진과 전 프로토콜 지원에 감사드립니다.
-- **[Flutter](https://flutter.dev/)**: 뛰어난 크로스 플랫폼 프레임워크 지원에 감사드립니다.
+- **[GooRingX (vowe)](https://github.com/GooRingX)**
+- **[Mihomo (MetaCubeX)](https://github.com/MetaCubeX/mihomo)**
+- **[Flutter](https://flutter.dev/)**
 
----
-
-## 커뮤니티 & 문의
+## 커뮤니티 및 피드백
 
 - **공식 웹사이트**: [wmimo.buzz](https://wmimo.buzz)
-- **Telegram 공식 채널**: [t.me/wmimoapp](https://t.me/wmimoapp)
-- **개발자 이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
-- **이슈 제보**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)
-
----
-
-## 라이선스
-
-이 프로젝트는 **GNU General Public License v3.0 (GPL-3.0-or-later)**에 따라 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하십시오.
-
-- **Rust Workspace 크레이트**: 독립 라이브러리로 사용 시 [MIT](rust/LICENSE-MIT) 또는 [Apache-2.0](rust/LICENSE-APACHE) 듀얼 라이선스가 적용되며, Wmimo와 함께 배포 시 GPL-3.0을 따릅니다.
-- **서드파티 및 핵심 컴포넌트 라이선스**: [THIRDPARTY_LICENSES.md](THIRDPARTY_LICENSES.md) 및 [docs/LICENSES_AND_COMPONENTS.md](docs/LICENSES_AND_COMPONENTS.md)를 참조하십시오.
-- **보안 정책 및 서명 인증서**: 공식 Android APK 서명 인증서 지문(SHA-256) 및 릴리스 검증 가이드는 [SECURITY.md](SECURITY.md)를 참조하십시오.
+- **Telegram 채널**: [t.me/wmimoapp](https://t.me/wmimoapp)
+- **이메일**: [aisaniya@proton.me](mailto:aisaniya@proton.me)
+- **이슈 트래커**: [GitHub Issues](https://github.com/aimy1/Wmimo/issues)

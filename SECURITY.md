@@ -10,9 +10,9 @@ Security patches and bug fixes are actively maintained on the following channels
 
 | Version Channel | Supported | Notes |
 |:---|:---:|:---|
-| Current Stable Release (`v1.3.x`) | :white_check_mark: | Fully supported with security and stability updates |
-| Beta Preview Channel (`v1.3.x-beta`) | :white_check_mark: | Early validation builds |
-| Older Versions (`< v1.3.0`) | :x: | End of life; please upgrade to the latest stable release |
+| Current Stable Release (`v1.4.x`) | :white_check_mark: | Fully supported with security and stability updates |
+| Beta Preview Channel (`v1.4.x-beta`) | :white_check_mark: | Early validation builds |
+| Older Versions (`< v1.4.0`) | :x: | End of life; please upgrade to the latest stable release |
 
 ---
 
