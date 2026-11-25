@@ -32,7 +32,19 @@
     "permissionRestrictedTip": "システムによりアプリ一覧の読み取りが制限されています。下の【システム権限設定を開く】をタップしてアプリ一覧取得権限を許可するか、権限不要のプリセットをご利用ください。",
     "openSystemPermission": "システム権限設定を開く",
     "presetApps": "よく使うアプリを追加 (権限不要プリセット)",
-    "requestPermissionPopup": "権限をリクエスト (システムダイアログ)"
+    "requestPermissionPopup": "権限をリクエスト (システムダイアログ)",
+    "rulesAppliedLive": "アプリ別プロキシルールがスムーズに適用されました",
+    "rulesChangedBanner": "ルールが変更されました。適用するとすぐに反映されます",
+    "applyNow": "今すぐ適用",
+    "partialPermissionBanner": "アプリ一覧の読み取り権限が制限されているため、一部のアプリのみ表示しています",
+    "grantPermission": "権限を許可",
+    "searchHint": "アプリ名 / パッケージ名",
+    "emptyWhitelistWarning": "ホワイトリストが空の場合、どのアプリもプロキシされません。少なくとも 1 つ選択してください",
+    "cleanupInvalidItems": "無効な $p 件を整理",
+    "uninstalledBadge": "アンインストール済",
+    "systemGuideTitle": "システム権限の設定ガイド",
+    "systemGuideBody": "• Xiaomi / HyperOS / MIUI：下の【システム権限設定へ】をタップし、「アプリ一覧の取得」を許可してください。\n• Huawei / Honor：設定 -> アプリ -> Wmimo -> 権限から「インストール済みアプリ一覧の読み取り」を許可。\n• OPPO / vivo：アプリの権限設定で「アプリ一覧の読み取り」を許可。\n• 権限を付与して Wmimo に戻ると自動的に読み込まれます。",
+    "configuredAppsCount": "$p 個のアプリを設定済み"
   },
   "UserAgreementScreen": {
     "privacyFirst": "利用規約とプライバシーポリシー",
@@ -189,7 +201,8 @@
   "VersionUpdateScreen": {
     "versionReady": "新しいバージョン [$p] の準備ができました",
     "update": "再起動して更新",
-    "cancel": "今はしない"
+    "cancel": "今はしない",
+    "dpkgNotFoundError": "現在のシステムで dpkg が検出されないため、.deb パッケージをインストールできません。\n互換性のないキャッシュを消去しました。再度アップデートを確認して適切なパッケージ（pacman / AppImage など）を取得してください。"
   },
   "loginScreen": {
     "login": "ログイン",
@@ -773,7 +786,13 @@
     "batteryOptimizationExempted": "除外済み",
     "batteryOptimizationRestricted": "制限あり（タップして許可）",
     "appPermissionsSettings": "システムアプリ権限設定",
-    "previewFinalConfig": "最終コア設定をプレビュー"
+    "previewFinalConfig": "最終コア設定をプレビュー",
+    "filterCategory": "$p のみ表示",
+    "directModeBannerTip": "現在「直連」モードです。すべての通信はプロキシを経由せず直接接続されます。",
+    "iconUrlOptional": "アイコン URL（空欄で Favicon を自動取得）",
+    "schemeConnectConfirm": "外部からプロキシ接続のリクエストがあります。許可しますか？",
+    "schemeDisconnectConfirm": "外部からプロキシ切断のリクエストがあります。許可しますか？",
+    "schemeReconnectConfirm": "外部からプロキシ再接続のリクエストがあります。許可しますか？"
   },
   "permission": {
     "camera": "カメラ",
@@ -852,7 +871,27 @@
     "updateFailed": "更新に失敗しました",
     "addPresetServer": "プリセットDNSを追加",
     "manageFakeIpFilter": "フィルターリストを管理 ($p)",
-    "fakeIpFilterDesc": "$p 個のドメインルールがFake-IP解決をバイパスし、ネットワーク分離問題を回避します。"
+    "fakeIpFilterDesc": "$p 個のドメインルールがFake-IP解決をバイパスし、ネットワーク分離問題を回避します。",
+    "geoInstalled": "インストール済み",
+    "geoNotInstalled": "未インストール",
+    "geoNeverUpdated": "未更新",
+    "geoDownloading": "ダウンロード中...",
+    "geoIntervalHours": "$p時間",
+    "geoIntervalDays": "$p日",
+    "cdnJsdelivrName": "jsDelivr グローバル高速 CDN（推奨）",
+    "cdnJsdelivrDesc": "Cloudflare エッジノード加速、アジア太平洋地域での直接ダウンロードに最適",
+    "cdnFastgitName": "GitHub 高速ミラー（プロキシ不要）",
+    "cdnFastgitDesc": "GitHub Releases 向けリバースプロキシミラー、直接ダウンロード可能",
+    "cdnGithubName": "GitHub 公式ソース（MetaCubeX）",
+    "cdnGithubDesc": "MetaCubeX 公式リリースリポジトリ",
+    "assetGeositeName": "GeoSite ドメイン振り分けデータベース",
+    "assetGeositeDesc": "GEOSITE ドメイン分類と精密なルーティングマッピングを提供",
+    "assetGeoipName": "GeoIP ルーティングデータベース",
+    "assetGeoipDesc": "GEOIP ルール一致に必要なグローバル IP アドレス範囲データを提供",
+    "assetCountryName": "GeoLite2 国別位置情報データベース (MMDB)",
+    "assetCountryDesc": "Mihomo コア内蔵の DNS 汚染対策および IP 国別高速照会用必須データベース",
+    "assetAsnName": "GeoLite2 ASN 自律システムデータベース",
+    "assetAsnDesc": "対象 IP の通信事業者と AS 番号を識別（IP-ASN ルール対応）"
   },
   "sniffer": {
     "overrideDest": "上書き"

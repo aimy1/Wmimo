@@ -133,6 +133,18 @@ class Translations$PerAppAndroidScreen$zh_CN implements Translations$PerAppAndro
 	@override String get openSystemPermission => '前往系统权限设置页';
 	@override String get presetApps => '快捷添加常用应用 (免授权预设)';
 	@override String get requestPermissionPopup => '尝试一键申请权限 (系统弹窗)';
+	@override String get rulesAppliedLive => '分应用代理规则已平滑生效';
+	@override String get rulesChangedBanner => '分流规则已变更，应用后立即生效';
+	@override String get applyNow => '立即应用';
+	@override String get partialPermissionBanner => '读取应用列表权限受限，当前仅展示部分可见应用';
+	@override String get grantPermission => '去授权';
+	@override String get searchHint => '应用名 / 包名';
+	@override String get emptyWhitelistWarning => '白名单为空时不会代理任何应用，请至少勾选 1 个应用';
+	@override String cleanupInvalidItems({required Object p}) => '清理 ${p} 个失效项';
+	@override String get uninstalledBadge => '已卸载';
+	@override String get systemGuideTitle => '常见系统开启指引';
+	@override String get systemGuideBody => '• 小米 / HyperOS / MIUI：点击下方【前往系统权限设置页】直达安全中心，开启「获取应用列表」权限。\n• 华为 / 荣耀：设置 -> 应用管理 -> Wmimo -> 权限，开启「读取已安装应用列表」。\n• OPPO / vivo：在应用权限中开启「读取应用列表」。\n• 开启权限后切回 Wmimo 即可自动加载，无需重复进入。';
+	@override String configuredAppsCount({required Object p}) => '已配置 ${p} 个分流应用';
 }
 
 // Path: UserAgreementScreen
@@ -318,6 +330,7 @@ class Translations$VersionUpdateScreen$zh_CN implements Translations$VersionUpda
 	@override String versionReady({required Object p}) => '新版本[${p}]已就绪';
 	@override String get update => '重启更新';
 	@override String get cancel => '暂不更新';
+	@override String get dpkgNotFoundError => '当前系统未检测到 dpkg，无法安装 .deb 软件包。\n已清除不兼容的缓存文件，请重新检查更新以获取适用于当前系统的软件包（如 pacman / AppImage）。';
 }
 
 // Path: loginScreen
@@ -898,6 +911,12 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get batteryOptimizationRestricted => '未豁免（点击授权）';
 	@override String get appPermissionsSettings => '系统应用权限设置';
 	@override String get previewFinalConfig => '预览最终生成的内核配置';
+	@override String filterCategory({required Object p}) => '仅看 ${p}';
+	@override String get directModeBannerTip => '当前为「直连」模式，所有流量直接连接，不经过下方代理节点';
+	@override String get iconUrlOptional => '图标地址 (留空自动获取 Favicon)';
+	@override String get schemeConnectConfirm => '外部请求连接代理，是否允许？';
+	@override String get schemeDisconnectConfirm => '外部请求断开代理，是否允许？';
+	@override String get schemeReconnectConfirm => '外部请求重新连接代理，是否允许？';
 }
 
 // Path: permission
@@ -1005,6 +1024,26 @@ class Translations$dns$zh_CN implements Translations$dns$en {
 	@override String get addPresetServer => '添加预设 DNS';
 	@override String manageFakeIpFilter({required Object p}) => '管理过滤列表 (${p})';
 	@override String fakeIpFilterDesc({required Object p}) => '${p} 条域名规则绕过 Fake-IP 解析，以避免网络隔离问题。';
+	@override String get geoInstalled => '已安装';
+	@override String get geoNotInstalled => '未安装';
+	@override String get geoNeverUpdated => '从未更新';
+	@override String get geoDownloading => '正在下载...';
+	@override String geoIntervalHours({required Object p}) => '${p}小时';
+	@override String geoIntervalDays({required Object p}) => '${p}天';
+	@override String get cdnJsdelivrName => 'jsDelivr 全球加速 CDN（推荐）';
+	@override String get cdnJsdelivrDesc => 'Cloudflare 边缘节点加速，适合中国大陆与亚太网络直连下载';
+	@override String get cdnFastgitName => 'GitHub 高速镜像源（国内直连）';
+	@override String get cdnFastgitDesc => '针对 GitHub Releases 的反向代理镜像，免代理直连下载';
+	@override String get cdnGithubName => 'GitHub 官方源（MetaCubeX）';
+	@override String get cdnGithubDesc => 'MetaCubeX 官方发布仓库，需具备国际网络或开启代理';
+	@override String get assetGeositeName => 'GeoSite 域名分流数据库';
+	@override String get assetGeositeDesc => '提供 GEOSITE 域名分类与国内外站点精准分流映射';
+	@override String get assetGeoipName => 'GeoIP 路由分流数据库';
+	@override String get assetGeoipDesc => '提供 GEOIP 规则匹配所需的全球 IP 地址段归属数据';
+	@override String get assetCountryName => 'GeoLite2 国家地理位置库 (MMDB)';
+	@override String get assetCountryDesc => 'Mihomo 核心内置 DNS 防污染与目标 IP 国家快速查询必用库';
+	@override String get assetAsnName => 'GeoLite2 ASN 自治系统数据库';
+	@override String get assetAsnDesc => '识别目标 IP 所属运营商与自治系统号（支持 IP-ASN 分流规则）';
 }
 
 // Path: sniffer
@@ -1174,6 +1213,18 @@ extension on TranslationsZhCn {
 			'PerAppAndroidScreen.openSystemPermission' => '前往系统权限设置页',
 			'PerAppAndroidScreen.presetApps' => '快捷添加常用应用 (免授权预设)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '尝试一键申请权限 (系统弹窗)',
+			'PerAppAndroidScreen.rulesAppliedLive' => '分应用代理规则已平滑生效',
+			'PerAppAndroidScreen.rulesChangedBanner' => '分流规则已变更，应用后立即生效',
+			'PerAppAndroidScreen.applyNow' => '立即应用',
+			'PerAppAndroidScreen.partialPermissionBanner' => '读取应用列表权限受限，当前仅展示部分可见应用',
+			'PerAppAndroidScreen.grantPermission' => '去授权',
+			'PerAppAndroidScreen.searchHint' => '应用名 / 包名',
+			'PerAppAndroidScreen.emptyWhitelistWarning' => '白名单为空时不会代理任何应用，请至少勾选 1 个应用',
+			'PerAppAndroidScreen.cleanupInvalidItems' => ({required Object p}) => '清理 ${p} 个失效项',
+			'PerAppAndroidScreen.uninstalledBadge' => '已卸载',
+			'PerAppAndroidScreen.systemGuideTitle' => '常见系统开启指引',
+			'PerAppAndroidScreen.systemGuideBody' => '• 小米 / HyperOS / MIUI：点击下方【前往系统权限设置页】直达安全中心，开启「获取应用列表」权限。\n• 华为 / 荣耀：设置 -> 应用管理 -> Wmimo -> 权限，开启「读取已安装应用列表」。\n• OPPO / vivo：在应用权限中开启「读取应用列表」。\n• 开启权限后切回 Wmimo 即可自动加载，无需重复进入。',
+			'PerAppAndroidScreen.configuredAppsCount' => ({required Object p}) => '已配置 ${p} 个分流应用',
 			'UserAgreementScreen.privacyFirst' => '用户协议与隐私保护',
 			'UserAgreementScreen.subtitle' => '在使用 Wmimo 之前，请仔细阅读并同意以下条款',
 			'UserAgreementScreen.agreeAndContinue' => '同意并继续',
@@ -1323,6 +1374,7 @@ extension on TranslationsZhCn {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '新版本[${p}]已就绪',
 			'VersionUpdateScreen.update' => '重启更新',
 			'VersionUpdateScreen.cancel' => '暂不更新',
+			'VersionUpdateScreen.dpkgNotFoundError' => '当前系统未检测到 dpkg，无法安装 .deb 软件包。\n已清除不兼容的缓存文件，请重新检查更新以获取适用于当前系统的软件包（如 pacman / AppImage）。',
 			'loginScreen.login' => '登录',
 			'loginScreen.register' => '注册账号',
 			'loginScreen.forgotPassword' => '忘记密码',
@@ -1646,6 +1698,8 @@ extension on TranslationsZhCn {
 			'meta.remoteSubscription' => '远程订阅',
 			'meta.noTrafficData' => '未提供用量统计',
 			'meta.localProfile' => '本地文件',
+			_ => null,
+		} ?? switch (path) {
 			'meta.viewYamlConfig' => '查看 YAML 配置',
 			'meta.editYamlConfig' => '编辑 YAML 配置',
 			'meta.copySubscriptionUrl' => '复制订阅链接',
@@ -1659,8 +1713,6 @@ extension on TranslationsZhCn {
 			'meta.nodeSelected' => ({required Object p}) => '已选择节点: ${p}',
 			'meta.startingCoreAndTesting' => '正在启动代理内核并测速...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} 分钟',
-			_ => null,
-		} ?? switch (path) {
 			'meta.chartUpload' => '上传',
 			'meta.chartDownload' => '下载',
 			'meta.author' => '作者',
@@ -1901,6 +1953,12 @@ extension on TranslationsZhCn {
 			'meta.batteryOptimizationRestricted' => '未豁免（点击授权）',
 			'meta.appPermissionsSettings' => '系统应用权限设置',
 			'meta.previewFinalConfig' => '预览最终生成的内核配置',
+			'meta.filterCategory' => ({required Object p}) => '仅看 ${p}',
+			'meta.directModeBannerTip' => '当前为「直连」模式，所有流量直接连接，不经过下方代理节点',
+			'meta.iconUrlOptional' => '图标地址 (留空自动获取 Favicon)',
+			'meta.schemeConnectConfirm' => '外部请求连接代理，是否允许？',
+			'meta.schemeDisconnectConfirm' => '外部请求断开代理，是否允许？',
+			'meta.schemeReconnectConfirm' => '外部请求重新连接代理，是否允许？',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',
@@ -1972,6 +2030,26 @@ extension on TranslationsZhCn {
 			'dns.addPresetServer' => '添加预设 DNS',
 			'dns.manageFakeIpFilter' => ({required Object p}) => '管理过滤列表 (${p})',
 			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} 条域名规则绕过 Fake-IP 解析，以避免网络隔离问题。',
+			'dns.geoInstalled' => '已安装',
+			'dns.geoNotInstalled' => '未安装',
+			'dns.geoNeverUpdated' => '从未更新',
+			'dns.geoDownloading' => '正在下载...',
+			'dns.geoIntervalHours' => ({required Object p}) => '${p}小时',
+			'dns.geoIntervalDays' => ({required Object p}) => '${p}天',
+			'dns.cdnJsdelivrName' => 'jsDelivr 全球加速 CDN（推荐）',
+			'dns.cdnJsdelivrDesc' => 'Cloudflare 边缘节点加速，适合中国大陆与亚太网络直连下载',
+			'dns.cdnFastgitName' => 'GitHub 高速镜像源（国内直连）',
+			'dns.cdnFastgitDesc' => '针对 GitHub Releases 的反向代理镜像，免代理直连下载',
+			'dns.cdnGithubName' => 'GitHub 官方源（MetaCubeX）',
+			'dns.cdnGithubDesc' => 'MetaCubeX 官方发布仓库，需具备国际网络或开启代理',
+			'dns.assetGeositeName' => 'GeoSite 域名分流数据库',
+			'dns.assetGeositeDesc' => '提供 GEOSITE 域名分类与国内外站点精准分流映射',
+			'dns.assetGeoipName' => 'GeoIP 路由分流数据库',
+			'dns.assetGeoipDesc' => '提供 GEOIP 规则匹配所需的全球 IP 地址段归属数据',
+			'dns.assetCountryName' => 'GeoLite2 国家地理位置库 (MMDB)',
+			'dns.assetCountryDesc' => 'Mihomo 核心内置 DNS 防污染与目标 IP 国家快速查询必用库',
+			'dns.assetAsnName' => 'GeoLite2 ASN 自治系统数据库',
+			'dns.assetAsnDesc' => '识别目标 IP 所属运营商与自治系统号（支持 IP-ASN 分流规则）',
 			'sniffer.overrideDest' => '覆盖',
 			'profilePatchMode.currentSelected' => '当前选择',
 			'profilePatchMode.overwrite' => '内置-覆写',

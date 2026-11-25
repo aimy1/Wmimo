@@ -133,6 +133,18 @@ class _Translations$PerAppAndroidScreen$ar implements Translations$PerAppAndroid
 	@override String get openSystemPermission => 'الانتقال إلى إعدادات أذونات النظام';
 	@override String get presetApps => 'إضافة سريعة للتطبيقات الشائعة (بدون إذن)';
 	@override String get requestPermissionPopup => 'طلب الإذن (نافذة النظام)';
+	@override String get rulesAppliedLive => 'تم تطبيق قواعد الوكيل لكل تطبيق بسلاسة';
+	@override String get rulesChangedBanner => 'تغيرت قواعد التوجيه. طبّق لتفعيلها فوراً';
+	@override String get applyNow => 'تطبيق الآن';
+	@override String get partialPermissionBanner => 'إذن قراءة قائمة التطبيقات مقيد؛ يتم عرض التطبيقات المرئية جزئياً فقط';
+	@override String get grantPermission => 'منح الإذن';
+	@override String get searchHint => 'اسم التطبيق / الحزمة';
+	@override String get emptyWhitelistWarning => 'القائمة البيضاء الفارغة لا تمرر أي تطبيق عبر الوكيل. يرجى تحديد تطبيق واحد على الأقل';
+	@override String cleanupInvalidItems({required Object p}) => 'تنظيف ${p} عنصر غير صالح';
+	@override String get uninstalledBadge => 'غير مثبت';
+	@override String get systemGuideTitle => 'دليل تفعيل أذونات النظام';
+	@override String get systemGuideBody => '• Xiaomi / HyperOS / MIUI: اضغط على [فتح إعدادات أذونات النظام] أدناه لتفعيل \'الحصول على قائمة التطبيقات\'.\n• Huawei / Honor: الإعدادات -> التطبيقات -> Wmimo -> الأذونات -> فعّل \'قراءة قائمة التطبيقات المثبتة\'.\n• OPPO / vivo: فعّل \'قراءة قائمة التطبيقات\' في أذونات التطبيق.\n• عُد إلى Wmimo بعد منح الإذن ليتم التحميل تلقائياً.';
+	@override String configuredAppsCount({required Object p}) => 'تم تكوين ${p} تطبيق';
 }
 
 // Path: UserAgreementScreen
@@ -318,6 +330,7 @@ class _Translations$VersionUpdateScreen$ar implements Translations$VersionUpdate
 	@override String versionReady({required Object p}) => 'الإصدار الجديد [${p}] جاهز';
 	@override String get update => 'أعد التشغيل للتحديث';
 	@override String get cancel => 'ليس الآن';
+	@override String get dpkgNotFoundError => 'لم يتم العثور على dpkg في هذا النظام، لذا لا يمكن تثبيت حزم .deb.\nتم مسح الملفات المؤقتة غير المتوافقة. يرجى التحقق من التحديثات مجدداً للحصول على حزمة متوافقة (مثل pacman / AppImage).';
 }
 
 // Path: loginScreen
@@ -898,6 +911,12 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get batteryOptimizationRestricted => 'مقيّد (اضغط للسماح)';
 	@override String get appPermissionsSettings => 'أذونات التطبيق في النظام';
 	@override String get previewFinalConfig => 'معاينة التكوين النهائي للنواة';
+	@override String filterCategory({required Object p}) => 'تصفية ${p}';
+	@override String get directModeBannerTip => 'وضع الاتصال المباشر نشط. تمر جميع حركة المرور مباشرة دون استخدام عقد الوكيل.';
+	@override String get iconUrlOptional => 'رابط الأيقونة (اتركه فارغاً لجلب Favicon تلقائياً)';
+	@override String get schemeConnectConfirm => 'طلب خارجي يريد الاتصال بالوكيل. هل تسمح؟';
+	@override String get schemeDisconnectConfirm => 'طلب خارجي يريد قطع الاتصال بالوكيل. هل تسمح؟';
+	@override String get schemeReconnectConfirm => 'طلب خارجي يريد إعادة الاتصال بالوكيل. هل تسمح؟';
 }
 
 // Path: permission
@@ -1005,6 +1024,26 @@ class _Translations$dns$ar implements Translations$dns$en {
 	@override String get addPresetServer => 'إضافة DNS محدد مسبقًا';
 	@override String manageFakeIpFilter({required Object p}) => 'إدارة قائمة التصفية (${p})';
 	@override String fakeIpFilterDesc({required Object p}) => '${p} قواعد نطاق تتجاوز تحليل Fake-IP لتجنب مشكلات العزل في الشبكة.';
+	@override String get geoInstalled => 'مُثبّت';
+	@override String get geoNotInstalled => 'غير مُثبّت';
+	@override String get geoNeverUpdated => 'أبداً';
+	@override String get geoDownloading => 'جارٍ التنزيل...';
+	@override String geoIntervalHours({required Object p}) => '${p} س';
+	@override String geoIntervalDays({required Object p}) => '${p} ي';
+	@override String get cdnJsdelivrName => 'شبكة jsDelivr العالمية (موصى به)';
+	@override String get cdnJsdelivrDesc => 'تسريع عبر عقد Cloudflare الطرفية للتنزيل المباشر';
+	@override String get cdnFastgitName => 'مرآة GitHub عالية السرعة (اتصال مباشر)';
+	@override String get cdnFastgitDesc => 'مرآة وكيل عكسي لإصدارات GitHub للتنزيل بدون وكيل';
+	@override String get cdnGithubName => 'مصدر GitHub الرسمي (MetaCubeX)';
+	@override String get cdnGithubDesc => 'مستودع إصدارات MetaCubeX الرسمي';
+	@override String get assetGeositeName => 'قاعدة بيانات توجيه النطاقات GeoSite';
+	@override String get assetGeositeDesc => 'تصنيفات النطاقات لتوجيه قواعد GEOSITE بدقة';
+	@override String get assetGeoipName => 'قاعدة بيانات توجيه GeoIP';
+	@override String get assetGeoipDesc => 'بيانات نطاقات IP العالمية لمطابقة قواعد GEOIP';
+	@override String get assetCountryName => 'قاعدة بيانات الدول GeoLite2 (MMDB)';
+	@override String get assetCountryDesc => 'قاعدة بيانات أساسية للاستعلام السريع عن دولة IP وحماية DNS في النواة';
+	@override String get assetAsnName => 'قاعدة بيانات الأنظمة المستقلة GeoLite2 ASN';
+	@override String get assetAsnDesc => 'تحديد مزود الخدمة ورقم النظام المستقل لعنوان IP (يدعم قواعد IP-ASN)';
 }
 
 // Path: sniffer
@@ -1174,6 +1213,18 @@ extension on TranslationsAr {
 			'PerAppAndroidScreen.openSystemPermission' => 'الانتقال إلى إعدادات أذونات النظام',
 			'PerAppAndroidScreen.presetApps' => 'إضافة سريعة للتطبيقات الشائعة (بدون إذن)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'طلب الإذن (نافذة النظام)',
+			'PerAppAndroidScreen.rulesAppliedLive' => 'تم تطبيق قواعد الوكيل لكل تطبيق بسلاسة',
+			'PerAppAndroidScreen.rulesChangedBanner' => 'تغيرت قواعد التوجيه. طبّق لتفعيلها فوراً',
+			'PerAppAndroidScreen.applyNow' => 'تطبيق الآن',
+			'PerAppAndroidScreen.partialPermissionBanner' => 'إذن قراءة قائمة التطبيقات مقيد؛ يتم عرض التطبيقات المرئية جزئياً فقط',
+			'PerAppAndroidScreen.grantPermission' => 'منح الإذن',
+			'PerAppAndroidScreen.searchHint' => 'اسم التطبيق / الحزمة',
+			'PerAppAndroidScreen.emptyWhitelistWarning' => 'القائمة البيضاء الفارغة لا تمرر أي تطبيق عبر الوكيل. يرجى تحديد تطبيق واحد على الأقل',
+			'PerAppAndroidScreen.cleanupInvalidItems' => ({required Object p}) => 'تنظيف ${p} عنصر غير صالح',
+			'PerAppAndroidScreen.uninstalledBadge' => 'غير مثبت',
+			'PerAppAndroidScreen.systemGuideTitle' => 'دليل تفعيل أذونات النظام',
+			'PerAppAndroidScreen.systemGuideBody' => '• Xiaomi / HyperOS / MIUI: اضغط على [فتح إعدادات أذونات النظام] أدناه لتفعيل \'الحصول على قائمة التطبيقات\'.\n• Huawei / Honor: الإعدادات -> التطبيقات -> Wmimo -> الأذونات -> فعّل \'قراءة قائمة التطبيقات المثبتة\'.\n• OPPO / vivo: فعّل \'قراءة قائمة التطبيقات\' في أذونات التطبيق.\n• عُد إلى Wmimo بعد منح الإذن ليتم التحميل تلقائياً.',
+			'PerAppAndroidScreen.configuredAppsCount' => ({required Object p}) => 'تم تكوين ${p} تطبيق',
 			'UserAgreementScreen.privacyFirst' => 'شروط الخدمة وسياسة الخصوصية',
 			'UserAgreementScreen.subtitle' => 'يرجى مراجعة الشروط التالية والموافقة عليها قبل استخدام Wmimo',
 			'UserAgreementScreen.agreeAndContinue' => 'قبول ومتابعة',
@@ -1323,6 +1374,7 @@ extension on TranslationsAr {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'الإصدار الجديد [${p}] جاهز',
 			'VersionUpdateScreen.update' => 'أعد التشغيل للتحديث',
 			'VersionUpdateScreen.cancel' => 'ليس الآن',
+			'VersionUpdateScreen.dpkgNotFoundError' => 'لم يتم العثور على dpkg في هذا النظام، لذا لا يمكن تثبيت حزم .deb.\nتم مسح الملفات المؤقتة غير المتوافقة. يرجى التحقق من التحديثات مجدداً للحصول على حزمة متوافقة (مثل pacman / AppImage).',
 			'loginScreen.login' => 'دخول',
 			'loginScreen.register' => 'إنشاء حساب',
 			'loginScreen.forgotPassword' => 'هل نسيت كلمة المرور',
@@ -1646,6 +1698,8 @@ extension on TranslationsAr {
 			'meta.remoteSubscription' => 'اشتراك عن بُعد',
 			'meta.noTrafficData' => 'لا توجد إحصائيات للاستخدام',
 			'meta.localProfile' => 'ملف محلي',
+			_ => null,
+		} ?? switch (path) {
 			'meta.viewYamlConfig' => 'عرض تكوين YAML',
 			'meta.editYamlConfig' => 'تعديل تكوين YAML',
 			'meta.copySubscriptionUrl' => 'نسخ رابط الاشتراك',
@@ -1659,8 +1713,6 @@ extension on TranslationsAr {
 			'meta.nodeSelected' => ({required Object p}) => 'العقدة المحددة: ${p}',
 			'meta.startingCoreAndTesting' => 'جارٍ تشغيل النواة واختبار السرعة...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} دقيقة',
-			_ => null,
-		} ?? switch (path) {
 			'meta.chartUpload' => 'رفع',
 			'meta.chartDownload' => 'تنزيل',
 			'meta.author' => 'المؤلف',
@@ -1901,6 +1953,12 @@ extension on TranslationsAr {
 			'meta.batteryOptimizationRestricted' => 'مقيّد (اضغط للسماح)',
 			'meta.appPermissionsSettings' => 'أذونات التطبيق في النظام',
 			'meta.previewFinalConfig' => 'معاينة التكوين النهائي للنواة',
+			'meta.filterCategory' => ({required Object p}) => 'تصفية ${p}',
+			'meta.directModeBannerTip' => 'وضع الاتصال المباشر نشط. تمر جميع حركة المرور مباشرة دون استخدام عقد الوكيل.',
+			'meta.iconUrlOptional' => 'رابط الأيقونة (اتركه فارغاً لجلب Favicon تلقائياً)',
+			'meta.schemeConnectConfirm' => 'طلب خارجي يريد الاتصال بالوكيل. هل تسمح؟',
+			'meta.schemeDisconnectConfirm' => 'طلب خارجي يريد قطع الاتصال بالوكيل. هل تسمح؟',
+			'meta.schemeReconnectConfirm' => 'طلب خارجي يريد إعادة الاتصال بالوكيل. هل تسمح؟',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',
@@ -1972,6 +2030,26 @@ extension on TranslationsAr {
 			'dns.addPresetServer' => 'إضافة DNS محدد مسبقًا',
 			'dns.manageFakeIpFilter' => ({required Object p}) => 'إدارة قائمة التصفية (${p})',
 			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} قواعد نطاق تتجاوز تحليل Fake-IP لتجنب مشكلات العزل في الشبكة.',
+			'dns.geoInstalled' => 'مُثبّت',
+			'dns.geoNotInstalled' => 'غير مُثبّت',
+			'dns.geoNeverUpdated' => 'أبداً',
+			'dns.geoDownloading' => 'جارٍ التنزيل...',
+			'dns.geoIntervalHours' => ({required Object p}) => '${p} س',
+			'dns.geoIntervalDays' => ({required Object p}) => '${p} ي',
+			'dns.cdnJsdelivrName' => 'شبكة jsDelivr العالمية (موصى به)',
+			'dns.cdnJsdelivrDesc' => 'تسريع عبر عقد Cloudflare الطرفية للتنزيل المباشر',
+			'dns.cdnFastgitName' => 'مرآة GitHub عالية السرعة (اتصال مباشر)',
+			'dns.cdnFastgitDesc' => 'مرآة وكيل عكسي لإصدارات GitHub للتنزيل بدون وكيل',
+			'dns.cdnGithubName' => 'مصدر GitHub الرسمي (MetaCubeX)',
+			'dns.cdnGithubDesc' => 'مستودع إصدارات MetaCubeX الرسمي',
+			'dns.assetGeositeName' => 'قاعدة بيانات توجيه النطاقات GeoSite',
+			'dns.assetGeositeDesc' => 'تصنيفات النطاقات لتوجيه قواعد GEOSITE بدقة',
+			'dns.assetGeoipName' => 'قاعدة بيانات توجيه GeoIP',
+			'dns.assetGeoipDesc' => 'بيانات نطاقات IP العالمية لمطابقة قواعد GEOIP',
+			'dns.assetCountryName' => 'قاعدة بيانات الدول GeoLite2 (MMDB)',
+			'dns.assetCountryDesc' => 'قاعدة بيانات أساسية للاستعلام السريع عن دولة IP وحماية DNS في النواة',
+			'dns.assetAsnName' => 'قاعدة بيانات الأنظمة المستقلة GeoLite2 ASN',
+			'dns.assetAsnDesc' => 'تحديد مزود الخدمة ورقم النظام المستقل لعنوان IP (يدعم قواعد IP-ASN)',
 			'sniffer.overrideDest' => 'غطاء',
 			'profilePatchMode.currentSelected' => 'المحدد الحالي',
 			'profilePatchMode.overwrite' => 'التجاوز المدمج',

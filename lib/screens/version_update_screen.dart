@@ -271,9 +271,10 @@ class _VersionUpdateScreenState
           AutoUpdateManager.getVersionCheck().clear();
           await AutoUpdateManager.save();
           if (mounted) {
+            final tcontext = Translations.of(context);
             DialogUtils.showAlertDialog(
               context,
-              "当前系统未检测到 dpkg，无法安装 .deb 软件包。\n已清除不兼容的缓存文件，请重新检查更新以获取适用于当前系统的软件包（如 pacman / AppImage）。",
+              tcontext.VersionUpdateScreen.dpkgNotFoundError,
               showCopy: true,
               showFAQ: true,
               withVersion: true,

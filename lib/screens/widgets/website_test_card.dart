@@ -500,7 +500,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                       TextField(
                         controller: iconController,
                         decoration: InputDecoration(
-                          labelText: "图标地址 (留空自动获取 Favicon)",
+                          labelText: tcontext.meta.iconUrlOptional,
                           hintText: "https://.../favicon.ico",
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                           isDense: true,
@@ -687,7 +687,7 @@ class _WebsiteTestCardState extends State<WebsiteTestCard> {
                       TextField(
                         controller: iconController,
                         decoration: InputDecoration(
-                          labelText: "图标地址 (留空自动获取 Favicon)",
+                          labelText: tcontext.meta.iconUrlOptional,
                           hintText: "https://.../favicon.ico",
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                           isDense: true,

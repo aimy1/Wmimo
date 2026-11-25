@@ -32,7 +32,19 @@
     "permissionRestrictedTip": "The system restricted reading the app list. Please tap 【Open System Permission Settings】 below to enable 'Get installed apps', or use preset apps directly without permission.",
     "openSystemPermission": "Open System Permission Settings",
     "presetApps": "Quick Add Common Apps (Preset)",
-    "requestPermissionPopup": "Request Permission (System Dialog)"
+    "requestPermissionPopup": "Request Permission (System Dialog)",
+    "rulesAppliedLive": "Per-app proxy rules applied seamlessly",
+    "rulesChangedBanner": "Routing rules changed. Apply to take effect immediately",
+    "applyNow": "Apply Now",
+    "partialPermissionBanner": "App list permission is restricted; only partially visible apps are shown",
+    "grantPermission": "Authorize",
+    "searchHint": "App name / Package ID",
+    "emptyWhitelistWarning": "An empty whitelist proxies no apps. Please select at least 1 app",
+    "cleanupInvalidItems": "Clean $p invalid",
+    "uninstalledBadge": "Uninstalled",
+    "systemGuideTitle": "System Permission Guide",
+    "systemGuideBody": "• Xiaomi / HyperOS / MIUI: Tap [Open System Permission Settings] below to enable 'Get installed apps'.\n• Huawei / Honor: Settings -> Apps -> Wmimo -> Permissions -> enable 'Read installed app list'.\n• OPPO / vivo: Enable 'Read app list' in App Permissions.\n• Return to Wmimo after granting permission to reload automatically.",
+    "configuredAppsCount": "$p apps configured"
   },
   "UserAgreementScreen": {
     "privacyFirst": "Terms of Service & Privacy Policy",
@@ -49,7 +61,8 @@
   "VersionUpdateScreen": {
     "versionReady": "The new version[$p] is ready",
     "update": "Restart To Update",
-    "cancel": "Not Now"
+    "cancel": "Not Now",
+    "dpkgNotFoundError": "dpkg was not detected on this system, so .deb packages cannot be installed.\nIncompatible cached files have been cleared. Please check for updates again to fetch a compatible package (e.g., pacman / AppImage)."
   },
   "NetCheckScreen": {
     "title": "Network Diagnostics",
@@ -773,7 +786,13 @@
     "batteryOptimizationExempted": "Exempted",
     "batteryOptimizationRestricted": "Restricted (Tap to allow)",
     "appPermissionsSettings": "System App Permissions",
-    "previewFinalConfig": "Preview final core configuration"
+    "previewFinalConfig": "Preview final core configuration",
+    "filterCategory": "Filter $p",
+    "directModeBannerTip": "Direct mode is active. All traffic connects directly without using proxy nodes.",
+    "iconUrlOptional": "Icon URL (Leave blank to auto-fetch Favicon)",
+    "schemeConnectConfirm": "An external request wants to connect the proxy. Allow?",
+    "schemeDisconnectConfirm": "An external request wants to disconnect the proxy. Allow?",
+    "schemeReconnectConfirm": "An external request wants to reconnect the proxy. Allow?"
   },
   "permission": {
     "camera": "Camera",
@@ -852,7 +871,27 @@
     "updateFailed": "Update failed",
     "addPresetServer": "Add Preset DNS",
     "manageFakeIpFilter": "Manage Filter List ($p)",
-    "fakeIpFilterDesc": "$p domain rules bypass Fake-IP resolution to avoid network isolation issues."
+    "fakeIpFilterDesc": "$p domain rules bypass Fake-IP resolution to avoid network isolation issues.",
+    "geoInstalled": "Installed",
+    "geoNotInstalled": "Not Installed",
+    "geoNeverUpdated": "Never",
+    "geoDownloading": "Downloading...",
+    "geoIntervalHours": "$p h",
+    "geoIntervalDays": "$p d",
+    "cdnJsdelivrName": "jsDelivr Global CDN (Recommended)",
+    "cdnJsdelivrDesc": "Cloudflare edge-accelerated CDN, ideal for direct download",
+    "cdnFastgitName": "GitHub High-Speed Mirror (Direct)",
+    "cdnFastgitDesc": "Reverse-proxy mirror for GitHub Releases without proxy",
+    "cdnGithubName": "GitHub Official (MetaCubeX)",
+    "cdnGithubDesc": "Official MetaCubeX releases repository",
+    "assetGeositeName": "GeoSite Domain Rules Database",
+    "assetGeositeDesc": "Domain category mappings for accurate GEOSITE rule routing",
+    "assetGeoipName": "GeoIP Routing Database",
+    "assetGeoipDesc": "Global IP subnet attribution data for GEOIP rule matching",
+    "assetCountryName": "GeoLite2 Country Database (MMDB)",
+    "assetCountryDesc": "Essential MaxMind country lookup database for core DNS & routing",
+    "assetAsnName": "GeoLite2 ASN Carrier Database",
+    "assetAsnDesc": "Identifies target IP carrier and Autonomous System Number (IP-ASN rules)"
   },
   "sniffer": {
     "overrideDest": "Override"

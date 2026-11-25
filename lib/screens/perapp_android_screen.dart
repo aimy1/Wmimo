@@ -239,10 +239,11 @@ class _PerAppAndroidScreenState
       }
       _captureInitialSnapshot();
       if (showFeedback && mounted) {
+        final tcontext = Translations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("分应用代理规则已平滑生效"),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(tcontext.PerAppAndroidScreen.rulesAppliedLive),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -456,10 +457,10 @@ class _PerAppAndroidScreenState
                       children: [
                         const Icon(Icons.sync_rounded, size: 16, color: ThemeDefine.kColorBlue),
                         const SizedBox(width: 8),
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            "分流规则已变更，应用后立即生效",
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                            tcontext.PerAppAndroidScreen.rulesChangedBanner,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                           ),
                         ),
                         TextButton(
@@ -473,7 +474,7 @@ class _PerAppAndroidScreenState
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                           ),
                           child: Text(
-                            _applying ? "..." : "立即应用",
+                            _applying ? "..." : tcontext.PerAppAndroidScreen.applyNow,
                             style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -497,10 +498,10 @@ class _PerAppAndroidScreenState
                     children: [
                       const Icon(Icons.warning_amber_rounded, size: 16, color: Colors.orange),
                       const SizedBox(width: 8),
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          "读取应用列表权限受限，当前仅展示部分可见应用",
-                          style: TextStyle(fontSize: 11.5, color: Colors.orange),
+                          tcontext.PerAppAndroidScreen.partialPermissionBanner,
+                          style: const TextStyle(fontSize: 11.5, color: Colors.orange),
                         ),
                       ),
                       TextButton(
@@ -510,7 +511,10 @@ class _PerAppAndroidScreenState
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
-                        child: const Text("去授权", style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          tcontext.PerAppAndroidScreen.grantPermission,
+                          style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -521,7 +525,7 @@ class _PerAppAndroidScreenState
                 padding: const EdgeInsets.fromLTRB(16, 6, 16, 4),
                 child: WmimoSearchBar(
                   controller: _searchController,
-                  hintText: "${tcontext.meta.search} (应用名 / 包名)",
+                  hintText: "${tcontext.meta.search} (${tcontext.PerAppAndroidScreen.searchHint})",
                   textInputAction: TextInputAction.search,
                   onChanged: (_) => _applyFilter(),
                   onClear: () {
@@ -666,10 +670,10 @@ class _PerAppAndroidScreenState
                   children: [
                     const Icon(Icons.info_outline_rounded, size: 13, color: Colors.orange),
                     const SizedBox(width: 5),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        "白名单为空时不会代理任何应用，请至少勾选 1 个应用",
-                        style: TextStyle(fontSize: 11, color: Colors.orange),
+                        tcontext.PerAppAndroidScreen.emptyWhitelistWarning,
+                        style: const TextStyle(fontSize: 11, color: Colors.orange),
                       ),
                     ),
                   ],
@@ -812,7 +816,9 @@ class _PerAppAndroidScreenState
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  "清理 $removedCount 个失效项",
+                  tcontext.PerAppAndroidScreen.cleanupInvalidItems(
+                    p: removedCount.toString(),
+                  ),
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
@@ -978,9 +984,9 @@ class _PerAppAndroidScreenState
                               color: Colors.red.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: const Text(
-                              "已卸载",
-                              style: TextStyle(
+                            child: Text(
+                              Translations.of(context).PerAppAndroidScreen.uninstalledBadge,
+                              style: const TextStyle(
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.redAccent,
@@ -1117,7 +1123,11 @@ class _PerAppAndroidScreenState
         if (removedCount > 0)
           PopupMenuItem(
             value: 4,
-            child: Text("清理失效包名 ($removedCount)"),
+            child: Text(
+              tcontext.PerAppAndroidScreen.cleanupInvalidItems(
+                p: removedCount.toString(),
+              ),
+            ),
             onTap: _cleanupRemovedPackages,
           ),
       ],
@@ -1146,7 +1156,7 @@ class _PerAppAndroidScreenState
                 maxLines: 4,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: "例如：org.telegram.messenger\ncom.google.android.youtube",
+                  hintText: "org.telegram.messenger\ncom.google.android.youtube",
                   isDense: true,
                 ),
               ),
@@ -1312,7 +1322,7 @@ class _PerAppAndroidScreenState
                       Icon(Icons.info_outline, size: 16, color: theme.colorScheme.primary),
                       const SizedBox(width: 6),
                       Text(
-                        "常见系统开启指引",
+                        tcontext.PerAppAndroidScreen.systemGuideTitle,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -1323,10 +1333,7 @@ class _PerAppAndroidScreenState
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "• 小米 / HyperOS / MIUI：点击下方【前往系统权限设置页】直达安全中心，开启「获取应用列表」权限。\n"
-                    "• 华为 / 荣耀：设置 -> 应用管理 -> Wmimo -> 权限，开启「读取已安装应用列表」。\n"
-                    "• OPPO / vivo：在应用权限中开启「读取应用列表」。\n"
-                    "• 开启权限后切回 Wmimo 即可自动加载，无需重复进入。",
+                    tcontext.PerAppAndroidScreen.systemGuideBody,
                     style: TextStyle(
                       fontSize: 11,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
@@ -1388,7 +1395,9 @@ class _PerAppAndroidScreenState
               children: [
                 if (selectedCount > 0)
                   Text(
-                    "已配置 $selectedCount 个分流应用",
+                    tcontext.PerAppAndroidScreen.configuredAppsCount(
+                      p: selectedCount.toString(),
+                    ),
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,

@@ -670,7 +670,7 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
                           item.delay == null
                               ? tcontext.chain_proxy.test_latency
                               : (item.delay! < 0
-                                  ? "Timeout"
+                                  ? tcontext.meta.timeout
                                   : "${item.delay} ms"),
                           style: TextStyle(
                             fontSize: 12,

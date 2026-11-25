@@ -3,6 +3,7 @@ import 'package:wmimo/app/utils/app_scheme_actions.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/url_launcher_utils.dart';
+import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/add_profile_by_url_screen.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
@@ -31,9 +32,10 @@ class SchemeHandler {
         return await _installConfig(context, uri);
       } else if (uri.host == AppSchemeActions.connectAction()) {
         if (!context.mounted) return null;
+        final tcontext = Translations.of(context);
         bool? ok = await DialogUtils.showConfirmDialog(
           context,
-          "外部请求连接代理，是否允许？",
+          tcontext.meta.schemeConnectConfirm,
         );
         if (ok != true) return null;
         if (VpnActionHandler.vpnConnect != null) {
@@ -42,9 +44,10 @@ class SchemeHandler {
         return null;
       } else if (uri.host == AppSchemeActions.disconnectAction()) {
         if (!context.mounted) return null;
+        final tcontext = Translations.of(context);
         bool? ok = await DialogUtils.showConfirmDialog(
           context,
-          "外部请求断开代理，是否允许？",
+          tcontext.meta.schemeDisconnectConfirm,
         );
         if (ok != true) return null;
         if (VpnActionHandler.vpnDisconnect != null) {
@@ -53,9 +56,10 @@ class SchemeHandler {
         return null;
       } else if (uri.host == AppSchemeActions.reconnectAction()) {
         if (!context.mounted) return null;
+        final tcontext = Translations.of(context);
         bool? ok = await DialogUtils.showConfirmDialog(
           context,
-          "外部请求重新连接代理，是否允许？",
+          tcontext.meta.schemeReconnectConfirm,
         );
         if (ok != true) return null;
         if (VpnActionHandler.vpnReconnect != null) {

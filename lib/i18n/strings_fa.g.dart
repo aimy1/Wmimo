@@ -133,6 +133,18 @@ class _Translations$PerAppAndroidScreen$fa implements Translations$PerAppAndroid
 	@override String get openSystemPermission => 'رفتن به تنظیمات مجوزهای سیستم';
 	@override String get presetApps => 'افزودن سریع برنامه‌ها (بدون نیاز به مجوز)';
 	@override String get requestPermissionPopup => 'درخواست مجوز (پاپ‌آپ سیستم)';
+	@override String get rulesAppliedLive => 'قوانین پروکسی تفکیک برنامه بدون وقفه اعمال شد';
+	@override String get rulesChangedBanner => 'قوانین مسیریابی تغییر کرد. برای اعمال فوری تایید کنید';
+	@override String get applyNow => 'اعمال فوری';
+	@override String get partialPermissionBanner => 'مجوز خواندن فهرست برنامه‌ها محدود است؛ فقط بخشی از برنامه‌ها نمایش داده می‌شود';
+	@override String get grantPermission => 'اعطای مجوز';
+	@override String get searchHint => 'نام برنامه / شناسه بسته';
+	@override String get emptyWhitelistWarning => 'لیست سفید خالی هیچ برنامه‌ای را پروکسی نمی‌کند. لطفاً حداقل ۱ برنامه را انتخاب کنید';
+	@override String cleanupInvalidItems({required Object p}) => 'پاکسازی ${p} مورد نامعتبر';
+	@override String get uninstalledBadge => 'حذف شده';
+	@override String get systemGuideTitle => 'راهنمای فعال‌سازی مجوز سیستم';
+	@override String get systemGuideBody => '• Xiaomi / HyperOS / MIUI: روی [باز کردن تنظیمات مجوز سیستم] در پایین بزنید و مجوز دریافت فهرست برنامه‌ها را فعال کنید.\n• Huawei / Honor: تنظیمات -> برنامه‌ها -> Wmimo -> مجوزها -> خواندن فهرست برنامه‌های نصب‌شده را فعال کنید.\n• OPPO / vivo: در مجوزهای برنامه، خواندن فهرست برنامه‌ها را فعال کنید.\n• پس از اعطای مجوز به Wmimo برگردید تا به طور خودکار بارگذاری شود.';
+	@override String configuredAppsCount({required Object p}) => '${p} برنامه پیکربندی شده';
 }
 
 // Path: UserAgreementScreen
@@ -318,6 +330,7 @@ class _Translations$VersionUpdateScreen$fa implements Translations$VersionUpdate
 	@override String versionReady({required Object p}) => 'نسخه جدید [${p}] آماده است';
 	@override String get update => 'راه‌اندازی مجدد برای به‌روزرسانی';
 	@override String get cancel => 'الان‌ نه';
+	@override String get dpkgNotFoundError => 'در سیستم فعلی dpkg شناسایی نشد و امکان نصب بسته .deb وجود ندارد.\nفایل‌های کش ناسازگار پاک شدند. لطفاً دوباره بروزرسانی را بررسی کنید تا بسته سازگار (مانند pacman / AppImage) دریافت شود.';
 }
 
 // Path: loginScreen
@@ -898,6 +911,12 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get batteryOptimizationRestricted => 'محدود شده (برای مجوز لمس کنید)';
 	@override String get appPermissionsSettings => 'مجوزهای سیستمی برنامه';
 	@override String get previewFinalConfig => 'پیش‌نمایش پیکربندی نهایی هسته';
+	@override String filterCategory({required Object p}) => 'فیلتر ${p}';
+	@override String get directModeBannerTip => 'حالت اتصال مستقیم فعال است. تمام ترافیک بدون استفاده از گره‌های پروکسی مستقیماً متصل می‌شود.';
+	@override String get iconUrlOptional => 'آدرس آیکون (برای دریافت خودکار Favicon خالی بگذارید)';
+	@override String get schemeConnectConfirm => 'یک درخواست خارجی می‌خواهد به پروکسی متصل شود. اجازه می‌دهید؟';
+	@override String get schemeDisconnectConfirm => 'یک درخواست خارجی می‌خواهد اتصال پروکسی را قطع کند. اجازه می‌دهید؟';
+	@override String get schemeReconnectConfirm => 'یک درخواست خارجی می‌خواهد دوباره به پروکسی متصل شود. اجازه می‌دهید؟';
 }
 
 // Path: permission
@@ -1005,6 +1024,26 @@ class _Translations$dns$fa implements Translations$dns$en {
 	@override String get addPresetServer => 'افزودن DNS پیش‌فرض';
 	@override String manageFakeIpFilter({required Object p}) => 'مدیریت فهرست فیلترها (${p})';
 	@override String fakeIpFilterDesc({required Object p}) => '${p} قانون دامنه برای جلوگیری از مشکلات انزوای شبکه، تفکیک Fake-IP را دور می‌زنند.';
+	@override String get geoInstalled => 'نصب شده';
+	@override String get geoNotInstalled => 'نصب نشده';
+	@override String get geoNeverUpdated => 'هرگز';
+	@override String get geoDownloading => 'در حال دانلود...';
+	@override String geoIntervalHours({required Object p}) => '${p} ساعت';
+	@override String geoIntervalDays({required Object p}) => '${p} روز';
+	@override String get cdnJsdelivrName => 'شبکه جهانی jsDelivr (پیشنهادی)';
+	@override String get cdnJsdelivrDesc => 'شتاب‌دهی با گره‌های Cloudflare، مناسب برای دانلود مستقیم';
+	@override String get cdnFastgitName => 'آینه پرسرعت GitHub (اتصال مستقیم)';
+	@override String get cdnFastgitDesc => 'آینه پروکسی معکوس برای انتشارهای GitHub بدون نیاز به پروکسی';
+	@override String get cdnGithubName => 'منبع رسمی GitHub (MetaCubeX)';
+	@override String get cdnGithubDesc => 'مخزن رسمی انتشارهای MetaCubeX';
+	@override String get assetGeositeName => 'پایگاه داده مسیریابی دامنه GeoSite';
+	@override String get assetGeositeDesc => 'دسته‌بندی دامنه‌ها برای مسیریابی دقیق قوانین GEOSITE';
+	@override String get assetGeoipName => 'پایگاه داده مسیریابی GeoIP';
+	@override String get assetGeoipDesc => 'داده‌های زیرشبکه IP جهانی برای تطبیق قوانین GEOIP';
+	@override String get assetCountryName => 'پایگاه داده کشورها GeoLite2 (MMDB)';
+	@override String get assetCountryDesc => 'پایگاه داده ضروری MaxMind برای استعلام سریع کشور IP و محافظت DNS هسته';
+	@override String get assetAsnName => 'پایگاه داده سیستم‌های مستقل GeoLite2 ASN';
+	@override String get assetAsnDesc => 'شناسایی اپراتور و شماره سیستم مستقل IP مقصد (پشتیبانی از قوانین IP-ASN)';
 }
 
 // Path: sniffer
@@ -1174,6 +1213,18 @@ extension on TranslationsFa {
 			'PerAppAndroidScreen.openSystemPermission' => 'رفتن به تنظیمات مجوزهای سیستم',
 			'PerAppAndroidScreen.presetApps' => 'افزودن سریع برنامه‌ها (بدون نیاز به مجوز)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'درخواست مجوز (پاپ‌آپ سیستم)',
+			'PerAppAndroidScreen.rulesAppliedLive' => 'قوانین پروکسی تفکیک برنامه بدون وقفه اعمال شد',
+			'PerAppAndroidScreen.rulesChangedBanner' => 'قوانین مسیریابی تغییر کرد. برای اعمال فوری تایید کنید',
+			'PerAppAndroidScreen.applyNow' => 'اعمال فوری',
+			'PerAppAndroidScreen.partialPermissionBanner' => 'مجوز خواندن فهرست برنامه‌ها محدود است؛ فقط بخشی از برنامه‌ها نمایش داده می‌شود',
+			'PerAppAndroidScreen.grantPermission' => 'اعطای مجوز',
+			'PerAppAndroidScreen.searchHint' => 'نام برنامه / شناسه بسته',
+			'PerAppAndroidScreen.emptyWhitelistWarning' => 'لیست سفید خالی هیچ برنامه‌ای را پروکسی نمی‌کند. لطفاً حداقل ۱ برنامه را انتخاب کنید',
+			'PerAppAndroidScreen.cleanupInvalidItems' => ({required Object p}) => 'پاکسازی ${p} مورد نامعتبر',
+			'PerAppAndroidScreen.uninstalledBadge' => 'حذف شده',
+			'PerAppAndroidScreen.systemGuideTitle' => 'راهنمای فعال‌سازی مجوز سیستم',
+			'PerAppAndroidScreen.systemGuideBody' => '• Xiaomi / HyperOS / MIUI: روی [باز کردن تنظیمات مجوز سیستم] در پایین بزنید و مجوز دریافت فهرست برنامه‌ها را فعال کنید.\n• Huawei / Honor: تنظیمات -> برنامه‌ها -> Wmimo -> مجوزها -> خواندن فهرست برنامه‌های نصب‌شده را فعال کنید.\n• OPPO / vivo: در مجوزهای برنامه، خواندن فهرست برنامه‌ها را فعال کنید.\n• پس از اعطای مجوز به Wmimo برگردید تا به طور خودکار بارگذاری شود.',
+			'PerAppAndroidScreen.configuredAppsCount' => ({required Object p}) => '${p} برنامه پیکربندی شده',
 			'UserAgreementScreen.privacyFirst' => 'شرایط استفاده و حریم خصوصی',
 			'UserAgreementScreen.subtitle' => 'لطفاً قبل از استفاده از Wmimo شرایط زیر را مطالعه و با آن موافقت کنید',
 			'UserAgreementScreen.agreeAndContinue' => 'پذیرفتن و ادامه',
@@ -1323,6 +1374,7 @@ extension on TranslationsFa {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'نسخه جدید [${p}] آماده است',
 			'VersionUpdateScreen.update' => 'راه‌اندازی مجدد برای به‌روزرسانی',
 			'VersionUpdateScreen.cancel' => 'الان‌ نه',
+			'VersionUpdateScreen.dpkgNotFoundError' => 'در سیستم فعلی dpkg شناسایی نشد و امکان نصب بسته .deb وجود ندارد.\nفایل‌های کش ناسازگار پاک شدند. لطفاً دوباره بروزرسانی را بررسی کنید تا بسته سازگار (مانند pacman / AppImage) دریافت شود.',
 			'loginScreen.login' => 'ورود',
 			'loginScreen.register' => 'ایجاد حساب',
 			'loginScreen.forgotPassword' => 'فراموشی رمز عبور',
@@ -1646,6 +1698,8 @@ extension on TranslationsFa {
 			'meta.remoteSubscription' => 'اشتراک از راه دور',
 			'meta.noTrafficData' => 'آمار مصرف ارائه نشده است',
 			'meta.localProfile' => 'فایل محلی',
+			_ => null,
+		} ?? switch (path) {
 			'meta.viewYamlConfig' => 'مشاهده پیکربندی YAML',
 			'meta.editYamlConfig' => 'ویرایش پیکربندی YAML',
 			'meta.copySubscriptionUrl' => 'کپی پیوند اشتراک',
@@ -1659,8 +1713,6 @@ extension on TranslationsFa {
 			'meta.nodeSelected' => ({required Object p}) => 'گره انتخاب شده: ${p}',
 			'meta.startingCoreAndTesting' => 'در حال شروع هسته و تست سرعت...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} دقیقه',
-			_ => null,
-		} ?? switch (path) {
 			'meta.chartUpload' => 'آپلود',
 			'meta.chartDownload' => 'دانلود',
 			'meta.author' => 'سازنده',
@@ -1901,6 +1953,12 @@ extension on TranslationsFa {
 			'meta.batteryOptimizationRestricted' => 'محدود شده (برای مجوز لمس کنید)',
 			'meta.appPermissionsSettings' => 'مجوزهای سیستمی برنامه',
 			'meta.previewFinalConfig' => 'پیش‌نمایش پیکربندی نهایی هسته',
+			'meta.filterCategory' => ({required Object p}) => 'فیلتر ${p}',
+			'meta.directModeBannerTip' => 'حالت اتصال مستقیم فعال است. تمام ترافیک بدون استفاده از گره‌های پروکسی مستقیماً متصل می‌شود.',
+			'meta.iconUrlOptional' => 'آدرس آیکون (برای دریافت خودکار Favicon خالی بگذارید)',
+			'meta.schemeConnectConfirm' => 'یک درخواست خارجی می‌خواهد به پروکسی متصل شود. اجازه می‌دهید؟',
+			'meta.schemeDisconnectConfirm' => 'یک درخواست خارجی می‌خواهد اتصال پروکسی را قطع کند. اجازه می‌دهید؟',
+			'meta.schemeReconnectConfirm' => 'یک درخواست خارجی می‌خواهد دوباره به پروکسی متصل شود. اجازه می‌دهید؟',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'دریافت فهرست برنامه‌ها',
@@ -1972,6 +2030,26 @@ extension on TranslationsFa {
 			'dns.addPresetServer' => 'افزودن DNS پیش‌فرض',
 			'dns.manageFakeIpFilter' => ({required Object p}) => 'مدیریت فهرست فیلترها (${p})',
 			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} قانون دامنه برای جلوگیری از مشکلات انزوای شبکه، تفکیک Fake-IP را دور می‌زنند.',
+			'dns.geoInstalled' => 'نصب شده',
+			'dns.geoNotInstalled' => 'نصب نشده',
+			'dns.geoNeverUpdated' => 'هرگز',
+			'dns.geoDownloading' => 'در حال دانلود...',
+			'dns.geoIntervalHours' => ({required Object p}) => '${p} ساعت',
+			'dns.geoIntervalDays' => ({required Object p}) => '${p} روز',
+			'dns.cdnJsdelivrName' => 'شبکه جهانی jsDelivr (پیشنهادی)',
+			'dns.cdnJsdelivrDesc' => 'شتاب‌دهی با گره‌های Cloudflare، مناسب برای دانلود مستقیم',
+			'dns.cdnFastgitName' => 'آینه پرسرعت GitHub (اتصال مستقیم)',
+			'dns.cdnFastgitDesc' => 'آینه پروکسی معکوس برای انتشارهای GitHub بدون نیاز به پروکسی',
+			'dns.cdnGithubName' => 'منبع رسمی GitHub (MetaCubeX)',
+			'dns.cdnGithubDesc' => 'مخزن رسمی انتشارهای MetaCubeX',
+			'dns.assetGeositeName' => 'پایگاه داده مسیریابی دامنه GeoSite',
+			'dns.assetGeositeDesc' => 'دسته‌بندی دامنه‌ها برای مسیریابی دقیق قوانین GEOSITE',
+			'dns.assetGeoipName' => 'پایگاه داده مسیریابی GeoIP',
+			'dns.assetGeoipDesc' => 'داده‌های زیرشبکه IP جهانی برای تطبیق قوانین GEOIP',
+			'dns.assetCountryName' => 'پایگاه داده کشورها GeoLite2 (MMDB)',
+			'dns.assetCountryDesc' => 'پایگاه داده ضروری MaxMind برای استعلام سریع کشور IP و محافظت DNS هسته',
+			'dns.assetAsnName' => 'پایگاه داده سیستم‌های مستقل GeoLite2 ASN',
+			'dns.assetAsnDesc' => 'شناسایی اپراتور و شماره سیستم مستقل IP مقصد (پشتیبانی از قوانین IP-ASN)',
 			'sniffer.overrideDest' => 'پوشش',
 			'profilePatchMode.currentSelected' => 'فعلی انتخاب شده',
 			'profilePatchMode.overwrite' => 'Overwrite داخلی',

@@ -32,7 +32,19 @@
     "permissionRestrictedTip": "El sistema restringió la lectura de la lista de aplicaciones. Toque 【Abrir configuración de permisos】 abajo para habilitar el acceso o use ajustes preestablecidos sin permisos.",
     "openSystemPermission": "Abrir configuración de permisos del sistema",
     "presetApps": "Añadir apps comunes (sin permisos)",
-    "requestPermissionPopup": "Solicitar permiso (diálogo del sistema)"
+    "requestPermissionPopup": "Solicitar permiso (diálogo del sistema)",
+    "rulesAppliedLive": "Reglas de proxy por aplicación aplicadas sin interrupciones",
+    "rulesChangedBanner": "Las reglas han cambiado. Aplique para activar inmediatamente",
+    "applyNow": "Aplicar ahora",
+    "partialPermissionBanner": "Permiso de lista de apps restringido; solo se muestran algunas aplicaciones",
+    "grantPermission": "Autorizar",
+    "searchHint": "Nombre de app / Paquete",
+    "emptyWhitelistWarning": "Una lista blanca vacía no aplica proxy a ninguna app. Seleccione al menos 1 app",
+    "cleanupInvalidItems": "Limpiar $p inválidos",
+    "uninstalledBadge": "Desinstalado",
+    "systemGuideTitle": "Guía de permisos del sistema",
+    "systemGuideBody": "• Xiaomi / HyperOS / MIUI: Toque [Abrir configuración de permisos] abajo y active 'Obtener lista de aplicaciones'.\n• Huawei / Honor: Ajustes -> Aplicaciones -> Wmimo -> Permisos -> active 'Leer lista de apps instaladas'.\n• OPPO / vivo: Active 'Leer lista de aplicaciones' en Permisos.\n• Regrese a Wmimo tras conceder el permiso para cargar automáticamente.",
+    "configuredAppsCount": "$p aplicaciones configuradas"
   },
   "UserAgreementScreen": {
     "privacyFirst": "Términos del Servicio y Privacidad",
@@ -49,7 +61,8 @@
   "VersionUpdateScreen": {
     "versionReady": "La nueva versión [$p] está lista",
     "update": "Reiniciar para Actualizar",
-    "cancel": "Ahora no"
+    "cancel": "Ahora no",
+    "dpkgNotFoundError": "No se detectó dpkg en este sistema, por lo que no se pueden instalar paquetes .deb.\nSe limpió la caché incompatible. Vuelva a buscar actualizaciones para obtener un paquete compatible (p. ej., pacman / AppImage)."
   },
   "NetCheckScreen": {
     "title": "Diagnóstico de red",
@@ -773,7 +786,13 @@
     "batteryOptimizationExempted": "Exento",
     "batteryOptimizationRestricted": "Restringido (Toca para permitir)",
     "appPermissionsSettings": "Permisos de la Aplicación",
-    "previewFinalConfig": "Vista previa de configuración final"
+    "previewFinalConfig": "Vista previa de configuración final",
+    "filterCategory": "Filtrar $p",
+    "directModeBannerTip": "El modo directo está activo. Todo el tráfico se conecta directamente sin usar nodos proxy.",
+    "iconUrlOptional": "URL del icono (dejar vacío para obtener Favicon automáticamente)",
+    "schemeConnectConfirm": "Una solicitud externa desea conectar el proxy. ¿Permitir?",
+    "schemeDisconnectConfirm": "Una solicitud externa desea desconectar el proxy. ¿Permitir?",
+    "schemeReconnectConfirm": "Una solicitud externa desea reconectar el proxy. ¿Permitir?"
   },
   "permission": {
     "camera": "Cámara",
@@ -852,7 +871,27 @@
     "updateFailed": "Error al actualizar",
     "addPresetServer": "Añadir DNS preestablecido",
     "manageFakeIpFilter": "Gestionar lista de filtros ($p)",
-    "fakeIpFilterDesc": "$p reglas de dominio omiten la resolución Fake-IP para evitar problemas de aislamiento de red."
+    "fakeIpFilterDesc": "$p reglas de dominio omiten la resolución Fake-IP para evitar problemas de aislamiento de red.",
+    "geoInstalled": "Instalado",
+    "geoNotInstalled": "No instalado",
+    "geoNeverUpdated": "Nunca",
+    "geoDownloading": "Descargando...",
+    "geoIntervalHours": "$p h",
+    "geoIntervalDays": "$p d",
+    "cdnJsdelivrName": "CDN Global jsDelivr (Recomendado)",
+    "cdnJsdelivrDesc": "Acelerado por nodos de Cloudflare, ideal para descarga directa",
+    "cdnFastgitName": "Espejo rápido de GitHub (Directo)",
+    "cdnFastgitDesc": "Espejo de proxy inverso para GitHub Releases sin proxy",
+    "cdnGithubName": "GitHub Oficial (MetaCubeX)",
+    "cdnGithubDesc": "Repositorio oficial de lanzamientos de MetaCubeX",
+    "assetGeositeName": "Base de datos de dominios GeoSite",
+    "assetGeositeDesc": "Categorías de dominios para el enrutamiento preciso de reglas GEOSITE",
+    "assetGeoipName": "Base de datos de enrutamiento GeoIP",
+    "assetGeoipDesc": "Datos globales de subredes IP para coincidencia de reglas GEOIP",
+    "assetCountryName": "Base de datos de países GeoLite2 (MMDB)",
+    "assetCountryDesc": "Base de datos esencial de países MaxMind para DNS y enrutamiento del núcleo",
+    "assetAsnName": "Base de datos de sistemas autónomos GeoLite2 ASN",
+    "assetAsnDesc": "Identifica el operador y número de sistema autónomo de la IP (reglas IP-ASN)"
   },
   "sniffer": {
     "overrideDest": "Sobrescribir"

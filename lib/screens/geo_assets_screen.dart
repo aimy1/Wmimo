@@ -119,12 +119,65 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
     await _loadAssets();
   }
 
+  String _localizedSourceName(GeoCdnSource source, Translations tcontext) {
+    switch (source.id) {
+      case "jsdelivr":
+        return tcontext.dns.cdnJsdelivrName;
+      case "fastgit":
+        return tcontext.dns.cdnFastgitName;
+      case "github":
+      default:
+        return tcontext.dns.cdnGithubName;
+    }
+  }
+
+  String _localizedSourceDesc(GeoCdnSource source, Translations tcontext) {
+    switch (source.id) {
+      case "jsdelivr":
+        return tcontext.dns.cdnJsdelivrDesc;
+      case "fastgit":
+        return tcontext.dns.cdnFastgitDesc;
+      case "github":
+      default:
+        return tcontext.dns.cdnGithubDesc;
+    }
+  }
+
+  String _localizedAssetName(GeoAssetInfo asset, Translations tcontext) {
+    switch (asset.fileName) {
+      case "geosite.dat":
+        return tcontext.dns.assetGeositeName;
+      case "geoip.dat":
+        return tcontext.dns.assetGeoipName;
+      case "country.mmdb":
+        return tcontext.dns.assetCountryName;
+      case "ASN.mmdb":
+        return tcontext.dns.assetAsnName;
+      default:
+        return asset.displayName;
+    }
+  }
+
+  String _localizedAssetDesc(GeoAssetInfo asset, Translations tcontext) {
+    switch (asset.fileName) {
+      case "geosite.dat":
+        return tcontext.dns.assetGeositeDesc;
+      case "geoip.dat":
+        return tcontext.dns.assetGeoipDesc;
+      case "country.mmdb":
+        return tcontext.dns.assetCountryDesc;
+      case "ASN.mmdb":
+        return tcontext.dns.assetAsnDesc;
+      default:
+        return asset.description;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final isZh = Localizations.localeOf(context).languageCode.startsWith('zh');
 
     return Scaffold(
       appBar: WmimoAppBar(
@@ -149,7 +202,7 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
             : ListView(
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
                 children: [
-                  _buildSourceSelectorCard(tcontext, theme, isDark, isZh),
+                  _buildSourceSelectorCard(tcontext, theme, isDark),
                   const SizedBox(height: 12),
                   ..._assets.map(
                     (asset) => Padding(
@@ -159,12 +212,11 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
                         tcontext,
                         theme,
                         isDark,
-                        isZh,
                       ),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  _buildAutoUpdateRulesetCard(tcontext, theme, isDark, isZh),
+                  _buildAutoUpdateRulesetCard(tcontext, theme, isDark),
                 ],
               ),
       ),
@@ -175,7 +227,6 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
     Translations tcontext,
     ThemeData theme,
     bool isDark,
-    bool isZh,
   ) {
     return Container(
       padding: const EdgeInsets.all(14),
@@ -267,7 +318,7 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              source.getLocalizedName(isZh),
+                              _localizedSourceName(source, tcontext),
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
@@ -278,7 +329,7 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
                             ),
                             const SizedBox(height: 1),
                             Text(
-                              source.getLocalizedDescription(isZh),
+                              _localizedSourceDesc(source, tcontext),
                               style: TextStyle(
                                 fontSize: 11,
                                 color: theme.colorScheme.onSurface
@@ -331,7 +382,6 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
     Translations tcontext,
     ThemeData theme,
     bool isDark,
-    bool isZh,
   ) {
     final downloading = _isDownloading[asset.fileName] == true;
     final progress = _downloadProgress[asset.fileName] ?? 0.0;
@@ -363,7 +413,7 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
                       children: [
                         Flexible(
                           child: Text(
-                            asset.getLocalizedName(isZh),
+                            _localizedAssetName(asset, tcontext),
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 14.5,
@@ -384,8 +434,8 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
                           ),
                           child: Text(
                             asset.exists
-                                ? (isZh ? "已安装" : "Installed")
-                                : (isZh ? "未安装" : "Missing"),
+                                ? tcontext.dns.geoInstalled
+                                : tcontext.dns.geoNotInstalled,
                             style: TextStyle(
                               fontSize: 10.5,
                               fontWeight: FontWeight.w700,
@@ -428,7 +478,7 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            asset.getLocalizedDescription(isZh),
+            _localizedAssetDesc(asset, tcontext),
             style: TextStyle(
               fontSize: 12,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
@@ -439,13 +489,17 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
             children: [
               _buildInfoBadge(
                 Icons.storage_outlined,
-                asset.getFormattedSize(isZh),
+                (!asset.exists || asset.sizeBytes <= 0)
+                    ? tcontext.dns.geoNotInstalled
+                    : asset.formattedSize,
                 theme,
               ),
               const SizedBox(width: 14),
               _buildInfoBadge(
                 Icons.access_time_outlined,
-                asset.getFormattedModifiedTime(isZh),
+                asset.modifiedTime == null
+                    ? tcontext.dns.geoNeverUpdated
+                    : asset.formattedModifiedTime,
                 theme,
               ),
             ],
@@ -464,7 +518,7 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
             Text(
               progress > 0
                   ? "${(progress * 100).toInt()}%"
-                  : (isZh ? "正在下载..." : "Downloading..."),
+                  : tcontext.dns.geoDownloading,
               style: TextStyle(
                 fontSize: 11,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
@@ -499,7 +553,6 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
     Translations tcontext,
     ThemeData theme,
     bool isDark,
-    bool isZh,
   ) {
     final ruleset = ClashSettingManager.getConfig().Extension?.Ruleset;
     final currentHours =
@@ -543,8 +596,8 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
                 children: _kIntervalHourOptions.map((hours) {
                   final selected = currentHours == hours;
                   final label = hours >= 168
-                      ? (isZh ? "7天" : "7d")
-                      : (isZh ? "${hours}小时" : "${hours}h");
+                      ? tcontext.dns.geoIntervalDays(p: (hours ~/ 24).toString())
+                      : tcontext.dns.geoIntervalHours(p: hours.toString());
                   return InkWell(
                     borderRadius: BorderRadius.circular(8),
                     onTap: () async {

@@ -197,6 +197,42 @@ class Translations$PerAppAndroidScreen$en {
 
 	/// en: 'Request Permission (System Dialog)'
 	String get requestPermissionPopup => 'Request Permission (System Dialog)';
+
+	/// en: 'Per-app proxy rules applied seamlessly'
+	String get rulesAppliedLive => 'Per-app proxy rules applied seamlessly';
+
+	/// en: 'Routing rules changed. Apply to take effect immediately'
+	String get rulesChangedBanner => 'Routing rules changed. Apply to take effect immediately';
+
+	/// en: 'Apply Now'
+	String get applyNow => 'Apply Now';
+
+	/// en: 'App list permission is restricted; only partially visible apps are shown'
+	String get partialPermissionBanner => 'App list permission is restricted; only partially visible apps are shown';
+
+	/// en: 'Authorize'
+	String get grantPermission => 'Authorize';
+
+	/// en: 'App name / Package ID'
+	String get searchHint => 'App name / Package ID';
+
+	/// en: 'An empty whitelist proxies no apps. Please select at least 1 app'
+	String get emptyWhitelistWarning => 'An empty whitelist proxies no apps. Please select at least 1 app';
+
+	/// en: 'Clean $p invalid'
+	String cleanupInvalidItems({required Object p}) => 'Clean ${p} invalid';
+
+	/// en: 'Uninstalled'
+	String get uninstalledBadge => 'Uninstalled';
+
+	/// en: 'System Permission Guide'
+	String get systemGuideTitle => 'System Permission Guide';
+
+	/// en: '• Xiaomi / HyperOS / MIUI: Tap [Open System Permission Settings] below to enable 'Get installed apps'. • Huawei / Honor: Settings -> Apps -> Wmimo -> Permissions -> enable 'Read installed app list'. • OPPO / vivo: Enable 'Read app list' in App Permissions. • Return to Wmimo after granting permission to reload automatically.'
+	String get systemGuideBody => '• Xiaomi / HyperOS / MIUI: Tap [Open System Permission Settings] below to enable \'Get installed apps\'.\n• Huawei / Honor: Settings -> Apps -> Wmimo -> Permissions -> enable \'Read installed app list\'.\n• OPPO / vivo: Enable \'Read app list\' in App Permissions.\n• Return to Wmimo after granting permission to reload automatically.';
+
+	/// en: '$p apps configured'
+	String configuredAppsCount({required Object p}) => '${p} apps configured';
 }
 
 // Path: UserAgreementScreen
@@ -254,6 +290,9 @@ class Translations$VersionUpdateScreen$en {
 
 	/// en: 'Not Now'
 	String get cancel => 'Not Now';
+
+	/// en: 'dpkg was not detected on this system, so .deb packages cannot be installed. Incompatible cached files have been cleared. Please check for updates again to fetch a compatible package (e.g., pacman / AppImage).'
+	String get dpkgNotFoundError => 'dpkg was not detected on this system, so .deb packages cannot be installed.\nIncompatible cached files have been cleared. Please check for updates again to fetch a compatible package (e.g., pacman / AppImage).';
 }
 
 // Path: NetCheckScreen
@@ -2364,6 +2403,24 @@ class Translations$meta$en {
 
 	/// en: 'Preview final core configuration'
 	String get previewFinalConfig => 'Preview final core configuration';
+
+	/// en: 'Filter $p'
+	String filterCategory({required Object p}) => 'Filter ${p}';
+
+	/// en: 'Direct mode is active. All traffic connects directly without using proxy nodes.'
+	String get directModeBannerTip => 'Direct mode is active. All traffic connects directly without using proxy nodes.';
+
+	/// en: 'Icon URL (Leave blank to auto-fetch Favicon)'
+	String get iconUrlOptional => 'Icon URL (Leave blank to auto-fetch Favicon)';
+
+	/// en: 'An external request wants to connect the proxy. Allow?'
+	String get schemeConnectConfirm => 'An external request wants to connect the proxy. Allow?';
+
+	/// en: 'An external request wants to disconnect the proxy. Allow?'
+	String get schemeDisconnectConfirm => 'An external request wants to disconnect the proxy. Allow?';
+
+	/// en: 'An external request wants to reconnect the proxy. Allow?'
+	String get schemeReconnectConfirm => 'An external request wants to reconnect the proxy. Allow?';
 }
 
 // Path: permission
@@ -2613,6 +2670,66 @@ class Translations$dns$en {
 
 	/// en: '$p domain rules bypass Fake-IP resolution to avoid network isolation issues.'
 	String fakeIpFilterDesc({required Object p}) => '${p} domain rules bypass Fake-IP resolution to avoid network isolation issues.';
+
+	/// en: 'Installed'
+	String get geoInstalled => 'Installed';
+
+	/// en: 'Not Installed'
+	String get geoNotInstalled => 'Not Installed';
+
+	/// en: 'Never'
+	String get geoNeverUpdated => 'Never';
+
+	/// en: 'Downloading...'
+	String get geoDownloading => 'Downloading...';
+
+	/// en: '$p h'
+	String geoIntervalHours({required Object p}) => '${p} h';
+
+	/// en: '$p d'
+	String geoIntervalDays({required Object p}) => '${p} d';
+
+	/// en: 'jsDelivr Global CDN (Recommended)'
+	String get cdnJsdelivrName => 'jsDelivr Global CDN (Recommended)';
+
+	/// en: 'Cloudflare edge-accelerated CDN, ideal for direct download'
+	String get cdnJsdelivrDesc => 'Cloudflare edge-accelerated CDN, ideal for direct download';
+
+	/// en: 'GitHub High-Speed Mirror (Direct)'
+	String get cdnFastgitName => 'GitHub High-Speed Mirror (Direct)';
+
+	/// en: 'Reverse-proxy mirror for GitHub Releases without proxy'
+	String get cdnFastgitDesc => 'Reverse-proxy mirror for GitHub Releases without proxy';
+
+	/// en: 'GitHub Official (MetaCubeX)'
+	String get cdnGithubName => 'GitHub Official (MetaCubeX)';
+
+	/// en: 'Official MetaCubeX releases repository'
+	String get cdnGithubDesc => 'Official MetaCubeX releases repository';
+
+	/// en: 'GeoSite Domain Rules Database'
+	String get assetGeositeName => 'GeoSite Domain Rules Database';
+
+	/// en: 'Domain category mappings for accurate GEOSITE rule routing'
+	String get assetGeositeDesc => 'Domain category mappings for accurate GEOSITE rule routing';
+
+	/// en: 'GeoIP Routing Database'
+	String get assetGeoipName => 'GeoIP Routing Database';
+
+	/// en: 'Global IP subnet attribution data for GEOIP rule matching'
+	String get assetGeoipDesc => 'Global IP subnet attribution data for GEOIP rule matching';
+
+	/// en: 'GeoLite2 Country Database (MMDB)'
+	String get assetCountryName => 'GeoLite2 Country Database (MMDB)';
+
+	/// en: 'Essential MaxMind country lookup database for core DNS & routing'
+	String get assetCountryDesc => 'Essential MaxMind country lookup database for core DNS & routing';
+
+	/// en: 'GeoLite2 ASN Carrier Database'
+	String get assetAsnName => 'GeoLite2 ASN Carrier Database';
+
+	/// en: 'Identifies target IP carrier and Autonomous System Number (IP-ASN rules)'
+	String get assetAsnDesc => 'Identifies target IP carrier and Autonomous System Number (IP-ASN rules)';
 }
 
 // Path: sniffer
@@ -2956,6 +3073,18 @@ extension on Translations {
 			'PerAppAndroidScreen.openSystemPermission' => 'Open System Permission Settings',
 			'PerAppAndroidScreen.presetApps' => 'Quick Add Common Apps (Preset)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'Request Permission (System Dialog)',
+			'PerAppAndroidScreen.rulesAppliedLive' => 'Per-app proxy rules applied seamlessly',
+			'PerAppAndroidScreen.rulesChangedBanner' => 'Routing rules changed. Apply to take effect immediately',
+			'PerAppAndroidScreen.applyNow' => 'Apply Now',
+			'PerAppAndroidScreen.partialPermissionBanner' => 'App list permission is restricted; only partially visible apps are shown',
+			'PerAppAndroidScreen.grantPermission' => 'Authorize',
+			'PerAppAndroidScreen.searchHint' => 'App name / Package ID',
+			'PerAppAndroidScreen.emptyWhitelistWarning' => 'An empty whitelist proxies no apps. Please select at least 1 app',
+			'PerAppAndroidScreen.cleanupInvalidItems' => ({required Object p}) => 'Clean ${p} invalid',
+			'PerAppAndroidScreen.uninstalledBadge' => 'Uninstalled',
+			'PerAppAndroidScreen.systemGuideTitle' => 'System Permission Guide',
+			'PerAppAndroidScreen.systemGuideBody' => '• Xiaomi / HyperOS / MIUI: Tap [Open System Permission Settings] below to enable \'Get installed apps\'.\n• Huawei / Honor: Settings -> Apps -> Wmimo -> Permissions -> enable \'Read installed app list\'.\n• OPPO / vivo: Enable \'Read app list\' in App Permissions.\n• Return to Wmimo after granting permission to reload automatically.',
+			'PerAppAndroidScreen.configuredAppsCount' => ({required Object p}) => '${p} apps configured',
 			'UserAgreementScreen.privacyFirst' => 'Terms of Service & Privacy Policy',
 			'UserAgreementScreen.subtitle' => 'Please review and agree to the terms below to continue',
 			'UserAgreementScreen.agreeAndContinue' => 'Agree & Continue',
@@ -2969,6 +3098,7 @@ extension on Translations {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'The new version[${p}] is ready',
 			'VersionUpdateScreen.update' => 'Restart To Update',
 			'VersionUpdateScreen.cancel' => 'Not Now',
+			'VersionUpdateScreen.dpkgNotFoundError' => 'dpkg was not detected on this system, so .deb packages cannot be installed.\nIncompatible cached files have been cleared. Please check for updates again to fetch a compatible package (e.g., pacman / AppImage).',
 			'NetCheckScreen.title' => 'Network Diagnostics',
 			'NetCheckScreen.fullDiagnosticsTab' => 'Full Diagnostics',
 			'NetCheckScreen.advancedCheckTab' => 'Advanced Domain Query',
@@ -3428,6 +3558,8 @@ extension on Translations {
 			'meta.remoteSubscription' => 'Remote Subscription',
 			'meta.noTrafficData' => 'No usage statistics provided',
 			'meta.localProfile' => 'Local File',
+			_ => null,
+		} ?? switch (path) {
 			'meta.viewYamlConfig' => 'View YAML Config',
 			'meta.editYamlConfig' => 'Edit YAML Config',
 			'meta.copySubscriptionUrl' => 'Copy Subscription URL',
@@ -3441,8 +3573,6 @@ extension on Translations {
 			'meta.nodeSelected' => ({required Object p}) => 'Selected node: ${p}',
 			'meta.startingCoreAndTesting' => 'Starting core and testing latency...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} min',
-			_ => null,
-		} ?? switch (path) {
 			'meta.chartUpload' => 'Upload',
 			'meta.chartDownload' => 'Download',
 			'meta.author' => 'Author',
@@ -3683,6 +3813,12 @@ extension on Translations {
 			'meta.batteryOptimizationRestricted' => 'Restricted (Tap to allow)',
 			'meta.appPermissionsSettings' => 'System App Permissions',
 			'meta.previewFinalConfig' => 'Preview final core configuration',
+			'meta.filterCategory' => ({required Object p}) => 'Filter ${p}',
+			'meta.directModeBannerTip' => 'Direct mode is active. All traffic connects directly without using proxy nodes.',
+			'meta.iconUrlOptional' => 'Icon URL (Leave blank to auto-fetch Favicon)',
+			'meta.schemeConnectConfirm' => 'An external request wants to connect the proxy. Allow?',
+			'meta.schemeDisconnectConfirm' => 'An external request wants to disconnect the proxy. Allow?',
+			'meta.schemeReconnectConfirm' => 'An external request wants to reconnect the proxy. Allow?',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',
@@ -3754,6 +3890,26 @@ extension on Translations {
 			'dns.addPresetServer' => 'Add Preset DNS',
 			'dns.manageFakeIpFilter' => ({required Object p}) => 'Manage Filter List (${p})',
 			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} domain rules bypass Fake-IP resolution to avoid network isolation issues.',
+			'dns.geoInstalled' => 'Installed',
+			'dns.geoNotInstalled' => 'Not Installed',
+			'dns.geoNeverUpdated' => 'Never',
+			'dns.geoDownloading' => 'Downloading...',
+			'dns.geoIntervalHours' => ({required Object p}) => '${p} h',
+			'dns.geoIntervalDays' => ({required Object p}) => '${p} d',
+			'dns.cdnJsdelivrName' => 'jsDelivr Global CDN (Recommended)',
+			'dns.cdnJsdelivrDesc' => 'Cloudflare edge-accelerated CDN, ideal for direct download',
+			'dns.cdnFastgitName' => 'GitHub High-Speed Mirror (Direct)',
+			'dns.cdnFastgitDesc' => 'Reverse-proxy mirror for GitHub Releases without proxy',
+			'dns.cdnGithubName' => 'GitHub Official (MetaCubeX)',
+			'dns.cdnGithubDesc' => 'Official MetaCubeX releases repository',
+			'dns.assetGeositeName' => 'GeoSite Domain Rules Database',
+			'dns.assetGeositeDesc' => 'Domain category mappings for accurate GEOSITE rule routing',
+			'dns.assetGeoipName' => 'GeoIP Routing Database',
+			'dns.assetGeoipDesc' => 'Global IP subnet attribution data for GEOIP rule matching',
+			'dns.assetCountryName' => 'GeoLite2 Country Database (MMDB)',
+			'dns.assetCountryDesc' => 'Essential MaxMind country lookup database for core DNS & routing',
+			'dns.assetAsnName' => 'GeoLite2 ASN Carrier Database',
+			'dns.assetAsnDesc' => 'Identifies target IP carrier and Autonomous System Number (IP-ASN rules)',
 			'sniffer.overrideDest' => 'Override',
 			'profilePatchMode.currentSelected' => 'Current Selected',
 			'profilePatchMode.overwrite' => 'Built-in Overwrite',

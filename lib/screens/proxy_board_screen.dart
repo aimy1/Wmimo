@@ -2432,9 +2432,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          isZh
-                              ? "当前为「直连」模式，所有流量直接连接，不经过下方代理节点"
-                              : "Direct mode is active. All traffic connects directly without using proxy nodes.",
+                          tcontext.meta.directModeBannerTip,
                           style: TextStyle(
                             fontSize: 12,
                             color: isDark

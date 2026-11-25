@@ -133,6 +133,18 @@ class _Translations$PerAppAndroidScreen$ko implements Translations$PerAppAndroid
 	@override String get openSystemPermission => '시스템 권한 설정으로 이동';
 	@override String get presetApps => '자주 쓰는 앱 빠른 추가 (권한 불필요 프리셋)';
 	@override String get requestPermissionPopup => '권한 요청 (시스템 팝업)';
+	@override String get rulesAppliedLive => '앱별 프록시 규칙이 원활하게 적용되었습니다';
+	@override String get rulesChangedBanner => '라우팅 규칙이 변경되었습니다. 적용 시 즉시 반영됩니다';
+	@override String get applyNow => '즉시 적용';
+	@override String get partialPermissionBanner => '앱 목록 읽기 권한이 제한되어 일부 표시 가능한 앱만 노출됩니다';
+	@override String get grantPermission => '권한 부여';
+	@override String get searchHint => '앱 이름 / 패키지명';
+	@override String get emptyWhitelistWarning => '화이트리스트가 비어 있으면 어떤 앱도 프록시되지 않습니다. 최소 1개의 앱을 선택하세요';
+	@override String cleanupInvalidItems({required Object p}) => '유효하지 않은 ${p}개 정리';
+	@override String get uninstalledBadge => '제거됨';
+	@override String get systemGuideTitle => '시스템 권한 설정 안내';
+	@override String get systemGuideBody => '• Xiaomi / HyperOS / MIUI: 아래 [시스템 권한 설정 열기]를 눌러 \'설치된 앱 목록 가져오기\'를 허용하세요.\n• Huawei / Honor: 설정 -> 앱 -> Wmimo -> 권한에서 \'설치된 앱 목록 읽기\'를 허용하세요.\n• OPPO / vivo: 앱 권한에서 \'앱 목록 읽기\'를 허용하세요.\n• 권한 허용 후 Wmimo로 돌아오면 자동으로 로드됩니다.';
+	@override String configuredAppsCount({required Object p}) => '${p}개 앱 설정됨';
 }
 
 // Path: UserAgreementScreen
@@ -318,6 +330,7 @@ class _Translations$VersionUpdateScreen$ko implements Translations$VersionUpdate
 	@override String versionReady({required Object p}) => '새 버전 [${p}]이 준비되었습니다';
 	@override String get update => '업데이트를 위해 재시작';
 	@override String get cancel => '나중에';
+	@override String get dpkgNotFoundError => '현재 시스템에서 dpkg가 감지되지 않아 .deb 패키지를 설치할 수 없습니다.\n호환되지 않는 캐시 파일을 정리했습니다. 다시 업데이트를 확인하여 시스템에 맞는 패키지(pacman / AppImage 등)를 받아주세요.';
 }
 
 // Path: loginScreen
@@ -898,6 +911,12 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get batteryOptimizationRestricted => '제한됨 (눌러서 허용)';
 	@override String get appPermissionsSettings => '시스템 앱 권한 설정';
 	@override String get previewFinalConfig => '최종 코어 설정 미리보기';
+	@override String filterCategory({required Object p}) => '${p} 필터';
+	@override String get directModeBannerTip => '현재 \'직접 연결\' 모드입니다. 모든 트래픽이 프록시 노드를 거치지 않고 직접 연결됩니다.';
+	@override String get iconUrlOptional => '아이콘 URL (비워두면 Favicon 자동 가져오기)';
+	@override String get schemeConnectConfirm => '외부에서 프록시 연결을 요청했습니다. 허용하시겠습니까?';
+	@override String get schemeDisconnectConfirm => '외부에서 프록시 연결 해제를 요청했습니다. 허용하시겠습니까?';
+	@override String get schemeReconnectConfirm => '외부에서 프록시 재연결을 요청했습니다. 허용하시겠습니까?';
 }
 
 // Path: permission
@@ -1005,6 +1024,26 @@ class _Translations$dns$ko implements Translations$dns$en {
 	@override String get addPresetServer => '프리셋 DNS 추가';
 	@override String manageFakeIpFilter({required Object p}) => '필터 목록 관리 (${p})';
 	@override String fakeIpFilterDesc({required Object p}) => '${p}개의 도메인 규칙이 네트워크 격리 문제를 방지하기 위해 Fake-IP 확인을 우회합니다.';
+	@override String get geoInstalled => '설치됨';
+	@override String get geoNotInstalled => '미설치';
+	@override String get geoNeverUpdated => '업데이트 없음';
+	@override String get geoDownloading => '다운로드 중...';
+	@override String geoIntervalHours({required Object p}) => '${p}시간';
+	@override String geoIntervalDays({required Object p}) => '${p}일';
+	@override String get cdnJsdelivrName => 'jsDelivr 글로벌 가속 CDN (권장)';
+	@override String get cdnJsdelivrDesc => 'Cloudflare 엣지 노드 가속, 아시아 태평양 지역 직접 다운로드에 적합';
+	@override String get cdnFastgitName => 'GitHub 고속 미러 (직접 연결)';
+	@override String get cdnFastgitDesc => 'GitHub Releases용 리버스 프록시 미러, 프록시 없이 직접 다운로드';
+	@override String get cdnGithubName => 'GitHub 공식 소스 (MetaCubeX)';
+	@override String get cdnGithubDesc => 'MetaCubeX 공식 릴리스 저장소';
+	@override String get assetGeositeName => 'GeoSite 도메인 라우팅 데이터베이스';
+	@override String get assetGeositeDesc => 'GEOSITE 도메인 분류 및 정밀한 트래픽 라우팅 매핑 제공';
+	@override String get assetGeoipName => 'GeoIP 라우팅 데이터베이스';
+	@override String get assetGeoipDesc => 'GEOIP 규칙 매칭에 필요한 글로벌 IP 대역 귀속 데이터 제공';
+	@override String get assetCountryName => 'GeoLite2 국가 지리 데이터베이스 (MMDB)';
+	@override String get assetCountryDesc => 'Mihomo 코어 내장 DNS 오염 방지 및 대상 IP 국가 빠른 조회용 필수 데이터베이스';
+	@override String get assetAsnName => 'GeoLite2 ASN 자율 시스템 데이터베이스';
+	@override String get assetAsnDesc => '대상 IP의 통신사 및 자율 시스템 번호 식별 (IP-ASN 규칙 지원)';
 }
 
 // Path: sniffer
@@ -1174,6 +1213,18 @@ extension on TranslationsKo {
 			'PerAppAndroidScreen.openSystemPermission' => '시스템 권한 설정으로 이동',
 			'PerAppAndroidScreen.presetApps' => '자주 쓰는 앱 빠른 추가 (권한 불필요 프리셋)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '권한 요청 (시스템 팝업)',
+			'PerAppAndroidScreen.rulesAppliedLive' => '앱별 프록시 규칙이 원활하게 적용되었습니다',
+			'PerAppAndroidScreen.rulesChangedBanner' => '라우팅 규칙이 변경되었습니다. 적용 시 즉시 반영됩니다',
+			'PerAppAndroidScreen.applyNow' => '즉시 적용',
+			'PerAppAndroidScreen.partialPermissionBanner' => '앱 목록 읽기 권한이 제한되어 일부 표시 가능한 앱만 노출됩니다',
+			'PerAppAndroidScreen.grantPermission' => '권한 부여',
+			'PerAppAndroidScreen.searchHint' => '앱 이름 / 패키지명',
+			'PerAppAndroidScreen.emptyWhitelistWarning' => '화이트리스트가 비어 있으면 어떤 앱도 프록시되지 않습니다. 최소 1개의 앱을 선택하세요',
+			'PerAppAndroidScreen.cleanupInvalidItems' => ({required Object p}) => '유효하지 않은 ${p}개 정리',
+			'PerAppAndroidScreen.uninstalledBadge' => '제거됨',
+			'PerAppAndroidScreen.systemGuideTitle' => '시스템 권한 설정 안내',
+			'PerAppAndroidScreen.systemGuideBody' => '• Xiaomi / HyperOS / MIUI: 아래 [시스템 권한 설정 열기]를 눌러 \'설치된 앱 목록 가져오기\'를 허용하세요.\n• Huawei / Honor: 설정 -> 앱 -> Wmimo -> 권한에서 \'설치된 앱 목록 읽기\'를 허용하세요.\n• OPPO / vivo: 앱 권한에서 \'앱 목록 읽기\'를 허용하세요.\n• 권한 허용 후 Wmimo로 돌아오면 자동으로 로드됩니다.',
+			'PerAppAndroidScreen.configuredAppsCount' => ({required Object p}) => '${p}개 앱 설정됨',
 			'UserAgreementScreen.privacyFirst' => '이용약관 및 개인정보 처리방침',
 			'UserAgreementScreen.subtitle' => 'Wmimo를 사용하기 전에 다음 약관을 읽고 동의해 주세요',
 			'UserAgreementScreen.agreeAndContinue' => '동의 및 계속',
@@ -1323,6 +1374,7 @@ extension on TranslationsKo {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '새 버전 [${p}]이 준비되었습니다',
 			'VersionUpdateScreen.update' => '업데이트를 위해 재시작',
 			'VersionUpdateScreen.cancel' => '나중에',
+			'VersionUpdateScreen.dpkgNotFoundError' => '현재 시스템에서 dpkg가 감지되지 않아 .deb 패키지를 설치할 수 없습니다.\n호환되지 않는 캐시 파일을 정리했습니다. 다시 업데이트를 확인하여 시스템에 맞는 패키지(pacman / AppImage 등)를 받아주세요.',
 			'loginScreen.login' => '로그인',
 			'loginScreen.register' => '계정 가입',
 			'loginScreen.forgotPassword' => '비밀번호 찾기',
@@ -1646,6 +1698,8 @@ extension on TranslationsKo {
 			'meta.remoteSubscription' => '원격 구독',
 			'meta.noTrafficData' => '사용량 통계 없음',
 			'meta.localProfile' => '로컬 파일',
+			_ => null,
+		} ?? switch (path) {
 			'meta.viewYamlConfig' => 'YAML 설정 보기',
 			'meta.editYamlConfig' => 'YAML 설정 편집',
 			'meta.copySubscriptionUrl' => '구독 URL 복사',
@@ -1659,8 +1713,6 @@ extension on TranslationsKo {
 			'meta.nodeSelected' => ({required Object p}) => '선택된 노드: ${p}',
 			'meta.startingCoreAndTesting' => '코어를 시작하고 지연 속도를 측정하는 중...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} 분',
-			_ => null,
-		} ?? switch (path) {
 			'meta.chartUpload' => '업로드',
 			'meta.chartDownload' => '다운로드',
 			'meta.author' => '작성자',
@@ -1901,6 +1953,12 @@ extension on TranslationsKo {
 			'meta.batteryOptimizationRestricted' => '제한됨 (눌러서 허용)',
 			'meta.appPermissionsSettings' => '시스템 앱 권한 설정',
 			'meta.previewFinalConfig' => '최종 코어 설정 미리보기',
+			'meta.filterCategory' => ({required Object p}) => '${p} 필터',
+			'meta.directModeBannerTip' => '현재 \'직접 연결\' 모드입니다. 모든 트래픽이 프록시 노드를 거치지 않고 직접 연결됩니다.',
+			'meta.iconUrlOptional' => '아이콘 URL (비워두면 Favicon 자동 가져오기)',
+			'meta.schemeConnectConfirm' => '외부에서 프록시 연결을 요청했습니다. 허용하시겠습니까?',
+			'meta.schemeDisconnectConfirm' => '외부에서 프록시 연결 해제를 요청했습니다. 허용하시겠습니까?',
+			'meta.schemeReconnectConfirm' => '외부에서 프록시 재연결을 요청했습니다. 허용하시겠습니까?',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',
@@ -1972,6 +2030,26 @@ extension on TranslationsKo {
 			'dns.addPresetServer' => '프리셋 DNS 추가',
 			'dns.manageFakeIpFilter' => ({required Object p}) => '필터 목록 관리 (${p})',
 			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p}개의 도메인 규칙이 네트워크 격리 문제를 방지하기 위해 Fake-IP 확인을 우회합니다.',
+			'dns.geoInstalled' => '설치됨',
+			'dns.geoNotInstalled' => '미설치',
+			'dns.geoNeverUpdated' => '업데이트 없음',
+			'dns.geoDownloading' => '다운로드 중...',
+			'dns.geoIntervalHours' => ({required Object p}) => '${p}시간',
+			'dns.geoIntervalDays' => ({required Object p}) => '${p}일',
+			'dns.cdnJsdelivrName' => 'jsDelivr 글로벌 가속 CDN (권장)',
+			'dns.cdnJsdelivrDesc' => 'Cloudflare 엣지 노드 가속, 아시아 태평양 지역 직접 다운로드에 적합',
+			'dns.cdnFastgitName' => 'GitHub 고속 미러 (직접 연결)',
+			'dns.cdnFastgitDesc' => 'GitHub Releases용 리버스 프록시 미러, 프록시 없이 직접 다운로드',
+			'dns.cdnGithubName' => 'GitHub 공식 소스 (MetaCubeX)',
+			'dns.cdnGithubDesc' => 'MetaCubeX 공식 릴리스 저장소',
+			'dns.assetGeositeName' => 'GeoSite 도메인 라우팅 데이터베이스',
+			'dns.assetGeositeDesc' => 'GEOSITE 도메인 분류 및 정밀한 트래픽 라우팅 매핑 제공',
+			'dns.assetGeoipName' => 'GeoIP 라우팅 데이터베이스',
+			'dns.assetGeoipDesc' => 'GEOIP 규칙 매칭에 필요한 글로벌 IP 대역 귀속 데이터 제공',
+			'dns.assetCountryName' => 'GeoLite2 국가 지리 데이터베이스 (MMDB)',
+			'dns.assetCountryDesc' => 'Mihomo 코어 내장 DNS 오염 방지 및 대상 IP 국가 빠른 조회용 필수 데이터베이스',
+			'dns.assetAsnName' => 'GeoLite2 ASN 자율 시스템 데이터베이스',
+			'dns.assetAsnDesc' => '대상 IP의 통신사 및 자율 시스템 번호 식별 (IP-ASN 규칙 지원)',
 			'sniffer.overrideDest' => '덮어쓰기',
 			'profilePatchMode.currentSelected' => '현재 선택됨',
 			'profilePatchMode.overwrite' => '내장 - 덮어쓰기',

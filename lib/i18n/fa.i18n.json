@@ -32,7 +32,19 @@
     "permissionRestrictedTip": "سیستم دسترسی به لیست برنامه‌ها را محدود کرده است. لطفاً برای فعال‌سازی دسترسی به تنظیمات بروید یا از الگوهای آماده استفاده کنید.",
     "openSystemPermission": "رفتن به تنظیمات مجوزهای سیستم",
     "presetApps": "افزودن سریع برنامه‌ها (بدون نیاز به مجوز)",
-    "requestPermissionPopup": "درخواست مجوز (پاپ‌آپ سیستم)"
+    "requestPermissionPopup": "درخواست مجوز (پاپ‌آپ سیستم)",
+    "rulesAppliedLive": "قوانین پروکسی تفکیک برنامه بدون وقفه اعمال شد",
+    "rulesChangedBanner": "قوانین مسیریابی تغییر کرد. برای اعمال فوری تایید کنید",
+    "applyNow": "اعمال فوری",
+    "partialPermissionBanner": "مجوز خواندن فهرست برنامه‌ها محدود است؛ فقط بخشی از برنامه‌ها نمایش داده می‌شود",
+    "grantPermission": "اعطای مجوز",
+    "searchHint": "نام برنامه / شناسه بسته",
+    "emptyWhitelistWarning": "لیست سفید خالی هیچ برنامه‌ای را پروکسی نمی‌کند. لطفاً حداقل ۱ برنامه را انتخاب کنید",
+    "cleanupInvalidItems": "پاکسازی $p مورد نامعتبر",
+    "uninstalledBadge": "حذف شده",
+    "systemGuideTitle": "راهنمای فعال‌سازی مجوز سیستم",
+    "systemGuideBody": "• Xiaomi / HyperOS / MIUI: روی [باز کردن تنظیمات مجوز سیستم] در پایین بزنید و مجوز دریافت فهرست برنامه‌ها را فعال کنید.\n• Huawei / Honor: تنظیمات -> برنامه‌ها -> Wmimo -> مجوزها -> خواندن فهرست برنامه‌های نصب‌شده را فعال کنید.\n• OPPO / vivo: در مجوزهای برنامه، خواندن فهرست برنامه‌ها را فعال کنید.\n• پس از اعطای مجوز به Wmimo برگردید تا به طور خودکار بارگذاری شود.",
+    "configuredAppsCount": "$p برنامه پیکربندی شده"
   },
   "UserAgreementScreen": {
     "privacyFirst": "شرایط استفاده و حریم خصوصی",
@@ -189,7 +201,8 @@
   "VersionUpdateScreen": {
     "versionReady": "نسخه جدید [$p] آماده است",
     "update": "راه‌اندازی مجدد برای به‌روزرسانی",
-    "cancel": "الان‌ نه"
+    "cancel": "الان‌ نه",
+    "dpkgNotFoundError": "در سیستم فعلی dpkg شناسایی نشد و امکان نصب بسته .deb وجود ندارد.\nفایل‌های کش ناسازگار پاک شدند. لطفاً دوباره بروزرسانی را بررسی کنید تا بسته سازگار (مانند pacman / AppImage) دریافت شود."
   },
   "loginScreen": {
     "login": "ورود",
@@ -773,7 +786,13 @@
     "batteryOptimizationExempted": "معاف شده",
     "batteryOptimizationRestricted": "محدود شده (برای مجوز لمس کنید)",
     "appPermissionsSettings": "مجوزهای سیستمی برنامه",
-    "previewFinalConfig": "پیش‌نمایش پیکربندی نهایی هسته"
+    "previewFinalConfig": "پیش‌نمایش پیکربندی نهایی هسته",
+    "filterCategory": "فیلتر $p",
+    "directModeBannerTip": "حالت اتصال مستقیم فعال است. تمام ترافیک بدون استفاده از گره‌های پروکسی مستقیماً متصل می‌شود.",
+    "iconUrlOptional": "آدرس آیکون (برای دریافت خودکار Favicon خالی بگذارید)",
+    "schemeConnectConfirm": "یک درخواست خارجی می‌خواهد به پروکسی متصل شود. اجازه می‌دهید؟",
+    "schemeDisconnectConfirm": "یک درخواست خارجی می‌خواهد اتصال پروکسی را قطع کند. اجازه می‌دهید؟",
+    "schemeReconnectConfirm": "یک درخواست خارجی می‌خواهد دوباره به پروکسی متصل شود. اجازه می‌دهید؟"
   },
   "permission": {
     "camera": "دوربین",
@@ -852,7 +871,27 @@
     "updateFailed": "به‌روزرسانی ناموفق بود",
     "addPresetServer": "افزودن DNS پیش‌فرض",
     "manageFakeIpFilter": "مدیریت فهرست فیلترها ($p)",
-    "fakeIpFilterDesc": "$p قانون دامنه برای جلوگیری از مشکلات انزوای شبکه، تفکیک Fake-IP را دور می‌زنند."
+    "fakeIpFilterDesc": "$p قانون دامنه برای جلوگیری از مشکلات انزوای شبکه، تفکیک Fake-IP را دور می‌زنند.",
+    "geoInstalled": "نصب شده",
+    "geoNotInstalled": "نصب نشده",
+    "geoNeverUpdated": "هرگز",
+    "geoDownloading": "در حال دانلود...",
+    "geoIntervalHours": "$p ساعت",
+    "geoIntervalDays": "$p روز",
+    "cdnJsdelivrName": "شبکه جهانی jsDelivr (پیشنهادی)",
+    "cdnJsdelivrDesc": "شتاب‌دهی با گره‌های Cloudflare، مناسب برای دانلود مستقیم",
+    "cdnFastgitName": "آینه پرسرعت GitHub (اتصال مستقیم)",
+    "cdnFastgitDesc": "آینه پروکسی معکوس برای انتشارهای GitHub بدون نیاز به پروکسی",
+    "cdnGithubName": "منبع رسمی GitHub (MetaCubeX)",
+    "cdnGithubDesc": "مخزن رسمی انتشارهای MetaCubeX",
+    "assetGeositeName": "پایگاه داده مسیریابی دامنه GeoSite",
+    "assetGeositeDesc": "دسته‌بندی دامنه‌ها برای مسیریابی دقیق قوانین GEOSITE",
+    "assetGeoipName": "پایگاه داده مسیریابی GeoIP",
+    "assetGeoipDesc": "داده‌های زیرشبکه IP جهانی برای تطبیق قوانین GEOIP",
+    "assetCountryName": "پایگاه داده کشورها GeoLite2 (MMDB)",
+    "assetCountryDesc": "پایگاه داده ضروری MaxMind برای استعلام سریع کشور IP و محافظت DNS هسته",
+    "assetAsnName": "پایگاه داده سیستم‌های مستقل GeoLite2 ASN",
+    "assetAsnDesc": "شناسایی اپراتور و شماره سیستم مستقل IP مقصد (پشتیبانی از قوانین IP-ASN)"
   },
   "sniffer": {
     "overrideDest": "پوشش"

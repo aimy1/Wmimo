@@ -133,6 +133,18 @@ class _Translations$PerAppAndroidScreen$ru implements Translations$PerAppAndroid
 	@override String get openSystemPermission => 'Открыть настройки разрешений';
 	@override String get presetApps => 'Быстрое добавление (пресет без разрешений)';
 	@override String get requestPermissionPopup => 'Запросить разрешение (системный диалог)';
+	@override String get rulesAppliedLive => 'Правила прокси для приложений успешно применены';
+	@override String get rulesChangedBanner => 'Правила изменены. Примените для немедленного вступления в силу';
+	@override String get applyNow => 'Применить';
+	@override String get partialPermissionBanner => 'Доступ к списку приложений ограничен, показана только часть приложений';
+	@override String get grantPermission => 'Разрешить';
+	@override String get searchHint => 'Имя приложения / Пакет';
+	@override String get emptyWhitelistWarning => 'При пустом белом списке прокси не применяется ни к одному приложению. Выберите хотя бы 1';
+	@override String cleanupInvalidItems({required Object p}) => 'Очистить недействительные (${p})';
+	@override String get uninstalledBadge => 'Удалено';
+	@override String get systemGuideTitle => 'Инструкция по включению разрешений';
+	@override String get systemGuideBody => '• Xiaomi / HyperOS / MIUI: Нажмите [Открыть настройки разрешений] ниже и включите «Получение списка приложений».\n• Huawei / Honor: Настройки -> Приложения -> Wmimo -> Права -> включите «Чтение списка установленных приложений».\n• OPPO / vivo: Включите «Чтение списка приложений» в разрешениях.\n• После включения вернитесь в Wmimo для автозагрузки.';
+	@override String configuredAppsCount({required Object p}) => 'Настроено приложений: ${p}';
 }
 
 // Path: UserAgreementScreen
@@ -318,6 +330,7 @@ class _Translations$VersionUpdateScreen$ru implements Translations$VersionUpdate
 	@override String versionReady({required Object p}) => 'Новая версия [${p}] доступна';
 	@override String get update => 'Перезапустить';
 	@override String get cancel => 'Не сейчас';
+	@override String get dpkgNotFoundError => 'В системе не обнаружен dpkg, установка пакетов .deb невозможна.\nНесовместимый кэш очищен. Проверьте обновления снова для загрузки подходящего пакета (например, pacman / AppImage).';
 }
 
 // Path: loginScreen
@@ -898,6 +911,12 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get batteryOptimizationRestricted => 'Ограничено (Нажмите для разрешения)';
 	@override String get appPermissionsSettings => 'Системные разрешения';
 	@override String get previewFinalConfig => 'Предпросмотр итоговой конфигурации ядра';
+	@override String filterCategory({required Object p}) => 'Фильтр ${p}';
+	@override String get directModeBannerTip => 'Активен режим «Напрямую». Весь трафик идет напрямую без использования прокси-узлов.';
+	@override String get iconUrlOptional => 'URL иконки (оставьте пустым для автозагрузки Favicon)';
+	@override String get schemeConnectConfirm => 'Внешний запрос на подключение прокси. Разрешить?';
+	@override String get schemeDisconnectConfirm => 'Внешний запрос на отключение прокси. Разрешить?';
+	@override String get schemeReconnectConfirm => 'Внешний запрос на переподключение прокси. Разрешить?';
 }
 
 // Path: permission
@@ -1005,6 +1024,26 @@ class _Translations$dns$ru implements Translations$dns$en {
 	@override String get addPresetServer => 'Добавить предустановленный DNS';
 	@override String manageFakeIpFilter({required Object p}) => 'Управление списком фильтров (${p})';
 	@override String fakeIpFilterDesc({required Object p}) => '${p} правил доменов обходят разрешение Fake-IP во избежание проблем изоляции сети.';
+	@override String get geoInstalled => 'Установлено';
+	@override String get geoNotInstalled => 'Не установлено';
+	@override String get geoNeverUpdated => 'Никогда';
+	@override String get geoDownloading => 'Загрузка...';
+	@override String geoIntervalHours({required Object p}) => '${p} ч';
+	@override String geoIntervalDays({required Object p}) => '${p} дн';
+	@override String get cdnJsdelivrName => 'Глобальный CDN jsDelivr (Рекомендуется)';
+	@override String get cdnJsdelivrDesc => 'Ускорение через узлы Cloudflare, подходит для прямой загрузки';
+	@override String get cdnFastgitName => 'Быстрое зеркало GitHub (Прямое)';
+	@override String get cdnFastgitDesc => 'Зеркало обратного прокси для GitHub Releases без прокси';
+	@override String get cdnGithubName => 'Официальный GitHub (MetaCubeX)';
+	@override String get cdnGithubDesc => 'Официальный репозиторий релизов MetaCubeX';
+	@override String get assetGeositeName => 'База правил доменов GeoSite';
+	@override String get assetGeositeDesc => 'Категории доменов для точной маршрутизации правил GEOSITE';
+	@override String get assetGeoipName => 'База маршрутизации GeoIP';
+	@override String get assetGeoipDesc => 'Данные глобальных IP-подсетей для сопоставления правил GEOIP';
+	@override String get assetCountryName => 'База стран GeoLite2 (MMDB)';
+	@override String get assetCountryDesc => 'Необходимая база стран MaxMind для DNS-защиты и маршрутизации ядра';
+	@override String get assetAsnName => 'База автономных систем GeoLite2 ASN';
+	@override String get assetAsnDesc => 'Определяет провайдера и номер автономной системы IP (правила IP-ASN)';
 }
 
 // Path: sniffer
@@ -1174,6 +1213,18 @@ extension on TranslationsRu {
 			'PerAppAndroidScreen.openSystemPermission' => 'Открыть настройки разрешений',
 			'PerAppAndroidScreen.presetApps' => 'Быстрое добавление (пресет без разрешений)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'Запросить разрешение (системный диалог)',
+			'PerAppAndroidScreen.rulesAppliedLive' => 'Правила прокси для приложений успешно применены',
+			'PerAppAndroidScreen.rulesChangedBanner' => 'Правила изменены. Примените для немедленного вступления в силу',
+			'PerAppAndroidScreen.applyNow' => 'Применить',
+			'PerAppAndroidScreen.partialPermissionBanner' => 'Доступ к списку приложений ограничен, показана только часть приложений',
+			'PerAppAndroidScreen.grantPermission' => 'Разрешить',
+			'PerAppAndroidScreen.searchHint' => 'Имя приложения / Пакет',
+			'PerAppAndroidScreen.emptyWhitelistWarning' => 'При пустом белом списке прокси не применяется ни к одному приложению. Выберите хотя бы 1',
+			'PerAppAndroidScreen.cleanupInvalidItems' => ({required Object p}) => 'Очистить недействительные (${p})',
+			'PerAppAndroidScreen.uninstalledBadge' => 'Удалено',
+			'PerAppAndroidScreen.systemGuideTitle' => 'Инструкция по включению разрешений',
+			'PerAppAndroidScreen.systemGuideBody' => '• Xiaomi / HyperOS / MIUI: Нажмите [Открыть настройки разрешений] ниже и включите «Получение списка приложений».\n• Huawei / Honor: Настройки -> Приложения -> Wmimo -> Права -> включите «Чтение списка установленных приложений».\n• OPPO / vivo: Включите «Чтение списка приложений» в разрешениях.\n• После включения вернитесь в Wmimo для автозагрузки.',
+			'PerAppAndroidScreen.configuredAppsCount' => ({required Object p}) => 'Настроено приложений: ${p}',
 			'UserAgreementScreen.privacyFirst' => 'Пользовательское соглашение и конфиденциальность',
 			'UserAgreementScreen.subtitle' => 'Перед использованием Wmimo внимательно прочтите и примите условия',
 			'UserAgreementScreen.agreeAndContinue' => 'Принять и продолжить',
@@ -1323,6 +1374,7 @@ extension on TranslationsRu {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'Новая версия [${p}] доступна',
 			'VersionUpdateScreen.update' => 'Перезапустить',
 			'VersionUpdateScreen.cancel' => 'Не сейчас',
+			'VersionUpdateScreen.dpkgNotFoundError' => 'В системе не обнаружен dpkg, установка пакетов .deb невозможна.\nНесовместимый кэш очищен. Проверьте обновления снова для загрузки подходящего пакета (например, pacman / AppImage).',
 			'loginScreen.login' => 'Вход',
 			'loginScreen.register' => 'Зарегистрировать аккаунт',
 			'loginScreen.forgotPassword' => 'Забыли пароль',
@@ -1646,6 +1698,8 @@ extension on TranslationsRu {
 			'meta.remoteSubscription' => 'Удаленная подписка',
 			'meta.noTrafficData' => 'Статистика использования отсутствует',
 			'meta.localProfile' => 'Локальный файл',
+			_ => null,
+		} ?? switch (path) {
 			'meta.viewYamlConfig' => 'Просмотреть YAML-конфиг',
 			'meta.editYamlConfig' => 'Редактировать YAML-конфиг',
 			'meta.copySubscriptionUrl' => 'Скопировать URL подписки',
@@ -1659,8 +1713,6 @@ extension on TranslationsRu {
 			'meta.nodeSelected' => ({required Object p}) => 'Выбран узел: ${p}',
 			'meta.startingCoreAndTesting' => 'Запуск ядра и проверка задержки...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} мин',
-			_ => null,
-		} ?? switch (path) {
 			'meta.chartUpload' => 'Отдача',
 			'meta.chartDownload' => 'Загрузка',
 			'meta.author' => 'Автор',
@@ -1901,6 +1953,12 @@ extension on TranslationsRu {
 			'meta.batteryOptimizationRestricted' => 'Ограничено (Нажмите для разрешения)',
 			'meta.appPermissionsSettings' => 'Системные разрешения',
 			'meta.previewFinalConfig' => 'Предпросмотр итоговой конфигурации ядра',
+			'meta.filterCategory' => ({required Object p}) => 'Фильтр ${p}',
+			'meta.directModeBannerTip' => 'Активен режим «Напрямую». Весь трафик идет напрямую без использования прокси-узлов.',
+			'meta.iconUrlOptional' => 'URL иконки (оставьте пустым для автозагрузки Favicon)',
+			'meta.schemeConnectConfirm' => 'Внешний запрос на подключение прокси. Разрешить?',
+			'meta.schemeDisconnectConfirm' => 'Внешний запрос на отключение прокси. Разрешить?',
+			'meta.schemeReconnectConfirm' => 'Внешний запрос на переподключение прокси. Разрешить?',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',
@@ -1972,6 +2030,26 @@ extension on TranslationsRu {
 			'dns.addPresetServer' => 'Добавить предустановленный DNS',
 			'dns.manageFakeIpFilter' => ({required Object p}) => 'Управление списком фильтров (${p})',
 			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} правил доменов обходят разрешение Fake-IP во избежание проблем изоляции сети.',
+			'dns.geoInstalled' => 'Установлено',
+			'dns.geoNotInstalled' => 'Не установлено',
+			'dns.geoNeverUpdated' => 'Никогда',
+			'dns.geoDownloading' => 'Загрузка...',
+			'dns.geoIntervalHours' => ({required Object p}) => '${p} ч',
+			'dns.geoIntervalDays' => ({required Object p}) => '${p} дн',
+			'dns.cdnJsdelivrName' => 'Глобальный CDN jsDelivr (Рекомендуется)',
+			'dns.cdnJsdelivrDesc' => 'Ускорение через узлы Cloudflare, подходит для прямой загрузки',
+			'dns.cdnFastgitName' => 'Быстрое зеркало GitHub (Прямое)',
+			'dns.cdnFastgitDesc' => 'Зеркало обратного прокси для GitHub Releases без прокси',
+			'dns.cdnGithubName' => 'Официальный GitHub (MetaCubeX)',
+			'dns.cdnGithubDesc' => 'Официальный репозиторий релизов MetaCubeX',
+			'dns.assetGeositeName' => 'База правил доменов GeoSite',
+			'dns.assetGeositeDesc' => 'Категории доменов для точной маршрутизации правил GEOSITE',
+			'dns.assetGeoipName' => 'База маршрутизации GeoIP',
+			'dns.assetGeoipDesc' => 'Данные глобальных IP-подсетей для сопоставления правил GEOIP',
+			'dns.assetCountryName' => 'База стран GeoLite2 (MMDB)',
+			'dns.assetCountryDesc' => 'Необходимая база стран MaxMind для DNS-защиты и маршрутизации ядра',
+			'dns.assetAsnName' => 'База автономных систем GeoLite2 ASN',
+			'dns.assetAsnDesc' => 'Определяет провайдера и номер автономной системы IP (правила IP-ASN)',
 			'sniffer.overrideDest' => 'Переназначить',
 			'profilePatchMode.currentSelected' => 'Текущий сервер',
 			'profilePatchMode.overwrite' => 'Встроенная функция переопределения',

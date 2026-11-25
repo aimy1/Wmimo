@@ -133,6 +133,18 @@ class _Translations$PerAppAndroidScreen$ja implements Translations$PerAppAndroid
 	@override String get openSystemPermission => 'システム権限設定を開く';
 	@override String get presetApps => 'よく使うアプリを追加 (権限不要プリセット)';
 	@override String get requestPermissionPopup => '権限をリクエスト (システムダイアログ)';
+	@override String get rulesAppliedLive => 'アプリ別プロキシルールがスムーズに適用されました';
+	@override String get rulesChangedBanner => 'ルールが変更されました。適用するとすぐに反映されます';
+	@override String get applyNow => '今すぐ適用';
+	@override String get partialPermissionBanner => 'アプリ一覧の読み取り権限が制限されているため、一部のアプリのみ表示しています';
+	@override String get grantPermission => '権限を許可';
+	@override String get searchHint => 'アプリ名 / パッケージ名';
+	@override String get emptyWhitelistWarning => 'ホワイトリストが空の場合、どのアプリもプロキシされません。少なくとも 1 つ選択してください';
+	@override String cleanupInvalidItems({required Object p}) => '無効な ${p} 件を整理';
+	@override String get uninstalledBadge => 'アンインストール済';
+	@override String get systemGuideTitle => 'システム権限の設定ガイド';
+	@override String get systemGuideBody => '• Xiaomi / HyperOS / MIUI：下の【システム権限設定へ】をタップし、「アプリ一覧の取得」を許可してください。\n• Huawei / Honor：設定 -> アプリ -> Wmimo -> 権限から「インストール済みアプリ一覧の読み取り」を許可。\n• OPPO / vivo：アプリの権限設定で「アプリ一覧の読み取り」を許可。\n• 権限を付与して Wmimo に戻ると自動的に読み込まれます。';
+	@override String configuredAppsCount({required Object p}) => '${p} 個のアプリを設定済み';
 }
 
 // Path: UserAgreementScreen
@@ -318,6 +330,7 @@ class _Translations$VersionUpdateScreen$ja implements Translations$VersionUpdate
 	@override String versionReady({required Object p}) => '新しいバージョン [${p}] の準備ができました';
 	@override String get update => '再起動して更新';
 	@override String get cancel => '今はしない';
+	@override String get dpkgNotFoundError => '現在のシステムで dpkg が検出されないため、.deb パッケージをインストールできません。\n互換性のないキャッシュを消去しました。再度アップデートを確認して適切なパッケージ（pacman / AppImage など）を取得してください。';
 }
 
 // Path: loginScreen
@@ -898,6 +911,12 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get batteryOptimizationRestricted => '制限あり（タップして許可）';
 	@override String get appPermissionsSettings => 'システムアプリ権限設定';
 	@override String get previewFinalConfig => '最終コア設定をプレビュー';
+	@override String filterCategory({required Object p}) => '${p} のみ表示';
+	@override String get directModeBannerTip => '現在「直連」モードです。すべての通信はプロキシを経由せず直接接続されます。';
+	@override String get iconUrlOptional => 'アイコン URL（空欄で Favicon を自動取得）';
+	@override String get schemeConnectConfirm => '外部からプロキシ接続のリクエストがあります。許可しますか？';
+	@override String get schemeDisconnectConfirm => '外部からプロキシ切断のリクエストがあります。許可しますか？';
+	@override String get schemeReconnectConfirm => '外部からプロキシ再接続のリクエストがあります。許可しますか？';
 }
 
 // Path: permission
@@ -1005,6 +1024,26 @@ class _Translations$dns$ja implements Translations$dns$en {
 	@override String get addPresetServer => 'プリセットDNSを追加';
 	@override String manageFakeIpFilter({required Object p}) => 'フィルターリストを管理 (${p})';
 	@override String fakeIpFilterDesc({required Object p}) => '${p} 個のドメインルールがFake-IP解決をバイパスし、ネットワーク分離問題を回避します。';
+	@override String get geoInstalled => 'インストール済み';
+	@override String get geoNotInstalled => '未インストール';
+	@override String get geoNeverUpdated => '未更新';
+	@override String get geoDownloading => 'ダウンロード中...';
+	@override String geoIntervalHours({required Object p}) => '${p}時間';
+	@override String geoIntervalDays({required Object p}) => '${p}日';
+	@override String get cdnJsdelivrName => 'jsDelivr グローバル高速 CDN（推奨）';
+	@override String get cdnJsdelivrDesc => 'Cloudflare エッジノード加速、アジア太平洋地域での直接ダウンロードに最適';
+	@override String get cdnFastgitName => 'GitHub 高速ミラー（プロキシ不要）';
+	@override String get cdnFastgitDesc => 'GitHub Releases 向けリバースプロキシミラー、直接ダウンロード可能';
+	@override String get cdnGithubName => 'GitHub 公式ソース（MetaCubeX）';
+	@override String get cdnGithubDesc => 'MetaCubeX 公式リリースリポジトリ';
+	@override String get assetGeositeName => 'GeoSite ドメイン振り分けデータベース';
+	@override String get assetGeositeDesc => 'GEOSITE ドメイン分類と精密なルーティングマッピングを提供';
+	@override String get assetGeoipName => 'GeoIP ルーティングデータベース';
+	@override String get assetGeoipDesc => 'GEOIP ルール一致に必要なグローバル IP アドレス範囲データを提供';
+	@override String get assetCountryName => 'GeoLite2 国別位置情報データベース (MMDB)';
+	@override String get assetCountryDesc => 'Mihomo コア内蔵の DNS 汚染対策および IP 国別高速照会用必須データベース';
+	@override String get assetAsnName => 'GeoLite2 ASN 自律システムデータベース';
+	@override String get assetAsnDesc => '対象 IP の通信事業者と AS 番号を識別（IP-ASN ルール対応）';
 }
 
 // Path: sniffer
@@ -1174,6 +1213,18 @@ extension on TranslationsJa {
 			'PerAppAndroidScreen.openSystemPermission' => 'システム権限設定を開く',
 			'PerAppAndroidScreen.presetApps' => 'よく使うアプリを追加 (権限不要プリセット)',
 			'PerAppAndroidScreen.requestPermissionPopup' => '権限をリクエスト (システムダイアログ)',
+			'PerAppAndroidScreen.rulesAppliedLive' => 'アプリ別プロキシルールがスムーズに適用されました',
+			'PerAppAndroidScreen.rulesChangedBanner' => 'ルールが変更されました。適用するとすぐに反映されます',
+			'PerAppAndroidScreen.applyNow' => '今すぐ適用',
+			'PerAppAndroidScreen.partialPermissionBanner' => 'アプリ一覧の読み取り権限が制限されているため、一部のアプリのみ表示しています',
+			'PerAppAndroidScreen.grantPermission' => '権限を許可',
+			'PerAppAndroidScreen.searchHint' => 'アプリ名 / パッケージ名',
+			'PerAppAndroidScreen.emptyWhitelistWarning' => 'ホワイトリストが空の場合、どのアプリもプロキシされません。少なくとも 1 つ選択してください',
+			'PerAppAndroidScreen.cleanupInvalidItems' => ({required Object p}) => '無効な ${p} 件を整理',
+			'PerAppAndroidScreen.uninstalledBadge' => 'アンインストール済',
+			'PerAppAndroidScreen.systemGuideTitle' => 'システム権限の設定ガイド',
+			'PerAppAndroidScreen.systemGuideBody' => '• Xiaomi / HyperOS / MIUI：下の【システム権限設定へ】をタップし、「アプリ一覧の取得」を許可してください。\n• Huawei / Honor：設定 -> アプリ -> Wmimo -> 権限から「インストール済みアプリ一覧の読み取り」を許可。\n• OPPO / vivo：アプリの権限設定で「アプリ一覧の読み取り」を許可。\n• 権限を付与して Wmimo に戻ると自動的に読み込まれます。',
+			'PerAppAndroidScreen.configuredAppsCount' => ({required Object p}) => '${p} 個のアプリを設定済み',
 			'UserAgreementScreen.privacyFirst' => '利用規約とプライバシーポリシー',
 			'UserAgreementScreen.subtitle' => 'Wmimo をご利用になる前に、以下の規約をお読みいただきご同意ください',
 			'UserAgreementScreen.agreeAndContinue' => '同意して続行',
@@ -1323,6 +1374,7 @@ extension on TranslationsJa {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => '新しいバージョン [${p}] の準備ができました',
 			'VersionUpdateScreen.update' => '再起動して更新',
 			'VersionUpdateScreen.cancel' => '今はしない',
+			'VersionUpdateScreen.dpkgNotFoundError' => '現在のシステムで dpkg が検出されないため、.deb パッケージをインストールできません。\n互換性のないキャッシュを消去しました。再度アップデートを確認して適切なパッケージ（pacman / AppImage など）を取得してください。',
 			'loginScreen.login' => 'ログイン',
 			'loginScreen.register' => 'アカウント登録',
 			'loginScreen.forgotPassword' => 'パスワードを忘れた',
@@ -1646,6 +1698,8 @@ extension on TranslationsJa {
 			'meta.remoteSubscription' => 'リモートサブスクリプション',
 			'meta.noTrafficData' => '利用統計なし',
 			'meta.localProfile' => 'ローカルファイル',
+			_ => null,
+		} ?? switch (path) {
 			'meta.viewYamlConfig' => 'YAML設定を表示',
 			'meta.editYamlConfig' => 'YAML設定を編集',
 			'meta.copySubscriptionUrl' => 'サブスクリプションURLをコピー',
@@ -1659,8 +1713,6 @@ extension on TranslationsJa {
 			'meta.nodeSelected' => ({required Object p}) => '選択されたノード: ${p}',
 			'meta.startingCoreAndTesting' => 'コアを起動してレイテンシをテスト中...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} 分',
-			_ => null,
-		} ?? switch (path) {
 			'meta.chartUpload' => 'アップロード',
 			'meta.chartDownload' => 'ダウンロード',
 			'meta.author' => '作成者',
@@ -1901,6 +1953,12 @@ extension on TranslationsJa {
 			'meta.batteryOptimizationRestricted' => '制限あり（タップして許可）',
 			'meta.appPermissionsSettings' => 'システムアプリ権限設定',
 			'meta.previewFinalConfig' => '最終コア設定をプレビュー',
+			'meta.filterCategory' => ({required Object p}) => '${p} のみ表示',
+			'meta.directModeBannerTip' => '現在「直連」モードです。すべての通信はプロキシを経由せず直接接続されます。',
+			'meta.iconUrlOptional' => 'アイコン URL（空欄で Favicon を自動取得）',
+			'meta.schemeConnectConfirm' => '外部からプロキシ接続のリクエストがあります。許可しますか？',
+			'meta.schemeDisconnectConfirm' => '外部からプロキシ切断のリクエストがあります。許可しますか？',
+			'meta.schemeReconnectConfirm' => '外部からプロキシ再接続のリクエストがあります。許可しますか？',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',
@@ -1972,6 +2030,26 @@ extension on TranslationsJa {
 			'dns.addPresetServer' => 'プリセットDNSを追加',
 			'dns.manageFakeIpFilter' => ({required Object p}) => 'フィルターリストを管理 (${p})',
 			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} 個のドメインルールがFake-IP解決をバイパスし、ネットワーク分離問題を回避します。',
+			'dns.geoInstalled' => 'インストール済み',
+			'dns.geoNotInstalled' => '未インストール',
+			'dns.geoNeverUpdated' => '未更新',
+			'dns.geoDownloading' => 'ダウンロード中...',
+			'dns.geoIntervalHours' => ({required Object p}) => '${p}時間',
+			'dns.geoIntervalDays' => ({required Object p}) => '${p}日',
+			'dns.cdnJsdelivrName' => 'jsDelivr グローバル高速 CDN（推奨）',
+			'dns.cdnJsdelivrDesc' => 'Cloudflare エッジノード加速、アジア太平洋地域での直接ダウンロードに最適',
+			'dns.cdnFastgitName' => 'GitHub 高速ミラー（プロキシ不要）',
+			'dns.cdnFastgitDesc' => 'GitHub Releases 向けリバースプロキシミラー、直接ダウンロード可能',
+			'dns.cdnGithubName' => 'GitHub 公式ソース（MetaCubeX）',
+			'dns.cdnGithubDesc' => 'MetaCubeX 公式リリースリポジトリ',
+			'dns.assetGeositeName' => 'GeoSite ドメイン振り分けデータベース',
+			'dns.assetGeositeDesc' => 'GEOSITE ドメイン分類と精密なルーティングマッピングを提供',
+			'dns.assetGeoipName' => 'GeoIP ルーティングデータベース',
+			'dns.assetGeoipDesc' => 'GEOIP ルール一致に必要なグローバル IP アドレス範囲データを提供',
+			'dns.assetCountryName' => 'GeoLite2 国別位置情報データベース (MMDB)',
+			'dns.assetCountryDesc' => 'Mihomo コア内蔵の DNS 汚染対策および IP 国別高速照会用必須データベース',
+			'dns.assetAsnName' => 'GeoLite2 ASN 自律システムデータベース',
+			'dns.assetAsnDesc' => '対象 IP の通信事業者と AS 番号を識別（IP-ASN ルール対応）',
 			'sniffer.overrideDest' => '上書き',
 			'profilePatchMode.currentSelected' => '現在選択中',
 			'profilePatchMode.overwrite' => '内蔵 - 上書き',

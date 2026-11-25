@@ -32,7 +32,19 @@
     "permissionRestrictedTip": "يقيد النظام قراءة قائمة التطبيقات. يرجى فتح إعدادات الأذونات لتمكين الوصول إلى قائمة التطبيقات، أو استخدام التطبيقات المعدة مسبقًا بدون إذن.",
     "openSystemPermission": "الانتقال إلى إعدادات أذونات النظام",
     "presetApps": "إضافة سريعة للتطبيقات الشائعة (بدون إذن)",
-    "requestPermissionPopup": "طلب الإذن (نافذة النظام)"
+    "requestPermissionPopup": "طلب الإذن (نافذة النظام)",
+    "rulesAppliedLive": "تم تطبيق قواعد الوكيل لكل تطبيق بسلاسة",
+    "rulesChangedBanner": "تغيرت قواعد التوجيه. طبّق لتفعيلها فوراً",
+    "applyNow": "تطبيق الآن",
+    "partialPermissionBanner": "إذن قراءة قائمة التطبيقات مقيد؛ يتم عرض التطبيقات المرئية جزئياً فقط",
+    "grantPermission": "منح الإذن",
+    "searchHint": "اسم التطبيق / الحزمة",
+    "emptyWhitelistWarning": "القائمة البيضاء الفارغة لا تمرر أي تطبيق عبر الوكيل. يرجى تحديد تطبيق واحد على الأقل",
+    "cleanupInvalidItems": "تنظيف $p عنصر غير صالح",
+    "uninstalledBadge": "غير مثبت",
+    "systemGuideTitle": "دليل تفعيل أذونات النظام",
+    "systemGuideBody": "• Xiaomi / HyperOS / MIUI: اضغط على [فتح إعدادات أذونات النظام] أدناه لتفعيل 'الحصول على قائمة التطبيقات'.\n• Huawei / Honor: الإعدادات -> التطبيقات -> Wmimo -> الأذونات -> فعّل 'قراءة قائمة التطبيقات المثبتة'.\n• OPPO / vivo: فعّل 'قراءة قائمة التطبيقات' في أذونات التطبيق.\n• عُد إلى Wmimo بعد منح الإذن ليتم التحميل تلقائياً.",
+    "configuredAppsCount": "تم تكوين $p تطبيق"
   },
   "UserAgreementScreen": {
     "privacyFirst": "شروط الخدمة وسياسة الخصوصية",
@@ -189,7 +201,8 @@
   "VersionUpdateScreen": {
     "versionReady": "الإصدار الجديد [$p] جاهز",
     "update": "أعد التشغيل للتحديث",
-    "cancel": "ليس الآن"
+    "cancel": "ليس الآن",
+    "dpkgNotFoundError": "لم يتم العثور على dpkg في هذا النظام، لذا لا يمكن تثبيت حزم .deb.\nتم مسح الملفات المؤقتة غير المتوافقة. يرجى التحقق من التحديثات مجدداً للحصول على حزمة متوافقة (مثل pacman / AppImage)."
   },
   "loginScreen": {
     "login": "دخول",
@@ -773,7 +786,13 @@
     "batteryOptimizationExempted": "مستثنى",
     "batteryOptimizationRestricted": "مقيّد (اضغط للسماح)",
     "appPermissionsSettings": "أذونات التطبيق في النظام",
-    "previewFinalConfig": "معاينة التكوين النهائي للنواة"
+    "previewFinalConfig": "معاينة التكوين النهائي للنواة",
+    "filterCategory": "تصفية $p",
+    "directModeBannerTip": "وضع الاتصال المباشر نشط. تمر جميع حركة المرور مباشرة دون استخدام عقد الوكيل.",
+    "iconUrlOptional": "رابط الأيقونة (اتركه فارغاً لجلب Favicon تلقائياً)",
+    "schemeConnectConfirm": "طلب خارجي يريد الاتصال بالوكيل. هل تسمح؟",
+    "schemeDisconnectConfirm": "طلب خارجي يريد قطع الاتصال بالوكيل. هل تسمح؟",
+    "schemeReconnectConfirm": "طلب خارجي يريد إعادة الاتصال بالوكيل. هل تسمح؟"
   },
   "permission": {
     "camera": "الكاميرا",
@@ -852,7 +871,27 @@
     "updateFailed": "فشل التحديث",
     "addPresetServer": "إضافة DNS محدد مسبقًا",
     "manageFakeIpFilter": "إدارة قائمة التصفية ($p)",
-    "fakeIpFilterDesc": "$p قواعد نطاق تتجاوز تحليل Fake-IP لتجنب مشكلات العزل في الشبكة."
+    "fakeIpFilterDesc": "$p قواعد نطاق تتجاوز تحليل Fake-IP لتجنب مشكلات العزل في الشبكة.",
+    "geoInstalled": "مُثبّت",
+    "geoNotInstalled": "غير مُثبّت",
+    "geoNeverUpdated": "أبداً",
+    "geoDownloading": "جارٍ التنزيل...",
+    "geoIntervalHours": "$p س",
+    "geoIntervalDays": "$p ي",
+    "cdnJsdelivrName": "شبكة jsDelivr العالمية (موصى به)",
+    "cdnJsdelivrDesc": "تسريع عبر عقد Cloudflare الطرفية للتنزيل المباشر",
+    "cdnFastgitName": "مرآة GitHub عالية السرعة (اتصال مباشر)",
+    "cdnFastgitDesc": "مرآة وكيل عكسي لإصدارات GitHub للتنزيل بدون وكيل",
+    "cdnGithubName": "مصدر GitHub الرسمي (MetaCubeX)",
+    "cdnGithubDesc": "مستودع إصدارات MetaCubeX الرسمي",
+    "assetGeositeName": "قاعدة بيانات توجيه النطاقات GeoSite",
+    "assetGeositeDesc": "تصنيفات النطاقات لتوجيه قواعد GEOSITE بدقة",
+    "assetGeoipName": "قاعدة بيانات توجيه GeoIP",
+    "assetGeoipDesc": "بيانات نطاقات IP العالمية لمطابقة قواعد GEOIP",
+    "assetCountryName": "قاعدة بيانات الدول GeoLite2 (MMDB)",
+    "assetCountryDesc": "قاعدة بيانات أساسية للاستعلام السريع عن دولة IP وحماية DNS في النواة",
+    "assetAsnName": "قاعدة بيانات الأنظمة المستقلة GeoLite2 ASN",
+    "assetAsnDesc": "تحديد مزود الخدمة ورقم النظام المستقل لعنوان IP (يدعم قواعد IP-ASN)"
   },
   "sniffer": {
     "overrideDest": "غطاء"

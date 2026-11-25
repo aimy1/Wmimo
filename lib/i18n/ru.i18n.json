@@ -32,7 +32,19 @@
     "permissionRestrictedTip": "Система ограничила чтение списка приложений. Нажмите 【Открыть настройки разрешений】 ниже, чтобы включить доступ к списку приложений, или используйте пресеты без разрешений.",
     "openSystemPermission": "Открыть настройки разрешений",
     "presetApps": "Быстрое добавление (пресет без разрешений)",
-    "requestPermissionPopup": "Запросить разрешение (системный диалог)"
+    "requestPermissionPopup": "Запросить разрешение (системный диалог)",
+    "rulesAppliedLive": "Правила прокси для приложений успешно применены",
+    "rulesChangedBanner": "Правила изменены. Примените для немедленного вступления в силу",
+    "applyNow": "Применить",
+    "partialPermissionBanner": "Доступ к списку приложений ограничен, показана только часть приложений",
+    "grantPermission": "Разрешить",
+    "searchHint": "Имя приложения / Пакет",
+    "emptyWhitelistWarning": "При пустом белом списке прокси не применяется ни к одному приложению. Выберите хотя бы 1",
+    "cleanupInvalidItems": "Очистить недействительные ($p)",
+    "uninstalledBadge": "Удалено",
+    "systemGuideTitle": "Инструкция по включению разрешений",
+    "systemGuideBody": "• Xiaomi / HyperOS / MIUI: Нажмите [Открыть настройки разрешений] ниже и включите «Получение списка приложений».\n• Huawei / Honor: Настройки -> Приложения -> Wmimo -> Права -> включите «Чтение списка установленных приложений».\n• OPPO / vivo: Включите «Чтение списка приложений» в разрешениях.\n• После включения вернитесь в Wmimo для автозагрузки.",
+    "configuredAppsCount": "Настроено приложений: $p"
   },
   "UserAgreementScreen": {
     "privacyFirst": "Пользовательское соглашение и конфиденциальность",
@@ -189,7 +201,8 @@
   "VersionUpdateScreen": {
     "versionReady": "Новая версия [$p] доступна",
     "update": "Перезапустить",
-    "cancel": "Не сейчас"
+    "cancel": "Не сейчас",
+    "dpkgNotFoundError": "В системе не обнаружен dpkg, установка пакетов .deb невозможна.\nНесовместимый кэш очищен. Проверьте обновления снова для загрузки подходящего пакета (например, pacman / AppImage)."
   },
   "loginScreen": {
     "login": "Вход",
@@ -773,7 +786,13 @@
     "batteryOptimizationExempted": "В исключениях",
     "batteryOptimizationRestricted": "Ограничено (Нажмите для разрешения)",
     "appPermissionsSettings": "Системные разрешения",
-    "previewFinalConfig": "Предпросмотр итоговой конфигурации ядра"
+    "previewFinalConfig": "Предпросмотр итоговой конфигурации ядра",
+    "filterCategory": "Фильтр $p",
+    "directModeBannerTip": "Активен режим «Напрямую». Весь трафик идет напрямую без использования прокси-узлов.",
+    "iconUrlOptional": "URL иконки (оставьте пустым для автозагрузки Favicon)",
+    "schemeConnectConfirm": "Внешний запрос на подключение прокси. Разрешить?",
+    "schemeDisconnectConfirm": "Внешний запрос на отключение прокси. Разрешить?",
+    "schemeReconnectConfirm": "Внешний запрос на переподключение прокси. Разрешить?"
   },
   "permission": {
     "camera": "Камера",
@@ -852,7 +871,27 @@
     "updateFailed": "Ошибка обновления",
     "addPresetServer": "Добавить предустановленный DNS",
     "manageFakeIpFilter": "Управление списком фильтров ($p)",
-    "fakeIpFilterDesc": "$p правил доменов обходят разрешение Fake-IP во избежание проблем изоляции сети."
+    "fakeIpFilterDesc": "$p правил доменов обходят разрешение Fake-IP во избежание проблем изоляции сети.",
+    "geoInstalled": "Установлено",
+    "geoNotInstalled": "Не установлено",
+    "geoNeverUpdated": "Никогда",
+    "geoDownloading": "Загрузка...",
+    "geoIntervalHours": "$p ч",
+    "geoIntervalDays": "$p дн",
+    "cdnJsdelivrName": "Глобальный CDN jsDelivr (Рекомендуется)",
+    "cdnJsdelivrDesc": "Ускорение через узлы Cloudflare, подходит для прямой загрузки",
+    "cdnFastgitName": "Быстрое зеркало GitHub (Прямое)",
+    "cdnFastgitDesc": "Зеркало обратного прокси для GitHub Releases без прокси",
+    "cdnGithubName": "Официальный GitHub (MetaCubeX)",
+    "cdnGithubDesc": "Официальный репозиторий релизов MetaCubeX",
+    "assetGeositeName": "База правил доменов GeoSite",
+    "assetGeositeDesc": "Категории доменов для точной маршрутизации правил GEOSITE",
+    "assetGeoipName": "База маршрутизации GeoIP",
+    "assetGeoipDesc": "Данные глобальных IP-подсетей для сопоставления правил GEOIP",
+    "assetCountryName": "База стран GeoLite2 (MMDB)",
+    "assetCountryDesc": "Необходимая база стран MaxMind для DNS-защиты и маршрутизации ядра",
+    "assetAsnName": "База автономных систем GeoLite2 ASN",
+    "assetAsnDesc": "Определяет провайдера и номер автономной системы IP (правила IP-ASN)"
   },
   "sniffer": {
     "overrideDest": "Переназначить"

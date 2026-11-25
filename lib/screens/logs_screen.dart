@@ -469,7 +469,6 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final isZh = LocaleSettings.currentLocale == AppLocale.zhCn;
     final level = LogsScreen.normalizeLevel(log.type);
     final color = _getLevelColor(level);
     final category = LogsScreen.parseLogCategory(log.payload);
@@ -603,9 +602,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                         },
                         icon: const Icon(Icons.filter_alt_outlined, size: 18),
                         label: Text(
-                          isZh
-                              ? "仅看 ${category.tag}"
-                              : "Filter ${category.tag}",
+                          tcontext.meta.filterCategory(p: category.tag!),
                         ),
                       ),
                     ),

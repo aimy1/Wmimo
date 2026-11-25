@@ -133,6 +133,18 @@ class _Translations$PerAppAndroidScreen$es implements Translations$PerAppAndroid
 	@override String get openSystemPermission => 'Abrir configuración de permisos del sistema';
 	@override String get presetApps => 'Añadir apps comunes (sin permisos)';
 	@override String get requestPermissionPopup => 'Solicitar permiso (diálogo del sistema)';
+	@override String get rulesAppliedLive => 'Reglas de proxy por aplicación aplicadas sin interrupciones';
+	@override String get rulesChangedBanner => 'Las reglas han cambiado. Aplique para activar inmediatamente';
+	@override String get applyNow => 'Aplicar ahora';
+	@override String get partialPermissionBanner => 'Permiso de lista de apps restringido; solo se muestran algunas aplicaciones';
+	@override String get grantPermission => 'Autorizar';
+	@override String get searchHint => 'Nombre de app / Paquete';
+	@override String get emptyWhitelistWarning => 'Una lista blanca vacía no aplica proxy a ninguna app. Seleccione al menos 1 app';
+	@override String cleanupInvalidItems({required Object p}) => 'Limpiar ${p} inválidos';
+	@override String get uninstalledBadge => 'Desinstalado';
+	@override String get systemGuideTitle => 'Guía de permisos del sistema';
+	@override String get systemGuideBody => '• Xiaomi / HyperOS / MIUI: Toque [Abrir configuración de permisos] abajo y active \'Obtener lista de aplicaciones\'.\n• Huawei / Honor: Ajustes -> Aplicaciones -> Wmimo -> Permisos -> active \'Leer lista de apps instaladas\'.\n• OPPO / vivo: Active \'Leer lista de aplicaciones\' en Permisos.\n• Regrese a Wmimo tras conceder el permiso para cargar automáticamente.';
+	@override String configuredAppsCount({required Object p}) => '${p} aplicaciones configuradas';
 }
 
 // Path: UserAgreementScreen
@@ -164,6 +176,7 @@ class _Translations$VersionUpdateScreen$es implements Translations$VersionUpdate
 	@override String versionReady({required Object p}) => 'La nueva versión [${p}] está lista';
 	@override String get update => 'Reiniciar para Actualizar';
 	@override String get cancel => 'Ahora no';
+	@override String get dpkgNotFoundError => 'No se detectó dpkg en este sistema, por lo que no se pueden instalar paquetes .deb.\nSe limpió la caché incompatible. Vuelva a buscar actualizaciones para obtener un paquete compatible (p. ej., pacman / AppImage).';
 }
 
 // Path: NetCheckScreen
@@ -898,6 +911,12 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get batteryOptimizationRestricted => 'Restringido (Toca para permitir)';
 	@override String get appPermissionsSettings => 'Permisos de la Aplicación';
 	@override String get previewFinalConfig => 'Vista previa de configuración final';
+	@override String filterCategory({required Object p}) => 'Filtrar ${p}';
+	@override String get directModeBannerTip => 'El modo directo está activo. Todo el tráfico se conecta directamente sin usar nodos proxy.';
+	@override String get iconUrlOptional => 'URL del icono (dejar vacío para obtener Favicon automáticamente)';
+	@override String get schemeConnectConfirm => 'Una solicitud externa desea conectar el proxy. ¿Permitir?';
+	@override String get schemeDisconnectConfirm => 'Una solicitud externa desea desconectar el proxy. ¿Permitir?';
+	@override String get schemeReconnectConfirm => 'Una solicitud externa desea reconectar el proxy. ¿Permitir?';
 }
 
 // Path: permission
@@ -1005,6 +1024,26 @@ class _Translations$dns$es implements Translations$dns$en {
 	@override String get addPresetServer => 'Añadir DNS preestablecido';
 	@override String manageFakeIpFilter({required Object p}) => 'Gestionar lista de filtros (${p})';
 	@override String fakeIpFilterDesc({required Object p}) => '${p} reglas de dominio omiten la resolución Fake-IP para evitar problemas de aislamiento de red.';
+	@override String get geoInstalled => 'Instalado';
+	@override String get geoNotInstalled => 'No instalado';
+	@override String get geoNeverUpdated => 'Nunca';
+	@override String get geoDownloading => 'Descargando...';
+	@override String geoIntervalHours({required Object p}) => '${p} h';
+	@override String geoIntervalDays({required Object p}) => '${p} d';
+	@override String get cdnJsdelivrName => 'CDN Global jsDelivr (Recomendado)';
+	@override String get cdnJsdelivrDesc => 'Acelerado por nodos de Cloudflare, ideal para descarga directa';
+	@override String get cdnFastgitName => 'Espejo rápido de GitHub (Directo)';
+	@override String get cdnFastgitDesc => 'Espejo de proxy inverso para GitHub Releases sin proxy';
+	@override String get cdnGithubName => 'GitHub Oficial (MetaCubeX)';
+	@override String get cdnGithubDesc => 'Repositorio oficial de lanzamientos de MetaCubeX';
+	@override String get assetGeositeName => 'Base de datos de dominios GeoSite';
+	@override String get assetGeositeDesc => 'Categorías de dominios para el enrutamiento preciso de reglas GEOSITE';
+	@override String get assetGeoipName => 'Base de datos de enrutamiento GeoIP';
+	@override String get assetGeoipDesc => 'Datos globales de subredes IP para coincidencia de reglas GEOIP';
+	@override String get assetCountryName => 'Base de datos de países GeoLite2 (MMDB)';
+	@override String get assetCountryDesc => 'Base de datos esencial de países MaxMind para DNS y enrutamiento del núcleo';
+	@override String get assetAsnName => 'Base de datos de sistemas autónomos GeoLite2 ASN';
+	@override String get assetAsnDesc => 'Identifica el operador y número de sistema autónomo de la IP (reglas IP-ASN)';
 }
 
 // Path: sniffer
@@ -1174,6 +1213,18 @@ extension on TranslationsEs {
 			'PerAppAndroidScreen.openSystemPermission' => 'Abrir configuración de permisos del sistema',
 			'PerAppAndroidScreen.presetApps' => 'Añadir apps comunes (sin permisos)',
 			'PerAppAndroidScreen.requestPermissionPopup' => 'Solicitar permiso (diálogo del sistema)',
+			'PerAppAndroidScreen.rulesAppliedLive' => 'Reglas de proxy por aplicación aplicadas sin interrupciones',
+			'PerAppAndroidScreen.rulesChangedBanner' => 'Las reglas han cambiado. Aplique para activar inmediatamente',
+			'PerAppAndroidScreen.applyNow' => 'Aplicar ahora',
+			'PerAppAndroidScreen.partialPermissionBanner' => 'Permiso de lista de apps restringido; solo se muestran algunas aplicaciones',
+			'PerAppAndroidScreen.grantPermission' => 'Autorizar',
+			'PerAppAndroidScreen.searchHint' => 'Nombre de app / Paquete',
+			'PerAppAndroidScreen.emptyWhitelistWarning' => 'Una lista blanca vacía no aplica proxy a ninguna app. Seleccione al menos 1 app',
+			'PerAppAndroidScreen.cleanupInvalidItems' => ({required Object p}) => 'Limpiar ${p} inválidos',
+			'PerAppAndroidScreen.uninstalledBadge' => 'Desinstalado',
+			'PerAppAndroidScreen.systemGuideTitle' => 'Guía de permisos del sistema',
+			'PerAppAndroidScreen.systemGuideBody' => '• Xiaomi / HyperOS / MIUI: Toque [Abrir configuración de permisos] abajo y active \'Obtener lista de aplicaciones\'.\n• Huawei / Honor: Ajustes -> Aplicaciones -> Wmimo -> Permisos -> active \'Leer lista de apps instaladas\'.\n• OPPO / vivo: Active \'Leer lista de aplicaciones\' en Permisos.\n• Regrese a Wmimo tras conceder el permiso para cargar automáticamente.',
+			'PerAppAndroidScreen.configuredAppsCount' => ({required Object p}) => '${p} aplicaciones configuradas',
 			'UserAgreementScreen.privacyFirst' => 'Términos del Servicio y Privacidad',
 			'UserAgreementScreen.subtitle' => 'Por favor, revise y acepte los siguientes términos antes de usar Wmimo',
 			'UserAgreementScreen.agreeAndContinue' => 'Aceptar y Continuar',
@@ -1187,6 +1238,7 @@ extension on TranslationsEs {
 			'VersionUpdateScreen.versionReady' => ({required Object p}) => 'La nueva versión [${p}] está lista',
 			'VersionUpdateScreen.update' => 'Reiniciar para Actualizar',
 			'VersionUpdateScreen.cancel' => 'Ahora no',
+			'VersionUpdateScreen.dpkgNotFoundError' => 'No se detectó dpkg en este sistema, por lo que no se pueden instalar paquetes .deb.\nSe limpió la caché incompatible. Vuelva a buscar actualizaciones para obtener un paquete compatible (p. ej., pacman / AppImage).',
 			'NetCheckScreen.title' => 'Diagnóstico de red',
 			'NetCheckScreen.fullDiagnosticsTab' => 'Diagnóstico completo',
 			'NetCheckScreen.advancedCheckTab' => 'Consulta avanzada de dominio',
@@ -1646,6 +1698,8 @@ extension on TranslationsEs {
 			'meta.remoteSubscription' => 'Suscripción remota',
 			'meta.noTrafficData' => 'Sin estadísticas de uso',
 			'meta.localProfile' => 'Archivo local',
+			_ => null,
+		} ?? switch (path) {
 			'meta.viewYamlConfig' => 'Ver configuración YAML',
 			'meta.editYamlConfig' => 'Editar configuración YAML',
 			'meta.copySubscriptionUrl' => 'Copiar URL de suscripción',
@@ -1659,8 +1713,6 @@ extension on TranslationsEs {
 			'meta.nodeSelected' => ({required Object p}) => 'Nodo seleccionado: ${p}',
 			'meta.startingCoreAndTesting' => 'Iniciando núcleo y probando latencia...',
 			'meta.chartMinutes' => ({required Object p}) => '${p} min',
-			_ => null,
-		} ?? switch (path) {
 			'meta.chartUpload' => 'Subida',
 			'meta.chartDownload' => 'Descarga',
 			'meta.author' => 'Autor',
@@ -1901,6 +1953,12 @@ extension on TranslationsEs {
 			'meta.batteryOptimizationRestricted' => 'Restringido (Toca para permitir)',
 			'meta.appPermissionsSettings' => 'Permisos de la Aplicación',
 			'meta.previewFinalConfig' => 'Vista previa de configuración final',
+			'meta.filterCategory' => ({required Object p}) => 'Filtrar ${p}',
+			'meta.directModeBannerTip' => 'El modo directo está activo. Todo el tráfico se conecta directamente sin usar nodos proxy.',
+			'meta.iconUrlOptional' => 'URL del icono (dejar vacío para obtener Favicon automáticamente)',
+			'meta.schemeConnectConfirm' => 'Una solicitud externa desea conectar el proxy. ¿Permitir?',
+			'meta.schemeDisconnectConfirm' => 'Una solicitud externa desea desconectar el proxy. ¿Permitir?',
+			'meta.schemeReconnectConfirm' => 'Una solicitud externa desea reconectar el proxy. ¿Permitir?',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',
@@ -1972,6 +2030,26 @@ extension on TranslationsEs {
 			'dns.addPresetServer' => 'Añadir DNS preestablecido',
 			'dns.manageFakeIpFilter' => ({required Object p}) => 'Gestionar lista de filtros (${p})',
 			'dns.fakeIpFilterDesc' => ({required Object p}) => '${p} reglas de dominio omiten la resolución Fake-IP para evitar problemas de aislamiento de red.',
+			'dns.geoInstalled' => 'Instalado',
+			'dns.geoNotInstalled' => 'No instalado',
+			'dns.geoNeverUpdated' => 'Nunca',
+			'dns.geoDownloading' => 'Descargando...',
+			'dns.geoIntervalHours' => ({required Object p}) => '${p} h',
+			'dns.geoIntervalDays' => ({required Object p}) => '${p} d',
+			'dns.cdnJsdelivrName' => 'CDN Global jsDelivr (Recomendado)',
+			'dns.cdnJsdelivrDesc' => 'Acelerado por nodos de Cloudflare, ideal para descarga directa',
+			'dns.cdnFastgitName' => 'Espejo rápido de GitHub (Directo)',
+			'dns.cdnFastgitDesc' => 'Espejo de proxy inverso para GitHub Releases sin proxy',
+			'dns.cdnGithubName' => 'GitHub Oficial (MetaCubeX)',
+			'dns.cdnGithubDesc' => 'Repositorio oficial de lanzamientos de MetaCubeX',
+			'dns.assetGeositeName' => 'Base de datos de dominios GeoSite',
+			'dns.assetGeositeDesc' => 'Categorías de dominios para el enrutamiento preciso de reglas GEOSITE',
+			'dns.assetGeoipName' => 'Base de datos de enrutamiento GeoIP',
+			'dns.assetGeoipDesc' => 'Datos globales de subredes IP para coincidencia de reglas GEOIP',
+			'dns.assetCountryName' => 'Base de datos de países GeoLite2 (MMDB)',
+			'dns.assetCountryDesc' => 'Base de datos esencial de países MaxMind para DNS y enrutamiento del núcleo',
+			'dns.assetAsnName' => 'Base de datos de sistemas autónomos GeoLite2 ASN',
+			'dns.assetAsnDesc' => 'Identifica el operador y número de sistema autónomo de la IP (reglas IP-ASN)',
 			'sniffer.overrideDest' => 'Sobrescribir',
 			'profilePatchMode.currentSelected' => 'Seleccionado Actual',
 			'profilePatchMode.overwrite' => 'Sobrescritura Integrada',

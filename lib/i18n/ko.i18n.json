@@ -32,7 +32,19 @@
     "permissionRestrictedTip": "시스템에서 앱 목록 읽기가 제한되었습니다. 아래 【시스템 권한 설정 열기】를 눌러 앱 목록 접근 권한을 허용하거나 권한이 필요 없는 프리셋을 사용하세요.",
     "openSystemPermission": "시스템 권한 설정으로 이동",
     "presetApps": "자주 쓰는 앱 빠른 추가 (권한 불필요 프리셋)",
-    "requestPermissionPopup": "권한 요청 (시스템 팝업)"
+    "requestPermissionPopup": "권한 요청 (시스템 팝업)",
+    "rulesAppliedLive": "앱별 프록시 규칙이 원활하게 적용되었습니다",
+    "rulesChangedBanner": "라우팅 규칙이 변경되었습니다. 적용 시 즉시 반영됩니다",
+    "applyNow": "즉시 적용",
+    "partialPermissionBanner": "앱 목록 읽기 권한이 제한되어 일부 표시 가능한 앱만 노출됩니다",
+    "grantPermission": "권한 부여",
+    "searchHint": "앱 이름 / 패키지명",
+    "emptyWhitelistWarning": "화이트리스트가 비어 있으면 어떤 앱도 프록시되지 않습니다. 최소 1개의 앱을 선택하세요",
+    "cleanupInvalidItems": "유효하지 않은 $p개 정리",
+    "uninstalledBadge": "제거됨",
+    "systemGuideTitle": "시스템 권한 설정 안내",
+    "systemGuideBody": "• Xiaomi / HyperOS / MIUI: 아래 [시스템 권한 설정 열기]를 눌러 '설치된 앱 목록 가져오기'를 허용하세요.\n• Huawei / Honor: 설정 -> 앱 -> Wmimo -> 권한에서 '설치된 앱 목록 읽기'를 허용하세요.\n• OPPO / vivo: 앱 권한에서 '앱 목록 읽기'를 허용하세요.\n• 권한 허용 후 Wmimo로 돌아오면 자동으로 로드됩니다.",
+    "configuredAppsCount": "$p개 앱 설정됨"
   },
   "UserAgreementScreen": {
     "privacyFirst": "이용약관 및 개인정보 처리방침",
@@ -189,7 +201,8 @@
   "VersionUpdateScreen": {
     "versionReady": "새 버전 [$p]이 준비되었습니다",
     "update": "업데이트를 위해 재시작",
-    "cancel": "나중에"
+    "cancel": "나중에",
+    "dpkgNotFoundError": "현재 시스템에서 dpkg가 감지되지 않아 .deb 패키지를 설치할 수 없습니다.\n호환되지 않는 캐시 파일을 정리했습니다. 다시 업데이트를 확인하여 시스템에 맞는 패키지(pacman / AppImage 등)를 받아주세요."
   },
   "loginScreen": {
     "login": "로그인",
@@ -773,7 +786,13 @@
     "batteryOptimizationExempted": "제외됨",
     "batteryOptimizationRestricted": "제한됨 (눌러서 허용)",
     "appPermissionsSettings": "시스템 앱 권한 설정",
-    "previewFinalConfig": "최종 코어 설정 미리보기"
+    "previewFinalConfig": "최종 코어 설정 미리보기",
+    "filterCategory": "$p 필터",
+    "directModeBannerTip": "현재 '직접 연결' 모드입니다. 모든 트래픽이 프록시 노드를 거치지 않고 직접 연결됩니다.",
+    "iconUrlOptional": "아이콘 URL (비워두면 Favicon 자동 가져오기)",
+    "schemeConnectConfirm": "외부에서 프록시 연결을 요청했습니다. 허용하시겠습니까?",
+    "schemeDisconnectConfirm": "외부에서 프록시 연결 해제를 요청했습니다. 허용하시겠습니까?",
+    "schemeReconnectConfirm": "외부에서 프록시 재연결을 요청했습니다. 허용하시겠습니까?"
   },
   "permission": {
     "camera": "카메라",
@@ -852,7 +871,27 @@
     "updateFailed": "업데이트 실패",
     "addPresetServer": "프리셋 DNS 추가",
     "manageFakeIpFilter": "필터 목록 관리 ($p)",
-    "fakeIpFilterDesc": "$p개의 도메인 규칙이 네트워크 격리 문제를 방지하기 위해 Fake-IP 확인을 우회합니다."
+    "fakeIpFilterDesc": "$p개의 도메인 규칙이 네트워크 격리 문제를 방지하기 위해 Fake-IP 확인을 우회합니다.",
+    "geoInstalled": "설치됨",
+    "geoNotInstalled": "미설치",
+    "geoNeverUpdated": "업데이트 없음",
+    "geoDownloading": "다운로드 중...",
+    "geoIntervalHours": "$p시간",
+    "geoIntervalDays": "$p일",
+    "cdnJsdelivrName": "jsDelivr 글로벌 가속 CDN (권장)",
+    "cdnJsdelivrDesc": "Cloudflare 엣지 노드 가속, 아시아 태평양 지역 직접 다운로드에 적합",
+    "cdnFastgitName": "GitHub 고속 미러 (직접 연결)",
+    "cdnFastgitDesc": "GitHub Releases용 리버스 프록시 미러, 프록시 없이 직접 다운로드",
+    "cdnGithubName": "GitHub 공식 소스 (MetaCubeX)",
+    "cdnGithubDesc": "MetaCubeX 공식 릴리스 저장소",
+    "assetGeositeName": "GeoSite 도메인 라우팅 데이터베이스",
+    "assetGeositeDesc": "GEOSITE 도메인 분류 및 정밀한 트래픽 라우팅 매핑 제공",
+    "assetGeoipName": "GeoIP 라우팅 데이터베이스",
+    "assetGeoipDesc": "GEOIP 규칙 매칭에 필요한 글로벌 IP 대역 귀속 데이터 제공",
+    "assetCountryName": "GeoLite2 국가 지리 데이터베이스 (MMDB)",
+    "assetCountryDesc": "Mihomo 코어 내장 DNS 오염 방지 및 대상 IP 국가 빠른 조회용 필수 데이터베이스",
+    "assetAsnName": "GeoLite2 ASN 자율 시스템 데이터베이스",
+    "assetAsnDesc": "대상 IP의 통신사 및 자율 시스템 번호 식별 (IP-ASN 규칙 지원)"
   },
   "sniffer": {
     "overrideDest": "덮어쓰기"

@@ -32,7 +32,19 @@
     "permissionRestrictedTip": "当前系统限制了读取软件列表。请点击下方【前往系统权限设置页】开启「获取应用列表」，或直接使用免授权的「常用应用预设」一键代理。",
     "openSystemPermission": "前往系统权限设置页",
     "presetApps": "快捷添加常用应用 (免授权预设)",
-    "requestPermissionPopup": "尝试一键申请权限 (系统弹窗)"
+    "requestPermissionPopup": "尝试一键申请权限 (系统弹窗)",
+    "rulesAppliedLive": "分应用代理规则已平滑生效",
+    "rulesChangedBanner": "分流规则已变更，应用后立即生效",
+    "applyNow": "立即应用",
+    "partialPermissionBanner": "读取应用列表权限受限，当前仅展示部分可见应用",
+    "grantPermission": "去授权",
+    "searchHint": "应用名 / 包名",
+    "emptyWhitelistWarning": "白名单为空时不会代理任何应用，请至少勾选 1 个应用",
+    "cleanupInvalidItems": "清理 $p 个失效项",
+    "uninstalledBadge": "已卸载",
+    "systemGuideTitle": "常见系统开启指引",
+    "systemGuideBody": "• 小米 / HyperOS / MIUI：点击下方【前往系统权限设置页】直达安全中心，开启「获取应用列表」权限。\n• 华为 / 荣耀：设置 -> 应用管理 -> Wmimo -> 权限，开启「读取已安装应用列表」。\n• OPPO / vivo：在应用权限中开启「读取应用列表」。\n• 开启权限后切回 Wmimo 即可自动加载，无需重复进入。",
+    "configuredAppsCount": "已配置 $p 个分流应用"
   },
   "UserAgreementScreen": {
     "privacyFirst": "用户协议与隐私保护",
@@ -189,7 +201,8 @@
   "VersionUpdateScreen": {
     "versionReady": "新版本[$p]已就绪",
     "update": "重启更新",
-    "cancel": "暂不更新"
+    "cancel": "暂不更新",
+    "dpkgNotFoundError": "当前系统未检测到 dpkg，无法安装 .deb 软件包。\n已清除不兼容的缓存文件，请重新检查更新以获取适用于当前系统的软件包（如 pacman / AppImage）。"
   },
   "loginScreen": {
     "login": "登录",
@@ -773,7 +786,13 @@
     "batteryOptimizationExempted": "已豁免限制",
     "batteryOptimizationRestricted": "未豁免（点击授权）",
     "appPermissionsSettings": "系统应用权限设置",
-    "previewFinalConfig": "预览最终生成的内核配置"
+    "previewFinalConfig": "预览最终生成的内核配置",
+    "filterCategory": "仅看 $p",
+    "directModeBannerTip": "当前为「直连」模式，所有流量直接连接，不经过下方代理节点",
+    "iconUrlOptional": "图标地址 (留空自动获取 Favicon)",
+    "schemeConnectConfirm": "外部请求连接代理，是否允许？",
+    "schemeDisconnectConfirm": "外部请求断开代理，是否允许？",
+    "schemeReconnectConfirm": "外部请求重新连接代理，是否允许？"
   },
   "permission": {
     "camera": "摄像头",
@@ -852,7 +871,27 @@
     "updateFailed": "更新失败",
     "addPresetServer": "添加预设 DNS",
     "manageFakeIpFilter": "管理过滤列表 ($p)",
-    "fakeIpFilterDesc": "$p 条域名规则绕过 Fake-IP 解析，以避免网络隔离问题。"
+    "fakeIpFilterDesc": "$p 条域名规则绕过 Fake-IP 解析，以避免网络隔离问题。",
+    "geoInstalled": "已安装",
+    "geoNotInstalled": "未安装",
+    "geoNeverUpdated": "从未更新",
+    "geoDownloading": "正在下载...",
+    "geoIntervalHours": "$p小时",
+    "geoIntervalDays": "$p天",
+    "cdnJsdelivrName": "jsDelivr 全球加速 CDN（推荐）",
+    "cdnJsdelivrDesc": "Cloudflare 边缘节点加速，适合中国大陆与亚太网络直连下载",
+    "cdnFastgitName": "GitHub 高速镜像源（国内直连）",
+    "cdnFastgitDesc": "针对 GitHub Releases 的反向代理镜像，免代理直连下载",
+    "cdnGithubName": "GitHub 官方源（MetaCubeX）",
+    "cdnGithubDesc": "MetaCubeX 官方发布仓库，需具备国际网络或开启代理",
+    "assetGeositeName": "GeoSite 域名分流数据库",
+    "assetGeositeDesc": "提供 GEOSITE 域名分类与国内外站点精准分流映射",
+    "assetGeoipName": "GeoIP 路由分流数据库",
+    "assetGeoipDesc": "提供 GEOIP 规则匹配所需的全球 IP 地址段归属数据",
+    "assetCountryName": "GeoLite2 国家地理位置库 (MMDB)",
+    "assetCountryDesc": "Mihomo 核心内置 DNS 防污染与目标 IP 国家快速查询必用库",
+    "assetAsnName": "GeoLite2 ASN 自治系统数据库",
+    "assetAsnDesc": "识别目标 IP 所属运营商与自治系统号（支持 IP-ASN 分流规则）"
   },
   "sniffer": {
     "overrideDest": "覆盖"
