@@ -116,6 +116,60 @@ class ChainProxyManager {
   static List<ChainProxyItem> get items => List.unmodifiable(_items);
   static int get enabledCount => _items.where((e) => e.enabled).length;
 
+  /// Returns true if [name] is an internal intermediate hop helper node (`⛓️ ... · Hop N`).
+  static bool isIntermediateHopNodeName(String name) {
+    final trimmed = name.trimLeft();
+    return trimmed.startsWith('⛓️ ') && trimmed.contains(' · Hop ');
+  }
+
+  /// Returns true if [name] is a generated chain proxy node or intermediate hop node.
+  static bool isGeneratedChainNodeName(String name) {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return false;
+    if (isIntermediateHopNodeName(trimmed)) return true;
+    if (trimmed.startsWith('🔗 ')) return true;
+    return _items.any((e) => e.name.trim() == trimmed);
+  }
+
+  /// Returns true if [name] looks like an informational airport dummy node
+  /// (e.g., remaining traffic, expiration date, website announcement).
+  static bool isInformationalDummyNodeName(String name) {
+    final lower = name.trim().toLowerCase();
+    if (lower.isEmpty) return true;
+    const keywords = [
+      '剩余流量',
+      '套餐到期',
+      '到期时间',
+      '距离下次重置',
+      '重置剩余',
+      '过期时间',
+      '官网',
+      '网址',
+      '公告',
+      '群组',
+      '客服',
+      '使用前请',
+      '请更新订阅',
+      'traffic:',
+      'expire:',
+    ];
+    for (final kw in keywords) {
+      if (lower.contains(kw)) return true;
+    }
+    return false;
+  }
+
+  /// Returns the matching enabled [ChainProxyItem] if [nodeName] is a configured chain proxy.
+  static ChainProxyItem? findChainByName(String nodeName) {
+    final trimmed = nodeName.trim();
+    for (final item in _items) {
+      if (item.name.trim() == trimmed) {
+        return item;
+      }
+    }
+    return null;
+  }
+
   static Future<void> init() async {
     if (_initialized) return;
     _initialized = true;
@@ -691,6 +745,50 @@ class ChainProxyManager {
         final err = await ClashHttpApi.setProxiesNode(g.name, chainName);
         if (err == null) {
           return g.name;
+        }
+      }
+    }
+    return null;
+  }
+
+  /// Switches the active profile's primary selector group away from [chainName]
+  /// back to the first non-chain proxy/group option.
+  static Future<String?> deactivateChainInPrimaryGroup(String chainName) async {
+    final res = await ClashHttpApi.getProxies();
+    if (res.error != null || res.data == null || res.data!.isEmpty) {
+      return null;
+    }
+
+    final proxies = res.data!;
+    final selectorGroups = proxies.where((n) {
+      final lowerType =
+          n.type.toLowerCase().replaceAll('-', '').replaceAll('_', '');
+      return lowerType == 'selector' || lowerType == 'select';
+    }).toList();
+
+    for (final g in [
+      if (ClashHttpApi.findPrimaryRuleGroup(selectorGroups) != null)
+        ClashHttpApi.findPrimaryRuleGroup(selectorGroups)!,
+      ...selectorGroups,
+    ]) {
+      if (g.now == chainName) {
+        final fallback = g.all.firstWhere(
+          (candidate) =>
+              candidate != chainName &&
+              !isGeneratedChainNodeName(candidate) &&
+              !isInformationalDummyNodeName(candidate) &&
+              candidate.toUpperCase() != 'REJECT' &&
+              candidate.toUpperCase() != 'REJECT-DROP',
+          orElse: () => g.all.firstWhere(
+            (candidate) => candidate != chainName,
+            orElse: () => '',
+          ),
+        );
+        if (fallback.isNotEmpty) {
+          final err = await ClashHttpApi.setProxiesNode(g.name, fallback);
+          if (err == null) {
+            return fallback;
+          }
         }
       }
     }

@@ -8,7 +8,9 @@ import 'package:wmimo/app/utils/path_utils.dart';
 class GeoAssetInfo {
   final String fileName;
   final String displayName;
+  final String displayNameZh;
   final String description;
+  final String descriptionZh;
   final String filePath;
   final int sizeBytes;
   final DateTime? modifiedTime;
@@ -17,22 +19,38 @@ class GeoAssetInfo {
   const GeoAssetInfo({
     required this.fileName,
     required this.displayName,
+    this.displayNameZh = '',
     required this.description,
+    this.descriptionZh = '',
     required this.filePath,
     required this.sizeBytes,
     this.modifiedTime,
     required this.exists,
   });
 
-  String get formattedSize {
-    if (!exists || sizeBytes <= 0) return "Not Installed";
+  String getLocalizedName(bool isZh) =>
+      (isZh && displayNameZh.isNotEmpty) ? displayNameZh : displayName;
+
+  String getLocalizedDescription(bool isZh) =>
+      (isZh && descriptionZh.isNotEmpty) ? descriptionZh : description;
+
+  String get formattedSize => getFormattedSize(false);
+
+  String getFormattedSize(bool isZh) {
+    if (!exists || sizeBytes <= 0) {
+      return isZh ? "未安装" : "Not Installed";
+    }
     if (sizeBytes < 1024) return "$sizeBytes B";
-    if (sizeBytes < 1024 * 1024) return "${(sizeBytes / 1024).toStringAsFixed(1)} KB";
+    if (sizeBytes < 1024 * 1024) {
+      return "${(sizeBytes / 1024).toStringAsFixed(1)} KB";
+    }
     return "${(sizeBytes / (1024 * 1024)).toStringAsFixed(2)} MB";
   }
 
-  String get formattedModifiedTime {
-    if (modifiedTime == null) return "Never";
+  String get formattedModifiedTime => getFormattedModifiedTime(false);
+
+  String getFormattedModifiedTime(bool isZh) {
+    if (modifiedTime == null) return isZh ? "从未更新" : "Never";
     return "${modifiedTime!.year}-${modifiedTime!.month.toString().padLeft(2, '0')}-${modifiedTime!.day.toString().padLeft(2, '0')} "
         "${modifiedTime!.hour.toString().padLeft(2, '0')}:${modifiedTime!.minute.toString().padLeft(2, '0')}";
   }
@@ -41,31 +59,55 @@ class GeoAssetInfo {
 class GeoCdnSource {
   final String id;
   final String name;
+  final String nameZh;
   final String description;
+  final String descriptionZh;
 
   const GeoCdnSource({
     required this.id,
     required this.name,
+    this.nameZh = '',
     required this.description,
+    this.descriptionZh = '',
   });
+
+  String getLocalizedName(bool isZh) =>
+      (isZh && nameZh.isNotEmpty) ? nameZh : name;
+
+  String getLocalizedDescription(bool isZh) =>
+      (isZh && descriptionZh.isNotEmpty) ? descriptionZh : description;
 }
 
 class GeoAssetManager {
+  static const List<String> managedFiles = [
+    "geosite.dat",
+    "geoip.dat",
+    "country.mmdb",
+    "ASN.mmdb",
+  ];
+
   static const List<GeoCdnSource> cdnSources = [
     GeoCdnSource(
       id: "jsdelivr",
       name: "jsDelivr CDN (Fast)",
-      description: "Accelerated global CDN, highly recommended for China & APAC",
+      nameZh: "jsDelivr 全球加速 CDN（推荐）",
+      description:
+          "Accelerated global CDN, highly recommended for China & APAC",
+      descriptionZh: "Cloudflare 边缘节点加速，适合中国大陆与亚太网络直连下载",
     ),
     GeoCdnSource(
       id: "fastgit",
       name: "FastGit Mirror (CN)",
+      nameZh: "GitHub 高速镜像源（国内直连）",
       description: "Direct reverse-proxy mirror for GitHub releases",
+      descriptionZh: "针对 GitHub Releases 的反向代理镜像，免代理直连下载",
     ),
     GeoCdnSource(
       id: "github",
       name: "GitHub Official",
+      nameZh: "GitHub 官方源（MetaCubeX）",
       description: "Official MetaCubeX releases repository",
+      descriptionZh: "MetaCubeX 官方发布仓库，需具备国际网络或开启代理",
     ),
   ];
 
@@ -73,7 +115,7 @@ class GeoAssetManager {
     switch (sourceId) {
       case "jsdelivr":
         if (fileName == "ASN.mmdb") {
-          return "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb";
+          return "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb";
         }
         return "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/$fileName";
       case "fastgit":
@@ -92,29 +134,44 @@ class GeoAssetManager {
 
   static Future<List<GeoAssetInfo>> getAssetsInfo() async {
     final homePath = await PathUtils.profileDir();
-    final List<Map<String, String>> definitions = [
+    const List<Map<String, String>> definitions = [
       {
         "fileName": "geosite.dat",
         "displayName": "GeoSite Database",
-        "description": "Domain name ruleset and category mappings (MetaCubeX)",
+        "displayNameZh": "GeoSite 域名分流数据库",
+        "description":
+            "Domain name ruleset and category mappings (MetaCubeX)",
+        "descriptionZh": "提供 GEOSITE 域名分类与国内外站点精准分流映射",
       },
       {
         "fileName": "geoip.dat",
         "displayName": "GeoIP Database",
+        "displayNameZh": "GeoIP 路由分流数据库",
         "description": "IP geolocation and country resolution data",
+        "descriptionZh": "提供 GEOIP 规则匹配所需的全球 IP 地址段归属数据",
+      },
+      {
+        "fileName": "country.mmdb",
+        "displayName": "GeoLite2 Country (MMDB)",
+        "displayNameZh": "GeoLite2 国家地理位置库 (MMDB)",
+        "description":
+            "MaxMind GeoLite2 country lookup database for core DNS & routing",
+        "descriptionZh": "Mihomo 核心内置 DNS 防污染与目标 IP 国家快速查询必用库",
       },
       {
         "fileName": "ASN.mmdb",
-        "displayName": "ASN Database",
-        "description": "Autonomous System Number (ASN) database",
+        "displayName": "GeoLite2 ASN Database",
+        "displayNameZh": "GeoLite2 ASN 自治系统数据库",
+        "description": "Autonomous System Number (ASN) carrier database",
+        "descriptionZh": "识别目标 IP 所属运营商与自治系统号（支持 IP-ASN 分流规则）",
       },
     ];
 
-    List<GeoAssetInfo> result = [];
+    final List<GeoAssetInfo> result = [];
     for (final def in definitions) {
       final fileName = def["fileName"]!;
       final f = File(path.join(homePath, fileName));
-      bool exists = await f.exists();
+      final bool exists = await f.exists();
       int size = 0;
       DateTime? mod;
       if (exists) {
@@ -124,15 +181,19 @@ class GeoAssetManager {
           mod = stat.modified;
         } catch (_) {}
       }
-      result.add(GeoAssetInfo(
-        fileName: fileName,
-        displayName: def["displayName"]!,
-        description: def["description"]!,
-        filePath: f.path,
-        sizeBytes: size,
-        modifiedTime: mod,
-        exists: exists,
-      ));
+      result.add(
+        GeoAssetInfo(
+          fileName: fileName,
+          displayName: def["displayName"]!,
+          displayNameZh: def["displayNameZh"]!,
+          description: def["description"]!,
+          descriptionZh: def["descriptionZh"]!,
+          filePath: f.path,
+          sizeBytes: size,
+          modifiedTime: mod,
+          exists: exists,
+        ),
+      );
     }
     return result;
   }
@@ -146,23 +207,30 @@ class GeoAssetManager {
     final targetFile = File(path.join(homePath, fileName));
     final tempFile = File(path.join(homePath, "$fileName.tmp"));
     final url = getDownloadUrl(fileName, sourceId);
+    final client = http.Client();
+    IOSink? sink;
 
     try {
       Log.i("GeoAssetManager: Downloading $fileName from $url");
       final request = http.Request('GET', Uri.parse(url));
       request.headers['User-Agent'] = 'Mozilla/5.0 Wmimo-GeoDownloader';
-      final response = await http.Client().send(request);
+      final response = await client
+          .send(request)
+          .timeout(const Duration(seconds: 20));
 
       if (response.statusCode != 200) {
-        Log.w("GeoAssetManager: Download failed with status ${response.statusCode}");
+        Log.w(
+          "GeoAssetManager: Download failed with status ${response.statusCode}",
+        );
         return false;
       }
 
       final contentLength = response.contentLength ?? 0;
       int receivedBytes = 0;
-      final sink = tempFile.openWrite();
+      sink = tempFile.openWrite();
 
-      await for (final chunk in response.stream) {
+      await for (final chunk
+          in response.stream.timeout(const Duration(seconds: 30))) {
         sink.add(chunk);
         receivedBytes += chunk.length;
         if (contentLength > 0 && onProgress != null) {
@@ -171,22 +239,38 @@ class GeoAssetManager {
       }
       await sink.flush();
       await sink.close();
+      sink = null;
+
+      if (receivedBytes <= 0) {
+        Log.w("GeoAssetManager: Downloaded empty payload for $fileName");
+        if (await tempFile.exists()) {
+          await tempFile.delete();
+        }
+        return false;
+      }
 
       // Download complete: replace target file atomically
       if (await targetFile.exists()) {
         await targetFile.delete();
       }
       await tempFile.rename(targetFile.path);
-      Log.i("GeoAssetManager: Successfully updated $fileName (${targetFile.path})");
+      Log.i(
+        "GeoAssetManager: Successfully updated $fileName (${targetFile.path})",
+      );
       return true;
     } catch (e) {
       Log.w("GeoAssetManager: Exception while downloading $fileName: $e");
+      try {
+        await sink?.close();
+      } catch (_) {}
       if (await tempFile.exists()) {
         try {
           await tempFile.delete();
         } catch (_) {}
       }
       return false;
+    } finally {
+      client.close();
     }
   }
 
@@ -194,9 +278,8 @@ class GeoAssetManager {
     String sourceId = "jsdelivr",
     void Function(String fileName, double progress)? onProgress,
   }) async {
-    final assets = ["geosite.dat", "geoip.dat", "ASN.mmdb"];
-    Map<String, bool> results = {};
-    for (final asset in assets) {
+    final Map<String, bool> results = {};
+    for (final asset in managedFiles) {
       final success = await downloadAsset(
         asset,
         sourceId: sourceId,

@@ -5,9 +5,10 @@ import 'dart:io';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
-import 'package:wmimo/screens/theme_config.dart';
+import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 import 'package:wmimo/screens/widgets/text_field.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
@@ -44,12 +45,21 @@ class _AddProfileByImportFromFileScreenState
 
   Future<void> onAdd(BuildContext context) async {
     final tcontext = Translations.of(context);
+    if (_filePath.trim().isEmpty) {
+      await onPressChooseFile();
+      if (_filePath.trim().isEmpty) {
+        return;
+      }
+    }
 
     String text = _textControllerRemark.text.trim();
     if (text.isEmpty && _filePath.isNotEmpty) {
       text = path.basenameWithoutExtension(_filePath);
     }
 
+    setState(() {
+      _loading = true;
+    });
     final error = await ProfileManager.addLocal(_filePath, remark: text);
 
     if (!mounted) {
@@ -82,107 +92,137 @@ class _AddProfileByImportFromFileScreenState
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: WmimoAppBar(
+        title: tcontext.meta.import,
+        actions: [
+          if (_loading)
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            )
+          else
+            IconButton(
+              tooltip: tcontext.meta.save,
+              icon: const Icon(Icons.check_rounded, size: 22),
+              onPressed: () async {
+                await onAdd(context);
+              },
+            ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: const SizedBox(
-                      width: 50,
-                      height: 30,
-                      child: Icon(Icons.arrow_back_ios_outlined, size: 26),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      tcontext.meta.import,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: ThemeConfig.kFontWeightTitle,
-                        fontSize: ThemeConfig.kFontSizeTitle,
-                      ),
-                    ),
-                  ),
-                  _loading
-                      ? const Row(
-                          children: [
-                            SizedBox(width: 12),
-                            SizedBox(
-                              width: 26,
-                              height: 26,
-                              child: RepaintBoundary(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                            SizedBox(width: 12),
-                          ],
-                        )
-                      : InkWell(
-                          onTap: () async {
-                            await onAdd(context);
-                          },
-                          child: Tooltip(
-                            message: tcontext.meta.save,
-                            child: const SizedBox(
-                              width: 50,
-                              height: 30,
-                              child: Icon(Icons.done, size: 26),
-                            ),
-                          ),
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () async {
+                      await onPressChooseFile();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? ThemeDefine.kColorDarkInner
+                            : const Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _filePath.isNotEmpty
+                              ? ThemeDefine.kColorBlue.withValues(alpha: 0.5)
+                              : (isDark
+                                  ? ThemeDefine.kColorDarkBorder
+                                  : const Color(0xFFCBD5E1)),
+                          width: 1,
                         ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: Column(
+                      ),
+                      child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
-                            child: SizedBox(
-                              height: 45.0,
-                              child: ElevatedButton(
-                                child: Text(tcontext.meta.fileChoose),
-                                onPressed: () async {
-                                  await onPressChooseFile();
-                                },
-                              ),
+                          Container(
+                            width: 38,
+                            height: 38,
+                            decoration: BoxDecoration(
+                              color:
+                                  ThemeDefine.kColorBlue.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              _filePath.isNotEmpty
+                                  ? Icons.description_rounded
+                                  : Icons.upload_file_rounded,
+                              color: ThemeDefine.kColorBlue,
+                              size: 20,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
-                            child: TextFieldEx(
-                              controller: _textControllerRemark,
-                              textInputAction: TextInputAction.done,
-                              decoration: InputDecoration(
-                                labelText: tcontext.meta.remark,
-                                hintText: tcontext.meta.required,
-                                prefixIcon: const Icon(
-                                  Icons.edit_note_outlined,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _filePath.isNotEmpty
+                                      ? path.basename(_filePath)
+                                      : tcontext.meta.fileChoose,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
+                                if (_filePath.isNotEmpty) ...[
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    _filePath,
+                                    style: const TextStyle(
+                                      fontSize: 11,
+                                      fontFamily: 'monospace',
+                                      color: ThemeDefine.kColorGrey,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ],
                             ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.folder_open_rounded,
+                            size: 18,
+                            color: ThemeDefine.kColorBlue,
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 18),
+                  TextFieldEx(
+                    controller: _textControllerRemark,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      labelText: tcontext.meta.remark,
+                      hintText: tcontext.meta.required,
+                      prefixIcon: const Icon(
+                        Icons.edit_note_outlined,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -220,8 +260,8 @@ class _AddProfileByImportFromFileScreenState
           _textControllerRemark.value = _textControllerRemark.value.copyWith(
             text: baseName,
           );
-          setState(() {});
         }
+        setState(() {});
       }
     } catch (err) {
       if (!mounted) {

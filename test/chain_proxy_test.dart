@@ -178,6 +178,20 @@ proxy-groups:
       final proxyGroup = (parsed['proxy-groups'] as YamlList).first as YamlMap;
       expect(proxyGroup['proxies'], contains('ZeroChain'));
     });
+
+    test('detects generated chain nodes, intermediate hops, and informational dummy nodes', () {
+      expect(ChainProxyManager.isIntermediateHopNodeName('⛓️ 🔗 HK ➔ SG ➔ US · Hop 2'), isTrue);
+      expect(ChainProxyManager.isIntermediateHopNodeName('🇭🇰 香港 01'), isFalse);
+
+      expect(ChainProxyManager.isGeneratedChainNodeName('🔗 香港 01 ➔ 美国 01'), isTrue);
+      expect(ChainProxyManager.isGeneratedChainNodeName('⛓️ Chain · Hop 2'), isTrue);
+      expect(ChainProxyManager.isGeneratedChainNodeName('🇺🇸 美国 01'), isFalse);
+
+      expect(ChainProxyManager.isInformationalDummyNodeName('剩余流量：88.5 GB'), isTrue);
+      expect(ChainProxyManager.isInformationalDummyNodeName('套餐到期：2027-12-31'), isTrue);
+      expect(ChainProxyManager.isInformationalDummyNodeName('距离下次重置剩余：15 天'), isTrue);
+      expect(ChainProxyManager.isInformationalDummyNodeName('🇯🇵 日本 IEPL 01'), isFalse);
+    });
   });
 
   group('Chain Proxy UI widgets (Beta)', () {

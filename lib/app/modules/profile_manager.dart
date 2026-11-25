@@ -249,9 +249,13 @@ class ProfileSetting {
           total = value;
           break;
         case "expire":
-          expire =
-              DateTimeUtils.millisecondSecondsToDate((value * 1000).toInt()) ??
-              "";
+          if (value > 0) {
+            expire =
+                DateTimeUtils.millisecondSecondsToDate((value * 1000).toInt()) ??
+                "";
+          } else {
+            expire = "";
+          }
           break;
       }
     }
@@ -260,6 +264,9 @@ class ProfileSetting {
   Tuple2<bool, String> getExpireTime(String languageTag) {
     bool expiring = false;
     String expireTime = expire;
+    if (expireTime.startsWith('1970-')) {
+      return const Tuple2(false, "");
+    }
     if (expireTime.isNotEmpty) {
       DateTime? date = DateTime.tryParse(expireTime);
       if (date != null) {

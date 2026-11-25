@@ -1,12 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/utils/geo_asset_manager.dart';
 import 'package:wmimo/i18n/strings.g.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 
 class GeoAssetsScreen extends LasyRenderingStatefulWidget {
   static RouteSettings routSettings() {
@@ -20,6 +21,8 @@ class GeoAssetsScreen extends LasyRenderingStatefulWidget {
 }
 
 class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
+  static const List<int> _kIntervalHourOptions = [24, 48, 72, 168];
+
   List<GeoAssetInfo> _assets = [];
   bool _loading = true;
   String _selectedSourceId = "jsdelivr";
@@ -65,10 +68,13 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
     final tcontext = Translations.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(success
-            ? "$fileName: ${tcontext.dns.updateSuccess}"
-            : "$fileName: ${tcontext.dns.updateFailed}"),
-        backgroundColor: success ? ThemeDefine.kColorGreenBright : ThemeDefine.kColorRed,
+        content: Text(
+          success
+              ? "$fileName: ${tcontext.dns.updateSuccess}"
+              : "$fileName: ${tcontext.dns.updateFailed}",
+        ),
+        backgroundColor:
+            success ? ThemeDefine.kColorGreenBright : ThemeDefine.kColorRed,
       ),
     );
 
@@ -100,10 +106,13 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
     final allOk = results.values.every((v) => v);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(allOk
-            ? tcontext.dns.updateSuccess
-            : "${tcontext.dns.updateSuccess}: ${results.values.where((v) => v).length}/${results.length}"),
-        backgroundColor: allOk ? ThemeDefine.kColorGreenBright : Colors.orange,
+        content: Text(
+          allOk
+              ? tcontext.dns.updateSuccess
+              : "${tcontext.dns.updateSuccess}: ${results.values.where((v) => v).length}/${results.length}",
+        ),
+        backgroundColor:
+            allOk ? ThemeDefine.kColorGreenBright : ThemeDefine.kColorAmber,
       ),
     );
 
@@ -114,26 +123,22 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final isZh = Localizations.localeOf(context).languageCode.startsWith('zh');
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          tcontext.dns.geoAssetsTitle,
-          style: const TextStyle(
-            fontWeight: ThemeConfig.kFontWeightTitle,
-            fontSize: ThemeConfig.kFontSizeTitle,
-          ),
-        ),
+      appBar: WmimoAppBar(
+        title: tcontext.dns.geoAssetsTitle,
         actions: [
           IconButton(
             tooltip: tcontext.dns.updateAll,
             icon: _isUpdatingAll
                 ? const SizedBox(
-                    width: 20,
-                    height: 20,
+                    width: 18,
+                    height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Icon(Icons.sync),
+                : const Icon(Icons.sync_rounded, size: 20),
             onPressed: _isUpdatingAll ? null : _updateAll,
           ),
         ],
@@ -142,265 +147,486 @@ class _GeoAssetsScreenState extends LasyRenderingState<GeoAssetsScreen> {
         child: _loading
             ? const Center(child: CircularProgressIndicator())
             : ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
                 children: [
-                  _buildSourceSelectorCard(tcontext, theme),
-                  const SizedBox(height: 16),
-                  ..._assets.map((asset) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: _buildAssetCard(asset, tcontext, theme),
-                      )),
-                  const SizedBox(height: 8),
-                  _buildAutoUpdateRulesetCard(tcontext, theme),
-                  const SizedBox(height: 24),
+                  _buildSourceSelectorCard(tcontext, theme, isDark, isZh),
+                  const SizedBox(height: 12),
+                  ..._assets.map(
+                    (asset) => Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _buildAssetCard(
+                        asset,
+                        tcontext,
+                        theme,
+                        isDark,
+                        isZh,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  _buildAutoUpdateRulesetCard(tcontext, theme, isDark, isZh),
                 ],
               ),
       ),
     );
   }
 
-  Widget _buildSourceSelectorCard(Translations tcontext, ThemeData theme) {
-    return Card(
-      elevation: 0,
-      color: theme.colorScheme.surfaceContainerHighest.withAlpha(120),
-      shape: RoundedRectangleBorder(
-        borderRadius: ThemeDefine.kBorderRadius,
-        side: BorderSide(color: theme.dividerColor.withAlpha(60)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.speed, size: 20, color: Colors.blueAccent),
-                const SizedBox(width: 8),
-                Text(
-                  tcontext.dns.cdnSource,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              tcontext.dns.geoAssetsDesc,
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 12),
-            Column(
-              children: GeoAssetManager.cdnSources.map((source) {
-                final isSelected = _selectedSourceId == source.id;
-                return InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: () => setState(() => _selectedSourceId = source.id),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: isSelected ? Colors.blueAccent : Colors.grey.withAlpha(50),
-                        width: isSelected ? 1.5 : 1.0,
-                      ),
-                      color: isSelected ? Colors.blue.withAlpha(20) : Colors.transparent,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                          color: isSelected ? Colors.blueAccent : Colors.grey,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(source.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-                              Text(source.description, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(42),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-              icon: _isUpdatingAll
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                    )
-                  : const Icon(Icons.download_for_offline_outlined),
-              label: Text(tcontext.dns.updateAll),
-              onPressed: _isUpdatingAll ? null : _updateAll,
-            ),
-          ],
+  Widget _buildSourceSelectorCard(
+    Translations tcontext,
+    ThemeData theme,
+    bool isDark,
+    bool isZh,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: isDark ? ThemeDefine.kColorDarkCard : ThemeDefine.kColorLightCard,
+        borderRadius: ThemeDefine.kCardBorderRadius,
+        border: Border.all(
+          color: isDark
+              ? ThemeDefine.kColorDarkBorder
+              : ThemeDefine.kColorGreyLight,
+          width: 0.8,
         ),
       ),
-    );
-  }
-
-  Widget _buildAssetCard(GeoAssetInfo asset, Translations tcontext, ThemeData theme) {
-    final downloading = _isDownloading[asset.fileName] == true;
-    final progress = _downloadProgress[asset.fileName] ?? 0.0;
-
-    return Card(
-      elevation: 0,
-      color: theme.colorScheme.surfaceContainerHighest.withAlpha(120),
-      shape: RoundedRectangleBorder(
-        borderRadius: ThemeDefine.kBorderRadius,
-        side: BorderSide(color: theme.dividerColor.withAlpha(60)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.speed_rounded,
+                size: 19,
+                color: ThemeDefine.kColorBlue,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                tcontext.dns.cdnSource,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            tcontext.dns.geoAssetsDesc,
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Column(
+            children: GeoAssetManager.cdnSources.map((source) {
+              final isSelected = _selectedSourceId == source.id;
+              return InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  setState(() => _selectedSourceId = source.id);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 3.5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: isSelected
+                          ? ThemeDefine.kColorBlue.withValues(alpha: 0.6)
+                          : (isDark
+                              ? ThemeDefine.kColorDarkBorder
+                              : const Color(0xFFE2E8F0)),
+                      width: isSelected ? 1.2 : 0.8,
+                    ),
+                    color: isSelected
+                        ? ThemeDefine.kColorBlue
+                            .withValues(alpha: isDark ? 0.16 : 0.08)
+                        : (isDark
+                            ? ThemeDefine.kColorDarkInner
+                            : const Color(0xFFF8FAFC)),
+                  ),
+                  child: Row(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            asset.displayName,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: asset.exists
-                                  ? Colors.green.withAlpha(30)
-                                  : Colors.red.withAlpha(30),
-                              borderRadius: BorderRadius.circular(4),
-                              border: Border.all(
-                                color: asset.exists
-                                    ? Colors.green.withAlpha(80)
-                                    : Colors.red.withAlpha(80),
-                              ),
-                            ),
-                            child: Text(
-                              asset.exists ? "Installed" : "Missing",
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: asset.exists ? Colors.green.shade800 : Colors.red,
-                              ),
-                            ),
-                          ),
-                        ],
+                      Icon(
+                        isSelected
+                            ? Icons.radio_button_checked_rounded
+                            : Icons.radio_button_unchecked_rounded,
+                        color: isSelected
+                            ? ThemeDefine.kColorBlue
+                            : ThemeDefine.kColorGrey,
+                        size: 18,
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        asset.fileName,
-                        style: TextStyle(fontSize: 12, fontFamily: 'monospace', color: Colors.grey.shade600),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              source.getLocalizedName(isZh),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13,
+                                color: isSelected
+                                    ? ThemeDefine.kColorBlue
+                                    : null,
+                              ),
+                            ),
+                            const SizedBox(height: 1),
+                            Text(
+                              source.getLocalizedDescription(isZh),
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.58),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                IconButton(
-                  icon: downloading
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.file_download_outlined, color: Colors.blueAccent),
-                  onPressed: (downloading || _isUpdatingAll)
-                      ? null
-                      : () => _updateSingle(asset.fileName),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              asset.description,
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                _buildInfoBadge(Icons.storage_outlined, asset.formattedSize),
-                const SizedBox(width: 12),
-                _buildInfoBadge(Icons.access_time_outlined, asset.formattedModifiedTime),
-              ],
-            ),
-            if (downloading) ...[
-              const SizedBox(height: 10),
-              LinearProgressIndicator(
-                value: progress > 0 ? progress : null,
-                borderRadius: BorderRadius.circular(4),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ThemeDefine.kColorBlue,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              minimumSize: const Size.fromHeight(40),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              const SizedBox(height: 4),
-              Text(
-                progress > 0 ? "${(progress * 100).toInt()}%" : "Downloading...",
-                style: const TextStyle(fontSize: 11, color: Colors.grey),
-              ),
-            ],
-          ],
-        ),
+            ),
+            icon: _isUpdatingAll
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                : const Icon(Icons.download_for_offline_outlined, size: 18),
+            label: Text(
+              tcontext.dns.updateAll,
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
+            onPressed: _isUpdatingAll ? null : _updateAll,
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildInfoBadge(IconData icon, String text) {
+  Widget _buildAssetCard(
+    GeoAssetInfo asset,
+    Translations tcontext,
+    ThemeData theme,
+    bool isDark,
+    bool isZh,
+  ) {
+    final downloading = _isDownloading[asset.fileName] == true;
+    final progress = _downloadProgress[asset.fileName] ?? 0.0;
+    final statusColor =
+        asset.exists ? ThemeDefine.kColorGreenBright : ThemeDefine.kColorRed;
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: isDark ? ThemeDefine.kColorDarkCard : ThemeDefine.kColorLightCard,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: isDark
+              ? ThemeDefine.kColorDarkBorder
+              : ThemeDefine.kColorGreyLight,
+          width: 0.8,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            asset.getLocalizedName(isZh),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14.5,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: statusColor.withValues(alpha: 0.14),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            asset.exists
+                                ? (isZh ? "已安装" : "Installed")
+                                : (isZh ? "未安装" : "Missing"),
+                            style: TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w700,
+                              color: statusColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      asset.fileName,
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontFamily: 'monospace',
+                        color: theme.colorScheme.onSurface
+                            .withValues(alpha: 0.55),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                tooltip: tcontext.meta.update,
+                icon: downloading
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(
+                        Icons.file_download_outlined,
+                        color: ThemeDefine.kColorBlue,
+                      ),
+                onPressed: (downloading || _isUpdatingAll)
+                    ? null
+                    : () => _updateSingle(asset.fileName),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            asset.getLocalizedDescription(isZh),
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              _buildInfoBadge(
+                Icons.storage_outlined,
+                asset.getFormattedSize(isZh),
+                theme,
+              ),
+              const SizedBox(width: 14),
+              _buildInfoBadge(
+                Icons.access_time_outlined,
+                asset.getFormattedModifiedTime(isZh),
+                theme,
+              ),
+            ],
+          ),
+          if (downloading) ...[
+            const SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: progress > 0 ? progress : null,
+                minHeight: 5,
+                color: ThemeDefine.kColorBlue,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              progress > 0
+                  ? "${(progress * 100).toInt()}%"
+                  : (isZh ? "正在下载..." : "Downloading..."),
+              style: TextStyle(
+                fontSize: 11,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoBadge(IconData icon, String text, ThemeData theme) {
+    final color = theme.colorScheme.onSurface.withValues(alpha: 0.55);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 14, color: Colors.grey),
+        Icon(icon, size: 13.5, color: color),
         const SizedBox(width: 4),
-        Text(text, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 11.5,
+            fontFamily: 'monospace',
+            color: color,
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildAutoUpdateRulesetCard(Translations tcontext, ThemeData theme) {
+  Widget _buildAutoUpdateRulesetCard(
+    Translations tcontext,
+    ThemeData theme,
+    bool isDark,
+    bool isZh,
+  ) {
     final ruleset = ClashSettingManager.getConfig().Extension?.Ruleset;
-    final intervalHours = ((ruleset?.UpdateInterval ?? 2 * 24 * 3600) / 3600).round();
+    final currentHours =
+        ((ruleset?.UpdateInterval ?? 2 * 24 * 3600) / 3600).round();
+    final enableProxy = ruleset?.EnableProxy ?? false;
 
-    return Card(
-      elevation: 0,
-      color: theme.colorScheme.surfaceContainerHighest.withAlpha(120),
-      shape: RoundedRectangleBorder(
-        borderRadius: ThemeDefine.kBorderRadius,
-        side: BorderSide(color: theme.dividerColor.withAlpha(60)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.schedule, size: 20, color: Colors.purple),
-                const SizedBox(width: 8),
-                Text(
-                  "Auto-Update Interval",
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "Background GeoX auto-update frequency: every $intervalHours hours (Clash.Meta engine).",
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-            ),
-          ],
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: isDark ? ThemeDefine.kColorDarkCard : ThemeDefine.kColorLightCard,
+        borderRadius: ThemeDefine.kCardBorderRadius,
+        border: Border.all(
+          color: isDark
+              ? ThemeDefine.kColorDarkBorder
+              : ThemeDefine.kColorGreyLight,
+          width: 0.8,
         ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.schedule_rounded,
+                size: 19,
+                color: ThemeDefine.kColorBlue,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  tcontext.meta.updateInterval,
+                  style: const TextStyle(
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Wrap(
+                spacing: 6,
+                children: _kIntervalHourOptions.map((hours) {
+                  final selected = currentHours == hours;
+                  final label = hours >= 168
+                      ? (isZh ? "7天" : "7d")
+                      : (isZh ? "${hours}小时" : "${hours}h");
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () async {
+                      if (ruleset == null) return;
+                      HapticFeedback.selectionClick();
+                      setState(() {
+                        ruleset.UpdateInterval = hours * 3600;
+                      });
+                      await ClashSettingManager.save();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? ThemeDefine.kColorBlue
+                            : (isDark
+                                ? ThemeDefine.kColorDarkInner
+                                : const Color(0xFFF1F5F9)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w700,
+                          color: selected
+                              ? Colors.white
+                              : theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.75),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Divider(
+            height: 1,
+            color: isDark
+                ? ThemeDefine.kColorDarkBorder
+                : const Color(0xFFE2E8F0),
+          ),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  tcontext.meta.geoDownloadByProxy,
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+                child: Transform.scale(
+                  scale: 0.84,
+                  alignment: Alignment.centerRight,
+                  child: Switch.adaptive(
+                    value: enableProxy,
+                    activeThumbColor: Colors.white,
+                    activeTrackColor: ThemeDefine.kColorBlue,
+                    onChanged: (val) async {
+                      if (ruleset == null) return;
+                      HapticFeedback.selectionClick();
+                      setState(() {
+                        ruleset.EnableProxy = val;
+                      });
+                      await ClashSettingManager.save();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

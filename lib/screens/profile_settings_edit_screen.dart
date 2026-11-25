@@ -15,11 +15,11 @@ import 'package:wmimo/screens/group_item_options.dart';
 import 'package:wmimo/screens/group_screen.dart';
 
 import 'package:wmimo/screens/proxygroup_screen.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 import 'package:wmimo/screens/widgets/sheet.dart';
 import 'package:wmimo/screens/widgets/text_field.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
@@ -65,6 +65,8 @@ class _ProfilesSettingsEditScreenState
 
   @override
   void dispose() {
+    _textControllerRemark.dispose();
+    _textControllerUrl.dispose();
     super.dispose();
   }
 
@@ -73,112 +75,83 @@ class _ProfilesSettingsEditScreenState
     final tcontext = Translations.of(context);
 
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
+      appBar: WmimoAppBar(
+        title: tcontext.meta.profileEdit,
+        actions: [
+          IconButton(
+            tooltip: tcontext.meta.save,
+            icon: const Icon(Icons.check_rounded, size: 22),
+            onPressed: onTapSave,
+          ),
+        ],
+      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: const SizedBox(
-                      width: 50,
-                      height: 30,
-                      child: Icon(Icons.arrow_back_ios_outlined, size: 26),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      tcontext.meta.profileEdit,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: ThemeConfig.kFontWeightTitle,
-                        fontSize: ThemeConfig.kFontSizeTitle,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      onTapSave();
-                    },
-                    child: const SizedBox(
-                      width: 50,
-                      height: 30,
-                      child: Icon(Icons.done_outlined, size: 26),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
-                          child: Column(
-                            children: [
-                              TextFieldEx(
-                                enabled: _provider == null,
-                                controller: _textControllerRemark,
-                                textInputAction: _profile.isRemote()
-                                    ? TextInputAction.next
-                                    : TextInputAction.done,
-                                decoration: InputDecoration(
-                                  labelText: tcontext.meta.remark,
-                                  hintText: tcontext.meta.remark,
-                                ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+                        child: Column(
+                          children: [
+                            TextFieldEx(
+                              enabled: _provider == null,
+                              controller: _textControllerRemark,
+                              textInputAction: _profile.isRemote()
+                                  ? TextInputAction.next
+                                  : TextInputAction.done,
+                              decoration: InputDecoration(
+                                labelText: tcontext.meta.remark,
+                                hintText: tcontext.meta.remark,
                               ),
-                              _profile.isRemote()
-                                  ? const SizedBox(height: 20)
-                                  : const SizedBox.shrink(),
-                              _profile.isRemote()
-                                  ? TextFieldEx(
-                                      maxLines: 5,
-                                      enabled: _provider == null,
-                                      controller: _textControllerUrl,
-                                      decoration: InputDecoration(
-                                        labelText: tcontext.meta.url,
-                                        hintText: tcontext.meta.url,
+                            ),
+                            _profile.isRemote()
+                                ? const SizedBox(height: 20)
+                                : const SizedBox.shrink(),
+                            _profile.isRemote()
+                                ? TextFieldEx(
+                                    maxLines: 5,
+                                    enabled: _provider == null,
+                                    controller: _textControllerUrl,
+                                    decoration: InputDecoration(
+                                      labelText: tcontext.meta.url,
+                                      hintText: tcontext.meta.url,
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            const SizedBox(height: 20),
+                            FutureBuilder(
+                              future: getGroupOptions(),
+                              builder:
+                                  (
+                                    BuildContext context,
+                                    AsyncSnapshot<List<GroupItem>> snapshot,
+                                  ) {
+                                    List<GroupItem> data = snapshot.hasData
+                                        ? snapshot.data!
+                                        : [];
+                                    return Column(
+                                      children: GroupItemCreator.createGroups(
+                                        context,
+                                        data,
                                       ),
-                                    )
-                                  : const SizedBox.shrink(),
-                              const SizedBox(height: 20),
-                              FutureBuilder(
-                                future: getGroupOptions(),
-                                builder:
-                                    (
-                                      BuildContext context,
-                                      AsyncSnapshot<List<GroupItem>> snapshot,
-                                    ) {
-                                      List<GroupItem> data = snapshot.hasData
-                                          ? snapshot.data!
-                                          : [];
-                                      return Column(
-                                        children: GroupItemCreator.createGroups(
-                                          context,
-                                          data,
-                                        ),
-                                      );
-                                    },
-                              ),
-                            ],
-                          ),
+                                    );
+                                  },
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -246,7 +219,9 @@ class _ProfilesSettingsEditScreenState
     ];
     final items = ProfilePatchManager.getProfilePatchs();
     for (var item in items) {
-      overwrite.add(Tuple2(item.id, item.remark));
+      overwrite.add(
+        Tuple2(item.id, item.remark.isNotEmpty ? item.remark : item.id),
+      );
     }
     List<GroupItem> groupOptions = [];
     List<GroupItemOptions> options = [
@@ -526,9 +501,9 @@ class _ProfilesSettingsEditScreenState
         if (node.delay! < 800) {
           color = ThemeDefine.kColorGreenBright;
         } else if (node.delay! < 1500) {
-          color = Colors.black;
+          color = ThemeDefine.kColorAmber;
         } else {
-          color = Colors.red;
+          color = ThemeDefine.kColorRed;
         }
       }
       widgets.add(

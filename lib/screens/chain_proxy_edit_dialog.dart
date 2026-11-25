@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/modules/chain_proxy_manager.dart';
@@ -51,14 +50,18 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
   late List<String> _hops;
   bool _customName = false;
 
+  late final List<ClashProxiesNode> _cleanCandidates;
   late final Map<String, ClashProxiesNode> _nodeLookup;
   late final List<ClashProxiesNode> _concreteNodes;
 
   @override
   void initState() {
     super.initState();
-    _nodeLookup = {for (final n in widget.availableNodes) n.name: n};
-    _concreteNodes = widget.availableNodes
+    _cleanCandidates = widget.availableNodes
+        .where((n) => !ChainProxyManager.isGeneratedChainNodeName(n.name))
+        .toList();
+    _nodeLookup = {for (final n in _cleanCandidates) n.name: n};
+    _concreteNodes = _cleanCandidates
         .where((n) => !ClashProtocolType.isGroupType(n.type))
         .toList();
 
@@ -68,16 +71,29 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
     if (item != null && item.hops.length >= 2) {
       _hops = List<String>.from(item.hops);
     } else {
-      final firstEntry = widget.availableNodes.isNotEmpty
-          ? widget.availableNodes.first.name
-          : '';
-      final firstExit = _concreteNodes
+      // Smart pre-selection: skip airport dummy info nodes and prefer nodes with live positive latency
+      final validEntries = _cleanCandidates
+          .where((n) => !ChainProxyManager.isInformationalDummyNodeName(n.name))
+          .toList();
+      final entryPool =
+          validEntries.isNotEmpty ? validEntries : _cleanCandidates;
+      final firstEntry = entryPool.isNotEmpty ? entryPool.first.name : '';
+
+      final validExits = _concreteNodes
+          .where(
+            (n) =>
+                n.name != firstEntry &&
+                !ChainProxyManager.isInformationalDummyNodeName(n.name),
+          )
+          .toList();
+      final exitPool = validExits.isNotEmpty ? validExits : _concreteNodes;
+      final firstExit = exitPool
           .firstWhere(
             (n) => n.name != firstEntry,
-            orElse: () => _concreteNodes.isNotEmpty
-                ? _concreteNodes.first
-                : (widget.availableNodes.length > 1
-                    ? widget.availableNodes[1]
+            orElse: () => exitPool.isNotEmpty
+                ? exitPool.first
+                : (_cleanCandidates.length > 1
+                    ? _cleanCandidates[1]
                     : ClashProxiesNode()),
           )
           .name;
@@ -119,10 +135,25 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
     }
   }
 
+  int? _estimateTotalDelay() {
+    int sum = 0;
+    int counted = 0;
+    for (final hop in _hops) {
+      final d = widget.liveDelays[hop] ?? _nodeLookup[hop]?.delay;
+      if (d != null && d > 0) {
+        sum += d;
+        counted++;
+      }
+    }
+    return counted > 0 ? sum : null;
+  }
+
   String _roleLabel(int index, Translations tcontext) {
-    if (index == 0) return tcontext.chain_proxy.hop_entry;
+    if (index == 0) return tcontext.chain_proxy.hop1;
     if (index == _hops.length - 1) {
-      return tcontext.chain_proxy.hop_exit(index: index + 1);
+      return _hops.length == 2
+          ? tcontext.chain_proxy.hop2
+          : tcontext.chain_proxy.hop_exit(index: index + 1);
     }
     return tcontext.chain_proxy.hop_transit(index: index + 1);
   }
@@ -133,10 +164,16 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
     return Colors.purple;
   }
 
+  IconData _roleIcon(int index) {
+    if (index == 0) return Icons.vpn_key_rounded;
+    if (index == _hops.length - 1) return Icons.public_rounded;
+    return Icons.alt_route_rounded;
+  }
+
   Future<String?> _pickNodeForIndex(int index) async {
     final tcontext = Translations.of(context);
     final isEntry = index == 0;
-    final candidates = isEntry ? widget.availableNodes : _concreteNodes;
+    final candidates = isEntry ? _cleanCandidates : _concreteNodes;
     final currentVal = _hops[index];
     final otherSelected = <String>{
       for (int i = 0; i < _hops.length; i++)
@@ -149,15 +186,14 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
             ? tcontext.chain_proxy.hop2_select_title
             : tcontext.chain_proxy.hop_transit(index: index + 1));
 
-    final hint = isEntry
-        ? tcontext.chain_proxy.picker_entry_hint
-        : tcontext.chain_proxy.picker_node_only_hint;
-
-    return showDialog<String>(
+    return showModalBottomSheet<String>(
       context: context,
-      builder: (ctx) => _ChainNodePickerDialog(
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => _ChainNodePickerSheet(
         title: title,
-        hint: hint,
         nodes: candidates,
         liveDelays: widget.liveDelays,
         currentSelected: currentVal,
@@ -170,11 +206,14 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
     if (_hops.length >= _kMaxHops) return;
     final tcontext = Translations.of(context);
     final otherSelected = _hops.where((h) => h.isNotEmpty).toSet();
-    final picked = await showDialog<String>(
+    final picked = await showModalBottomSheet<String>(
       context: context,
-      builder: (ctx) => _ChainNodePickerDialog(
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => _ChainNodePickerSheet(
         title: tcontext.chain_proxy.add_transit_hop,
-        hint: tcontext.chain_proxy.picker_node_only_hint,
         nodes: _concreteNodes,
         liveDelays: widget.liveDelays,
         currentSelected: null,
@@ -196,19 +235,10 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
         indexB >= _hops.length) {
       return;
     }
-    HapticFeedback.selectionClick();
     setState(() {
       final tmp = _hops[indexA];
       _hops[indexA] = _hops[indexB];
       _hops[indexB] = tmp;
-      _generateDefaultName();
-    });
-  }
-
-  void _onReorderHops(int oldIndex, int newIndex) {
-    setState(() {
-      final moved = _hops.removeAt(oldIndex);
-      _hops.insert(newIndex, moved);
       _generateDefaultName();
     });
   }
@@ -225,7 +255,7 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
     }
 
     final proxyNames = _concreteNodes.map((n) => n.name).toSet();
-    final groupNames = widget.availableNodes
+    final groupNames = _cleanCandidates
         .where((n) => ClashProtocolType.isGroupType(n.type))
         .map((n) => n.name)
         .toSet();
@@ -269,46 +299,31 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final mediaSize = MediaQuery.of(context).size;
+    final estimatedDelay = _estimateTotalDelay();
 
     return Dialog(
-      backgroundColor:
-          isDark ? ThemeDefine.kColorDarkCard : ThemeDefine.kColorLightCard,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-        side: BorderSide(
-          color: isDark
-              ? ThemeDefine.kColorDarkBorder
-              : ThemeDefine.kColorGreyLight,
-          width: 0.9,
-        ),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: 600,
-          maxHeight: mediaSize.height * 0.9,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // 1. Dialog Header
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 14, 12, 12),
-              child: Row(
+        constraints: const BoxConstraints(maxWidth: 480),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Header (Original Clean Style)
+              Row(
                 children: [
                   Container(
-                    width: 36,
-                    height: 36,
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: ThemeDefine.kColorBlue.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(10),
+                      color: ThemeDefine.kColorBlue.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
                     ),
                     child: const Icon(
-                      Icons.account_tree_rounded,
+                      Icons.link_rounded,
                       color: ThemeDefine.kColorBlue,
-                      size: 19,
+                      size: 22,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -321,8 +336,8 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
                                 ? tcontext.chain_proxy.add
                                 : tcontext.chain_proxy.edit,
                             style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w800,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -335,13 +350,13 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
                           ),
                           decoration: BoxDecoration(
                             color:
-                                ThemeDefine.kColorBlue.withValues(alpha: 0.15),
+                                ThemeDefine.kColorBlue.withValues(alpha: 0.14),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: const Text(
                             "Beta",
                             style: TextStyle(
-                              fontSize: 10.5,
+                              fontSize: 11,
                               fontWeight: FontWeight.w700,
                               color: ThemeDefine.kColorBlue,
                             ),
@@ -350,600 +365,308 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
                       ],
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.close_rounded, size: 20),
-                    onPressed: () => Navigator.pop(context),
-                  ),
                 ],
               ),
-            ),
-            Divider(
-              height: 1,
-              color: isDark
-                  ? ThemeDefine.kColorDarkBorder
-                  : const Color(0xFFE2E8F0),
-            ),
+              const SizedBox(height: 16),
 
-            // 2. Scrollable Body
-            Flexible(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
+              // Name Input (Original OutlineInputBorder Style + Auto Reset)
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: tcontext.chain_proxy.name,
+                  hintText: tcontext.chain_proxy.name_hint,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                  suffixIcon: IconButton(
+                    tooltip: tcontext.chain_proxy.reset_name,
+                    icon: const Icon(Icons.auto_fix_high_rounded, size: 18),
+                    onPressed: () {
+                      setState(() {
+                        _generateDefaultName(force: true);
+                      });
+                    },
+                  ),
+                ),
+                onChanged: (_) => _customName = true,
+              ),
+              const SizedBox(height: 16),
+
+              // Topology Diagram Preview Card (Original Clean Horizontal Row)
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.05)
+                      : const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
+                  ),
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Name Input Section
-                    Text(
-                      tcontext.chain_proxy.name,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: theme.colorScheme.onSurface
-                            .withValues(alpha: 0.72),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Container(
-                      height: 42,
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? ThemeDefine.kColorDarkInner
-                            : const Color(0xFFF8FAFC),
-                        borderRadius: BorderRadius.circular(11),
-                        border: Border.all(
-                          color: isDark
-                              ? ThemeDefine.kColorDarkBorder
-                              : const Color(0xFFCBD5E1),
-                          width: 0.8,
-                        ),
-                      ),
-                      child: TextField(
-                        controller: _nameController,
-                        style: TextStyle(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.w600,
-                          fontFamilyFallback:
-                              Platform.isWindows ? const ['Emoji'] : null,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: tcontext.chain_proxy.name_hint,
-                          hintStyle: TextStyle(
-                            fontSize: 12.5,
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.4),
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.tag_rounded,
-                            size: 17,
-                            color: ThemeDefine.kColorBlue,
-                          ),
-                          suffixIcon: Tooltip(
-                            message: tcontext.chain_proxy.reset_name,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(8),
-                              onTap: () {
-                                HapticFeedback.selectionClick();
-                                setState(() {
-                                  _generateDefaultName(force: true);
-                                });
-                              },
-                              child: const Icon(
-                                Icons.auto_fix_high_rounded,
-                                size: 18,
-                                color: ThemeDefine.kColorBlue,
-                              ),
-                            ),
-                          ),
-                          border: InputBorder.none,
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 11,
-                          ),
-                        ),
-                        onChanged: (_) => _customName = true,
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-
-                    // Adaptive Multi-hop Topology Preview Card
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? ThemeDefine.kColorDarkInner
-                            : const Color(0xFFF8FAFC),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isDark
-                              ? ThemeDefine.kColorDarkBorder
-                              : const Color(0xFFE2E8F0),
-                          width: 0.8,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.hub_outlined,
-                                size: 15,
-                                color: ThemeDefine.kColorBlue,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                tcontext.chain_proxy.preview,
-                                style: TextStyle(
-                                  fontSize: 11.5,
-                                  fontWeight: FontWeight.w700,
-                                  color: theme.colorScheme.onSurface
-                                      .withValues(alpha: 0.7),
-                                ),
-                              ),
-                              const Spacer(),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 7,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: ThemeDefine.kColorBlue
-                                      .withValues(alpha: 0.14),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  tcontext.chain_proxy.hop_count_badge(
-                                    count: _hops.length,
-                                  ),
-                                  style: const TextStyle(
-                                    fontSize: 10.5,
-                                    fontWeight: FontWeight.w700,
-                                    color: ThemeDefine.kColorBlue,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Wrap(
-                            spacing: 5,
-                            runSpacing: 6,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              _buildTopologyBadge(
-                                "📱 ${tcontext.chain_proxy.local_device}",
-                                Colors.grey,
-                                isDark,
-                              ),
-                              for (int i = 0; i < _hops.length; i++) ...[
-                                const Icon(
-                                  Icons.arrow_forward_rounded,
-                                  size: 13,
-                                  color: Colors.grey,
-                                ),
-                                _buildTopologyBadge(
-                                  _hops[i].isNotEmpty
-                                      ? _formatCleanHopLabel(_hops[i])
-                                      : (i == 0
-                                          ? tcontext.chain_proxy.hop1_placeholder
-                                          : tcontext
-                                              .chain_proxy.hop2_placeholder),
-                                  _roleColor(i),
-                                  isDark,
-                                ),
-                              ],
-                              const Icon(
-                                Icons.arrow_forward_rounded,
-                                size: 13,
-                                color: Colors.grey,
-                              ),
-                              _buildTopologyBadge(
-                                "🌐 ${tcontext.chain_proxy.internet}",
-                                Colors.orange,
-                                isDark,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-
-                    // Hop Sequence Header + Add Transit Button
                     Row(
                       children: [
-                        Expanded(
-                          child: Text(
-                            tcontext.chain_proxy.hops_label,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.72),
-                            ),
+                        const Icon(
+                          Icons.hub_outlined,
+                          size: 16,
+                          color: ThemeDefine.kColorBlue,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          tcontext.chain_proxy.preview,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.7),
                           ),
                         ),
-                        if (_hops.length < _kMaxHops)
-                          FilledButton.tonalIcon(
-                            onPressed: _addTransitHop,
-                            icon: const Icon(
-                              Icons.add_circle_outline_rounded,
-                              size: 15,
-                            ),
-                            label: Text(
-                              tcontext.chain_proxy.add_transit_hop,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            style: FilledButton.styleFrom(
-                              backgroundColor: ThemeDefine.kColorBlue
-                                  .withValues(alpha: isDark ? 0.18 : 0.1),
-                              foregroundColor: ThemeDefine.kColorBlue,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5,
-                              ),
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
+                        const Spacer(),
+                        if (estimatedDelay != null)
+                          Text(
+                            "~$estimatedDelay ms",
+                            style: const TextStyle(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w700,
+                              color: ThemeDefine.kColorGreenBright,
                             ),
                           ),
                       ],
                     ),
                     const SizedBox(height: 8),
-
-                    // Reorderable Hop Cards
-                    ReorderableListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      buildDefaultDragHandles: false,
-                      itemCount: _hops.length,
-                      onReorderItem: _onReorderHops,
-                      itemBuilder: (context, index) {
-                        final hopName = _hops[index];
-                        final cleanName =
-                            NodeRegionHelper.getDisplayNameWithoutFlag(hopName);
-                        final flag = hopName.isNotEmpty
-                            ? NodeRegionHelper.getFlag(hopName)
-                            : "🔗";
-                        final nodeObj = _nodeLookup[hopName];
-                        final isGroup = nodeObj != null &&
-                            ClashProtocolType.isGroupType(nodeObj.type);
-                        final invalidGroupInExit = index > 0 && isGroup;
-                        final missingNode =
-                            hopName.isNotEmpty && nodeObj == null;
-                        final hasHopIssue = invalidGroupInExit || missingNode;
-                        final roleColor = _roleColor(index);
-                        final delay =
-                            widget.liveDelays[hopName] ?? nodeObj?.delay;
-
-                        return Column(
-                          key: ValueKey("hop_slot_${index}_$hopName"),
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? ThemeDefine.kColorDarkInner
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: hasHopIssue
-                                      ? ThemeDefine.kColorAmber
-                                          .withValues(alpha: 0.7)
-                                      : (isDark
-                                          ? ThemeDefine.kColorDarkBorder
-                                          : const Color(0xFFE2E8F0)),
-                                  width: hasHopIssue ? 1.2 : 0.8,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  ReorderableDragStartListener(
-                                    index: index,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 8),
-                                      child: Icon(
-                                        Icons.drag_indicator_rounded,
-                                        size: 19,
-                                        color: theme.colorScheme.onSurface
-                                            .withValues(alpha: 0.38),
-                                      ),
-                                    ),
-                                  ),
-                                  // Step Number Circle
-                                  Container(
-                                    width: 24,
-                                    height: 24,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: hasHopIssue
-                                          ? ThemeDefine.kColorAmber
-                                          : roleColor.withValues(
-                                              alpha: isDark ? 0.25 : 0.14,
-                                            ),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Text(
-                                      "${index + 1}",
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w800,
-                                        color: hasHopIssue
-                                            ? Colors.white
-                                            : roleColor[isDark ? 200 : 700],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        final picked =
-                                            await _pickNodeForIndex(index);
-                                        if (picked != null && mounted) {
-                                          setState(() {
-                                            _hops[index] = picked;
-                                            _generateDefaultName();
-                                          });
-                                        }
-                                      },
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 6,
-                                                  vertical: 1.5,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: roleColor.withValues(
-                                                    alpha:
-                                                        isDark ? 0.22 : 0.12,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: Text(
-                                                  _roleLabel(index, tcontext),
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: roleColor[
-                                                        isDark ? 300 : 700],
-                                                  ),
-                                                ),
-                                              ),
-                                              if (nodeObj != null &&
-                                                  nodeObj.type.isNotEmpty) ...[
-                                                const SizedBox(width: 6),
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 5,
-                                                    vertical: 1,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: isDark
-                                                        ? Colors.white10
-                                                        : const Color(
-                                                            0xFFF1F5F9,
-                                                          ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                      4,
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                    nodeObj.type.toUpperCase(),
-                                                    style: TextStyle(
-                                                      fontSize: 9.5,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: theme
-                                                          .colorScheme.onSurface
-                                                          .withValues(
-                                                        alpha: 0.65,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                              if (delay != null &&
-                                                  delay > 0) ...[
-                                                const SizedBox(width: 6),
-                                                Text(
-                                                  "$delay ms",
-                                                  style: TextStyle(
-                                                    fontSize: 10.5,
-                                                    fontFamily: 'monospace',
-                                                    fontWeight: FontWeight.w700,
-                                                    color: delay < 800
-                                                        ? ThemeDefine
-                                                            .kColorGreenBright
-                                                        : ThemeDefine
-                                                            .kColorAmber,
-                                                  ),
-                                                ),
-                                              ],
-                                            ],
-                                          ),
-                                          const SizedBox(height: 5),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                flag,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamilyFallback:
-                                                      Platform.isWindows
-                                                          ? const ['Emoji']
-                                                          : null,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 6),
-                                              Expanded(
-                                                child: Text(
-                                                  hopName.isNotEmpty
-                                                      ? (cleanName.isNotEmpty
-                                                          ? cleanName
-                                                          : hopName)
-                                                      : tcontext.chain_proxy
-                                                          .select_node,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 13.5,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: hopName.isEmpty
-                                                        ? Colors.grey
-                                                        : (hasHopIssue
-                                                            ? ThemeDefine
-                                                                .kColorAmber
-                                                            : null),
-                                                    fontFamilyFallback:
-                                                        Platform.isWindows
-                                                            ? const ['Emoji']
-                                                            : null,
-                                                  ),
-                                                ),
-                                              ),
-                                              const Icon(
-                                                Icons.unfold_more_rounded,
-                                                size: 17,
-                                                color: Colors.grey,
-                                              ),
-                                            ],
-                                          ),
-                                          if (invalidGroupInExit)
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                top: 4,
-                                              ),
-                                              child: Text(
-                                                tcontext.chain_proxy
-                                                    .hop_group_not_exit_warning,
-                                                style: const TextStyle(
-                                                  fontSize: 11,
-                                                  color:
-                                                      ThemeDefine.kColorAmber,
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  if (_hops.length > 2)
-                                    IconButton(
-                                      tooltip: tcontext.chain_proxy.remove_hop,
-                                      icon: const Icon(
-                                        Icons.remove_circle_outline_rounded,
-                                        size: 19,
-                                        color: ThemeDefine.kColorRed,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _hops.removeAt(index);
-                                          _generateDefaultName();
-                                        });
-                                      },
-                                    ),
-                                ],
-                              ),
+                    Row(
+                      children: [
+                        _buildTopologyBadge(
+                          tcontext.chain_proxy.local_device,
+                          Colors.grey,
+                          isDark,
+                        ),
+                        for (int i = 0; i < _hops.length; i++) ...[
+                          const Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 14,
+                            color: Colors.grey,
+                          ),
+                          Expanded(
+                            child: _buildTopologyBadge(
+                              _hops[i].isNotEmpty
+                                  ? _formatCleanHopLabel(_hops[i])
+                                  : (i == 0
+                                      ? tcontext.chain_proxy.hop1_placeholder
+                                      : tcontext.chain_proxy.hop2_placeholder),
+                              _roleColor(i),
+                              isDark,
                             ),
-
-                            // Adjacent Hop Swap Connector
-                            if (index < _hops.length - 1)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.south_rounded,
-                                      size: 14,
-                                      color: Colors.grey.withValues(alpha: 0.6),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    InkWell(
-                                      onTap: () => _swapHops(index, index + 1),
-                                      borderRadius: BorderRadius.circular(14),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 3.5,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: ThemeDefine.kColorBlue
-                                              .withValues(
-                                            alpha: isDark ? 0.16 : 0.08,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ThemeDefine.kColorBlue
-                                                .withValues(alpha: 0.25),
-                                            width: 0.7,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Icon(
-                                              Icons.swap_vert_rounded,
-                                              size: 14,
-                                              color: ThemeDefine.kColorBlue,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              tcontext.chain_proxy.swap_hops,
-                                              style: const TextStyle(
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.w700,
-                                                color: ThemeDefine.kColorBlue,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        );
-                      },
+                          ),
+                        ],
+                        const Icon(
+                          Icons.arrow_forward_rounded,
+                          size: 14,
+                          color: Colors.grey,
+                        ),
+                        _buildTopologyBadge(
+                          tcontext.chain_proxy.internet,
+                          Colors.orange,
+                          isDark,
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-            ),
+              const SizedBox(height: 16),
 
-            Divider(
-              height: 1,
-              color: isDark
-                  ? ThemeDefine.kColorDarkBorder
-                  : const Color(0xFFE2E8F0),
-            ),
-            // 3. Footer Action Buttons
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 10, 18, 14),
-              child: Row(
+              // Hop Selectors (Original Clean Selector Boxes)
+              for (int index = 0; index < _hops.length; index++) ...[
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _roleLabel(index, tcontext),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    if (_hops.length > 2)
+                      InkWell(
+                        borderRadius: BorderRadius.circular(6),
+                        onTap: () {
+                          setState(() {
+                            _hops.removeAt(index);
+                            _generateDefaultName();
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 2,
+                          ),
+                          child: Text(
+                            tcontext.chain_proxy.remove_hop,
+                            style: const TextStyle(
+                              fontSize: 11.5,
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                InkWell(
+                  onTap: () async {
+                    final selected = await _pickNodeForIndex(index);
+                    if (selected != null && mounted) {
+                      setState(() {
+                        _hops[index] = selected;
+                        _generateDefaultName();
+                      });
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: isDark ? Colors.white24 : Colors.black26,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _roleIcon(index),
+                          size: 18,
+                          color: _roleColor(index),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            _hops[index].isNotEmpty
+                                ? _formatCleanHopLabel(_hops[index])
+                                : tcontext.chain_proxy.select_node,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color:
+                                  _hops[index].isEmpty ? Colors.grey : null,
+                              fontFamilyFallback:
+                                  Platform.isWindows ? const ['Emoji'] : null,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if ((widget.liveDelays[_hops[index]] ??
+                                    _nodeLookup[_hops[index]]?.delay) !=
+                                null &&
+                            (widget.liveDelays[_hops[index]] ??
+                                    _nodeLookup[_hops[index]]!.delay!) >
+                                0) ...[
+                          Text(
+                            "${widget.liveDelays[_hops[index]] ?? _nodeLookup[_hops[index]]!.delay} ms",
+                            style: const TextStyle(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                              color: ThemeDefine.kColorGreenBright,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                        ],
+                        const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                      ],
+                    ),
+                  ),
+                ),
+                if (index < _hops.length - 1)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () => _swapHops(index, index + 1),
+                          borderRadius: BorderRadius.circular(12),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.swap_vert_rounded,
+                                  size: 15,
+                                  color: ThemeDefine.kColorBlue,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  tcontext.chain_proxy.swap_hops,
+                                  style: const TextStyle(
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.w600,
+                                    color: ThemeDefine.kColorBlue,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        if (index == _hops.length - 2 &&
+                            _hops.length < _kMaxHops) ...[
+                          const SizedBox(width: 12),
+                          InkWell(
+                            onTap: _addTransitHop,
+                            borderRadius: BorderRadius.circular(12),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.add_circle_outline_rounded,
+                                    size: 14,
+                                    color: ThemeDefine.kColorBlue,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    tcontext.chain_proxy.add_transit_hop,
+                                    style: const TextStyle(
+                                      fontSize: 11.5,
+                                      fontWeight: FontWeight.w600,
+                                      color: ThemeDefine.kColorBlue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+              ],
+              const SizedBox(height: 20),
+
+              // Action Buttons (Original Clean Style)
+              Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
@@ -951,30 +674,25 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
                     child: Text(tcontext.meta.cancel),
                   ),
                   const SizedBox(width: 8),
-                  ElevatedButton.icon(
+                  ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ThemeDefine.kColorBlue,
                       foregroundColor: Colors.white,
-                      elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
+                        horizontal: 20,
                         vertical: 10,
                       ),
                     ),
                     onPressed: _onSave,
-                    icon: const Icon(Icons.check_rounded, size: 18),
-                    label: Text(
-                      tcontext.meta.save,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
-                    ),
+                    child: Text(tcontext.meta.save),
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -982,22 +700,18 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
 
   Widget _buildTopologyBadge(String text, MaterialColor color, bool isDark) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      constraints: const BoxConstraints(maxWidth: 210),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: isDark ? 0.2 : 0.1),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: color.withValues(alpha: 0.25),
-          width: 0.7,
-        ),
       ),
       child: Text(
         text,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 11,
+          fontSize: 10.5,
           fontWeight: FontWeight.w600,
           color: color[isDark ? 300 : 700],
           fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
@@ -1007,17 +721,15 @@ class _ChainProxyEditDialogState extends State<ChainProxyEditDialog> {
   }
 }
 
-class _ChainNodePickerDialog extends StatefulWidget {
+class _ChainNodePickerSheet extends StatefulWidget {
   final String title;
-  final String hint;
   final List<ClashProxiesNode> nodes;
   final Map<String, int?> liveDelays;
   final String? currentSelected;
   final Set<String> disabledNodes;
 
-  const _ChainNodePickerDialog({
+  const _ChainNodePickerSheet({
     required this.title,
-    required this.hint,
     required this.nodes,
     required this.liveDelays,
     required this.currentSelected,
@@ -1025,19 +737,12 @@ class _ChainNodePickerDialog extends StatefulWidget {
   });
 
   @override
-  State<_ChainNodePickerDialog> createState() => _ChainNodePickerDialogState();
+  State<_ChainNodePickerSheet> createState() => _ChainNodePickerSheetState();
 }
 
-class _ChainNodePickerDialogState extends State<_ChainNodePickerDialog> {
+class _ChainNodePickerSheetState extends State<_ChainNodePickerSheet> {
   final TextEditingController _searchController = TextEditingController();
-  String _selectedRegionCode = NodeRegion.all.code;
-  late final List<RegionNodeSummary> _regions;
-
-  @override
-  void initState() {
-    super.initState();
-    _regions = NodeRegionHelper.extractAvailableRegions(widget.nodes);
-  }
+  bool _sortByDelay = false;
 
   @override
   void dispose() {
@@ -1047,355 +752,162 @@ class _ChainNodePickerDialogState extends State<_ChainNodePickerDialog> {
 
   List<ClashProxiesNode> _filteredNodes() {
     final query = _searchController.text.trim().toLowerCase();
-    return widget.nodes.where((n) {
-      if (_selectedRegionCode != NodeRegion.all.code) {
-        if (NodeRegionHelper.getRegion(n.name).code != _selectedRegionCode) {
-          return false;
-        }
-      }
+    final list = widget.nodes.where((n) {
+      if (widget.disabledNodes.contains(n.name)) return false;
+      if (ChainProxyManager.isGeneratedChainNodeName(n.name)) return false;
       if (query.isNotEmpty) {
-        final matchName = n.name.toLowerCase().contains(query);
-        final matchType = n.type.toLowerCase().contains(query);
-        if (!matchName && !matchType) return false;
+        return n.name.toLowerCase().contains(query) ||
+            n.type.toLowerCase().contains(query);
       }
       return true;
     }).toList();
+
+    if (_sortByDelay) {
+      list.sort((a, b) {
+        final dA = widget.liveDelays[a.name] ?? a.delay ?? 999999;
+        final dB = widget.liveDelays[b.name] ?? b.delay ?? 999999;
+        final sA = dA <= 0 ? 999999 : dA;
+        final sB = dB <= 0 ? 999999 : dB;
+        return sA.compareTo(sB);
+      });
+    }
+    return list;
   }
 
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final isZh = Localizations.localeOf(context).languageCode.startsWith('zh');
-    final mediaSize = MediaQuery.of(context).size;
-    final filtered = _filteredNodes();
+    final filteredList = _filteredNodes();
 
-    return Dialog(
-      backgroundColor:
-          isDark ? ThemeDefine.kColorDarkCard : ThemeDefine.kColorLightCard,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: isDark
-              ? ThemeDefine.kColorDarkBorder
-              : ThemeDefine.kColorGreyLight,
-          width: 0.9,
-        ),
-      ),
-      child: ConstrainedBox(
+    return SafeArea(
+      child: Container(
         constraints: BoxConstraints(
-          maxWidth: 560,
-          maxHeight: mediaSize.height * 0.82,
+          maxHeight: MediaQuery.of(context).size.height * 0.75,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      _sortByDelay = !_sortByDelay;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.bolt_rounded,
+                    size: 16,
+                    color: _sortByDelay ? ThemeDefine.kColorBlue : Colors.grey,
+                  ),
+                  label: Text(
+                    tcontext.meta.sortLatency,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color:
+                          _sortByDelay ? ThemeDefine.kColorBlue : Colors.grey,
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.close_rounded, size: 20),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              ),
-              Text(
-                widget.hint,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                 ),
-              ),
-              const SizedBox(height: 10),
-              WmimoSearchBar(
-                controller: _searchController,
-                hintText: tcontext.meta.searchProxies,
-                badgeText: _searchController.text.trim().isNotEmpty
-                    ? '${filtered.length}'
-                    : null,
-                onChanged: (_) => setState(() {}),
-                onClear: () {
-                  _searchController.clear();
-                  setState(() {});
-                },
-              ),
-              if (_regions.length > 2) ...[
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 32,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _regions.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 6),
-                    itemBuilder: (context, idx) {
-                      final summary = _regions[idx];
-                      final selected =
-                          _selectedRegionCode == summary.region.code;
-                      final label =
-                          summary.region.code == NodeRegion.all.code
-                              ? "${summary.region.flag} ${tcontext.chain_proxy.all_nodes} (${summary.count})"
-                              : "${summary.region.flag} ${summary.region.getDisplayName(isZh)} (${summary.count})";
-                      return InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: () {
-                          HapticFeedback.selectionClick();
-                          setState(
-                            () => _selectedRegionCode = summary.region.code,
-                          );
-                        },
-                        child: AnimatedContainer(
-                          duration: ThemeDefine.durationMicro,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: selected
-                                ? ThemeDefine.kColorBlue
-                                : (isDark
-                                    ? ThemeDefine.kColorDarkInner
-                                    : const Color(0xFFF1F5F9)),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: selected
-                                  ? ThemeDefine.kColorBlue
-                                  : (isDark
-                                      ? ThemeDefine.kColorDarkBorder
-                                      : const Color(0xFFE2E8F0)),
-                              width: 0.8,
-                            ),
-                          ),
-                          child: Text(
-                            label,
-                            style: TextStyle(
-                              fontSize: 11.5,
-                              fontWeight: selected
-                                  ? FontWeight.w700
-                                  : FontWeight.w500,
-                              color: selected
-                                  ? Colors.white
-                                  : theme.colorScheme.onSurface
-                                      .withValues(alpha: 0.8),
-                              fontFamilyFallback: Platform.isWindows
-                                  ? const ['Emoji']
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                IconButton(
+                  icon: const Icon(Icons.close_rounded),
+                  onPressed: () => Navigator.pop(context),
                 ),
               ],
-              const SizedBox(height: 10),
-              Expanded(
-                child: filtered.isEmpty
-                    ? Center(
-                        child: Text(
-                          tcontext.chain_proxy.empty_tip,
-                          style: TextStyle(
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.5),
-                          ),
+            ),
+            const SizedBox(height: 8),
+            WmimoSearchBar(
+              controller: _searchController,
+              hintText: tcontext.meta.searchProxies,
+              onChanged: (_) => setState(() {}),
+              onClear: () {
+                _searchController.clear();
+                setState(() {});
+              },
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: filteredList.isEmpty
+                  ? Center(
+                      child: Text(
+                        tcontext.chain_proxy.empty_tip,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.5),
                         ),
-                      )
-                    : ListView.separated(
-                        itemCount: filtered.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 6),
-                        itemBuilder: (context, index) {
-                          final node = filtered[index];
-                          final isSelected =
-                              node.name == widget.currentSelected;
-                          final isDisabled =
-                              widget.disabledNodes.contains(node.name);
-                          final isGroup =
-                              ClashProtocolType.isGroupType(node.type);
-                          final delay =
-                              widget.liveDelays[node.name] ?? node.delay;
-                          final flag = NodeRegionHelper.getFlag(node.name);
-                          final cleanName =
-                              NodeRegionHelper.getDisplayNameWithoutFlag(
-                            node.name,
-                          );
-
-                          return InkWell(
-                            borderRadius: BorderRadius.circular(10),
-                            onTap: isDisabled
-                                ? null
-                                : () => Navigator.pop(context, node.name),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 9,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? ThemeDefine.kColorBlue.withValues(
-                                        alpha: isDark ? 0.18 : 0.08,
-                                      )
-                                    : (isDark
-                                        ? ThemeDefine.kColorDarkInner
-                                        : const Color(0xFFF8FAFC)),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: isSelected
-                                      ? ThemeDefine.kColorBlue
-                                          .withValues(alpha: 0.6)
-                                      : (isDark
-                                          ? ThemeDefine.kColorDarkBorder
-                                          : const Color(0xFFE2E8F0)),
-                                  width: isSelected ? 1.2 : 0.8,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    flag,
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontFamilyFallback: Platform.isWindows
-                                          ? const ['Emoji']
-                                          : null,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 9),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          cleanName.isNotEmpty
-                                              ? cleanName
-                                              : node.name,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 13.5,
-                                            fontWeight: isSelected
-                                                ? FontWeight.w700
-                                                : FontWeight.w600,
-                                            color: isDisabled
-                                                ? Colors.grey
-                                                : (isSelected
-                                                    ? ThemeDefine.kColorBlue
-                                                    : null),
-                                            fontFamilyFallback:
-                                                Platform.isWindows
-                                                    ? const ['Emoji']
-                                                    : null,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 3),
-                                        Row(
-                                          children: [
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 5,
-                                                vertical: 1,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: isGroup
-                                                    ? Colors.purple.withValues(
-                                                        alpha: isDark
-                                                            ? 0.22
-                                                            : 0.12,
-                                                      )
-                                                    : (isDark
-                                                        ? Colors.white10
-                                                        : const Color(
-                                                            0xFFE2E8F0,
-                                                          )),
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                              ),
-                                              child: Text(
-                                                node.type.toUpperCase(),
-                                                style: TextStyle(
-                                                  fontSize: 9.5,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: isGroup
-                                                      ? Colors.purple[
-                                                          isDark ? 200 : 700]
-                                                      : theme
-                                                          .colorScheme.onSurface
-                                                          .withValues(
-                                                          alpha: 0.65,
-                                                        ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  if (delay != null && delay > 0) ...[
-                                    const SizedBox(width: 6),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 6,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: (delay < 800
-                                                ? ThemeDefine.kColorGreenBright
-                                                : ThemeDefine.kColorAmber)
-                                            .withValues(alpha: 0.14),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Text(
-                                        "$delay ms",
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          fontFamily: 'monospace',
-                                          fontWeight: FontWeight.w700,
-                                          color: delay < 800
-                                              ? ThemeDefine.kColorGreenBright
-                                              : ThemeDefine.kColorAmber,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  if (isSelected) ...[
-                                    const SizedBox(width: 6),
-                                    const Icon(
-                                      Icons.check_circle_rounded,
-                                      color: ThemeDefine.kColorBlue,
-                                      size: 19,
-                                    ),
-                                  ] else if (isDisabled) ...[
-                                    const SizedBox(width: 6),
-                                    const Icon(
-                                      Icons.block_rounded,
-                                      color: Colors.grey,
-                                      size: 16,
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            ),
-                          );
-                        },
                       ),
-              ),
-            ],
-          ),
+                    )
+                  : ListView.builder(
+                      itemCount: filteredList.length,
+                      itemBuilder: (context, index) {
+                        final node = filteredList[index];
+                        final isSelected =
+                            node.name == widget.currentSelected;
+                        final delay =
+                            widget.liveDelays[node.name] ?? node.delay;
+                        final label = _ChainProxyEditDialogState
+                            ._formatCleanHopLabel(node.name);
+
+                        return ListTile(
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 8),
+                          title: Text(
+                            label,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              color:
+                                  isSelected ? ThemeDefine.kColorBlue : null,
+                              fontFamilyFallback:
+                                  Platform.isWindows ? const ['Emoji'] : null,
+                            ),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (delay != null && delay > 0)
+                                Text(
+                                  "$delay ms",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: delay < 800
+                                        ? ThemeDefine.kColorGreenBright
+                                        : Colors.amber,
+                                  ),
+                                ),
+                              if (isSelected) ...[
+                                const SizedBox(width: 8),
+                                const Icon(
+                                  Icons.check_circle_rounded,
+                                  color: ThemeDefine.kColorBlue,
+                                  size: 20,
+                                ),
+                              ],
+                            ],
+                          ),
+                          onTap: () => Navigator.pop(context, node.name),
+                        );
+                      },
+                    ),
+            ),
+          ],
         ),
       ),
     );

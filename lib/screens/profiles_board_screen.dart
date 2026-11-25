@@ -327,20 +327,17 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
 
     showSheet(
       context: context,
-      body: SizedBox(
-        height: 400,
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: Scrollbar(
-            child: ListView.separated(
-              itemBuilder: (BuildContext context, int index) {
-                return widgets[index];
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider(height: 1, thickness: 0.3);
-              },
-              itemCount: widgets.length,
-            ),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (int i = 0; i < widgets.length; i++) ...[
+                if (i > 0) const Divider(height: 1, thickness: 0.4),
+                widgets[i],
+              ],
+            ],
           ),
         ),
       ),

@@ -13,9 +13,9 @@ import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/dialog_utils.dart';
 import 'package:wmimo/screens/group_item_creator.dart';
 import 'package:wmimo/screens/group_item_options.dart';
-import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/widgets/framework.dart';
 import 'package:wmimo/screens/widgets/text_field.dart';
+import 'package:wmimo/screens/widgets/wmimo_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
@@ -173,113 +173,83 @@ class _AddProfileByUrlScreenState
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.zero, child: AppBar()),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: const SizedBox(
-                      width: 50,
-                      height: 30,
-                      child: Icon(Icons.arrow_back_ios_outlined, size: 26),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      tcontext.meta.profileAddUrlOrContent,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: ThemeConfig.kFontWeightTitle,
-                        fontSize: ThemeConfig.kFontSizeTitle,
-                      ),
-                    ),
-                  ),
-                  _loading
-                      ? const Row(
-                          children: [
-                            SizedBox(width: 12),
-                            SizedBox(
-                              width: 26,
-                              height: 26,
-                              child: RepaintBoundary(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                            SizedBox(width: 12),
-                          ],
-                        )
-                      : InkWell(
-                          onTap: () async {
-                            await onAdd(context);
-                          },
-                          child: Tooltip(
-                            message: tcontext.meta.save,
-                            child: const SizedBox(
-                              width: 50,
-                              height: 30,
-                              child: Icon(Icons.done, size: 26),
-                            ),
-                          ),
-                        ),
-                ],
+      appBar: WmimoAppBar(
+        title: tcontext.meta.profileAddUrlOrContent,
+        actions: [
+          if (_loading)
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
               ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                18,
-                                10,
-                                18,
-                                10,
+            )
+          else
+            IconButton(
+              tooltip: tcontext.meta.save,
+              icon: const Icon(Icons.check_rounded, size: 22),
+              onPressed: () async {
+                await onAdd(context);
+              },
+            ),
+        ],
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              18,
+                              10,
+                              18,
+                              10,
+                            ),
+                            child: TextFieldEx(
+                              textInputAction: TextInputAction.next,
+                              maxLines: 5,
+                              controller: _textControllerLink,
+                              decoration: InputDecoration(
+                                labelText: tcontext.meta.profileUrlOrContent,
+                                hintText:
+                                    tcontext.meta.profileUrlOrContentHit,
                               ),
-                              child: TextFieldEx(
-                                textInputAction: TextInputAction.next,
-                                maxLines: 5,
-                                controller: _textControllerLink,
-                                decoration: InputDecoration(
-                                  labelText: tcontext.meta.profileUrlOrContent,
-                                  hintText:
-                                      tcontext.meta.profileUrlOrContentHit,
-                                ),
-                                onChanged: (text) {},
-                                onEditingComplete: () async {
-                                  String url = _textControllerLink.text.trim();
-                                  if (url.isNotEmpty ||
-                                      null != Uri.tryParse(url)) {
-                                    final userAgent = SettingManager.getConfig()
-                                        .userAgent();
-                                    final result = await HttpUtils.httpGetTitle(
-                                      url,
-                                      userAgent,
-                                    );
-                                    if (result.error == null) {
-                                      if (_textControllerRemark.text
-                                          .trim()
-                                          .isEmpty) {
-                                        _textControllerRemark.text =
-                                            result.data!;
-                                        setState(() {});
-                                      }
+                              onChanged: (text) {},
+                              onEditingComplete: () async {
+                                String url = _textControllerLink.text.trim();
+                                final uri = Uri.tryParse(url);
+                                if (url.isNotEmpty &&
+                                    uri != null &&
+                                    (uri.scheme == 'http' ||
+                                        uri.scheme == 'https')) {
+                                  final userAgent = SettingManager.getConfig()
+                                      .userAgent();
+                                  final result = await HttpUtils.httpGetTitle(
+                                    url,
+                                    userAgent,
+                                  );
+                                  if (result.error == null) {
+                                    if (_textControllerRemark.text
+                                        .trim()
+                                        .isEmpty) {
+                                      _textControllerRemark.text =
+                                          result.data!;
+                                      setState(() {});
                                     }
                                   }
-                                },
-                              ),
+                                }
+                              },
                             ),
+                          ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(
                                 18,
@@ -331,8 +301,7 @@ class _AddProfileByUrlScreenState
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   Future<List<GroupItem>> getGroupOptions() async {
@@ -362,7 +331,9 @@ class _AddProfileByUrlScreenState
     ];
     final items = ProfilePatchManager.getProfilePatchs();
     for (var item in items) {
-      overwrite.add(Tuple2(item.id, item.id));
+      overwrite.add(
+        Tuple2(item.id, item.remark.isNotEmpty ? item.remark : item.id),
+      );
     }
     List<GroupItem> groupOptions = [];
     List<GroupItemOptions> options = [

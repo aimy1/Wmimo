@@ -312,6 +312,7 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
 
   static bool isRealLeafProxy(ClashProxiesNode n) {
     if (ClashProtocolType.isGroupType(n.type)) return false;
+    if (ChainProxyManager.isIntermediateHopNodeName(n.name)) return false;
     final lowerType = n.type.toLowerCase().replaceAll('-', '').replaceAll('_', '').trim();
     if (lowerType == "direct" ||
         lowerType == "reject" ||
@@ -2321,6 +2322,93 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
               _buildRegionFilterBar(leafNodes),
               const SizedBox(height: 6),
 
+              // Active Chain Proxy Status Banner
+              if (ChainProxyManager.enabledCount > 0)
+                Builder(
+                  builder: (context) {
+                    final primaryGroup =
+                        ClashHttpApi.findPrimaryRuleGroup(groups);
+                    final activeChain = primaryGroup != null
+                        ? ChainProxyManager.findChainByName(primaryGroup.now)
+                        : null;
+                    final bannerColor = activeChain != null
+                        ? ThemeDefine.kColorGreenBright
+                        : ThemeDefine.kColorBlue;
+                    final label = activeChain != null
+                        ? "${tcontext.chain_proxy.title}: ${activeChain.name}"
+                        : tcontext.chain_proxy.active_count(
+                            active: ChainProxyManager.enabledCount,
+                            total: ChainProxyManager.items.length,
+                          );
+
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(10),
+                        onTap: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              settings: ChainProxyScreen.routSettings(),
+                              builder: (context) => const ChainProxyScreen(),
+                            ),
+                          );
+                          if (mounted) {
+                            setState(() {});
+                          }
+                          _fetchProxies();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 7,
+                          ),
+                          decoration: BoxDecoration(
+                            color: bannerColor.withValues(
+                              alpha: isDark ? 0.14 : 0.08,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: bannerColor.withValues(alpha: 0.3),
+                              width: 0.8,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.link_rounded,
+                                size: 16,
+                                color: bannerColor,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  label,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: bannerColor,
+                                    fontFamilyFallback: Platform.isWindows
+                                        ? const ['Emoji']
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                              Icon(
+                                Icons.chevron_right_rounded,
+                                size: 16,
+                                color: bannerColor,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
               // Direct Mode Notice Banner
               if (_currentMode == "direct")
                 Container(
@@ -2937,6 +3025,26 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
                       if (node.type.isNotEmpty && node.type != ClashProtocolType.selector.name)
                         Row(
                           children: [
+                            if (ChainProxyManager.findChainByName(node.name) != null) ...[
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0.5),
+                                decoration: BoxDecoration(
+                                  color: ThemeDefine.kColorBlue.withValues(alpha: 0.16),
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                child: Text(
+                                  Translations.of(context).chain_proxy.hop_count_badge(
+                                    count: ChainProxyManager.findChainByName(node.name)!.hops.length,
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 8.5,
+                                    fontWeight: FontWeight.w700,
+                                    color: ThemeDefine.kColorBlue,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 3),
+                            ],
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0.5),
                               decoration: BoxDecoration(

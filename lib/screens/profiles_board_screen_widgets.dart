@@ -942,11 +942,18 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
     super.initState();
     _loadNodeCounts();
     SettingManager.onSideBySideLayoutChanged.add(_onLayoutChanged);
+    ProfileManager.onEventUpdate.add(_onProfileUpdated);
   }
 
   void _onLayoutChanged() {
     if (mounted) {
       setState(() {});
+    }
+  }
+
+  void _onProfileUpdated(String id, bool finish) {
+    if (finish && mounted) {
+      _loadNodeCounts(forceId: id);
     }
   }
 
@@ -956,7 +963,10 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
     _loadNodeCounts();
   }
 
-  Future<void> _loadNodeCounts() async {
+  Future<void> _loadNodeCounts({String? forceId}) async {
+    if (forceId != null && forceId.isNotEmpty) {
+      _nodeCounts.remove(forceId);
+    }
     for (final setting in widget.settings) {
       if (!_nodeCounts.containsKey(setting.id)) {
         try {
@@ -974,6 +984,7 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
 
   @override
   void dispose() {
+    ProfileManager.onEventUpdate.remove(_onProfileUpdated);
     SettingManager.onSideBySideLayoutChanged.remove(_onLayoutChanged);
     ProfileManager.save();
     super.dispose();
@@ -1131,6 +1142,7 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
             withVersion: true,
           );
         }
+        await _loadNodeCounts(forceId: setting.id);
         if (mounted) setState(() {});
       },
       onTapEdit: () async {
@@ -1168,6 +1180,7 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
                   ? null
                   : (BuildContext context, String content) async {
                       await File(path).writeAsString(content);
+                      await _loadNodeCounts(forceId: setting.id);
                     },
             ),
           ),

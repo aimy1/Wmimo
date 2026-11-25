@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:wmimo/app/clash/clash_config.dart';
 import 'package:wmimo/app/clash/clash_http_api.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
@@ -30,7 +29,6 @@ class ChainProxyScreen extends StatefulWidget {
 
 class _ChainProxyScreenState extends State<ChainProxyScreen> {
   List<ClashProxiesNode> _availableNodes = [];
-  Map<String, ClashProxiesNode> _nodeMap = {};
   Set<String> _proxyNames = {};
   Set<String> _groupNames = {};
   Map<String, int?> _liveDelays = {};
@@ -62,7 +60,6 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
     try {
       final nodes = await ProxyNodeLoader.loadCurrentProfileNodes();
       final List<ClashProxiesNode> filtered = [];
-      final Map<String, ClashProxiesNode> nodeMap = {};
       final Set<String> pNames = {};
       final Set<String> gNames = {};
 
@@ -75,8 +72,11 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
             upper == "PASS") {
           continue;
         }
+        // Prevent generated chain nodes and intermediate hop nodes from polluting candidate pool
+        if (ChainProxyManager.isGeneratedChainNodeName(n.name)) {
+          continue;
+        }
         filtered.add(n);
-        nodeMap[n.name] = n;
         if (ClashProtocolType.isGroupType(n.type)) {
           gNames.add(n.name);
         } else {
@@ -85,7 +85,6 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
       }
 
       _availableNodes = filtered;
-      _nodeMap = nodeMap;
       _proxyNames = pNames;
       _groupNames = gNames;
 
@@ -171,19 +170,29 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
     }
   }
 
-  Future<void> _useChainNow(ChainProxyItem item) async {
-    if (_activatingIds.contains(item.id)) return;
-    final tcontext = Translations.of(context);
+  Future<void> _testAllEnabledLatencies() async {
+    final enabledItems =
+        ChainProxyManager.items.where((e) => e.enabled).toList();
+    if (enabledItems.isEmpty) return;
 
-    if (!item.enabled) {
+    final isStarted = await VPNService.getStarted();
+    if (!isStarted) {
+      final tcontext = Translations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(tcontext.chain_proxy.enable_before_use),
+          content: Text(tcontext.meta.profileNeedActive),
           duration: const Duration(seconds: 2),
         ),
       );
       return;
     }
+
+    await Future.wait(enabledItems.map(_testLatency));
+  }
+
+  Future<void> _toggleUseChain(ChainProxyItem item, bool isCurrentSelected) async {
+    if (_activatingIds.contains(item.id)) return;
+    final tcontext = Translations.of(context);
 
     final isStarted = await VPNService.getStarted();
     if (!isStarted) {
@@ -198,6 +207,32 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
 
     setState(() => _activatingIds.add(item.id));
     try {
+      if (isCurrentSelected) {
+        // Deactivate and switch back to normal node/group
+        final fallback =
+            await ChainProxyManager.deactivateChainInPrimaryGroup(item.name);
+        await _refreshLiveStates();
+        if (mounted && fallback != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                tcontext.chain_proxy.switched_to_chain(
+                  group: 'Proxy',
+                  name: fallback,
+                ),
+              ),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+        return;
+      }
+
+      // If disabled, auto-enable and mount first in one step
+      if (!item.enabled) {
+        await ChainProxyManager.toggle(item.id, true);
+      }
+
       final switchedGroup =
           await ChainProxyManager.activateChainInPrimaryGroup(item.name);
       await _refreshLiveStates();
@@ -257,53 +292,87 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
     }
   }
 
+  static String _displayHopName(String rawName) {
+    final flag = NodeRegionHelper.getFlag(rawName);
+    final clean = NodeRegionHelper.getDisplayNameWithoutFlag(rawName);
+    return clean.isNotEmpty ? "$flag $clean" : rawName;
+  }
+
   @override
   Widget build(BuildContext context) {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final items = ChainProxyManager.items;
-    final activeCount = ChainProxyManager.enabledCount;
+    final hasEnabled = ChainProxyManager.enabledCount > 0;
 
     return Scaffold(
       appBar: WmimoAppBar(
         title: "${tcontext.chain_proxy.title} (Beta)",
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: FilledButton.tonalIcon(
-              onPressed: () => _createOrEdit(),
-              icon: const Icon(Icons.add_rounded, size: 17),
-              label: Text(
-                tcontext.chain_proxy.add,
-                style: const TextStyle(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              style: FilledButton.styleFrom(
-                backgroundColor:
-                    ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.2 : 0.12),
-                foregroundColor: ThemeDefine.kColorBlue,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                minimumSize: const Size(0, 34),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+          if (hasEnabled)
+            IconButton(
+              tooltip: tcontext.chain_proxy.test_latency,
+              onPressed:
+                  _testingIds.isNotEmpty ? null : _testAllEnabledLatencies,
+              icon: _testingIds.isNotEmpty
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.bolt_rounded),
             ),
+          IconButton(
+            tooltip: tcontext.chain_proxy.add,
+            icon: const Icon(Icons.add_rounded, size: 22),
+            onPressed: () => _createOrEdit(),
           ),
         ],
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 28),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
               children: [
-                _buildOverviewBanner(theme, isDark, tcontext, activeCount, items.length),
-                const SizedBox(height: 14),
+                // Original Clean Info Banner
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: ThemeDefine.kColorBlue
+                        .withValues(alpha: isDark ? 0.15 : 0.08),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: ThemeDefine.kColorBlue.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.info_outline_rounded,
+                        color: ThemeDefine.kColorBlue,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          tcontext.chain_proxy.desc,
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            height: 1.4,
+                            color: isDark
+                                ? Colors.blue[100]
+                                : const Color(0xFF1E3A8A),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Empty state or List of cards
                 if (items.isEmpty)
                   _buildEmptyState(theme, isDark, tcontext)
                 else
@@ -315,153 +384,34 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
     );
   }
 
-  Widget _buildOverviewBanner(
-    ThemeData theme,
-    bool isDark,
-    Translations tcontext,
-    int activeCount,
-    int totalCount,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: isDark ? ThemeDefine.kColorDarkCard : ThemeDefine.kColorLightCard,
-        borderRadius: ThemeDefine.kCardBorderRadius,
-        border: Border.all(
-          color: ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.3 : 0.22),
-          width: 0.9,
-        ),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.14 : 0.07),
-            isDark ? ThemeDefine.kColorDarkCard : ThemeDefine.kColorLightCard,
-          ],
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: ThemeDefine.kColorBlue.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                child: const Icon(
-                  Icons.account_tree_rounded,
-                  color: ThemeDefine.kColorBlue,
-                  size: 17,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  tcontext.chain_proxy.title,
-                  style: const TextStyle(
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
-                decoration: BoxDecoration(
-                  color: activeCount > 0
-                      ? ThemeDefine.kColorGreenBright
-                          .withValues(alpha: isDark ? 0.18 : 0.12)
-                      : (isDark
-                          ? Colors.white.withValues(alpha: 0.07)
-                          : const Color(0xFFF1F5F9)),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: activeCount > 0
-                        ? ThemeDefine.kColorGreenBright.withValues(alpha: 0.35)
-                        : Colors.transparent,
-                    width: 0.8,
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: activeCount > 0
-                            ? ThemeDefine.kColorGreenBright
-                            : ThemeDefine.kColorGrey,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      tcontext.chain_proxy.active_count(
-                        active: activeCount,
-                        total: totalCount,
-                      ),
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w700,
-                        color: activeCount > 0
-                            ? ThemeDefine.kColorGreenBright
-                            : (isDark ? Colors.white70 : const Color(0xFF475569)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            tcontext.chain_proxy.desc,
-            style: TextStyle(
-              fontSize: 12,
-              height: 1.45,
-              color: isDark ? Colors.white70 : const Color(0xFF475569),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildEmptyState(
     ThemeData theme,
     bool isDark,
     Translations tcontext,
   ) {
     return Container(
-      margin: const EdgeInsets.only(top: 16),
-      padding: const EdgeInsets.symmetric(vertical: 42, horizontal: 24),
+      margin: const EdgeInsets.only(top: 32),
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       decoration: BoxDecoration(
-        color: isDark ? ThemeDefine.kColorDarkCard : ThemeDefine.kColorLightCard,
-        borderRadius: ThemeDefine.kCardBorderRadius,
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.03)
+            : const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark
-              ? ThemeDefine.kColorDarkBorder
-              : ThemeDefine.kColorGreyLight,
-          width: 0.8,
+          color: isDark ? Colors.white10 : const Color(0xFFE2E8F0),
         ),
       ),
       child: Column(
         children: [
           Container(
-            width: 64,
-            height: 64,
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: ThemeDefine.kColorBlue.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
-              Icons.route_rounded,
-              size: 32,
+              Icons.link_off_rounded,
+              size: 36,
               color: ThemeDefine.kColorBlue,
             ),
           ),
@@ -470,29 +420,22 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
             tcontext.chain_proxy.empty_tip,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 13.5,
-              height: 1.4,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+              fontSize: 14,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               backgroundColor: ThemeDefine.kColorBlue,
               foregroundColor: Colors.white,
-              elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: ThemeDefine.kButtonBorderRadius,
+                borderRadius: BorderRadius.circular(8),
               ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
             ),
             onPressed: () => _createOrEdit(),
             icon: const Icon(Icons.add_rounded, size: 18),
-            label: Text(
-              tcontext.chain_proxy.add,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
+            label: Text(tcontext.chain_proxy.add),
           ),
         ],
       ),
@@ -515,7 +458,6 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
     final hasMissingNode =
         validation.issues.contains(ChainValidationIssue.missingHop) ||
             validation.issues.contains(ChainValidationIssue.emptyHop);
-    final hasIssue = hasInvalidGroup || hasMissingNode;
     final isTesting = _testingIds.contains(item.id);
     final isActivating = _activatingIds.contains(item.id);
     final isCurrentSelected =
@@ -524,275 +466,190 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: isDark ? ThemeDefine.kColorDarkCard : ThemeDefine.kColorLightCard,
-        borderRadius: ThemeDefine.kCardBorderRadius,
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isCurrentSelected
-              ? ThemeDefine.kColorGreenBright.withValues(alpha: 0.75)
-              : (hasIssue
-                  ? ThemeDefine.kColorAmber.withValues(alpha: 0.6)
-                  : (item.enabled
-                      ? ThemeDefine.kColorBlue.withValues(alpha: isDark ? 0.35 : 0.25)
-                      : (isDark
-                          ? ThemeDefine.kColorDarkBorder
-                          : ThemeDefine.kColorGreyLight))),
-          width: isCurrentSelected ? 1.4 : 0.9,
+              ? ThemeDefine.kColorBlue
+              : (isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
+          width: isCurrentSelected ? 1.4 : 1.0,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Header Row: Icon + Name + Hop Count Badge + Switch
+            // Top Row: Title + Status Switch (Original Clean Style)
             Row(
               children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: (isCurrentSelected
-                            ? ThemeDefine.kColorGreenBright
-                            : (item.enabled
-                                ? ThemeDefine.kColorBlue
-                                : ThemeDefine.kColorGrey))
-                        .withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(
-                    isCurrentSelected
-                        ? Icons.verified_rounded
-                        : Icons.link_rounded,
-                    color: isCurrentSelected
-                        ? ThemeDefine.kColorGreenBright
-                        : (item.enabled
-                            ? ThemeDefine.kColorBlue
-                            : ThemeDefine.kColorGrey),
-                    size: 19,
-                  ),
+                Icon(
+                  Icons.link_rounded,
+                  color: item.enabled ? ThemeDefine.kColorBlue : Colors.grey,
+                  size: 20,
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.name,
-                        style: TextStyle(
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w700,
-                          color: item.enabled
-                              ? theme.colorScheme.onSurface
-                              : theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.5),
-                          fontFamilyFallback:
-                              Platform.isWindows ? const ['Emoji'] : null,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 3),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 1.5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: ThemeDefine.kColorBlue
-                                  .withValues(alpha: isDark ? 0.18 : 0.1),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              tcontext.chain_proxy.hop_count_badge(
-                                count: item.hops.length,
-                              ),
-                              style: const TextStyle(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.w700,
-                                color: ThemeDefine.kColorBlue,
-                              ),
-                            ),
-                          ),
-                          if (isCurrentSelected) ...[
-                            const SizedBox(width: 6),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 1.5,
-                              ),
-                              decoration: BoxDecoration(
-                                color: ThemeDefine.kColorGreenBright
-                                    .withValues(alpha: isDark ? 0.2 : 0.12),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text(
-                                tcontext.meta.connected,
-                                style: const TextStyle(
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w700,
-                                  color: ThemeDefine.kColorGreenBright,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ],
+                  child: Text(
+                    item.name,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: item.enabled
+                          ? null
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                      fontFamilyFallback:
+                          Platform.isWindows ? const ['Emoji'] : null,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(width: 6),
-                SizedBox(
-                  height: 30,
-                  child: Transform.scale(
-                    scale: 0.84,
-                    alignment: Alignment.centerRight,
-                    child: Switch.adaptive(
-                      value: item.enabled,
-                      activeThumbColor: Colors.white,
-                      activeTrackColor: ThemeDefine.kColorBlue,
-                      onChanged: (val) async {
-                        HapticFeedback.selectionClick();
-                        await ChainProxyManager.toggle(item.id, val);
-                        await _refreshLiveStates();
-                        if (mounted) setState(() {});
-                      },
+                if (item.hops.length > 2) ...[
+                  const SizedBox(width: 6),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: ThemeDefine.kColorBlue
+                          .withValues(alpha: isDark ? 0.18 : 0.1),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      tcontext.chain_proxy
+                          .hop_count_badge(count: item.hops.length),
+                      style: const TextStyle(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w600,
+                        color: ThemeDefine.kColorBlue,
+                      ),
                     ),
                   ),
+                ],
+                Switch.adaptive(
+                  value: item.enabled,
+                  activeThumbColor: Colors.white,
+                  activeTrackColor: ThemeDefine.kColorBlue,
+                  onChanged: (val) async {
+                    await ChainProxyManager.toggle(item.id, val);
+                    await _refreshLiveStates();
+                    if (mounted) setState(() {});
+                  },
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
-            // 2. Multi-Hop Pipeline Box
+            // Original Clean Horizontal Route Visualization
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
                 color: isDark
-                    ? ThemeDefine.kColorDarkInner
-                    : const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(11),
-                border: Border.all(
-                  color: isDark
-                      ? ThemeDefine.kColorDarkBorder
-                      : const Color(0xFFE2E8F0),
-                  width: 0.8,
-                ),
+                    ? Colors.white.withValues(alpha: 0.04)
+                    : const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
                   for (int i = 0; i < item.hops.length; i++) ...[
                     if (i > 0)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 11, top: 3, bottom: 3),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 1.5,
-                              height: 10,
-                              color: isDark
-                                  ? Colors.white24
-                                  : const Color(0xFFCBD5E1),
-                            ),
-                            const SizedBox(width: 6),
-                            Icon(
-                              Icons.south_rounded,
-                              size: 11,
-                              color: isDark
-                                  ? Colors.white38
-                                  : const Color(0xFF94A3B8),
-                            ),
-                          ],
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 6),
+                        child: Icon(
+                          Icons.arrow_forward_rounded,
+                          size: 14,
+                          color: Colors.grey,
                         ),
                       ),
-                    _buildHopPipelineRow(
-                      stepNum: i + 1,
-                      total: item.hops.length,
-                      nodeName: item.hops[i],
-                      hasIssue: validation.missingHopIndices.contains(i) ||
-                          validation.invalidGroupHopIndices.contains(i),
-                      isDark: isDark,
-                      theme: theme,
-                      tcontext: tcontext,
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Icon(
+                            i == 0
+                                ? Icons.vpn_key_rounded
+                                : (i == item.hops.length - 1
+                                    ? Icons.public_rounded
+                                    : Icons.alt_route_rounded),
+                            size: 14,
+                            color: i == 0
+                                ? Colors.blue
+                                : (i == item.hops.length - 1
+                                    ? Colors.green
+                                    : Colors.purple),
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              _displayHopName(item.hops[i]),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: (validation.missingHopIndices
+                                            .contains(i) ||
+                                        validation.invalidGroupHopIndices
+                                            .contains(i))
+                                    ? Colors.red
+                                    : null,
+                                fontFamilyFallback:
+                                    Platform.isWindows ? const ['Emoji'] : null,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ],
               ),
             ),
 
-            // 3. Validation Warning Banner
-            if (hasIssue) ...[
-              const SizedBox(height: 10),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                decoration: BoxDecoration(
-                  color: ThemeDefine.kColorAmber.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(9),
-                  border: Border.all(
-                    color: ThemeDefine.kColorAmber.withValues(alpha: 0.35),
+            if (hasMissingNode || hasInvalidGroup) ...[
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.warning_amber_rounded,
+                    size: 14,
+                    color: Colors.orange,
                   ),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.warning_amber_rounded,
-                      size: 16,
-                      color: ThemeDefine.kColorAmber,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        hasInvalidGroup
-                            ? tcontext.chain_proxy.hop_group_not_exit_warning
-                            : tcontext.chain_proxy.node_missing_warning,
-                        style: const TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w600,
-                          color: ThemeDefine.kColorAmber,
-                        ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      hasInvalidGroup
+                          ? tcontext.chain_proxy.hop_group_not_exit_warning
+                          : tcontext.chain_proxy.node_missing_warning,
+                      style: const TextStyle(
+                        fontSize: 11.5,
+                        color: Colors.orange,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
 
-            const SizedBox(height: 12),
-            Divider(
-              height: 1,
-              color: isDark
-                  ? ThemeDefine.kColorDarkBorder
-                  : const Color(0xFFE2E8F0),
-            ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
+            const Divider(height: 1),
+            const SizedBox(height: 4),
 
-            // 4. Bottom Action Bar
+            // Bottom Actions: Latency Badge / Test, Use/Deactivate & Edit / Delete
             Row(
               children: [
-                // Latency Test Pill
                 InkWell(
                   onTap: () => _testLatency(item),
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5.5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: (item.delay == null
-                              ? ThemeDefine.kColorBlue
-                              : (item.delay! < 0
-                                  ? ThemeDefine.kColorRed
-                                  : (item.delay! < 800
-                                      ? ThemeDefine.kColorGreenBright
-                                      : ThemeDefine.kColorAmber)))
-                          .withValues(alpha: isDark ? 0.15 : 0.09),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                  borderRadius: BorderRadius.circular(6),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -800,22 +657,13 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
                           const SizedBox(
                             width: 12,
                             height: 12,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 1.8,
-                              color: ThemeDefine.kColorBlue,
-                            ),
+                            child: CircularProgressIndicator(strokeWidth: 1.5),
                           )
                         else
-                          Icon(
+                          const Icon(
                             Icons.bolt_rounded,
-                            size: 15,
-                            color: item.delay == null
-                                ? ThemeDefine.kColorBlue
-                                : (item.delay! < 0
-                                    ? ThemeDefine.kColorRed
-                                    : (item.delay! < 800
-                                        ? ThemeDefine.kColorGreenBright
-                                        : ThemeDefine.kColorAmber)),
+                            size: 16,
+                            color: ThemeDefine.kColorBlue,
                           ),
                         const SizedBox(width: 4),
                         Text(
@@ -826,14 +674,14 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
                                   : "${item.delay} ms"),
                           style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             color: item.delay == null
                                 ? ThemeDefine.kColorBlue
                                 : (item.delay! < 0
-                                    ? ThemeDefine.kColorRed
+                                    ? Colors.red
                                     : (item.delay! < 800
                                         ? ThemeDefine.kColorGreenBright
-                                        : ThemeDefine.kColorAmber)),
+                                        : Colors.amber)),
                           ),
                         ),
                       ],
@@ -841,14 +689,16 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
                   ),
                 ),
                 const Spacer(),
-                if (validation.isValid) ...[
+                if (validation.isValid)
                   TextButton.icon(
-                    onPressed: isActivating ? null : () => _useChainNow(item),
+                    onPressed: isActivating
+                        ? null
+                        : () => _toggleUseChain(item, isCurrentSelected),
                     icon: isActivating
                         ? const SizedBox(
                             width: 12,
                             height: 12,
-                            child: CircularProgressIndicator(strokeWidth: 1.6),
+                            child: CircularProgressIndicator(strokeWidth: 1.5),
                           )
                         : Icon(
                             isCurrentSelected
@@ -857,10 +707,12 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
                             size: 15,
                           ),
                     label: Text(
-                      tcontext.chain_proxy.use_now,
+                      isCurrentSelected
+                          ? tcontext.meta.inUse
+                          : tcontext.chain_proxy.use_now,
                       style: const TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     style: TextButton.styleFrom(
@@ -870,10 +722,10 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
                       backgroundColor: (isCurrentSelected
                               ? ThemeDefine.kColorGreenBright
                               : ThemeDefine.kColorBlue)
-                          .withValues(alpha: isDark ? 0.16 : 0.09),
+                          .withValues(alpha: isDark ? 0.16 : 0.08),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10,
-                        vertical: 5.5,
+                        vertical: 5,
                       ),
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -882,190 +734,25 @@ class _ChainProxyScreenState extends State<ChainProxyScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 6),
-                ],
-                _buildCardIconButton(
-                  icon: Icons.edit_outlined,
+                IconButton(
+                  icon: const Icon(Icons.edit_outlined, size: 18),
                   tooltip: tcontext.chain_proxy.edit,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
-                  isDark: isDark,
-                  onTap: () => _createOrEdit(initialItem: item),
+                  onPressed: () => _createOrEdit(initialItem: item),
                 ),
-                const SizedBox(width: 6),
-                _buildCardIconButton(
-                  icon: Icons.delete_outline_rounded,
+                IconButton(
+                  icon: const Icon(
+                    Icons.delete_outline_rounded,
+                    size: 18,
+                    color: Colors.red,
+                  ),
                   tooltip: tcontext.chain_proxy.delete,
-                  color: ThemeDefine.kColorRed,
-                  isDark: isDark,
-                  onTap: () => _deleteItem(item),
+                  onPressed: () => _deleteItem(item),
                 ),
               ],
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildCardIconButton({
-    required IconData icon,
-    required String tooltip,
-    required Color color,
-    required bool isDark,
-    required VoidCallback onTap,
-  }) {
-    return Tooltip(
-      message: tooltip,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          width: 30,
-          height: 30,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: isDark
-                ? Colors.white.withValues(alpha: 0.06)
-                : const Color(0xFFF1F5F9),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, size: 16, color: color),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHopPipelineRow({
-    required int stepNum,
-    required int total,
-    required String nodeName,
-    required bool hasIssue,
-    required bool isDark,
-    required ThemeData theme,
-    required Translations tcontext,
-  }) {
-    final MaterialColor accent = stepNum == 1
-        ? Colors.blue
-        : (stepNum == total ? Colors.green : Colors.purple);
-    final roleText = stepNum == 1
-        ? tcontext.chain_proxy.hop_entry
-        : (stepNum == total
-            ? tcontext.chain_proxy.hop_exit(index: stepNum)
-            : tcontext.chain_proxy.hop_transit(index: stepNum));
-    final cleanName = NodeRegionHelper.getDisplayNameWithoutFlag(nodeName);
-    final flag = NodeRegionHelper.getFlag(nodeName);
-    final nodeObj = _nodeMap[nodeName];
-    final liveDelay = _liveDelays[nodeName] ?? nodeObj?.delay;
-
-    return Row(
-      children: [
-        // Step Number Circle
-        Container(
-          width: 22,
-          height: 22,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: hasIssue
-                ? ThemeDefine.kColorAmber
-                : accent.withValues(alpha: isDark ? 0.25 : 0.14),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: hasIssue
-                  ? ThemeDefine.kColorAmber
-                  : accent.withValues(alpha: 0.5),
-              width: 1,
-            ),
-          ),
-          child: Text(
-            "$stepNum",
-            style: TextStyle(
-              fontSize: 10.5,
-              fontWeight: FontWeight.w800,
-              color: hasIssue ? Colors.white : accent[isDark ? 200 : 700],
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        // Role Badge
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-          decoration: BoxDecoration(
-            color: hasIssue
-                ? ThemeDefine.kColorAmber.withValues(alpha: 0.15)
-                : accent.withValues(alpha: isDark ? 0.18 : 0.1),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Text(
-            roleText.split(' ').first,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              color: hasIssue
-                  ? ThemeDefine.kColorAmber
-                  : accent[isDark ? 300 : 700],
-            ),
-          ),
-        ),
-        const SizedBox(width: 7),
-        // Flag + Clean Node Name (no duplicate flag)
-        Text(
-          flag,
-          style: TextStyle(
-            fontSize: 13.5,
-            fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
-          ),
-        ),
-        const SizedBox(width: 5),
-        Expanded(
-          child: Text(
-            cleanName.isNotEmpty ? cleanName : nodeName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 12.5,
-              fontWeight: FontWeight.w600,
-              color: hasIssue
-                  ? ThemeDefine.kColorAmber
-                  : theme.colorScheme.onSurface,
-              fontFamilyFallback: Platform.isWindows ? const ['Emoji'] : null,
-            ),
-          ),
-        ),
-        if (nodeObj != null && nodeObj.type.isNotEmpty) ...[
-          const SizedBox(width: 6),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? Colors.white.withValues(alpha: 0.07)
-                  : const Color(0xFFE2E8F0).withValues(alpha: 0.7),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              nodeObj.type.toUpperCase(),
-              style: TextStyle(
-                fontSize: 9.5,
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-              ),
-            ),
-          ),
-        ],
-        if (liveDelay != null && liveDelay > 0) ...[
-          const SizedBox(width: 6),
-          Text(
-            "${liveDelay}ms",
-            style: TextStyle(
-              fontSize: 10.5,
-              fontFamily: 'monospace',
-              fontWeight: FontWeight.w700,
-              color: liveDelay < 800
-                  ? ThemeDefine.kColorGreenBright
-                  : ThemeDefine.kColorAmber,
-            ),
-          ),
-        ],
-      ],
     );
   }
 }
