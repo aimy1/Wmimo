@@ -28,6 +28,83 @@ class LogsScreen extends StatefulWidget {
     return "INFO";
   }
 
+  static bool matchesFilter(
+    ClashLog log, {
+    required String selectedLevel,
+    required String searchKeyword,
+  }) {
+    final level = normalizeLevel(log.type);
+    if (selectedLevel != "ALL" && level != selectedLevel) {
+      return false;
+    }
+    if (searchKeyword.isEmpty) return true;
+    final kw = searchKeyword.toLowerCase();
+    return log.payload.toLowerCase().contains(kw) ||
+        level.toLowerCase().contains(kw);
+  }
+
+  static ({
+    String? tag,
+    String? rawBracketTag,
+    Color? color,
+    String displayPayload,
+  }) parseLogCategory(String payload) {
+    String? categoryTag;
+    String? rawBracketTag;
+    Color? tagColor;
+    List<String> prefixesToStrip = const [];
+    final lower = payload.toLowerCase();
+    if (lower.contains("[dns]")) {
+      categoryTag = "DNS";
+      rawBracketTag = "[DNS]";
+      tagColor = const Color(0xFF06B6D4);
+      prefixesToStrip = const ["[dns]"];
+    } else if (lower.contains("[tcp]")) {
+      categoryTag = "TCP";
+      rawBracketTag = "[TCP]";
+      tagColor = const Color(0xFF3B82F6);
+      prefixesToStrip = const ["[tcp]"];
+    } else if (lower.contains("[udp]")) {
+      categoryTag = "UDP";
+      rawBracketTag = "[UDP]";
+      tagColor = const Color(0xFF8B5CF6);
+      prefixesToStrip = const ["[udp]"];
+    } else if (lower.contains("[rule]") || lower.contains("match rule")) {
+      categoryTag = "RULE";
+      rawBracketTag = "[Rule]";
+      tagColor = const Color(0xFF10B981);
+      prefixesToStrip = const ["[rule]"];
+    } else if (lower.contains("[process]")) {
+      categoryTag = "PROC";
+      rawBracketTag = "[Process]";
+      tagColor = const Color(0xFFF59E0B);
+      prefixesToStrip = const ["[process]", "[proc]"];
+    } else if (lower.contains("[sniffer]")) {
+      categoryTag = "SNIFF";
+      rawBracketTag = "[Sniffer]";
+      tagColor = const Color(0xFFEC4899);
+      prefixesToStrip = const ["[sniffer]", "[sniff]"];
+    }
+
+    var displayPayload = payload;
+    if (prefixesToStrip.isNotEmpty) {
+      final trimmed = displayPayload.trimLeft();
+      final trimmedLower = trimmed.toLowerCase();
+      for (final prefix in prefixesToStrip) {
+        if (trimmedLower.startsWith(prefix)) {
+          displayPayload = trimmed.substring(prefix.length).trimLeft();
+          break;
+        }
+      }
+    }
+    return (
+      tag: categoryTag,
+      rawBracketTag: rawBracketTag,
+      color: tagColor,
+      displayPayload: displayPayload,
+    );
+  }
+
   const LogsScreen({super.key});
 
   @override
@@ -48,13 +125,26 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
   Timer? _batchUpdateTimer;
   final List<ClashLog> _pendingLogs = [];
 
+  List<ClashLog> _cachedFilteredLogs = const [];
+  Map<String, int> _cachedLevelCounts = const {
+    "ALL": 0,
+    "INFO": 0,
+    "WARN": 0,
+    "ERROR": 0,
+    "DEBUG": 0,
+  };
+
   @override
   void initState() {
     super.initState();
     _searchController.addListener(() {
-      setState(() {
-        _searchKeyword = _searchController.text.trim().toLowerCase();
-      });
+      final next = _searchController.text.trim().toLowerCase();
+      if (next != _searchKeyword) {
+        setState(() {
+          _searchKeyword = next;
+          _recomputeLogCaches();
+        });
+      }
     });
 
     _scrollController.addListener(() {
@@ -78,6 +168,53 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     });
     AppLifecycleStateNofity.onStateResumed(hashCode, _onStateResumed);
     AppLifecycleStateNofity.onStatePaused(hashCode, _onStatePaused);
+  }
+
+  void _recomputeLogCaches() {
+    int info = 0;
+    int warn = 0;
+    int error = 0;
+    int debug = 0;
+    final List<ClashLog> filtered = [];
+    final kw = _searchKeyword;
+    final hasKw = kw.isNotEmpty;
+
+    for (final l in _logs) {
+      final level = LogsScreen.normalizeLevel(l.type);
+      switch (level) {
+        case "ERROR":
+          error++;
+          break;
+        case "WARN":
+          warn++;
+          break;
+        case "DEBUG":
+          debug++;
+          break;
+        case "INFO":
+        default:
+          info++;
+          break;
+      }
+
+      if (_selectedLevel != "ALL" && level != _selectedLevel) {
+        continue;
+      }
+      if (!hasKw ||
+          l.payload.toLowerCase().contains(kw) ||
+          level.toLowerCase().contains(kw)) {
+        filtered.add(l);
+      }
+    }
+
+    _cachedFilteredLogs = filtered;
+    _cachedLevelCounts = {
+      "ALL": _logs.length,
+      "INFO": info,
+      "WARN": warn,
+      "ERROR": error,
+      "DEBUG": debug,
+    };
   }
 
   void _onStateResumed() {
@@ -114,14 +251,6 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     super.dispose();
   }
 
-  static String normalizeLevel(String rawType) {
-    final t = rawType.trim().toLowerCase();
-    if (t == "error" || t == "fatal") return "ERROR";
-    if (t == "warning" || t == "warn") return "WARN";
-    if (t == "debug") return "DEBUG";
-    return "INFO";
-  }
-
   Future<void> _startLogStream() async {
     _stopLogStream();
 
@@ -147,7 +276,12 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
           if (!_isStreaming) return;
 
           _pendingLogs.add(log);
-          if (_userScrolledUp) {
+          if (_userScrolledUp &&
+              LogsScreen.matchesFilter(
+                log,
+                selectedLevel: _selectedLevel,
+                searchKeyword: _searchKeyword,
+              )) {
             _newLogsWhilePaused++;
           }
 
@@ -188,6 +322,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
         if (_logs.length > 2000) {
           _logs.removeRange(0, _logs.length - 2000);
         }
+        _recomputeLogCaches();
       });
 
       if (_autoScroll && !_userScrolledUp && _scrollController.hasClients) {
@@ -207,6 +342,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
       setState(() {
         _logs.clear();
         _logs.addAll(logs);
+        _recomputeLogCaches();
       });
       if (_autoScroll && _scrollController.hasClients) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -279,54 +415,8 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     _logSubscription = null;
   }
 
-  List<ClashLog> get _filteredLogs {
-    return _logs.where((l) {
-      if (_selectedLevel != "ALL") {
-        if (normalizeLevel(l.type) != _selectedLevel) {
-          return false;
-        }
-      }
-      if (_searchKeyword.isEmpty) return true;
-      final kw = _searchKeyword;
-      return l.payload.toLowerCase().contains(kw) ||
-          normalizeLevel(l.type).toLowerCase().contains(kw);
-    }).toList();
-  }
-
-  Map<String, int> get _levelCounts {
-    int info = 0;
-    int warn = 0;
-    int error = 0;
-    int debug = 0;
-
-    for (var l in _logs) {
-      switch (normalizeLevel(l.type)) {
-        case "ERROR":
-          error++;
-          break;
-        case "WARN":
-          warn++;
-          break;
-        case "DEBUG":
-          debug++;
-          break;
-        case "INFO":
-        default:
-          info++;
-          break;
-      }
-    }
-    return {
-      "ALL": _logs.length,
-      "INFO": info,
-      "WARN": warn,
-      "ERROR": error,
-      "DEBUG": debug,
-    };
-  }
-
   Color _getLevelColor(String type) {
-    switch (normalizeLevel(type)) {
+    switch (LogsScreen.normalizeLevel(type)) {
       case "ERROR":
         return const Color(0xFFEF4444);
       case "WARN":
@@ -357,8 +447,11 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
 
   Future<void> _copyAllLogs() async {
     final tcontext = Translations.of(context);
-    final text = _filteredLogs
-        .map((l) => "[${_formatTime(l.time)}] [${normalizeLevel(l.type)}] ${l.payload}")
+    final text = _cachedFilteredLogs
+        .map(
+          (l) =>
+              "[${_formatTime(l.time)}] [${LogsScreen.normalizeLevel(l.type)}] ${l.payload}",
+        )
         .join('\n');
     if (text.isEmpty) return;
     await Clipboard.setData(ClipboardData(text: text));
@@ -376,13 +469,15 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final level = normalizeLevel(log.type);
+    final isZh = LocaleSettings.currentLocale == AppLocale.zhCn;
+    final level = LogsScreen.normalizeLevel(log.type);
     final color = _getLevelColor(level);
+    final category = LogsScreen.parseLogCategory(log.payload);
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF141416) : Colors.white,
+      backgroundColor: isDark ? ThemeDefine.kColorDarkInner : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -390,7 +485,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
         return Padding(
           padding: EdgeInsets.fromLTRB(
             20,
-            16,
+            12,
             20,
             MediaQuery.of(context).viewInsets.bottom + 24,
           ),
@@ -398,6 +493,18 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Drag Handle
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
               // Header
               Row(
                 children: [
@@ -416,6 +523,25 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                       ),
                     ),
                   ),
+                  if (category.tag != null) ...[
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: (category.color ?? Colors.blueGrey)
+                            .withValues(alpha: isDark ? 0.2 : 0.12),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        category.tag!,
+                        style: TextStyle(
+                          color: category.color ?? Colors.blueGrey,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 11.5,
+                        ),
+                      ),
+                    ),
+                  ],
                   const SizedBox(width: 8),
                   Text(
                     _formatFullDateTime(log.time),
@@ -462,6 +588,29 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
               // Action Buttons
               Row(
                 children: [
+                  if (category.rawBracketTag != null) ...[
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _searchController.text = category.rawBracketTag!;
+                        },
+                        icon: const Icon(Icons.filter_alt_outlined, size: 18),
+                        label: Text(
+                          isZh
+                              ? "仅看 ${category.tag}"
+                              : "Filter ${category.tag}",
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
                   Expanded(
                     child: OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
@@ -513,8 +662,8 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
     final tcontext = Translations.of(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final filtered = _filteredLogs;
-    final counts = _levelCounts;
+    final filtered = _cachedFilteredLogs;
+    final counts = _cachedLevelCounts;
 
     final actions = [
       // Refresh / Reload
@@ -591,6 +740,7 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
             _logs.clear();
             _pendingLogs.clear();
             _newLogsWhilePaused = 0;
+            _recomputeLogCaches();
           });
         },
       ),
@@ -627,7 +777,6 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
           child: Column(
             children: [
-
               // Search bar and level filters
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -637,6 +786,9 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                       controller: _searchController,
                       hintText:
                           "${tcontext.meta.search}${tcontext.meta.searchLogsHint}",
+                      badgeText: _searchKeyword.isNotEmpty
+                          ? "${filtered.length}/${_logs.length}"
+                          : null,
                     ),
                     const SizedBox(height: 8),
 
@@ -669,7 +821,9 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF0B1120) : const Color(0xFFF8FAFC),
+                        color: isDark
+                            ? ThemeDefine.kColorDarkInner
+                            : const Color(0xFFF8FAFC),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: theme.dividerColor.withValues(alpha: 0.35),
@@ -775,9 +929,12 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
         onTap: () {
-          setState(() {
-            _selectedLevel = level;
-          });
+          if (_selectedLevel != level) {
+            setState(() {
+              _selectedLevel = level;
+              _recomputeLogCaches();
+            });
+          }
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
@@ -824,42 +981,14 @@ class _LogsScreenState extends State<LogsScreen> with AfterLayoutMixin {
   Widget _buildLogItem(ClashLog log) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final level = normalizeLevel(log.type);
+    final level = LogsScreen.normalizeLevel(log.type);
     final color = _getLevelColor(level);
     final timeStr = _formatTime(log.time);
 
-    // Extract sub-tags like [TCP], [UDP], [DNS], [Rule], [Match], [Sniffer]
-    String? categoryTag;
-    Color? tagColor;
-    final lower = log.payload.toLowerCase();
-    if (lower.contains("[dns]")) {
-      categoryTag = "DNS";
-      tagColor = const Color(0xFF06B6D4);
-    } else if (lower.contains("[tcp]")) {
-      categoryTag = "TCP";
-      tagColor = const Color(0xFF3B82F6);
-    } else if (lower.contains("[udp]")) {
-      categoryTag = "UDP";
-      tagColor = const Color(0xFF8B5CF6);
-    } else if (lower.contains("[rule]") || lower.contains("match rule")) {
-      categoryTag = "RULE";
-      tagColor = const Color(0xFF10B981);
-    } else if (lower.contains("[process]")) {
-      categoryTag = "PROC";
-      tagColor = const Color(0xFFF59E0B);
-    } else if (lower.contains("[sniffer]")) {
-      categoryTag = "SNIFF";
-      tagColor = const Color(0xFFEC4899);
-    }
-
-    // Strip leading [tag] if present so it's not duplicated next to categoryTag badge
-    var displayPayload = log.payload;
-    if (categoryTag != null) {
-      final tagPrefix = "[$categoryTag]";
-      if (displayPayload.toLowerCase().startsWith(tagPrefix.toLowerCase())) {
-        displayPayload = displayPayload.substring(tagPrefix.length).trimLeft();
-      }
-    }
+    final parsedCategory = LogsScreen.parseLogCategory(log.payload);
+    final categoryTag = parsedCategory.tag;
+    final tagColor = parsedCategory.color;
+    final displayPayload = parsedCategory.displayPayload;
 
     Color textColor;
     if (level == "ERROR") {
