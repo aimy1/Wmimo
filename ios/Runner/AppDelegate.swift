@@ -2,30 +2,145 @@ import Flutter
 import UIKit
 import NetworkExtension
 import os.log
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
+  static weak var sharedInstance: AppDelegate?
   private let CHANNEL = "com.wmimo.app/native_helper"
+  private let WIDGET_CHANNEL = "com.wmimo.app/widget"
   private let appGroupId = "group.com.wmimo.app"
   private let tunnelBundleId = "com.wmimo.app.wmimoService"
   private var vpnManager: NETunnelProviderManager?
+  private var widgetChannel: FlutterMethodChannel?
+  private var pendingWidgetUri: String?
+  private var lastWidgetReloadTime: TimeInterval = 0
   private let log = OSLog(subsystem: "com.wmimo.app", category: "AppDelegate")
 
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+    AppDelegate.sharedInstance = self
+    if let launchUrl = launchOptions?[.url] as? URL {
+      handleIncomingWidgetUrl(launchUrl, dispatchImmediately: false)
+    }
     let controller = window?.rootViewController as? FlutterViewController
     if let messenger = controller?.binaryMessenger {
       setupNativeHelperChannel(messenger: messenger)
+      setupWidgetChannel(messenger: messenger)
     }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  override func application(
+    _ app: UIApplication,
+    open url: URL,
+    options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+  ) -> Bool {
+    handleIncomingWidgetUrl(url, dispatchImmediately: true)
+    return super.application(app, open: url, options: options)
   }
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "WmimoNativeHelper") {
       setupNativeHelperChannel(messenger: registrar.messenger())
+      setupWidgetChannel(messenger: registrar.messenger())
+    }
+  }
+
+  func handleIncomingWidgetUrl(_ url: URL, dispatchImmediately: Bool) {
+    guard url.scheme == "wmimo", url.host == "widget" else { return }
+    let uriStr = url.absoluteString
+    if dispatchImmediately, let channel = widgetChannel {
+      channel.invokeMethod("onWidgetAction", arguments: ["uri": uriStr])
+      return
+    }
+    pendingWidgetUri = uriStr
+  }
+
+  private func getOrCreateWidgetToken() -> String {
+    let defaults = UserDefaults(suiteName: appGroupId) ?? UserDefaults.standard
+    if let existing = defaults.string(forKey: "widget_action_token"), !existing.isEmpty {
+      return existing
+    }
+    let generated = UUID().uuidString.replacingOccurrences(of: "-", with: "").lowercased()
+    defaults.set(generated, forKey: "widget_action_token")
+    return generated
+  }
+
+  private func setupWidgetChannel(messenger: FlutterBinaryMessenger) {
+    let channel = FlutterMethodChannel(name: WIDGET_CHANNEL, binaryMessenger: messenger)
+    self.widgetChannel = channel
+    channel.setMethodCallHandler { [weak self] (call: FlutterMethodCall, result: @escaping FlutterResult) in
+      guard let self = self else {
+        result(nil)
+        return
+      }
+      let defaults = UserDefaults(suiteName: self.appGroupId) ?? UserDefaults.standard
+
+      switch call.method {
+      case "getWidgetToken":
+        result(self.getOrCreateWidgetToken())
+
+      case "syncWidgetSnapshot":
+        let args = call.arguments as? [String: Any]
+        let snapshot = args?["snapshot"] as? String ?? ""
+        let forceReload = args?["forceReload"] as? Bool ?? false
+
+        if !snapshot.isEmpty {
+          defaults.set(snapshot, forKey: "widget_snapshot")
+          if let groupDir = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: self.appGroupId),
+             let data = snapshot.data(using: .utf8) {
+            let fileUrl = groupDir.appendingPathComponent("widget_snapshot.json", isDirectory: false)
+            try? data.write(to: fileUrl, options: .atomic)
+          }
+        }
+
+        #if canImport(WidgetKit)
+        let now = Date().timeIntervalSince1970
+        if forceReload || (now - self.lastWidgetReloadTime >= 15.0) {
+          self.lastWidgetReloadTime = now
+          if #available(iOS 14.0, *) {
+            WidgetCenter.shared.reloadAllTimelines()
+          }
+          if #available(iOS 18.0, *) {
+            ControlCenter.shared.reloadAllControls()
+          }
+        }
+        #endif
+        result(true)
+
+      case "consumeNativeOverrides":
+        var map: [String: Any] = [:]
+        if let mode = defaults.string(forKey: "override_mode"), !mode.isEmpty {
+          map["mode"] = mode
+        }
+        if let node = defaults.string(forKey: "override_node"), !node.isEmpty {
+          map["currentNode"] = node
+        }
+        if defaults.bool(forKey: "override_vpn_stopped") {
+          map["vpnStopped"] = true
+        }
+        defaults.removeObject(forKey: "override_mode")
+        defaults.removeObject(forKey: "override_node")
+        defaults.removeObject(forKey: "override_vpn_stopped")
+        result(map)
+
+      case "getPendingWidgetAction":
+        if let uriStr = self.pendingWidgetUri, !uriStr.isEmpty {
+          self.pendingWidgetUri = nil
+          result(["uri": uriStr])
+        } else {
+          result(nil)
+        }
+
+      default:
+        result(FlutterMethodNotImplemented)
+      }
     }
   }
 

@@ -16,6 +16,7 @@ import 'package:wmimo/app/modules/chain_proxy_manager.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/app/utils/home_widget_service.dart';
 import 'package:wmimo/app/utils/node_region_helper.dart';
 import 'package:wmimo/app/utils/proxy_node_loader.dart';
 import 'package:wmimo/app/utils/vpn_action_handler.dart';
@@ -112,6 +113,9 @@ class _ProxyBoardScreenState extends State<ProxyBoardScreen>
           isTesting: _nodesTesting.contains(n.name),
         );
       }
+    }
+    if (_nodesTesting.isEmpty) {
+      unawaited(HomeWidgetService.refreshNodesAndSync(forceReload: true));
     }
   }
 

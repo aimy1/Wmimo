@@ -70,6 +70,7 @@ class TranslationsFa with BaseTranslations<AppLocale, Translations> implements T
 	};
 	@override late final _Translations$hotkeys$fa hotkeys = _Translations$hotkeys$fa._(_root);
 	@override late final _Translations$chain_proxy$fa chain_proxy = _Translations$chain_proxy$fa._(_root);
+	@override late final _Translations$widget$fa widget = _Translations$widget$fa._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -917,6 +918,7 @@ class _Translations$meta$fa implements Translations$meta$en {
 	@override String get schemeConnectConfirm => 'یک درخواست خارجی می‌خواهد به پروکسی متصل شود. اجازه می‌دهید؟';
 	@override String get schemeDisconnectConfirm => 'یک درخواست خارجی می‌خواهد اتصال پروکسی را قطع کند. اجازه می‌دهید؟';
 	@override String get schemeReconnectConfirm => 'یک درخواست خارجی می‌خواهد دوباره به پروکسی متصل شود. اجازه می‌دهید؟';
+	@override String get tvModeTips => 'بهینه‌شده برای تلویزیون اندروید و ریموت کنترل: پیمایش روان با دکمه‌های جهت‌نما، پنجره ورودی متن و کادر تمرکز واضح';
 }
 
 // Path: permission
@@ -1143,6 +1145,36 @@ class _Translations$chain_proxy$fa implements Translations$chain_proxy$en {
 	@override String get picker_node_only_hint => 'گام‌های میانی و خروجی فقط از گره‌های واقعی پشتیبانی می‌کنند';
 	@override String get hops_label => 'ترتیب گام‌ها (بکشید یا جابه‌جا کنید)';
 	@override String get all_nodes => 'همه';
+}
+
+// Path: widget
+class _Translations$widget$fa implements Translations$widget$en {
+	_Translations$widget$fa._(this._root);
+
+	final TranslationsFa _root; // ignore: unused_field
+
+	// Translations
+	@override String get statusTitle => 'وضعیت سرور';
+	@override String get statusDesc => 'مشاهده وضعیت اتصال VPN، پینگ سرور و اتصال با یک لمس';
+	@override String get trafficTitle => 'ترافیک لحظه‌ای';
+	@override String get trafficDesc => 'بررسی سرعت آپلود و دانلود، مصرف نشست و حجم باقی‌مانده';
+	@override String get quickSwitchTitle => 'تغییر سریع';
+	@override String get quickSwitchDesc => 'تغییر سریع سرورها، حالت مسیریابی و اشتراک از صفحه اصلی';
+	@override String get upload => 'آپلود';
+	@override String get download => 'دانلود';
+	@override String get sessionTotal => 'ترافیک نشست';
+	@override String get quota => 'حجم اشتراک';
+	@override String get remaining => 'باقی‌مانده';
+	@override String get noProfile => 'بدون اشتراک';
+	@override String get noNodes => 'بدون سرور';
+	@override String get tapToConnect => 'لمس برای اتصال';
+	@override String get tapToDisconnect => 'لمس برای قطع';
+	@override String get modeRule => 'قانون';
+	@override String get modeGlobal => 'سراسری';
+	@override String get modeDirect => 'مستقیم';
+	@override String get refresh => 'بروزرسانی';
+	@override String get switchNode => 'تغییر سرور';
+	@override String get switchProfile => 'تغییر اشتراک';
 }
 
 // Path: main.tray
@@ -1959,6 +1991,7 @@ extension on TranslationsFa {
 			'meta.schemeConnectConfirm' => 'یک درخواست خارجی می‌خواهد به پروکسی متصل شود. اجازه می‌دهید؟',
 			'meta.schemeDisconnectConfirm' => 'یک درخواست خارجی می‌خواهد اتصال پروکسی را قطع کند. اجازه می‌دهید؟',
 			'meta.schemeReconnectConfirm' => 'یک درخواست خارجی می‌خواهد دوباره به پروکسی متصل شود. اجازه می‌دهید؟',
+			'meta.tvModeTips' => 'بهینه‌شده برای تلویزیون اندروید و ریموت کنترل: پیمایش روان با دکمه‌های جهت‌نما، پنجره ورودی متن و کادر تمرکز واضح',
 			'permission.camera' => 'دوربین',
 			'permission.screen' => 'ضبط صفحه',
 			'permission.appQuery' => 'دریافت فهرست برنامه‌ها',
@@ -2125,6 +2158,27 @@ extension on TranslationsFa {
 			'chain_proxy.picker_node_only_hint' => 'گام‌های میانی و خروجی فقط از گره‌های واقعی پشتیبانی می‌کنند',
 			'chain_proxy.hops_label' => 'ترتیب گام‌ها (بکشید یا جابه‌جا کنید)',
 			'chain_proxy.all_nodes' => 'همه',
+			'widget.statusTitle' => 'وضعیت سرور',
+			'widget.statusDesc' => 'مشاهده وضعیت اتصال VPN، پینگ سرور و اتصال با یک لمس',
+			'widget.trafficTitle' => 'ترافیک لحظه‌ای',
+			'widget.trafficDesc' => 'بررسی سرعت آپلود و دانلود، مصرف نشست و حجم باقی‌مانده',
+			'widget.quickSwitchTitle' => 'تغییر سریع',
+			'widget.quickSwitchDesc' => 'تغییر سریع سرورها، حالت مسیریابی و اشتراک از صفحه اصلی',
+			'widget.upload' => 'آپلود',
+			'widget.download' => 'دانلود',
+			'widget.sessionTotal' => 'ترافیک نشست',
+			'widget.quota' => 'حجم اشتراک',
+			'widget.remaining' => 'باقی‌مانده',
+			'widget.noProfile' => 'بدون اشتراک',
+			'widget.noNodes' => 'بدون سرور',
+			'widget.tapToConnect' => 'لمس برای اتصال',
+			'widget.tapToDisconnect' => 'لمس برای قطع',
+			'widget.modeRule' => 'قانون',
+			'widget.modeGlobal' => 'سراسری',
+			'widget.modeDirect' => 'مستقیم',
+			'widget.refresh' => 'بروزرسانی',
+			'widget.switchNode' => 'تغییر سرور',
+			'widget.switchProfile' => 'تغییر اشتراک',
 			_ => null,
 		};
 	}

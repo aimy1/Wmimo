@@ -792,7 +792,8 @@
     "iconUrlOptional": "رابط الأيقونة (اتركه فارغاً لجلب Favicon تلقائياً)",
     "schemeConnectConfirm": "طلب خارجي يريد الاتصال بالوكيل. هل تسمح؟",
     "schemeDisconnectConfirm": "طلب خارجي يريد قطع الاتصال بالوكيل. هل تسمح؟",
-    "schemeReconnectConfirm": "طلب خارجي يريد إعادة الاتصال بالوكيل. هل تسمح؟"
+    "schemeReconnectConfirm": "طلب خارجي يريد إعادة الاتصال بالوكيل. هل تسمح؟",
+    "tvModeTips": "محسّن لتلفزيون أندرويد وجهاز التحكم: تنقل سلس بالأسهم، إدخال منبثق بزر التأكيد وإطار تركيز واضح"
   },
   "permission": {
     "camera": "الكاميرا",
@@ -977,5 +978,28 @@
     "picker_node_only_hint": "تدعم قفزات العبور والخروج العقد الفعلية فقط",
     "hops_label": "تسلسل القفزات (اسحب للترتيب / بدّل)",
     "all_nodes": "الكل"
+  },
+  "widget": {
+    "statusTitle": "حالة الخادم",
+    "statusDesc": "عرض حالة اتصال VPN وزمن استجابة الخادم والتشغيل بنقرة واحدة",
+    "trafficTitle": "حركة المرور الحية",
+    "trafficDesc": "مراقبة سرعة الرفع والتنزيل واستهلاك الجلسة والباقة",
+    "quickSwitchTitle": "تبديل سريع",
+    "quickSwitchDesc": "تبديل الخوادم وأوضاع التوجيه والملفات الشخصية من الشاشة الرئيسية",
+    "upload": "رفع",
+    "download": "تنزيل",
+    "sessionTotal": "الجلسة",
+    "quota": "حصة الباقة",
+    "remaining": "المتبقي",
+    "noProfile": "لا يوجد ملف",
+    "noNodes": "لا توجد خوادم",
+    "tapToConnect": "انقر للاتصال",
+    "tapToDisconnect": "انقر لقطع الاتصال",
+    "modeRule": "قواعد",
+    "modeGlobal": "شامل",
+    "modeDirect": "مباشر",
+    "refresh": "تحديث",
+    "switchNode": "تبديل الخادم",
+    "switchProfile": "تبديل الملف"
   }
 }

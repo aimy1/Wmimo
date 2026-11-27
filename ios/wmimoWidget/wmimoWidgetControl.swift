@@ -25,15 +25,21 @@ struct wmimoWidgetControl: ControlWidget {
             kind: Self.controlKind,
             provider: Provider()
         ) { value in
+            let snap = WmimoWidgetStore.loadSnapshot()
+            let onLabel = snap.label("connected", fallback: "ON")
+            let offLabel = snap.label("disconnected", fallback: "OFF")
             ControlWidgetToggle(
                 "Wmimo",
                 isOn: value,
                 action: StartVPNServiceIntent()
             ) { isRunning in
-                Label(isRunning ? "ON" : "OFF", systemImage: isRunning ? "shield.fill" : "shield")
+                Label(
+                    isRunning ? onLabel : offLabel,
+                    systemImage: isRunning ? "shield.fill" : "shield"
+                )
             }
         }
-        .displayName("ON/OFF")
+        .displayName("Wmimo VPN")
         .description("Start or Stop Wmimo VPN service")
     }
 }
@@ -64,7 +70,7 @@ struct StartVPNServiceIntent: SetValueIntent {
     var value: Bool
 
     func perform() async throws -> some IntentResult {
-        if let configPath = wmimoWidgetControl.configFile?.path, FileManager.default.fileExists(atPath: configPath) {
+        if VpnServiceHandler.shared.hasValidConfigFile() {
             let _ = await withCheckedContinuation { continuation in
                 if value {
                     VpnServiceHandler.shared.start(timeoutInSeconds: 30) { err in
@@ -76,6 +82,13 @@ struct StartVPNServiceIntent: SetValueIntent {
                     }
                 }
             }
+            var snap = WmimoWidgetStore.loadSnapshot()
+            snap.connected = value
+            snap.transitioning = false
+            snap.vpnState = value ? "connected" : "disconnected"
+            WmimoWidgetStore.recordNativeOverride(vpnStopped: !value)
+            WmimoWidgetStore.saveSnapshot(snap)
+            WidgetCenter.shared.reloadAllTimelines()
         }
 
         return .result()

@@ -792,7 +792,8 @@
     "iconUrlOptional": "Icon URL (Leave blank to auto-fetch Favicon)",
     "schemeConnectConfirm": "An external request wants to connect the proxy. Allow?",
     "schemeDisconnectConfirm": "An external request wants to disconnect the proxy. Allow?",
-    "schemeReconnectConfirm": "An external request wants to reconnect the proxy. Allow?"
+    "schemeReconnectConfirm": "An external request wants to reconnect the proxy. Allow?",
+    "tvModeTips": "Optimized for Android TV & D-pad remotes: focus traversal guard, popup input on Select, and high-contrast focus ring"
   },
   "permission": {
     "camera": "Camera",
@@ -977,5 +978,28 @@
     "picker_node_only_hint": "Transit and exit hops only support concrete proxy nodes",
     "hops_label": "Hop Sequence (Drag to reorder / Swap)",
     "all_nodes": "All"
+  },
+  "widget": {
+    "statusTitle": "Node Status",
+    "statusDesc": "View VPN connection state, node latency, and toggle proxy in one tap",
+    "trafficTitle": "Live Traffic",
+    "trafficDesc": "Monitor upload/download speeds, session traffic, and plan quota",
+    "quickSwitchTitle": "Quick Switch",
+    "quickSwitchDesc": "Switch proxy nodes, outbound modes, and profiles from home screen",
+    "upload": "Upload",
+    "download": "Download",
+    "sessionTotal": "Session",
+    "quota": "Plan Quota",
+    "remaining": "Left",
+    "noProfile": "No Profile",
+    "noNodes": "No Nodes",
+    "tapToConnect": "Tap to Connect",
+    "tapToDisconnect": "Tap to Stop",
+    "modeRule": "Rule",
+    "modeGlobal": "Global",
+    "modeDirect": "Direct",
+    "refresh": "Refresh",
+    "switchNode": "Switch Node",
+    "switchProfile": "Switch Profile"
   }
 }

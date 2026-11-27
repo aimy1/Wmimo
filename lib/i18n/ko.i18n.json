@@ -792,7 +792,8 @@
     "iconUrlOptional": "아이콘 URL (비워두면 Favicon 자동 가져오기)",
     "schemeConnectConfirm": "외부에서 프록시 연결을 요청했습니다. 허용하시겠습니까?",
     "schemeDisconnectConfirm": "외부에서 프록시 연결 해제를 요청했습니다. 허용하시겠습니까?",
-    "schemeReconnectConfirm": "외부에서 프록시 재연결을 요청했습니다. 허용하시겠습니까?"
+    "schemeReconnectConfirm": "외부에서 프록시 재연결을 요청했습니다. 허용하시겠습니까?",
+    "tvModeTips": "Android TV 및 리모컨 최적화: 방향키 포커스 갇힘 방지, 확인 키 팝업 입력 및 고대비 포커스 테두리"
   },
   "permission": {
     "camera": "카메라",
@@ -977,5 +978,28 @@
     "picker_node_only_hint": "경유 및 출구 홉은 실제 프록시 노드만 선택 가능합니다",
     "hops_label": "홉 구성 (드래그 정렬 / 맞바꾸기 지원)",
     "all_nodes": "전체"
+  },
+  "widget": {
+    "statusTitle": "노드 상태",
+    "statusDesc": "VPN 연결 상태와 현재 노드 지연 시간을 확인하고 원탭으로 전환",
+    "trafficTitle": "실시간 트래픽",
+    "trafficDesc": "업로드/다운로드 속도, 세션 트래픽 및 요금제 잔여량 모니터링",
+    "quickSwitchTitle": "빠른 전환",
+    "quickSwitchDesc": "홈 화면에서 프록시 노드, 라우팅 모드, 프로필을 즉시 전환",
+    "upload": "업로드",
+    "download": "다운로드",
+    "sessionTotal": "세션 트래픽",
+    "quota": "데이터 잔여량",
+    "remaining": "잔여",
+    "noProfile": "프로필 없음",
+    "noNodes": "노드 없음",
+    "tapToConnect": "탭하여 연결",
+    "tapToDisconnect": "탭하여 연결 해제",
+    "modeRule": "규칙",
+    "modeGlobal": "글로벌",
+    "modeDirect": "직접 연결",
+    "refresh": "새로고침",
+    "switchNode": "노드 전환",
+    "switchProfile": "프로필 전환"
   }
 }

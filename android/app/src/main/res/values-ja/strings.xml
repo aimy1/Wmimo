@@ -12,4 +12,26 @@
     <string name="notif_label_mode">動作モード</string>
     <string name="notif_label_port">ポート</string>
     <string name="notif_label_profile">プロファイル</string>
+    <string name="widget_status_name">Wmimo · ノード状態</string>
+    <string name="widget_status_desc">VPN接続状態と現在のノード遅延を確認し、ワンタップで切替</string>
+    <string name="widget_traffic_name">Wmimo · リアルタイム通信量</string>
+    <string name="widget_traffic_desc">上下通信速度、セッション通信量、プラン残量を表示</string>
+    <string name="widget_quick_switch_name">Wmimo · クイック切替</string>
+    <string name="widget_quick_switch_desc">ホーム画面からノード、モード、プロファイルを素早く切替</string>
+    <string name="widget_status_title">ノード状態</string>
+    <string name="widget_traffic_title">リアルタイム通信量</string>
+    <string name="widget_quick_switch_title">クイック切替</string>
+    <string name="widget_upload">アップロード</string>
+    <string name="widget_download">ダウンロード</string>
+    <string name="widget_session_total">今回の通信量</string>
+    <string name="widget_quota">プラン残量</string>
+    <string name="widget_remaining">残り</string>
+    <string name="widget_no_profile">プロファイルなし</string>
+    <string name="widget_no_nodes">ノードなし</string>
+    <string name="widget_tap_connect">タップして接続</string>
+    <string name="widget_tap_disconnect">タップして切断</string>
+    <string name="widget_mode_rule">ルール</string>
+    <string name="widget_mode_global">グローバル</string>
+    <string name="widget_mode_direct">ダイレクト</string>
+    <string name="widget_refresh">更新</string>
 </resources>

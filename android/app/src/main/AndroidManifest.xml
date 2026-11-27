@@ -147,6 +147,47 @@
                 <action android:name="com.wmimo.app.action.RECONNECT" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".WmimoStatusWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_status_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.wmimo.app.widget.ACTION_REFRESH" />
+                <action android:name="com.wmimo.app.widget.ACTION_TOGGLE_VPN" />
+                <action android:name="com.wmimo.app.widget.ACTION_CYCLE_MODE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_status_info" />
+        </receiver>
+        <receiver
+            android:name=".WmimoTrafficWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_traffic_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.wmimo.app.widget.ACTION_REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_traffic_info" />
+        </receiver>
+        <receiver
+            android:name=".WmimoQuickSwitchWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_quick_switch_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.wmimo.app.widget.ACTION_REFRESH" />
+                <action android:name="com.wmimo.app.widget.ACTION_TOGGLE_VPN" />
+                <action android:name="com.wmimo.app.widget.ACTION_SET_MODE" />
+                <action android:name="com.wmimo.app.widget.ACTION_SWITCH_NODE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_quick_switch_info" />
+        </receiver>
         <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileProvider" android:exported="false" android:grantUriPermissions="true" tools:replace="android:authorities">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" tools:replace="android:resource"/>
         </provider>

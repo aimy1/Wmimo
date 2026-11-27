@@ -35,6 +35,7 @@ class ThemeDataDark {
       canvasColor: ThemeDefine.kColorDarkCard,
       cardColor: ThemeDefine.kColorDarkCard,
       dividerColor: ThemeDefine.kColorDarkBorder,
+      focusColor: ThemeDefine.kColorBlue.withValues(alpha: 0.22),
       appBarTheme: const AppBarTheme(
         backgroundColor: ThemeDefine.kColorDarkBg,
         surfaceTintColor: Colors.transparent,

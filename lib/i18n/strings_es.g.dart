@@ -70,6 +70,7 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 	};
 	@override late final _Translations$hotkeys$es hotkeys = _Translations$hotkeys$es._(_root);
 	@override late final _Translations$chain_proxy$es chain_proxy = _Translations$chain_proxy$es._(_root);
+	@override late final _Translations$widget$es widget = _Translations$widget$es._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -917,6 +918,7 @@ class _Translations$meta$es implements Translations$meta$en {
 	@override String get schemeConnectConfirm => 'Una solicitud externa desea conectar el proxy. ¿Permitir?';
 	@override String get schemeDisconnectConfirm => 'Una solicitud externa desea desconectar el proxy. ¿Permitir?';
 	@override String get schemeReconnectConfirm => 'Una solicitud externa desea reconectar el proxy. ¿Permitir?';
+	@override String get tvModeTips => 'Optimizado para Android TV y control remoto: navegación fluida con cruceta, entrada emergente y borde de enfoque';
 }
 
 // Path: permission
@@ -1143,6 +1145,36 @@ class _Translations$chain_proxy$es implements Translations$chain_proxy$en {
 	@override String get picker_node_only_hint => 'Los saltos intermedios y de salida solo admiten nodos concretos';
 	@override String get hops_label => 'Secuencia de saltos (Arrastra para reordenar)';
 	@override String get all_nodes => 'Todos';
+}
+
+// Path: widget
+class _Translations$widget$es implements Translations$widget$en {
+	_Translations$widget$es._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get statusTitle => 'Estado del nodo';
+	@override String get statusDesc => 'Ver estado de VPN, latencia del nodo y activar con un toque';
+	@override String get trafficTitle => 'Tráfico en vivo';
+	@override String get trafficDesc => 'Monitorear velocidad de subida/bajada, tráfico de sesión y cuota';
+	@override String get quickSwitchTitle => 'Cambio rápido';
+	@override String get quickSwitchDesc => 'Cambiar nodos, modos y perfiles desde la pantalla de inicio';
+	@override String get upload => 'Subida';
+	@override String get download => 'Bajada';
+	@override String get sessionTotal => 'Sesión';
+	@override String get quota => 'Cuota del plan';
+	@override String get remaining => 'Restante';
+	@override String get noProfile => 'Sin perfil';
+	@override String get noNodes => 'Sin nodos';
+	@override String get tapToConnect => 'Toca para conectar';
+	@override String get tapToDisconnect => 'Toca para desconectar';
+	@override String get modeRule => 'Regla';
+	@override String get modeGlobal => 'Global';
+	@override String get modeDirect => 'Directo';
+	@override String get refresh => 'Actualizar';
+	@override String get switchNode => 'Cambiar nodo';
+	@override String get switchProfile => 'Cambiar perfil';
 }
 
 // Path: main.tray
@@ -1959,6 +1991,7 @@ extension on TranslationsEs {
 			'meta.schemeConnectConfirm' => 'Una solicitud externa desea conectar el proxy. ¿Permitir?',
 			'meta.schemeDisconnectConfirm' => 'Una solicitud externa desea desconectar el proxy. ¿Permitir?',
 			'meta.schemeReconnectConfirm' => 'Una solicitud externa desea reconectar el proxy. ¿Permitir?',
+			'meta.tvModeTips' => 'Optimizado para Android TV y control remoto: navegación fluida con cruceta, entrada emergente y borde de enfoque',
 			'permission.camera' => 'Cámara',
 			'permission.screen' => 'Grabación de Pantalla',
 			'permission.appQuery' => 'Obtener Lista de Aplicaciones',
@@ -2125,6 +2158,27 @@ extension on TranslationsEs {
 			'chain_proxy.picker_node_only_hint' => 'Los saltos intermedios y de salida solo admiten nodos concretos',
 			'chain_proxy.hops_label' => 'Secuencia de saltos (Arrastra para reordenar)',
 			'chain_proxy.all_nodes' => 'Todos',
+			'widget.statusTitle' => 'Estado del nodo',
+			'widget.statusDesc' => 'Ver estado de VPN, latencia del nodo y activar con un toque',
+			'widget.trafficTitle' => 'Tráfico en vivo',
+			'widget.trafficDesc' => 'Monitorear velocidad de subida/bajada, tráfico de sesión y cuota',
+			'widget.quickSwitchTitle' => 'Cambio rápido',
+			'widget.quickSwitchDesc' => 'Cambiar nodos, modos y perfiles desde la pantalla de inicio',
+			'widget.upload' => 'Subida',
+			'widget.download' => 'Bajada',
+			'widget.sessionTotal' => 'Sesión',
+			'widget.quota' => 'Cuota del plan',
+			'widget.remaining' => 'Restante',
+			'widget.noProfile' => 'Sin perfil',
+			'widget.noNodes' => 'Sin nodos',
+			'widget.tapToConnect' => 'Toca para conectar',
+			'widget.tapToDisconnect' => 'Toca para desconectar',
+			'widget.modeRule' => 'Regla',
+			'widget.modeGlobal' => 'Global',
+			'widget.modeDirect' => 'Directo',
+			'widget.refresh' => 'Actualizar',
+			'widget.switchNode' => 'Cambiar nodo',
+			'widget.switchProfile' => 'Cambiar perfil',
 			_ => null,
 		};
 	}

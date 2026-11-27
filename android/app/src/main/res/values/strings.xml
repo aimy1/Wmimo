@@ -12,4 +12,26 @@
     <string name="notif_label_mode">Mode</string>
     <string name="notif_label_port">Port</string>
     <string name="notif_label_profile">Profile</string>
+    <string name="widget_status_name">Wmimo · Node Status</string>
+    <string name="widget_status_desc">View VPN connection state, node latency, and toggle proxy in one tap</string>
+    <string name="widget_traffic_name">Wmimo · Live Traffic</string>
+    <string name="widget_traffic_desc">Monitor upload/download speeds, session traffic, and plan quota</string>
+    <string name="widget_quick_switch_name">Wmimo · Quick Switch</string>
+    <string name="widget_quick_switch_desc">Switch proxy nodes, outbound modes, and profiles from home screen</string>
+    <string name="widget_status_title">Node Status</string>
+    <string name="widget_traffic_title">Live Traffic</string>
+    <string name="widget_quick_switch_title">Quick Switch</string>
+    <string name="widget_upload">Upload</string>
+    <string name="widget_download">Download</string>
+    <string name="widget_session_total">Session</string>
+    <string name="widget_quota">Plan Quota</string>
+    <string name="widget_remaining">Left</string>
+    <string name="widget_no_profile">No Profile</string>
+    <string name="widget_no_nodes">No Nodes</string>
+    <string name="widget_tap_connect">Tap to Connect</string>
+    <string name="widget_tap_disconnect">Tap to Stop</string>
+    <string name="widget_mode_rule">Rule</string>
+    <string name="widget_mode_global">Global</string>
+    <string name="widget_mode_direct">Direct</string>
+    <string name="widget_refresh">Refresh</string>
 </resources>

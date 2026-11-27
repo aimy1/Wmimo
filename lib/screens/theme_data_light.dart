@@ -17,6 +17,7 @@ class ThemeDataLight {
       colorScheme: scheme,
       platform: TargetPlatform.iOS,
       scaffoldBackgroundColor: scheme.surface,
+      focusColor: ThemeDefine.kColorBlue.withValues(alpha: 0.18),
       cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 0,

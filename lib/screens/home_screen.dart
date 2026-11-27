@@ -10,6 +10,7 @@ import 'package:wmimo/app/modules/biz.dart';
 import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/remote_config_manager.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
+import 'package:wmimo/app/utils/home_widget_service.dart';
 import 'package:wmimo/screens/widgets/routes.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/error_reporter_utils.dart';
@@ -151,6 +152,16 @@ class _HomeScreenState extends State<HomeScreen>
       );
       setState(() {});
     });
+    HomeWidgetService.onNavigateToTab = (int index) {
+      if (!mounted) return;
+      if (index == 2) {
+        ProfileManager.load();
+      }
+      setState(() {
+        _currentNavIndex = index.clamp(0, 4);
+      });
+    };
+    HomeWidgetService.init();
     _init();
   }
 

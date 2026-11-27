@@ -12,4 +12,26 @@
     <string name="notif_label_mode">Режим</string>
     <string name="notif_label_port">Порт</string>
     <string name="notif_label_profile">Профиль</string>
+    <string name="widget_status_name">Wmimo · Статус узла</string>
+    <string name="widget_status_desc">Статус VPN, задержка текущего узла и быстрое переключение</string>
+    <string name="widget_traffic_name">Wmimo · Трафик</string>
+    <string name="widget_traffic_desc">Скорость загрузки/отдачи, трафик сессии и остаток пакета</string>
+    <string name="widget_quick_switch_name">Wmimo · Быстрое переключение</string>
+    <string name="widget_quick_switch_desc">Переключение узлов, режимов и профилей с главного экрана</string>
+    <string name="widget_status_title">Статус узла</string>
+    <string name="widget_traffic_title">Трафик</string>
+    <string name="widget_quick_switch_title">Быстрое переключение</string>
+    <string name="widget_upload">Отдача</string>
+    <string name="widget_download">Загрузка</string>
+    <string name="widget_session_total">За сессию</string>
+    <string name="widget_quota">Лимит трафика</string>
+    <string name="widget_remaining">Остаток</string>
+    <string name="widget_no_profile">Нет профиля</string>
+    <string name="widget_no_nodes">Нет узлов</string>
+    <string name="widget_tap_connect">Нажмите для подключения</string>
+    <string name="widget_tap_disconnect">Нажмите для отключения</string>
+    <string name="widget_mode_rule">Правила</string>
+    <string name="widget_mode_global">Глобальный</string>
+    <string name="widget_mode_direct">Напрямую</string>
+    <string name="widget_refresh">Обновить</string>
 </resources>

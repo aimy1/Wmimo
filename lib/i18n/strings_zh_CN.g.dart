@@ -70,6 +70,7 @@ class TranslationsZhCn with BaseTranslations<AppLocale, Translations> implements
 	};
 	@override late final Translations$hotkeys$zh_CN hotkeys = Translations$hotkeys$zh_CN.internal(_root);
 	@override late final Translations$chain_proxy$zh_CN chain_proxy = Translations$chain_proxy$zh_CN.internal(_root);
+	@override late final Translations$widget$zh_CN widget = Translations$widget$zh_CN.internal(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -917,6 +918,7 @@ class Translations$meta$zh_CN implements Translations$meta$en {
 	@override String get schemeConnectConfirm => '外部请求连接代理，是否允许？';
 	@override String get schemeDisconnectConfirm => '外部请求断开代理，是否允许？';
 	@override String get schemeReconnectConfirm => '外部请求重新连接代理，是否允许？';
+	@override String get tvModeTips => '专为 Android TV 与遥控器优化：方向键防卡焦点、确认键弹窗输入及高对比度焦点边框';
 }
 
 // Path: permission
@@ -1143,6 +1145,36 @@ class Translations$chain_proxy$zh_CN implements Translations$chain_proxy$en {
 	@override String get picker_node_only_hint => '中转与落地跳仅支持选择具体代理节点';
 	@override String get hops_label => '链路节点编排（支持拖拽调序 / 一键互换）';
 	@override String get all_nodes => '全部';
+}
+
+// Path: widget
+class Translations$widget$zh_CN implements Translations$widget$en {
+	Translations$widget$zh_CN.internal(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get statusTitle => '节点状态';
+	@override String get statusDesc => '速览连接状态、当前节点延迟并一键开关 VPN';
+	@override String get trafficTitle => '实时流量';
+	@override String get trafficDesc => '实时查看上传下载速率、本次流量与套餐余量';
+	@override String get quickSwitchTitle => '快捷切换';
+	@override String get quickSwitchDesc => '桌面一键切换常用代理节点、分流模式与配置订阅';
+	@override String get upload => '上传';
+	@override String get download => '下载';
+	@override String get sessionTotal => '本次流量';
+	@override String get quota => '套餐余量';
+	@override String get remaining => '剩余';
+	@override String get noProfile => '暂无配置';
+	@override String get noNodes => '暂无节点';
+	@override String get tapToConnect => '点击连接';
+	@override String get tapToDisconnect => '点击断开';
+	@override String get modeRule => '规则';
+	@override String get modeGlobal => '全局';
+	@override String get modeDirect => '直连';
+	@override String get refresh => '刷新';
+	@override String get switchNode => '切换节点';
+	@override String get switchProfile => '切换配置';
 }
 
 // Path: main.tray
@@ -1959,6 +1991,7 @@ extension on TranslationsZhCn {
 			'meta.schemeConnectConfirm' => '外部请求连接代理，是否允许？',
 			'meta.schemeDisconnectConfirm' => '外部请求断开代理，是否允许？',
 			'meta.schemeReconnectConfirm' => '外部请求重新连接代理，是否允许？',
+			'meta.tvModeTips' => '专为 Android TV 与遥控器优化：方向键防卡焦点、确认键弹窗输入及高对比度焦点边框',
 			'permission.camera' => '摄像头',
 			'permission.screen' => '屏幕录制',
 			'permission.appQuery' => '获取应用列表',
@@ -2125,6 +2158,27 @@ extension on TranslationsZhCn {
 			'chain_proxy.picker_node_only_hint' => '中转与落地跳仅支持选择具体代理节点',
 			'chain_proxy.hops_label' => '链路节点编排（支持拖拽调序 / 一键互换）',
 			'chain_proxy.all_nodes' => '全部',
+			'widget.statusTitle' => '节点状态',
+			'widget.statusDesc' => '速览连接状态、当前节点延迟并一键开关 VPN',
+			'widget.trafficTitle' => '实时流量',
+			'widget.trafficDesc' => '实时查看上传下载速率、本次流量与套餐余量',
+			'widget.quickSwitchTitle' => '快捷切换',
+			'widget.quickSwitchDesc' => '桌面一键切换常用代理节点、分流模式与配置订阅',
+			'widget.upload' => '上传',
+			'widget.download' => '下载',
+			'widget.sessionTotal' => '本次流量',
+			'widget.quota' => '套餐余量',
+			'widget.remaining' => '剩余',
+			'widget.noProfile' => '暂无配置',
+			'widget.noNodes' => '暂无节点',
+			'widget.tapToConnect' => '点击连接',
+			'widget.tapToDisconnect' => '点击断开',
+			'widget.modeRule' => '规则',
+			'widget.modeGlobal' => '全局',
+			'widget.modeDirect' => '直连',
+			'widget.refresh' => '刷新',
+			'widget.switchNode' => '切换节点',
+			'widget.switchProfile' => '切换配置',
 			_ => null,
 		};
 	}

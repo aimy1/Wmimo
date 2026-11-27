@@ -1230,6 +1230,12 @@ rules:
         await platform.invokeMethod('stopVpnService');
       } catch (_) {}
     }
+    if (Platform.isAndroid) {
+      try {
+        const widgetChannel = MethodChannel('com.wmimo.app/widget');
+        await widgetChannel.invokeMethod('registerCorePid', {'pid': 0});
+      } catch (_) {}
+    }
     if (_coreProcess != null) {
       try {
         _coreProcess?.kill(ProcessSignal.sigterm);
@@ -1341,6 +1347,16 @@ rules:
 
       final args = ['-d', workDir, '-f', configFile];
       _coreProcess = await Process.start(coreExe, args, mode: ProcessStartMode.normal);
+      if (Platform.isAndroid && _coreProcess != null) {
+        try {
+          const widgetChannel = MethodChannel('com.wmimo.app/widget');
+          unawaited(
+            widgetChannel
+                .invokeMethod('registerCorePid', {'pid': _coreProcess!.pid})
+                .catchError((_) => null),
+          );
+        } catch (_) {}
+      }
 
       final outBuffer = StringBuffer();
       final errBuffer = StringBuffer();

@@ -70,6 +70,7 @@ class TranslationsKo with BaseTranslations<AppLocale, Translations> implements T
 	};
 	@override late final _Translations$hotkeys$ko hotkeys = _Translations$hotkeys$ko._(_root);
 	@override late final _Translations$chain_proxy$ko chain_proxy = _Translations$chain_proxy$ko._(_root);
+	@override late final _Translations$widget$ko widget = _Translations$widget$ko._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -917,6 +918,7 @@ class _Translations$meta$ko implements Translations$meta$en {
 	@override String get schemeConnectConfirm => '외부에서 프록시 연결을 요청했습니다. 허용하시겠습니까?';
 	@override String get schemeDisconnectConfirm => '외부에서 프록시 연결 해제를 요청했습니다. 허용하시겠습니까?';
 	@override String get schemeReconnectConfirm => '외부에서 프록시 재연결을 요청했습니다. 허용하시겠습니까?';
+	@override String get tvModeTips => 'Android TV 및 리모컨 최적화: 방향키 포커스 갇힘 방지, 확인 키 팝업 입력 및 고대비 포커스 테두리';
 }
 
 // Path: permission
@@ -1143,6 +1145,36 @@ class _Translations$chain_proxy$ko implements Translations$chain_proxy$en {
 	@override String get picker_node_only_hint => '경유 및 출구 홉은 실제 프록시 노드만 선택 가능합니다';
 	@override String get hops_label => '홉 구성 (드래그 정렬 / 맞바꾸기 지원)';
 	@override String get all_nodes => '전체';
+}
+
+// Path: widget
+class _Translations$widget$ko implements Translations$widget$en {
+	_Translations$widget$ko._(this._root);
+
+	final TranslationsKo _root; // ignore: unused_field
+
+	// Translations
+	@override String get statusTitle => '노드 상태';
+	@override String get statusDesc => 'VPN 연결 상태와 현재 노드 지연 시간을 확인하고 원탭으로 전환';
+	@override String get trafficTitle => '실시간 트래픽';
+	@override String get trafficDesc => '업로드/다운로드 속도, 세션 트래픽 및 요금제 잔여량 모니터링';
+	@override String get quickSwitchTitle => '빠른 전환';
+	@override String get quickSwitchDesc => '홈 화면에서 프록시 노드, 라우팅 모드, 프로필을 즉시 전환';
+	@override String get upload => '업로드';
+	@override String get download => '다운로드';
+	@override String get sessionTotal => '세션 트래픽';
+	@override String get quota => '데이터 잔여량';
+	@override String get remaining => '잔여';
+	@override String get noProfile => '프로필 없음';
+	@override String get noNodes => '노드 없음';
+	@override String get tapToConnect => '탭하여 연결';
+	@override String get tapToDisconnect => '탭하여 연결 해제';
+	@override String get modeRule => '규칙';
+	@override String get modeGlobal => '글로벌';
+	@override String get modeDirect => '직접 연결';
+	@override String get refresh => '새로고침';
+	@override String get switchNode => '노드 전환';
+	@override String get switchProfile => '프로필 전환';
 }
 
 // Path: main.tray
@@ -1959,6 +1991,7 @@ extension on TranslationsKo {
 			'meta.schemeConnectConfirm' => '외부에서 프록시 연결을 요청했습니다. 허용하시겠습니까?',
 			'meta.schemeDisconnectConfirm' => '외부에서 프록시 연결 해제를 요청했습니다. 허용하시겠습니까?',
 			'meta.schemeReconnectConfirm' => '외부에서 프록시 재연결을 요청했습니다. 허용하시겠습니까?',
+			'meta.tvModeTips' => 'Android TV 및 리모컨 최적화: 방향키 포커스 갇힘 방지, 확인 키 팝업 입력 및 고대비 포커스 테두리',
 			'permission.camera' => '카메라',
 			'permission.screen' => '화면 녹화',
 			'permission.appQuery' => '애플리케이션 목록 가져오기',
@@ -2125,6 +2158,27 @@ extension on TranslationsKo {
 			'chain_proxy.picker_node_only_hint' => '경유 및 출구 홉은 실제 프록시 노드만 선택 가능합니다',
 			'chain_proxy.hops_label' => '홉 구성 (드래그 정렬 / 맞바꾸기 지원)',
 			'chain_proxy.all_nodes' => '전체',
+			'widget.statusTitle' => '노드 상태',
+			'widget.statusDesc' => 'VPN 연결 상태와 현재 노드 지연 시간을 확인하고 원탭으로 전환',
+			'widget.trafficTitle' => '실시간 트래픽',
+			'widget.trafficDesc' => '업로드/다운로드 속도, 세션 트래픽 및 요금제 잔여량 모니터링',
+			'widget.quickSwitchTitle' => '빠른 전환',
+			'widget.quickSwitchDesc' => '홈 화면에서 프록시 노드, 라우팅 모드, 프로필을 즉시 전환',
+			'widget.upload' => '업로드',
+			'widget.download' => '다운로드',
+			'widget.sessionTotal' => '세션 트래픽',
+			'widget.quota' => '데이터 잔여량',
+			'widget.remaining' => '잔여',
+			'widget.noProfile' => '프로필 없음',
+			'widget.noNodes' => '노드 없음',
+			'widget.tapToConnect' => '탭하여 연결',
+			'widget.tapToDisconnect' => '탭하여 연결 해제',
+			'widget.modeRule' => '규칙',
+			'widget.modeGlobal' => '글로벌',
+			'widget.modeDirect' => '직접 연결',
+			'widget.refresh' => '새로고침',
+			'widget.switchNode' => '노드 전환',
+			'widget.switchProfile' => '프로필 전환',
 			_ => null,
 		};
 	}

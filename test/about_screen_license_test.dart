@@ -83,7 +83,7 @@ void main() {
         child: MaterialApp(
           home: LicenseScreen(
             applicationName: 'Wmimo',
-            applicationVersion: 'v1.4.1.1527',
+            applicationVersion: 'v1.4.2.1528',
             initialPackages: samplePackages,
           ),
         ),
@@ -93,7 +93,7 @@ void main() {
 
     // Summary banner & badges
     expect(find.text('Wmimo'), findsOneWidget);
-    expect(find.text('v1.4.1.1527'), findsOneWidget);
+    expect(find.text('v1.4.2.1528'), findsOneWidget);
     expect(
       find.text('GNU General Public License v3.0 (GPL-3.0-or-later)'),
       findsOneWidget,

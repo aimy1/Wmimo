@@ -70,6 +70,7 @@ class TranslationsZhTw with BaseTranslations<AppLocale, Translations> implements
 	};
 	@override late final Translations$hotkeys$zh_TW hotkeys = Translations$hotkeys$zh_TW.internal(_root);
 	@override late final Translations$chain_proxy$zh_TW chain_proxy = Translations$chain_proxy$zh_TW.internal(_root);
+	@override late final Translations$widget$zh_TW widget = Translations$widget$zh_TW.internal(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -917,6 +918,7 @@ class Translations$meta$zh_TW implements Translations$meta$en {
 	@override String get schemeConnectConfirm => '外部請求連線代理，是否允許？';
 	@override String get schemeDisconnectConfirm => '外部請求斷開代理，是否允許？';
 	@override String get schemeReconnectConfirm => '外部請求重新連線代理，是否允許？';
+	@override String get tvModeTips => '專為 Android TV 與遙控器最佳化：方向鍵防卡焦點、確認鍵彈窗輸入及高對比度焦點邊框';
 }
 
 // Path: permission
@@ -1143,6 +1145,36 @@ class Translations$chain_proxy$zh_TW implements Translations$chain_proxy$en {
 	@override String get picker_node_only_hint => '中轉與落地跳僅支援選擇具體代理節點';
 	@override String get hops_label => '鏈路節點編排（支援拖曳調序 / 一鍵互換）';
 	@override String get all_nodes => '全部';
+}
+
+// Path: widget
+class Translations$widget$zh_TW implements Translations$widget$en {
+	Translations$widget$zh_TW.internal(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get statusTitle => '節點狀態';
+	@override String get statusDesc => '速覽連線狀態、目前節點延遲並一鍵開關 VPN';
+	@override String get trafficTitle => '即時流量';
+	@override String get trafficDesc => '即時查看上傳下載速率、本次流量與方案餘量';
+	@override String get quickSwitchTitle => '快速切換';
+	@override String get quickSwitchDesc => '桌面一鍵切換常用代理節點、分流模式與配置訂閱';
+	@override String get upload => '上傳';
+	@override String get download => '下載';
+	@override String get sessionTotal => '本次流量';
+	@override String get quota => '方案餘量';
+	@override String get remaining => '剩餘';
+	@override String get noProfile => '暫無配置';
+	@override String get noNodes => '暫無節點';
+	@override String get tapToConnect => '點擊連線';
+	@override String get tapToDisconnect => '點擊中斷';
+	@override String get modeRule => '規則';
+	@override String get modeGlobal => '全域';
+	@override String get modeDirect => '直連';
+	@override String get refresh => '重新整理';
+	@override String get switchNode => '切換節點';
+	@override String get switchProfile => '切換配置';
 }
 
 // Path: main.tray
@@ -1959,6 +1991,7 @@ extension on TranslationsZhTw {
 			'meta.schemeConnectConfirm' => '外部請求連線代理，是否允許？',
 			'meta.schemeDisconnectConfirm' => '外部請求斷開代理，是否允許？',
 			'meta.schemeReconnectConfirm' => '外部請求重新連線代理，是否允許？',
+			'meta.tvModeTips' => '專為 Android TV 與遙控器最佳化：方向鍵防卡焦點、確認鍵彈窗輸入及高對比度焦點邊框',
 			'permission.camera' => '相機',
 			'permission.screen' => '螢幕錄製',
 			'permission.appQuery' => '取得應用程式列表',
@@ -2125,6 +2158,27 @@ extension on TranslationsZhTw {
 			'chain_proxy.picker_node_only_hint' => '中轉與落地跳僅支援選擇具體代理節點',
 			'chain_proxy.hops_label' => '鏈路節點編排（支援拖曳調序 / 一鍵互換）',
 			'chain_proxy.all_nodes' => '全部',
+			'widget.statusTitle' => '節點狀態',
+			'widget.statusDesc' => '速覽連線狀態、目前節點延遲並一鍵開關 VPN',
+			'widget.trafficTitle' => '即時流量',
+			'widget.trafficDesc' => '即時查看上傳下載速率、本次流量與方案餘量',
+			'widget.quickSwitchTitle' => '快速切換',
+			'widget.quickSwitchDesc' => '桌面一鍵切換常用代理節點、分流模式與配置訂閱',
+			'widget.upload' => '上傳',
+			'widget.download' => '下載',
+			'widget.sessionTotal' => '本次流量',
+			'widget.quota' => '方案餘量',
+			'widget.remaining' => '剩餘',
+			'widget.noProfile' => '暫無配置',
+			'widget.noNodes' => '暫無節點',
+			'widget.tapToConnect' => '點擊連線',
+			'widget.tapToDisconnect' => '點擊中斷',
+			'widget.modeRule' => '規則',
+			'widget.modeGlobal' => '全域',
+			'widget.modeDirect' => '直連',
+			'widget.refresh' => '重新整理',
+			'widget.switchNode' => '切換節點',
+			'widget.switchProfile' => '切換配置',
 			_ => null,
 		};
 	}

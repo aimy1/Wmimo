@@ -6,7 +6,7 @@ import 'package:wmimo/generated/build_time.dart' as build_time;
 abstract final class AppUtils {
   static String? _cachedPackageVersion;
 
-  static const String kDefaultFallbackVersion = "1.4.1.1527";
+  static const String kDefaultFallbackVersion = "1.4.2.1528";
 
   static Future<String> getPackgetVersion() async {
     if (_cachedPackageVersion != null && _cachedPackageVersion!.isNotEmpty) {
@@ -53,7 +53,7 @@ abstract final class AppUtils {
     return _cachedPackageVersion ?? kDefaultFallbackVersion;
   }
 
-  /// Unified display version with 4-part dot notation, e.g. "v1.4.1.1527" or "1.4.1.1527"
+  /// Unified display version with 4-part dot notation, e.g. "v1.4.2.1528" or "1.4.2.1528"
   static String getFormattedVersion({bool withV = true}) {
     String v = getBuildinVersion().trim();
     if (v.startsWith('v') || v.startsWith('V')) {
@@ -88,7 +88,7 @@ abstract final class AppUtils {
   }
 
   static String getControlKind() {
-    return "com.wmimo.app.widget.ControlCenterToggle";
+    return "com.wmimo.app.wmimoWidget.ControlCenterToggle";
   }
 
   static String getICloudContainerId() {

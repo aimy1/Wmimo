@@ -186,6 +186,8 @@ class WmimoVpnService : VpnService() {
                 } catch (_: Exception) {}
                 isRunning = true
                 isServiceRunning = true
+                WmimoWidgetUpdater.onVpnServiceStateChanged(this, true)
+                notifyTileStateChanged(true)
             } else if (!isRunning) {
                 stopVpn()
             }
@@ -201,6 +203,9 @@ class WmimoVpnService : VpnService() {
         isServiceRunning = false
         currentNotificationContent = null
         currentNotificationDisconnect = null
+        WmimoWidgetUpdater.terminateOrphanedCoreIfNeeded(this)
+        WmimoWidgetUpdater.onVpnServiceStateChanged(this, false)
+        notifyTileStateChanged(false)
         try {
             vpnInterface?.close()
             vpnInterface = null
@@ -213,6 +218,18 @@ class WmimoVpnService : VpnService() {
             stopForeground(true)
         }
         stopSelf()
+    }
+
+    private fun notifyTileStateChanged(connected: Boolean) {
+        try {
+            val action = if (connected) TileService.ACTION_START_RESULT else TileService.ACTION_STOPED
+            val broadcast = Intent(action).apply {
+                setPackage(packageName)
+                if (connected) putExtra("err", "")
+            }
+            sendBroadcast(broadcast)
+            TileService.requestTileUpdate(this)
+        } catch (_: Throwable) {}
     }
 
     override fun onDestroy() {

@@ -8,5 +8,7 @@ struct wmimoWidgetBundle: WidgetBundle {
             wmimoWidgetControl()
         }
         wmimoWidget()
+        WmimoTrafficWidget()
+        WmimoQuickSwitchWidget()
     }
 }

@@ -792,7 +792,8 @@
     "iconUrlOptional": "圖示位址 (留空自動取得 Favicon)",
     "schemeConnectConfirm": "外部請求連線代理，是否允許？",
     "schemeDisconnectConfirm": "外部請求斷開代理，是否允許？",
-    "schemeReconnectConfirm": "外部請求重新連線代理，是否允許？"
+    "schemeReconnectConfirm": "外部請求重新連線代理，是否允許？",
+    "tvModeTips": "專為 Android TV 與遙控器最佳化：方向鍵防卡焦點、確認鍵彈窗輸入及高對比度焦點邊框"
   },
   "permission": {
     "camera": "相機",
@@ -977,5 +978,28 @@
     "picker_node_only_hint": "中轉與落地跳僅支援選擇具體代理節點",
     "hops_label": "鏈路節點編排（支援拖曳調序 / 一鍵互換）",
     "all_nodes": "全部"
+  },
+  "widget": {
+    "statusTitle": "節點狀態",
+    "statusDesc": "速覽連線狀態、目前節點延遲並一鍵開關 VPN",
+    "trafficTitle": "即時流量",
+    "trafficDesc": "即時查看上傳下載速率、本次流量與方案餘量",
+    "quickSwitchTitle": "快速切換",
+    "quickSwitchDesc": "桌面一鍵切換常用代理節點、分流模式與配置訂閱",
+    "upload": "上傳",
+    "download": "下載",
+    "sessionTotal": "本次流量",
+    "quota": "方案餘量",
+    "remaining": "剩餘",
+    "noProfile": "暫無配置",
+    "noNodes": "暫無節點",
+    "tapToConnect": "點擊連線",
+    "tapToDisconnect": "點擊中斷",
+    "modeRule": "規則",
+    "modeGlobal": "全域",
+    "modeDirect": "直連",
+    "refresh": "重新整理",
+    "switchNode": "切換節點",
+    "switchProfile": "切換配置"
   }
 }

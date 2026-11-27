@@ -12,4 +12,26 @@
     <string name="notif_label_mode">運行模式</string>
     <string name="notif_label_port">埠號</string>
     <string name="notif_label_profile">配置訂閱</string>
+    <string name="widget_status_name">Wmimo · 節點狀態</string>
+    <string name="widget_status_desc">速覽連線狀態、目前節點延遲並一鍵開關 VPN</string>
+    <string name="widget_traffic_name">Wmimo · 即時流量</string>
+    <string name="widget_traffic_desc">即時查看上傳下載速率、本次流量與方案餘量</string>
+    <string name="widget_quick_switch_name">Wmimo · 快速切換</string>
+    <string name="widget_quick_switch_desc">桌面一鍵切換常用代理節點、分流模式與配置訂閱</string>
+    <string name="widget_status_title">節點狀態</string>
+    <string name="widget_traffic_title">即時流量</string>
+    <string name="widget_quick_switch_title">快速切換</string>
+    <string name="widget_upload">上傳</string>
+    <string name="widget_download">下載</string>
+    <string name="widget_session_total">本次流量</string>
+    <string name="widget_quota">方案餘量</string>
+    <string name="widget_remaining">剩餘</string>
+    <string name="widget_no_profile">暫無配置</string>
+    <string name="widget_no_nodes">暫無節點</string>
+    <string name="widget_tap_connect">點擊連線</string>
+    <string name="widget_tap_disconnect">點擊中斷</string>
+    <string name="widget_mode_rule">規則</string>
+    <string name="widget_mode_global">全域</string>
+    <string name="widget_mode_direct">直連</string>
+    <string name="widget_refresh">重新整理</string>
 </resources>

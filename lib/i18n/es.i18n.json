@@ -792,7 +792,8 @@
     "iconUrlOptional": "URL del icono (dejar vacío para obtener Favicon automáticamente)",
     "schemeConnectConfirm": "Una solicitud externa desea conectar el proxy. ¿Permitir?",
     "schemeDisconnectConfirm": "Una solicitud externa desea desconectar el proxy. ¿Permitir?",
-    "schemeReconnectConfirm": "Una solicitud externa desea reconectar el proxy. ¿Permitir?"
+    "schemeReconnectConfirm": "Una solicitud externa desea reconectar el proxy. ¿Permitir?",
+    "tvModeTips": "Optimizado para Android TV y control remoto: navegación fluida con cruceta, entrada emergente y borde de enfoque"
   },
   "permission": {
     "camera": "Cámara",
@@ -977,5 +978,28 @@
     "picker_node_only_hint": "Los saltos intermedios y de salida solo admiten nodos concretos",
     "hops_label": "Secuencia de saltos (Arrastra para reordenar)",
     "all_nodes": "Todos"
+  },
+  "widget": {
+    "statusTitle": "Estado del nodo",
+    "statusDesc": "Ver estado de VPN, latencia del nodo y activar con un toque",
+    "trafficTitle": "Tráfico en vivo",
+    "trafficDesc": "Monitorear velocidad de subida/bajada, tráfico de sesión y cuota",
+    "quickSwitchTitle": "Cambio rápido",
+    "quickSwitchDesc": "Cambiar nodos, modos y perfiles desde la pantalla de inicio",
+    "upload": "Subida",
+    "download": "Bajada",
+    "sessionTotal": "Sesión",
+    "quota": "Cuota del plan",
+    "remaining": "Restante",
+    "noProfile": "Sin perfil",
+    "noNodes": "Sin nodos",
+    "tapToConnect": "Toca para conectar",
+    "tapToDisconnect": "Toca para desconectar",
+    "modeRule": "Regla",
+    "modeGlobal": "Global",
+    "modeDirect": "Directo",
+    "refresh": "Actualizar",
+    "switchNode": "Cambiar nodo",
+    "switchProfile": "Cambiar perfil"
   }
 }

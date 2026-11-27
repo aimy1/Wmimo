@@ -792,7 +792,8 @@
     "iconUrlOptional": "アイコン URL（空欄で Favicon を自動取得）",
     "schemeConnectConfirm": "外部からプロキシ接続のリクエストがあります。許可しますか？",
     "schemeDisconnectConfirm": "外部からプロキシ切断のリクエストがあります。許可しますか？",
-    "schemeReconnectConfirm": "外部からプロキシ再接続のリクエストがあります。許可しますか？"
+    "schemeReconnectConfirm": "外部からプロキシ再接続のリクエストがあります。許可しますか？",
+    "tvModeTips": "Android TV・リモコン操作に最適化：十字キーのフォーカス移動保護、決定キーでのポップアップ入力、高コントラスト枠線"
   },
   "permission": {
     "camera": "カメラ",
@@ -977,5 +978,28 @@
     "picker_node_only_hint": "中継・出口ホップは具体的なプロキシノードのみ選択できます",
     "hops_label": "ホップ構成（ドラッグ並べ替え / 入れ替え可）",
     "all_nodes": "すべて"
+  },
+  "widget": {
+    "statusTitle": "ノード状態",
+    "statusDesc": "VPN接続状態と現在のノード遅延を確認し、ワンタップで切替",
+    "trafficTitle": "リアルタイム通信量",
+    "trafficDesc": "上下通信速度、セッション通信量、プラン残量を表示",
+    "quickSwitchTitle": "クイック切替",
+    "quickSwitchDesc": "ホーム画面からノード、モード、プロファイルを素早く切替",
+    "upload": "アップロード",
+    "download": "ダウンロード",
+    "sessionTotal": "今回の通信量",
+    "quota": "プラン残量",
+    "remaining": "残り",
+    "noProfile": "プロファイルなし",
+    "noNodes": "ノードなし",
+    "tapToConnect": "タップして接続",
+    "tapToDisconnect": "タップして切断",
+    "modeRule": "ルール",
+    "modeGlobal": "グローバル",
+    "modeDirect": "ダイレクト",
+    "refresh": "更新",
+    "switchNode": "ノード切替",
+    "switchProfile": "プロファイル切替"
   }
 }

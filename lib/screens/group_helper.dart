@@ -54,7 +54,6 @@ import 'package:wmimo/screens/version_update_screen.dart';
 import 'package:wmimo/screens/webview_helper.dart';
 import 'package:wmimo/screens/widgets/sheet.dart';
 import 'package:wmimo/screens/widgets/home_cards_manager_sheet.dart';
-import 'package:wmimo/screens/widgets/text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -554,8 +553,8 @@ class GroupHelper {
                 context,
                 listen: false,
               ).setTheme(setting.ui.theme, true);
-              TextFieldEx.popupEdit = setting.ui.tvMode;
               await SettingManager.save();
+              SettingManager.notifyTvModeChanged();
               SettingManager.notifySideBySideLayoutChanged();
               SettingManager.notifyAnimationsChanged();
               if (context.mounted) {
@@ -655,11 +654,14 @@ class GroupHelper {
           GroupItemOptions(
             switchOptions: GroupItemSwitchOptions(
               name: tcontext.meta.tvMode,
+              tips: tcontext.meta.tvModeTips,
               switchValue: setting.ui.tvMode,
               onSwitch: (bool value) async {
                 setting.ui.tvMode = value;
-                TextFieldEx.popupEdit = setting.ui.tvMode;
+                setting.ui.hasExplicitTvMode = true;
                 await SettingManager.save();
+                SettingManager.notifyTvModeChanged();
+                setstate?.call();
               },
             ),
           ),

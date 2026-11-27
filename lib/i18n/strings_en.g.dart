@@ -80,6 +80,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	};
 	late final Translations$hotkeys$en hotkeys = Translations$hotkeys$en._(_root);
 	late final Translations$chain_proxy$en chain_proxy = Translations$chain_proxy$en._(_root);
+	late final Translations$widget$en widget = Translations$widget$en._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -2421,6 +2422,9 @@ class Translations$meta$en {
 
 	/// en: 'An external request wants to reconnect the proxy. Allow?'
 	String get schemeReconnectConfirm => 'An external request wants to reconnect the proxy. Allow?';
+
+	/// en: 'Optimized for Android TV & D-pad remotes: focus traversal guard, popup input on Select, and high-contrast focus ring'
+	String get tvModeTips => 'Optimized for Android TV & D-pad remotes: focus traversal guard, popup input on Select, and high-contrast focus ring';
 }
 
 // Path: permission
@@ -2955,6 +2959,78 @@ class Translations$chain_proxy$en {
 
 	/// en: 'All'
 	String get all_nodes => 'All';
+}
+
+// Path: widget
+class Translations$widget$en {
+	Translations$widget$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Node Status'
+	String get statusTitle => 'Node Status';
+
+	/// en: 'View VPN connection state, node latency, and toggle proxy in one tap'
+	String get statusDesc => 'View VPN connection state, node latency, and toggle proxy in one tap';
+
+	/// en: 'Live Traffic'
+	String get trafficTitle => 'Live Traffic';
+
+	/// en: 'Monitor upload/download speeds, session traffic, and plan quota'
+	String get trafficDesc => 'Monitor upload/download speeds, session traffic, and plan quota';
+
+	/// en: 'Quick Switch'
+	String get quickSwitchTitle => 'Quick Switch';
+
+	/// en: 'Switch proxy nodes, outbound modes, and profiles from home screen'
+	String get quickSwitchDesc => 'Switch proxy nodes, outbound modes, and profiles from home screen';
+
+	/// en: 'Upload'
+	String get upload => 'Upload';
+
+	/// en: 'Download'
+	String get download => 'Download';
+
+	/// en: 'Session'
+	String get sessionTotal => 'Session';
+
+	/// en: 'Plan Quota'
+	String get quota => 'Plan Quota';
+
+	/// en: 'Left'
+	String get remaining => 'Left';
+
+	/// en: 'No Profile'
+	String get noProfile => 'No Profile';
+
+	/// en: 'No Nodes'
+	String get noNodes => 'No Nodes';
+
+	/// en: 'Tap to Connect'
+	String get tapToConnect => 'Tap to Connect';
+
+	/// en: 'Tap to Stop'
+	String get tapToDisconnect => 'Tap to Stop';
+
+	/// en: 'Rule'
+	String get modeRule => 'Rule';
+
+	/// en: 'Global'
+	String get modeGlobal => 'Global';
+
+	/// en: 'Direct'
+	String get modeDirect => 'Direct';
+
+	/// en: 'Refresh'
+	String get refresh => 'Refresh';
+
+	/// en: 'Switch Node'
+	String get switchNode => 'Switch Node';
+
+	/// en: 'Switch Profile'
+	String get switchProfile => 'Switch Profile';
 }
 
 // Path: main.tray
@@ -3819,6 +3895,7 @@ extension on Translations {
 			'meta.schemeConnectConfirm' => 'An external request wants to connect the proxy. Allow?',
 			'meta.schemeDisconnectConfirm' => 'An external request wants to disconnect the proxy. Allow?',
 			'meta.schemeReconnectConfirm' => 'An external request wants to reconnect the proxy. Allow?',
+			'meta.tvModeTips' => 'Optimized for Android TV & D-pad remotes: focus traversal guard, popup input on Select, and high-contrast focus ring',
 			'permission.camera' => 'Camera',
 			'permission.screen' => 'Screen Recording',
 			'permission.appQuery' => 'Get Application List',
@@ -3985,6 +4062,27 @@ extension on Translations {
 			'chain_proxy.picker_node_only_hint' => 'Transit and exit hops only support concrete proxy nodes',
 			'chain_proxy.hops_label' => 'Hop Sequence (Drag to reorder / Swap)',
 			'chain_proxy.all_nodes' => 'All',
+			'widget.statusTitle' => 'Node Status',
+			'widget.statusDesc' => 'View VPN connection state, node latency, and toggle proxy in one tap',
+			'widget.trafficTitle' => 'Live Traffic',
+			'widget.trafficDesc' => 'Monitor upload/download speeds, session traffic, and plan quota',
+			'widget.quickSwitchTitle' => 'Quick Switch',
+			'widget.quickSwitchDesc' => 'Switch proxy nodes, outbound modes, and profiles from home screen',
+			'widget.upload' => 'Upload',
+			'widget.download' => 'Download',
+			'widget.sessionTotal' => 'Session',
+			'widget.quota' => 'Plan Quota',
+			'widget.remaining' => 'Left',
+			'widget.noProfile' => 'No Profile',
+			'widget.noNodes' => 'No Nodes',
+			'widget.tapToConnect' => 'Tap to Connect',
+			'widget.tapToDisconnect' => 'Tap to Stop',
+			'widget.modeRule' => 'Rule',
+			'widget.modeGlobal' => 'Global',
+			'widget.modeDirect' => 'Direct',
+			'widget.refresh' => 'Refresh',
+			'widget.switchNode' => 'Switch Node',
+			'widget.switchProfile' => 'Switch Profile',
 			_ => null,
 		};
 	}

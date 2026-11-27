@@ -12,4 +12,26 @@
     <string name="notif_label_mode">الوضع</string>
     <string name="notif_label_port">المنفذ</string>
     <string name="notif_label_profile">الملف الشخصي</string>
+    <string name="widget_status_name">Wmimo · حالة الخادم</string>
+    <string name="widget_status_desc">عرض حالة اتصال VPN وزمن استجابة الخادم والتشغيل بنقرة واحدة</string>
+    <string name="widget_traffic_name">Wmimo · حركة المرور الحية</string>
+    <string name="widget_traffic_desc">مراقبة سرعة الرفع والتنزيل واستهلاك الجلسة والباقة</string>
+    <string name="widget_quick_switch_name">Wmimo · تبديل سريع</string>
+    <string name="widget_quick_switch_desc">تبديل الخوادم وأوضاع التوجيه والملفات الشخصية من الشاشة الرئيسية</string>
+    <string name="widget_status_title">حالة الخادم</string>
+    <string name="widget_traffic_title">حركة المرور الحية</string>
+    <string name="widget_quick_switch_title">تبديل سريع</string>
+    <string name="widget_upload">رفع</string>
+    <string name="widget_download">تنزيل</string>
+    <string name="widget_session_total">الجلسة</string>
+    <string name="widget_quota">حصة الباقة</string>
+    <string name="widget_remaining">المتبقي</string>
+    <string name="widget_no_profile">لا يوجد ملف</string>
+    <string name="widget_no_nodes">لا توجد خوادم</string>
+    <string name="widget_tap_connect">انقر للاتصال</string>
+    <string name="widget_tap_disconnect">انقر لقطع الاتصال</string>
+    <string name="widget_mode_rule">قواعد</string>
+    <string name="widget_mode_global">شامل</string>
+    <string name="widget_mode_direct">مباشر</string>
+    <string name="widget_refresh">تحديث</string>
 </resources>

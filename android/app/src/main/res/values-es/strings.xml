@@ -12,4 +12,26 @@
     <string name="notif_label_mode">Modo</string>
     <string name="notif_label_port">Puerto</string>
     <string name="notif_label_profile">Perfil</string>
+    <string name="widget_status_name">Wmimo · Estado del nodo</string>
+    <string name="widget_status_desc">Ver estado de VPN, latencia del nodo y activar con un toque</string>
+    <string name="widget_traffic_name">Wmimo · Tráfico en vivo</string>
+    <string name="widget_traffic_desc">Monitorear velocidad de subida/bajada, tráfico de sesión y cuota</string>
+    <string name="widget_quick_switch_name">Wmimo · Cambio rápido</string>
+    <string name="widget_quick_switch_desc">Cambiar nodos, modos y perfiles desde la pantalla de inicio</string>
+    <string name="widget_status_title">Estado del nodo</string>
+    <string name="widget_traffic_title">Tráfico en vivo</string>
+    <string name="widget_quick_switch_title">Cambio rápido</string>
+    <string name="widget_upload">Subida</string>
+    <string name="widget_download">Bajada</string>
+    <string name="widget_session_total">Sesión</string>
+    <string name="widget_quota">Cuota del plan</string>
+    <string name="widget_remaining">Restante</string>
+    <string name="widget_no_profile">Sin perfil</string>
+    <string name="widget_no_nodes">Sin nodos</string>
+    <string name="widget_tap_connect">Toca para conectar</string>
+    <string name="widget_tap_disconnect">Toca para desconectar</string>
+    <string name="widget_mode_rule">Regla</string>
+    <string name="widget_mode_global">Global</string>
+    <string name="widget_mode_direct">Directo</string>
+    <string name="widget_refresh">Actualizar</string>
 </resources>

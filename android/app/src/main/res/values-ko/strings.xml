@@ -12,4 +12,26 @@
     <string name="notif_label_mode">동작 모드</string>
     <string name="notif_label_port">포트</string>
     <string name="notif_label_profile">구독 프로필</string>
+    <string name="widget_status_name">Wmimo · 노드 상태</string>
+    <string name="widget_status_desc">VPN 연결 상태와 현재 노드 지연 시간을 확인하고 원탭으로 전환</string>
+    <string name="widget_traffic_name">Wmimo · 실시간 트래픽</string>
+    <string name="widget_traffic_desc">업로드/다운로드 속도, 세션 트래픽 및 요금제 잔여량 모니터링</string>
+    <string name="widget_quick_switch_name">Wmimo · 빠른 전환</string>
+    <string name="widget_quick_switch_desc">홈 화면에서 프록시 노드, 라우팅 모드, 프로필을 즉시 전환</string>
+    <string name="widget_status_title">노드 상태</string>
+    <string name="widget_traffic_title">실시간 트래픽</string>
+    <string name="widget_quick_switch_title">빠른 전환</string>
+    <string name="widget_upload">업로드</string>
+    <string name="widget_download">다운로드</string>
+    <string name="widget_session_total">세션 트래픽</string>
+    <string name="widget_quota">데이터 잔여량</string>
+    <string name="widget_remaining">잔여</string>
+    <string name="widget_no_profile">프로필 없음</string>
+    <string name="widget_no_nodes">노드 없음</string>
+    <string name="widget_tap_connect">탭하여 연결</string>
+    <string name="widget_tap_disconnect">탭하여 연결 해제</string>
+    <string name="widget_mode_rule">규칙</string>
+    <string name="widget_mode_global">글로벌</string>
+    <string name="widget_mode_direct">직접 연결</string>
+    <string name="widget_refresh">새로고침</string>
 </resources>

@@ -304,6 +304,7 @@ class MyAppState extends State<MyApp>
     super.initState();
     _themes.addListener(_onThemeChanged);
     SettingManager.onAnimationsChanged.add(_onAnimationsChanged);
+    SettingManager.onTvModeChanged.add(_onAnimationsChanged);
     _themes.setTheme(SettingManager.getConfig().ui.theme, false);
     WidgetsBinding.instance.addObserver(this);
     if (PlatformUtils.isPC()) {
@@ -362,6 +363,7 @@ class MyAppState extends State<MyApp>
   void dispose() {
     _themes.removeListener(_onThemeChanged);
     SettingManager.onAnimationsChanged.remove(_onAnimationsChanged);
+    SettingManager.onTvModeChanged.remove(_onAnimationsChanged);
     AppLifecycleStateNofity.uninit();
     WidgetsBinding.instance.removeObserver(this);
     if (PlatformUtils.isPC()) {

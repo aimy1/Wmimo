@@ -13,6 +13,7 @@ import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_define.dart';
 import 'package:wmimo/screens/widgets/text_field.dart';
+import 'package:flutter/services.dart';
 
 import 'package:path/path.dart' as path;
 import 'package:win32_registry/win32_registry.dart';
@@ -32,6 +33,8 @@ class SettingConfigItemUI {
   bool disableFontScaler = false;
   bool hideAfterLaunch = false;
   bool tvMode = maybeTv();
+  bool hasExplicitTvMode = false;
+  static bool detectedAndroidTv = false;
   bool perAppHideSystemApp = true;
   bool perAppHideAppIcon = false;
   bool delayTestSort = false;
@@ -119,7 +122,8 @@ class SettingConfigItemUI {
     } else {
       homeCardsOrder = List<String>.from(kDefaultHomeCardsOrder);
     }
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid || map.containsKey("tv_mode")) {
+      hasExplicitTvMode = map.containsKey("tv_mode") && map["tv_mode"] != null;
       tvMode = map["tv_mode"] ?? maybeTv();
       TextFieldEx.popupEdit = tvMode;
     }
@@ -150,6 +154,9 @@ class SettingConfigItemUI {
   }
 
   static bool maybeTv() {
+    if (detectedAndroidTv) {
+      return true;
+    }
     if (Platform.isAndroid) {
       final abis = VPNService.getABIs();
       if (abis.length == 1 &&
@@ -456,12 +463,40 @@ class SettingManager {
     }
   }
 
+  static final List<void Function()> onTvModeChanged = [];
+  static void notifyTvModeChanged() {
+    TextFieldEx.setPopupEdit(_config.ui.tvMode);
+    for (final cb in onTvModeChanged) {
+      try {
+        cb();
+      } catch (_) {}
+    }
+  }
+
+  static Future<bool> detectAndroidTvPlatform() async {
+    if (!Platform.isAndroid) return false;
+    try {
+      const channel = MethodChannel('com.wmimo.app/native_helper');
+      final isTv = await channel.invokeMethod<bool>('isAndroidTv');
+      if (isTv == true) {
+        SettingConfigItemUI.detectedAndroidTv = true;
+        return true;
+      }
+    } catch (_) {}
+    return SettingConfigItemUI.maybeTv();
+  }
+
   static bool _saving = false;
   static bool _hasPendingSave = false;
   static String _cachedSettingFilePath = "";
   static SettingConfig _config = SettingConfig();
   static Future<void> init({bool fromBackupRestore = false}) async {
+    await detectAndroidTvPlatform();
     await load(fromBackupRestore: fromBackupRestore);
+    if (Platform.isAndroid && !_config.ui.hasExplicitTvMode && SettingConfigItemUI.detectedAndroidTv) {
+      _config.ui.tvMode = true;
+    }
+    TextFieldEx.setPopupEdit(_config.ui.tvMode);
     bool needSave = await parseConfig();
     if (needSave) {
       await save();

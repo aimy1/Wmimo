@@ -22,4 +22,8 @@ abstract final class AppSchemeActions {
   static String reconnectAction() {
     return "reconnect";
   }
+
+  static String widgetAction() {
+    return "widget";
+  }
 }

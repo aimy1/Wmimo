@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wmimo/app/modules/setting_manager.dart';
+import 'package:wmimo/app/utils/home_widget_service.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 import 'package:wmimo/screens/theme_config.dart';
 import 'package:wmimo/screens/theme_define.dart';
@@ -295,6 +297,15 @@ class _LanguageSettingsScreenState
     SettingManager.getConfig().languageTag = item.locale.languageTag;
     SettingManager.save();
     await LocaleSettings.setLocale(item.locale);
+    if (Platform.isAndroid) {
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      unawaited(
+        platform.invokeMethod('setAppLocale', {
+          'languageTag': item.locale.languageTag,
+        }).catchError((_) => null),
+      );
+    }
+    unawaited(HomeWidgetService.syncNow(forceReload: true));
     if (widget.nextText == null) {
       if (!mounted) {
         return;

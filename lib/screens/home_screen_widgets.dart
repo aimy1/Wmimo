@@ -17,6 +17,7 @@ import 'package:wmimo/screens/rules_screen.dart';
 import 'package:wmimo/screens/logs_screen.dart';
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/app_scheme_actions.dart';
+import 'package:wmimo/app/utils/home_widget_service.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/mobile_permission_helper.dart';
 import 'package:wmimo/app/utils/move_to_background_utils.dart';
@@ -1883,6 +1884,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
         _lastNotifiedTrafficSpeed = trafficSpeedNew;
         Biz.trafficChanged(trafficTotalNew, trafficSpeedNew);
       }
+      HomeWidgetService.updateRealtimeMetrics(
+        vpnState: _state,
+        currentNode: _proxyNow.value,
+        upSpeed: _uploadSpeedRaw.value,
+        downSpeed: _downloadSpeedRaw.value,
+        upTotal: _uploadTotalRaw.value,
+        downTotal: _downloadTotalRaw.value,
+      );
       if (AppLifecycleStateNofity.isPaused()) {
         return;
       }
@@ -1998,6 +2007,14 @@ class _HomeScreenWidgetPart1 extends State<HomeScreenWidgetPart1> {
       // keep current or fallback
     } finally {
       _proxyNowUpdating = false;
+      HomeWidgetService.updateRealtimeMetrics(
+        vpnState: _state,
+        currentNode: _proxyNow.value,
+        upSpeed: _uploadSpeedRaw.value,
+        downSpeed: _downloadSpeedRaw.value,
+        upTotal: _uploadTotalRaw.value,
+        downTotal: _downloadTotalRaw.value,
+      );
     }
   }
 

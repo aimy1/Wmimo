@@ -12,4 +12,26 @@
     <string name="notif_label_mode">حالت</string>
     <string name="notif_label_port">پورت</string>
     <string name="notif_label_profile">اشتراک</string>
+    <string name="widget_status_name">Wmimo · وضعیت سرور</string>
+    <string name="widget_status_desc">مشاهده وضعیت اتصال VPN، پینگ سرور و اتصال با یک لمس</string>
+    <string name="widget_traffic_name">Wmimo · ترافیک لحظه‌ای</string>
+    <string name="widget_traffic_desc">بررسی سرعت آپلود و دانلود، مصرف نشست و حجم باقی‌مانده</string>
+    <string name="widget_quick_switch_name">Wmimo · تغییر سریع</string>
+    <string name="widget_quick_switch_desc">تغییر سریع سرورها، حالت مسیریابی و اشتراک از صفحه اصلی</string>
+    <string name="widget_status_title">وضعیت سرور</string>
+    <string name="widget_traffic_title">ترافیک لحظه‌ای</string>
+    <string name="widget_quick_switch_title">تغییر سریع</string>
+    <string name="widget_upload">آپلود</string>
+    <string name="widget_download">دانلود</string>
+    <string name="widget_session_total">ترافیک نشست</string>
+    <string name="widget_quota">حجم اشتراک</string>
+    <string name="widget_remaining">باقی‌مانده</string>
+    <string name="widget_no_profile">بدون اشتراک</string>
+    <string name="widget_no_nodes">بدون سرور</string>
+    <string name="widget_tap_connect">لمس برای اتصال</string>
+    <string name="widget_tap_disconnect">لمس برای قطع</string>
+    <string name="widget_mode_rule">قانون</string>
+    <string name="widget_mode_global">سراسری</string>
+    <string name="widget_mode_direct">مستقیم</string>
+    <string name="widget_refresh">بروزرسانی</string>
 </resources>

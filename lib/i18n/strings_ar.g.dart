@@ -70,6 +70,7 @@ class TranslationsAr with BaseTranslations<AppLocale, Translations> implements T
 	};
 	@override late final _Translations$hotkeys$ar hotkeys = _Translations$hotkeys$ar._(_root);
 	@override late final _Translations$chain_proxy$ar chain_proxy = _Translations$chain_proxy$ar._(_root);
+	@override late final _Translations$widget$ar widget = _Translations$widget$ar._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -917,6 +918,7 @@ class _Translations$meta$ar implements Translations$meta$en {
 	@override String get schemeConnectConfirm => 'طلب خارجي يريد الاتصال بالوكيل. هل تسمح؟';
 	@override String get schemeDisconnectConfirm => 'طلب خارجي يريد قطع الاتصال بالوكيل. هل تسمح؟';
 	@override String get schemeReconnectConfirm => 'طلب خارجي يريد إعادة الاتصال بالوكيل. هل تسمح؟';
+	@override String get tvModeTips => 'محسّن لتلفزيون أندرويد وجهاز التحكم: تنقل سلس بالأسهم، إدخال منبثق بزر التأكيد وإطار تركيز واضح';
 }
 
 // Path: permission
@@ -1143,6 +1145,36 @@ class _Translations$chain_proxy$ar implements Translations$chain_proxy$en {
 	@override String get picker_node_only_hint => 'تدعم قفزات العبور والخروج العقد الفعلية فقط';
 	@override String get hops_label => 'تسلسل القفزات (اسحب للترتيب / بدّل)';
 	@override String get all_nodes => 'الكل';
+}
+
+// Path: widget
+class _Translations$widget$ar implements Translations$widget$en {
+	_Translations$widget$ar._(this._root);
+
+	final TranslationsAr _root; // ignore: unused_field
+
+	// Translations
+	@override String get statusTitle => 'حالة الخادم';
+	@override String get statusDesc => 'عرض حالة اتصال VPN وزمن استجابة الخادم والتشغيل بنقرة واحدة';
+	@override String get trafficTitle => 'حركة المرور الحية';
+	@override String get trafficDesc => 'مراقبة سرعة الرفع والتنزيل واستهلاك الجلسة والباقة';
+	@override String get quickSwitchTitle => 'تبديل سريع';
+	@override String get quickSwitchDesc => 'تبديل الخوادم وأوضاع التوجيه والملفات الشخصية من الشاشة الرئيسية';
+	@override String get upload => 'رفع';
+	@override String get download => 'تنزيل';
+	@override String get sessionTotal => 'الجلسة';
+	@override String get quota => 'حصة الباقة';
+	@override String get remaining => 'المتبقي';
+	@override String get noProfile => 'لا يوجد ملف';
+	@override String get noNodes => 'لا توجد خوادم';
+	@override String get tapToConnect => 'انقر للاتصال';
+	@override String get tapToDisconnect => 'انقر لقطع الاتصال';
+	@override String get modeRule => 'قواعد';
+	@override String get modeGlobal => 'شامل';
+	@override String get modeDirect => 'مباشر';
+	@override String get refresh => 'تحديث';
+	@override String get switchNode => 'تبديل الخادم';
+	@override String get switchProfile => 'تبديل الملف';
 }
 
 // Path: main.tray
@@ -1959,6 +1991,7 @@ extension on TranslationsAr {
 			'meta.schemeConnectConfirm' => 'طلب خارجي يريد الاتصال بالوكيل. هل تسمح؟',
 			'meta.schemeDisconnectConfirm' => 'طلب خارجي يريد قطع الاتصال بالوكيل. هل تسمح؟',
 			'meta.schemeReconnectConfirm' => 'طلب خارجي يريد إعادة الاتصال بالوكيل. هل تسمح؟',
+			'meta.tvModeTips' => 'محسّن لتلفزيون أندرويد وجهاز التحكم: تنقل سلس بالأسهم، إدخال منبثق بزر التأكيد وإطار تركيز واضح',
 			'permission.camera' => 'الكاميرا',
 			'permission.screen' => 'تسجيل الشاشة',
 			'permission.appQuery' => 'الحصول على قائمة التطبيقات',
@@ -2125,6 +2158,27 @@ extension on TranslationsAr {
 			'chain_proxy.picker_node_only_hint' => 'تدعم قفزات العبور والخروج العقد الفعلية فقط',
 			'chain_proxy.hops_label' => 'تسلسل القفزات (اسحب للترتيب / بدّل)',
 			'chain_proxy.all_nodes' => 'الكل',
+			'widget.statusTitle' => 'حالة الخادم',
+			'widget.statusDesc' => 'عرض حالة اتصال VPN وزمن استجابة الخادم والتشغيل بنقرة واحدة',
+			'widget.trafficTitle' => 'حركة المرور الحية',
+			'widget.trafficDesc' => 'مراقبة سرعة الرفع والتنزيل واستهلاك الجلسة والباقة',
+			'widget.quickSwitchTitle' => 'تبديل سريع',
+			'widget.quickSwitchDesc' => 'تبديل الخوادم وأوضاع التوجيه والملفات الشخصية من الشاشة الرئيسية',
+			'widget.upload' => 'رفع',
+			'widget.download' => 'تنزيل',
+			'widget.sessionTotal' => 'الجلسة',
+			'widget.quota' => 'حصة الباقة',
+			'widget.remaining' => 'المتبقي',
+			'widget.noProfile' => 'لا يوجد ملف',
+			'widget.noNodes' => 'لا توجد خوادم',
+			'widget.tapToConnect' => 'انقر للاتصال',
+			'widget.tapToDisconnect' => 'انقر لقطع الاتصال',
+			'widget.modeRule' => 'قواعد',
+			'widget.modeGlobal' => 'شامل',
+			'widget.modeDirect' => 'مباشر',
+			'widget.refresh' => 'تحديث',
+			'widget.switchNode' => 'تبديل الخادم',
+			'widget.switchProfile' => 'تبديل الملف',
 			_ => null,
 		};
 	}

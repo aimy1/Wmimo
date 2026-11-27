@@ -2,8 +2,10 @@ package com.wmimo.app
 
 import android.Manifest
 import android.app.LocaleManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -31,6 +33,7 @@ import java.util.Locale
 
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.wmimo.app/native_helper"
+    private val WIDGET_CHANNEL = "com.wmimo.app/widget"
     private val VPN_REQUEST_CODE = 1001
     private val NOTIF_REQUEST_CODE = 1002
     private val APP_LIST_REQUEST_CODE = 1003
@@ -38,6 +41,67 @@ class MainActivity : FlutterActivity() {
     private var pendingVpnResult: MethodChannel.Result? = null
     private var pendingNotifResult: MethodChannel.Result? = null
     private var pendingAppListResult: MethodChannel.Result? = null
+    private var widgetMethodChannel: MethodChannel? = null
+    private var pendingWidgetUri: String? = null
+    private var widgetSyncReceiverRegistered = false
+
+    private val widgetSyncReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action != WmimoWidgetUpdater.ACTION_NATIVE_WIDGET_SYNC) return
+            val payload = mutableMapOf<String, Any>()
+            intent.getStringExtra("mode")?.let { payload["mode"] = it }
+            intent.getStringExtra("currentNode")?.let { payload["currentNode"] = it }
+            if (intent.hasExtra("vpnStopped")) {
+                payload["vpnStopped"] = intent.getBooleanExtra("vpnStopped", false)
+            }
+            if (payload.isNotEmpty()) {
+                runOnUiThread {
+                    try {
+                        widgetMethodChannel?.invokeMethod("onNativeStateChanged", payload)
+                    } catch (_: Throwable) {}
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+        super.onCreate(savedInstanceState)
+        captureWidgetIntent(intent, dispatchImmediately = false)
+        registerWidgetSyncReceiver()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        captureWidgetIntent(intent, dispatchImmediately = true)
+    }
+
+    private fun captureWidgetIntent(intent: Intent?, dispatchImmediately: Boolean) {
+        val dataUri = intent?.data ?: return
+        if (dataUri.scheme == "wmimo" && dataUri.host == "widget") {
+            val uriStr = dataUri.toString()
+            if (dispatchImmediately && widgetMethodChannel != null) {
+                try {
+                    widgetMethodChannel?.invokeMethod("onWidgetAction", mapOf("uri" to uriStr))
+                    return
+                } catch (_: Throwable) {}
+            }
+            pendingWidgetUri = uriStr
+        }
+    }
+
+    private fun registerWidgetSyncReceiver() {
+        if (widgetSyncReceiverRegistered) return
+        try {
+            val filter = IntentFilter(WmimoWidgetUpdater.ACTION_NATIVE_WIDGET_SYNC)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(widgetSyncReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                registerReceiver(widgetSyncReceiver, filter)
+            }
+            widgetSyncReceiverRegistered = true
+        } catch (_: Throwable) {}
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
@@ -46,6 +110,13 @@ class MainActivity : FlutterActivity() {
             when (call.method) {
                 "getNativeLibraryDir" -> {
                     result.success(applicationInfo.nativeLibraryDir)
+                }
+                "isAndroidTv" -> {
+                    val uiModeManager = getSystemService(Context.UI_MODE_SERVICE) as? android.app.UiModeManager
+                    val isTvUi = uiModeManager?.currentModeType == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
+                    val hasLeanback = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
+                    val noTouch = !packageManager.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN)
+                    result.success(isTvUi || hasLeanback || noTouch)
                 }
                 "getNativeLibraryPath" -> {
                     val libName = call.argument<String>("libName") ?: "libwmimoService.so"
@@ -529,6 +600,43 @@ class MainActivity : FlutterActivity() {
                 else -> result.notImplemented()
             }
         }
+
+        val wChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, WIDGET_CHANNEL)
+        widgetMethodChannel = wChannel
+        wChannel.setMethodCallHandler { call, result ->
+            when (call.method) {
+                "getWidgetToken" -> {
+                    result.success(WmimoWidgetUpdater.getOrCreateToken(this))
+                }
+                "syncWidgetSnapshot" -> {
+                    val snapshot = call.argument<String>("snapshot")
+                    if (!snapshot.isNullOrEmpty()) {
+                        WmimoWidgetUpdater.saveSnapshotAndRefresh(this, snapshot)
+                    } else {
+                        WmimoWidgetUpdater.refreshAllWidgets(this)
+                    }
+                    result.success(true)
+                }
+                "consumeNativeOverrides" -> {
+                    result.success(WmimoWidgetUpdater.consumeNativeOverrides(this))
+                }
+                "getPendingWidgetAction" -> {
+                    val uriStr = pendingWidgetUri
+                    pendingWidgetUri = null
+                    if (!uriStr.isNullOrEmpty()) {
+                        result.success(mapOf("uri" to uriStr))
+                    } else {
+                        result.success(null)
+                    }
+                }
+                "registerCorePid" -> {
+                    val pid = call.argument<Int>("pid") ?: 0
+                    WmimoWidgetUpdater.saveCorePid(this, pid)
+                    result.success(true)
+                }
+                else -> result.notImplemented()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -554,6 +662,13 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onDestroy() {
+        if (widgetSyncReceiverRegistered) {
+            widgetSyncReceiverRegistered = false
+            try {
+                unregisterReceiver(widgetSyncReceiver)
+            } catch (_: Throwable) {}
+        }
+        widgetMethodChannel = null
         pendingVpnResult = null
         pendingNotifResult = null
         pendingAppListResult = null

@@ -70,6 +70,7 @@ class TranslationsRu with BaseTranslations<AppLocale, Translations> implements T
 	};
 	@override late final _Translations$hotkeys$ru hotkeys = _Translations$hotkeys$ru._(_root);
 	@override late final _Translations$chain_proxy$ru chain_proxy = _Translations$chain_proxy$ru._(_root);
+	@override late final _Translations$widget$ru widget = _Translations$widget$ru._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -917,6 +918,7 @@ class _Translations$meta$ru implements Translations$meta$en {
 	@override String get schemeConnectConfirm => 'Внешний запрос на подключение прокси. Разрешить?';
 	@override String get schemeDisconnectConfirm => 'Внешний запрос на отключение прокси. Разрешить?';
 	@override String get schemeReconnectConfirm => 'Внешний запрос на переподключение прокси. Разрешить?';
+	@override String get tvModeTips => 'Оптимизировано для Android TV и пульта: защита фокуса, ввод во всплывающем окне по кнопке ОК и яркая рамка фокуса';
 }
 
 // Path: permission
@@ -1143,6 +1145,36 @@ class _Translations$chain_proxy$ru implements Translations$chain_proxy$en {
 	@override String get picker_node_only_hint => 'Транзитные и выходные шаги поддерживают только конкретные узлы';
 	@override String get hops_label => 'Порядок переходов (перетащите или поменяйте)';
 	@override String get all_nodes => 'Все';
+}
+
+// Path: widget
+class _Translations$widget$ru implements Translations$widget$en {
+	_Translations$widget$ru._(this._root);
+
+	final TranslationsRu _root; // ignore: unused_field
+
+	// Translations
+	@override String get statusTitle => 'Статус узла';
+	@override String get statusDesc => 'Статус VPN, задержка текущего узла и быстрое переключение';
+	@override String get trafficTitle => 'Трафик';
+	@override String get trafficDesc => 'Скорость загрузки/отдачи, трафик сессии и остаток пакета';
+	@override String get quickSwitchTitle => 'Быстрое переключение';
+	@override String get quickSwitchDesc => 'Переключение узлов, режимов и профилей с главного экрана';
+	@override String get upload => 'Отдача';
+	@override String get download => 'Загрузка';
+	@override String get sessionTotal => 'За сессию';
+	@override String get quota => 'Лимит трафика';
+	@override String get remaining => 'Остаток';
+	@override String get noProfile => 'Нет профиля';
+	@override String get noNodes => 'Нет узлов';
+	@override String get tapToConnect => 'Нажмите для подключения';
+	@override String get tapToDisconnect => 'Нажмите для отключения';
+	@override String get modeRule => 'Правила';
+	@override String get modeGlobal => 'Глобальный';
+	@override String get modeDirect => 'Напрямую';
+	@override String get refresh => 'Обновить';
+	@override String get switchNode => 'Сменить узел';
+	@override String get switchProfile => 'Сменить профиль';
 }
 
 // Path: main.tray
@@ -1959,6 +1991,7 @@ extension on TranslationsRu {
 			'meta.schemeConnectConfirm' => 'Внешний запрос на подключение прокси. Разрешить?',
 			'meta.schemeDisconnectConfirm' => 'Внешний запрос на отключение прокси. Разрешить?',
 			'meta.schemeReconnectConfirm' => 'Внешний запрос на переподключение прокси. Разрешить?',
+			'meta.tvModeTips' => 'Оптимизировано для Android TV и пульта: защита фокуса, ввод во всплывающем окне по кнопке ОК и яркая рамка фокуса',
 			'permission.camera' => 'Камера',
 			'permission.screen' => 'Запись экрана',
 			'permission.appQuery' => 'Получить список приложений',
@@ -2125,6 +2158,27 @@ extension on TranslationsRu {
 			'chain_proxy.picker_node_only_hint' => 'Транзитные и выходные шаги поддерживают только конкретные узлы',
 			'chain_proxy.hops_label' => 'Порядок переходов (перетащите или поменяйте)',
 			'chain_proxy.all_nodes' => 'Все',
+			'widget.statusTitle' => 'Статус узла',
+			'widget.statusDesc' => 'Статус VPN, задержка текущего узла и быстрое переключение',
+			'widget.trafficTitle' => 'Трафик',
+			'widget.trafficDesc' => 'Скорость загрузки/отдачи, трафик сессии и остаток пакета',
+			'widget.quickSwitchTitle' => 'Быстрое переключение',
+			'widget.quickSwitchDesc' => 'Переключение узлов, режимов и профилей с главного экрана',
+			'widget.upload' => 'Отдача',
+			'widget.download' => 'Загрузка',
+			'widget.sessionTotal' => 'За сессию',
+			'widget.quota' => 'Лимит трафика',
+			'widget.remaining' => 'Остаток',
+			'widget.noProfile' => 'Нет профиля',
+			'widget.noNodes' => 'Нет узлов',
+			'widget.tapToConnect' => 'Нажмите для подключения',
+			'widget.tapToDisconnect' => 'Нажмите для отключения',
+			'widget.modeRule' => 'Правила',
+			'widget.modeGlobal' => 'Глобальный',
+			'widget.modeDirect' => 'Напрямую',
+			'widget.refresh' => 'Обновить',
+			'widget.switchNode' => 'Сменить узел',
+			'widget.switchProfile' => 'Сменить профиль',
 			_ => null,
 		};
 	}

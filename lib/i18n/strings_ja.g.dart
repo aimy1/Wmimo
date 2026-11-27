@@ -70,6 +70,7 @@ class TranslationsJa with BaseTranslations<AppLocale, Translations> implements T
 	};
 	@override late final _Translations$hotkeys$ja hotkeys = _Translations$hotkeys$ja._(_root);
 	@override late final _Translations$chain_proxy$ja chain_proxy = _Translations$chain_proxy$ja._(_root);
+	@override late final _Translations$widget$ja widget = _Translations$widget$ja._(_root);
 }
 
 // Path: WelcomeLanguageScreen
@@ -917,6 +918,7 @@ class _Translations$meta$ja implements Translations$meta$en {
 	@override String get schemeConnectConfirm => '外部からプロキシ接続のリクエストがあります。許可しますか？';
 	@override String get schemeDisconnectConfirm => '外部からプロキシ切断のリクエストがあります。許可しますか？';
 	@override String get schemeReconnectConfirm => '外部からプロキシ再接続のリクエストがあります。許可しますか？';
+	@override String get tvModeTips => 'Android TV・リモコン操作に最適化：十字キーのフォーカス移動保護、決定キーでのポップアップ入力、高コントラスト枠線';
 }
 
 // Path: permission
@@ -1143,6 +1145,36 @@ class _Translations$chain_proxy$ja implements Translations$chain_proxy$en {
 	@override String get picker_node_only_hint => '中継・出口ホップは具体的なプロキシノードのみ選択できます';
 	@override String get hops_label => 'ホップ構成（ドラッグ並べ替え / 入れ替え可）';
 	@override String get all_nodes => 'すべて';
+}
+
+// Path: widget
+class _Translations$widget$ja implements Translations$widget$en {
+	_Translations$widget$ja._(this._root);
+
+	final TranslationsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get statusTitle => 'ノード状態';
+	@override String get statusDesc => 'VPN接続状態と現在のノード遅延を確認し、ワンタップで切替';
+	@override String get trafficTitle => 'リアルタイム通信量';
+	@override String get trafficDesc => '上下通信速度、セッション通信量、プラン残量を表示';
+	@override String get quickSwitchTitle => 'クイック切替';
+	@override String get quickSwitchDesc => 'ホーム画面からノード、モード、プロファイルを素早く切替';
+	@override String get upload => 'アップロード';
+	@override String get download => 'ダウンロード';
+	@override String get sessionTotal => '今回の通信量';
+	@override String get quota => 'プラン残量';
+	@override String get remaining => '残り';
+	@override String get noProfile => 'プロファイルなし';
+	@override String get noNodes => 'ノードなし';
+	@override String get tapToConnect => 'タップして接続';
+	@override String get tapToDisconnect => 'タップして切断';
+	@override String get modeRule => 'ルール';
+	@override String get modeGlobal => 'グローバル';
+	@override String get modeDirect => 'ダイレクト';
+	@override String get refresh => '更新';
+	@override String get switchNode => 'ノード切替';
+	@override String get switchProfile => 'プロファイル切替';
 }
 
 // Path: main.tray
@@ -1959,6 +1991,7 @@ extension on TranslationsJa {
 			'meta.schemeConnectConfirm' => '外部からプロキシ接続のリクエストがあります。許可しますか？',
 			'meta.schemeDisconnectConfirm' => '外部からプロキシ切断のリクエストがあります。許可しますか？',
 			'meta.schemeReconnectConfirm' => '外部からプロキシ再接続のリクエストがあります。許可しますか？',
+			'meta.tvModeTips' => 'Android TV・リモコン操作に最適化：十字キーのフォーカス移動保護、決定キーでのポップアップ入力、高コントラスト枠線',
 			'permission.camera' => 'カメラ',
 			'permission.screen' => '画面録画',
 			'permission.appQuery' => 'アプリケーションリストを取得',
@@ -2125,6 +2158,27 @@ extension on TranslationsJa {
 			'chain_proxy.picker_node_only_hint' => '中継・出口ホップは具体的なプロキシノードのみ選択できます',
 			'chain_proxy.hops_label' => 'ホップ構成（ドラッグ並べ替え / 入れ替え可）',
 			'chain_proxy.all_nodes' => 'すべて',
+			'widget.statusTitle' => 'ノード状態',
+			'widget.statusDesc' => 'VPN接続状態と現在のノード遅延を確認し、ワンタップで切替',
+			'widget.trafficTitle' => 'リアルタイム通信量',
+			'widget.trafficDesc' => '上下通信速度、セッション通信量、プラン残量を表示',
+			'widget.quickSwitchTitle' => 'クイック切替',
+			'widget.quickSwitchDesc' => 'ホーム画面からノード、モード、プロファイルを素早く切替',
+			'widget.upload' => 'アップロード',
+			'widget.download' => 'ダウンロード',
+			'widget.sessionTotal' => '今回の通信量',
+			'widget.quota' => 'プラン残量',
+			'widget.remaining' => '残り',
+			'widget.noProfile' => 'プロファイルなし',
+			'widget.noNodes' => 'ノードなし',
+			'widget.tapToConnect' => 'タップして接続',
+			'widget.tapToDisconnect' => 'タップして切断',
+			'widget.modeRule' => 'ルール',
+			'widget.modeGlobal' => 'グローバル',
+			'widget.modeDirect' => 'ダイレクト',
+			'widget.refresh' => '更新',
+			'widget.switchNode' => 'ノード切替',
+			'widget.switchProfile' => 'プロファイル切替',
 			_ => null,
 		};
 	}

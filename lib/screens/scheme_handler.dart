@@ -1,5 +1,6 @@
 import 'package:wmimo/app/runtime/return_result.dart';
 import 'package:wmimo/app/utils/app_scheme_actions.dart';
+import 'package:wmimo/app/utils/home_widget_service.dart';
 import 'package:wmimo/app/utils/platform_utils.dart';
 import 'package:wmimo/app/utils/system_scheme_utils.dart';
 import 'package:wmimo/app/utils/url_launcher_utils.dart';
@@ -65,6 +66,16 @@ class SchemeHandler {
         if (VpnActionHandler.vpnReconnect != null) {
           VpnActionHandler.vpnReconnect!.call("scheme", false);
         }
+        return null;
+      } else if (uri.host == AppSchemeActions.widgetAction()) {
+        final cmd = HomeWidgetService.parseWidgetUri(
+          uri,
+          expectedToken: HomeWidgetService.actionToken,
+        );
+        if (cmd == null) {
+          return ReturnResultError("invalid or unauthorized widget action");
+        }
+        await HomeWidgetService.executeCommand(cmd);
         return null;
       }
     }

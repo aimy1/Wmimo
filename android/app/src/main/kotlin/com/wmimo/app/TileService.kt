@@ -3,10 +3,12 @@ package com.wmimo.app
 import android.app.ActivityManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
@@ -16,48 +18,58 @@ import java.io.File
 @RequiresApi(24)
 class TileService : TileService() {
     companion object {
-        const val profile_file_name = "vpn_profile.txt"
-        const val service_file_name = "service.json"
+        const val SERVICE_FILE_NAME = "service.json"
+        const val PROFILES_CONFIG_NAME = "profiles.json"
 
         const val VPN_SERVICE_CLASS = "com.wmimo.app.WmimoVpnService"
         const val ACTION_START = "com.wmimo.app.vpn.START"
         const val ACTION_STOP = "com.wmimo.app.vpn.STOP"
         const val ACTION_START_RESULT = "com.wmimo.app.vpn.START_RESULT"
         const val ACTION_STOPED = "com.wmimo.app.vpn.STOPPED"
+
+        fun requestTileUpdate(context: Context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                try {
+                    requestListeningState(
+                        context.applicationContext,
+                        ComponentName(context.applicationContext, TileService::class.java)
+                    )
+                } catch (_: Throwable) {}
+            }
+        }
     }
 
     private var receiverRegistered = false
-    private val receiver =
-            object : BroadcastReceiver() {
-                override fun onReceive(
-                        context: Context,
-                        intent: Intent,
-                ) {
-                    when (intent.action) {
-                        ACTION_START_RESULT -> {
-                            val err = intent.getStringExtra("err")
-                            updateTile(err == "")
-                        }
-                        ACTION_STOPED -> {
-                            updateTile(false)
-                        }
-                    }
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                ACTION_START_RESULT -> {
+                    val err = intent.getStringExtra("err") ?: ""
+                    updateTile(err.isEmpty())
+                }
+                ACTION_STOPED -> {
+                    updateTile(false)
+                }
+                WmimoWidgetUpdater.ACTION_NATIVE_WIDGET_SYNC -> {
+                    update()
                 }
             }
+        }
+    }
 
     override fun onCreate() {
         if (!receiverRegistered) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                var intentFilter = IntentFilter()
-                intentFilter.addAction(ACTION_STOPED)
-                intentFilter.addAction(ACTION_START_RESULT)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    registerReceiver(receiver, intentFilter, Context.RECEIVER_EXPORTED)
-                } else {
-                    registerReceiver(receiver, intentFilter)
-                }
-                receiverRegistered = true
+            val intentFilter = IntentFilter().apply {
+                addAction(ACTION_STOPED)
+                addAction(ACTION_START_RESULT)
+                addAction(WmimoWidgetUpdater.ACTION_NATIVE_WIDGET_SYNC)
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(receiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                registerReceiver(receiver, intentFilter)
+            }
+            receiverRegistered = true
         }
         super.onCreate()
     }
@@ -65,33 +77,30 @@ class TileService : TileService() {
     override fun onDestroy() {
         if (receiverRegistered) {
             receiverRegistered = false
-            unregisterReceiver(receiver)
+            try {
+                unregisterReceiver(receiver)
+            } catch (_: Throwable) {}
         }
         super.onDestroy()
     }
 
     override fun onClick() {
-        if (isRuning()) {
-            var intent =
-                    Intent().apply {
-                        action = ACTION_STOP
-                    }
-            intent.setClassName(
-                    getPackageName(),
-                    VPN_SERVICE_CLASS
-            )
-            intent.putExtra("exitProcess", true)
+        if (isRunning()) {
+            val intent = Intent(this, WmimoVpnService::class.java).apply {
+                action = ACTION_STOP
+                putExtra("exitProcess", true)
+            }
             startService(intent)
-            // stopService(intent)
+            WmimoWidgetUpdater.recordNativeOverride(this, vpnStopped = true)
+            WmimoWidgetUpdater.onVpnServiceStateChanged(this, false)
             updateTile(false)
             return
         }
 
         try {
-            updateTile(true)
-            startByService()
+            startByLaunch()
         } catch (e: Exception) {
-            var stackTrace = e.getStackTrace().joinToString(separator = "\n")
+            val stackTrace = e.stackTrace.joinToString(separator = "\n")
             writeLog("TileService onClick: exception: $e \n$stackTrace")
         }
     }
@@ -115,11 +124,24 @@ class TileService : TileService() {
     }
 
     private fun isValid(): Boolean {
-        return profileFile().exists() && serviceFile().exists()
+        val snap = WmimoWidgetUpdater.loadSnapshot(this)
+        if (snap.optString("profileId", "").isNotEmpty() ||
+            snap.optString("profileName", "").isNotEmpty()
+        ) {
+            return true
+        }
+        val appDir = File(filesDir, packageName)
+        if (File(appDir, SERVICE_FILE_NAME).exists() ||
+            File(appDir, PROFILES_CONFIG_NAME).exists() ||
+            File(filesDir, SERVICE_FILE_NAME).exists()
+        ) {
+            return true
+        }
+        return true
     }
 
     private fun update() {
-        if (isRuning()) {
+        if (isRunning()) {
             updateTile(true)
             return
         }
@@ -128,16 +150,20 @@ class TileService : TileService() {
     }
 
     private fun updateTile(active: Boolean?) {
+        val snap = WmimoWidgetUpdater.loadSnapshot(this)
+        val nodeDisplay = snap.optString("currentNodeDisplay", "").ifEmpty {
+            snap.optString("currentNode", "")
+        }
+
         qsTile?.apply {
-            state =
-                    when (active) {
-                        true -> Tile.STATE_ACTIVE
-                        false -> Tile.STATE_INACTIVE
-                        else -> Tile.STATE_UNAVAILABLE
-                    }
+            state = when (active) {
+                true -> Tile.STATE_ACTIVE
+                false -> Tile.STATE_INACTIVE
+                else -> Tile.STATE_UNAVAILABLE
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 subtitle = when (active) {
-                    true -> getString(R.string.tile_connected)
+                    true -> if (nodeDisplay.isNotEmpty()) nodeDisplay else getString(R.string.tile_connected)
                     false -> getString(R.string.tile_disconnected)
                     else -> getString(R.string.tile_unavailable)
                 }
@@ -147,87 +173,52 @@ class TileService : TileService() {
         }
     }
 
-    private fun startByService() {
-        var intent =
-                Intent().apply { action = ACTION_START }
-        intent.setClassName(
-                getPackageName(),
-                VPN_SERVICE_CLASS
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent)
-        } else {
-            startService(intent)
-        }
-    }
-
     private fun startByLaunch() {
-        var intent = Intent()
-        intent.setClassName(getPackageName(), MainActivity::class.java.name)
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.putExtra("command", "connect")
+        val token = WmimoWidgetUpdater.getOrCreateToken(this)
+        val uri = Uri.parse("wmimo://widget?action=connect&background=true&token=$token")
+        val intent = Intent(Intent.ACTION_VIEW, uri, this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            putExtra("command", "connect")
+        }
         if (Build.VERSION.SDK_INT < 34) {
+            @Suppress("DEPRECATION")
             startActivityAndCollapse(intent)
         } else {
-            startActivityAndCollapse(
-                    PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            val pendingIntent = PendingIntent.getActivity(
+                this,
+                401,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
+            startActivityAndCollapse(pendingIntent)
         }
     }
 
-    private fun startBy() {
-        if (!isMainProcessRunning()) {
-            startByLaunch()
-        } else {
-            startByService()
+    private fun isRunning(): Boolean {
+        if (WmimoVpnService.isServiceRunning) {
+            return true
         }
+        return isServiceRunning(VPN_SERVICE_CLASS)
     }
 
-    private fun isMainRuning(): Boolean = isServiceRuning(MainActivity::class.java.name)
-
-    private fun isRuning(): Boolean =
-            isServiceRuning(VPN_SERVICE_CLASS)
-
-    private fun isServiceRuning(serviceName: String): Boolean {
+    private fun isServiceRunning(serviceName: String): Boolean {
         try {
-            val packageName = getPackageName()
+            val pkg = packageName
             val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            @Suppress("DEPRECATION")
             val services = activityManager.getRunningServices(Integer.MAX_VALUE)
             for (runningServiceInfo in services) {
-                if (runningServiceInfo.service.getPackageName().equals(packageName)) {
-                    if (runningServiceInfo.service.getClassName().equals(serviceName)) {
-                        return runningServiceInfo.started
-                    }
+                if (runningServiceInfo.service.packageName == pkg &&
+                    runningServiceInfo.service.className == serviceName
+                ) {
+                    return runningServiceInfo.started
                 }
             }
         } catch (e: Exception) {
-            var stackTrace = e.getStackTrace().joinToString(separator = "\n")
-            writeLog("TileService isServiceRuning: exception: $e \n$stackTrace")
-        }
-
-        return false
-    }
-
-    fun isMainProcessRunning(): Boolean {
-        val packageName = getPackageName()
-        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val runningApps = activityManager.runningAppProcesses ?: return false
-        for (procInfo in runningApps) {
-            if (procInfo.processName == packageName) {
-                return true
-            }
+            val stackTrace = e.stackTrace.joinToString(separator = "\n")
+            writeLog("TileService isServiceRunning: exception: $e \n$stackTrace")
         }
         return false
-    }
-
-    private fun serviceFile(): File {
-        val context = this as Context
-        return File(context.getFilesDir(), service_file_name)
-    }
-
-    private fun profileFile(): File {
-        val context = this as Context
-        return File(context.getFilesDir(), profile_file_name)
     }
 
     private fun writeLog(message: String) {
