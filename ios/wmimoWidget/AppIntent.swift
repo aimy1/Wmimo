@@ -357,16 +357,26 @@ public enum WmimoWidgetStore {
     }
 
     public static func formatBytes(_ bytes: Int64) -> String {
-        if (bytes <= 0) return "0 B"
+        if bytes <= 0 {
+            return "0 B"
+        }
         let kb = 1024.0
         let mb = kb * 1024.0
         let gb = mb * 1024.0
         let tb = gb * 1024.0
         let val = Double(bytes)
-        if (val >= tb) return String(format: "%.1f TB", val / tb)
-        if (val >= gb) return String(format: "%.1f GB", val / gb)
-        if (val >= mb) return String(format: "%.1f MB", val / mb)
-        if (val >= kb) return String(format: "%.1f KB", val / kb)
+        if val >= tb {
+            return String(format: "%.1f TB", val / tb)
+        }
+        if val >= gb {
+            return String(format: "%.1f GB", val / gb)
+        }
+        if val >= mb {
+            return String(format: "%.1f MB", val / mb)
+        }
+        if val >= kb {
+            return String(format: "%.1f KB", val / kb)
+        }
         return "\(bytes) B"
     }
 
@@ -401,7 +411,8 @@ public enum WmimoWidgetStore {
         return nil
     }
 
-    public static func refreshLiveMetricsIfConnected(_ snapshot: inout WmimoWidgetSnapshot) async {
+    public static func refreshLiveMetricsIfConnected(_ initialSnapshot: WmimoWidgetSnapshot) async -> WmimoWidgetSnapshot {
+        var snapshot = initialSnapshot
         let status = await VpnServiceHandler.shared.getCurrentState()
         let isRunning = (status == .connected || status == .connecting || status == .reasserting)
         if status != .invalid {
@@ -414,7 +425,7 @@ public enum WmimoWidgetStore {
             snapshot.downSpeed = 0
             snapshot.upSpeedText = "0 B/s"
             snapshot.downSpeedText = "0 B/s"
-            return
+            return snapshot
         }
 
         if let connData = await performCoreHttpRequest(
@@ -431,6 +442,7 @@ public enum WmimoWidgetStore {
             snapshot.downTotalText = formatBytes(downTotal)
             snapshot.sessionTotalText = formatBytes(upTotal + downTotal)
         }
+        return snapshot
     }
 }
 
@@ -484,8 +496,8 @@ struct RefreshWmimoWidgetIntent: AppIntent {
     static let description = IntentDescription("Refresh live traffic and proxy node status.")
 
     func perform() async throws -> some IntentResult {
-        var snap = WmimoWidgetStore.loadSnapshot()
-        await WmimoWidgetStore.refreshLiveMetricsIfConnected(&snap)
+        let current = WmimoWidgetStore.loadSnapshot()
+        let snap = await WmimoWidgetStore.refreshLiveMetricsIfConnected(current)
         WmimoWidgetStore.saveSnapshot(snap)
         WidgetCenter.shared.reloadAllTimelines()
         return .result()
