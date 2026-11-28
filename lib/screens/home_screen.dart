@@ -1008,6 +1008,7 @@ class _HomeScreenState extends State<HomeScreen>
                           Expanded(
                             child: AnimatedIndexedStack(
                               index: _currentNavIndex,
+                              lazy: true,
                               children: _tabPages,
                             ),
                           ),
@@ -1023,6 +1024,7 @@ class _HomeScreenState extends State<HomeScreen>
                     Expanded(
                       child: AnimatedIndexedStack(
                         index: _currentNavIndex,
+                        lazy: true,
                         children: _tabPages,
                       ),
                     ),

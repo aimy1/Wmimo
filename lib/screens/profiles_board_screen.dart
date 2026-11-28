@@ -47,7 +47,6 @@ class _ProfilesBoardScreenState extends State<ProfilesBoardScreen>
     ProfileManager.onEventRemove.add(_onRemove);
     ProfileManager.onEventUpdate.add(_onUpdate);
     ProfileManager.onEventCurrentChanged.add(_onCurrentChanged);
-    _reloadProfiles();
   }
 
   void _onSearchChanged() {

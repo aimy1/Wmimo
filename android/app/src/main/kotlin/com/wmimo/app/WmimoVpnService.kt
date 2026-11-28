@@ -9,9 +9,13 @@ import android.content.Intent
 import android.net.ProxyInfo
 import android.net.VpnService
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.ParcelFileDescriptor
 import androidx.core.app.NotificationCompat
 import java.io.File
+import java.net.InetSocketAddress
+import java.net.Socket
 
 class WmimoVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
@@ -20,6 +24,43 @@ class WmimoVpnService : VpnService() {
     private var perAppEnable = false
     private var perAppWhitelist = false
     private var perAppPackages: ArrayList<String> = ArrayList()
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private var consecutiveDeadChecks = 0
+
+    private val coreWatchdogRunnable = object : Runnable {
+        override fun run() {
+            if (!isRunning) return
+            Thread {
+                val alive = isCorePortListening(mixedPort)
+                mainHandler.post {
+                    if (!isRunning) return@post
+                    if (alive) {
+                        consecutiveDeadChecks = 0
+                        mainHandler.postDelayed(this, 2500L)
+                    } else {
+                        consecutiveDeadChecks++
+                        if (consecutiveDeadChecks >= 2) {
+                            stopVpn()
+                        } else {
+                            mainHandler.postDelayed(this, 1500L)
+                        }
+                    }
+                }
+            }.start()
+        }
+    }
+
+    private fun isCorePortListening(port: Int): Boolean {
+        if (port <= 0) return false
+        return try {
+            Socket().use { socket ->
+                socket.connect(InetSocketAddress("127.0.0.1", port), 400)
+                true
+            }
+        } catch (_: Throwable) {
+            false
+        }
+    }
 
     companion object {
         const val ACTION_START = "com.wmimo.app.vpn.START"
@@ -186,6 +227,9 @@ class WmimoVpnService : VpnService() {
                 } catch (_: Exception) {}
                 isRunning = true
                 isServiceRunning = true
+                consecutiveDeadChecks = 0
+                mainHandler.removeCallbacks(coreWatchdogRunnable)
+                mainHandler.postDelayed(coreWatchdogRunnable, 3000L)
                 WmimoWidgetUpdater.onVpnServiceStateChanged(this, true)
                 notifyTileStateChanged(true)
             } else if (!isRunning) {
@@ -199,6 +243,8 @@ class WmimoVpnService : VpnService() {
     }
 
     private fun stopVpn() {
+        mainHandler.removeCallbacks(coreWatchdogRunnable)
+        consecutiveDeadChecks = 0
         isRunning = false
         isServiceRunning = false
         currentNotificationContent = null
@@ -230,6 +276,11 @@ class WmimoVpnService : VpnService() {
             sendBroadcast(broadcast)
             TileService.requestTileUpdate(this)
         } catch (_: Throwable) {}
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        stopVpn()
+        super.onTaskRemoved(rootIntent)
     }
 
     override fun onDestroy() {

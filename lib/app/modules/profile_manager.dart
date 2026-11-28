@@ -362,6 +362,8 @@ class ProfileManager {
   static final Set<String> updating = {};
   static Timer? _timerChecker;
   static bool _saving = false;
+  static Future<void>? _loadingFuture;
+  static bool _tickerUpdating = false;
 
   static void _onVpnStateChanged(
     FlutterVpnServiceState state,
@@ -444,15 +446,29 @@ class ProfileManager {
   }
 
   static Future<void> load() async {
+    if (_loadingFuture != null) {
+      return await _loadingFuture!;
+    }
+    final future = _loadInternal();
+    _loadingFuture = future;
+    try {
+      await future;
+    } finally {
+      _loadingFuture = null;
+    }
+  }
+
+  static Future<void> _loadInternal() async {
     String filePath = await PathUtils.profilesConfigFilePath();
     var file = File(filePath);
     bool exists = await file.exists();
+    final tempConfig = ProfileConfig();
     if (exists) {
       try {
         String content = await file.readAsString();
         if (content.isNotEmpty) {
           var config = jsonDecode(content);
-          _config.fromJson(config);
+          tempConfig.fromJson(config);
         }
       } catch (err) {
         Log.w("ProfileManager.load exception ${err.toString()} ");
@@ -473,34 +489,37 @@ class ProfileManager {
           ?.substring(urlComment.length)
           .trim();
     }
-    for (int i = 0; i < _config.profiles.length; ++i) {
-      if (!existProfiles.containsKey(_config.profiles[i].id) &&
-          !_config.profiles[i].isRemote()) {
-        _config.profiles.removeAt(i);
+    for (int i = 0; i < tempConfig.profiles.length; ++i) {
+      if (!existProfiles.containsKey(tempConfig.profiles[i].id) &&
+          !tempConfig.profiles[i].isRemote()) {
+        tempConfig.profiles.removeAt(i);
         --i;
       }
     }
     existProfiles.forEach((key, existValue) {
-      int index = _config.profiles.indexWhere((value) {
+      int index = tempConfig.profiles.indexWhere((value) {
         return value.id == key;
       });
       if (index < 0) {
-        _config.profiles.add(ProfileSetting(id: key, url: existValue ?? ""));
+        tempConfig.profiles.add(ProfileSetting(id: key, url: existValue ?? ""));
       }
     });
 
-    if (_config._currentId.isNotEmpty) {
-      int index = _config.profiles.indexWhere((value) {
-        return value.id == _config._currentId;
+    if (tempConfig._currentId.isNotEmpty) {
+      int index = tempConfig.profiles.indexWhere((value) {
+        return value.id == tempConfig._currentId;
       });
 
       if (index < 0) {
-        _config._currentId = "";
+        tempConfig._currentId = "";
       }
     }
-    if (_config._currentId.isEmpty && _config.profiles.isNotEmpty) {
-      _config._currentId = _config.profiles.first.id;
+    if (tempConfig._currentId.isEmpty && tempConfig.profiles.isNotEmpty) {
+      tempConfig._currentId = tempConfig.profiles.first.id;
     }
+
+    _config._currentId = tempConfig._currentId;
+    _config.profiles = tempConfig.profiles;
   }
 
   static ProfileSetting? getCurrent() {
@@ -1232,30 +1251,39 @@ class ProfileManager {
   }
 
   static Future<void> updateByTicker() async {
-    DateTime now = DateTime.now();
-    for (var profile in _config.profiles) {
-      if (!profile.isRemote()) {
-        continue;
-      }
-      Duration? updateInterval = profile.updateInterval;
-      if (profile.updateIntervalPreferByProfile) {
-        updateInterval =
-            profile.updateIntervalByProfile ?? profile.updateInterval;
-      } else {
-        updateInterval = profile.updateInterval;
-      }
-      if (updateInterval == null) {
-        continue;
-      }
-      if (profile.update == null ||
-          now.difference(profile.update!).inSeconds >=
-              updateInterval.inSeconds) {
-        if (profile.updateFailed == null ||
-            now.difference(profile.updateFailed!).inSeconds >=
+    if (_tickerUpdating) {
+      return;
+    }
+    _tickerUpdating = true;
+    try {
+      DateTime now = DateTime.now();
+      final snapshot = List<ProfileSetting>.from(_config.profiles);
+      for (var profile in snapshot) {
+        if (!profile.isRemote()) {
+          continue;
+        }
+        Duration? updateInterval = profile.updateInterval;
+        if (profile.updateIntervalPreferByProfile) {
+          updateInterval =
+              profile.updateIntervalByProfile ?? profile.updateInterval;
+        } else {
+          updateInterval = profile.updateInterval;
+        }
+        if (updateInterval == null) {
+          continue;
+        }
+        if (profile.update == null ||
+            now.difference(profile.update!).inSeconds >=
                 updateInterval.inSeconds) {
-          update(profile.id);
+          if (profile.updateFailed == null ||
+              now.difference(profile.updateFailed!).inSeconds >=
+                  updateInterval.inSeconds) {
+            await update(profile.id);
+          }
         }
       }
+    } finally {
+      _tickerUpdating = false;
     }
   }
 

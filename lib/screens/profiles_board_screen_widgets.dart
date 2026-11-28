@@ -936,6 +936,8 @@ class ProfilesBoardScreenWidget extends StatefulWidget {
 
 class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
   final Map<String, int> _nodeCounts = {};
+  bool _isLoadingCounts = false;
+  bool _pendingReloadCounts = false;
 
   @override
   void initState() {
@@ -960,25 +962,43 @@ class _ProfilesBoardScreenWidget extends State<ProfilesBoardScreenWidget> {
   @override
   void didUpdateWidget(covariant ProfilesBoardScreenWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _loadNodeCounts();
+    if (oldWidget.settings.length != widget.settings.length ||
+        widget.settings.any((s) => !_nodeCounts.containsKey(s.id))) {
+      _loadNodeCounts();
+    }
   }
 
   Future<void> _loadNodeCounts({String? forceId}) async {
     if (forceId != null && forceId.isNotEmpty) {
       _nodeCounts.remove(forceId);
     }
-    for (final setting in widget.settings) {
-      if (!_nodeCounts.containsKey(setting.id)) {
-        try {
-          final nodes = await ProxyNodeLoader.loadNodesFromProfile(setting.id);
-          final count = nodes.where((n) => n.all.isEmpty).length;
-          if (mounted) {
-            setState(() {
+    if (_isLoadingCounts) {
+      _pendingReloadCounts = true;
+      return;
+    }
+    _isLoadingCounts = true;
+    try {
+      do {
+        _pendingReloadCounts = false;
+        bool updated = false;
+        final snapshot = List<ProfileSetting>.from(widget.settings);
+        for (final setting in snapshot) {
+          if (!mounted) return;
+          if (!_nodeCounts.containsKey(setting.id)) {
+            try {
+              final count = await ProxyNodeLoader.countNodesInProfile(setting.id);
+              if (!mounted) return;
               _nodeCounts[setting.id] = count;
-            });
+              updated = true;
+            } catch (_) {}
           }
-        } catch (_) {}
-      }
+        }
+        if (updated && mounted) {
+          setState(() {});
+        }
+      } while (_pendingReloadCounts && mounted);
+    } finally {
+      _isLoadingCounts = false;
     }
   }
 

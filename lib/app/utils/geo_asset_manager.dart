@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
+import 'package:wmimo/app/local_services/vpn_service.dart';
+import 'package:wmimo/app/modules/clash_setting_manager.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 
@@ -198,6 +199,59 @@ class GeoAssetManager {
     return result;
   }
 
+  static List<String> getCandidateUrls(String fileName, String preferredSourceId) {
+    final targetName = fileName == "ASN.mmdb" ? "GeoLite2-ASN.mmdb" : fileName;
+    final orderedIds = <String>[
+      preferredSourceId,
+      for (final s in cdnSources)
+        if (s.id != preferredSourceId) s.id,
+    ];
+    final urls = <String>[];
+    for (final id in orderedIds) {
+      final u = getDownloadUrl(fileName, id);
+      if (!urls.contains(u)) {
+        urls.add(u);
+      }
+      if (id == "jsdelivr") {
+        final fastlyUrl =
+            "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/$targetName";
+        if (!urls.contains(fastlyUrl)) {
+          urls.add(fastlyUrl);
+        }
+      }
+    }
+    return urls;
+  }
+
+  static bool _ensuringCoreFiles = false;
+
+  /// Silently ensures essential geo files (`geoip.dat`, `geosite.dat`, `country.mmdb`)
+  /// exist in the profile directory by downloading missing files in the background.
+  static Future<void> ensureCoreGeoFiles() async {
+    if (_ensuringCoreFiles) return;
+    _ensuringCoreFiles = true;
+    try {
+      final homePath = await PathUtils.profileDir();
+      for (final fileName in const ["geoip.dat", "geosite.dat", "country.mmdb"]) {
+        final f = File(path.join(homePath, fileName));
+        bool needsDownload = !await f.exists();
+        if (!needsDownload) {
+          try {
+            final len = await f.length();
+            if (len <= 0) needsDownload = true;
+          } catch (_) {}
+        }
+        if (needsDownload) {
+          await downloadAsset(fileName, sourceId: "jsdelivr");
+        }
+      }
+    } catch (e) {
+      Log.w("GeoAssetManager.ensureCoreGeoFiles error: $e");
+    } finally {
+      _ensuringCoreFiles = false;
+    }
+  }
+
   static Future<bool> downloadAsset(
     String fileName, {
     String sourceId = "jsdelivr",
@@ -206,31 +260,84 @@ class GeoAssetManager {
     final homePath = await PathUtils.profileDir();
     final targetFile = File(path.join(homePath, fileName));
     final tempFile = File(path.join(homePath, "$fileName.tmp"));
-    final url = getDownloadUrl(fileName, sourceId);
-    final client = http.Client();
+    final candidateUrls = getCandidateUrls(fileName, sourceId);
+
+    bool vpnStarted = false;
+    int mixedPort = 0;
+    try {
+      vpnStarted = await VPNService.getStarted();
+      mixedPort = ClashSettingManager.getMixedPort();
+    } catch (_) {}
+
+    final proxyModes = <int?>[
+      if (vpnStarted && mixedPort > 0) mixedPort,
+      null,
+    ];
+
+    for (final url in candidateUrls) {
+      for (final proxyPort in proxyModes) {
+        final ok = await _tryDownloadFromUrl(
+          fileName: fileName,
+          url: url,
+          targetFile: targetFile,
+          tempFile: tempFile,
+          proxyPort: proxyPort,
+          onProgress: onProgress,
+        );
+        if (ok) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> _tryDownloadFromUrl({
+    required String fileName,
+    required String url,
+    required File targetFile,
+    required File tempFile,
+    required int? proxyPort,
+    void Function(double progress)? onProgress,
+  }) async {
+    final client = HttpClient()
+      ..connectionTimeout = const Duration(seconds: 20)
+      ..idleTimeout = const Duration(seconds: 30);
+    if (proxyPort != null && proxyPort > 0) {
+      client.findProxy = (_) => "PROXY 127.0.0.1:$proxyPort; DIRECT";
+    }
     IOSink? sink;
 
     try {
-      Log.i("GeoAssetManager: Downloading $fileName from $url");
-      final request = http.Request('GET', Uri.parse(url));
-      request.headers['User-Agent'] = 'Mozilla/5.0 Wmimo-GeoDownloader';
-      final response = await client
-          .send(request)
+      Log.i(
+        "GeoAssetManager: Downloading $fileName from $url (proxy: ${proxyPort ?? 'DIRECT'})",
+      );
+      final request = await client
+          .getUrl(Uri.parse(url))
           .timeout(const Duration(seconds: 20));
+      request.followRedirects = true;
+      request.maxRedirects = 5;
+      request.headers.set(
+        HttpHeaders.userAgentHeader,
+        'Mozilla/5.0 Wmimo-GeoDownloader',
+      );
+      request.headers.set(HttpHeaders.acceptHeader, '*/*');
+      final response =
+          await request.close().timeout(const Duration(seconds: 25));
 
       if (response.statusCode != 200) {
         Log.w(
-          "GeoAssetManager: Download failed with status ${response.statusCode}",
+          "GeoAssetManager: Download from $url failed with status ${response.statusCode}",
         );
         return false;
       }
 
-      final contentLength = response.contentLength ?? 0;
+      final contentLength = response.contentLength;
       int receivedBytes = 0;
       sink = tempFile.openWrite();
 
       await for (final chunk
-          in response.stream.timeout(const Duration(seconds: 30))) {
+          in response.timeout(const Duration(seconds: 45))) {
         sink.add(chunk);
         receivedBytes += chunk.length;
         if (contentLength > 0 && onProgress != null) {
@@ -241,25 +348,24 @@ class GeoAssetManager {
       await sink.close();
       sink = null;
 
-      if (receivedBytes <= 0) {
-        Log.w("GeoAssetManager: Downloaded empty payload for $fileName");
+      if (receivedBytes <= 1024) {
+        Log.w("GeoAssetManager: Downloaded invalid payload ($receivedBytes B) for $fileName");
         if (await tempFile.exists()) {
           await tempFile.delete();
         }
         return false;
       }
 
-      // Download complete: replace target file atomically
       if (await targetFile.exists()) {
         await targetFile.delete();
       }
       await tempFile.rename(targetFile.path);
       Log.i(
-        "GeoAssetManager: Successfully updated $fileName (${targetFile.path})",
+        "GeoAssetManager: Successfully updated $fileName (${targetFile.path}, $receivedBytes bytes)",
       );
       return true;
     } catch (e) {
-      Log.w("GeoAssetManager: Exception while downloading $fileName: $e");
+      Log.w("GeoAssetManager: Exception while downloading $fileName from $url: $e");
       try {
         await sink?.close();
       } catch (_) {}
@@ -270,7 +376,7 @@ class GeoAssetManager {
       }
       return false;
     } finally {
-      client.close();
+      client.close(force: true);
     }
   }
 

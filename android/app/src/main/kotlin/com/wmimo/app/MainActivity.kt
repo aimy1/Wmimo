@@ -597,6 +597,18 @@ class MainActivity : FlutterActivity() {
                     startService(intent)
                     result.success(true)
                 }
+                "setExcludeFromRecents" -> {
+                    val enable = call.argument<Boolean>("enable") ?: false
+                    try {
+                        val am = getSystemService(Context.ACTIVITY_SERVICE) as? android.app.ActivityManager
+                        am?.appTasks?.forEach { task ->
+                            task.setExcludeFromRecents(enable)
+                        }
+                        result.success(null)
+                    } catch (e: Throwable) {
+                        result.success(e.message)
+                    }
+                }
                 else -> result.notImplemented()
             }
         }
@@ -662,6 +674,15 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onDestroy() {
+        if (WmimoVpnService.isServiceRunning) {
+            try {
+                WmimoWidgetUpdater.terminateOrphanedCoreIfNeeded(this)
+                val stopIntent = Intent(this, WmimoVpnService::class.java).apply {
+                    action = WmimoVpnService.ACTION_STOP
+                }
+                startService(stopIntent)
+            } catch (_: Throwable) {}
+        }
         if (widgetSyncReceiverRegistered) {
             widgetSyncReceiverRegistered = false
             try {

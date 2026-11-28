@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wmimo/app/modules/clash_setting_manager.dart';
+import 'package:wmimo/app/utils/geo_asset_manager.dart';
 import 'package:wmimo/app/utils/package_manager_android.dart';
 import 'package:wmimo/app/utils/uwp_loopback_helper.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
+import 'package:wmimo/screens/widgets/animated_indexed_stack.dart';
 import 'package:libclash_vpn_service/vpn_service.dart';
 
 void main() {
@@ -186,6 +191,84 @@ void main() {
       expect(bigText, contains('当前节点: HK-01 专线'));
       expect(bigText, contains('运行模式: 规则分流 · 端口: 7890'));
       expect(bigText, contains('配置订阅: 我的专属订阅'));
+    });
+  });
+
+  group('GeoIP Direct File URLs, Multi-CDN Fallback & Android Lifecycle Sync Tests', () {
+    test('ClashSettingManager defaultRawExtensionRuleset uses direct .dat and .mmdb file URLs', () {
+      final ruleset = ClashSettingManager.defaultRawExtensionRuleset();
+      expect(ruleset.GeoIpUrl, endsWith('/geoip.dat'));
+      expect(ruleset.GeoSiteUrl, endsWith('/geosite.dat'));
+      expect(ruleset.AsnUrl, endsWith('/GeoLite2-ASN.mmdb'));
+    });
+
+    test('GeoAssetManager getCandidateUrls provides multi-CDN fallback chain for geoip.dat', () {
+      final urls = GeoAssetManager.getCandidateUrls('geoip.dat', 'jsdelivr');
+      expect(urls.length, greaterThanOrEqualTo(4));
+      expect(urls.first, contains('testingcf.jsdelivr.net'));
+      expect(urls.any((u) => u.contains('fastly.jsdelivr.net')), isTrue);
+      expect(urls.any((u) => u.contains('ghfast.top')), isTrue);
+      expect(urls.any((u) => u.contains('github.com/MetaCubeX')), isTrue);
+      for (final u in urls) {
+        expect(u, endsWith('/geoip.dat'));
+      }
+    });
+
+    test('Android VPN service stops cleanly on task removal and MainActivity supports setExcludeFromRecents', () {
+      final manifest = File('android/app/src/main/AndroidManifest.xml').readAsStringSync();
+      expect(manifest, contains('android:name=".WmimoVpnService"'));
+      expect(manifest, contains('android:stopWithTask="true"'));
+
+      final vpnServiceKt = File('android/app/src/main/kotlin/com/wmimo/app/WmimoVpnService.kt').readAsStringSync();
+      expect(vpnServiceKt, contains('override fun onTaskRemoved'));
+      expect(vpnServiceKt, contains('isCorePortListening'));
+
+      final mainActivityKt = File('android/app/src/main/kotlin/com/wmimo/app/MainActivity.kt').readAsStringSync();
+      expect(mainActivityKt, contains('"setExcludeFromRecents"'));
+      expect(mainActivityKt, contains('task.setExcludeFromRecents(enable)'));
+    });
+
+    testWidgets('AnimatedIndexedStack lazy mode only mounts active tab until switched', (tester) async {
+      int tab1Builds = 0;
+      int tab2Builds = 0;
+      int currentIndex = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              return Scaffold(
+                body: AnimatedIndexedStack(
+                  index: currentIndex,
+                  lazy: true,
+                  children: [
+                    Builder(builder: (_) {
+                      tab1Builds++;
+                      return const Text('Tab 1');
+                    }),
+                    Builder(builder: (_) {
+                      tab2Builds++;
+                      return const Text('Tab 2');
+                    }),
+                  ],
+                ),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () => setState(() => currentIndex = 1),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+
+      expect(tab1Builds, equals(1));
+      expect(tab2Builds, equals(0));
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      expect(tab2Builds, greaterThanOrEqualTo(1));
+      expect(find.text('Tab 2'), findsOneWidget);
     });
   });
 }

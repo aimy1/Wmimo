@@ -338,7 +338,7 @@ abstract final class FileUtils {
         await raf.setPosition(pos);
         final data = await raf.read(4096);
         await raf.close();
-        String str = utf8.decode(data);
+        String str = utf8.decode(data, allowMalformed: true);
         List<String> lines = str.split('\n');
         if (lines.isNotEmpty) {
           for (var i = lines.length - 1; i >= 0; i--) {

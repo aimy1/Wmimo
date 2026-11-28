@@ -689,23 +689,42 @@ tcp-concurrent: $tcpConcurrent
 find-process-mode: $findProcessMode
 ''';
 
-    if (patchJson != null && patchJson['geox-url'] is Map) {
-      final geox = patchJson['geox-url'] as Map;
-      final geosite = geox['geosite']?.toString();
-      final geoip = geox['geoip']?.toString();
-      final mmdb = geox['mmdb']?.toString();
-      final asn = geox['asn']?.toString();
-      if ((geosite != null && geosite.isNotEmpty) ||
-          (geoip != null && geoip.isNotEmpty) ||
-          (mmdb != null && mmdb.isNotEmpty) ||
-          (asn != null && asn.isNotEmpty)) {
-        header += 'geox-url:\n';
-        if (geoip != null && geoip.isNotEmpty) header += '  geoip: "$geoip"\n';
-        if (geosite != null && geosite.isNotEmpty) header += '  geosite: "$geosite"\n';
-        if (mmdb != null && mmdb.isNotEmpty) header += '  mmdb: "$mmdb"\n';
-        if (asn != null && asn.isNotEmpty) header += '  asn: "$asn"\n';
+    String normalizeGeoUrl(String? raw, String fallback) {
+      final t = raw?.trim() ?? '';
+      if (t.isEmpty ||
+          t.endsWith('/geo/geoip') ||
+          t.endsWith('/geo/geosite') ||
+          t.endsWith('/geo/asn') ||
+          t.endsWith('/meta/asn')) {
+        return fallback;
       }
+      return t;
     }
+
+    final geox = (patchJson != null && patchJson['geox-url'] is Map)
+        ? (patchJson['geox-url'] as Map)
+        : const {};
+    final geoip = normalizeGeoUrl(
+      geox['geoip']?.toString(),
+      'https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat',
+    );
+    final geosite = normalizeGeoUrl(
+      geox['geosite']?.toString(),
+      'https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat',
+    );
+    final mmdb = normalizeGeoUrl(
+      geox['mmdb']?.toString(),
+      'https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb',
+    );
+    final asn = normalizeGeoUrl(
+      geox['asn']?.toString(),
+      'https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb',
+    );
+    header += 'geox-url:\n';
+    header += '  geoip: "$geoip"\n';
+    header += '  geosite: "$geosite"\n';
+    header += '  mmdb: "$mmdb"\n';
+    header += '  asn: "$asn"\n';
 
     if (patchJson != null && patchJson['sniffer'] is Map) {
       final sniffer = patchJson['sniffer'] as Map;
@@ -786,9 +805,7 @@ tun:
       'routing-mark',
     ];
 
-    if (patchJson != null && patchJson['geox-url'] is Map) {
-      overriddenTopLevelKeys.add('geox-url');
-    }
+    overriddenTopLevelKeys.add('geox-url');
     if (patchJson != null && patchJson['sniffer'] is Map && (patchJson['sniffer'] as Map)['enable'] == true) {
       overriddenTopLevelKeys.add('sniffer');
     }
@@ -1544,7 +1561,17 @@ rules:
   }
 
   static Future<void> setAlwaysOn(bool enable) async {}
-  static Future<String?> setExcludeFromRecents(bool enable) async => null;
+  static Future<String?> setExcludeFromRecents(bool enable) async {
+    if (!Platform.isAndroid) return null;
+    try {
+      const platform = MethodChannel('com.wmimo.app/native_helper');
+      return await platform.invokeMethod<String>('setExcludeFromRecents', {
+        'enable': enable,
+      });
+    } catch (e) {
+      return e.toString();
+    }
+  }
 
   static Future<void> setSystemProxy(dynamic options) async {
     String host = "127.0.0.1";

@@ -12,6 +12,7 @@ class AnimatedIndexedStack extends StatefulWidget {
   final AlignmentGeometry alignment;
   final TextDirection? textDirection;
   final StackFit sizing;
+  final bool lazy;
 
   const AnimatedIndexedStack({
     super.key,
@@ -22,6 +23,7 @@ class AnimatedIndexedStack extends StatefulWidget {
     this.alignment = AlignmentDirectional.topStart,
     this.textDirection,
     this.sizing = StackFit.loose,
+    this.lazy = false,
   });
 
   @override
@@ -33,10 +35,12 @@ class _AnimatedIndexedStackState extends State<AnimatedIndexedStack>
   late final AnimationController _controller;
   late final Animation<double> _fadeAnimation;
   late final Animation<Offset> _slideAnimation;
+  final Set<int> _activatedIndices = {};
 
   @override
   void initState() {
     super.initState();
+    _activatedIndices.add(widget.index);
     _controller = AnimationController(
       vsync: this,
       duration: widget.duration,
@@ -56,6 +60,7 @@ class _AnimatedIndexedStackState extends State<AnimatedIndexedStack>
   @override
   void didUpdateWidget(covariant AnimatedIndexedStack oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _activatedIndices.add(widget.index);
     if (oldWidget.duration != widget.duration) {
       _controller.duration = widget.duration;
     }
@@ -79,6 +84,15 @@ class _AnimatedIndexedStackState extends State<AnimatedIndexedStack>
 
   @override
   Widget build(BuildContext context) {
+    final effectiveChildren = widget.lazy
+        ? List<Widget>.generate(
+            widget.children.length,
+            (i) => _activatedIndices.contains(i)
+                ? widget.children[i]
+                : const SizedBox.shrink(),
+          )
+        : widget.children;
+
     return FadeTransition(
       opacity: _fadeAnimation,
       child: SlideTransition(
@@ -88,7 +102,7 @@ class _AnimatedIndexedStackState extends State<AnimatedIndexedStack>
           alignment: widget.alignment,
           textDirection: widget.textDirection,
           sizing: widget.sizing,
-          children: widget.children,
+          children: effectiveChildren,
         ),
       ),
     );

@@ -12,6 +12,7 @@ import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/runtime/return_result.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/did.dart';
+import 'package:wmimo/app/utils/geo_asset_manager.dart';
 import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
@@ -60,6 +61,7 @@ class ClashSettingManager {
         List<int> bytes = data.buffer.asUint8List();
         await filePath.writeAsBytes(bytes, flush: true);
       }
+      unawaited(GeoAssetManager.ensureCoreGeoFiles());
     } catch (err) {
       Log.w("ClashSettingManager.initGeo exception ${err.toString()} ");
     }
@@ -234,14 +236,32 @@ class ClashSettingManager {
     );
   }
 
+  static const String kDefaultGeoSiteUrl =
+      "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat";
+  static const String kDefaultGeoIpUrl =
+      "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat";
+  static const String kDefaultMmdbUrl =
+      "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb";
+  static const String kDefaultAsnUrl =
+      "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb";
+
+  static String _normalizeGeoFileUrl(String? url, String fallbackUrl) {
+    final trimmed = url?.trim() ?? "";
+    if (trimmed.isEmpty) return fallbackUrl;
+    if (trimmed.endsWith("/geo/geoip") ||
+        trimmed.endsWith("/geo/geosite") ||
+        trimmed.endsWith("/geo/asn") ||
+        trimmed.endsWith("/meta/asn")) {
+      return fallbackUrl;
+    }
+    return trimmed;
+  }
+
   static RawExtensionGeoRuleset defaultRawExtensionRuleset() {
     return RawExtensionGeoRuleset.by(
-      GeoSiteUrl:
-          "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite",
-      GeoIpUrl:
-          "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip",
-      AsnUrl:
-          "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn",
+      GeoSiteUrl: kDefaultGeoSiteUrl,
+      GeoIpUrl: kDefaultGeoIpUrl,
+      AsnUrl: kDefaultAsnUrl,
       UpdateInterval: 2 * 24 * 3600,
       EnableProxy: true,
     );
@@ -477,10 +497,10 @@ class ClashSettingManager {
     if (ruleset != null) {
       _setting.GeoXUrl = RawGeoXUrl(
         true,
-        ruleset.GeoIpUrl,
-        null,
-        ruleset.AsnUrl,
-        ruleset.GeoSiteUrl,
+        _normalizeGeoFileUrl(ruleset.GeoIpUrl, kDefaultGeoIpUrl),
+        kDefaultMmdbUrl,
+        _normalizeGeoFileUrl(ruleset.AsnUrl, kDefaultAsnUrl),
+        _normalizeGeoFileUrl(ruleset.GeoSiteUrl, kDefaultGeoSiteUrl),
       );
     }
     final result = await getPatchContent(
@@ -554,11 +574,19 @@ class ClashSettingManager {
       );
     }
 
-    if (_setting.Extension?.Ruleset.AsnUrl ==
-        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/asn") {
-      _setting.Extension?.Ruleset.AsnUrl =
-          "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/asn";
-      await save();
+    final ruleset = _setting.Extension?.Ruleset;
+    if (ruleset != null) {
+      final fixedGeoIp = _normalizeGeoFileUrl(ruleset.GeoIpUrl, kDefaultGeoIpUrl);
+      final fixedGeoSite = _normalizeGeoFileUrl(ruleset.GeoSiteUrl, kDefaultGeoSiteUrl);
+      final fixedAsn = _normalizeGeoFileUrl(ruleset.AsnUrl, kDefaultAsnUrl);
+      if (ruleset.GeoIpUrl != fixedGeoIp ||
+          ruleset.GeoSiteUrl != fixedGeoSite ||
+          ruleset.AsnUrl != fixedAsn) {
+        ruleset.GeoIpUrl = fixedGeoIp;
+        ruleset.GeoSiteUrl = fixedGeoSite;
+        ruleset.AsnUrl = fixedAsn;
+        await save();
+      }
     }
   }
 
@@ -583,10 +611,10 @@ class ClashSettingManager {
     if (ruleset != null) {
       _setting.GeoXUrl = RawGeoXUrl(
         true,
-        ruleset.GeoIpUrl,
-        null,
-        ruleset.AsnUrl,
-        ruleset.GeoSiteUrl,
+        _normalizeGeoFileUrl(ruleset.GeoIpUrl, kDefaultGeoIpUrl),
+        kDefaultMmdbUrl,
+        _normalizeGeoFileUrl(ruleset.AsnUrl, kDefaultAsnUrl),
+        _normalizeGeoFileUrl(ruleset.GeoSiteUrl, kDefaultGeoSiteUrl),
       );
     }
     _setting.Extension?.RuntimeProfileSavePath =

@@ -21,16 +21,31 @@ class _ProfileCacheEntry {
   });
 }
 
+class _ProfileCountEntry {
+  final DateTime modified;
+  final int size;
+  final int count;
+
+  _ProfileCountEntry({
+    required this.modified,
+    required this.size,
+    required this.count,
+  });
+}
+
 class ProxyNodeLoader {
   static final Map<String, _ProfileCacheEntry> _nodesCache = {};
+  static final Map<String, _ProfileCountEntry> _nodeCountCache = {};
   static final RegExp _proxyGroupsHeader = RegExp(r'(?:^|\n)\s*proxy-groups\s*:', caseSensitive: false);
 
   /// Clears in-memory profile node cache
   static void clearCache([String? profileId]) {
     if (profileId != null) {
       _nodesCache.remove(profileId);
+      _nodeCountCache.remove(profileId);
     } else {
       _nodesCache.clear();
+      _nodeCountCache.clear();
     }
   }
 
@@ -119,14 +134,84 @@ class ProxyNodeLoader {
       if (content.trim().isEmpty) return [];
 
       final nodes = await Isolate.run(() => parseProfileContent(content));
+      final leafCount = nodes.where((n) => n.all.isEmpty).length;
       _nodesCache[profileId] = _ProfileCacheEntry(
         modified: freshStat.modified,
         size: freshStat.size,
         nodes: nodes,
       );
+      _nodeCountCache[profileId] = _ProfileCountEntry(
+        modified: freshStat.modified,
+        size: freshStat.size,
+        count: leafCount,
+      );
       return nodes;
     } catch (_) {
       return [];
+    }
+  }
+
+  /// Fast lightweight node counter for subscription cards without rewriting files
+  /// or constructing full YAML DOMs on the main UI thread.
+  static Future<int> countNodesInProfile(String profileId) async {
+    if (profileId.isEmpty) return 0;
+    try {
+      final profilesDir = await PathUtils.profilesDir();
+      final filePath = path.join(profilesDir, profileId);
+      final file = File(filePath);
+      if (!await file.exists()) return 0;
+
+      final stat = await file.stat();
+      final cachedNodes = _nodesCache[profileId];
+      if (cachedNodes != null &&
+          cachedNodes.modified == stat.modified &&
+          cachedNodes.size == stat.size) {
+        return cachedNodes.nodes.where((n) => n.all.isEmpty).length;
+      }
+      final cachedCount = _nodeCountCache[profileId];
+      if (cachedCount != null &&
+          cachedCount.modified == stat.modified &&
+          cachedCount.size == stat.size) {
+        return cachedCount.count;
+      }
+
+      final count = await Isolate.run(() => _fastCountFileNodes(filePath));
+      _nodeCountCache[profileId] = _ProfileCountEntry(
+        modified: stat.modified,
+        size: stat.size,
+        count: count,
+      );
+      return count;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  static int _fastCountFileNodes(String filePath) {
+    try {
+      final file = File(filePath);
+      if (!file.existsSync()) return 0;
+      var content = file.readAsStringSync();
+      if (content.trim().isEmpty) return 0;
+      if (!SubscriptionConverter.isClashYaml(content)) {
+        final converted = SubscriptionConverter.convertToClashYaml(content);
+        if (SubscriptionConverter.isClashYaml(converted)) {
+          content = converted;
+        }
+      }
+      final proxiesBlock = extractBlock(content, 'proxies');
+      if (proxiesBlock.isEmpty) return 0;
+      int count = 0;
+      final lines = proxiesBlock.split('\n');
+      for (final raw in lines) {
+        final trimmed = raw.trimLeft();
+        if (trimmed.startsWith('- ') || trimmed.startsWith('-{')) {
+          count++;
+        }
+      }
+      return count;
+    } catch (_) {
+      return 0;
     }
   }
 
@@ -152,17 +237,31 @@ class ProxyNodeLoader {
         } catch (_) {}
       }
 
+      final newContent = await Isolate.run(
+        () => _synthesizeProfileProxyGroupsSync(content),
+      );
+      if (newContent != null && newContent.isNotEmpty && newContent != content) {
+        await _atomicWrite(file, newContent);
+      }
+    } catch (_) {}
+  }
+
+  static String? _synthesizeProfileProxyGroupsSync(String rawContent) {
+    try {
+      var content = rawContent;
       // Automatically convert Base64 subscription or node URIs into valid Clash YAML
       final convertedYaml = SubscriptionConverter.convertToClashYaml(content);
       if (convertedYaml != content && SubscriptionConverter.isClashYaml(convertedYaml)) {
         content = convertedYaml;
-        await _atomicWrite(file, content);
       }
 
       content = content.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+      if (hasProxyGroups(content)) {
+        return content != rawContent ? content : null;
+      }
 
       final proxiesList = extractProxiesList(content);
-      if (proxiesList.isEmpty) return;
+      if (proxiesList.isEmpty) return content != rawContent ? content : null;
 
       final List<String> allProxyNames = [];
       for (var item in proxiesList) {
@@ -172,27 +271,15 @@ class ProxyNodeLoader {
         }
       }
 
-      if (allProxyNames.isEmpty) return;
+      if (allProxyNames.isEmpty) return content != rawContent ? content : null;
 
       final existingGroupsList = extractProxyGroupsList(content);
-      bool hasValidGroups = existingGroupsList.isNotEmpty;
+      if (existingGroupsList.isNotEmpty) {
+        return content != rawContent ? content : null;
+      }
 
       // Extract referenced target groups from 'rules:'
       final Set<String> ruleTargets = extractRuleTargets(content);
-
-      final Set<String> existingGroupNames = {};
-      if (hasValidGroups) {
-        for (var g in existingGroupsList) {
-          if (g['name'] != null) {
-            existingGroupNames.add(g['name'].toString());
-          }
-        }
-      }
-
-      // If proxy-groups already exists in the profile, do NOT append a duplicate proxy-groups section
-      if (hasValidGroups) {
-        return;
-      }
 
       // Region nodes classification
       final hkNodes = _filterNodes(allProxyNames, ["香港", "HK", "HONG KONG"]);
@@ -252,7 +339,6 @@ class ProxyNodeLoader {
       _addRegionGroup(synthesizedGroups, '🇮🇩 印尼节点', idNodes);
       _addRegionGroup(synthesizedGroups, '🇹🇷 土耳其节点', trNodes);
 
-      // Add rule-referenced target groups (e.g. YouTube, Netflix, Telegram, AI, etc.)
       for (var target in ruleTargets) {
         if (!synthesizedGroups.any((g) => g['name'] == target)) {
           synthesizedGroups.add({
@@ -263,7 +349,6 @@ class ProxyNodeLoader {
         }
       }
 
-      // Ensure GLOBAL group exists
       if (!synthesizedGroups.any((g) => g['name'] == "GLOBAL")) {
         synthesizedGroups.add({
           'name': 'GLOBAL',
@@ -272,16 +357,15 @@ class ProxyNodeLoader {
         });
       }
 
-      if (synthesizedGroups.isEmpty) return;
+      if (synthesizedGroups.isEmpty) return content != rawContent ? content : null;
 
-      // Append generated proxy-groups to the file
       final yamlWriter = YamlWriter();
       String groupsYaml = yamlWriter.write({'proxy-groups': synthesizedGroups});
 
-      // Append cleanly using atomic write
-      String newContent = content.trimRight() + "\n\n" + groupsYaml + "\n";
-      await _atomicWrite(file, newContent);
-    } catch (_) {}
+      return "${content.trimRight()}\n\n$groupsYaml\n";
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Safely writes content to target file atomically using a temporary file
