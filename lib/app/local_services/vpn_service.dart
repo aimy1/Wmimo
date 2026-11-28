@@ -541,7 +541,9 @@ class VPNService {
       final savedMode = ClashSettingManager.getConfigsMode();
       try {
         await ClashHttpApi.setConfigsMode(savedMode.name);
-      } catch (_) {}
+      } catch (e) {
+        Log.w("VPNService: setConfigsMode(${savedMode.name}) failed: $e");
+      }
 
       CoreWatchdog.setUserConnected(true);
       return null;

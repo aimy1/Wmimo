@@ -201,6 +201,7 @@ class _ListAddScreenState extends LasyRenderingState<ListAddScreen> {
     }
     if (changed) {
       widget.onChanged?.call(widget.data);
+      if (!mounted) return;
       setState(() {});
     }
   }

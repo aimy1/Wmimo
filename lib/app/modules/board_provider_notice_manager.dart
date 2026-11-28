@@ -163,7 +163,9 @@ class BoardProviderNoticeLoadAndCheck {
         notice.fromJson(config);
         return notice;
       }
-    } catch (err) {}
+    } catch (err) {
+      Log.w("BoardProviderNoticeManager.loadFile exception: $err");
+    }
     return BoardProviderNotice();
   }
 
@@ -302,21 +304,29 @@ class BoardProviderNoticeManager {
   static final BoardProviderNoticeLoadAndCheck _selfNotice =
       BoardProviderNoticeLoadAndCheck();
 
+  static void _onVpnStateChanged(
+    FlutterVpnServiceState state,
+    Map<String, String> params,
+  ) {
+    if (state == FlutterVpnServiceState.connected) {
+      Future.delayed(const Duration(seconds: 3), () async {
+        _selfNotice.check();
+      });
+    }
+  }
+
+  static void _onProfileCurrentChanged(String id) {
+    _selfNotice.check();
+  }
+
   static Future<void> init() async {
     _selfNotice.filePath = await PathUtils.providerNoticeFilePath();
     _selfNotice.checkUpdate = _onCheckUpdate;
     await _selfNotice.load();
 
-    VPNService.onEventStateChanged.add((
-      FlutterVpnServiceState state,
-      Map<String, String> params,
-    ) async {
-      if (state == FlutterVpnServiceState.connected) {
-        Future.delayed(const Duration(seconds: 3), () async {
-          _selfNotice.check();
-        });
-      }
-    });
+    if (!VPNService.onEventStateChanged.contains(_onVpnStateChanged)) {
+      VPNService.onEventStateChanged.add(_onVpnStateChanged);
+    }
     AppLifecycleStateNofity.onStateResumed(null, () {
       Future.delayed(const Duration(seconds: 3), () async {
         _selfNotice.check();
@@ -330,12 +340,14 @@ class BoardProviderNoticeManager {
         _selfNotice.check();
       });
     }
-    ProfileManager.onEventCurrentChanged.add((id) {
-      _selfNotice.check();
-    });
+    if (!ProfileManager.onEventCurrentChanged.contains(_onProfileCurrentChanged)) {
+      ProfileManager.onEventCurrentChanged.add(_onProfileCurrentChanged);
+    }
   }
 
   static Future<void> uninit() async {
+    VPNService.onEventStateChanged.remove(_onVpnStateChanged);
+    ProfileManager.onEventCurrentChanged.remove(_onProfileCurrentChanged);
     _timerChecker?.cancel();
     _timerChecker = null;
   }

@@ -144,7 +144,7 @@ proxy-groups:
       var content = await profileFile.readAsString();
       expect(content, contains('BEGIN WMIMO CHAIN PROXIES'));
       expect(content, contains('END WMIMO CHAIN PROXIES'));
-      expect(content, contains('type: relay'));
+      expect(content, contains('"dialer-proxy":"HK-01"'));
       expect(content, contains('🔗 港美链式'));
       expect(content, contains('HK-01'));
       expect(content, contains('US-01'));

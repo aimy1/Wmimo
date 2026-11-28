@@ -542,28 +542,32 @@ class BoardSessionPersistentManager implements BoardSessionPersistent {
     }
   }
 
+  void _handleVpnStateChanged(
+    FlutterVpnServiceState state,
+    Map<String, String> params,
+  ) async {
+    if (state != FlutterVpnServiceState.connected &&
+        state != FlutterVpnServiceState.disconnected) {
+      return;
+    }
+    final proxyUrl = state == FlutterVpnServiceState.connected
+        ? "127.0.0.1:${ClashSettingManager.getMixedPort()}"
+        : null;
+    for (int i = 0; i < _instance._config.sessions.length; i++) {
+      if (_instance._config.sessions[i]._v2board != null) {
+        _instance._config.sessions[i]._v2board!.proxyUrl = proxyUrl;
+      } else if (_instance._config.sessions[i]._xboard != null) {
+        _instance._config.sessions[i]._xboard!.proxyUrl = proxyUrl;
+      } else if (_instance._config.sessions[i]._ssPanel != null) {
+        _instance._config.sessions[i]._ssPanel!.proxyUrl = proxyUrl;
+      }
+    }
+  }
+
   void onVpnStateChanged() {
-    VPNService.onEventStateChanged.add((
-      FlutterVpnServiceState state,
-      Map<String, String> params,
-    ) async {
-      if (state != FlutterVpnServiceState.connected &&
-          state != FlutterVpnServiceState.disconnected) {
-        return;
-      }
-      final proxyUrl = state == FlutterVpnServiceState.connected
-          ? "127.0.0.1:${ClashSettingManager.getMixedPort()}"
-          : null;
-      for (int i = 0; i < _instance._config.sessions.length; i++) {
-        if (_instance._config.sessions[i]._v2board != null) {
-          _instance._config.sessions[i]._v2board!.proxyUrl = proxyUrl;
-        } else if (_instance._config.sessions[i]._xboard != null) {
-          _instance._config.sessions[i]._xboard!.proxyUrl = proxyUrl;
-        } else if (_instance._config.sessions[i]._ssPanel != null) {
-          _instance._config.sessions[i]._ssPanel!.proxyUrl = proxyUrl;
-        }
-      }
-    });
+    if (!VPNService.onEventStateChanged.contains(_handleVpnStateChanged)) {
+      VPNService.onEventStateChanged.add(_handleVpnStateChanged);
+    }
   }
 
   void relogin() {

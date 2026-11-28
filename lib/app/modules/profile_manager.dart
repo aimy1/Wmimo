@@ -363,18 +363,22 @@ class ProfileManager {
   static Timer? _timerChecker;
   static bool _saving = false;
 
+  static void _onVpnStateChanged(
+    FlutterVpnServiceState state,
+    Map<String, String> params,
+  ) {
+    if (state == FlutterVpnServiceState.connected) {
+      Future.delayed(const Duration(seconds: 3), () async {
+        updateByTicker();
+      });
+    }
+  }
+
   static Future<void> init() async {
     await load();
-    VPNService.onEventStateChanged.add((
-      FlutterVpnServiceState state,
-      Map<String, String> params,
-    ) async {
-      if (state == FlutterVpnServiceState.connected) {
-        Future.delayed(const Duration(seconds: 3), () async {
-          updateByTicker();
-        });
-      }
-    });
+    if (!VPNService.onEventStateChanged.contains(_onVpnStateChanged)) {
+      VPNService.onEventStateChanged.add(_onVpnStateChanged);
+    }
     AppLifecycleStateNofity.onStateResumed(null, () {
       Future.delayed(const Duration(seconds: 3), () async {
         updateByTicker();
@@ -391,6 +395,7 @@ class ProfileManager {
   }
 
   static Future<void> uninit() async {
+    VPNService.onEventStateChanged.remove(_onVpnStateChanged);
     _timerChecker?.cancel();
     _timerChecker = null;
   }

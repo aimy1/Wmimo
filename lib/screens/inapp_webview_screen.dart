@@ -672,6 +672,7 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
                                                         _pullToRefreshController
                                                             ?.endRefreshing();
                                                       }
+                                                      if (!mounted) return;
                                                       setState(() {
                                                         _progress =
                                                             progress / 100;

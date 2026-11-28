@@ -286,6 +286,44 @@ class MyAppState extends State<MyApp>
   String _trafficOld = "";
   String _speedOld = "";
   final Themes _themes = Themes();
+  StreamSubscription<AppLocale>? _localeSubscription;
+
+  void _onTrafficChanged(String traffic, String speed) {
+    if (!SettingManager.getConfig().showTrayTraffic) {
+      traffic = "";
+      speed = "";
+    }
+    if (_trafficOld != traffic || _speedOld != speed) {
+      _trafficOld = traffic;
+      _speedOld = speed;
+      if (traffic.isEmpty && speed.isEmpty) {
+        trayManager.setTitle("");
+      }
+      if (traffic.isNotEmpty && speed.isNotEmpty) {
+        trayManager.setTitle("$traffic $speed");
+      } else if (traffic.isNotEmpty) {
+        trayManager.setTitle(traffic);
+      } else if (speed.isNotEmpty) {
+        trayManager.setTitle(speed);
+      }
+    }
+  }
+
+  void _onProfileCurrentChanged(String id) {
+    if (PlatformUtils.isPC()) {
+      _setTray(_trayGrey, false, false);
+    }
+  }
+
+  void _onModeChanged() {
+    if (PlatformUtils.isPC()) {
+      _setTrayMenu(_trayGrey);
+    }
+  }
+
+  void _onInitHomeFinish() {
+    firstShowWindow(false);
+  }
 
   void _onThemeChanged() {
     if (PlatformUtils.isPC()) {
@@ -314,30 +352,13 @@ class MyAppState extends State<MyApp>
       _setTray(true, false, true);
     }
     if (Platform.isMacOS) {
-      Biz.onEventTrafficChanged.add((String traffic, String speed) {
-        if (!SettingManager.getConfig().showTrayTraffic) {
-          traffic = "";
-          speed = "";
-        }
-        if (_trafficOld != traffic || _speedOld != speed) {
-          _trafficOld = traffic;
-          _speedOld = speed;
-          if (traffic.isEmpty && speed.isEmpty) {
-            trayManager.setTitle("");
-          }
-          if (traffic.isNotEmpty && speed.isNotEmpty) {
-            trayManager.setTitle("$traffic $speed");
-          } else if (traffic.isNotEmpty) {
-            trayManager.setTitle(traffic);
-          } else if (speed.isNotEmpty) {
-            trayManager.setTitle(speed);
-          }
-        }
-      });
+      if (!Biz.onEventTrafficChanged.contains(_onTrafficChanged)) {
+        Biz.onEventTrafficChanged.add(_onTrafficChanged);
+      }
     }
 
     AppLifecycleStateNofity.init();
-    LocaleSettings.getLocaleStream().listen((event) {
+    _localeSubscription = LocaleSettings.getLocaleStream().listen((event) {
       if (Platform.isAndroid) {
         const platform = MethodChannel('com.wmimo.app/native_helper');
         platform.invokeMethod('setAppLocale', {
@@ -361,6 +382,12 @@ class MyAppState extends State<MyApp>
 
   @override
   void dispose() {
+    _localeSubscription?.cancel();
+    _localeSubscription = null;
+    Biz.onEventTrafficChanged.remove(_onTrafficChanged);
+    ProfileManager.onEventCurrentChanged.remove(_onProfileCurrentChanged);
+    ClashSettingManager.onEventModeChanged.remove(_onModeChanged);
+    Biz.onEventInitHomeFinish.remove(_onInitHomeFinish);
     _themes.removeListener(_onThemeChanged);
     SettingManager.onAnimationsChanged.remove(_onAnimationsChanged);
     SettingManager.onTvModeChanged.remove(_onAnimationsChanged);
@@ -561,21 +588,17 @@ class MyAppState extends State<MyApp>
         }
       }
     });
-    ProfileManager.onEventCurrentChanged.add((String id) {
-      if (PlatformUtils.isPC()) {
-        _setTray(_trayGrey, false, false);
-      }
-    });
-    ClashSettingManager.onEventModeChanged.add(() {
-      if (PlatformUtils.isPC()) {
-        _setTrayMenu(_trayGrey);
-      }
-    });
+    if (!ProfileManager.onEventCurrentChanged.contains(_onProfileCurrentChanged)) {
+      ProfileManager.onEventCurrentChanged.add(_onProfileCurrentChanged);
+    }
+    if (!ClashSettingManager.onEventModeChanged.contains(_onModeChanged)) {
+      ClashSettingManager.onEventModeChanged.add(_onModeChanged);
+    }
     firstShowWindow(true);
     if (startFailedReason == null) {
-      Biz.onEventInitHomeFinish.add(() {
-        firstShowWindow(false);
-      });
+      if (!Biz.onEventInitHomeFinish.contains(_onInitHomeFinish)) {
+        Biz.onEventInitHomeFinish.add(_onInitHomeFinish);
+      }
 
       await Biz.init(_launchAtStartup);
     } else {

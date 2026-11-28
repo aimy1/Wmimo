@@ -297,6 +297,7 @@ class AboutScreenState extends LasyRenderingState<AboutScreen> {
         ),
       ),
     );
+    if (!mounted) return;
     setState(() {});
   }
 }

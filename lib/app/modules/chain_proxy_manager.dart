@@ -43,6 +43,8 @@ class ChainProxyItem {
     'id': id,
     'name': name,
     'hops': hops,
+    'hop1': hop1,
+    'hop2': hop2,
     'enabled': enabled,
     'delay': delay,
   };

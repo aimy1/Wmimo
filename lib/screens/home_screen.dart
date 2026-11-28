@@ -253,9 +253,13 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _init() async {
-    Biz.onEventInitAllFinish.add(() async {
-      await _onInitAllFinish();
-    });
+    if (!Biz.onEventInitAllFinish.contains(_handleInitAllFinish)) {
+      Biz.onEventInitAllFinish.add(_handleInitAllFinish);
+    }
+  }
+
+  void _handleInitAllFinish() {
+    _onInitAllFinish();
   }
 
   Future<void> _onInitAllFinish() async {
@@ -344,9 +348,11 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void dispose() {
     AppHotkeyManager.dispose();
+    Biz.onEventInitAllFinish.remove(_handleInitAllFinish);
     VPNService.onEventStateChanged.remove(_onStateChanged);
     VpnActionHandler.uiStatus.removeListener(_onVpnUiStatusChanged);
     AutoUpdateManager.onEventCheck.remove(_onAutoUpdateCheck);
+    HomeWidgetService.onNavigateToTab = null;
     protocolHandler.removeListener(this);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();

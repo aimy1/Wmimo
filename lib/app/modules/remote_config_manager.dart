@@ -23,18 +23,22 @@ class RemoteConfigManager {
   static Duration _duration = const Duration(hours: 1);
   static RemoteConfig _config = RemoteConfig();
 
+  static void _onVpnStateChanged(
+    FlutterVpnServiceState state,
+    Map<String, String> params,
+  ) {
+    if (state == FlutterVpnServiceState.connected) {
+      Future.delayed(const Duration(seconds: 3), () async {
+        _check();
+      });
+    }
+  }
+
   static Future<void> init() async {
     await _loadConfig();
-    VPNService.onEventStateChanged.add((
-      FlutterVpnServiceState state,
-      Map<String, String> params,
-    ) async {
-      if (state == FlutterVpnServiceState.connected) {
-        Future.delayed(const Duration(seconds: 3), () async {
-          _check();
-        });
-      }
-    });
+    if (!VPNService.onEventStateChanged.contains(_onVpnStateChanged)) {
+      VPNService.onEventStateChanged.add(_onVpnStateChanged);
+    }
     AppLifecycleStateNofity.onStateResumed(null, () {
       Future.delayed(const Duration(seconds: 3), () async {
         _check();
@@ -55,6 +59,7 @@ class RemoteConfigManager {
   }
 
   static Future<void> uninit() async {
+    VPNService.onEventStateChanged.remove(_onVpnStateChanged);
     _timerChecker?.cancel();
     _timerChecker = null;
   }
@@ -76,7 +81,9 @@ class RemoteConfigManager {
         var config = jsonDecode(content);
         _config.fromJson(config);
       }
-    } catch (err) {}
+    } catch (err) {
+      Log.w("RemoteConfigManager._loadConfig exception: $err");
+    }
   }
 
   static void _saveConfig() async {

@@ -207,6 +207,7 @@ class _MapStringAndStringAddScreenState
       }
     }
 
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -238,6 +239,7 @@ class _MapStringAndStringAddScreenState
     }
 
     widget.data.add(Tuple2(text, ""));
+    if (!mounted) return;
     setState(() {});
   }
 

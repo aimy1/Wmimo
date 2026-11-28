@@ -187,16 +187,9 @@ class AutoUpdateManager {
 
       save();
     }
-    VPNService.onEventStateChanged.add((
-      FlutterVpnServiceState state,
-      Map<String, String> params,
-    ) async {
-      if (state == FlutterVpnServiceState.connected) {
-        Future.delayed(const Duration(seconds: 3), () async {
-          _check();
-        });
-      }
-    });
+    if (!VPNService.onEventStateChanged.contains(_onVpnStateChanged)) {
+      VPNService.onEventStateChanged.add(_onVpnStateChanged);
+    }
     AppLifecycleStateNofity.onStateResumed(null, () {
       Future.delayed(const Duration(seconds: 3), () async {
         _check();
@@ -216,7 +209,19 @@ class AutoUpdateManager {
     );
   }
 
+  static void _onVpnStateChanged(
+    FlutterVpnServiceState state,
+    Map<String, String> params,
+  ) {
+    if (state == FlutterVpnServiceState.connected) {
+      Future.delayed(const Duration(seconds: 3), () async {
+        _check();
+      });
+    }
+  }
+
   static Future<void> uninit() async {
+    VPNService.onEventStateChanged.remove(_onVpnStateChanged);
     _timerChecker?.cancel();
     _timerChecker = null;
   }

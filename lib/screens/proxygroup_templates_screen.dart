@@ -203,12 +203,14 @@ class _ProxyGroupsScreenState
         builder: (context) => ProxyGroupTemplatesAddOrEditScreen(),
       ),
     );
+    if (!mounted) return;
     setState(() {});
   }
 
   void onTapDelete(String name) async {
     DiversionTemplateManager.removeProxyGroupTemplateByName(name);
     DiversionTemplateManager.save();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -220,6 +222,7 @@ class _ProxyGroupsScreenState
         builder: (context) => ProxyGroupTemplatesAddOrEditScreen(name: name),
       ),
     );
+    if (!mounted) return;
     setState(() {});
   }
 }

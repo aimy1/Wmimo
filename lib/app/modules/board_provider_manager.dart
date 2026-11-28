@@ -7,6 +7,7 @@ import 'package:wmimo/app/runtime/return_result.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
 import 'package:wmimo/app/utils/did.dart';
 import 'package:wmimo/app/utils/http_utils.dart';
+import 'package:wmimo/app/utils/log.dart';
 import 'package:wmimo/app/utils/path_utils.dart';
 import 'package:wmimo/i18n/strings.g.dart';
 
@@ -583,7 +584,9 @@ class BoardProviderManager {
           config.fromJson(item);
           return config;
         }).toList();
-      } catch (e) {}
+      } catch (e) {
+        Log.w("BoardProviderManager.init parse exception: $e");
+      }
     } else {
       await _save();
     }

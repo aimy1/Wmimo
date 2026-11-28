@@ -169,14 +169,30 @@ class HomeWidgetService {
       _actionToken = _generateFallbackToken();
     }
 
-    VPNService.onEventStateChanged.add(_onVpnStateChanged);
-    ClashSettingManager.onEventModeChanged.add(_onModeChanged);
-    ProfileManager.onEventCurrentChanged.add(_onProfileChanged);
-    ProfileManager.onEventAdd.add(_onProfileChanged);
-    ProfileManager.onEventRemove.add(_onProfileChanged);
-    ProfileManager.onEventUpdate.add(_onProfileUpdated);
-    Biz.onEventProxySelected.add(_onProxySelected);
-    Biz.onEventInitAllFinish.add(_onInitAllFinished);
+    if (!VPNService.onEventStateChanged.contains(_onVpnStateChanged)) {
+      VPNService.onEventStateChanged.add(_onVpnStateChanged);
+    }
+    if (!ClashSettingManager.onEventModeChanged.contains(_onModeChanged)) {
+      ClashSettingManager.onEventModeChanged.add(_onModeChanged);
+    }
+    if (!ProfileManager.onEventCurrentChanged.contains(_onProfileChanged)) {
+      ProfileManager.onEventCurrentChanged.add(_onProfileChanged);
+    }
+    if (!ProfileManager.onEventAdd.contains(_onProfileChanged)) {
+      ProfileManager.onEventAdd.add(_onProfileChanged);
+    }
+    if (!ProfileManager.onEventRemove.contains(_onProfileChanged)) {
+      ProfileManager.onEventRemove.add(_onProfileChanged);
+    }
+    if (!ProfileManager.onEventUpdate.contains(_onProfileUpdated)) {
+      ProfileManager.onEventUpdate.add(_onProfileUpdated);
+    }
+    if (!Biz.onEventProxySelected.contains(_onProxySelected)) {
+      Biz.onEventProxySelected.add(_onProxySelected);
+    }
+    if (!Biz.onEventInitAllFinish.contains(_onInitAllFinished)) {
+      Biz.onEventInitAllFinish.add(_onInitAllFinished);
+    }
     AppLifecycleStateNofity.onStateResumed(
       identityHashCode(HomeWidgetService),
       _onAppResumed,

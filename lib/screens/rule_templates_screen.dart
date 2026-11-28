@@ -173,12 +173,14 @@ class _RuleTemplatesScreenState
         builder: (context) => RuleTemplatesAddOrEditScreen(),
       ),
     );
+    if (!mounted) return;
     setState(() {});
   }
 
   void onTapDelete(String name) async {
     DiversionTemplateManager.removeRuleTemplateByName(name);
     DiversionTemplateManager.save();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -190,6 +192,7 @@ class _RuleTemplatesScreenState
         builder: (context) => RuleTemplatesAddOrEditScreen(name: name),
       ),
     );
+    if (!mounted) return;
     setState(() {});
   }
 }

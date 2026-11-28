@@ -153,6 +153,7 @@ class _RuleTemplatesAddOrEditScreenState
         !_data.rules.contains(newRule)) {
       _data.rules.add(newRule);
     }
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -289,6 +290,7 @@ class _RuleTemplatesAddOrEditScreenState
         _data.rules[index] = newRule;
       }
     }
+    if (!mounted) return;
     setState(() {});
   }
 

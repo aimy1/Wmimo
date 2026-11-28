@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -167,16 +166,7 @@ void main() {
         final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
         if (byteData == null) return;
         final pngBytes = byteData.buffer.asUint8List();
-
-        for (final p in [
-          r'C:\Users\win\.gemini\antigravity\brain\1f108630-e8e6-497c-9b4e-f2e6f46cf6fa\official_brands_pixel_perfect.png',
-          r'C:\Users\win\.gemini\antigravity\brain\1f108630-e8e6-497c-9b4e-f2e6f46cf6fa\vector_icons_comparison.png',
-        ]) {
-          final file = File(p);
-          if (file.parent.existsSync()) {
-            await file.writeAsBytes(pngBytes);
-          }
-        }
+        expect(pngBytes, isNotEmpty);
       });
     }, timeout: const Timeout(Duration(seconds: 15)));
   });
