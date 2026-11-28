@@ -112,7 +112,6 @@ Future<void> main(List<String> args) async {
   final force = args.contains('--force') || args.contains('-f');
   print('Starting multi-platform Mihomo core downloader ($kVersion)...');
   final client = HttpClient();
-  client.badCertificateCallback = (cert, host, port) => true;
   client.connectionTimeout = const Duration(seconds: 15);
 
   for (final entry in targets.entries) {

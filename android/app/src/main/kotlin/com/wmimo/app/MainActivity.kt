@@ -244,21 +244,21 @@ class MainActivity : FlutterActivity() {
                 }
                 "getInstalledAppList" -> {
                     val mainHandler = Handler(Looper.getMainLooper())
-                    val list = ArrayList<Map<String, Any>>()
-                    val seenPackages = HashSet<String>()
                     val pm = packageManager
                     val responded = java.util.concurrent.atomic.AtomicBoolean(false)
 
                     val watchdog = Runnable {
                         if (responded.compareAndSet(false, true)) {
                             try {
-                                result.success(list)
+                                result.success(emptyList<Map<String, Any>>())
                             } catch (_: Throwable) {}
                         }
                     }
                     mainHandler.postDelayed(watchdog, 4500)
 
                     Thread {
+                        val list = ArrayList<Map<String, Any>>()
+                        val seenPackages = HashSet<String>()
                         try {
                             // Method 1: Direct getInstalledApplications (fastest, 1 IPC call)
                             var allApps: List<ApplicationInfo> = try {

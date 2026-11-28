@@ -424,11 +424,12 @@ class VPNService {
       }
       if (result.type != VpnServiceWaitType.done) {
         Log.w(
-          "VPNService.restart err ${result.type}:${result.err!.message.toString()}",
+          "VPNService.restart err ${result.type}:${result.err?.message ?? 'unknown'}",
         );
 
         await stop();
-        return convertErr(result.err);
+        return convertErr(result.err) ??
+            ReturnResultError(t.meta.connectTimeout);
       }
       String errorPath = await PathUtils.serviceStdErrorFilePath();
       String? content = await FileUtils.readAndDelete(errorPath);
@@ -751,6 +752,8 @@ class VPNService {
             );
             return null;
           }
+          await launchAtStartup.enable();
+          return null;
         } else {
           await FlutterVpnService.autoStartDelete(getLaunchAtStartupTaskName());
           await launchAtStartup.disable();

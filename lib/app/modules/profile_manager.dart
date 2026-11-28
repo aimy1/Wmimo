@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:board_service/crypto.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/modules/board_provider_manager.dart';
 import 'package:wmimo/app/modules/chain_proxy_manager.dart';
@@ -115,7 +116,7 @@ class ProfileSetting {
     'url': url,
     'user_agent': userAgent,
     'xhwid': xhwid,
-    'decrypt_password': decryptPassword,
+    'decrypt_password': Crypto.encrypt(decryptPassword),
     'upload': upload,
     'download': download,
     'total': total,
@@ -160,12 +161,11 @@ class ProfileSetting {
     url = map['url'] ?? '';
     userAgent = map['user_agent'] ?? '';
     xhwid = map['xhwid'] ?? false;
-    decryptPassword = map['decrypt_password'] ?? '';
+    decryptPassword = Crypto.decrypt(map['decrypt_password'] ?? '');
     upload = map['upload'] ?? 0;
     download = map['download'] ?? 0;
     total = map['total'] ?? 0;
     expire = map['expire'] ?? "";
-    decryptPassword = map['decrypt_password'] ?? "";
     boardProviderId = map['board_provider_id'] ?? "";
     overwriteProxyGroups = map['overwrite_proxy_groups'] ?? false;
     overwriteRules = map['overwrite_rules'] ?? false;

@@ -369,48 +369,51 @@ class AutoUpdateManager {
         return false;
       }
       _downloading = true;
-      late ReturnResult<HttpHeaders> result;
-      for (var port in ports) {
-        result = await DownloadUtils.downloadWithPort(
-          uri,
-          downloadPath,
-          null,
-          false,
-          port,
-        );
-        if (result.error == null) {
-          break;
+      try {
+        late ReturnResult<HttpHeaders> result;
+        for (var port in ports) {
+          result = await DownloadUtils.downloadWithPort(
+            uri,
+            downloadPath,
+            null,
+            false,
+            port,
+          );
+          if (result.error == null) {
+            break;
+          }
         }
-      }
 
-      if (result.error != null) {
-        _downloading = false;
-        if (result.error!.message.contains("404")) {
-          _versionCheck.newVersion = false;
-          _versionCheck.version = "";
-          _versionCheck.url = "";
-          _versionCheck.sha256 = "";
+        if (result.error != null) {
+          if (result.error!.message.contains("404")) {
+            _versionCheck.newVersion = false;
+            _versionCheck.version = "";
+            _versionCheck.url = "";
+            _versionCheck.sha256 = "";
 
-          save();
-        }
-        return false;
-      }
-      if (_versionCheck.sha256.isNotEmpty) {
-        final hash = await CryptoUtils.getFileSha256(downloadPath);
-        if (hash == null || _versionCheck.sha256.trim().toLowerCase() != hash.trim().toLowerCase()) {
-          await FileUtils.deletePath(downloadPath);
-          _downloading = false;
+            save();
+          }
           return false;
         }
-      }
-      await _sanitizeMacOSInstaller(downloadPath);
-      _downloading = false;
-      Future.delayed(const Duration(milliseconds: 300), () async {
-        for (var callback in onEventCheck) {
-          callback();
+        if (_versionCheck.sha256.isNotEmpty) {
+          final hash = await CryptoUtils.getFileSha256(downloadPath);
+          if (hash == null ||
+              _versionCheck.sha256.trim().toLowerCase() !=
+                  hash.trim().toLowerCase()) {
+            await FileUtils.deletePath(downloadPath);
+            return false;
+          }
+          await _sanitizeMacOSInstaller(downloadPath);
         }
-      });
-      return true;
+        Future.delayed(const Duration(milliseconds: 300), () async {
+          for (var callback in onEventCheck) {
+            callback();
+          }
+        });
+        return true;
+      } finally {
+        _downloading = false;
+      }
     }
     return false;
   }
@@ -459,32 +462,32 @@ class AutoUpdateManager {
       return _activeCheckCompleter!.future;
     }
 
-    _activeCheckCompleter = Completer<AutoUpdateCheckResult>();
-
-    var last = DateTime.tryParse(_versionCheck.latestCheck);
-    DateTime now = DateTime.now();
-    if (last != null && !manual) {
-      Duration dur = now.difference(last);
-      if (dur.inSeconds < _duration.inSeconds) {
-        await download();
-        final res = AutoUpdateCheckResult(
-          status: _versionCheck.newVersion
-              ? AutoUpdateCheckStatus.hasNewVersion
-              : AutoUpdateCheckStatus.alreadyLatest,
-          versionCheck: _versionCheck,
-        );
-        _activeCheckCompleter?.complete(res);
-        _activeCheckCompleter = null;
-        return res;
-      }
-    }
-    var autoUpdateChannel = SettingManager.getConfig().autoUpdateChannel;
-    if (!updateChannels().contains(autoUpdateChannel)) {
-      autoUpdateChannel = "stable";
-    }
-    _versionCheck.latestCheck = now.toString();
+    final completer = Completer<AutoUpdateCheckResult>();
+    _activeCheckCompleter = completer;
     _checking = true;
+
     try {
+      var last = DateTime.tryParse(_versionCheck.latestCheck);
+      DateTime now = DateTime.now();
+      if (last != null && !manual) {
+        Duration dur = now.difference(last);
+        if (dur.inSeconds < _duration.inSeconds) {
+          await download();
+          final res = AutoUpdateCheckResult(
+            status: _versionCheck.newVersion
+                ? AutoUpdateCheckStatus.hasNewVersion
+                : AutoUpdateCheckStatus.alreadyLatest,
+            versionCheck: _versionCheck,
+          );
+          if (!completer.isCompleted) completer.complete(res);
+          return res;
+        }
+      }
+      var autoUpdateChannel = SettingManager.getConfig().autoUpdateChannel;
+      if (!updateChannels().contains(autoUpdateChannel)) {
+        autoUpdateChannel = "stable";
+      }
+      _versionCheck.latestCheck = now.toString();
       bool body =
           _lastCheck == null ||
           DateTime.now().difference(_lastCheck!).inHours > 12;
@@ -492,7 +495,6 @@ class AutoUpdateManager {
           await AutoupdateUtils.getAutoupdate(body);
       _lastCheck = DateTime.now();
       if (items.error != null) {
-        _checking = false;
         _duration = const Duration(minutes: 10);
         save();
         final res = AutoUpdateCheckResult(
@@ -500,8 +502,7 @@ class AutoUpdateManager {
           errorMessage: items.error!.message,
           versionCheck: _versionCheck,
         );
-        _activeCheckCompleter?.complete(res);
-        _activeCheckCompleter = null;
+        if (!completer.isCompleted) completer.complete(res);
         return res;
       }
       _duration = const Duration(hours: 3);
@@ -587,21 +588,22 @@ class AutoUpdateManager {
             : AutoUpdateCheckStatus.alreadyLatest,
         versionCheck: _versionCheck,
       );
-      _checking = false;
-      _activeCheckCompleter?.complete(res);
-      _activeCheckCompleter = null;
+      if (!completer.isCompleted) completer.complete(res);
       return res;
     } catch (err) {
       Log.w("AutoUpdateManager._check exception ${err.toString()}");
-      _checking = false;
       final res = AutoUpdateCheckResult(
         status: AutoUpdateCheckStatus.error,
         errorMessage: err.toString(),
         versionCheck: _versionCheck,
       );
-      _activeCheckCompleter?.complete(res);
-      _activeCheckCompleter = null;
+      if (!completer.isCompleted) completer.complete(res);
       return res;
+    } finally {
+      _checking = false;
+      if (identical(_activeCheckCompleter, completer)) {
+        _activeCheckCompleter = null;
+      }
     }
   }
 }

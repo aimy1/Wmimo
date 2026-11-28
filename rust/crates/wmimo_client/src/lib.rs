@@ -86,6 +86,29 @@ impl MihomoClient {
         Ok(())
     }
 
+    /// 动态切换出站运行模式 (rule / global / direct)
+    pub async fn set_mode(&self, mode: &str) -> Result<()> {
+        let url = format!("{}/configs", self.base_url);
+        let body = serde_json::json!({ "mode": mode });
+
+        let res = self
+            .http_client
+            .patch(&url)
+            .headers(self.auth_headers())
+            .json(&body)
+            .send()
+            .await
+            .map_err(|e| WmimoError::Network(format!("切换运行模式失败: {}", e)))?;
+
+        if !res.status().is_success() {
+            let err_text = res.text().await.unwrap_or_default();
+            return Err(WmimoError::Core(format!("内核切换模式失败: {}", err_text)));
+        }
+
+        info!("Mihomo 运行模式已切换为 -> {}", mode);
+        Ok(())
+    }
+
     /// 获取所有代理节点与策略组列表
     pub async fn get_proxies(&self) -> Result<HashMap<String, ProxyNode>> {
         let url = format!("{}/proxies", self.base_url);

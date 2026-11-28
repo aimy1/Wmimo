@@ -43,10 +43,10 @@ You can independently verify any downloaded APK using the official Android SDK `
 
 ```bash
 # Method 1: Using Android SDK apksigner
-apksigner verify --print-certs Wmimo-Android-arm64-v8a-v1.3.3.1519.apk
+apksigner verify --print-certs Wmimo-Android-arm64-v8a-v1.4.2.1528.apk
 
 # Method 2: Using standard JDK keytool
-keytool -printcert -jarfile Wmimo-Android-arm64-v8a-v1.3.3.1519.apk
+keytool -printcert -jarfile Wmimo-Android-arm64-v8a-v1.4.2.1528.apk
 ```
 
 The output SHA-256 certificate fingerprint **must match** `4D:29:23:87:5A:FC:F3:...` above. If the fingerprints differ, do not install the APK.

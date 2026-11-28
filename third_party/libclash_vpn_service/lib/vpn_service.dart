@@ -274,14 +274,14 @@ class FlutterVpnService {
       if (password.isNotEmpty) {
         try {
           if (await _runWithSudo(password, 'chown', ['root:admin', path]) == 0 &&
-              await _runWithSudo(password, 'chmod', ['+sx', path]) == 0) {
+              await _runWithSudo(password, 'chmod', ['4755', path]) == 0) {
             return null;
           }
         } catch (_) {}
       }
       try {
         const script =
-            'do shell script "chown root:admin " & quoted form of (system attribute "WMIMO_SERVICE_PATH") & " && chmod +sx " & quoted form of (system attribute "WMIMO_SERVICE_PATH") with administrator privileges';
+            'do shell script "chown root:admin " & quoted form of (system attribute "WMIMO_SERVICE_PATH") & " && chmod 4755 " & quoted form of (system attribute "WMIMO_SERVICE_PATH") with administrator privileges';
         final res = await Process.run(
           'osascript',
           ['-e', script],
@@ -668,7 +668,7 @@ class FlutterVpnService {
 
     final logLevel = patchJson?['log-level'] ?? 'info';
     final ipv6 = patchJson?['ipv6'] ?? false;
-    final allowLan = patchJson?['allow-lan'] ?? true;
+    final allowLan = patchJson?['allow-lan'] ?? false;
     final tcpConcurrent = patchJson?['tcp-concurrent'] ?? true;
     final unifiedDelay = patchJson?['unified-delay'] ?? true;
     final findProcessMode = patchJson?['find-process-mode'] ?? 'always';
@@ -1363,13 +1363,14 @@ rules:
       _ensureWintunAvailable(workDir, coreExe);
 
       final args = ['-d', workDir, '-f', configFile];
-      _coreProcess = await Process.start(coreExe, args, mode: ProcessStartMode.normal);
-      if (Platform.isAndroid && _coreProcess != null) {
+      final spawnedProcess = await Process.start(coreExe, args, mode: ProcessStartMode.normal);
+      _coreProcess = spawnedProcess;
+      if (Platform.isAndroid) {
         try {
           const widgetChannel = MethodChannel('com.wmimo.app/widget');
           unawaited(
             widgetChannel
-                .invokeMethod('registerCorePid', {'pid': _coreProcess!.pid})
+                .invokeMethod('registerCorePid', {'pid': spawnedProcess.pid})
                 .catchError((_) => null),
           );
         } catch (_) {}
@@ -1381,26 +1382,36 @@ rules:
           ? File(_savedConfig!.log_path)
           : null;
 
-      _coreProcess!.stdout.transform(utf8.decoder).listen((data) {
-        outBuffer.write(data);
+      spawnedProcess.stdout.transform(utf8.decoder).listen((data) {
+        if (outBuffer.length < 16384) {
+          outBuffer.write(data);
+        }
         if (logFile != null) {
-          try {
-            logFile.writeAsStringSync(data, mode: FileMode.append, flush: true);
-          } catch (_) {}
+          unawaited(
+            logFile
+                .writeAsString(data, mode: FileMode.append)
+                .catchError((_) => logFile),
+          );
         }
       });
-      _coreProcess!.stderr.transform(utf8.decoder).listen((data) {
-        errBuffer.write(data);
+      spawnedProcess.stderr.transform(utf8.decoder).listen((data) {
+        if (errBuffer.length < 16384) {
+          errBuffer.write(data);
+        }
         if (logFile != null) {
-          try {
-            logFile.writeAsStringSync(data, mode: FileMode.append, flush: true);
-          } catch (_) {}
+          unawaited(
+            logFile
+                .writeAsString(data, mode: FileMode.append)
+                .catchError((_) => logFile),
+          );
         }
       });
-      _coreProcess!.exitCode.then((code) {
-        _coreProcess = null;
-        _stopTrafficMonitor();
-        _notifyState(FlutterVpnServiceState.disconnected);
+      spawnedProcess.exitCode.then((code) {
+        if (identical(_coreProcess, spawnedProcess)) {
+          _coreProcess = null;
+          _stopTrafficMonitor();
+          _notifyState(FlutterVpnServiceState.disconnected);
+        }
       });
 
       final port = _savedConfig?.control_port ?? 9090;

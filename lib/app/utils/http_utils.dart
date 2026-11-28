@@ -235,6 +235,9 @@ abstract final class HttpUtils {
           request.headers.set(key, value);
         });
       }
+      if (cookies != null && cookies.isNotEmpty) {
+        request.cookies.addAll(cookies);
+      }
       HttpClientResponse? response = await Future.any([
         waitResponseDone(request, null),
         waitResponseTimeout(request, timeout),
@@ -620,7 +623,7 @@ abstract final class HttpUtils {
     int start = body.indexOf("<title>");
     int end = body.indexOf("</title>");
     String siteName = "";
-    if (start < end) {
+    if (start != -1 && end != -1 && start + "<title>".length <= end) {
       siteName = body.substring(start + "<title>".length, end).trim();
     }
     return ReturnResult(data: siteName);

@@ -8,6 +8,7 @@ import 'package:wmimo/app/modules/profile_manager.dart';
 import 'package:wmimo/app/modules/profile_patch_manager.dart';
 import 'package:wmimo/app/modules/chain_proxy_manager.dart';
 import 'package:wmimo/app/modules/diversion_template_manager.dart';
+import 'package:wmimo/app/modules/remote_config_manager.dart';
 
 import 'package:wmimo/app/utils/app_lifecycle_state_notify.dart';
 import 'package:wmimo/app/utils/log.dart';
@@ -47,7 +48,8 @@ class Biz {
   }
 
   static Future<void> uninit() async {
-    BoardProviderNoticeManager.uninit();
+    await BoardProviderNoticeManager.uninit();
+    await RemoteConfigManager.uninit();
     await AutoUpdateManager.uninit();
     AppLifecycleStateNofity.uninit();
 

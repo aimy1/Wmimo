@@ -192,10 +192,12 @@ class RemoteConfig {
 
   static bool isSelfHost(String url, String host) {
     Uri? uri = Uri.tryParse(url);
-    if (uri == null) {
+    if (uri == null || host.isEmpty) {
       return false;
     }
-    if (uri.host == host || uri.host.contains(".$host")) {
+    final targetHost = uri.host.toLowerCase();
+    final baseHost = host.toLowerCase();
+    if (targetHost == baseHost || targetHost.endsWith(".$baseHost")) {
       return true;
     }
     return false;
@@ -208,8 +210,8 @@ class RemoteConfig {
   }
 
   Future<RemoteConfigChannel?> getCurrentChannel() async {
-    if (channels.isNotEmpty) {
-      return channels[0];
+    if (channels.isEmpty) {
+      return null;
     }
     String channelName = await InstallReferrerUtils.getString();
     for (var cha in channels) {
@@ -218,7 +220,12 @@ class RemoteConfig {
         return cha;
       }
     }
-    return null;
+    for (var cha in channels) {
+      if (cha.platform == Platform.operatingSystem) {
+        return cha;
+      }
+    }
+    return channels[0];
   }
 
   RemoteConfigGetProfile? getProfileByRegionCode(String regionCode) {

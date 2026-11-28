@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'package:board_service/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wmimo/app/modules/clash_setting_manager.dart';
+import 'package:wmimo/app/modules/remote_config.dart';
+import 'package:wmimo/app/modules/setting_manager.dart';
 import 'package:wmimo/app/utils/geo_asset_manager.dart';
 import 'package:wmimo/app/utils/package_manager_android.dart';
 import 'package:wmimo/app/utils/uwp_loopback_helper.dart';
@@ -226,6 +229,31 @@ void main() {
       final mainActivityKt = File('android/app/src/main/kotlin/com/wmimo/app/MainActivity.kt').readAsStringSync();
       expect(mainActivityKt, contains('"setExcludeFromRecents"'));
       expect(mainActivityKt, contains('task.setExcludeFromRecents(enable)'));
+    });
+
+    test('Security hardening: Crypto encrypts credentials, RemoteConfig.isSelfHost blocks subdomain spoofing, Fake-IP uses 198.18.0.1/16', () {
+      const secret = 'my_super_secret_token_123';
+      final encrypted = Crypto.encrypt('custom_key', secret);
+      expect(encrypted, isNot(equals(secret)));
+      expect(encrypted, startsWith('WMIMO_ENC_V1:'));
+      expect(Crypto.decrypt('custom_key', encrypted), equals(secret));
+      // Legacy plaintext fallback
+      expect(Crypto.decrypt('custom_key', 'legacy_plain_token'), equals('legacy_plain_token'));
+
+      final webdav = SettingConfigItemWebDev()
+        ..url = 'https://dav.example.com'
+        ..user = 'alice'
+        ..password = 'webdav_pass_456';
+      final json = webdav.toJson();
+      expect(json['password'], startsWith('WMIMO_ENC_V1:'));
+      final restored = SettingConfigItemWebDev.fromJsonStatic(json);
+      expect(restored.password, equals('webdav_pass_456'));
+
+      expect(RemoteConfig.isSelfHost('https://wmimo.buzz/donate', 'wmimo.buzz'), isTrue);
+      expect(RemoteConfig.isSelfHost('https://pay.wmimo.buzz/donate', 'wmimo.buzz'), isTrue);
+      expect(RemoteConfig.isSelfHost('https://evil.wmimo.buzz.attacker.com/donate', 'wmimo.buzz'), isFalse);
+
+      expect(ClashSettingManager.defaultDNS().FakeIPRange, equals('198.18.0.1/16'));
     });
 
     testWidgets('AnimatedIndexedStack lazy mode only mounts active tab until switched', (tester) async {

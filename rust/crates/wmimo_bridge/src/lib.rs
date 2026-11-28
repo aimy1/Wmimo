@@ -234,12 +234,12 @@ impl WmimoController {
         self.save_persisted_state();
 
         if let Some(client) = self.core_mgr.get_client() {
-            let _mode_str = match mode {
+            let mode_str = match mode {
                 ProxyMode::Rule => "rule",
                 ProxyMode::Global => "global",
                 ProxyMode::Direct => "direct",
             };
-            let _ = client.reload_config(&self.work_dir.join("config.yaml").to_string_lossy()).await;
+            let _ = client.set_mode(mode_str).await;
         }
 
         let mut st = self.status.write();

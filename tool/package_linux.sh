@@ -62,9 +62,12 @@ echo "=========================================================="
 if [ -f "$CORE_SRC" ]; then
   cp "$CORE_SRC" "$BUNDLE_DIR/wmimoService"
   chmod +x "$BUNDLE_DIR/wmimoService"
-elif [ -f "bind/linux/core/wmimoService" ]; then
+elif [ "$ARCH_LABEL" = "x64" ] && [ -f "bind/linux/core/wmimoService" ]; then
   cp "bind/linux/core/wmimoService" "$BUNDLE_DIR/wmimoService"
   chmod +x "$BUNDLE_DIR/wmimoService"
+else
+  echo "Error: Required Linux core binary not found at $CORE_SRC for arch $ARCH_LABEL" >&2
+  exit 1
 fi
 chmod +x "$BUNDLE_DIR/wmimo"
 

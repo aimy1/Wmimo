@@ -594,8 +594,10 @@ class MyAppState extends State<MyApp>
     if (!ClashSettingManager.onEventModeChanged.contains(_onModeChanged)) {
       ClashSettingManager.onEventModeChanged.add(_onModeChanged);
     }
-    firstShowWindow(true);
     if (startFailedReason == null) {
+      if (!SettingManager.getConfig().ui.hideAfterLaunch) {
+        firstShowWindow(true);
+      }
       if (!Biz.onEventInitHomeFinish.contains(_onInitHomeFinish)) {
         Biz.onEventInitHomeFinish.add(_onInitHomeFinish);
       }
@@ -869,13 +871,11 @@ class MyAppState extends State<MyApp>
         label: t.main.tray.copyProxyCmd,
         submenu: Menu(
           items: [
-            MenuItem(
-              key: kMenuCopyProxyCmd,
-              label: Platform.isWindows
-                  ? "${t.main.tray.copyCmdPowerShell} (127.0.0.1:$mixedPort)"
-                  : "${t.main.tray.copyCmdBash} (127.0.0.1:$mixedPort)",
-            ),
             if (Platform.isWindows) ...[
+              MenuItem(
+                key: kMenuCopyProxyCmd,
+                label: "${t.main.tray.copyCmdPowerShell} (127.0.0.1:$mixedPort)",
+              ),
               MenuItem(
                 key: kMenuCopyProxyCmdCmd,
                 label: "${t.main.tray.copyCmdCmd} (127.0.0.1:$mixedPort)",
@@ -887,6 +887,15 @@ class MyAppState extends State<MyApp>
             ),
           ],
         ),
+      ),
+
+      MenuItem(
+        key: kMenuDelayTest,
+        label: t.meta.latencyTest,
+      ),
+      MenuItem(
+        key: kMenuOpenConfigDir,
+        label: t.meta.openProfilesDir,
       ),
 
       // Reset System Proxy / Repair Network

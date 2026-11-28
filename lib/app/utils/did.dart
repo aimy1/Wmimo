@@ -25,7 +25,12 @@ abstract final class Did {
       }
 
       _did = did;
-    } catch (e) {}
+    } catch (e) {
+      _did ??= newUUID();
+    }
+    if (_did == null || _did!.isEmpty) {
+      _did = newUUID();
+    }
   }
 
   static String? _tryLoadFromPlatformSpecificLocation() {

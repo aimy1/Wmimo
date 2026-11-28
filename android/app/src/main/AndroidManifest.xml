@@ -28,7 +28,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.OBSERVE_GRANT_REVOKE_PERMISSIONS" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <permission android:name="com.wmimo.app.permission.AUTOMATION" android:protectionLevel="normal" />
+    <permission android:name="com.wmimo.app.permission.AUTOMATION" android:protectionLevel="signature" />
     <uses-permission android:name="com.wmimo.app.permission.AUTOMATION" />
     <!--TV-->
     <uses-feature android:name="android.software.leanback" android:required="false"/>

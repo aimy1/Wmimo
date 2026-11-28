@@ -161,10 +161,22 @@ abstract final class AutoupdateUtils {
   }
 
   static List<String> _resolveArchAbis(String assetName) {
-    if (assetName.contains("arm64") || assetName.contains("aarch64")) {
+    final lower = assetName.toLowerCase();
+    if (lower.contains("arm64") || lower.contains("aarch64")) {
       return ["arm64", "aarch64"];
     }
-    return ["x86_64", "x64", "*"];
+    if (lower.contains("x86_64") || lower.contains("x64") || lower.contains("amd64")) {
+      return ["x86_64", "x64"];
+    }
+    return ["*"];
+  }
+
+  static String _extractGithubAssetSha256(Map<String, dynamic> asset) {
+    final digest = asset["digest"]?.toString().trim() ?? "";
+    if (digest.toLowerCase().startsWith("sha256:")) {
+      return digest.substring("sha256:".length).trim();
+    }
+    return "";
   }
 
   static List<AutoupdateItem> _parseGithubReleaseJson(String jsonStr) {
@@ -187,6 +199,7 @@ abstract final class AutoupdateUtils {
           AutoupdateItem item = AutoupdateItem();
           item.version = version;
           item.url = downloadUrl;
+          item.sha256 = _extractGithubAssetSha256(asset);
           item.updateChannel = ["stable", "beta"];
 
           if (name.endsWith(".exe") && (name.contains("windows") || name.contains("setup"))) {

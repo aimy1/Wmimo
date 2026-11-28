@@ -25,6 +25,7 @@ class ClashSettingManager {
   static final List<void Function()> onEventModeChanged = [];
   static const iNet4Address = "172.19.0.1/30";
   static const iNet6Address = "fdfe:dcbe:9876::1/126";
+  static const fakeIpRange = "198.18.0.1/16";
   static const dnsHijack = "0.0.0.0:53";
   static RawConfig _setting = defaultConfig();
 
@@ -207,7 +208,7 @@ class ClashSettingManager {
       FallbackFilter: RawFallbackFilter.by(GeoIP: null),
       Listen: null,
       EnhancedMode: ClashDnsEnhancedMode.fakeIp.name,
-      FakeIPRange: "${iNet4Address.split('/')[0]}/16",
+      FakeIPRange: fakeIpRange,
       FakeIPFilter: fakeIPFilter,
       FakeIPFilterMode: ClashFakeIPFilterMode.blacklist.name,
       CacheAlgorithm: ClashDnsCacheAlgorithm.arc.name,
@@ -371,9 +372,10 @@ class ClashSettingManager {
         !_setting.Tun!.Inet4Address!.first.contains("/")) {
       _setting.Tun?.Inet4Address = [iNet4Address];
     }
-    final parts = _setting.Tun?.Inet4Address!.first.split('/');
-    if (parts != null && parts.length == 2) {
-      _setting.DNS?.FakeIPRange = "${parts[0]}/16";
+    if (_setting.DNS?.FakeIPRange == null ||
+        _setting.DNS!.FakeIPRange!.isEmpty ||
+        _setting.DNS!.FakeIPRange == "172.19.0.1/16") {
+      _setting.DNS?.FakeIPRange = fakeIpRange;
     }
 
     _setting.OverWriteRuleProviders = false;

@@ -68,9 +68,12 @@ android {
         val fallbackKey = file("wmimo.release.keystore")
         if (fallbackKey.exists()) {
             releaseKeyFile = fallbackKey
-            keystoreProps.setProperty("storePassword.release", "wmimo")
-            keystoreProps.setProperty("keyPassword.release", "wmimo")
-            keystoreProps.setProperty("keyAlias.release", "wmimo")
+            val envStorePass = System.getenv("WMIMO_KEYSTORE_PASSWORD") ?: "wmimo"
+            val envKeyPass = System.getenv("WMIMO_KEY_PASSWORD") ?: "wmimo"
+            val envKeyAlias = System.getenv("WMIMO_KEY_ALIAS") ?: "wmimo"
+            keystoreProps.setProperty("storePassword.release", envStorePass)
+            keystoreProps.setProperty("keyPassword.release", envKeyPass)
+            keystoreProps.setProperty("keyAlias.release", envKeyAlias)
         }
     }
 

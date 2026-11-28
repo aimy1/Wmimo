@@ -133,11 +133,8 @@ class RemoteConfigManager {
       });
     } catch (err) {
       Log.w("RemoteConfigManager._check exception ${err.toString()}");
+    } finally {
+      _checking = false;
     }
-
-    _checking = false;
-    Future.delayed(_duration, () async {
-      await _check();
-    });
   }
 }

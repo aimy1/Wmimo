@@ -70,7 +70,7 @@
 | **Speed Test Engine (`SpeedTest`)** | Multi-stream HTTP download/upload, steady Ping & Jitter, real-time dual-series waveform chart, scenario grades (`Gaming / 8K / Calls`), concurrent CDN latency badges, proxy pre-flight check |
 | **Backup & Sync** | WebDAV, iCloud Drive (iOS/macOS), local & URL `.zip` export/restore; includes `chain_proxies.json`, optional-file resilience, pre-staged atomic restore & Zip-Slip protection |
 | **Micro-Card UI & Telemetry** | Light & OLED Dark themes, customizable Home Cards Manager, Auto-Orientation enabled by default, multi-span Bezier traffic wave (`1m–60m`), egress IP/Geo/ISP with privacy masking |
-| **Privacy & Localization** | Zero telemetry/analytics SDKs, strict local execution, **9 languages × 898 keys (100% parity)** plus dedicated 9-language Privacy Policy & User Agreement views |
+| **Privacy & Localization** | Zero telemetry/analytics SDKs, strict local execution, **9 languages × 959 keys (100% parity)** plus dedicated 9-language Privacy Policy & User Agreement views |
 
 ---
 

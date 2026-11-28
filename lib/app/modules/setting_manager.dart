@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:board_service/crypto.dart';
 import 'package:wmimo/app/local_services/vpn_service.dart';
 import 'package:wmimo/app/utils/app_registry_utils.dart';
 import 'package:wmimo/app/utils/app_utils.dart';
@@ -174,7 +175,11 @@ class SettingConfigItemWebDev {
   String password = "";
 
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> ret = {'url': url, 'user': user, 'password': password};
+    Map<String, dynamic> ret = {
+      'url': url,
+      'user': user,
+      'password': Crypto.encrypt(password),
+    };
     return ret;
   }
 
@@ -184,7 +189,7 @@ class SettingConfigItemWebDev {
     }
     url = map["url"] ?? "";
     user = map["user"] ?? "";
-    password = map["password"] ?? "";
+    password = Crypto.decrypt(map["password"] ?? "");
   }
 
   static SettingConfigItemWebDev fromJsonStatic(Map<String, dynamic>? map) {

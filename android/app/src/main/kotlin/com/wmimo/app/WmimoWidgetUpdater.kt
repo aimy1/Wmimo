@@ -599,8 +599,11 @@ object WmimoWidgetUpdater {
         requestCode: Int,
         extras: (Intent.() -> Unit)? = null
     ): PendingIntent {
+        val token = getOrCreateToken(context)
         val intent = Intent(context, receiverClass).apply {
             this.action = action
+            setPackage(context.packageName)
+            putExtra("token", token)
             extras?.invoke(this)
         }
         return PendingIntent.getBroadcast(
@@ -618,6 +621,12 @@ object WmimoWidgetUpdater {
     ) {
         val appContext = context.applicationContext
         val action = intent.action ?: run {
+            pendingResult?.finish()
+            return
+        }
+        val expectedToken = getOrCreateToken(appContext)
+        val providedToken = intent.getStringExtra("token")
+        if (providedToken.isNullOrEmpty() || providedToken != expectedToken) {
             pendingResult?.finish()
             return
         }
